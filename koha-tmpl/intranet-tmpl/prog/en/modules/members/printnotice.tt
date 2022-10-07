@@ -1,0 +1,32 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% SET footerjs = 1 %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% title | html %] &rsaquo; Patrons &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
+
+[% Asset.css("css/print.css") | $raw %]
+[% IF ( Koha.Preference('SlipCSS') ) %]
+<link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
+[% END %]
+</head>
+
+<body id="members_printslip" class="member">
+    <div id="slip">
+        [% IF plain %]
+            <pre>[% IF ( slip ) %][% slip | html %][% ELSE %]No slip template found[% END %]</pre>
+        [% ELSE %]
+            [% IF ( slip ) %][% slip | $raw %][% ELSE %]No slip template found[% END %]
+        [% END %]
+    </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
