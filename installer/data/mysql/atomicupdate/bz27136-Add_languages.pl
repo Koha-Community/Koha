@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "27136",
-    description => "Add missing language information for facets",
+    description => "Add missing languages: Cree, Afrikaans and Multiple languages, Undetermined and No linguistic content",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
