@@ -9,7 +9,7 @@ return {
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
-            VALUES ('AuthorityXSLTOpacResultsDisplay','','','Enable XSL stylesheet control over authority results page display on opac','Free')
+            VALUES ('AuthorityXSLTOpacResultsDisplay','','','Enable XSL stylesheet control over authority results page in the OPAC','Free')
         });
     },
 };

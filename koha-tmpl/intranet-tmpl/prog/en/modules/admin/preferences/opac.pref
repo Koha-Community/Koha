@@ -102,6 +102,11 @@ OPAC:
               class: file
             - '<br />Options:<ul><li>Enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a URL for an external specific stylesheet.</li></ul>If you have multiple stylesheets for different languages the placeholder {langcode} will be replaced with current interface language.'
         -
+            - 'Display authority results in the OPAC using the XSLT stylesheet at: '
+            - pref: AuthorityXSLTOpacResultsDisplay
+              class: file
+            - '<br />Options:<ul><li>Enter a path to a custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></ul>If you have multiple stylesheets for: <ul><li>different languages: use the placeholder {langcode} - this will be replaced with the current interface language</li><li>authority types: use the placeholder {authtypecode} - this will be replaced with the authority type code'
+        -
             - pref: OpacNoItemTypeImages
               default: 0
               choices:
