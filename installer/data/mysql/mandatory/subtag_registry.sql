@@ -1935,13 +1935,13 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'mul', 'language', 'Multiple languages', NOW() );
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES ( 'mu','mul');
+VALUES ( 'mul','mul');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'mu', 'language', 'en', 'Multiple languages');
+VALUES ( 'mul', 'language', 'en', 'Multiple languages');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'mu', 'language', 'fr', 'Multilingue');
+VALUES ( 'mul', 'language', 'fr', 'Multilingue');
 
 -- Undetermined
 
@@ -1952,10 +1952,10 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES ( 'und','und');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'un', 'language', 'en', 'Undetermined');
+VALUES ( 'und', 'language', 'en', 'Undetermined');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'un', 'language', 'fr', 'Indéterminée');
+VALUES ( 'und', 'language', 'fr', 'Indéterminée');
 
 -- No linguistic content
 
