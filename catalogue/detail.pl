@@ -261,7 +261,6 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
                     record       => $part,
                     xsl_syspref  => "XSLTResultsDisplay",
                     fix_amps     => 1,
-                    interface    => 'intranet'
                 }
               );
         }

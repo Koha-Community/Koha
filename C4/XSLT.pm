@@ -178,7 +178,7 @@ sub XSLTParse4Display {
     my $hidden_items = $params->{hidden_items} || [];
     my $variables    = $params->{xslt_variables};
     my $items_rs     = $params->{items_rs};
-    my $interface    = $params->{interface};
+    my $interface    = C4::Context->interface;
 
     die "Mandatory \$params->{xsl_syspref} was not provided, called with biblionumber $params->{biblionumber}"
         if not defined $params->{xsl_syspref};

@@ -2018,7 +2018,6 @@ sub searchResults {
                     fix_amps       => 1,
                     hidden_items   => \@hiddenitems,
                     xslt_variables => $xslt_variables,
-                    interface => $search_context->{'interface'}
                 }
             );
         }

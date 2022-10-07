@@ -416,7 +416,6 @@ if ( $op eq 'view' ) {
                         fix_amps       => 1,
                         xslt_variables => $variables,
                         items_rs       => $items->reset,
-                        interface      => 'opac'
                     }
                 );
 

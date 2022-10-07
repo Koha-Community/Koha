@@ -293,7 +293,6 @@ if ( $op eq 'view' ) {
                         record       => $record,
                         xsl_syspref  => 'XSLTListsDisplay',
                         fix_amps     => 1,
-                        interface    => 'intranet'
                     }
                 );
 

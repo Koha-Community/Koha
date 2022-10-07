@@ -293,7 +293,6 @@ if ($loggedinuser) {
                 fix_amps       => 1,
                 hidden_items   => \@hidden_items,
                 xslt_variables => $variables,
-                interface      => 'opac'
             }
         );
 
