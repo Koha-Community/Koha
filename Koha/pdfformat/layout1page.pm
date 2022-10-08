@@ -34,8 +34,8 @@ BEGIN {
 }
 
 
-#be careful, all the sizes (height, width, etc...) are in mm, not PostScript points (the default measurment of PDF::API2).
-#The constants exported transform that into PostScript points (/mm for milimeter, /in for inch, pt is postscript point, and as so is there only to show what is happening.
+#be careful, all the sizes (height, width, etc...) are in mm, not PostScript points (the default measurement of PDF::API2).
+#The constants exported transform that into PostScript points (/mm for millimeter, /in for inch, pt is postscript point, and as so is there only to show what is happening.
 use constant mm => 25.4 / 72;
 use constant in => 1 / 72;
 use constant pt => 1;
@@ -88,7 +88,7 @@ sub printorders {
             }
             push( @$arrbasket,
                 $line->{quantity},
-                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor: " . $line->{order_vendornote} : '' ),
                 Koha::Number::Price->new( $line->{rrp_tax_included} )->format,
                 Koha::Number::Price->new( $line->{discount} )->format . '%',
                 Koha::Number::Price->new( $line->{tax_rate} * 100 )->format . '%',
