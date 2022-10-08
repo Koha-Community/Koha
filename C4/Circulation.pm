@@ -3272,7 +3272,7 @@ sub GetRenewCount {
 
 =head2 GetSoonestRenewDate
 
-  $NoRenewalBeforeThisDate = &GetSoonestRenewDate($issue);
+  $NoRenewalBeforeThisDate = &GetSoonestRenewDate($checkout);
 
 Find out the soonest possible renew date of a borrowed item.
 
@@ -3281,7 +3281,7 @@ C<$checkout> is the checkout object to renew.
 C<$GetSoonestRenewDate> returns the DateTime of the soonest possible
 renew date, based on the value "No renewal before" of the applicable
 issuing rule. Returns the current date if the item can already be
-renewed, and returns undefined if the borrower, loan, or item
+renewed, and returns undefined if the patron, item, or checkout
 cannot be found.
 
 =cut
