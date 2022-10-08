@@ -374,7 +374,11 @@
                     [% END # /IF ( delete_confirm ) %]
 
                     [% IF ( else ) %]
-                        <h1>MARC subfield structure admin for [% tagfield | html %] [% IF ( frameworkcode ) %](framework [% frameworkcode | html %])[% ELSE %](default framework)[% END %]</h1>
+                        [% IF ( frameworkcode ) %]
+                            <h1>MARC subfield structure admin for [% tagfield | html %] (framework [% frameworkcode | html %])</h1>
+                        [% ELSE %]
+                            <h1>MARC subfield structure admin for [% tagfield | html %] (default framework)</h1>
+                        [% END %]
 
                         <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
                         <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>

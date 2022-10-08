@@ -43,7 +43,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <li>
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
-                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
                         <span>Default MARC framework</span>
                     [% END%]
@@ -52,10 +52,10 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <li>
                 <a href="#" aria-current="page">
                     [% IF heading_add_tag_p %]
-                        <span>Add tag</span>
+                        <span>Add tag [% searchfield | html %]</span>
                     [% ELSE %]
-                        <span>Modify tag</span>
-                    [% END %] [% searchfield | html %]
+                        <span>Modify tag [% searchfield | html %]</span>
+                    [% END %]
                 </a>
             </li>
 
@@ -63,9 +63,9 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <li>
                 <a href="#" aria-current="page">
                     [% IF framework %]
-                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
-                        Default MARC framework
+                        <span>Default MARC framework</span>
                     [% END %]
                 </a>
             </li>
@@ -74,15 +74,15 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <li>
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
-                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
-                        Default MARC framework
+                        <span>Default MARC framework</span>
                     [% END %]
                 </a>
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Confirm deletion of tag '[% searchfield | html %]'
+                    Confirm deletion of tag [% searchfield | html %]
                 </a>
             </li>
 
@@ -90,9 +90,9 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <li>
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
-                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
-                        Default MARC framework
+                        <span>Default MARC framework</span>
                     [% END %]
                 </a>
             </li>
@@ -116,7 +116,11 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
     <a class="btn btn-default" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-plus"></i> New tag</a>
 </div>[% END %]
 
-<h1>MARC Framework for [% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]default MARC framework[% END %]</h1>
+[% IF framework %]
+    <h1>MARC Framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</h1>
+[% ELSE %]
+    <h1>MARC Framework for default MARC framework</h1>
+[% END %]
 
 [% IF ( add_form ) %]
 
@@ -285,9 +289,9 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                 [% END %]
             [% END %]
             </td>
-            <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
-            <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
-            <td>[% IF ( loo.important ) %]Yes[% ELSE %]No[% END %]</td>
+            <td>[% IF ( loo.repeatable ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
+            <td>[% IF ( loo.mandatory ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
+            <td>[% IF ( loo.important ) %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]</td>
             <td>[% loo.authorised_value | html %]</td>
             <td>[% loo.ind1_defaultvalue | html %]</td>
             <td>[% loo.ind2_defaultvalue | html %]</td>
