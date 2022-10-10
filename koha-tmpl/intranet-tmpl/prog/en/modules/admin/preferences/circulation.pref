@@ -1036,7 +1036,7 @@ Circulation:
             - "ILL statuses that are considered finished and should not be displayed in the ILL module: "
             - pref: ILLHiddenRequestStatuses
               class: multi
-            - (separated with |). If left empty, all ILL requests will be displayed. The request codes can be found in the ILLSTATUS authorized value category.
+            - (separated with |). If left empty, all ILL requests will be displayed. The request codes can be found in the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS">ILLSTATUS authorized value category</a>.
         -
             - "Send these ILL notices to staff when appropriate:"
             - pref: ILLSendStaffNotices
@@ -1327,11 +1327,11 @@ Circulation:
 
     Item bundles:
         -
-            - Use the LOST authorised value
+            - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST authorized value</a>
             - pref: BundleLostValue
             - to represent 'missing from bundle' at return.
         -
-            - Use the NOT_LOAN authorised value
+            - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">NOT_LOAN authorized value</a>
             - pref: BundleNotLoanValue
             - to represent 'added to bundle' when an item is attached to bundle.
 
@@ -1346,7 +1346,7 @@ Circulation:
                   no_charge: don't charge a lost fee
             - .
         -
-            - Use the LOST authorised value
+            - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST authorized value</a>
             - pref: ClaimReturnedLostValue
             - to represent 'claims returned'.
         -
