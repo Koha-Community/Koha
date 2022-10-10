@@ -240,7 +240,7 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{'unseencount'},
             $issue->{'unseenallowed'},
             $issue->{'unseenleft'}
-        ) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
+        ) = GetRenewCount($patron, $c->item);
         ( $issue->{'renewalfee'}, $issue->{'renewalitemtype'} ) = GetIssuingCharges( $issue->{'itemnumber'}, $borrowernumber );
         $issue->{itemtype_object} = Koha::ItemTypes->find( $c->item->effective_itemtype );
         if($status && C4::Context->preference("OpacRenewalAllowed")){

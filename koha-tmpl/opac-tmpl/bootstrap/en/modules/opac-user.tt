@@ -455,7 +455,7 @@
                                                         [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
                                                         [% IF ( ISSUE.status ) %]
                                                             [% IF ( canrenew ) %]
-                                                                <input type="checkbox" name="item" value="[% ISSUE.itemnumber | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
+                                                                <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;issue=[% ISSUE.issue_id | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
                                                             [% END %]
                                                             [% IF ISSUE.renewalfee > 0 %]
                                                                 <span class="renewalfee label label-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>

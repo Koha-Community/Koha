@@ -38,8 +38,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "opac",
 	}
-); 
-my @items = $query->multi_param('item');
+);
+my @issues = $query->multi_param('issue');
 
 my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 
@@ -55,13 +55,19 @@ if (   $patron->category->effective_BlockExpiredPatronOpacActions
 }
 else {
     my @renewed;
-    for my $itemnumber (@items) {
-        my $item = Koha::Items->find($itemnumber);
+    my $issues = Koha::Checkouts->search(
+        {
+            issue_id => { -in => \@issues }
+        }, {
+            prefetch => 'item'
+        }
+    );
+    while( my $issue = $issues->next) {
         my ( $status, $error ) =
-          CanBookBeRenewed( $patron, $item->checkout ); #TODO: Pass issue numbers instead
+          CanBookBeRenewed( $patron, $issue );
         if ( $status == 1 && $opacrenew == 1 ) {
-            AddRenewal( $borrowernumber, $itemnumber, undef, undef, undef, undef, 0 );
-            push( @renewed, $itemnumber );
+            AddRenewal( $borrowernumber, $issue->itemnumber, undef, undef, undef, undef, 0 );
+            push( @renewed, $issue->itemnumber );
         }
         else {
             $errorstring .= $error . "|";
