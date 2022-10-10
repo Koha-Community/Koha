@@ -94,40 +94,4 @@
 </div>
 
 <!-- Claims Returned Modal -->
-
 [% PROCESS 'modal-claims-display' %]
-<div class="modal fade" id="claims-returned-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-modal-label">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="claims-returned-modal-label">Claim returned</h4>
-      </div>
-      <div class="modal-body">
-
-          <div class="form-group">
-            <label for="claims-returned-notes" class="control-label">Notes</label>
-            <div>
-              <textarea id="claims-returned-notes" class="form-control" rows="3"></textarea>
-            </div>
-          </div>
-
-          [% IF Koha.Preference('ClaimReturnedChargeFee') == 'ask' %]
-            <div class="form-group">
-              <div class="checkbox">
-                <label for="claims-returned-charge-lost-fee">
-                  <input id="claims-returned-charge-lost-fee" type="checkbox" value="1">
-                  Charge lost fee
-                </label>
-              </div>
-            </div>
-          [% END %]
-
-          <input type="hidden" id="claims-returned-itemnumber" />
-      </div>
-      <div class="modal-footer">
-        <button id="claims-returned-modal-btn-submit" type="button" class="btn btn-primary"><i class="fa fa-exclamation-circle"></i> Make claim</button>
-        <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
