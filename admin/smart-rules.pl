@@ -263,7 +263,7 @@ elsif ($op eq 'add') {
     my $maxissueqty = strip_non_numeric( scalar $input->param('maxissueqty') );
     my $maxonsiteissueqty = strip_non_numeric( scalar $input->param('maxonsiteissueqty') );
     my $renewalsallowed  = $input->param('renewalsallowed');
-    my $unseen_renewals_allowed  = strip_non_numeric( scalar $input->param('unseen_renewals_allowed') ) // q{};
+    my $unseen_renewals_allowed  = defined $input->param('unseen_renewals_allowed') ? strip_non_numeric( scalar $input->param('unseen_renewals_allowed') ) : q{};
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
     $norenewalbefore = q{} if $norenewalbefore =~ /^\s*$/;
