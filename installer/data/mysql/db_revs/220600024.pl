@@ -9,7 +9,7 @@ return {
         my %default_rule_values = (
             issuelength             => 0,
             hardduedate             => '',
-            unseenrenewalsallowed   => '',
+            unseen_renewals_allowed   => '',
             rentaldiscount          => 0,
             decreaseloanholds       => '',
         );
@@ -17,7 +17,15 @@ return {
             $dbh->do(q{
                 INSERT IGNORE INTO circulation_rules (branchcode, categorycode, itemtype, rule_name, rule_value)
                     SELECT branchcode, categorycode, itemtype, ?, ? FROM circulation_rules cr
-                        WHERE NOT EXISTS (
+                        WHERE EXISTS (
+                            SELECT * FROM circulation_rules cr2
+                                WHERE
+                                    cr2.rule_name="suspension_chargeperiod"
+                                    AND ( (cr2.branchcode=cr.branchcode) OR ( ISNULL(cr2.branchcode) AND ISNULL(cr.branchcode) ) )
+                                    AND ( (cr2.categorycode=cr.categorycode) OR ( ISNULL(cr2.categorycode) AND ISNULL(cr.categorycode) ) )
+                                    AND ( (cr2.itemtype=cr.itemtype) OR ( ISNULL(cr2.itemtype) AND ISNULL(cr.itemtype) ) )
+                        )
+                        AND NOT EXISTS (
                             SELECT * FROM circulation_rules cr2
                                 WHERE
                                     cr2.rule_name=?
