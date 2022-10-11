@@ -32,9 +32,12 @@ return {
         });
 
         # Remove FOREIGN KEY CONSTRAINT
-        $dbh->do(q{
-            ALTER TABLE reserves DROP FOREIGN KEY reserves_ibfk_4;
-        });
+        if ( foreign_key_exists( 'reserves', 'reserves_ibfk_4' ) ) {
+            $dbh->do(q{
+                ALTER TABLE reserves DROP FOREIGN KEY reserves_ibfk_4;
+            });
+        }
+
         # Set the NOT NULL configuration
         $dbh->do(q{
             ALTER TABLE reserves
