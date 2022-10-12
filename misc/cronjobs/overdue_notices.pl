@@ -314,7 +314,7 @@ my $command_line_options = join(" ",@ARGV);
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
-    'v|verbose'      => \$verbose,
+    'v|verbose+'     => \$verbose,
     'n|nomail'       => \$nomail,
     'max=s'          => \$MAX,
     'library=s'      => \@branchcodes,
