@@ -200,7 +200,7 @@ ok( Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery($borrowernum
 my $borrower = Koha::Patrons->search( { userid => $userid1 } )->next;
 my $success;
 warning_is {
-    $success = Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0); }
+    $success = Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1 ); }
     "Fake sendmail",
     '[SendPasswordRecoveryEmail] expecting fake sendmail';
 ok( $success == 1, '[SendPasswordRecoveryEmail] Returns 1 on success');
@@ -212,7 +212,7 @@ my $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumb
 my $tempuuid1 = $bpr->next->uuid;
 
 warning_is {
-    Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 1); }
+    Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1 ); }
     "Fake sendmail",
     '[SendPasswordRecoveryEmail] expecting fake sendmail';
 

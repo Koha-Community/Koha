@@ -133,7 +133,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             username                => $username
         );
     }
-    elsif ( SendPasswordRecoveryEmail( $borrower, $email, scalar $query->param('resendEmail') ) ) {    # generate uuid and send recovery email
+    elsif ( SendPasswordRecoveryEmail( $borrower, $email ) ) {    # generate uuid and send recovery email
         $template->param(
             mail_sent => 1,
             email     => $email

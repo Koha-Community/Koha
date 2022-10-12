@@ -100,11 +100,8 @@ if ( $op eq 'send_password_reset' ) {
 
     if ($emailaddr) {
 
-        # check if there's already a recovery in process
-        my $update = ValidateBorrowernumber( $patron->borrowernumber );
-
         # send staff initiated password recovery
-        SendPasswordRecoveryEmail( $patron, $emailaddr, $update, 1 );
+        SendPasswordRecoveryEmail( $patron, $emailaddr, 1 );
     }
 
     # redirect to self to avoid form submission on refresh
