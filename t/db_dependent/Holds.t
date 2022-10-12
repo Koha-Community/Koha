@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 75;
+use Test::More tests => 76;
 use Test::Exception;
 
 use MARC::Record;
@@ -384,6 +384,12 @@ t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1' );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
 t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1|1' );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
+t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '' );
+my $item_group_1 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+my $item_group_2 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+$item_group_1->add_item({ item_id => $itemnumber });
+$hold->item_group_id( $item_group_2->id )->update;
+ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with non-matching item group" );
 is(
     CanItemBeReserved( $patrons[0], $nfl_item)->{status}, 'itemAlreadyOnHold',
     "cannot request item that you have already reservedd"
