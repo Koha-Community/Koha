@@ -38,6 +38,7 @@
         [%- CASE 'OVERPAYMENT'  -%]<span>Overpayment refund</span>
         [%- CASE 'REFUND'       -%]<span>Refund</span>
         [%- CASE 'CANCELLATION' -%]<span>Cancelled charge</span>
+        [%- CASE 'PROCESSING_FOUND' -%]<span>Lost item processing fee refund</span>
         [%- CASE                -%]<span>[% credit_type.description | html %]</span>
     [%- END -%]
 [%- END -%]

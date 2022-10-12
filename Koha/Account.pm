@@ -173,6 +173,7 @@ $credit_type can be any of:
   - 'OVERPAYMENT'
   - 'PAYMENT'
   - 'WRITEOFF'
+  - 'PROCESSING_FOUND'
 
 =cut
 
