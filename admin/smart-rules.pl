@@ -654,6 +654,31 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
             }
         );
     }
+
+    my $processingreturn = $input->param('processingreturn');
+
+    if ( $processingreturn eq '*' ) {
+        if ( $branch ne '*' ) {
+            # only do something for $processingreturn eq '*' if branch-specific
+            Koha::CirculationRules->set_rules(
+                {
+                    branchcode   => $branch,
+                    rules        => {
+                        processingreturn => undef
+                    }
+                }
+            );
+        }
+    } else {
+        Koha::CirculationRules->set_rules(
+            {
+                branchcode   => $branch,
+                rules        => {
+                    processingreturn => $processingreturn
+                }
+            }
+        );
+    }
 } elsif ( $op eq "set-waiting-hold-cancellation" ) {
 
     my $category = $input->param('waiting_hold_cancellation_category');
@@ -691,9 +716,13 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
 
 my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'lostreturn' });
 my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'lostreturn' });
+my $refundProcessingFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'processingreturn' });
+my $defaultProcessingFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'processingreturn' });
 $template->param(
     refundLostItemFeeRule => $refundLostItemFeeRule,
-    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'refund'
+    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'refund',
+    refundProcessingFeeRule => $refundProcessingFeeRule,
+    defaultProcessingRefundRule => $defaultProcessingFeeRule ? $defaultProcessingFeeRule->rule_value : 'refund',
 );
 
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });

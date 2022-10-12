@@ -1073,7 +1073,8 @@
             <input type="hidden" name="branch" value="[% current_branch | html %]" />
             <table>
                 <tr>
-                    <th>Refund lost item fee</th>
+                    <th>Refund lost item replacement fee</th>
+                    <th>Refund lost item processing fee</th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr>
@@ -1174,6 +1175,64 @@
                                 <option value="charge">Refund lost item charge and charge new overdue fine</option>
                                 <option value="restore">Refund lost item charge and restore overdue fine</option>
                                 <option value="0" selected="selected">Leave lost item charge</option>
+                                [% END %]
+                            [% END %]
+                          [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="processingreturn">
+                          [%# Default branch %]
+                          [% IF ( current_branch == '*' ) %]
+                            [% IF ( defaultProcessingRefundRule == 'refund' ) %]
+                            <option value="refund" selected="selected">Refund lost item processing charge</option>
+                            <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                            <option value="0">Leave lost item processing charge</option>
+                            [% ELSIF ( defaultProcessingRefundRule == 'refund_unpaid' ) %]
+                            <option value="refund">Refund lost item charge</option>
+                            <option value="refund_unpaid" selected="selected">Refund lost item processing charge (only if unpaid)</option>
+                            <option value="0">Leave lost item processing charge</option>
+                            [% ELSIF ( defaultProcessingRefundRule == 0 ) %]
+                            <option value="refund">Refund lost item processing charge</option>
+                            <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                            <option value="0" selected="selected">Leave lost item processing charge</option>
+                            [% ELSE %]
+                            <option value="refund">Refund lost item processing charge</option>
+                            <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                            <option value="0">Leave lost item processing charge</option>
+                            [% END %]
+                          [% ELSE %]
+                          [%# Branch-specific %]
+                            [% IF ( not refundProcessingFeeRule ) %]
+                                <option value="*" selected="selected">
+                            [% ELSE %]
+                                <option value="*">
+                            [% END %]
+                              [% IF defaultProcessingRefundRule == 'refund' %]
+                                <span>Use default (Refund lost item processing charge)</span>
+                              [% ELSIF defaultProcessingRefundRule == 'refund_unpaid' %]
+                                Use default (Refund lost item processing charge (only if unpaid))
+                              [% ELSE %]
+                                <span>Use default (Leave lost item processing charge)</span>
+                              [% END %]
+                                </option>
+                            [% IF ( not refundProcessingFeeRule ) %]
+                                <option value="refund">Refund lost item processing charge</option>
+                                <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                                <option value="0">Leave lost item processing charge</option>
+                            [% ELSE %]
+                                [% IF ( refundProcessingFeeRule.rule_value == 'refund' ) %]
+                                <option value="refund" selected="selected">Refund lost item processing charge</option>
+                                <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                                <option value="0">Leave lost item processing charge</option>
+                                [% ELSIF ( refundProcessingFeeRule.rule_value == 'refund_unpaid' ) %]
+                                <option value="refund">Refund lost item processing charge</option>
+                                <option value="refund_unpaid" selected="selected">Refund lost item processing charge (only if unpaid)</option>
+                                <option value="0">Leave lost item processing charge</option>
+                                [% ELSIF ( refundProcessingFeeRule.rule_value == 0 ) %]
+                                <option value="refund">Refund lost item processing charge</option>
+                                <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
+                                <option value="0" selected="selected">Leave lost item processing charge</option>
                                 [% END %]
                             [% END %]
                           [% END %]
