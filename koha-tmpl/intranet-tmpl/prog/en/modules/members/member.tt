@@ -78,8 +78,17 @@
                     [% END %]
 
                     [% IF CAN_user_borrowers_edit_borrowers %]
-                          <button id="merge-patrons" class="btn btn-sm btn-default disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
+                        <div class="btn-group">
+                            <button id="merge-patrons" class="btn btn-sm btn-default disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
+                        </div>
                     [% END %]
+
+                    [% IF CAN_user_tools_edit_patrons %]
+                        <div class="btn-group">
+                            <button id="batch-mod-patrons" class="btn btn-default btn-sm" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Batch patron modification</button>
+                        </div>
+                    [% END %]
+
                     <div id="patron_search_selected" class="btn-group" style="display:none;">
                         <span></span>
                         <a href="#" id="clear-patron-selection"><i class="fa fa-remove"></i> Clear</a>
@@ -93,6 +102,12 @@
             [% END %]
             [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
           </div>
+        [% IF CAN_user_tools_edit_patrons %]
+            <form id="patron_batchmod_form" method="post" action="/cgi-bin/koha/tools/modborrowers.pl">
+                <input type="hidden" name="op" value="show" />
+                <textarea style="display:none" id="borrowernumberlist" name="borrowernumberlist"></textarea>
+            </form>
+        [% END %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -141,7 +156,7 @@
         }
 
         $(document).ready(function() {
-            $('#merge-patrons').prop('disabled', true);
+            $('#merge-patrons, #batch-mod-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
                 var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
                 var borrowernumber = $(this).val();
@@ -164,17 +179,16 @@
                     }
                 }
                 if ( patron_search_selections.length > 1 ) {
-                    /* More than one checkbox has been checked */
-                    $('#merge-patrons').prop('disabled', false).removeClass("disabled");
-                    $("#patronlist-menu").removeClass("disabled").prop("disabled", false);
+                    /* More than one checkbox has been checked. All batch options enabled */
+                    $("#batch-mod-patrons, #merge-patrons, #patronlist-menu").removeClass("disabled").prop("disabled", false);
                 } else if ( patron_search_selections.length == 1 ) {
-                    /* At least one checkbox has been checked */
+                    /* Only one checkbox has been checked */
+                    $("#batch-mod-patrons, #patronlist-menu").removeClass("disabled").prop("disabled", false);
+                    /* Merge requires more than one selection */
                     $('#merge-patrons').prop('disabled', true).addClass("disabled");
-                    $("#patronlist-menu").removeClass("disabled").prop("disabled", false);
                 } else {
-                    /* No checkbox has been checked */
-                    $('#merge-patrons').prop('disabled', true).addClass("disabled");
-                    $("#patronlist-menu").addClass("disabled").prop("disabled", true);
+                    /* No checkbox has been checked. No batch options enabled */
+                    $("#batch-mod-patrons, #merge-patrons, #patronlist-menu").addClass("disabled").prop("disabled", true);
                 }
             });
 
@@ -186,11 +200,11 @@
 
             $("#clear-patron-selection").on("click", function(e){
                 e.preventDefault();
-                $(".selection").prop("checked", false).change();
+                $("input.selection").prop("checked", false).change();
                 localStorage.removeItem("patron_search_selections");
                 $("#patron_search_selected").hide();
-                $('#merge-patrons').prop('disabled', true).addClass("disabled");
-                $("#patronlist-menu").addClass("disabled").prop("disabled", true);
+                $('#merge-patrons, #patronlist-menu, #batch-mod-patrons').prop('disabled', true).addClass("disabled");
+                $("#borrowernumberlist").val("");
             });
 
             $("#patronlist-dropdown").on("click", ".patron-list-add", function(e){
@@ -212,7 +226,16 @@
 
                     patronListAdd();
                 }
-            })
+            });
+
+            $("#batch-mod-patrons").on("click", function(e) {
+                e.preventDefault();
+                var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
+                if( patron_search_selections.length > 0 ){
+                    $("#borrowernumberlist").html( patron_search_selections.join('\n') );
+                    $("#patron_batchmod_form").submit();
+                }
+            });
 
             /* Submit selected patrons to a list via AJAX */
             $("#new-patron-list_form").on('submit', function(e){
@@ -237,7 +260,7 @@
 
             $("#select_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").each(function(){
+                $("input.selection").each(function(){
                     if( $(this).prop("checked") == false ){
                         $(this).prop( "checked", true ).change();
                     }
@@ -245,7 +268,7 @@
             });
             $("#clear_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").each(function(){
+                $("input.selection").each(function(){
                     if( $(this).prop("checked") ){
                         $(this).prop("checked", false ).change();
                     }
@@ -321,8 +344,7 @@
                 });
 
                 if( selected_patrons.length > 1 ){
-                    $('#merge-patrons').removeClass("disabled").prop('disabled', false);
-                    $('#patronlist-menu').removeClass("disabled").prop('disabled', false);
+                    $('#batch-mod-patrons, #merge-patrons, #patronlist-menu').removeClass("disabled").prop('disabled', false);
                 }
             }
         }
