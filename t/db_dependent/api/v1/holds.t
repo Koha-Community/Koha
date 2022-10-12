@@ -1097,7 +1097,7 @@ subtest 'edit() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -1173,6 +1173,37 @@ subtest 'add() tests' => sub {
     my $biblio_hold_api_data = $biblio_hold->to_api;
     $biblio_hold->delete;
     my $biblio_hold_data = {
+        biblio_id         => $biblio_hold_api_data->{biblio_id},
+        patron_id         => $biblio_hold_api_data->{patron_id},
+        pickup_library_id => $library_1->branchcode,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
+    $t->post_ok( "//$userid:$password@/api/v1/holds"  => json => $biblio_hold_data )
+      ->status_is(201);
+
+    # Test biblio-level holds
+    my $item_group = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+    $biblio_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber  => $biblio->biblionumber,
+                branchcode    => $library_3->branchcode,
+                itemnumber    => undef,
+                priority      => 1,
+                item_group_id => $item_group->id,
+            }
+        }
+    );
+
+    $biblio_hold_api_data = $biblio_hold->to_api;
+    $biblio_hold->delete;
+    $biblio_hold_data = {
         biblio_id         => $biblio_hold_api_data->{biblio_id},
         patron_id         => $biblio_hold_api_data->{patron_id},
         pickup_library_id => $library_1->branchcode,
