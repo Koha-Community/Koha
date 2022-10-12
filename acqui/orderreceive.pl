@@ -170,21 +170,26 @@ if ( $suggestion ) {
 }
 
 my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
-my $budget_loop = [];
+my %budget_loops;
 my $budgets = GetBudgetHierarchy( undef, undef, undef, 1 );
-foreach my $r (@{$budgets}) {
-    next unless (CanUserUseBudget($patron, $r, $userflags));
-    push @{$budget_loop}, {
-        b_id  => $r->{budget_id},
-        b_txt => $r->{budget_name},
-        b_sort1_authcat => $r->{'sort1_authcat'},
-        b_sort2_authcat => $r->{'sort2_authcat'},
-        b_active => $r->{budget_period_active},
-        b_sel => ( $r->{budget_id} == $order->budget_id ) ? 1 : 0,
-        b_level => $r->{budget_level},
+foreach my $budget (@{$budgets}) {
+    next unless (CanUserUseBudget($patron, $budget, $userflags));
+    unless ( defined $budget_loops{$budget->{budget_period_id}} ){
+        $budget_loops{$budget->{budget_period_id}}->{description} = $budget->{budget_period_description};
+        $budget_loops{$budget->{budget_period_id}}->{active} = $budget->{budget_period_active};
+        $budget_loops{$budget->{budget_period_id}}->{funds} = [];
+    }
+    push @{$budget_loops{$budget->{budget_period_id}}->{funds}}, {
+        b_id  => $budget->{budget_id},
+        b_txt => $budget->{budget_name},
+        b_sort1_authcat => $budget->{'sort1_authcat'},
+        b_sort2_authcat => $budget->{'sort2_authcat'},
+        b_active => $budget->{budget_period_active},
+        b_sel => ( $budget->{budget_id} == $order->budget_id ) ? 1 : 0,
+        b_level => $budget->{budget_level},
     };
 }
-$template->{'VARS'}->{'budget_loop'} = $budget_loop;
+$template->{'VARS'}->{'budget_loops'} = \%budget_loops;
 
 my $op = $input->param('op');
 if ($op and $op eq 'edit'){
