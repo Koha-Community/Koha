@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Test::Exception;
 use Test::MockModule;
@@ -908,6 +908,50 @@ subtest 'can_update_pickup_location_opac() tests' => sub {
     $dt = dt_from_string();
     $hold->suspend_hold( $dt );
     is( $hold->can_update_pickup_location_opac, 1, "Suspended hold pickup can be changed (pending,intransit,suspended allowed)" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Koha::Hold::item_group tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { exclude_from_local_holds_priority => 0 }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode   => $library->branchcode,
+                categorycode => $category->categorycode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item_group =
+      Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+
+    my $hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                item_group_id  => $item_group->id,
+            }
+        }
+    );
+
+    is( $hold->item_group->id, $item_group->id, "Got correct item group" );
 
     $schema->storage->txn_rollback;
 };
