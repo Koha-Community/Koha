@@ -106,7 +106,6 @@ sub GetValidLinkInfo {
 sub SendPasswordRecoveryEmail {
     my $borrower  = shift;    # Koha::Patron
     my $userEmail = shift;    #to_address (the one specified in the request)
-    my $update    = shift;
     my $staff     = shift // 0;
 
     my $schema = Koha::Database->new->schema;
@@ -121,22 +120,14 @@ sub SendPasswordRecoveryEmail {
     my $days = $staff ? STAFF : PATRON;
     my $expirydate =
       dt_from_string()->add( days => $days );
-    if ($update) {
-        my $rs =
-          $schema->resultset('BorrowerPasswordRecovery')
-          ->search( { borrowernumber => $borrower->borrowernumber, } );
-        $rs->update(
-            { uuid => $uuid_str, valid_until => $expirydate->datetime() } );
-    }
-    else {
-        my $rs = $schema->resultset('BorrowerPasswordRecovery')->create(
+    my $rs = $schema->resultset('BorrowerPasswordRecovery')->update_or_create(
             {
                 borrowernumber => $borrower->borrowernumber,
                 uuid           => $uuid_str,
                 valid_until    => $expirydate->datetime()
-            }
+            },
+            { key => 'primary' }
         );
-    }
 
     # create link
     my $opacbase = C4::Context->preference('OPACBaseURL') || '';
