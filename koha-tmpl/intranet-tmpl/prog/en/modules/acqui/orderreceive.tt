@@ -291,33 +291,41 @@
             <label class="required" for="bookfund">Fund: </label>
             [% active_count = 0 %]
             [% IF !ordernumber %]
-                [% FOREACH budget_loo IN budget_loop %]
-                    [% active_count= active_count + budget_loo.b_active %]
+                [% FOREACH budget_period IN budget_loops.keys %]
+                    [% FOREACH fund IN budget_loops.$budget_period.funds %]
+                        [% active_count= active_count + fund.b_active %]
+                    [% END %]
                 [% END %]
             [% END %]
             <select class="select2" id="bookfund" name="bookfund">
-            [% FOREACH budget_loo IN budget_loop %]
-               [% level_indent_cnt = 0 %]
-                [% level_indent = "" %]
-                [% WHILE level_indent_cnt < budget_loo.b_level %]
-                    [% level_indent = level_indent _ " -- " %]
-                    [% level_indent_cnt = level_indent_cnt +1 %]
-                [% END %]
-
-                [% IF ( budget_loo.b_sel ) %]
-                    [% active_count = 0 #select no other fund %]
-                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                    >
-                [% ELSIF active_count==1 && budget_loo.b_active %]
-                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                    >
+            [% FOREACH budget_period_id IN budget_loops.keys %]
+                [% SET budget_period = budget_loops.$budget_period_id %]
+                [% IF budget_period.active %]
+                    <optgroup label="[% budget_period.description %]">
                 [% ELSE %]
-                    [% bdgclass=budget_loo.b_active? "": "b_inactive" | html %]
-                    <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                    >
+                    <optgroup class="inactive_budget" label="[% budget_period.description %] (Inactive)">
                 [% END %]
-                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
-                </option>
+                [% FOREACH budget_loo IN budget_period.funds %]
+                   [% level_indent_cnt = 0 %]
+                    [% level_indent = "" %]
+                    [% WHILE level_indent_cnt < budget_loo.b_level %]
+                        [% level_indent = level_indent _ " -- " %]
+                        [% level_indent_cnt = level_indent_cnt +1 %]
+                    [% END %]
+
+                    [% IF ( budget_loo.b_sel ) %]
+                        [% active_count = 0 #select no other fund %]
+                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                    [% ELSIF active_count==1 && budget_loo.b_active %]
+                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                    [% ELSE %]
+                        [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
+                        <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                    [% END %]
+                        [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                    </option>
+                [% END %]
+                </optgroup>
             [% END %]
             </select>
             <span class="required">Required</span>
@@ -555,14 +563,14 @@
 
             //keep a copy of all budgets before removing the inactives
             disabledBudgetsCopy = $('#bookfund').html();
-            $('#bookfund .b_inactive').remove();
+            $('#bookfund .inactive_budget').remove();
 
             $('#showallbudgets').click(function() {
                 if ($(this).is(":checked")) {
                     $('#bookfund').html(disabledBudgetsCopy); //Puts back all the funds
                 }
                 else {
-                    $('#bookfund .b_inactive').remove();
+                    $('#bookfund .inactive_budget').remove();
                 }
             });
 
