@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -204,6 +204,14 @@ $hold->store();
 
 $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, 'item', "Item level hold forces item level holds" );
+
+my $item_group = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+$hold->itemnumber( undef );
+$hold->item_group_id( $item_group->id );
+$hold->store();
+
+$holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
+is( $holds->forced_hold_level, 'item_group', "Item group level hold forces item group level holds" );
 
 $hold->delete();
 
