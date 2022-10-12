@@ -8,6 +8,7 @@ INSERT INTO account_credit_types ( code, description, can_be_added_manually, is_
 ('REFUND', 'Refund', 0, 1),
 ('LOST_FOUND', 'Lost item fee refund', 0, 1),
 ('PURCHASE', 'Purchase', 0, 1),
-('CANCELLATION', 'Cancellation', 0, 1);
+('CANCELLATION', 'Cancellation', 0, 1),
+('PROCESSING_FOUND', 'Lost item processing fee refund', 0, 1);
 
 INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('PAYMENT_TYPE','CASH','Cash');
