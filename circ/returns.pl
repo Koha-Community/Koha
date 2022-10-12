@@ -674,6 +674,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'LostItemFeeRestored' ) {
         $template->param( LostItemFeeRestored => 1 );
     }
+    elsif ( $code eq 'ProcessingFeeRefunded' ) {
+        $template->param( ProcessingFeeRefunded => 1 );
+    }
     elsif ( $code eq 'ResFound' ) {
         ;    # FIXME... anything to do here?
     }

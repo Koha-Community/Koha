@@ -2220,6 +2220,8 @@ sub AddReturn {
             for my $message (@object_messages) {
                 $messages->{'LostItemFeeRefunded'} = 1
                   if $message->message eq 'lost_refunded';
+                $messages->{'ProcessingFeeRefunded'} = 1
+                  if $message->message eq 'processing_refunded';
                 $messages->{'LostItemFeeRestored'} = 1
                   if $message->message eq 'lost_restored';
 

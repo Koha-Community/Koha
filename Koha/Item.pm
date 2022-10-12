@@ -1324,6 +1324,111 @@ sub _set_found_trigger {
         }
     }
 
+    my $processingreturn_policy = Koha::CirculationRules->get_processingreturn_policy(
+        {
+            item          => $self,
+            return_branch => C4::Context->userenv
+            ? C4::Context->userenv->{'branch'}
+            : undef,
+        }
+      );
+
+    if ( $processingreturn_policy ) {
+
+        # refund processing charge made for lost book
+        my $processing_charge = Koha::Account::Lines->search(
+            {
+                itemnumber      => $self->itemnumber,
+                debit_type_code => 'PROCESSING',
+                status          => [ undef, { '<>' => 'FOUND' } ]
+            },
+            {
+                order_by => { -desc => [ 'date', 'accountlines_id' ] },
+                rows     => 1
+            }
+        )->single;
+
+        if ( $processing_charge ) {
+
+            my $patron = $processing_charge->patron;
+            if ( $patron ) {
+
+                my $account = $patron->account;
+
+                # Credit outstanding amount
+                my $credit_total = $processing_charge->amountoutstanding;
+
+                # Use cases
+                if (
+                    $processing_charge->amount > $processing_charge->amountoutstanding &&
+                    $processingreturn_policy ne "refund_unpaid"
+                ) {
+                    # some amount has been cancelled. collect the offsets that are not writeoffs
+                    # this works because the only way to subtract from this kind of a debt is
+                    # using the UI buttons 'Pay' and 'Write off'
+
+                    # We don't credit any payments if return policy is
+                    # "refund_unpaid"
+                    #
+                    # In that case only unpaid/outstanding amount
+                    # will be credited which settles the debt without
+                    # creating extra credits
+
+                    my $credit_offsets = $processing_charge->debit_offsets(
+                        {
+                            'credit_id'               => { '!=' => undef },
+                            'credit.credit_type_code' => { '!=' => 'Writeoff' }
+                        },
+                        { join => 'credit' }
+                    );
+
+                    my $total_to_refund = ( $credit_offsets->count > 0 ) ?
+                        # credits are negative on the DB
+                        $credit_offsets->total * -1 :
+                        0;
+                    # Credit the outstanding amount, then add what has been
+                    # paid to create a net credit for this amount
+                    $credit_total += $total_to_refund;
+                }
+
+                my $credit;
+                if ( $credit_total > 0 ) {
+                    my $branchcode =
+                      C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+                    $credit = $account->add_credit(
+                        {
+                            amount      => $credit_total,
+                            description => 'Item found ' . $self->itemnumber,
+                            type        => 'PROCESSING_FOUND',
+                            interface   => C4::Context->interface,
+                            library_id  => $branchcode,
+                            item_id     => $self->itemnumber,
+                            issue_id    => $processing_charge->issue_id
+                        }
+                    );
+
+                    $credit->apply( { debits => [$processing_charge] } );
+                    $self->add_message(
+                        {
+                            type    => 'info',
+                            message => 'processing_refunded',
+                            payload => { credit_id => $credit->id }
+                        }
+                    );
+                }
+
+                # Update the account status
+                $processing_charge->status('FOUND');
+                $processing_charge->store();
+
+                # Reconcile balances if required
+                if ( C4::Context->preference('AccountAutoReconcile') ) {
+                    $account->reconcile_balance;
+                }
+            }
+        }
+    }
+
     return $self;
 }
 

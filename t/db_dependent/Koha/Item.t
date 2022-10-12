@@ -1407,7 +1407,7 @@ subtest 'store() tests' => sub {
 
     subtest '_set_found_trigger() tests' => sub {
 
-        plan tests => 6;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
 
@@ -1424,10 +1424,22 @@ subtest 'store() tests' => sub {
             }
         );
 
+        # Add a lost item processing fee
+        my $processing_debit = $patron->account->add_debit(
+            {
+                amount    => 2,
+                type      => 'PROCESSING',
+                item_id   => $item->id,
+                interface => 'intranet',
+            }
+        );
+
         my $lostreturn_policy = 'charge';
+        my $processingreturn_policy = 'refund';
 
         my $mocked_circ_rules = Test::MockModule->new('Koha::CirculationRules');
         $mocked_circ_rules->mock( 'get_lostreturn_policy', sub { return $lostreturn_policy; } );
+        $mocked_circ_rules->mock( 'get_processingreturn_policy', sub { return $processingreturn_policy; } );
 
         # simulate it was found
         $item->set( { itemlost => 0 } )->store;
@@ -1453,6 +1465,16 @@ subtest 'store() tests' => sub {
         is( $message_2->type,    'info',        'type is correct' );
         is( $message_2->message, 'lost_charge', 'message is correct' );
         is( $message_2->payload, undef,         'no payload' );
+
+        my $message_3 = $messages->[2];
+        is( $message_3->message, 'processing_refunded', 'message is correct' );
+
+        my $processing_credit = $processing_debit->credits->next;
+        is_deeply(
+            $message_3->payload,
+            { credit_id => $processing_credit->id },
+            'type is correct'
+        );
 
         $schema->storage->txn_rollback;
     };
