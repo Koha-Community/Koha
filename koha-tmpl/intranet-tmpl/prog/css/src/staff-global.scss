@@ -20,7 +20,12 @@
 
 .page-section {
     @include card;
+
     padding: .5em 1em;
+
+    & + .page-section {
+        margin-top: 1em;
+    }
 }
 
 a {
