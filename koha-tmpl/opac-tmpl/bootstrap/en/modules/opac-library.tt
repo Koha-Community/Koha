@@ -90,70 +90,42 @@
                 <div class="col order-first order-md-first order-lg-2">
             [% END %]
 
-                [% IF ( library ) %]
-
-                    <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
-                        <h1 property="name">[% library.branchname | html %]</h1>
-
-                        <div class="row">
-                            <div class="col-lg-8">
-                                [% PROCESS library_info %]
-                                [% IF ( OpacLibraryInfo ) %]
-                                    <div class="library_description">
-                                        <hr />
-                                        [% PROCESS library_description %]
-                                    </div>
-                                [% END %]
-                            </div>
-                            <div class="col-lg-4">
-                                [% IF ( libraries.count > 1 ) %]
-                                    <nav class="libraries">
-                                        <ul class="fa-ul">
-                                            [% FOREACH library IN libraries %]
-                                                [% IF ( branchcode == library.branchcode ) %]
-                                                    <li id="menu_[% library.branchcode| html %]" class="current">
-                                                        <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
-                                                            <i class="fa fa-li fa-map-pin" aria-hidden="true"></i> [% library.branchname | html %]
-                                                        </a>
-                                                    </li>
-                                                [% ELSE %]
-                                                    <li id="menu_[% library.branchcode| html %]">
-                                                        <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
-                                                            <i class="fa fa-li" aria-hidden="true"></i> [% library.branchname | html %]
-                                                        </a>
-                                                    </li>
-                                                [% END %]
-                                            [% END %]
-                                        </ul>
-                                    </nav>
-                                [% END # /IF libraries.count > 1 %]
-                            </div> <!-- /.col-lg-4 -->
-                        </div> <!-- /.row -->
-                    </div> <!-- /#library_info -->
-
-                [% ELSE %]
-                    <div id="library_info" class="maincontent">
-                        <h1>[% IF ( singleBranchMode ) %]<span>Library</span>[% ELSE %]<span>Libraries</span>[% END %]</h1>
-
-                        [% FOREACH library IN libraries %]
-                            <div class="section_library" id="section_[% library.branchcode | html %]">
-                                <h2 property="name">
-                                    [% IF ( libraries.count > 1 ) %]
-                                        <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
-                                    [% ELSE %]
-                                        [% library.branchname | html %]
-                                    [% END %]
-                                </h2>
-                                [% PROCESS library_info %]
-                            </div>
-                            [% IF ( libraries.count == 1 ) %]
+            [% IF ( library ) %]
+                <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
+                    <h1 property="name">[% library.branchname | html %]</h1>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            [% PROCESS library_info %]
+                            [% IF ( OpacLibraryInfo ) %]
                                 <div class="library_description">
+                                    <hr />
                                     [% PROCESS library_description %]
                                 </div>
                             [% END %]
+                        </div>
+                    </div>
+                </div> <!-- /#library_info -->
+
+            [% ELSE %]
+                <div id="library_info" class="maincontent">
+                    <h1>Libraries</h1>
+                    [% FOREACH library IN libraries %]
+                        [% IF ( branchcode == library.branchcode ) %]
+                            <div class="section_library" id="section_[% library.branchcode | html %]" class="current">
+                        [% ELSE %]
+                            <div class="section_library" id="section_[% library.branchcode | html %]" class="">
                         [% END %]
-                    </div> <!-- /#library_info -->
-                [% END # /IF library %]
+                        <h2 property="name">
+                            <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
+                                [% library.branchname | html %]
+                            </a>
+                        </h2>
+                        [% PROCESS library_info %]
+                        </div>
+                    [% END %]
+                </div> <!-- /#library_info -->
+            [% END # /IF library %]
+
             </div> <!-- /.col -->
         </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
