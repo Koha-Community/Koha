@@ -75,7 +75,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       In the case of --fees, DAYS must be greater than
                       or equal to 1.
    --log-modules      Specify which action log modules to trim. Repeatable.
-   --preserve-logs    Specify which action logs to exclude. Repeatable.
+   --preserve-log     Specify which action logs to exclude. Repeatable.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
