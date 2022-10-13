@@ -64,7 +64,8 @@
 
             [% FOREACH LINE IN TAB.LINES %]
             [% IF ( LINE.is_group_title ) %]
-            [% UNLESS ( loop.first ) %]</tbody></table>[% END %]
+            [% UNLESS ( loop.first ) %]</tbody></table></div>[% END %]
+            <div class="page-section">
             <div class="row">
                 <div class="col-sm-6">
                     <h3 id="[% LINE.title | $HtmlId %]"><i class="fa fa-caret-down"></i> [% LINE.title | html %]</h3>
@@ -197,7 +198,7 @@
                     [% END %]
                 </div></td>
             </tr>
-            [% IF ( loop.last ) %]</tbody></table>[% END %]
+            [% IF ( loop.last ) %]</tbody></table></div>[% END %]
             [% END %]
         [% END %]
         <fieldset class="action"><button class="save-all submit btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
