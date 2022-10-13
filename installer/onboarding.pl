@@ -242,7 +242,7 @@ if ( $step == 5 ) {
         my $categorycode    = $input->param('categorycode');
         my $itemtype        = $input->param('itemtype');
         my $maxissueqty     = $input->param('maxissueqty');
-        my $issuelength     = $input->param('issuelength') || 0;
+        my $issuelength     = $input->param('issuelength');
         my $lengthunit      = $input->param('lengthunit');
         my $renewalsallowed = $input->param('renewalsallowed');
         my $renewalperiod   = $input->param('renewalperiod');
@@ -252,6 +252,7 @@ if ( $step == 5 ) {
         my $onshelfholds    = $input->param('onshelfholds') || 0;
         $maxissueqty =~ s/\s//g;
         $maxissueqty = undef if $maxissueqty !~ /^\d+/;
+        $issuelength = $issuelength eq q{} ? undef : $issuelength;
 
         my $params = {
             branchcode      => $branchcode,
@@ -285,9 +286,8 @@ if ( $step == 5 ) {
                 overduefinescap                  => "",
                 rentaldiscount                   => 0,
                 reservesallowed                  => $reservesallowed,
-                suspension_chargeperiod          => 1,
-                decreaseloanholds                => "",
-                unseen_renewals_allowed          => "",
+                suspension_chargeperiod          => undef,
+                decreaseloanholds                => undef,
                 recalls_allowed                  => undef,
                 recalls_per_record               => undef,
                 on_shelf_recalls                 => undef,
