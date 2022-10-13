@@ -198,77 +198,79 @@
                     [% END %]
 
                     [% IF letter %]
-                        <table id="lettert">
-                            <thead>
-                                <tr>
-                                    <th>Library</th>
-                                    <th>Module</th>
-                                    <th>Code</th>
-                                    <th>Name</th>
-                                    <th>Last updated</th>
-                                    <th class="NoSort noExport">Copy notice</th>
-                                    <th class="NoSort noExport">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH lette IN letter %]
-                                    [% can_edit = lette.branchcode || !independant_branch %]
+                        <div class="page-section">
+                            <table id="lettert">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            [% IF lette.branchname %]
-                                                [% lette.branchname | html %]
-                                            [% ELSE %]
-                                                <span>(All libraries)</span>
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% SWITCH lette.module %]
-                                                [% CASE 'acquisition' %]<span>Acquisition</span>
-                                                [% CASE 'catalogue' %]<span>Catalog</span>
-                                                [% CASE 'circulation' %]<span>Circulation</span>
-                                                [% CASE 'orderacquisition' %]<span>Order acquisition</span>
-                                                [% CASE 'claimacquisition' %]<span>Claim acquisition</span>
-                                                [% CASE 'claimissues' %]<span>Claim serial issue</span>
-                                                [% CASE 'reserves' %]<span>Holds</span>
-                                                [% CASE 'ill' %]<span>Interlibrary loans</span>
-                                                [% CASE 'members' %]<span>Patrons</span>
-                                                [% CASE 'serial' %]<span>Serials (new issue)</span>
-                                                [% CASE 'suggestions' %]<span>Suggestions</span>
-                                                [% CASE 'pos' %]<span>Point of sale</span>
-                                                [% CASE %]<span>[% lette.module | html %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td>[% lette.code | html %]</td>
-                                        <td>[% lette.name | html %]</td>
-                                        <td data-order="[% lette.updated_on | html %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
-                                        <td class="actions">
-                                            [% IF !independant_branch || !lette.branchcode %]
-                                                <form method="post" action="/cgi-bin/koha/tools/letter.pl">
-                                                    <input type="hidden" name="op" value="copy_form" />
-                                                    <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
-                                                    <input type="hidden" name="module" value="[% lette.module | html %]" />
-                                                    <input type="hidden" name="code" value="[% lette.code | html %]" />
-                                                    [% IF independant_branch %]
-                                                        <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
-                                                    [% ELSE %]
-                                                        [% select_for_copy | $raw %]
-                                                    [% END %]
-                                                    <button class="btn btn-default btn-xs"><i class="fa fa-clone"></i> Copy</button>
-                                                </form>
-                                            [% END # /IF !independent_branch %]
-                                        </td>
-                                        <td class="actions">
-                                            [% IF can_edit %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                                            [% END %]
-                                            [% IF !lette.protected && can_edit %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash"></i> Delete</a>
-                                            [% END %]
-                                        </td>
+                                        <th>Library</th>
+                                        <th>Module</th>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th>Last updated</th>
+                                        <th class="NoSort noExport">Copy notice</th>
+                                        <th class="NoSort noExport">Actions</th>
                                     </tr>
-                                [% END # /FOREACH lette %]
-                            </tbody>
-                        </table> <!-- /#lettert -->
+                                </thead>
+                                <tbody>
+                                    [% FOREACH lette IN letter %]
+                                        [% can_edit = lette.branchcode || !independant_branch %]
+                                        <tr>
+                                            <td>
+                                                [% IF lette.branchname %]
+                                                    [% lette.branchname | html %]
+                                                [% ELSE %]
+                                                    <span>(All libraries)</span>
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% SWITCH lette.module %]
+                                                    [% CASE 'acquisition' %]<span>Acquisition</span>
+                                                    [% CASE 'catalogue' %]<span>Catalog</span>
+                                                    [% CASE 'circulation' %]<span>Circulation</span>
+                                                    [% CASE 'orderacquisition' %]<span>Order acquisition</span>
+                                                    [% CASE 'claimacquisition' %]<span>Claim acquisition</span>
+                                                    [% CASE 'claimissues' %]<span>Claim serial issue</span>
+                                                    [% CASE 'reserves' %]<span>Holds</span>
+                                                    [% CASE 'ill' %]<span>Interlibrary loans</span>
+                                                    [% CASE 'members' %]<span>Patrons</span>
+                                                    [% CASE 'serial' %]<span>Serials (new issue)</span>
+                                                    [% CASE 'suggestions' %]<span>Suggestions</span>
+                                                    [% CASE 'pos' %]<span>Point of sale</span>
+                                                    [% CASE %]<span>[% lette.module | html %]</span>
+                                                [% END %]
+                                            </td>
+                                            <td>[% lette.code | html %]</td>
+                                            <td>[% lette.name | html %]</td>
+                                            <td data-order="[% lette.updated_on | html %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
+                                            <td class="actions">
+                                                [% IF !independant_branch || !lette.branchcode %]
+                                                    <form method="post" action="/cgi-bin/koha/tools/letter.pl">
+                                                        <input type="hidden" name="op" value="copy_form" />
+                                                        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
+                                                        <input type="hidden" name="module" value="[% lette.module | html %]" />
+                                                        <input type="hidden" name="code" value="[% lette.code | html %]" />
+                                                        [% IF independant_branch %]
+                                                            <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
+                                                        [% ELSE %]
+                                                            [% select_for_copy | $raw %]
+                                                        [% END %]
+                                                        <button class="btn btn-default btn-xs"><i class="fa fa-clone"></i> Copy</button>
+                                                    </form>
+                                                [% END # /IF !independent_branch %]
+                                            </td>
+                                            <td class="actions">
+                                                [% IF can_edit %]
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                                                [% END %]
+                                                [% IF !lette.protected && can_edit %]
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END # /FOREACH lette %]
+                                </tbody>
+                            </table> <!-- /#lettert -->
+                        </div><!-- /.page-section -->
                     [% ELSE # IF lette %]
                         <div class="dialog message">
                             [% IF ( branchcode ) %]
