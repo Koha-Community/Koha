@@ -69,51 +69,53 @@
                 [% END %]
 
                 [% IF club_templates.count %]
-                    <table id="club-templates-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Public enrollment</th>
-                                <th>Email required</th>
-                                <th>Library</th>
-                                <th class="noExport">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH t IN club_templates %]
+                    <div class="page-section">
+                        <table id="club-templates-table">
+                            <thead>
                                 <tr>
-                                    <td>[% t.name | html %]</td>
-                                    <td>[% t.description | html %]</td>
-                                    <td>
-                                        [% IF t.is_enrollable_from_opac %]
-                                            <span>Yes</span>
-                                        [% ELSE %]
-                                            <span>No</span>
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% IF t.is_email_required %]
-                                            <span>Yes</span>
-                                        [% ELSE %]
-                                            <span>No</span>
-                                        [% END %]
-                                    </td>
-                                    <td>[% Branches.GetName( t.branchcode ) | html %]</td>
-                                    <td class="actions">
-                                        [% IF CAN_user_clubs_edit_templates %]
-                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]">
-                                                <i class="fa fa-pencil"></i> Edit
-                                            </a>
-                                            <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]">
-                                                <i class="fa fa-trash"></i> Delete
-                                            </a>
-                                        [% END %]
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Public enrollment</th>
+                                    <th>Email required</th>
+                                    <th>Library</th>
+                                    <th class="noExport">Actions</th>
                                 </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                [% FOREACH t IN club_templates %]
+                                    <tr>
+                                        <td>[% t.name | html %]</td>
+                                        <td>[% t.description | html %]</td>
+                                        <td>
+                                            [% IF t.is_enrollable_from_opac %]
+                                                <span>Yes</span>
+                                            [% ELSE %]
+                                                <span>No</span>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF t.is_email_required %]
+                                                <span>Yes</span>
+                                            [% ELSE %]
+                                                <span>No</span>
+                                            [% END %]
+                                        </td>
+                                        <td>[% Branches.GetName( t.branchcode ) | html %]</td>
+                                        <td class="actions">
+                                            [% IF CAN_user_clubs_edit_templates %]
+                                                <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]">
+                                                    <i class="fa fa-pencil"></i> Edit
+                                                </a>
+                                                <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a>
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div> <!-- /.page-section -->
                 [% ELSE %]
                     <div class="dialog message">No club templates defined.</div>
                 [% END %]
@@ -138,7 +140,9 @@
                 [% END %]
 
                 [% IF clubs.count %]
-                    [% INCLUDE 'clubs-table.inc' %]
+                    <div class="page-section">
+                        [% INCLUDE 'clubs-table.inc' %]
+                    </div> <!-- /.page-section -->
                 [% ELSE %]
                     [% IF club_templates.count %]
                         <div class="dialog message">No clubs defined.</div>
