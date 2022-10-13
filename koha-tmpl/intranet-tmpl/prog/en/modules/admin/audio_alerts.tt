@@ -100,48 +100,50 @@
                             [% END %]
                         </div>
                     [% END %]
-                    <table id="audio-alerts-table">
-                        <thead id="audio-alerts-table-head">
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Precedence</th>
-                                <th>Change order</th>
-                                <th>Selector</th>
-                                <th>Sound</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="audio-alerts-table-body">
-                            [% FOREACH a IN audio_alerts %]
+                    <div class="page-section">
+                        <table id="audio-alerts-table">
+                            <thead id="audio-alerts-table-head">
                                 <tr>
-                                    <td><input type="checkbox" name="delete" value="[% a.id | html %]" /></td>
-                                    <td>[% a.precedence | html %]</td>
-                                    <td style="white-space:nowrap;">
-                                        <a title="Move alert up" href="audio_alerts.pl?action=move&amp;where=up&amp;id=[% a.id | html %]">
-                                            <i class="fa fa-arrow-up fa-lg order-control"></i>
-                                        </a>
-
-                                        <a title="Move alert to top" href="audio_alerts.pl?action=move&amp;where=top&amp;id=[% a.id | html %]">
-                                            <i class="fa fa-arrow-up fa-lg overline order-control"></i>
-                                        </a>
-
-                                        <a title="Move alert to bottom" href="audio_alerts.pl?action=move&amp;where=bottom&amp;id=[% a.id | html %]">
-                                            <i class="fa fa-arrow-down fa-lg underline order-control"></i>
-                                        </a>
-
-                                        <a title="Move alert down" href="audio_alerts.pl?action=move&amp;where=down&amp;id=[% a.id | html %]">
-                                            <i class="fa fa-arrow-down fa-lg order-control"></i>
-                                        </a>
-                                    </td>
-                                    <td>[% a.selector | html %]</td>
-                                    <td>[% a.sound | html %]</td>
-                                    <td>
-                                        <a class="btn btn-default btn-xs edit" data-soundid="[% a.id | html %]" data-precedence="[% a.precedence | html %]" data-selector="[% a.selector | html %]" data-sound="[% a.sound | html %]"><i class="fa fa-pencil"></i> Edit</a></td>
+                                    <th>&nbsp;</th>
+                                    <th>Precedence</th>
+                                    <th>Change order</th>
+                                    <th>Selector</th>
+                                    <th>Sound</th>
+                                    <th>&nbsp;</th>
                                 </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
+                            </thead>
+
+                            <tbody id="audio-alerts-table-body">
+                                [% FOREACH a IN audio_alerts %]
+                                    <tr>
+                                        <td><input type="checkbox" name="delete" value="[% a.id | html %]" /></td>
+                                        <td>[% a.precedence | html %]</td>
+                                        <td style="white-space:nowrap;">
+                                            <a title="Move alert up" href="audio_alerts.pl?action=move&amp;where=up&amp;id=[% a.id | html %]">
+                                                <i class="fa fa-arrow-up fa-lg order-control"></i>
+                                            </a>
+
+                                            <a title="Move alert to top" href="audio_alerts.pl?action=move&amp;where=top&amp;id=[% a.id | html %]">
+                                                <i class="fa fa-arrow-up fa-lg overline order-control"></i>
+                                            </a>
+
+                                            <a title="Move alert to bottom" href="audio_alerts.pl?action=move&amp;where=bottom&amp;id=[% a.id | html %]">
+                                                <i class="fa fa-arrow-down fa-lg underline order-control"></i>
+                                            </a>
+
+                                            <a title="Move alert down" href="audio_alerts.pl?action=move&amp;where=down&amp;id=[% a.id | html %]">
+                                                <i class="fa fa-arrow-down fa-lg order-control"></i>
+                                            </a>
+                                        </td>
+                                        <td>[% a.selector | html %]</td>
+                                        <td>[% a.sound | html %]</td>
+                                        <td>
+                                            <a class="btn btn-default btn-xs edit" data-soundid="[% a.id | html %]" data-precedence="[% a.precedence | html %]" data-selector="[% a.selector | html %]" data-sound="[% a.sound | html %]"><i class="fa fa-pencil"></i> Edit</a></td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div> <!-- /.page-section -->
 
                     <p>
                         <button id="delete-alerts" type="submit" class="btn btn-default disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
