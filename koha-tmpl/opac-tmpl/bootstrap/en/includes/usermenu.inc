@@ -102,7 +102,7 @@
             [% END %]
 
             [% IF ( EnhancedMessagingPreferences ) %]
-                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
+                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) || Koha.Preference('TranslateNotices') %]
                     [% IF ( messagingview ) %]
                         <li class="active">
                     [% ELSE %]

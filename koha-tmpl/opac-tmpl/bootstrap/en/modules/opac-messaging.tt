@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-12 col-lg-10 order-1">
 
-                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
+                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) || Koha.Preference('TranslateNotices') %]
                     <div id="usermessaging" class="maincontent">
                         <h1>Your messaging settings</h1>
                         [% IF ( settings_updated ) %]
@@ -44,6 +44,7 @@
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             <input type="hidden" name="modify" value="yes" />
 
+                            [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
                                 <table class="table table-bordered table-condensed table-striped">
                                     <caption class="sr-only">Your messaging settings</caption>
                                     <thead>
@@ -173,8 +174,9 @@
 
                                         </tr>
                                     [% END # / FOREACH messaging_preferences%]
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            [% END %]
 
                             [% IF ( SMSSendDriver || Koha.Preference('TranslateNotices') ) %]
                                 <fieldset class="rows">
