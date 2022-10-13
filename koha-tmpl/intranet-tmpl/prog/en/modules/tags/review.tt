@@ -88,78 +88,80 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   </div>
   [% END %]
   [% IF ( tagloop ) %]
-  <p class="check"></p>
-  <table id="tagst">
-    <thead>
-        <tr>
-            <th class="NoSort">&nbsp;</th>
-		<th>Status</th>
-		<th>Term</th>
-		<th>Weight</th>
-            <th class="NoSort noExport">Actions</th>
-            [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
-        <th>Date</th>
-	</tr>
-    </thead>
-    <tbody>
-    [% FOREACH tagloo IN tagloop %]
-        <tr>
-            <td>
-                [% IF ( tagloo.approved == 0 ) %]
-                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="pending" />
-                [% ELSIF ( tagloo.approved == 1 ) %]
-                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="approved" />
-                [% ELSE %]
-                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="rejected" />
-                [% END %]
-            </td>
-            <td>
-                [% IF ( tagloo.approved == -1 ) %]
-                    <label for="checkbox[% offset + loop.count | html %]">
-                        <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
-                    </label>
-                [% ELSIF ( tagloo.approved == 1 ) %]
-                    <label for="checkbox[% offset + loop.count | html %]">
-                        <span class="approved status[% offset + loop.count | html %]">Approved</span>
-                    </label>
-                [% ELSE %]
-                    <label for="checkbox[% offset + loop.count | html %]">
-                        <span class="pending status[% offset + loop.count | html %]">Pending</span>
-                    </label>
-                [% END %]
-            </td>
-            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term | html %]</a>
-            </td>
-            <td>[% tagloo.weight_total | html %]
-            </td>
-            [% IF ( tagloo.approved ) %]
-            <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-                [% IF ( tagloo.approved == -1 ) %]
-                    <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                    <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
-                [% ELSE %]
-                    <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
-                    <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
-                [% END %]
-                </span>
-            </td>
-            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | uri %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>[% ELSE %]&nbsp;[% END %]
-            </td>
-            [% ELSE %]
-            <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-                <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
-                </span>
-            </td>
-            [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
+    <div class="page-section">
+        <p class="check"></p>
+        <table id="tagst">
+            <thead>
+                <tr>
+                    <th class="NoSort">&nbsp;</th>
+                <th>Status</th>
+                <th>Term</th>
+                <th>Weight</th>
+                    <th class="NoSort noExport">Actions</th>
+                    [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            [% FOREACH tagloo IN tagloop %]
+                <tr>
+                    <td>
+                        [% IF ( tagloo.approved == 0 ) %]
+                            <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="pending" />
+                        [% ELSIF ( tagloo.approved == 1 ) %]
+                            <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="approved" />
+                        [% ELSE %]
+                            <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="rejected" />
+                        [% END %]
+                    </td>
+                    <td>
+                        [% IF ( tagloo.approved == -1 ) %]
+                            <label for="checkbox[% offset + loop.count | html %]">
+                                <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
+                            </label>
+                        [% ELSIF ( tagloo.approved == 1 ) %]
+                            <label for="checkbox[% offset + loop.count | html %]">
+                                <span class="approved status[% offset + loop.count | html %]">Approved</span>
+                            </label>
+                        [% ELSE %]
+                            <label for="checkbox[% offset + loop.count | html %]">
+                                <span class="pending status[% offset + loop.count | html %]">Pending</span>
+                            </label>
+                        [% END %]
+                    </td>
+                    <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term | html %]</a>
+                    </td>
+                    <td>[% tagloo.weight_total | html %]
+                    </td>
+                    [% IF ( tagloo.approved ) %]
+                    <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
+                        [% IF ( tagloo.approved == -1 ) %]
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                        [% ELSE %]
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                        [% END %]
+                        </span>
+                    </td>
+                    <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | uri %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>[% ELSE %]&nbsp;[% END %]
+                    </td>
+                    [% ELSE %]
+                    <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
+                        <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                        <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                        </span>
+                    </td>
+                    [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
+                    [% END %]
+                    <td data-order="[% tagloo.date_approved | html %]">
+                        [% tagloo.date_approved | $KohaDates %]
+                    </td>
+                </tr>
             [% END %]
-            <td data-order="[% tagloo.date_approved | html %]">
-                [% tagloo.date_approved | $KohaDates %]
-            </td>
-        </tr>
-    [% END %]
-    </tbody>
-  </table>
+            </tbody>
+        </table>
+    </div> <!-- /.page-section -->
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
    <button type="submit" value="Approve" class="btn btn-default" id="approve_button" name="op-approve"><i class="fa fa-check"></i> Approve</button>
