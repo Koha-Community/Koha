@@ -169,54 +169,58 @@
                 </div>
             </div>
 
-            <table id="patron-list-table">
-                <thead>
-                    <tr>
-                        <th class="NoSort">&nbsp;</th>
-                        <th>Card</th>
-                        <th>First name</th>
-                        <th>Surname</th>
-                        <th>Address</th>
-                        <th>Category</th>
-                        <th>Library</th>
-                        <th>Expires on</th>
-                        <th>Circ notes</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    [% FOREACH p IN list.patron_list_patrons %]
+            <div class="page-section">
+                <table id="patron-list-table">
+                    <thead>
                         <tr>
-                            <td>
-                                <input type="checkbox" name="patrons_to_remove" class="selection" value="[% p.patron_list_patron_id | html %]" />
-                                <input type="hidden" id="borrowernumber_[% p.patron_list_patron_id | html %]" value="[% p.borrowernumber.id | html %]" />
-                            </td>
-                            <td>
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber.borrowernumber | uri %]">
-                                    [% p.borrowernumber.cardnumber | html %]
-                                </a>
-                            </td>
-                            <td>[% p.borrowernumber.firstname | html %]</td>
-                            <td>[% p.borrowernumber.surname | html %]</td>
-                            <td>
-                                [% p.borrowernumber.address | html %]
-                                [% p.borrowernumber.address2 | html %]
-                                [% p.borrowernumber.city | html %]
-                                [% p.borrowernumber.state | html %]
-                                [% p.borrowernumber.country | html %]
-                            </td>
-                            <td>[% p.borrowernumber.categorycode.description | html %] ([% p.borrowernumber.categorycode.categorycode | html %])</td>
-                            <td>[% p.borrowernumber.branchcode.branchname | html %]</td>
-                            <td data-order="[% p.borrowernumber.dateexpiry | html %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</td>
-                            <td>[% p.borrowernumber.borrowernotes | html %]</td>
+                            <th class="NoSort">&nbsp;</th>
+                            <th>Card</th>
+                            <th>First name</th>
+                            <th>Surname</th>
+                            <th>Address</th>
+                            <th>Category</th>
+                            <th>Library</th>
+                            <th>Expires on</th>
+                            <th>Circ notes</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
 
-            <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
-            <button type="submit" class="btn btn-default btn-sm list-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove selected patrons</button>
-            <button class="btn btn-default btn-sm merge-patrons" type="submit"><i class="fa fa-compress"></i> Merge selected patrons</button>
+                    <tbody>
+                        [% FOREACH p IN list.patron_list_patrons %]
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="patrons_to_remove" class="selection" value="[% p.patron_list_patron_id | html %]" />
+                                    <input type="hidden" id="borrowernumber_[% p.patron_list_patron_id | html %]" value="[% p.borrowernumber.id | html %]" />
+                                </td>
+                                <td>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber.borrowernumber | uri %]">
+                                        [% p.borrowernumber.cardnumber | html %]
+                                    </a>
+                                </td>
+                                <td>[% p.borrowernumber.firstname | html %]</td>
+                                <td>[% p.borrowernumber.surname | html %]</td>
+                                <td>
+                                    [% p.borrowernumber.address | html %]
+                                    [% p.borrowernumber.address2 | html %]
+                                    [% p.borrowernumber.city | html %]
+                                    [% p.borrowernumber.state | html %]
+                                    [% p.borrowernumber.country | html %]
+                                </td>
+                                <td>[% p.borrowernumber.categorycode.description | html %] ([% p.borrowernumber.categorycode.categorycode | html %])</td>
+                                <td>[% p.borrowernumber.branchcode.branchname | html %]</td>
+                                <td data-order="[% p.borrowernumber.dateexpiry | html %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</td>
+                                <td>[% p.borrowernumber.borrowernotes | html %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div> <!-- /.page-section -->
+
+            <fieldset class="action">
+                <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
+                <button type="submit" class="btn btn-default btn-sm list-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove selected patrons</button>
+                <button class="btn btn-default btn-sm merge-patrons" type="submit"><i class="fa fa-compress"></i> Merge selected patrons</button>
+            </fieldset>
         </form>
 
             </main>
