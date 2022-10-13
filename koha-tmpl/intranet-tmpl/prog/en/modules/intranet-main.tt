@@ -30,7 +30,7 @@
             <h1 class="sr-only">Koha home</h1>
             <div class="col-sm-3">
                 [% IF ( koha_news.count ) %]
-                    <div id="area-news">
+                    <div id="area-news" class="page-section">
                         <h3><span class="news_title">News</span></h3>
                         [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'staff' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                         [% FOREACH koha_new IN koha_news %]
@@ -48,7 +48,7 @@
                     </div><!-- /additional-contents -->
                 [% END %]
                 [% IF ( daily_quote ) %]
-                    <div id="area-news">
+                    <div id="area-quote" class="page-section">
                         <h3>Quote of the day</h3>
                         <div class="newsitem">
                             <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span>
@@ -171,7 +171,7 @@
                     <div class="col-sm-12">
                         [%# Following statement must be in one line for translatability %]
                         [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) || ( CAN_user_suggestions_suggestions_manage && ( pendingsuggestions || all_pendingsuggestions )) || ( CAN_user_borrowers_edit_borrowers && pending_discharge_requests ) || pending_article_requests || ( Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes.count ) || ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports && pending_problem_reports.count ) || already_ran_jobs || new_curbside_pickups.count %]
-                            <div id="area-pending">
+                            <div id="area-pending" class="page-section">
                                 [% IF pending_article_requests %]
                                 <div class="pending-info" id="article_requests_pending">
 
@@ -262,7 +262,7 @@
                 [% IF ( IntranetmainUserblock ) %]
                     <div class="row">
                         <div class="col-sm-12">
-                            <div id="area-userblock">
+                            <div id="area-userblock" class="page-section">
                                 <div class="user-info">
                                     [% IntranetmainUserblock | $raw %]
                                 </div>
