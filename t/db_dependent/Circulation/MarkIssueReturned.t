@@ -201,9 +201,9 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     my $item_1 = $builder->build_sample_item;
     my $item_2 = $builder->build_sample_item;
     my $item_3 = $builder->build_sample_item;
-    my $five_days_ago = dt_from_string->subtract( days => 5 );
-    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $five_days_ago ); # overdue, but would not trigger debarment
-    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $five_days_ago ); # overdue, but would not trigger debarment
+    my $nine_days_ago = dt_from_string->subtract( days => 9 ); #->set_hour(23)->set_minute(59);
+    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $nine_days_ago ); # overdue, but would not trigger debarment
+    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $nine_days_ago ); # overdue, but would not trigger debarment
     my $checkout_3 = AddIssue( $patron, $item_3->barcode ); # not overdue
 
     Koha::Patron::Debarments::AddUniqueDebarment(
@@ -227,10 +227,12 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 'when_no_overdue_causing_debarment');
 
-    my $eleven_days_ago = dt_from_string->subtract( days => 11 );
+    my $ten_days_ago = dt_from_string->subtract( days => 10 );
 
-    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $eleven_days_ago ); # overdue and would trigger debarment
-    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $five_days_ago ); # overdue, but would not trigger debarment
+    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
+    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $nine_days_ago ); # overdue, but would not trigger debarment
+
+    print STDERR "DUEDATE: " . $nine_days_ago->stringify . "\n";
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
@@ -245,7 +247,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
     is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaning items would not result in patron debarment' );
 
-    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $eleven_days_ago ); # overdue and would trigger debarment
+    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
@@ -260,12 +262,12 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
     is( $debarments->[0]->{type}, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues that would trigger debarment' );
 
-    my $thirteen_days_ago = dt_from_string->subtract( days => 13 );
+    my $eleven_days_ago = dt_from_string->subtract( days => 11 );
 
     # overdue and would trigger debarment
-    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $thirteen_days_ago );
+    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $eleven_days_ago );
 
-    # $chechout_1 should now not trigger debarment with this new rule for specific branchcode
+    # $checkout_1 should now not trigger debarment with this new rule for specific branchcode
     $dbh->do(qq{
         INSERT INTO `overduerules` (
             `branchcode`,
@@ -277,7 +279,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
             `letter2`,
             `debarred2`
         )
-        VALUES ('$branchcode', '$categorycode', 6, 'ODUE', 0, 12, 'ODUE2', 1)
+        VALUES ('$branchcode', '$categorycode', 6, 'ODUE', 0, 11, 'ODUE2', 1)
     });
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
