@@ -128,7 +128,7 @@ if ( $op eq 'add_form' ) {
                 branchcode => $branchcode,
                 (
                     map {
-                        $_ eq 'pickup_location' # Don't fallback to undef/NULL, default is 1 in DB
+                        /^(pickup_location|public)$/ # Don't fallback to undef for those fields
                           ? ( $_ => scalar $input->param($_) )
                           : ( $_ => scalar $input->param($_) || undef )
                     } @fields
