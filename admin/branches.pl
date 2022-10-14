@@ -83,7 +83,7 @@ if ( $op eq 'add_form' ) {
     if ($is_a_modif) {
         my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
-            if ( $field eq 'pickup_location' ) {
+            if( $field =~ /^(pickup_location|public)$/  ) {
                 # Don't fallback to undef/NULL, default is 1 in DB
                 $library->$field( scalar $input->param($field) );
             } else {
