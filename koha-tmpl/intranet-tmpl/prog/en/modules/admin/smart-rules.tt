@@ -283,13 +283,7 @@
                                     <td>[% suspension_chargeperiod | html %]</td>
                                     <td>[% renewalsallowed | html %]</td>
                                     [% IF Koha.Preference('UnseenRenewals') %]
-                                        <td>
-                                            [% IF unseenrenewalsallowed.defined && unseenrenewalsallowed != '' %]
-                                                [% unseenrenewalsallowed | html %]
-                                            [% ELSE %]
-                                                <span>Unlimited</span>
-                                            [% END %]
-                                        </td>
+                                        <td>[% unseenrenewalsallowed | html %]</td>
                                     [% END %]
                                     <td>[% renewalperiod | html %]</td>
                                     <td>[% norenewalbefore | html %]</td>

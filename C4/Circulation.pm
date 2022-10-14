@@ -2782,7 +2782,7 @@ sub CanBookBeRenewed {
 
         return ( 0, "too_unseen" )
           if C4::Context->preference('UnseenRenewals') &&
-            looks_like_number($issuing_rule->{unseen_renewals_allowed}) &&
+            $issuing_rule->{unseen_renewals_allowed} &&
             $issuing_rule->{unseen_renewals_allowed} <= $issue->unseen_renewals;
 
         my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
@@ -3008,7 +3008,7 @@ sub AddRenewal {
                     rule_name    => 'unseen_renewals_allowed'
                 }
             );
-            if (!$seen && $rule && looks_like_number($rule->rule_value)) {
+            if (!$seen && $rule && $rule->rule_value) {
                 $unseen_renewals++;
             } else {
                 # If the renewal is seen, unseen should revert to 0
