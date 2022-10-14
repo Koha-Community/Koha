@@ -3,6 +3,7 @@
 [% SET footerjs = 1 %]
 [% USE Koha %]
 [% USE KohaSpan %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -79,7 +80,7 @@
                         <thead><tr>
                             <th>Rule</th>
                             <th>Module</th>
-                            <th>Filter</th>
+                            <th>[% tp('noun', 'Filter') | html %]</th>
                             <th>Tag</th>
                             <th>Preset</th>
                             <th>Added <i id="info_added" data-toggle="tooltip" title="If a field matching the rule tag only exists in the incoming record" data-placement="right" class="fa fa-info-circle"></i></th>
