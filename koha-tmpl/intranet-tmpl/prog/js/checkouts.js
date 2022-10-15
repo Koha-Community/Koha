@@ -367,7 +367,7 @@ $(document).ready(function() {
                         }
 
                         if ( oObj.recalled == 1 ) {
-                             title += " - <span class='circ-hlt item-recalled'>This item has been recalled and the due date updated.</span>";
+                             title += " - <span class='circ-hlt item-recalled'>" +  __("This item has been recalled and the due date updated") + ".</span>";
                         }
 
                         title += " "
