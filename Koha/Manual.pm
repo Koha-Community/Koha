@@ -126,6 +126,7 @@ our $mapping = {
     'cataloguing/addbiblio'                    => '/cataloging.html#bibliographic-records',
     'cataloguing/addbooks'                     => '/cataloging.html',
     'cataloguing/additem'                      => '/cataloging.html#item-records',
+    'cataloguing/cataloging-home.pl'           => '/cataloging.html',
     'cataloguing/linkitem'                     => '/cataloging.html#adding-analytic-records',
     'cataloguing/merge'                        => '/cataloging.html#merging-records',
     'cataloguing/moveitem'                     => '/cataloging.html#moving-items',
