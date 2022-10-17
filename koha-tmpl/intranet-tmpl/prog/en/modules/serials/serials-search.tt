@@ -231,6 +231,11 @@
                         [% END %]
                     [% ELSE %]
                         [% IF ( done_searched ) %]
+                            [% IF orig_total > total %]
+                                <div class="dialog alert">
+                                    <p>The search originally produced [% orig_total | html %] results and was limited to [% total | html %].</p>
+                                </div>
+                            [% END %]
                             <h1>Serials subscriptions ([% total | html %] found)</h1>
                         [% ELSE %]
                             <h1>Serials subscriptions search</h1>

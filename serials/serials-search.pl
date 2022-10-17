@@ -55,6 +55,7 @@ my $searched      = $query->param('searched') || 0;
 my $mana      = $query->param('mana') || 0;
 my @subscriptionids = $query->multi_param('subscriptionid');
 my $op            = $query->param('op');
+my $orig_total;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -90,7 +91,7 @@ for my $field ( @additional_fields ) {
 
 my @subscriptions;
 my $mana_statuscode;
-if ($searched){
+if ($searched) {
     if ($mana) {
         my $result = Koha::SharedContent::search_entities("subscription",{
             title        => $title,
@@ -102,20 +103,25 @@ if ($searched){
         @subscriptions = @{ $result->{data} };
     }
     else {
-        @subscriptions = SearchSubscriptions(
-        {
-            biblionumber => $biblionumber,
-            title        => $title,
-            issn         => $ISSN,
-            ean          => $EAN,
-            callnumber   => $callnumber,
-            publisher    => $publisher,
-            bookseller   => $bookseller,
-            branch       => $branch,
-            additional_fields => \@additional_field_filters,
-            location     => $location,
-            expiration_date => $expiration_date,
-        });
+        my $subscriptions = SearchSubscriptions(
+            {
+                biblionumber => $biblionumber,
+                title        => $title,
+                issn         => $ISSN,
+                ean          => $EAN,
+                callnumber   => $callnumber,
+                publisher    => $publisher,
+                bookseller   => $bookseller,
+                branch       => $branch,
+                additional_fields => \@additional_field_filters,
+                location     => $location,
+                expiration_date => $expiration_date,
+            },
+            { results_limit => C4::Context->preference('SerialsSearchResultsLimit') }
+        );
+        @subscriptions = @{$subscriptions->{results}};
+        $orig_total = $subscriptions->{total};
+
     }
 }
 
@@ -142,8 +148,7 @@ if ($mana) {
         search_only => 1
     );
 }
-else
-{
+else {
     # to toggle between create or edit routing list options
     if ($routing) {
         for my $subscription ( @subscriptions) {
@@ -178,6 +183,7 @@ else
         openedsubscriptions => \@openedsubscriptions,
         closedsubscriptions => \@closedsubscriptions,
         total         => @openedsubscriptions + @closedsubscriptions,
+        orig_total    => $orig_total,
         title_filter  => $title,
         ISSN_filter   => $ISSN,
         EAN_filter    => $EAN,

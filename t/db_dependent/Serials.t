@@ -16,7 +16,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 52;
+use Test::More tests => 54;
 
 BEGIN {
     use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
@@ -25,6 +25,8 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
+
+$dbh->do('DELETE FROM subscription');
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -76,14 +78,84 @@ my $notes = "a\nnote\non\nseveral\nlines";
 my $internalnotes = 'intnotes';
 my $ccode = 'FIC';
 my $subscriptionid = NewSubscription(
-    undef,      "",     undef, undef, $budget_id, $biblionumber,
-    '2013-01-01', $frequency_id, undef, undef,  undef,
-    undef,      undef,  undef, undef, undef, undef,
-    1,          $notes, ,undef, '2013-01-01', undef, $pattern_id,
-    undef,       undef,  0,    $internalnotes,  0,
-    undef, undef, 0,          undef,         '2013-12-31', 0,
-    undef, undef, undef, $ccode
+    undef,
+    "",
+    undef,
+    undef,
+    $budget_id,
+    $biblionumber,
+    '2013-01-01',
+    $frequency_id,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    1,
+    $notes,
+    undef,
+    '2013-01-01',
+    undef,
+    $pattern_id,
+    undef,
+    undef,
+    0,
+    $internalnotes,
+    0,
+    undef,
+    undef,
+    0,
+    undef,
+    '2013-12-31', 0,
+    undef,
+    undef,
+    undef,
+    $ccode
+);
 
+NewSubscription(
+    undef,
+    "",
+    undef,
+    undef,
+    $budget_id,
+    $biblionumber,
+    '2013-01-02',
+    $frequency_id,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    undef,
+    1,
+    $notes,
+    undef,
+    '2013-01-02',
+    undef,
+    $pattern_id,
+    undef,
+    undef,
+    0,
+    $internalnotes,
+    0,
+    undef,
+    undef,
+    0,
+    undef,
+    '2013-12-31',
+    0,
+    undef,
+    undef,
+    undef,
+    $ccode
 );
 
 my $subscriptioninformation = GetSubscription( $subscriptionid );
@@ -107,6 +179,20 @@ isa_ok( \@subscriptions, 'ARRAY' );
 
 @subscriptions = SearchSubscriptions({ biblionumber => $subscriptioninformation->{bibnum}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
+
+@subscriptions = SearchSubscriptions({});
+is(
+    @subscriptions,
+    2,
+    'SearchSubscriptions returned the expected number of subscriptions when results_limit is not set'
+);
+
+@subscriptions = SearchSubscriptions({}, { results_limit => 1 });
+is(
+    @subscriptions,
+    1,
+    'SearchSubscriptions returned only one subscription when results_limit is set to "1"'
+);
 
 my $frequency = GetSubscriptionFrequency($subscriptioninformation->{periodicity});
 my $old_frequency;

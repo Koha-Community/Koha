@@ -672,6 +672,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
 ('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
+('SerialsSearchResultsLimit', NULL, NULL, 'Serials search results limit', 'integer'),
 ('SessionRestrictionByIP','1','Check for change in remote IP address for session security. Disable only when remote IP address changes frequently.','','YesNo'),
 ('SessionStorage','mysql','mysql|Pg|tmp','Use database or a temporary file for storing session data','Choice'),
 ('ShelfBrowserUsesCcode','1','0','Use the item collection code when finding items for the shelf browser.','YesNo'),
