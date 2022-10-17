@@ -130,7 +130,7 @@ subtest 'after_hold_action (placed) hook tests' => sub {
 
 subtest 'Koha::Hold tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -180,6 +180,24 @@ subtest 'Koha::Hold tests' => sub {
     }
     qr/after_hold_action called with action: resume, ref: Koha::Hold/,
       '->resume calls the after_hold_action hook';
+
+    warning_like {
+        $hold->set_transfer;
+    }
+    qr/after_hold_action called with action: transfer, ref: Koha::Hold/,
+      '->set_transfer calls the after_hold_action hook';
+
+    warning_like {
+        $hold->set_processing;
+    }
+    qr/after_hold_action called with action: processing, ref: Koha::Hold/,
+      '->set_processing calls the after_hold_action hook';
+
+    warning_like {
+        $hold->set_waiting;
+    }
+    qr/after_hold_action called with action: waiting, ref: Koha::Hold/,
+      '->set_waiting calls the after_hold_action hook';
 
     warning_like {
         $hold->cancel;

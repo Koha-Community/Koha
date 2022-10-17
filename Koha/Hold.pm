@@ -200,6 +200,14 @@ sub set_transfer {
     $self->found('T');
     $self->store();
 
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'transfer',
+            payload => { hold => $self->get_from_storage }
+        }
+    );
+
     return $self;
 }
 
@@ -256,6 +264,14 @@ sub set_waiting {
     $values->{expirationdate} = $new_expiration_date->ymd;
 
     $self->set($values)->store();
+
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'waiting',
+            payload => { hold => $self->get_from_storage }
+        }
+    );
 
     return $self;
 }
@@ -344,6 +360,14 @@ sub set_processing {
     $self->priority(0);
     $self->found('P');
     $self->store();
+
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'processing',
+            payload => { hold => $self->get_from_storage }
+        }
+    );
 
     return $self;
 }
