@@ -74,6 +74,7 @@
         <th class="anti-the">Title</th>
         <th>Author</th>
         <th>Call number</th>
+        <th>Vol info</th>
         <th>Barcode</th>
         <th>Number of renewals</th>
         <th>Checked out on</th>
@@ -108,6 +109,12 @@
                 [% issue.classification | html %]
             [% ELSE %]
                 [% issue.itemcallnumber | html %]
+            [% END %]
+          </td>
+
+          <td>
+            [% IF issue.enumchron %]
+                [% issue.enumchron | html %]
             [% END %]
           </td>
 

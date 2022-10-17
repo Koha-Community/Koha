@@ -101,6 +101,7 @@
                                                 <th class="anti-the">Title</th>
                                                 <th>Item type</th>
                                                 <th>Call number</th>
+                                                <th>Vol info</th>
                                                 <th>Date</th>
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th class="NoSort noExport">Links</th>
@@ -166,6 +167,11 @@
                                                 <td>
                                                 <span class="tdlabel">Call number:</span>
                                                 [% issue.itemcallnumber | html %]
+                                                </td>
+                                                <td>
+                                                    [% IF issue.enumchron %]
+                                                        [% issue.enumchron %]
+                                                    [% END %]
                                                 </td>
                                                 [% IF issue.returndate %]
                                                     <td data-order="[% issue.returndate | html %]">
