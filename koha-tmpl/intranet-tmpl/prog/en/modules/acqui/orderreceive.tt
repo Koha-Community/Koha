@@ -298,9 +298,9 @@
             [% FOREACH budget_period_id IN budget_loops.keys %]
                 [% SET budget_period = budget_loops.$budget_period_id %]
                 [% IF budget_period.active %]
-                    <optgroup label="[% budget_period.description %]">
+                    <optgroup label="[% budget_period.description | html %]">
                 [% ELSE %]
-                    <optgroup class="inactive_budget" label="[% budget_period.description %] (Inactive)">
+                    <optgroup class="inactive_budget" label="[% budget_period.description | html %] (Inactive)">
                 [% END %]
                 [% FOREACH budget_loo IN budget_period.funds %]
                    [% level_indent_cnt = 0 %]
