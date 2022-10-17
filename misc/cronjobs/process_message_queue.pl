@@ -100,7 +100,7 @@ if ( C4::Context->config("enable_plugins") ) {
                         verbose     => $verbose,
                         limit       => $limit,
                         type        => \@type,
-                        letter_code => @letter_code,
+                        letter_code => \@letter_code,
                     }
                 );
             }
