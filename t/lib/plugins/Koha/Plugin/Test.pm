@@ -359,6 +359,16 @@ sub after_account_action {
         "after_account_action called with action: $action, type: $type, ref: " . ref($line) );
 }
 
+sub after_recall_action {
+    my ( $self, $params ) = @_;
+
+    my $action = $params->{action};
+    my $recall   = $params->{payload}->{recall};
+
+    Koha::Exception->throw(
+        "after_recall_action called with action: $action, ref: " . ref($recall) );
+}
+
 sub _private_sub {
     return "";
 }

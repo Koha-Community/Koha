@@ -22,6 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::Recall;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Plugins;
 
 use C4::Stats qw( UpdateStats );
 
@@ -173,6 +174,14 @@ sub add_recall {
                 itemtype       => $item->effective_itemtype,
                 ccode          => $item->ccode,
                 categorycode   => $checkout->patron->categorycode
+            }
+        );
+
+        Koha::Plugins->call(
+            'after_recall_action',
+            {
+                action  => 'add',
+                payload => { recall => $recall->get_from_storage }, # FIXME Bug 32107
             }
         );
 
