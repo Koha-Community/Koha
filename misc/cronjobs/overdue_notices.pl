@@ -52,7 +52,7 @@ overdue_notices.pl
  Options:
    --help                          Brief help message.
    --man                           Full documentation.
-   --verbose | -v                  Verbose mode.
+   --verbose | -v                  Verbose mode. Can be repeated for increased output
    --nomail | -n                   No email will be sent.
    --max          <days>           Maximum days overdue to deal with.
    --library      <branchcode>     Only deal with overdues from this library.
@@ -88,6 +88,8 @@ Prints the manual page and exits.
 =item B<-v> | B<--verbose>
 
 Verbose. Without this flag set, only fatal errors are reported.
+A single 'v' will report info on branches, letter codes, and patrons.
+A second 'v' will report The SQL code used to search for triggered patrons.
 
 =item B<-n> | B<--nomail>
 
