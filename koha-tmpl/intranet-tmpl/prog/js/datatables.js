@@ -30,7 +30,7 @@ var dataTablesDefaults = {
             }
         }
     },
-    "dom": '<"top pager"<"table_entries"ilp><"table_controls"fB>>tr<"bottom pager"ip>',
+    "dom": '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
     "buttons": [{
         fade: 100,
         className: "dt_button_clear_filter",
