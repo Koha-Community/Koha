@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Test::Exception;
 use Test::MockModule;
@@ -29,6 +29,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::ActionLogs;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Old::Holds;
@@ -860,6 +861,53 @@ subtest 'cancellation_requestable_from_opac() tests' => sub {
         $hold->cancellation_requestable_from_opac,
         'Make sure it is picking the right circulation rule'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_update_pickup_location_opac() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $hold = $builder->build_object(
+        {   class => 'Koha::Holds',
+            value => { found => undef, suspend => 0, suspend_until => undef, waitingdate => undef }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'OPACAllowUserToChangeBranch', '' );
+    $hold->found(undef);
+    is( $hold->can_update_pickup_location_opac, 0, "Pending hold pickup can't be changed (No change allowed)" );
+
+    $hold->found('T');
+    is( $hold->can_update_pickup_location_opac, 0, "In transit hold pickup can't be changed (No change allowed)" );
+
+    $hold->found('W');
+    is( $hold->can_update_pickup_location_opac, 0, "Waiting hold pickup can't be changed (No change allowed)" );
+
+    $hold->found(undef);
+    my $dt = dt_from_string();
+
+    $hold->suspend_hold( $dt );
+    is( $hold->can_update_pickup_location_opac, 0, "Suspended hold pickup can't be changed (No change allowed)" );
+    $hold->resume();
+
+    t::lib::Mocks::mock_preference( 'OPACAllowUserToChangeBranch', 'pending,intransit,suspended' );
+    $hold->found(undef);
+    is( $hold->can_update_pickup_location_opac, 1, "Pending hold pickup can be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found('T');
+    is( $hold->can_update_pickup_location_opac, 1, "In transit hold pickup can be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found('W');
+    is( $hold->can_update_pickup_location_opac, 0, "Waiting hold pickup can't be changed (pending,intransit,suspended allowed)" );
+
+    $hold->found(undef);
+    $dt = dt_from_string();
+    $hold->suspend_hold( $dt );
+    is( $hold->can_update_pickup_location_opac, 1, "Suspended hold pickup can be changed (pending,intransit,suspended allowed)" );
 
     $schema->storage->txn_rollback;
 };

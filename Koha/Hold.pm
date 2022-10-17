@@ -906,15 +906,15 @@ sub to_api_mapping {
     };
 }
 
-=head3 can_change_branch_opac
+=head3 can_update_pickup_location_opac
 
-returns if a hold can change pickup location from opac
+    my $can_update_pickup_location_opac = $hold->can_update_pickup_location_opac;
 
-my $can_change_branch_opac = $hold->can_change_branch_opac;
+Returns if a hold can change pickup location from opac
 
 =cut
 
-sub can_change_branch_opac {
+sub can_update_pickup_location_opac {
     my ($self) = @_;
 
     my @statuses = split /,/, C4::Context->preference("OPACAllowUserToChangeBranch");

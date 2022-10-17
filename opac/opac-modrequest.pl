@@ -60,7 +60,7 @@ if ( $reserve_id && $borrowernumber ) {
     }
     elsif ( $new_pickup_location ) {
 
-        if ($hold->can_change_branch_opac){
+        if ($hold->can_update_pickup_location_opac) {
             $hold->set_pickup_location({ library_id => $new_pickup_location });
         }
         else {

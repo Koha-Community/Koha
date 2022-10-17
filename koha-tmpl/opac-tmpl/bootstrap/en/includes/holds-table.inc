@@ -83,7 +83,7 @@
                             <td class="branch">
                                 <span class="tdlabel">Pickup location:</span>
                                 [% HOLD.branch.branchname | html %]
-                                [% IF ( HOLD.can_change_branch_opac ) %]
+                                [% IF ( HOLD.can_update_pickup_location_opac ) %]
                                     <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> Change
                                     </button>
