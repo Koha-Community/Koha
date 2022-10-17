@@ -17,10 +17,6 @@ package Koha::Import::Record::Biblios;
 
 use Modern::Perl;
 
-use Carp;
-
-use Koha::Database;
-
 use Koha::Import::Record::Biblio;
 
 use base qw(Koha::Objects);
