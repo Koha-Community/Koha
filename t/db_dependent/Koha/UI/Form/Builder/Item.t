@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Data::Dumper qw( Dumper );
 use utf8;
 
@@ -26,6 +26,7 @@ use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
 use Koha::UI::Form::Builder::Item;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -332,6 +333,19 @@ subtest 'ignore_invisible_subfields' => sub {
     ($subfield) = grep { $_->{subfield} eq 'l' } @$subfields;
     is( $subfield->{marc_value}->{value},
         undef, 'items.issues not copied if ignore_invisible_subfields is passed' );
+};
+
+subtest 'Fix subfill_with_default_values - no biblionumber passed' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('itemcallnumber', '082ab,092ab');
+    my $item = $builder->build_sample_item;
+    my $subfields = Koha::UI::Form::Builder::Item->new(
+        {
+            item         => $item->unblessed,
+        }
+    )->edit_form({ prefill_with_default_values => 1 });
+    pass();
 };
 
 $cache->clear_from_cache("MarcStructure-0-");
