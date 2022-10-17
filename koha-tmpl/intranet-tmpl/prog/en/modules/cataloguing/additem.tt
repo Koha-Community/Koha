@@ -273,12 +273,12 @@
             <option value="0" selected="selected">Save as new template</option>
             <optgroup label="Update existing template">
                 [% FOREACH t IN item_templates.owned %]
-                    <option data-editor="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                    <option data-editor="1" data-shared="[% t.is_shared %]" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
                 [% END %]
                 [% IF CAN_user_editcatalogue_manage_item_editor_templates && item_templates.shared.count %]
                     <optgroup label="Update shared template">
                         [% FOREACH t IN item_templates.shared %]
-                            <option data-editor="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                            <option data-editor="1" data-shared="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
                         [% END %]
                     </optgroup>
                 [% END %]

@@ -93,10 +93,13 @@ $(document).ready(function(){
     });
     $("#template_id").change(); // Trigger to enable delete button if patron's template is in use
     $("#replace_template_id").on("change", function() {
-        if ( $(this).find(":selected").val() > 0 ) {
+        let selected = $(this).find(":selected");
+        if ( selected.val() > 0 ) {
             $("#template_name_block").hide();
+            $("#template_is_shared").prop("checked", selected.data("shared"));
         } else {
             $("#template_name_block").show();
+            $("#template_is_shared").prop("checked", false);
         }
     });
 
