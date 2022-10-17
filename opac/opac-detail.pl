@@ -647,7 +647,6 @@ $template->param(
         xsl_syspref    => 'OPACXSLTDetailsDisplay',
         fix_amps       => 1,
         xslt_variables => $variables,
-        interface      => 'opac'
     }),
 );
 

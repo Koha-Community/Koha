@@ -284,7 +284,6 @@ $template->param(
         xsl_syspref    => "XSLTDetailsDisplay",
         fix_amps       => 1,
         xslt_variables => $xslt_variables,
-        interface      => 'intranet'
     }),
 );
 
