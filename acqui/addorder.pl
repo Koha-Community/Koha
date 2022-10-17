@@ -155,6 +155,14 @@ unless($confirm_budget_exceeding) {
     my $budget = GetBudget($budget_id);
     my $budget_spent = GetBudgetSpent($budget_id);
     my $budget_ordered = GetBudgetOrdered($budget_id);
+
+    my $ordernumber = $input->param('ordernumber');
+    if ( $ordernumber ) {
+        # modifying an existing order so remove order price from $budget_ordered
+        my $order = Koha::Acquisition::Orders->find($ordernumber);
+        $budget_ordered = $budget_ordered - ( $order->ecost_tax_included * $order->quantity );
+    }
+
     my $budget_used = $budget_spent + $budget_ordered;
     my $budget_remaining = $budget->{budget_amount} - $budget_used;
     my $budget_encumbrance = $budget->{budget_amount} * $budget->{budget_encumb} / 100;
