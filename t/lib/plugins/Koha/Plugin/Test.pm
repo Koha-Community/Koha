@@ -348,6 +348,17 @@ sub background_tasks {
     };
 }
 
+sub after_account_action {
+    my ( $self, $params ) = @_;
+
+    my $action = $params->{action};
+    my $line   = $params->{payload}->{line};
+    my $type   = $params->{payload}->{type};
+
+    Koha::Exception->throw(
+        "after_account_action called with action: $action, type: $type, ref: " . ref($line) );
+}
+
 sub _private_sub {
     return "";
 }

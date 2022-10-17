@@ -35,6 +35,7 @@ use Koha::Account::Offsets;
 use Koha::Account::DebitTypes;
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
+use Koha::Plugins;
 
 =head1 NAME
 
@@ -255,6 +256,17 @@ sub add_credit {
                         borrowernumber => $self->{patron_id},
                     }
                 ) if grep { $credit_type eq $_ } ( 'PAYMENT', 'WRITEOFF' );
+
+                Koha::Plugins->call(
+                    'after_account_action',
+                    {
+                        action  => "add_credit",
+                        payload => {
+                            type => lc($credit_type),
+                            line => $line->get_from_storage
+                        }
+                    }
+                );
 
                 if ( C4::Context->preference("FinesLog") ) {
                     logaction(
