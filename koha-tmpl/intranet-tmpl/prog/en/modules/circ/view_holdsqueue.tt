@@ -76,146 +76,149 @@
         <div class="dialog message">No items found.</div>
     [% END %]
     [% IF ( itemsloop ) %]
-<table id="holdst">
-	<thead>
-    <tr>
-        <th class="hq-title anti-the">Title</th>
-        <th class="hq-holdingbranch">Current library</th>
-        <th class="hq-collection">Collection</th>
-        <th class="hq-itemtype">Item type</th>
-        <th class="hq-callnumber">Call number</th>
-        <th class="hq-copynumber">Copy number</th>
-        <th class="hq-enumchron">Enumeration</th>
-        <th class="hq-barcode">Barcode</th>
-        <th class="hq-patron">Patron</th>
-        <th class="hq-patroncategory">Patron category</th>
-        <th class="hq-sendto">Send to</th>
-        <th class="hq-date">Date</th>
-        <th class="hq-notes">Notes</th>
-    </tr>
-    <tr>
-        <td class="hq-title">
-            <span class="filter_column filter_text">
-                <input class="text_filter" type="text" placeholder="Title">
-            </span>
-        </td>
-        <td class="hq-holdingbranch">
-            <span class="filter_column filter_text">
-                <input class="text_filter" type="text" placeholder="Current library">
-            </span>
-        </td>
-        <td class="hq-collection">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Collection">
-            </span>
-        </td>
-        <td class="hq-itemtype">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Item type">
-            </span>
-        </td>
-        <td class="hq-callnumber">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Call number">
-            </span>
-        </td>
-        <td class="hq-copynumber">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Copy number">
-            </span>
-        </td>
-        <td class="hq-enumchron">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Enumeration">
-            </span>
-        </td>
-        <td class="hq-barcode">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Barcode">
-            </span>
-        </td>
-        <td class="hq-patron">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Patron">
-            </span>
-        </td>
-        <td class="hq-patroncategory">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Patron category">
-            </span>
-        </td>
-        <td class="hq-sendto">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Send to">
-            </span>
-        </td>
-        <td class="hq-date">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Date">
-            </span>
-        </td>
-        <td class="hq-notes">
-            <span class="filter_column filter_text">
-                <input type="text" placeholder="Notes">
-            </span>
-        </td>
-    </tr>
-	</thead>
-     <tbody>[% FOREACH itemsloo IN itemsloop %]
-        <tr>
-            <td class="hq-title">
-                <p>
-                    [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
-                </p>
-                <p>
-                    <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
-                    <div class="hq-author">[% itemsloo.author | html %]</div>
-                    [% IF ( itemsloo.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.editionstatement | html %]</div>[% END %]
-                    <div class="hq-pubdata">
-                        [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode | html %][% END %]
+        <div class="page-section">
+            <table id="holdst">
+                <thead>
+                <tr>
+                    <th class="hq-title anti-the">Title</th>
+                    <th class="hq-holdingbranch">Current library</th>
+                    <th class="hq-collection">Collection</th>
+                    <th class="hq-itemtype">Item type</th>
+                    <th class="hq-callnumber">Call number</th>
+                    <th class="hq-copynumber">Copy number</th>
+                    <th class="hq-enumchron">Enumeration</th>
+                    <th class="hq-barcode">Barcode</th>
+                    <th class="hq-patron">Patron</th>
+                    <th class="hq-patroncategory">Patron category</th>
+                    <th class="hq-sendto">Send to</th>
+                    <th class="hq-date">Date</th>
+                    <th class="hq-notes">Notes</th>
+                </tr>
+                <tr>
+                    <td class="hq-title">
+                        <span class="filter_column filter_text">
+                            <input class="text_filter" type="text" placeholder="Title">
+                        </span>
+                    </td>
+                    <td class="hq-holdingbranch">
+                        <span class="filter_column filter_text">
+                            <input class="text_filter" type="text" placeholder="Current library">
+                        </span>
+                    </td>
+                    <td class="hq-collection">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Collection">
+                        </span>
+                    </td>
+                    <td class="hq-itemtype">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Item type">
+                        </span>
+                    </td>
+                    <td class="hq-callnumber">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Call number">
+                        </span>
+                    </td>
+                    <td class="hq-copynumber">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Copy number">
+                        </span>
+                    </td>
+                    <td class="hq-enumchron">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Enumeration">
+                        </span>
+                    </td>
+                    <td class="hq-barcode">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Barcode">
+                        </span>
+                    </td>
+                    <td class="hq-patron">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Patron">
+                        </span>
+                    </td>
+                    <td class="hq-patroncategory">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Patron category">
+                        </span>
+                    </td>
+                    <td class="hq-sendto">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Send to">
+                        </span>
+                    </td>
+                    <td class="hq-date">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Date">
+                        </span>
+                    </td>
+                    <td class="hq-notes">
+                        <span class="filter_column filter_text">
+                            <input type="text" placeholder="Notes">
+                        </span>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>[% FOREACH itemsloo IN itemsloop %]
+                    <tr>
+                        <td class="hq-title">
+                            <p>
+                                [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
+                            </p>
+                            <p>
+                                <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
+                                <div class="hq-author">[% itemsloo.author | html %]</div>
+                                [% IF ( itemsloo.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.editionstatement | html %]</div>[% END %]
+                                <div class="hq-pubdata">
+                                    [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode | html %][% END %]
 
-                        [% IF ( itemsloo.publicationyear ) %]
-                            , [% itemsloo.publicationyear | html %]
-                        [% ELSIF ( itemsloo.copyrightdate ) %]
-                            , [% itemsloo.copyrightdate | html %]
-                        [% END %]
+                                    [% IF ( itemsloo.publicationyear ) %]
+                                        , [% itemsloo.publicationyear | html %]
+                                    [% ELSIF ( itemsloo.copyrightdate ) %]
+                                        , [% itemsloo.copyrightdate | html %]
+                                    [% END %]
 
-                        [% IF ( itemsloo.pages ) %]: [% itemsloo.pages | html %] [% END %]
+                                    [% IF ( itemsloo.pages ) %]: [% itemsloo.pages | html %] [% END %]
 
-                        [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') | html %][% END %]
+                                    [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') | html %][% END %]
 
-                        [% IF ( itemsloo.isbn ) %]<span>ISBN: [% itemsloo.isbn | html %]</span>[% END %]
-                    </div>
-                </p>
-            </td>
-            <td class="hq-holdingbranch">[% Branches.GetName( itemsloo.holdingbranch ) | html %]</td>
-            <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.ccode ) | html %]</td>
-            <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
-            <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
-            <td class="hq-copynumber">[% itemsloo.copynumber | html %]</td>
-            <td class="hq-enumchron">[% itemsloo.enumchron | html %]</td>
-            <td class="hq-barcode">
-                [% IF ( itemsloo.item_level_request ) %]
-                    <em>Only item:</em> <strong>[% itemsloo.barcode | html %]</strong>
-                [% ELSE %]
-                    <strong>[% itemsloo.barcode | html %]</strong> <em>or any available</em>
+                                    [% IF ( itemsloo.isbn ) %]<span>ISBN: [% itemsloo.isbn | html %]</span>[% END %]
+                                </div>
+                            </p>
+                        </td>
+                        <td class="hq-holdingbranch">[% Branches.GetName( itemsloo.holdingbranch ) | html %]</td>
+                        <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.ccode ) | html %]</td>
+                        <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
+                        <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
+                        <td class="hq-copynumber">[% itemsloo.copynumber | html %]</td>
+                        <td class="hq-enumchron">[% itemsloo.enumchron | html %]</td>
+                        <td class="hq-barcode">
+                            [% IF ( itemsloo.item_level_request ) %]
+                                <em>Only item:</em> <strong>[% itemsloo.barcode | html %]</strong>
+                            [% ELSE %]
+                                <strong>[% itemsloo.barcode | html %]</strong> <em>or any available</em>
+                            [% END %]
+                        </td>
+                        <td class="hq-patron">
+                          <p>
+                              [% INCLUDE 'patron-title.inc' invert_name=1 patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+                          </p>
+                          [% UNLESS Koha.Preference('HidePatronName') %]
+                             <p>[% itemsloo.patron.phone | html %]</p>
+                          [% END %]
+                        </td>
+                        <td class="hq-patroncategory">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
+                        <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
+                        <td class="hq-date" data-order="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</td>
+                        <td class="hq-notes">[% itemsloo.notes | html %]</td>
+                    </tr>
                 [% END %]
-            </td>
-            <td class="hq-patron">
-              <p>
-                  [% INCLUDE 'patron-title.inc' invert_name=1 patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
-              </p>
-              [% UNLESS Koha.Preference('HidePatronName') %]
-                 <p>[% itemsloo.patron.phone | html %]</p>
-              [% END %]
-            </td>
-            <td class="hq-patroncategory">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
-            <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
-            <td class="hq-date" data-order="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</td>
-            <td class="hq-notes">[% itemsloo.notes | html %]</td>
-        </tr>
-    [% END %]</tbody>
-    </table>
+                </tbody>
+            </table>
+        </div> <!-- /.page-section -->
 	[% END %] 
 	[% END %]
 
