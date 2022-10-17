@@ -36,13 +36,14 @@ $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'get_marc_host' => sub {
-    plan tests => 12;
+    plan tests => 15;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
 
     my $bib1 = $builder->build_object({ class => 'Koha::Biblios' });
     my $bib2 = $builder->build_object({ class => 'Koha::Biblios' });
+    my $item1 = $builder->build_object({ class => 'Koha::Items', value => { biblionumber => $bib2->biblionumber } });
     my $marc = MARC::Record->new;
     my $results = [];
 
@@ -72,12 +73,27 @@ subtest 'get_marc_host' => sub {
     $marc->field('773')->update( w => '(xyz) bad data' ); # causes no results
     $host = $bib1->get_marc_host;
     is( $bib1->get_marc_host, undef, 'No results for bad 773' );
-    # Test plaintext when no $w
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+    # no $w
     $marc->field('773')->update( t => 'title' );
     $marc->field('773')->delete_subfield( code => 'w' );
+    $marc->field('773')->update( '0' => $bib2->biblionumber );
     $host = $bib1->get_marc_host;
-    is( $host, "title, relpart", '773$atg returned when no $w' );
+    is( $host->biblionumber, $bib2->biblionumber, 'Found host biblio using 773$0 biblionumber' );
+
+    $marc->field('773')->delete_subfield( code => '0' );
+    $marc->field('773')->update( '9' => $item1->itemnumber );
+    $host = $bib1->get_marc_host;
+    is( $host->biblionumber, $bib2->biblionumber, 'Found host item using 773$9 itemnumber' );
+
+    $marc->field('773')->delete_subfield( code => '9' );
+    my ( $relatedparts, $info );
+    ( $host, $relatedparts, $info ) = $bib1->get_marc_host;
+    is( $host, undef, 'No Koha Biblio object returned with no $w' );
+    is( $info, "title, relpart", '773$atg returned when no $w' );
     $marc->field('773')->delete_subfield( code => 't' ); # restore
+
     # Add second 773
     $marc->append_fields( MARC::Field->new( '773', '', '', g => 'relpart2', w => '234' ) );
     $host = $bib1->get_marc_host;

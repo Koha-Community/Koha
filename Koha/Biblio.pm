@@ -1205,7 +1205,7 @@ sub to_api_mapping {
 
     $host = $biblio->get_marc_host;
     # OR:
-    ( $host, $relatedparts ) = $biblio->get_marc_host;
+    ( $host, $relatedparts, $hostinfo ) = $biblio->get_marc_host;
 
     Returns host biblio record from MARC21 773 (undef if no 773 present).
     It looks at the first 773 field with MARCorgCode or only a control
@@ -1213,6 +1213,12 @@ sub to_api_mapping {
     The optional parameter no_items triggers a check if $biblio has items.
     If there are, the sub returns undef.
     Called in list context, it also returns 773$g (related parts).
+
+    If there is no $w, we use $0 (host biblionumber) or $9 (host itemnumber)
+    to search for the host record. If there is also no $0 and no $9, we search
+    using author and title. Failing all of that, we return an undef host and
+    form a concatenation of strings with 773$agt for host information,
+    returned when called in list context.
 
 =cut
 
@@ -1237,18 +1243,35 @@ sub get_marc_host {
             last;
         }
     }
+
+    my $engine = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $bibno;
     if ( !$hostfld and $record->subfield('773','t') ) {
-        # not linked using $w so just return plaintext
+        # not linked using $w
         my $unlinkedf = $record->field('773');
-        my $host = join( ", ", $unlinkedf->subfield('a'), $unlinkedf->subfield('t'), $unlinkedf->subfield('g') );
-        return wantarray ? ( $host, $unlinkedf->subfield('g') ) : $host;
+        my $host;
+        if ( C4::Context->preference("EasyAnalyticalRecords") ) {
+            if ( $unlinkedf->subfield('0') ) {
+                # use 773$0 host biblionumber
+                $bibno = $unlinkedf->subfield('0');
+            } elsif ( $unlinkedf->subfield('9') ) {
+                # use 773$9 host itemnumber
+                my $linkeditemnumber = $unlinkedf->subfield('9');
+                $bibno = Koha::Items->find( $linkeditemnumber )->biblionumber;
+            }
+        }
+        if ( $bibno ) {
+            my $host = Koha::Biblios->find($bibno) or return;
+            return wantarray ? ( $host, $unlinkedf->subfield('g') ) : $host;
+        }
+        # just return plaintext and no host record
+        my $hostinfo = join( ", ", $unlinkedf->subfield('a'), $unlinkedf->subfield('t'), $unlinkedf->subfield('g') );
+        return wantarray ? ( undef, $unlinkedf->subfield('g'), $hostinfo ) : undef;
     }
     return if !$hostfld;
     my $rcn = $hostfld->subfield('w');
 
     # Look for control number with/without orgcode
-    my $engine = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-    my $bibno;
     for my $try (1..2) {
         my ( $error, $results, $total_hits ) = $engine->simple_search_compat( 'Control-number='.$rcn, 0,1 );
         if( !$error and $total_hits == 1 ) {
