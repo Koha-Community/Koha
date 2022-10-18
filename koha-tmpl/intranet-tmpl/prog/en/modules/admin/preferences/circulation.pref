@@ -797,6 +797,13 @@ Circulation:
               class: currency
             - "."
         -
+            - The holds queue should prioritize filling a hold by matching the patron's home library with an item having a matching
+            - pref: HoldsQueuePrioritizeBranch
+              type: choice
+              choices:
+                  homebranch: home library (homebranch).
+                  holdingbranch: holding library (holdingbranch).
+        -
             - Satisfy holds using items from the libraries
             - pref: StaticHoldsQueueWeight
               class: multi

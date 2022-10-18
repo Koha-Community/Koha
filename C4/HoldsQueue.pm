@@ -567,12 +567,13 @@ sub MapItemsToHoldRequests {
         my ($itemnumber, $holdingbranch);
 
         my $holding_branch_items = $items_by_branch{$pickup_branch};
+        my $priority_branch = C4::Context->preference('HoldsQueuePrioritizeBranch') // 'homebranch';
         if ( $holding_branch_items ) {
             foreach my $item (@$holding_branch_items) {
                 next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                 if (
-                    $request->{borrowerbranch} eq $item->{homebranch}
+                    $request->{borrowerbranch} eq $item->{$priority_branch}
                     && _checkHoldPolicy($item, $request) # Don't fill item level holds that contravene the hold pickup policy at this time
                     && ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                         || ( $request->{itemnumber} && ( $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} ) ) )
@@ -593,7 +594,7 @@ sub MapItemsToHoldRequests {
 
                 my $holding_branch_items = $items_by_branch{$holdingbranch};
                 foreach my $item (@$holding_branch_items) {
-                    next if $request->{borrowerbranch} ne $item->{homebranch};
+                    next if $request->{borrowerbranch} ne $item->{$priority_branch};
                     next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                     # Don't fill item level holds that contravene the hold pickup policy at this time
