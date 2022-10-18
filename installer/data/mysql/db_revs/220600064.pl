@@ -13,9 +13,9 @@ return {
         });
 
         $dbh->do(q{
-            UPDATE systempreferences SET value = (SELECT CASE WHEN value = 1 THEN 'intransit' ELSE '' END
-            FROM systempreferences
-            WHERE variable = 'OPACInTransitHoldPickupLocationChange')
+            UPDATE systempreferences
+            SET value=(SELECT CASE WHEN value=1 THEN 'intransit' ELSE '' END FROM systempreferences WHERE variable='OPACInTransitHoldPickupLocationChange')
+            WHERE variable='OPACAllowUserToChangeBranch'
         });
 
         say $out "Added new system preference 'OPACAllowUserToChangeBranch'";
