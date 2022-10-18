@@ -1,10 +1,11 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% PROCESS 'restriction-types.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% PROCESS restriction_type_description %]'[% ELSE %]New restriction[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of restriction '[% PROCESS restriction_type_description %]'[% END %] &rsaquo; Patron restrictions &rsaquo; Administration &rsaquo; Koha
+<title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'[% ELSE %]New restriction[% END %][% END %]
+[% IF op == 'delete_confirm' %]Confirm deletion of restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'[% END %] &rsaquo; Patron restrictions &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -37,7 +38,7 @@
         [% IF restriction %]
             <li>
                 <a href="#" aria-current="page">
-                    Modify restriction '[% PROCESS restriction_type_description %]'
+                    Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'
                 </a>
             </li>
         [% ELSE %]
@@ -68,7 +69,7 @@
             <main>
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
+    <div class="dialog [% m | html %]">
         [% SWITCH m.code %]
         [% CASE 'add_success' %]
             Type added
@@ -95,7 +96,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF restriction %]
-            <h1>Modify restriction [% PROCESS restriction_type_description %]</h1>
+            <h1>Modify restriction [% PROCESS restriction_type_description restriction_type=restriction %]</h1>
             <input type="hidden" name="is_a_modif" value="1" />
         [% ELSE %]
             <h1>New restriction</h1>
@@ -141,7 +142,7 @@
                 Confirm restriction deletion
             </legend>
 
-            <p>Are you sure you want to delete "[% PROCESS restriction_type_description %]"?</p>
+            <p>Are you sure you want to delete "[% PROCESS restriction_type_description restriction_type=restriction %]"?</p>
 
             <fieldset class="action">
                 <input type="hidden" name="op" value="delete_confirmed" />
@@ -181,7 +182,7 @@
                                 [% restriction.code | html %]
                             </td>
                             <td>
-                                [% PROCESS restriction_type_description %]
+                                [% PROCESS restriction_type_description restriction_type=restriction %]
                             </td>
                             <td>
                                 [% IF restriction.is_default %]Yes[% END %]
