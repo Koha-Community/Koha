@@ -68,6 +68,20 @@ sub list {
         return $c->render( status => 200, openapi => \@packages );
     }
     catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Authorization::Unauthorized') ) {
+                return $c->render(
+                    status  => 401,
+                    openapi => {
+                        errors => [
+                            {
+                                message => "Check your ERMProviderEbscoApiKey/ERMProviderEbscoCustomerID system preferences."
+                            }
+                        ]
+                    }
+                );
+            }
+        }
         $c->unhandled_exception($_);
     };
 }

@@ -276,6 +276,8 @@ sub request {
         warn sprintf "ERROR - EBSCO API %s returned %s - %s\n", $url, $response->code, $message;
         if ( $response->code == 404 ) {
             Koha::Exceptions::ObjectNotFound->throw($message);
+        } elsif ( $response->code == 401 ) {
+            Koha::Exceptions::Authorization::Unauthorized->throw($message);
         } else {
             die sprintf "ERROR requesting EBSCO API\n%s\ncode %s: %s\n", $url, $response->code,
               $message;

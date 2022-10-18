@@ -493,7 +493,11 @@ function filterDataTable( table, column, term ){
 jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
     if ( settings && settings.jqXHR ) {
         console.log("Got %s (%s)".format(settings.jqXHR.status, settings.jqXHR.statusText));
-        alert(__("Something went wrong when loading the table.\n%s: %s").format(settings.jqXHR.status, settings.jqXHR.statusText));
+        alert(__("Something went wrong when loading the table.\n%s: %s. \n%s").format(
+            settings.jqXHR.status,
+            settings.jqXHR.statusText,
+            settings.jqXHR.responseJSON.errors ? settings.jqXHR.responseJSON.errors[0].message : ''
+        ));
     } else {
         alert(__("Something went wrong when loading the table."));
     }
