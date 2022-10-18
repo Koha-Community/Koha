@@ -134,10 +134,12 @@ sub record_schema {
 
     my $record = $biblio->metadata_record(
         {
-            [ embed_items => 1|0,
-              opac        => 1|0,
-              patron      => $patron,
-              expand_coded_fields => 1|0 ]
+            [
+                embed_items         => 1 | 0,
+                interface           => 'opac' | 'intranet',
+                patron              => $patron,
+                expand_coded_fields => 1 | 0
+            ]
         }
     );
 
@@ -153,32 +155,26 @@ sub metadata_record {
 
     my $record = $self->metadata->record;
 
-    if ( $params->{embed_items} or $params->{opac} ) {
+    if ( $params->{embed_items} or $params->{interface} ) {
 
         # There's need for a RecordProcessor, let's do it!
         my @filters;
         my $options = {
-            interface     => 'opac',
+            interface     => $params->{interface},
             frameworkcode => $self->frameworkcode,
         };
 
         if ( $params->{embed_items} ) {
             push @filters, 'EmbedItems';
-            if ( $params->{opac} ) {
+            if ( $params->{interface} eq 'opac' ) {
                 $options->{items} = $self->items->filter_by_visible_in_opac(
-                    {
-                        (
-                            $params->{patron} ? ( patron => $params->{patron} ) : ()
-                        )
-                    }
-                );
-            }
-            else {
+                    { ( $params->{patron} ? ( patron => $params->{patron} ) : () ) } );
+            } else {
                 $options->{items} = $self->items;
             }
         }
 
-        if ( $params->{opac} ) {
+        if ( $params->{interface} ) {
             push @filters, 'ViewPolicy';
         }
 
