@@ -24,50 +24,47 @@ div#toolbar {
     padding-left: 0;
 }
 
-ul li.tag, ul li.tag li.subfield_line {
+ul li.tag,
+ul li.tag li.subfield_line {
     list-style-type: none;
-    position: relative;
     padding-left: 30px;
+    position: relative;
 }
 
 ul li.tag::before {
-    position: absolute;
-    font-size: .8em;
-    top: 0;
-    left: 10px;
     content: " ";
+    font-size: .8em;
+    left: 10px;
+    padding-top: 1.7em;
+    position: absolute;
+    top: 0;
 }
-
 
 ul li.tag.sortable_tag::before,
 ul li.tag li.subfield_line::before {
     color: #999;
-    cursor: move;
-    position: absolute;
-    font-family: 'FontAwesome';
-    font-size: .8em;
-    top: 0;
-    left: 10px;
     content: "\f0c9";
-}
-
-ul li.tag::before {
-    padding-top: 1.7em;
+    cursor: move;
+    font-family: FontAwesome;
+    font-size: .8em;
+    left: 10px;
+    position: absolute;
+    top: 0;
 }
 
 li.ui-sortable-helper {
-    background-color: #e0e0e0;
+    background-color: #E0E0E0;
+    border-radius: 4px;
     max-height: 150px;
     padding: 2px;
-    border-radius: 4px;
 }
 
 li.ui-sortable-helper ul li {
-	display: none !important;
+    display: none !important;
 }
 
 .sortable_subfield .ui-sortable-helper input.flat {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 ul li.tag li.subfield_line.ui-sortable-helper::before {
@@ -75,22 +72,22 @@ ul li.tag li.subfield_line.ui-sortable-helper::before {
 }
 
 .buttonPlus {
-	font-weight : bold;
-	text-decoration : none;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .buttonMinus {
-	font-weight : bold;
-	text-decoration : none;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 a.expandfield {
-	text-decoration : none;
+    text-decoration: none;
 }
 
 #authoritytabs {
-	margin-top : 1em;
-	margin-bottom : 1em;
+    margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 .toptabs {
@@ -109,19 +106,19 @@ a.expandfield {
 }
 
 li.subfield_line {
-    padding-bottom: .3em;
-    float: left;
     clear: left;
+    float: left;
+    padding-bottom: .3em;
     width: 100%;
 }
 
 li.subfield_line label {
-    font-size:89%;
+    clear: left;
     float: left;
+    font-size: 89%;
     padding-right: .4em;
-    width: 10em;
     text-align: left;
-    clear:left;
+    width: 10em;
 }
 
 .subfieldcode img {
@@ -129,30 +126,30 @@ li.subfield_line label {
 }
 
 .tag_title {
-	font-size : 90%;
-	padding : .2em 0;
+    font-size: 90%;
+    padding: .2em 0;
 }
 
 .tagnum {
-	font-size : 130%;
-	font-weight : bold;
-	color : #000;
-	padding : .1em .3em .1em 0;
+    color: #000;
+    font-size: 130%;
+    font-weight: bold;
+    padding: .1em .3em .1em 0;
 }
 
 a.tagnum {
-	font-size : 110%;
-	font-weight : bold;
-	color : #000;
-	padding : .1em .3em .1em 0;
-	text-decoration : none;
+    color: #000;
+    font-size: 110%;
+    font-weight: bold;
+    padding: .1em .3em .1em 0;
+    text-decoration: none;
 }
 
 .subfield {
-	color : #00698a;
-	float: left;
-	width: 10em;
-	text-align:right;
+    color: #00698A;
+    float: left;
+    text-align: right;
+    width: 10em;
 }
 
 .subfield.subfield_mandatory {
@@ -168,22 +165,26 @@ a.tagnum {
     float: left;
 }
 
-#cat_addbiblio .subfieldcode, #authoritytabs .subfieldcode {
+#cat_addbiblio .subfieldcode,
+#authoritytabs .subfieldcode {
     float: none;
 }
 
-#cat_addbiblio .labelsubfield, #authoritytabs .labelsubfield {
+#cat_addbiblio .labelsubfield,
+#authoritytabs .labelsubfield {
+    float: none;
     font-size: 90%;
-    float: none;
 }
 
-#cat_addbiblio .subfield, #authoritytabs .subfield {
+#cat_addbiblio .subfield,
+#authoritytabs .subfield {
     float: none;
     padding: .25em .5em;
 }
 
-#cat_addbiblio .subfield label, #authoritytabs .subfield label {
-    color: #00698a;
+#cat_addbiblio .subfield label,
+#authoritytabs .subfield label {
+    color: #00698A;
 }
 
 .input_marceditor {
@@ -191,42 +192,47 @@ a.tagnum {
     width: 50%;
 }
 
-#cat_addbiblio .input_marceditor, #authoritytabs .input_marceditor {
+#cat_addbiblio .input_marceditor,
+#authoritytabs .input_marceditor {
     float: none;
     width: 100%;
 }
 
-#cat_addbiblio .subfield_line, #authoritytabs .subfield_line {
+#cat_addbiblio .subfield_line,
+#authoritytabs .subfield_line {
     display: flex;
 }
 
-#cat_addbiblio .field_marceditor, #authoritytabs .field_marceditor {
+#cat_addbiblio .field_marceditor,
+#authoritytabs .field_marceditor {
     flex-grow: 1;
     padding: .25em .5em;
 }
 
-#cat_addbiblio .subfield_loop_mandatory, #authoritytabs .subfield_loop_mandatory {
+#cat_addbiblio .subfield_loop_mandatory,
+#authoritytabs .subfield_loop_mandatory {
     padding: .25em .5em;
 }
 
 .indicator {
-    width: 1em;
     box-sizing: content-box;
+    width: 1em;
 }
 
 #cataloguing_additem_newitem .subfield_line {
-    flex-basis: 100%;
     display: flex;
+    flex-basis: 100%;
 }
 
-#cataloguing_additem_newitem fieldset.rows label, #cataloguing_additem_newitem fieldset.rows span.label {
-	font-size : 100%;
-    flex-basis : 25%;
+#cataloguing_additem_newitem fieldset.rows label,
+#cataloguing_additem_newitem fieldset.rows span.label {
+    flex-basis: 25%;
+    font-size: 100%;
     margin-right: 1rem;
 }
 
 #cataloguing_additem_newitem fieldset.rows li {
-	padding-bottom : 3px;
+    padding-bottom: 3px;
 }
 
 #cataloguing_additem_newitem .input_marceditor {
@@ -242,20 +248,41 @@ a.tagnum {
 }
 
 .mandatory_marker {
-	color: red;
+    color: #C00;
 }
-.linktools { display: block; white-space: nowrap; }
-.linktools a { font-size : 75%; display:block;text-decoration:none;}
-.linktools a {margin:0 2px;padding:2px;background-color:#FFF;text-align:center; }
-.linktools a:first-child { border-bottom: 1px solid #DDD; }
-.linktools a:hover { background-color: #FFC; }
-.subfield_controls { margin: 0 .5em; }
+
+.linktools {
+    display: block;
+    white-space: nowrap;
+}
+
+.linktools a {
+    background-color: #FFF;
+    display: block;
+    font-size: 75%;
+    margin: 0 2px;
+    padding: 2px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.linktools a:first-child {
+    border-bottom: 1px solid #DDD;
+}
+
+.linktools a:hover {
+    background-color: #FFC;
+}
+
+.subfield_controls {
+    margin: 0 .5em;
+}
 
 #cataloguing_additem_itemlist {
-	margin-bottom : 1em;
+    margin-bottom: 1em;
 }
 
-tbody tr.active:nth-child(2n+1) td,
+tbody tr.active:nth-child( 2n+1 ) td,
 tbody tr.active td {
     background-color: #FFFFCC;
 }
@@ -271,14 +298,15 @@ tbody tr.active td {
     width: 100%;
     z-index: 1000;
 }
+
 #loading div {
-    background : transparent url(../img/loading.gif) top left no-repeat;
-    font-size : 175%;
+    background: transparent url( "../img/loading.gif" ) top left no-repeat;
+    font-size: 175%;
     font-weight: bold;
     height: 2em;
     left: 50%;
     margin: -1em 0 0 -2.5em;
-    padding-left : 50px;
+    padding-left: 50px;
     position: absolute;
     top: 50%;
     width: 15em;
@@ -300,39 +328,38 @@ tbody tr.active td {
 }
 
 .toolbar-tabs li {
-    background-color: #fff;
+    background-color: #FFF;
     display: flex;
-    justify-content: center;
     flex-grow: 1;
-    text-align: center;
+    justify-content: center;
     margin-bottom: 0;
+    text-align: center;
 }
 
 .toolbar-tabs li a {
+    background-color: #71B443;
     border: 1px solid #71B443;
     border-left: 0;
-    background-color: #71B443;
-    border-right: 1px solid #71B443;
     border-radius: 5px;
-    margin: 5px;
+    border-right: 1px solid #71B443;
+    color: #FFF;
     display: block;
-    color: #fff;
     font-weight: bold;
+    margin: 5px;
     padding: .3em 1.5em;
     width: 100%;
 }
 
 .toolbar-tabs li.selected a {
     background-color: #418940;
-    border-right: 1px solid #418940;
     border-bottom: 1px solid #418940;
-    text-decoration: none;
+    border-right: 1px solid #418940;
+    color: #FFF;
+    display: block;
     font-weight: bold;
     margin: 5px;
-    display: block;
-    color: #fff;
-    font-weight: bold;
     padding: .3em 1.5em;
+    text-decoration: none;
     width: 100%;
 }
 
@@ -342,14 +369,14 @@ tbody tr.active td {
 
 .toolbar-tabs li a:hover {
     background-color: #418940;
-    text-decoration: none;
-    border-right: 1px solid #418940;
     border-bottom: 1px solid #418940;
-    margin: 5px;
+    border-right: 1px solid #418940;
+    color: #FFF;
     display: block;
-    color: #fff;
     font-weight: bold;
+    margin: 5px;
     padding: .3em 1.5em;
+    text-decoration: none;
     width: 100%;
 }
 
@@ -381,23 +408,23 @@ tbody tr.active td {
     display: inline-block;
 }
 
-.matching_authority{
+.matching_authority {
     color: #99FF99;
 }
 
-.no_matching_authority{
+.no_matching_authority {
     color: #FFAAAA;
 }
 
-.matching_authority_field{
-     background-color: #99FF99 !important;
- }
+.matching_authority_field {
+    background-color: #99FF99 !important;
+}
 
- .no_matching_authority_field{
-     background-color: #FFAAAA !important;
- }
+.no_matching_authority_field {
+    background-color: #FFAAAA !important;
+}
 
- .show-errors {
+.show-errors {
     background: #FFEC8C none;
     border-color: #E0C726;
     color: #000;
@@ -409,7 +436,7 @@ tbody tr.active td {
     display: inline-block;
 }
 
-@media (min-width: 768px) {
+@media ( min-width: 768px ) {
     li.subfield_line label {
         width: 20em;
     }
@@ -423,7 +450,7 @@ tbody tr.active td {
     }
 }
 
-@media (min-width: 1200px) {
+@media ( min-width: 1200px ) {
     li.subfield_line label {
         width: 25em;
     }
@@ -442,18 +469,18 @@ tbody tr.active td {
 }
 
 #authoritiestabs .marc_field {
+    border-radius: 3px;
     display: inline-block;
     padding: .3em;
-    border-radius: 3px;
 }
 
 #authoritiestabs .marc_subfield {
-    font-weight: bold;
     color: #666;
+    font-weight: bold;
 }
 
 #authoritiestabs .marc_subfield_desc {
-    color: #00698a;
+    color: #00698A;
     font-style: italic;
 }
 
@@ -478,4 +505,3 @@ tbody tr.active td {
     font-weight: bold;
     padding: 0;
 }
-
