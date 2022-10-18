@@ -1014,8 +1014,11 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 resizeTimer = null;
 
                 var pos = $('#editor .CodeMirror').offset();
-                $('#editor .CodeMirror').height( $(window).height() - pos.top - 24 - $('#changelanguage').height() ); // 24 is hardcoded value but works well
-
+                if ( $('#changelanguage').length ) {
+                    $('#editor .CodeMirror').height( $(window).height() - pos.top - 24 - $('#changelanguage').height() ); // 24 is hardcoded value but works well
+                } else {
+                    $('#editor .CodeMirror').height( $(window).height() - pos.top - 24 );
+                }
                 $('.modal-body').each( function() {
                     $(this).height( $(window).height() * .8 - $(this).prevAll('.modal-header').height() );
                 } );
