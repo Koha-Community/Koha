@@ -4,10 +4,13 @@ form {
 
 div#toolbar {
     border: 0;
+    margin-bottom: 0;
+    padding-top: 5px;
 }
 
 .tab-content {
     border: 0;
+    border-radius: 0;
     padding: 0;
 }
 
@@ -90,12 +93,17 @@ a.expandfield {
 	margin-bottom : 1em;
 }
 
-.toptabs .ui-tabs-nav li a {
-	padding : .2em 1.2em;
+.toptabs {
+    margin-left: -5px;
+    margin-top: 0;
+}
+
+.toptabs .tab-pane {
+    padding: 1em;
 }
 
 .tag {
-    border-bottom: 2px solid #D5E6E9;
+    border-bottom: 2px solid #E4F2DA;
     clear: both;
     padding: .7em 0;
 }
@@ -278,6 +286,7 @@ tbody tr.active td {
 
 .toolbar-tabs-container {
     flex-basis: 100%;
+    margin-top: .5em;
 }
 
 .toolbar-tabs {
@@ -344,10 +353,6 @@ tbody tr.active td {
     width: 100%;
 }
 
-.toolbar-tabs li:first-child a {
-    border-left: 1px solid #EDF4F6;
-}
-
 .tag_anchors_list {
     background-color: #FFF;
     clear: both;
@@ -367,7 +372,7 @@ tbody tr.active td {
 }
 
 .tag_anchors a {
-    border-right: 1px solid #EDF4F6;
+    border-right: 1px solid #CCC;
     display: inline-block;
     padding: 0 .4em;
 }
