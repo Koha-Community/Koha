@@ -329,7 +329,9 @@ t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 is($messages->{NeedsTransfer},undef,"AddReturn respects branch item return policy - noreturn");
 t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
 
-subtest "Test GetBranchItemRule" => sub {
+$schema->storage->txn_rollback;
+
+subtest "GetBranchItemRule() tests" => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
@@ -348,9 +350,10 @@ subtest "Test GetBranchItemRule" => sub {
         }
     );
 
+    my $biblio = $builder->build_sample_biblio;
     my $item = Koha::Item->new(
         {
-            biblionumber  => $biblionumber,
+            biblionumber  => $biblio->id,
             homebranch    => $homebranch,
             holdingbranch => $holdingbranch,
             itype         => $sampleitemtype1->{itemtype}
@@ -395,5 +398,3 @@ subtest "Test GetBranchItemRule" => sub {
 
     $schema->storage->txn_rollback;
 };
-
-$schema->storage->txn_rollback;
