@@ -17,19 +17,22 @@ package Koha::Edifact::Transport;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use utf8;
-use DateTime;
+
 use Carp qw( carp );
+use DateTime;
+use Encode qw( from_to );
 use English qw{ -no_match_vars };
+use File::Copy qw( copy move );
+use File::Slurp qw( read_file );
 use Net::FTP;
 use Net::SFTP::Foreign;
-use File::Slurp qw( read_file );
-use File::Copy qw( copy move );
+
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use Encode qw( from_to );
+use Koha::Encryption;
 
 sub new {
     my ( $class, $account_id ) = @_;
@@ -136,7 +139,7 @@ sub sftp_download {
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
-        password => $self->{account}->password,
+        password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
         timeout  => 10,
     );
     if ( $sftp->error ) {
@@ -221,7 +224,7 @@ sub ftp_download {
       )
       or return $self->_abort_download( undef,
         "Cannot connect to $self->{account}->host: $EVAL_ERROR" );
-    $ftp->login( $self->{account}->username, $self->{account}->password )
+    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->download_directory )
       or return $self->_abort_download( $ftp,
@@ -262,7 +265,7 @@ sub ftp_upload {
       )
       or return $self->_abort_download( undef,
         "Cannot connect to $self->{account}->host: $EVAL_ERROR" );
-    $ftp->login( $self->{account}->username, $self->{account}->password )
+    $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->upload_directory )
       or return $self->_abort_download( $ftp,
@@ -293,7 +296,7 @@ sub sftp_upload {
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
-        password => $self->{account}->password,
+        password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
         timeout  => 10,
     );
     $sftp->die_on_error("Cannot ssh to $self->{account}->host");
