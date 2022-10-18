@@ -1,16 +1,16 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-
-use Test::More;
+use Test::More tests => 4;
 use Test::MockModule;
-use vars qw($koha $dbh $config $ret);
+
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Koha::Database;
 
 BEGIN {
-
+    my $ret;
     # Note: The overall number of tests may vary by configuration.
     # First we need to check your environmental variables
     for (qw(KOHA_CONF PERL5LIB)) {
@@ -19,9 +19,16 @@ BEGIN {
     use_ok('C4::Context');
 }
 
+our $schema;
+$schema = Koha::Database->new->schema;
+
+subtest 'Original tests' => sub {
+plan tests => 33;
+$schema->storage->txn_begin;
+
+my $dbh;
 ok($dbh = C4::Context->dbh(), 'Getting dbh from C4::Context');
 
-$dbh->begin_work;
 C4::Context->set_preference('OPACBaseURL','junk');
 C4::Context->clear_syspref_cache();
 my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
@@ -47,8 +54,9 @@ my $SillyPeference = C4::Context->preference('SillyPreference');
 is($SillyPeference,'random','SillyPreference saved as specified');
 C4::Context->clear_syspref_cache();
 C4::Context->enable_syspref_cache();
-$dbh->rollback;
+#$dbh->rollback;
 
+my $koha;
 ok($koha = C4::Context->new,  'C4::Context->new');
 my @keys = keys %$koha;
 my $width = 0;
@@ -62,11 +70,12 @@ foreach (sort @keys) {
 		. ((defined $koha->{$_}) ? "and is defined." : "but is not defined.")
 	);
 }
+my $config;
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
 # Testing syspref caching
 
-my $schema = Koha::Database->new()->schema();
+#my $schema = Koha::Database->new()->schema();
 $schema->storage->debug(1);
 my $trace_read;
 open my $trace, '>', \$trace_read or die "Can't open variable: $!";
@@ -131,17 +140,6 @@ C4::Context->set_preference('AutoEmailNewUser', '');
 my $yesno_pref = Koha::Config::SysPrefs->find('AutoEmailNewUser');
 is( $yesno_pref->value(), 0, 'set_preference should have set the value to 0, instead of an empty string' );
 
-done_testing();
 
-sub TransformVersionToNum {
-    my $version = shift;
-
-    # remove the 3 last . to have a Perl number
-    $version =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-
-    # three X's at the end indicate that you are testing patch with dbrev
-    # change it into 999
-    # prevents error on a < comparison between strings (should be: lt)
-    $version =~ s/XXX$/999/;
-    return $version;
-}
+    $schema->storage->txn_rollback;
+};
