@@ -697,7 +697,7 @@ sub get_raw_marc_record {
     if ($record_type eq 'biblio') {
         eval {
             my $biblio = Koha::Biblios->find($record_number);
-            $marc = $biblio->metadata->record({ embed_items => 1 });
+            $marc = $biblio->metadata_record( { embed_items => 1 } );
         };
         if ($@ || !$marc) {
             # here we do warn since catching an exception

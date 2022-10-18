@@ -64,14 +64,13 @@ if ($query->request_method eq "GET") {
 exit 0;
 
 sub fetch_bib {
-    my $query = shift;
-    my $biblionumber = shift;
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my ( $query, $biblionumber ) = @_;
+    my $biblio = Koha::Biblios->find($biblionumber);
     my $record;
     my $exception;
     my $invalid_metadata = 0;
     if ( defined $biblio ) {
-        eval { $record = $biblio->metadata->record( { embed_items => scalar $query->param('items') } ) };
+        eval { $record = $biblio->metadata_record( { embed_items => scalar $query->param('items') } ) };
         if ($@) {
             $exception = $@;
             $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
@@ -126,7 +125,7 @@ sub update_bib {
 
         C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode );
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $new_record = $biblio->metadata->record({ embed_items => scalar $query->url_param('items') });
+        my $new_record = $biblio->metadata_record( { embed_items => scalar $query->url_param('items') } );
 
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;

@@ -71,7 +71,7 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
         while ( my $content = $contents->next ) {
             push @biblionumbers, $content->biblionumber;
             my $biblio = Koha::Biblios->find( $content->biblionumber );
-            $iso2709 .= $biblio->metadata->record->as_usmarc();
+            $iso2709 .= $biblio->metadata_record( { interface => 'opac' } )->as_usmarc();
         }
 
         if ( !defined $iso2709 ) {

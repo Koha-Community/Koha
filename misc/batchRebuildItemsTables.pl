@@ -74,7 +74,7 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
     $count++;
     warn $count unless $count % 1000;
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record({ embed_items => 1 });
+    my $record = $biblio->metadata_record( { embed_items => 1 } );
 
     unless ($record) { push @errors, "bad record biblionumber $biblionumber"; next; }
 

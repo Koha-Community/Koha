@@ -293,7 +293,13 @@ if ( $pending_checkouts->count ) { # Useless test
             || C4::Context->preference('SyndeticsEnabled')
             || C4::Context->preference('SyndeticsCoverImages') )
         {
-            my $marcrecord = $biblio_object->metadata->record( { embed_items => 1, opac => 1, patron => $patron, } );
+            my $marcrecord = $biblio_object->metadata_record(
+                {
+                    embed_items => 1,
+                    interface   => 'opac',
+                    patron      => $patron
+                }
+            );
             $issue->{normalized_upc}  = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
             $issue->{normalized_oclc} = GetNormalizedOCLCNumber( $marcrecord, C4::Context->preference('marcflavour') );
         }

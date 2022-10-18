@@ -151,7 +151,7 @@ sub get_all_biblios_iterator {
             my $row = $rs->next();
             return if !$row;
             my $next = eval {
-                my $marc = $row->metadata->record({ embed_items => 1 });
+                my $marc = $row->metadata_record( { embed_items => 1 } );
                 $class->new($marc, $row->biblionumber);
             };
             if ($@) {
@@ -187,8 +187,7 @@ If set to true, item data is embedded in the record. Default is to not do this.
 sub get_marc_biblio {
     my ($class, $bibnum, %options) = @_;
 
-    my $record = Koha::Biblios->find($bibnum)
-      ->metadata->record( { $options{item_data} ? ( embed_items => 1 ) : () } );
+    my $record = Koha::Biblios->find($bibnum)->metadata_record( { $options{item_data} ? ( embed_items => 1 ) : () } );
     return $record;
 }
 

@@ -70,10 +70,10 @@ if ($userenv) {
 my $include_items = ($format =~ /bibtex/) ? 0 : 1;
 my $biblio = Koha::Biblios->find($biblionumber);
 my $marc = $biblio
-  ? $biblio->metadata->record(
+  ? $biblio->metadata_record(
     {
         embed_items => 1,
-        opac        => 1,
+        interface   => 'opac',
         patron      => $patron,
     }
   )

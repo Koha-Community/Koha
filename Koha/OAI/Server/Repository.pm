@@ -185,7 +185,14 @@ sub get_biblio_marcxml {
 
     # Koha::Biblio::Metadata->record throws an exception on bad encoding,
     # we don't want OAI harvests to die, so we catch and warn, and try to clean the record
-    eval { $record = $biblio->metadata->record( { embed_items => $with_items, opac => 1 } ); };
+    eval {
+        $record = $biblio->metadata_record(
+            {
+                embed_items => $with_items,
+                interface   => 'opac'
+            }
+        );
+    };
     my $decoding_error;
     if ($@) {
         my $exception = $@;

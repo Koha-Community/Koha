@@ -64,7 +64,7 @@ if ($bib_list && $format) {
         foreach my $biblionumber (@bibs) {
 
             my $biblio = Koha::Biblios->find($biblionumber);
-            my $record = $biblio->metadata->record({ embed_items => 1 });
+            my $record = $biblio->metadata_record( { embed_items => 1 } );
             next unless $record;
 
             if ($format eq 'iso2709') {

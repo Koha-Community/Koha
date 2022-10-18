@@ -254,10 +254,10 @@ if ($loggedinuser) {
     foreach my $tag (@$my_tags) {
         $tag->{visible} = 0;
         my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
-        my $record = $biblio->metadata->record(
+        my $record = $biblio->metadata_record(
             {
                 embed_items => 1,
-                opac        => 1,
+                interface   => 'opac',
                 patron      => $patron,
             }
         );

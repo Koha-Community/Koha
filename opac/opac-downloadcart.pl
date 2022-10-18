@@ -77,10 +77,10 @@ if ($bib_list && $format) {
         foreach my $biblionumber (@bibs) {
 
             my $biblio = Koha::Biblios->find($biblionumber);
-            my $record = $biblio->metadata->record(
+            my $record = $biblio->metadata_record(
                 {
                     embed_items => 1,
-                    opac        => 1,
+                    interface   => 'opac',
                     patron      => $patron,
                 }
             );

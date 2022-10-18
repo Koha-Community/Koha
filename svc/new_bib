@@ -87,8 +87,8 @@ sub add_bib {
             }
         }
 
-        $biblio = Koha::Biblios->find( $biblionumber );
-        $new_record = $biblio->metadata->record({ embed_items => scalar $query->url_param('items') });
+        $biblio     = Koha::Biblios->find($biblionumber);
+        $new_record = $biblio->metadata_record( { embed_items => scalar $query->url_param('items') } );
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();

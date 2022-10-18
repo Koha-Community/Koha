@@ -69,7 +69,7 @@ if ($shelfid && $format) {
                 while ( my $content = $contents->next ) {
                     my $biblionumber = $content->biblionumber;
                     my $biblio = Koha::Biblios->find($biblionumber);
-                    my $record = $biblio->metadata->record({ embed_items => 1 });
+                    my $record = $biblio->metadata_record( { embed_items => 1 } );
                     if ($format eq 'iso2709') {
                         $output .= $record->as_usmarc();
                     }

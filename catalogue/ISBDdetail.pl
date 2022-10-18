@@ -76,8 +76,8 @@ unless ( $biblionumber && $biblio ) {
    exit;
 }
 
-my $record = $biblio->metadata->record({ embed_items => 1 });
-
+my $record =
+  $biblio->metadata_record( { embed_items => 1, interface => 'intranet' } );
 if ( not defined $record ) {
        # biblionumber invalid -> report and exit
        $template->param( unknownbiblionumber => 1,
@@ -88,15 +88,6 @@ if ( not defined $record ) {
 }
 
 my $framework = $biblio->frameworkcode;
-my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
-    options => {
-        interface => 'intranet',
-        frameworkcode => $framework
-    },
-});
-$record_processor->process($record);
-
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'intranet',

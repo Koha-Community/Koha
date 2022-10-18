@@ -27,7 +27,7 @@ if ($op eq "export") {
             my $file_pre = "bib-";
 
             my $biblio = Koha::Biblios->find($biblionumber);
-            my $marc   = $biblio->metadata->record({ embed_items => 1 });
+            my $marc   = $biblio->metadata_record( { embed_items => 1 } );
 
             my $metadata_extractor = $biblio->metadata_extractor;
 
