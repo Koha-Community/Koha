@@ -5861,7 +5861,7 @@ CREATE TABLE `vendor_edi_accounts` (
   `description` mediumtext NOT NULL,
   `host` varchar(40) DEFAULT NULL,
   `username` varchar(40) DEFAULT NULL,
-  `password` varchar(40) DEFAULT NULL,
+  `password` mediumtext DEFAULT NULL,
   `last_activity` date DEFAULT NULL,
   `vendor_id` int(11) DEFAULT NULL,
   `download_directory` mediumtext DEFAULT NULL,
