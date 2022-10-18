@@ -3847,7 +3847,7 @@ DROP TABLE IF EXISTS `message_queue`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `letter_id` int(11) DEFAULT NULL,
+  `letter_id` int(11) DEFAULT NULL COMMENT 'Foreign key to the letters table',
   `borrowernumber` int(11) DEFAULT NULL,
   `subject` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,

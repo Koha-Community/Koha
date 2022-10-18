@@ -6,10 +6,14 @@ return {
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
-        $dbh->do(q{
-            ALTER TABLE message_queue
-            ADD COLUMN letter_id INT(11) NULL DEFAULT NULL AFTER message_id,
-            ADD CONSTRAINT letter_fk FOREIGN KEY (letter_id) REFERENCES letter(id) ON DELETE SET NULL ON UPDATE CASCADE
-        });
+        unless ( column_exists( 'message_queue', 'letter_id' ) ) {
+            $dbh->do(q{
+                ALTER TABLE message_queue
+                ADD COLUMN `letter_id` int(11) DEFAULT NULL COMMENT 'Foreign key to the letters table' AFTER message_id,
+                ADD CONSTRAINT letter_fk FOREIGN KEY (letter_id) REFERENCES letter(id) ON DELETE SET NULL ON UPDATE CASCADE
+            });
+
+            say $out "Added 'letter_id' column to 'message_queue' table";
+        }
     },
 };
