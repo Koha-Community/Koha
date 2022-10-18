@@ -170,6 +170,13 @@ Print a brief help message
 
 Delete patrons who have not borrowed since this date.
 
+NOTE: Patrons who have all their old loans anonymized will
+have an empty loan history and be deleted if this option is
+used. Anonymization can happen because the patron has
+borrowers.privacy = 2, through cronjobs doing anonymization
+or by the patron choosing to anonymize their history in the
+OPAC.
+
 =item B<--expired_before>
 
 Delete patrons with an account expired before this date.
