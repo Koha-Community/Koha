@@ -201,6 +201,21 @@ __PACKAGE__->add_unique_constraint(
 
 =head1 RELATIONS
 
+=head2 message_queues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::MessageQueue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "message_queues",
+  "Koha::Schema::Result::MessageQueue",
+  { "foreign.letter_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 message_transport_type
 
 Type: belongs_to
@@ -217,8 +232,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-02-11 12:33:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qqdTVEicMu5rHppY5qsEuA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-18 12:50:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MA3WvXK/1ZBc407iU7ZcrA
 
 sub koha_object_class {
     'Koha::Notice::Template';

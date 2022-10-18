@@ -29,6 +29,14 @@ __PACKAGE__->table("message_queue");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 letter_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+Foreign key to the letters table
+
 =head2 borrowernumber
 
   data_type: 'integer'
@@ -113,6 +121,8 @@ __PACKAGE__->table("message_queue");
 __PACKAGE__->add_columns(
   "message_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "letter_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "subject",
@@ -191,6 +201,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 letter
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Letter>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "letter",
+  "Koha::Schema::Result::Letter",
+  { id => "letter_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 message_transport_type
 
 Type: belongs_to
@@ -207,8 +237,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-08-05 08:57:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NwbN8wPMAlucrw6iQ2XQ5g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-18 12:50:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PX9JzZw0v134xuHqNbB0cA
 
 sub koha_object_class {
     'Koha::Notice::Message';
