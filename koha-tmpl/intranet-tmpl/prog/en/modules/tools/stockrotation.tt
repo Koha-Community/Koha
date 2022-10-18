@@ -101,55 +101,57 @@
                     <h1>Stock rotation</h1>
 
                     [% IF existing_rotas.size > 0 %]
-                        <table id="stock_rotation" class="rotas_table" role="grid">
-                            <thead>
-                                <tr>
-                                <th class="anti-the">Name</th>
-                                <th>Cyclical</th>
-                                <th>Active</th>
-                                <th>Description</th>
-                                <th>Number of items</th>
-                                <th class="NoSort noExport">&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH rota IN existing_rotas %]
+                        <div class="page-section">
+                            <table id="stock_rotation" class="rotas_table" role="grid">
+                                <thead>
                                     <tr>
-                                        <td>[% rota.title | html %]</td>
-                                        <td>[% rota.cyclical ? 'Yes' : 'No' | html %]</td>
-                                        <td>[% rota.active ? 'Yes' : 'No' | html %]</td>
-                                        <td>[% rota.description | html %]</td>
-                                        <td>[% rota.stockrotationitems.count | html %]</td>
-                                        <td class="actions">
-                                            <a class="btn btn-default btn-xs" href="?op=create_edit_rota&amp;rota_id=[% rota.rota_id | uri %]">
-                                                <i class="fa fa-pencil"></i>
-                                                Edit
-                                            </a>
-                                            <div class="btn-group dropup" role="group">
-                                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Manage
-                                                    <i class="fa fa-caret-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="?op=manage_stages&amp;rota_id=[% rota.rota_id | uri %]">Stages</a></li>
-                                                    [% IF CAN_user_stockrotation_manage_rota_items && rota.stockrotationstages.count > 0 %]
-                                                    <li><a href="?op=manage_items&amp;rota_id=[% rota.rota_id | uri %]">Items</a></li>
-                                                    [% END %]
-                                                </ul>
-                                            </div>
-                                            <a class="btn btn-default btn-xs" href="?op=toggle_rota&amp;rota_id=[% rota.rota_id | uri %]">
-                                                <i class="fa fa-power-off"></i>
-                                                [% IF !rota.active %]
-                                                    Activate
-                                                [% ELSE %]
-                                                    Deactivate
-                                                [% END %]
-                                            </a>
-                                        </td>
+                                    <th class="anti-the">Name</th>
+                                    <th>Cyclical</th>
+                                    <th>Active</th>
+                                    <th>Description</th>
+                                    <th>Number of items</th>
+                                    <th class="NoSort noExport">&nbsp;</th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH rota IN existing_rotas %]
+                                        <tr>
+                                            <td>[% rota.title | html %]</td>
+                                            <td>[% rota.cyclical ? 'Yes' : 'No' | html %]</td>
+                                            <td>[% rota.active ? 'Yes' : 'No' | html %]</td>
+                                            <td>[% rota.description | html %]</td>
+                                            <td>[% rota.stockrotationitems.count | html %]</td>
+                                            <td class="actions">
+                                                <a class="btn btn-default btn-xs" href="?op=create_edit_rota&amp;rota_id=[% rota.rota_id | uri %]">
+                                                    <i class="fa fa-pencil"></i>
+                                                    Edit
+                                                </a>
+                                                <div class="btn-group dropup" role="group">
+                                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Manage
+                                                        <i class="fa fa-caret-down"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a href="?op=manage_stages&amp;rota_id=[% rota.rota_id | uri %]">Stages</a></li>
+                                                        [% IF CAN_user_stockrotation_manage_rota_items && rota.stockrotationstages.count > 0 %]
+                                                        <li><a href="?op=manage_items&amp;rota_id=[% rota.rota_id | uri %]">Items</a></li>
+                                                        [% END %]
+                                                    </ul>
+                                                </div>
+                                                <a class="btn btn-default btn-xs" href="?op=toggle_rota&amp;rota_id=[% rota.rota_id | uri %]">
+                                                    <i class="fa fa-power-off"></i>
+                                                    [% IF !rota.active %]
+                                                        Activate
+                                                    [% ELSE %]
+                                                        Deactivate
+                                                    [% END %]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div><!-- /.page-section -->
                     [% END %]
 
                 [% ELSIF (op == 'create_edit_rota') %]
