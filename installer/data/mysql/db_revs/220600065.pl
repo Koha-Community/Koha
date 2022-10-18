@@ -13,5 +13,7 @@ return {
               'Specify the agency that controls the return policy','Choice'
             )
         });
+
+        say $out "Added new system preference 'CircControlReturnsBranch'";
     },
 };
