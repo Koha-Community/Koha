@@ -593,10 +593,6 @@ h4,
 h5,
 h6 {
     margin: .5em 0;
-
-    a, a:link, a:visited {
-        color: #000;
-    }
 }
 
 hr {
@@ -1627,7 +1623,6 @@ i {
     margin: 1em auto;
     padding: .5em;
     text-align: center;
-    display: table;
     width: 65%;
     max-width: 600px;
 
@@ -3393,28 +3388,33 @@ label {
     }
 }
 
-.modal-header {
-    .closebtn {
-        margin-top: 4px;
-    }
-}
-
 .closebtn {
     color: #000;
-    filter: alpha(opacity = 20);
+    cursor: pointer;
     float: right;
     font-size: 21px;
     font-weight: bold;
     line-height: 1;
-    opacity: .2;
+    margin-top: 4px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba( 255, 255, 255, .4 );
 
-    &:hover,
-    &:focus {
+    &:focus,
+    &:hover {
+        text-shadow: 0 1px 0 rgba( 255, 255, 255, .6 );
+    }
+
+    &:active {
+        box-shadow: none;
+        text-shadow: 0 1px 0 rgba( 255, 255, 255, .9 );
+    }
+}
+
+.modal-header {
+    border-bottom: 1px solid $background-color-secondary;
+
+    h3 {
         color: #000;
-        cursor: pointer;
-        filter: alpha(opacity = 50);
-        opacity: .5;
-        text-decoration: none;
     }
 }
 
@@ -3432,11 +3432,15 @@ label {
 }
 
 .modal-content {
-    background-color: rgb(211, 223, 204);
+    background-color: $background-color-modal;
 
     fieldset {
         box-shadow: none;
     }
+}
+
+.modal-footer {
+    border-top: 1px solid $background-color-secondary;
 }
 
 .btn-group {
