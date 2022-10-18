@@ -39,6 +39,11 @@
                     <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                     <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
                 [% END %]
+                [% IF CAN_user_acquisition && CAN_user_parameters_manage_additional_fields %]
+                    <li>
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqinvoices">Manage invoice fields</a>
+                    </li>
+                [% END %]
                 [% IF CAN_user_acquisition_order_manage && CAN_user_parameters_manage_additional_fields %]
                     <li>
                         <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket">Manage order basket fields</a>
