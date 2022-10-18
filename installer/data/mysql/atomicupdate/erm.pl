@@ -197,6 +197,7 @@ return {
                     `provider` ENUM('ebsco') DEFAULT NULL COMMENT 'External provider',
                     `package_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
                     `content_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
+                    `notes` mediumtext DEFAULT NULL COMMENT 'notes about this package',
                     `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date of creation of the package',
                     CONSTRAINT `erm_packages_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
                     PRIMARY KEY(`package_id`)

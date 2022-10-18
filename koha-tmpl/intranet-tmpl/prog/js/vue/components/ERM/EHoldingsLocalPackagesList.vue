@@ -151,6 +151,15 @@ export default {
                         }
                     },
                     {
+                        title: __("Notes"),
+                        data: "notes",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return row.notes;
+                        }
+                    },
+                    {
                         title: __("Actions"),
                         data: function (row, type, val, meta) {
                             return '<div class="actions"></div>'

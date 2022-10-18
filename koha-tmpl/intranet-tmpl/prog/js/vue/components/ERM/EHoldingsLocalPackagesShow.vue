@@ -53,6 +53,10 @@
                             )
                         }}</span>
                     </li>
+                    <li>
+                        <label>{{ $t("Notes") }}:</label>
+                        <span>{{ erm_package.notes }}</span>
+                    </li>
                     <li v-if="erm_package.created_on">
                         <label>{{ $t("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>

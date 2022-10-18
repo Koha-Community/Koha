@@ -55,6 +55,15 @@
                                 :options="av_package_content_types"
                             />
                         </li>
+                        <li>
+                            <label for="package_notes">{{
+                                $t("Notes")
+                            }}:</label>
+                            <textarea
+                                id="package_notes"
+                                v-model="erm_package.notes"
+                            />
+                        </li>
 
                         <EHoldingsPackageAgreements
                             :package_agreements="erm_package.package_agreements"
@@ -108,6 +117,7 @@ export default {
                 external_id: '',
                 package_type: '',
                 content_type: '',
+                notes: '',
                 created_on: null,
                 resources: null,
                 package_agreements: [],
