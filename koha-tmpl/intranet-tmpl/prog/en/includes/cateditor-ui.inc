@@ -99,8 +99,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                         return $result[0];
                     },
                     postCreate: function() {
-                        var value = defaultvalue;
                         var widget = this;
+                        var value = widget.text || defaultvalue;
 
                         $.each( authvals, function() {
                             if ( this.value == widget.text ) {
@@ -112,9 +112,18 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
                         $( '<select></select>' ).appendTo( this.node );
                         var $node = $( this.node ).find( 'select' );
+                        var matched = false;
                         $.each( authvals, function( undef, authval ) {
-                            $node.append( '<option value="' + authval.value + '"' + (authval.value == value ? ' selected="selected"' : '') + '>' + authval.lib + '</option>' );
+                            selected = '';
+                            if (authval.value == value){
+                                matched=true;
+                                selected = ' selected="selected" ';
+                            };
+                            $node.append( '<option value="' + authval.value + '"' + selected + '>' + authval.lib + '</option>' );
                         } );
+                        if( !matched ){
+                            $node.append( '<option value="' + value + '" selected="selected">' + value + _(' (Not in authorised values list) ') + '</option>' );
+                        }
                         $node.val( this.text );
 
                         $node.change( $.proxy( function() {
