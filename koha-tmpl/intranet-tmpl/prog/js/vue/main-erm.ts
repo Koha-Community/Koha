@@ -34,12 +34,14 @@ const languages = { en, "de-DE": de_DE, "es-ES": es_ES, "fr-FR": fr_FR };
 const messages = Object.assign(languages);
 const i18n = createI18n({ locale: "en", messages });
 
-const app = createApp(App)
-    .use(createPinia())
+const app = createApp(App);
+
+const rootComponent = app.use(createPinia())
     .use(router)
     .use(i18n)
     .component("font-awesome-icon", FontAwesomeIcon)
     .component("v-select", vSelect);
+
 app.config.unwrapInjectedRef = true;
 app.mount("#erm");
 const mainStore = useMainStore();
