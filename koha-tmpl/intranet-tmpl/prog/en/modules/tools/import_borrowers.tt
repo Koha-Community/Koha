@@ -321,16 +321,16 @@
                     <input type="radio" id="overwrite_cardnumberyes" name="overwrite_cardnumber" value="1" /><label for="overwrite_cardnumberyes">Overwrite the existing one with this</label>
                     <ul>
                         <li>
+                            <label class="update_dateexpiry" for="update_dateexpiry">Renew existing patrons</label>
+                            <select class="update_dateexpiry" type="select" id="update_dateexpiry" name="update_dateexpiry" disabled/>
+                                <option value="">using the datexpiry value in the file, if present</option>
+                                <option value="dateexpiry">from the current membership expiry date</option>
+                                <option value="now">from the current date</option>
+                            </select>
+                        </li>
+                        <li>
                             <input class="overwrite_passwords" type="checkbox" id="overwrite_passwords" name="overwrite_passwords" disabled/>
                             <label class="overwrite_passwords" for="overwrite_passwords">Replace patron passwords with those in the file (blank passwords will be ignored)</label>
-                        </li>
-                        <li>
-                            <input class="update_dateexpiry" type="checkbox" id="update_dateexpiry" name="update_dateexpiry" disabled/>
-                            <label class="update_dateexpiry" for="update_dateexpiry">Update existing patron expiration dates.</label>
-                        </li>
-                        <li>
-                            <input class="update_dateexpiry_from_today" type="checkbox" id="update_dateexpiry_from_today" name="update_dateexpiry_from_today" disabled/>
-                            <label class="update_dateexpiry_from_today" for="update_dateexpiry_from_today">Update patron's expiration date based on the current date instead of the patron's enrollment date</label>
                         </li>
                     </ul>
                 </li>
