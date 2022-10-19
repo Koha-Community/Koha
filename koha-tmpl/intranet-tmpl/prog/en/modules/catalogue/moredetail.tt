@@ -140,7 +140,7 @@
                     <span>Last renewed [% checkout.lastreneweddate | $KohaDates %]</span>,
                 [% END %]
                 [% IF ( checkout.date_due ) %]
-                    <span>Due back on [% ITEM_DAT.date_due | $KohaDates %]</span>
+                    <span>Due back on [% checkout.date_due | $KohaDates %]</span>
                 [% ELSE %]
                     <span>Not checked out</span>
                 [% END %]
