@@ -7,22 +7,23 @@ use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Context;
 use Koha::Database;
-
-BEGIN {
-    my $ret;
-    # First we need to check your environmental variables
-    for (qw(KOHA_CONF PERL5LIB)) {
-        ok( $ret = $ENV{$_}, "ENV{$_} = $ret" );
-    }
-    use_ok('C4::Context');
-}
 
 our $schema;
 $schema = Koha::Database->new->schema;
 
-subtest 'Original tests' => sub {
-    plan tests => 33;
+subtest 'Environment' => sub {
+    plan tests => 2;
+    # First we need to check your environmental variables
+    my $ret;
+    for (qw(KOHA_CONF PERL5LIB)) {
+        ok( $ret = $ENV{$_}, "ENV{$_} = $ret" );
+    }
+};
+
+subtest 'Tests with preferences' => sub {
+    plan tests => 22;
     $schema->storage->txn_begin;
 
     my $dbh;
@@ -54,25 +55,7 @@ subtest 'Original tests' => sub {
     C4::Context->clear_syspref_cache();
     C4::Context->enable_syspref_cache();
 
-    my $koha;
-    ok($koha = C4::Context->new,  'C4::Context->new');
-    my @keys = keys %$koha;
-    my $width = 0;
-    ok( @keys, 'Expecting entries in context hash' );
-    if( @keys ) {
-        $width = (sort {$a <=> $b} map {length} @keys)[-1];
-    }
-    foreach (sort @keys) {
-        ok(exists $koha->{$_},
-            '$koha->{' . sprintf('%' . $width . 's', $_)  . '} exists '
-            . ((defined $koha->{$_}) ? "and is defined." : "but is not defined.")
-        );
-    }
-    my $config;
-    ok($config = $koha->{config}, 'Getting $koha->{config} ');
-
     # Testing syspref caching
-
     $schema->storage->debug(1);
     my $trace_read;
     open my $trace, '>', \$trace_read or die "Can't open variable: $!";
@@ -116,12 +99,6 @@ subtest 'Original tests' => sub {
     is(C4::Context->preference("SillyPreference"), 'thing4', "Retrieved syspref (value='thing4') successfully from cache");
     is( $trace_read, q{}, 'Did not retrieve syspref from database');
     $trace_read = q{};
-
-    my $oConnection = C4::Context->Zconn('biblioserver', 0);
-    isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
-    $oConnection = C4::Context->Zconn('biblioserver', 1);
-    is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
-
     $silly_preference->delete();
 
     # AutoEmailNewUser should be a YesNo pref
@@ -130,4 +107,33 @@ subtest 'Original tests' => sub {
     is( $yesno_pref->value(), 0, 'set_preference should have set the value to 0, instead of an empty string' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Check context hash keys' => sub {
+    my $koha;
+    ok($koha = C4::Context->new, 'C4::Context->new');
+    my @keys = keys %$koha;
+    my $width = 0;
+    ok( @keys, 'Expecting entries in context hash' );
+    if( @keys ) {
+        $width = (sort {$a <=> $b} map {length} @keys)[-1];
+    }
+    foreach (sort @keys) {
+        ok(exists $koha->{$_},
+            '$koha->{' . sprintf('%' . $width . 's', $_)  . '} exists '
+            . ((defined $koha->{$_}) ? "and is defined." : "but is not defined.")
+        );
+    }
+    my $config;
+    ok($config = $koha->{config}, 'Getting $koha->{config} ');
+    done_testing();
+};
+
+subtest 'Zconn' => sub {
+    plan tests => 2;
+    my $oConnection = C4::Context->Zconn('biblioserver', 0);
+    isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
+    $oConnection = C4::Context->Zconn('biblioserver', 1);
+    is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
+
 };
