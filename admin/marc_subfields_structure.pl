@@ -229,7 +229,7 @@ elsif ( $op eq 'add_validate' ) {
         my $tab              = $input->param("tab_$id");
         my $seealso          = $input->param("seealso_$id");
         my $authorised_value = $input->param("authorised_value_$id");
-        my $authtypecode     = $input->param("authtypecodes_$id");
+        my $authtypecode     = $input->param("authtypecode_$id");
         my $value_builder    = $input->param("value_builder_$id");
         my $hidden = $input->param("hidden_$id");
         my $isurl  = $input->param("isurl_$id") ? 1 : 0;
