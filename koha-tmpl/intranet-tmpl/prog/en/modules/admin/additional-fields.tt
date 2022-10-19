@@ -12,7 +12,7 @@
 </head>
 
 [% marcfield_tables = ['subscription'] %]
-[% searchable_tables = ['subscription', 'aqbasket'] %]
+[% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices'] %]
 [% show_marcfield = marcfield_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 [% show_searchable = searchable_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 
@@ -116,6 +116,9 @@
         <ul>
             [% IF CAN_user_acquisition_order_manage %]
                 [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
+            [% END %]
+            [% IF CAN_user_acquisition_edit_invoices %]
+                [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
             [% END %]
             [% IF CAN_user_serials_edit_subscription %]
                 [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]

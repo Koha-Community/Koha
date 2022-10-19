@@ -38,9 +38,11 @@ use C4::Log qw(logaction);
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies qw( get_active );
+use Koha::AdditionalFields;
 use Koha::DateUtils qw( output_pref );
 use Koha::Misc::Files;
 use Koha::Acquisition::Invoice::Adjustments;
+use Koha::Acquisition::Invoices;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -125,6 +127,18 @@ elsif ( $op && $op eq 'mod' ) {
         MergeInvoices($invoiceid, \@sources);
         defined($invoice_files) && $invoice_files->MergeFileRecIds(@sources);
     }
+
+    my @additional_fields;
+    my $invoice_fields = Koha::AdditionalFields->search({ tablename => 'aqinvoices' });
+    while ( my $field = $invoice_fields->next ) {
+        my $value = $input->param('additional_field_' . $field->id);
+        push @additional_fields, {
+            id => $field->id,
+            value => $value,
+        };
+    }
+    Koha::Acquisition::Invoices->find($invoiceid)->set_additional_fields(\@additional_fields);
+
     $template->param( modified => 1 );
 }
 elsif ( $op && $op eq 'delete' ) {
@@ -297,6 +311,14 @@ foreach my $r ( @{$budgets} ) {
 
 my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({ invoiceid => $details->{'invoiceid'} });
 if ( $adjustments ) { $template->param( adjustments => $adjustments ); }
+
+my $invoice = Koha::Acquisition::Invoices->find($invoiceid);
+$template->param(
+    available_additional_fields => Koha::AdditionalFields->search( { tablename => 'aqinvoices' } ),
+    additional_field_values => { map {
+                $_->field->id => $_->value
+            } $invoice->additional_field_values->as_list },
+);
 
 $template->param(
     invoiceid                   => $details->{'invoiceid'},

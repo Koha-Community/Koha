@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 
 =head1 NAME
 

@@ -75,6 +75,8 @@ use C4::Acquisition qw( GetInvoices GetInvoice AddInvoice );
 use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
 
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Invoices;
+use Koha::AdditionalFields;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input          = CGI->new;
@@ -118,6 +120,7 @@ if ( $op and $op eq 'new' ) {
     }
     $op = 'confirm' unless $template->{'VARS'}->{'duplicate_invoices'};
 }
+
 if ($op and $op eq 'confirm') {
     my $invoiceid = AddInvoice(
         invoicenumber => $invoicenumber,
@@ -126,7 +129,23 @@ if ($op and $op eq 'confirm') {
         shipmentcost => $shipmentcost,
         shipmentcost_budgetid => $shipmentcost_budgetid,
     );
-    if(defined $invoiceid) {
+    if (defined $invoiceid) {
+
+        my @additional_fields;
+        my $invoice_fields = Koha::AdditionalFields->search({ tablename => 'aqinvoices' });
+        while ( my $field = $invoice_fields->next ) {
+            my $value = $input->param('additional_field_' . $field->id);
+            if (defined $value) {
+                push @additional_fields, {
+                    id    => $field->id,
+                    value => $value,
+                };
+            }
+        }
+        if (@additional_fields) {
+            my $invoice = Koha::Acquisition::Invoices->find( $invoiceid );
+            $invoice->set_additional_fields(\@additional_fields);
+        }
         # Successful 'Add'
         print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
         exit 0;
@@ -134,6 +153,10 @@ if ($op and $op eq 'confirm') {
         $template->param(error_failed_to_create_invoice => 1);
     }
 }
+
+$template->param(
+    available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'aqinvoices' })->as_list ]
+);
 
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my @parcels = GetInvoices(

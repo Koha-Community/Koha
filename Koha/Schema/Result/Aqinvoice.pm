@@ -220,6 +220,22 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LkekSbup37Z2WVnU/c9K+g
 
+__PACKAGE__->has_many(
+    "additional_field_values",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.invoiceid" },
+
+            "$args->{foreign_alias}.field_id" =>
+              { -in => \'(SELECT id FROM additional_fields WHERE tablename="aqinvoices")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
 sub koha_object_class {
     'Koha::Acquisition::Invoice';
 }

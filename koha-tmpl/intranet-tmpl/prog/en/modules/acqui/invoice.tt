@@ -140,6 +140,11 @@
                 [% END %]
             [% END %]
             </ol>
+          <fieldset class="rows">
+            [% IF available_additional_fields.count %]
+                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+            [% END %]
+          </fieldset>
         [% UNLESS readonly %]
           <input type="hidden" name="op" value="mod" />
           <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
