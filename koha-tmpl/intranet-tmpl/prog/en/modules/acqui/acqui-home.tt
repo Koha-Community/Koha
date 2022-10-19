@@ -105,100 +105,101 @@
                 </select>
             </span>
         </div>
+        <div class="page-section">
+            <table id="accounts">
 
-    <table id="accounts">
+                <thead>
+                    <tr>
+                        <th>Active</th>
+                        <th>Budget period description</th>
+                        <th>Fund code</th>
+                        <th>Fund name</th>
+                        <th>Owner</th>
+                        <th>Library</th>
+                        <th>Amount</th>
+                        <th>Ordered</th>
+                        <th>Spent</th>
+                        <th>Total available</th>
+                    </tr>
+                </thead>
+                <tfoot id="funds_total">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th colspan="4">Total</th>
+                        <th class="data"></th>
+                        <th class="data"></th>
+                        <th class="data"></th>
+                        <th class="data"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                [% FOREACH loop_budge IN loop_budget %]
+                    [% IF loop_budge.budget_parent_id %]
+                        <tr data-tt-id="[% loop_budge.budget_id | html %]" data-tt-parent-id="[% loop_budge.budget_parent_id | html %]">
+                    [% ELSE %]
+                        <tr data-tt-id="[% loop_budge.budget_id | html %]">
+                    [% END %]
 
-        <thead>
-        <tr>
-            <th>Active</th>
-            <th>Budget period description</th>
-            <th>Fund code</th>
-            <th>Fund name</th>
-            <th>Owner</th>
-            <th>Library</th>
-            <th>Amount</th>
-            <th>Ordered</th>
-            <th>Spent</th>
-            <th>Total available</th>
-        </tr>
-        </thead>
-        <tfoot id="funds_total">
-        <tr>
-            <th></th>
-            <th></th>
-            <th colspan="4">Total</th>
-            <th class="data"></th>
-            <th class="data"></th>
-            <th class="data"></th>
-            <th class="data"></th>
-        </tr>
-        </tfoot>
-        <tbody>
-        [% FOREACH loop_budge IN loop_budget %]
-            [% IF loop_budge.budget_parent_id %]
-                <tr data-tt-id="[% loop_budge.budget_id | html %]" data-tt-parent-id="[% loop_budge.budget_parent_id | html %]">
-            [% ELSE %]
-                <tr data-tt-id="[% loop_budge.budget_id | html %]">
-            [% END %]
-
-                <td>[% loop_budge.budget_period_active | html %]</td>
-                <td>Budget [% loop_budge.budget_period_description | html %] [id=[% loop_budge.budget_period_id | html %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
-                <td>
-                    [% IF ( CAN_user_acquisition_budget_manage ) %]
-                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id | uri %]">[% loop_budge.budget_code | html %]</a>
-                    [% ELSE %]
-                        [% loop_budge.budget_code | html %]
-                    [% END %]
-                </td>
-                <td>[% loop_budge.budget_name | html %]</td>
-                <td>[% IF ( loop_budge.budget_owner ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber | uri %]">[% loop_budge.budget_owner.surname | html %], [% loop_budge.budget_owner.firstname | html %]</a>
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]
-                </td>
-                <td>[% Branches.GetName( loop_budge.budget_branchcode ) | html %]</td>
-                <td class="data">
-                    <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_amount | $Price %]</span>
-                </td>
-                <td class="data">
-                    <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
-                    [% IF loop_budge.children.size %]
-                        <a title="Ordered from this fund" href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
-                            (<span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>)
-                        </a>
-                        <span title="Ordered from this fund and children" class="inclusive_amount">[% loop_budge.total_ordered | $Price %]</span>
-                    [% ELSE %]
-                        <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
-                            <span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>
-                        </a>
-                    [% END %]
-                </td>
-                <td class="data">
-                    [% IF loop_budge.children.size %]
-                        <a title="Spent from this fund" href="spent.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
-                            (<span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>)
-                        </a>
-                        <span title="Spent from this fund and children" class="inclusive_amount">[% loop_budge.total_spent | $Price %]</span>
-                    [% ELSE %]
-                        <a href="spent.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
-                            <span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>
-                        </a>
-                    [% END %]
-                </td>
-                <td class="data">
-                    [% IF loop_budge.children.size %]
-                        (<span title="Remaining in this fund" class="parent_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_avail | $Price %]</span>)
-                        <span title="Remaining with child funds included" class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.total_avail | $Price %]</span>
-                    [% ELSE %]
-                        <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_avail | $Price %]</span>
-                    [% END %]
-                </td>
-            </tr>
-        [% END %]
-        </tbody>
-    </table>
-    </div>
+                        <td>[% loop_budge.budget_period_active | html %]</td>
+                        <td>Budget [% loop_budge.budget_period_description | html %] [id=[% loop_budge.budget_period_id | html %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
+                        <td>
+                            [% IF ( CAN_user_acquisition_budget_manage ) %]
+                                <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id | uri %]">[% loop_budge.budget_code | html %]</a>
+                            [% ELSE %]
+                                [% loop_budge.budget_code | html %]
+                            [% END %]
+                        </td>
+                        <td>[% loop_budge.budget_name | html %]</td>
+                        <td>[% IF ( loop_budge.budget_owner ) %]
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber | uri %]">[% loop_budge.budget_owner.surname | html %], [% loop_budge.budget_owner.firstname | html %]</a>
+                            [% ELSE %]
+                                &nbsp;
+                            [% END %]
+                        </td>
+                        <td>[% Branches.GetName( loop_budge.budget_branchcode ) | html %]</td>
+                        <td class="data">
+                            <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_amount | $Price %]</span>
+                        </td>
+                        <td class="data">
+                            <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
+                            [% IF loop_budge.children.size %]
+                                <a title="Ordered from this fund" href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
+                                    (<span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>)
+                                </a>
+                                <span title="Ordered from this fund and children" class="inclusive_amount">[% loop_budge.total_ordered | $Price %]</span>
+                            [% ELSE %]
+                                <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
+                                    <span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>
+                                </a>
+                            [% END %]
+                        </td>
+                        <td class="data">
+                            [% IF loop_budge.children.size %]
+                                <a title="Spent from this fund" href="spent.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
+                                    (<span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>)
+                                </a>
+                                <span title="Spent from this fund and children" class="inclusive_amount">[% loop_budge.total_spent | $Price %]</span>
+                            [% ELSE %]
+                                <a href="spent.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
+                                    <span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>
+                                </a>
+                            [% END %]
+                        </td>
+                        <td class="data">
+                            [% IF loop_budge.children.size %]
+                                (<span title="Remaining in this fund" class="parent_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_avail | $Price %]</span>)
+                                <span title="Remaining with child funds included" class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.total_avail | $Price %]</span>
+                            [% ELSE %]
+                                <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_avail | $Price %]</span>
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+                </tbody>
+            </table>
+        </div><!-- /.page-section -->
+    </div><!-- /#BudgetsAndFunds -->
     [% END %]
 
 </main>
