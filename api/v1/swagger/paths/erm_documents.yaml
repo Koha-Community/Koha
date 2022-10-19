@@ -1,20 +1,15 @@
 ---
-"/erm/agreements/{agreement_id}/documents/{document_id}/file/content":
+"/erm/documents/{document_id}/file/content":
   get:
     x-mojo-to: ERM::Documents#get
-    operationId: downloadErmAgreementDocument
+    operationId: downloadErmDocument
     tags:
       - document
-    summary: Download agreement document
+    summary: Download erm document
     produces:
       - application/octet-stream
     parameters:
-      - description: Case insensitive search on agreement agreement_id
-        in: path
-        name: agreement_id
-        required: true
-        type: integer
-      - description: Case insensitive search on agreement document_id
+      - description: Case insensitive search on document_id
         in: path
         name: document_id
         required: true
