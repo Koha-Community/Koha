@@ -108,6 +108,7 @@
                                 :config="fp_config"
                             />
                         </li>
+                        <Documents :documents="license.documents" />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -127,6 +128,7 @@
 <script>
 import { inject } from 'vue'
 import flatPickr from 'vue-flatpickr-component'
+import Documents from './Documents.vue'
 import { setMessage, setError } from "../../messages"
 import { fetchLicense } from '../../fetch'
 import { storeToRefs } from "pinia"
@@ -162,6 +164,7 @@ export default {
                 status: '',
                 started_on: undefined,
                 ended_on: undefined,
+                documents: [],
             },
             initialized: false,
         }
@@ -209,6 +212,8 @@ export default {
             license.started_on = license.started_on ? $date_to_rfc3339(license.started_on) : null
             license.ended_on = license.ended_on ? $date_to_rfc3339(license.ended_on) : null
 
+            license.documents = license.documents.map(({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs)
+
             const options = {
                 method: method,
                 body: JSON.stringify(license),
@@ -234,7 +239,8 @@ export default {
         },
     },
     components: {
-        flatPickr
+        flatPickr,
+        Documents,
     },
     name: "LicensesFormAdd",
 }

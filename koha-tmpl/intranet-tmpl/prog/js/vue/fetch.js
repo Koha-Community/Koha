@@ -44,7 +44,7 @@ export const fetchLicense = async function (license_id) {
     let license;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "vendor",
+            "x-koha-embed": "vendor,documents",
         },
     })
         .then(checkError)

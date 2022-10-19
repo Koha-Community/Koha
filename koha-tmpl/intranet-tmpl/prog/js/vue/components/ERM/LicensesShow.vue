@@ -66,6 +66,42 @@
                         <label>{{ $t("Ended on") }}:</label>
                         <span>{{ format_date(license.ended_on) }}</span>
                     </li>
+                    <li v-if="license.documents.length">
+                        <label>{{ $t("Documents") }}</label>
+                        <div id="license_documents">
+                            <ul>
+                                <li
+                                    v-for="document in license.documents"
+                                    v-bind:key="document.document_id"
+                                >
+                                    <div v-if="document.file_name">
+                                        <span v-if="document.file_description"
+                                            >{{ document.file_description }} -
+                                        </span>
+                                        <a
+                                            download
+                                            :href="`/api/v1/erm/documents/${document.document_id}/file/content`"
+                                        >
+                                            {{ document.file_name }}
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                        ({{ document.file_type }}) Uploaded on:
+                                        {{ format_date(document.uploaded_on) }}
+                                    </div>
+                                    <div v-if="document.physical_location">
+                                        {{ $t("Physical location") }}:
+                                        {{ document.physical_location }}
+                                    </div>
+                                    <div v-if="document.uri">
+                                        {{ $t("URI") }}: {{ document.uri }}
+                                    </div>
+                                    <div v-if="document.notes">
+                                        {{ $t("Notes") }}: {{ document.notes }}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="action">
@@ -133,5 +169,11 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+}
+#license_documents {
+    padding-left: 10rem;
+}
+#license_documents ul {
+    padding-left: 0;
 }
 </style>

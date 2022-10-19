@@ -22,6 +22,7 @@ use Koha::Database;
 use base qw(Koha::Object);
 
 use Koha::Acquisition::Bookseller;
+use Koha::ERM::Documents;
 
 =head1 NAME
 
@@ -32,6 +33,21 @@ Koha::ERM::License - Koha ERM License Object class
 =head2 Class Methods
 
 =cut
+
+=head3 documents
+
+Returns or updates the documents for this license
+
+=cut
+
+sub documents {
+    my ( $self, $documents ) = @_;
+    if ($documents) {
+        $self->documents->replace_with($documents, $self);
+    }
+    my $documents_rs = $self->_result->erm_documents;
+    return Koha::ERM::Documents->_new_from_dbic($documents_rs);
+}
 
 =head3 vendor
 

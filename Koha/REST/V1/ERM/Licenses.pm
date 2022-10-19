@@ -91,7 +91,10 @@ sub add {
 
                 my $body = $c->validation->param('body');
 
+                my $documents = delete $body->{documents} // [];
+
                 my $license = Koha::ERM::License->new_from_api($body)->store;
+                $license->documents($documents);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(
@@ -163,7 +166,10 @@ sub update {
 
                 my $body = $c->validation->param('body');
 
+                my $documents = delete $body->{documents} // [];
+
                 $license->set_from_api($body)->store;
+                $license->documents($documents);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(
