@@ -30,6 +30,7 @@ use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Orders;
 use Koha::Biblios;
 use Koha::Exceptions;
@@ -2412,6 +2413,18 @@ asc is the default if omitted
 sub GetInvoices {
     my %args = @_;
 
+    my $additional_fields = $args{additional_fields} // [];
+    my $matching_invoice_ids_for_additional_fields = [];
+    if ( @$additional_fields ) {
+        my @invoices = Koha::Acquisition::Invoices->filter_by_additional_fields($additional_fields)->as_list;
+
+        return () unless @invoices;
+
+        $matching_invoice_ids_for_additional_fields = [ map {
+            $_->id
+        } @invoices ];
+    }
+
     my @columns = qw(invoicenumber booksellerid shipmentdate billingdate
         closedate shipmentcost shipmentcost_budgetid);
 
@@ -2504,6 +2517,18 @@ sub GetInvoices {
     }
 
     $query .= " WHERE " . join(" AND ", @bind_strs) if @bind_strs;
+
+    # Handle additional fields filtering
+    if ( @$additional_fields ) {
+        my $operator = ' WHERE';
+        if ( @bind_strs ) { # there's a WHERE already
+            $operator = ' AND';
+        }
+        $query .= "$operator aqinvoices.invoiceid IN ("
+            . join( ', ', @$matching_invoice_ids_for_additional_fields )
+        . ')';
+    }
+
     $query .= " GROUP BY aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id, aqbooksellers.name";
 
     if($args{order_by}) {

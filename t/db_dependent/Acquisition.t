@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 70;
+use Test::More tests => 71;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -28,7 +28,7 @@ use Koha::Acquisition::Basket;
 use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
 
 BEGIN {
-    use_ok('C4::Acquisition', qw( NewBasket GetBasket AddInvoice GetInvoice ModReceiveOrder SearchOrders GetOrder GetHistory ModOrder get_rounding_sql get_rounded_price ReopenBasket ModBasket ModBasketHeader ModBasketUsers ));
+    use_ok('C4::Acquisition', qw( NewBasket GetBasket AddInvoice GetInvoice GetInvoices ModReceiveOrder SearchOrders GetOrder GetHistory ModOrder get_rounding_sql get_rounded_price ReopenBasket ModBasket ModBasketHeader ModBasketUsers ));
     use_ok('C4::Biblio', qw( AddBiblio GetMarcSubfieldStructure ));
     use_ok('C4::Budgets', qw( AddBudgetPeriod AddBudget GetBudget GetBudgetByOrderNumber GetBudgetsReport GetBudgets GetBudgetReport ));
     use_ok('Koha::Acquisition::Orders');
@@ -983,3 +983,72 @@ subtest 'Acquisition logging' => sub {
 };
 
 $schema->storage->txn_rollback();
+
+subtest 'GetInvoices() tests with additional fields' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $invoice_1 = $builder->build_object(
+        {
+             class => 'Koha::Acquisition::Invoices',
+             value => {
+                invoicenumber => 'whataretheodds1'
+             }
+        }
+    );
+    my $invoice_2 = $builder->build_object(
+        {
+             class => 'Koha::Acquisition::Invoices',
+             value => {
+                invoicenumber => 'whataretheodds2'
+             }
+        }
+    );
+
+
+    my $invoices = [ GetInvoices( invoicenumber => 'whataretheodds' ) ];
+    is( scalar @{$invoices}, 2, 'Two invoices retrieved' );
+    is( $invoices->[0]->{invoiceid}, $invoice_1->id );
+    is( $invoices->[1]->{invoiceid}, $invoice_2->id );
+
+    my $additional_field_1 = $builder->build_object(
+        {   class => 'Koha::AdditionalFields',
+            value => {
+                tablename                 => 'aqinvoices',
+                authorised_value_category => "",
+            }
+        }
+    );
+
+    my $additional_field_2 = $builder->build_object(
+        {   class => 'Koha::AdditionalFields',
+            value => {
+                tablename                 => 'aqinvoices',
+                authorised_value_category => "",
+            }
+        }
+    );
+
+    $invoice_1->set_additional_fields([ { id => $additional_field_1->id, value => 'Ya-Hey' } ]);
+    $invoice_2->set_additional_fields([ { id => $additional_field_2->id, value => "Hey ho let's go" } ]);
+
+    $invoices = [ GetInvoices(
+        invoicenumber => 'whataretheodds',
+        additional_fields => [{ id => $additional_field_1->id, value => 'Ya-Hey' }]
+    )];
+    is( scalar @{$invoices}, 1, 'One invoice retrieved' );
+    is( $invoices->[0]->{invoiceid}, $invoice_1->id, 'Ya-Hey' );
+
+    $invoices = [ GetInvoices(
+        invoicenumber => 'whataretheodds',
+        additional_fields => [{ id => $additional_field_2->id, value => "Hey ho let's go" }]
+    )];
+    is( scalar @{$invoices}, 1, 'One invoice retrieved' );
+    is( $invoices->[0]->{invoiceid}, $invoice_2->id, "Hey ho let's go" );
+
+    $schema->storage->txn_rollback;
+};
