@@ -276,7 +276,7 @@ $(document).ready(function() {
                 "sProcessing": msg_loading,
             },
             "bAutoWidth": false,
-            "dom": 'B<"clearfix">rt',
+            "dom": '<"table_controls"B>rt',
             "aoColumns": [
                 {
                     "mDataProp": function( oObj ) {
@@ -708,7 +708,7 @@ $(document).ready(function() {
         if ( ! relativesIssuesTable ) {
             relativesIssuesTable = KohaTable("relatives-issues-table", {
                 "bAutoWidth": false,
-                "dom": 'B<"clearfix">rt',
+                "dom": '<"table_controls"B>rt',
                 "aaSorting": [],
                 "aoColumns": [
                     {

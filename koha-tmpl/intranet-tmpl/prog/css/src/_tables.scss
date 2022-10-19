@@ -548,61 +548,6 @@ tbody {
         }
     }
 
-    button,
-    div,
-    a {
-        &.dt-button {
-            background: transparent none;
-            border: 0;
-            color: #000;
-            font-size: 1em;
-            line-height: 1.7em;
-            margin: 3px 3px 0;
-            padding: 0 .5em;
-
-            &::before {
-                content: "";
-            }
-
-            &.disabled {
-                color: #999;
-                cursor: default;
-
-                a,
-                span {
-                    background: transparent none;
-                }
-            }
-
-            &:active,
-            &:focus {
-                background: transparent none;
-                border: 0;
-                box-shadow: none;
-                text-shadow: none;
-
-                &:not( .disabled ):hover:not( .disabled ) {
-                    background: transparent none;
-                    box-shadow: none;
-                }
-            }
-
-            &:hover {
-                background: transparent none;
-                border: 0;
-
-                &:not( .disabled ) {
-                    background: transparent none;
-                }
-            }
-
-            &.active:not( .disabled ):hover:not( .disabled ) {
-                background: transparent none;
-                box-shadow: none;
-            }
-        }
-    }
-
     input {
         &[type="search"] {
             border: 1px solid #CCC;
@@ -614,6 +559,62 @@ tbody {
         padding: 0;
     }
 } /* /.pager */
+
+button,
+div,
+a {
+    &.dt-button {
+        background: transparent none;
+        border: 0;
+        color: #000;
+        font-size: 1em;
+        line-height: 1.7em;
+        margin: 3px 3px 0;
+        padding: 0 .5em;
+
+        &::before {
+            content: "";
+        }
+
+        &.disabled {
+            color: #999;
+            cursor: default;
+
+            a,
+            span {
+                background: transparent none;
+            }
+        }
+
+        &:active,
+        &:focus {
+            background: transparent none;
+            border: 0;
+            box-shadow: none;
+            text-shadow: none;
+
+            &:not( .disabled ):hover:not( .disabled ) {
+                background: transparent none;
+                box-shadow: none;
+            }
+        }
+
+        &:hover {
+            background: transparent none;
+            border: 0;
+
+            &:not( .disabled ) {
+                background: transparent none;
+                border: 0;
+            }
+        }
+
+        &.active:not( .disabled ):hover:not( .disabled ) {
+            background: transparent none;
+            box-shadow: none;
+        }
+    }
+}
 
 .toptabs {
     .pager {
@@ -781,6 +782,7 @@ div {
     border-top: 1px solid #EEE;
     display: flex;
     flex-grow: 1;
+    justify-content: flex-end;
     margin-top: .5em;
     padding-top: .5em;
 }
