@@ -343,6 +343,57 @@ is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $ye
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER','Acquisition Order','Order','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order> Basket name: [% basket.basketname %]');});
 
+my $testacqorder2_content = <<EOF;
+[%- USE Price -%]
+[% bookseller.name %]
+[% FOREACH order IN orders %]
+Ordernumber [% order.ordernumber %] [% order.quantity %] [% order.listprice | \$Price %]
+[% END %]
+EOF
+
+$dbh->do("INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER2','Acquisition Order','Order','$testacqorder2_content');");
+
+my $popito = $builder->build({
+    source => 'Aqbookseller',
+    value  => { name => 'Popito' }
+});
+
+my $order_1 = $builder->build({
+    source => 'Aqorder',
+    value  => {
+       quantity => 2,
+       listprice => '12.00'
+    }
+});
+
+my $order_2 = $builder->build({
+    source => 'Aqorder',
+    value  => {
+       quantity => 1,
+       listprice => '23.50'
+    }
+});
+
+$prepared_letter = GetPreparedLetter((
+    module                 => 'orderacquisition',
+    branchcode             => '',
+    letter_code            => 'TESTACQORDER2',
+    tables                 => { 'aqbooksellers' => $popito->{id} },
+    loops                  => {
+        aqorders => [ $order_1->{ordernumber}, $order_2->{ordernumber} ]
+    }
+));
+
+my $testacqorder2_expected = qq|Popito
+
+Ordernumber | . $order_1->{ordernumber} . qq| 2 12.00
+
+Ordernumber | . $order_2->{ordernumber} . qq| 1 23.50
+
+|;
+
+is($prepared_letter->{content}, $testacqorder2_expected);
+
 # Test that _parseletter doesn't modify its parameters bug 15429
 {
     my $values = { dateexpiry => '2015-12-13', };
