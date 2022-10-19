@@ -109,8 +109,10 @@
                             <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor select2 [% kohafield | html %]" data-category="[% mv.category | html %]" data-width="50%">
                         [% END %]
 
+                        [% SET matched = 0 %]
                         [% FOREACH aval IN mv.values %]
                             [% IF aval == mv.default %]
+                                [% SET matched = 1 %]
                                 <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                             [% ELSE %]
                                 [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
@@ -122,7 +124,14 @@
                                 [% END %]
                             [% END %]
                         [% END %]
-                        </select>
+                        [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
+                        [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
+                                <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%]</option>
+                            </select>
+                            <span style="float:right;" title="The current value [% mv.default | html %] is not in the authorised value list"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                        [% ELSE %]
+                            </select>
+                        [% END %]
                     [% ELSIF ( mv.type == 'text_auth' ) %]
                         [% IF mv.readonly %]
                             <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />

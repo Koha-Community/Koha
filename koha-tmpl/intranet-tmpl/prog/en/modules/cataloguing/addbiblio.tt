@@ -1149,14 +1149,25 @@ function PopupMARCFieldDoc(field) {
                                                         [% ELSE %]
                                                             <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
                                                         [% END %]
+                                                            [% SET matched = 0 %]
                                                             [% FOREACH aval IN mv.values %]
                                                                 [% IF aval == mv.default %]
+                                                                    [% SET matched = 1 %]
                                                                 <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                                                                 [% ELSE %]
                                                                 <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
                                                                 [% END %]
+
                                                             [% END %]
+                                                            [% UNLESS matched # If the current value is not in the authorised list %]
+                                                                <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%]</option>
                                                             </select>
+                                                            <span style="float:right;" title="The current value [% mv.default | html %] is not in the authorised value list"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                                                            [% ELSE %]
+                                                            </select>
+                                                            [% END %]
+                                                    [% UNLESS matched # If the current value is not in the authorised list %]
+                                                    [% END %]
                                                         [% END  # /IF (mv.type...) %]
                                                     </div>
                                                     [% IF ( subfield_loo.mandatory ) %]
