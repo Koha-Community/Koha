@@ -47,6 +47,7 @@ use Storable qw( freeze thaw );
 use URI::Escape qw( uri_escape_utf8 );
 use C4::Members;
 use Koha::UI::Form::Builder::Item;
+use Koha::Result::Boolean;
 
 use MARC::File::XML;
 use URI::Escape qw( uri_escape_utf8 );
