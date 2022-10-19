@@ -155,7 +155,7 @@
                                 av_agreement_relationships
                             "
                         />
-                        <AgreementDocuments :documents="agreement.documents" />
+                        <Documents :documents="agreement.documents" />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -178,7 +178,7 @@ import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
 import AgreementRelationships from './AgreementRelationships.vue'
-import AgreementDocuments from './AgreementDocuments.vue'
+import Documents from './Documents.vue'
 import { setMessage, setError, setWarning } from "../../messages"
 import { fetchAgreement } from '../../fetch'
 import { storeToRefs } from "pinia"
@@ -358,7 +358,7 @@ export default {
         AgreementUserRoles,
         AgreementLicenses,
         AgreementRelationships,
-        AgreementDocuments,
+        Documents,
     },
     name: "AgreementsFormAdd",
 }

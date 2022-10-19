@@ -31,7 +31,7 @@ use Koha::ERM::Agreement::Periods;
 use Koha::ERM::Agreement::UserRoles;
 use Koha::ERM::Agreement::Licenses;
 use Koha::ERM::Agreement::Relationships;
-use Koha::ERM::Agreement::Documents;
+use Koha::ERM::Documents;
 use Koha::ERM::EHoldings::Package::Agreements;
 
 =head1 NAME
@@ -190,60 +190,19 @@ Returns the documents for this agreement
 
 =cut
 
+=head3 documents
+
+Returns or updates the documents for this agreement
+
+=cut
+
 sub documents {
     my ( $self, $documents ) = @_;
-
     if ($documents) {
-        my $schema = $self->_result->result_source->schema;
-        $schema->txn_do(
-            sub {
-                my $existing_documents = $self->documents;
-
-                # FIXME Here we are not deleting all the documents before recreating them, like we do for other related resources.
-                # As we do not want the content of the documents to transit over the network we need to use the document_id (and allow it in the API spec)
-                # to distinguish from each other
-                # Delete all the documents that are not part of the PUT request
-                my $modified_document_ids = [ map { $_->{document_id} || () } @$documents ];
-                $self->documents->search(
-                    {
-                        @$modified_document_ids
-                        ? (
-                            document_id => {
-                                '-not_in' => $modified_document_ids
-                            }
-                          )
-                        : ()
-                    }
-                )->delete;
-
-                for my $document (@$documents) {
-                    if ( $document->{document_id} ) {
-                        # The document already exists in DB
-                        $existing_documents->find( $document->{document_id} )
-                          ->set(
-                            {
-                                file_description  => $document->{file_description},
-                                physical_location => $document->{physical_location},
-                                uri               => $document->{uri},
-                                notes             => $document->{notes},
-                            }
-                        )->store;
-                    }
-                    else {
-                        # Creating a whole new document
-                        my $file_content = decode_base64( $document->{file_content} );
-                        my $mt = MIME::Types->new();
-                        $document->{file_type} = $mt->mimeTypeOf( $document->{file_name} );
-                        $document->{uploaded_on} //= dt_from_string;
-                        $document->{file_content} = $file_content;
-                        $self->_result->add_to_erm_agreement_documents( $document);
-                    }
-                }
-            }
-        );
+        $self->documents->replace_with($documents, $self);
     }
-    my $documents_rs = $self->_result->erm_agreement_documents;
-    return Koha::ERM::Agreement::Documents->_new_from_dbic($documents_rs);
+    my $documents_rs = $self->_result->erm_documents;
+    return Koha::ERM::Documents->_new_from_dbic($documents_rs);
 }
 
 =head3 agreement_packages

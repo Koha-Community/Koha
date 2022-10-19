@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::ERM::Agreement::Documents;
+use Koha::ERM::Documents;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
@@ -30,7 +30,7 @@ use Try::Tiny qw( catch try );
 
 =head3 get
 
-Controller function that handles retrieving a single Koha::ERM::Agreement object
+Controller function that handles retrieving a single Koha::ERM::Document object
 
 =cut
 
@@ -38,13 +38,12 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $agreement_id = $c->validation->param('agreement_id');
         my $document_id = $c->validation->param('document_id');
 
         # Do not use $c->objects->find here, we need the file_content
-        my $document = Koha::ERM::Agreement::Documents->find($document_id);
+        my $document = Koha::ERM::Documents->find($document_id);
 
-        if ( !$document || $document->agreement_id != $agreement_id) {
+        if ( !$document ) {
             return $c->render(
                 status  => 404,
                 openapi => { error => "Document not found" }

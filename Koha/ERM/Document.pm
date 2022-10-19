@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement::Documents;
+package Koha::ERM::Document;
 
 # This file is part of Koha.
 #
@@ -17,16 +17,13 @@ package Koha::ERM::Agreement::Documents;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
-use Koha::ERM::Agreement::Document;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ERM::Agreement::Documents- Koha Agreement Document Object set class
+Koha::ERM::Document - Koha ERM Document Object class
 
 =head1 API
 
@@ -34,16 +31,25 @@ Koha::ERM::Agreement::Documents- Koha Agreement Document Object set class
 
 =cut
 
-=head3 type
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        # Do not expose file_content to prevent the content to be fetch from the DB and sent over the network when embeded
+        file_content => undef,
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
 sub _type {
-    return 'ErmAgreementDocument';
-}
-
-sub object_class {
-    return 'Koha::ERM::Agreement::Document';
+    return 'ErmDocument';
 }
 
 1;

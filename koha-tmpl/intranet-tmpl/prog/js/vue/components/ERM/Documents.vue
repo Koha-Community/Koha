@@ -1,8 +1,8 @@
 <template>
-    <fieldset class="rows" id="agreement_documents">
+    <fieldset class="rows" id="documents">
         <legend>{{ $t("Documents") }}</legend>
         <fieldset
-            :id="`agreement_period_${counter}`"
+            :id="`document_${counter}`"
             class="rows"
             v-for="(document, counter) in documents"
             v-bind:key="counter"
@@ -139,7 +139,7 @@ export default {
             this.documents.splice(counter, 1)
         }
     },
-    name: 'AgreementDocuments',
+    name: 'Documents',
     props: {
         documents: Array
     },

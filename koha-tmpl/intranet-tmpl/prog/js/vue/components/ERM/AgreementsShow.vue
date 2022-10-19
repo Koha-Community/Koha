@@ -262,7 +262,7 @@
                                         </span>
                                         <a
                                             download
-                                            :href="`/api/v1/erm/agreements/${agreement.agreement_id}/documents/${document.document_id}/file/content`"
+                                            :href="`/api/v1/erm/documents/${document.document_id}/file/content`"
                                         >
                                             {{ document.file_name }}
                                             <i class="fa fa-download"></i>
