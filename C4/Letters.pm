@@ -365,6 +365,7 @@ sub SendAlerts {
         my $dataorders;
         my $action;
         my $basketno;
+        my %loops;
         if ( $type eq 'claimacquisition') {
             $strsth = qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*
@@ -430,25 +431,24 @@ sub SendAlerts {
             $sthorders = $dbh->prepare($strsth);
             $sthorders->execute($basketno);
             $dataorders = $sthorders->fetchall_arrayref( {} );
+            %loops = (
+                aqorders => [ map { $_->{ordernumber} } @$dataorders ]
+            );
         }
 
-        my $sthbookseller =
-          $dbh->prepare("select * from aqbooksellers where id=?");
-        $sthbookseller->execute( $dataorders->[0]->{booksellerid} );
-        my $databookseller = $sthbookseller->fetchrow_hashref;
-
+        my $booksellerid = $dataorders->[0]->{booksellerid};
         my $addressee =  $type eq 'claimacquisition' || $type eq 'orderacquisition' ? 'acqprimary' : 'serialsprimary';
 
         my $sthcontact =
           $dbh->prepare("SELECT * FROM aqcontacts WHERE booksellerid=? AND $type=1 ORDER BY $addressee DESC");
-        $sthcontact->execute( $dataorders->[0]->{booksellerid} );
+        $sthcontact->execute( $booksellerid );
         my $datacontact = $sthcontact->fetchrow_hashref;
 
         my @email;
         my @cc;
         push @email, $datacontact->{email}           if ( $datacontact && $datacontact->{email} );
         unless (@email) {
-            warn "Bookseller $dataorders->[0]->{booksellerid} without emails";
+            warn "Bookseller $booksellerid without emails";
             return { error => "no_email" };
         }
         my $addlcontact;
@@ -463,11 +463,12 @@ sub SendAlerts {
             branchcode => $userenv->{branch},
             tables => {
                 'branches'      => $userenv->{branch},
-                'aqbooksellers' => $databookseller,
+                'aqbooksellers' => $booksellerid,
                 'aqcontacts'    => $datacontact,
                 'aqbasket'      => $basketno,
             },
             repeat => $dataorders,
+            loops => \%loops,
             want_librarian => 1,
         ) or return { error => "no_letter" };
 
@@ -1655,6 +1656,12 @@ sub _get_tt_params {
             singular => 'basket',
             plural   => 'baskets',
             pk       => 'basketno',
+        },
+        aqbooksellers => {
+            module   => 'Koha::Acquisition::Booksellers',
+            singular => 'bookseller',
+            plural   => 'booksellers',
+            pk       => 'id',
         },
         biblio => {
             module   => 'Koha::Biblios',
