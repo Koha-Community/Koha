@@ -2876,13 +2876,14 @@ CREATE TABLE `erm_agreement_relationships` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `erm_agreement_documents`
+-- Table structure for table `erm_documents`
 --
 
-DROP TABLE IF EXISTS `erm_agreement_documents`;
-CREATE TABLE `erm_agreement_documents` (
+DROP TABLE IF EXISTS `erm_documents`;
+CREATE TABLE `erm_documents` (
     `document_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+    `agreement_id` INT(11) NULL COMMENT 'link to the agreement',
+    `license_id` INT(11) NULL COMMENT 'link to the license',
     `file_name` varchar(255) DEFAULT NULL COMMENT 'name of the file',
     `file_type` varchar(255) DEFAULT NULL COMMENT 'type of the file',
     `file_description` varchar(255) DEFAULT NULL COMMENT 'description of the file',
@@ -2891,7 +2892,8 @@ CREATE TABLE `erm_agreement_documents` (
     `physical_location` VARCHAR(255) DEFAULT NULL COMMENT 'physical location of the document',
     `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the document',
     `notes` mediumtext DEFAULT NULL COMMENT 'notes about this relationship',
-    CONSTRAINT `erm_agreement_documents_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `erm_documents_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `erm_documents_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(`document_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
