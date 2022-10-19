@@ -47,6 +47,7 @@ use Storable qw( freeze thaw );
 use URI::Escape qw( uri_escape_utf8 );
 use C4::Members;
 use Koha::UI::Form::Builder::Item;
+use Koha::Result::Boolean;
 
 use MARC::File::XML;
 use URI::Escape qw( uri_escape_utf8 );
@@ -380,7 +381,12 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
-    my $deleted = $item->safe_delete;
+    my $deleted;
+    if( $item ) {
+        $deleted = $item->safe_delete;
+    } else {
+        $deleted = Koha::Result::Boolean->new(0)->add_message({ message => 'item_not_found' });
+    }
     if ( $deleted ) {
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
         exit;
