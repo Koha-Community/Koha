@@ -121,6 +121,7 @@ import Dialog from "./Dialog.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchVendors } from "../../fetch"
+import "vue-select/dist/vue-select.css";
 
 export default {
     setup() {
@@ -161,7 +162,6 @@ export default {
 };
 </script>
 
-<style src="vue-select/dist/vue-select.css"></style>
 <style>
 #navmenulist a.router-link-active {
     font-weight: 700;
