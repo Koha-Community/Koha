@@ -172,7 +172,7 @@ sub _embed_items {
             my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
             push @item_fields, $item_marc->field($itemtag);
         }
-        $record->append_fields(@item_fields);
+        $record->insert_fields_ordered(@item_fields);
 
     }
     else {
