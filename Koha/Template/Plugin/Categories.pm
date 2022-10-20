@@ -28,6 +28,11 @@ sub all {
     return Koha::Patron::Categories->search($params);
 }
 
+sub limited {
+    my ( $self, $params ) = @_;
+    return Koha::Patron::Categories->search_with_library_limits($params);
+}
+
 sub GetName {
     my ( $self, $categorycode ) = @_;
 
@@ -56,8 +61,13 @@ Koha::Template::Plugin::Categories - TT Plugin for categories
 
 =head2 all
 
-In a template, you can get the all categories with
+In a template, you can get all the categories with
 the following TT code: [% Categories.all() %]
+
+=head2 limited
+
+In a template, you can get the categories with library limits applied with
+the following TT code: [% Categories.limited() %]
 
 =head2 GetName
 
