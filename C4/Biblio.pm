@@ -53,7 +53,6 @@ BEGIN {
         CountItemsIssued
         ModBiblio
         ModZebra
-        EmbedItemsInMarcBiblio
         UpdateTotalIssues
         RemoveAllNsb
         DelBiblio
