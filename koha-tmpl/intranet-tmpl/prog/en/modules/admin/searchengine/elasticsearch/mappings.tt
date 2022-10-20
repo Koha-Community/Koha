@@ -302,7 +302,7 @@ a.add, a.delete {
                                     <td>
                                     <input type="hidden" name="mapping_search" value="[% mapping.search | html %]" readonly />[% IF mapping.search == 1 %]Yes[% ELSE %]No[% END %]
                                     </td>
-                                    <td>
+                                    <td data-search="[% mapping.marc_field | html %]">
                                         <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                     </td>
                                     <td>&nbsp;</td>
@@ -363,7 +363,7 @@ a.add, a.delete {
                                         [% END %]
                                     </select>
                                     </td>
-                                    <td>
+                                    <td data-search="[% mapping.marc_field | html %]">
                                         <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                     </td>
                                     [% IF mapping.search_field_mandatory %]
