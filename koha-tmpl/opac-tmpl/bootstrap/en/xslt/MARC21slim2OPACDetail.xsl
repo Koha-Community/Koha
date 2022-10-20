@@ -315,7 +315,7 @@
         <!-- Publisher Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
             <xsl:call-template name="m880Select">
-                <xsl:with-param name="basetags">260</xsl:with-param>
+                <xsl:with-param name="basetags">260,264</xsl:with-param>
                 <xsl:with-param name="codes">abcg</xsl:with-param>
                 <xsl:with-param name="class">results_summary publisher</xsl:with-param>
                 <xsl:with-param name="label">Publication details: </xsl:with-param>
