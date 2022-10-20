@@ -86,7 +86,7 @@ subtest 'record() tests' => sub {
 };
 
 subtest '_embed_items' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin();
 
@@ -189,6 +189,21 @@ subtest '_embed_items' => sub {
         0,
 'For OPAC, If all items are hidden, no item should have been embedded'
     );
+
+    # Check position of 952 in response of embed_items marc
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', q{} );
+    $record = $biblio->metadata->record;
+    $record->insert_fields_ordered(
+        MARC::Field->new( '951', '', '', a => 'before items' ),
+        MARC::Field->new( '953', '', '', a => 'after  items' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber, q{} );
+    my $field_list = join ',', map { $_->tag } $record->fields;
+    ok( $field_list =~ /951,953/, "951 and 953 in $field_list" );
+    $biblio->discard_changes;
+    $record = $biblio->metadata->record({ embed_items => 1 });
+    $field_list = join ',', map { $_->tag } $record->fields;
+    ok( $field_list =~ /951,(952,)+953/, "951-952s-953 in $field_list" );
 
     $schema->storage->txn_rollback;
 };
