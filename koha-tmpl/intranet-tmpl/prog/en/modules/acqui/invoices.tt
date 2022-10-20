@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -385,6 +386,25 @@
                                     [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
                                 </select>
                             </li>
+                        [% FOR field IN additional_fields_for_invoice %]
+                            <li>
+                                <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
+                                [% IF field.authorised_value_category %]
+                                    <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]">
+                                        <option value="">All</option>
+                                        [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox(field.authorised_value_category) %]
+                                            [% IF av.authorised_value == additional_field_filters.${field.id} %]
+                                                <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                [% ELSE %]
+                                    <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.id} | html %]" name="additional_field_[% field.id | html %]" />
+                                [% END %]
+                            </li>
+                        [% END %]
                         </ol>
                         <fieldset class="action">
                             <input type="submit" value="Search" />

@@ -36,6 +36,7 @@ use C4::Acquisition qw( GetInvoices GetInvoice );
 use C4::Budgets qw( GetBudget GetBudgets CanUserUseBudget );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Booksellers;
+use Koha::AdditionalFields;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -62,24 +63,46 @@ my $branch           = $input->param('branch');
 my $message_id       = $input->param('message_id');
 my $op               = $input->param('op');
 
+my @additional_fields = Koha::AdditionalFields->search(
+    {   tablename  => 'aqinvoices',
+        searchable => 1
+    }
+)->as_list;
+my @additional_field_filters;
+for my $field (@additional_fields) {
+    my $value = $input->param( 'additional_field_' . $field->id );
+    if ( defined $value and $value ne '' ) {
+        push @additional_field_filters,
+          { id    => $field->id,
+            value => $value,
+          };
+    }
+}
+
 my $invoices = [];
 if ( $op and $op eq 'do_search' ) {
     @{$invoices} = GetInvoices(
-        invoicenumber    => $invoicenumber,
-        supplierid       => $supplierid,
-        shipmentdatefrom => $shipmentdatefrom,
-        shipmentdateto   => $shipmentdateto,
-        billingdatefrom  => $billingdatefrom,
-        billingdateto    => $billingdateto,
-        isbneanissn      => $isbneanissn,
-        title            => $title,
-        author           => $author,
-        publisher        => $publisher,
-        publicationyear  => $publicationyear,
-        branchcode       => $branch,
-        message_id       => $message_id,
+        invoicenumber     => $invoicenumber,
+        supplierid        => $supplierid,
+        shipmentdatefrom  => $shipmentdatefrom,
+        shipmentdateto    => $shipmentdateto,
+        billingdatefrom   => $billingdatefrom,
+        billingdateto     => $billingdateto,
+        isbneanissn       => $isbneanissn,
+        title             => $title,
+        author            => $author,
+        publisher         => $publisher,
+        publicationyear   => $publicationyear,
+        branchcode        => $branch,
+        message_id        => $message_id,
+        additional_fields => \@additional_field_filters,
     );
 }
+
+$template->param(
+    additional_field_filters      => { map { $_->{id} => $_->{value} } @additional_field_filters },
+    additional_fields_for_invoice => \@additional_fields,
+);
 
 # Build suppliers list
 my @suppliers      = Koha::Acquisition::Booksellers->search( undef, { order_by => { -asc => 'name' } } )->as_list;
