@@ -658,7 +658,12 @@ my $patron_categories = Koha::Patron::Categories->search_with_library_limits(
 );
 my $no_categories = ! $patron_categories->count;
 my $categories = {};
-foreach my $patron_category ($patron_categories->as_list ) {
+my @patron_categories = $patron_categories->as_list;
+unless ( $patron_categories->find( $category->id ) ){
+    $template->param( limited_category => 1 );
+    push @patron_categories, $category;
+}
+foreach my $patron_category ( @patron_categories ) {
     push @{ $categories->{ $patron_category->category_type } }, $patron_category;
 }
 
