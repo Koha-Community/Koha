@@ -56,7 +56,7 @@ use DateTime::Format::MySQL;
                   # debugging; so please don't remove this
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
 use Koha::Biblios;
@@ -406,7 +406,7 @@ sub ModDateLastSeen {
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 0 });
 
     my $item = Koha::Items->find($itemnumber);
-    $item->datelastseen(dt_from_string->ymd);
+    $item->datelastseen(dt_from_string);
     my $log = $item->itemlost && !$leave_item_lost ? 1 : 0; # If item was lost, record the change to the item
     $item->itemlost(0) unless $leave_item_lost;
     $item->store({ log_action => $log, skip_record_index => $params->{skip_record_index}, skip_holds_queue => $params->{skip_holds_queue} });

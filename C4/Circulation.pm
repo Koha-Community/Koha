@@ -42,7 +42,7 @@ use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblioitems;
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Calendar;
 use Koha::Checkouts;
 use Koha::Illrequests;
@@ -1695,7 +1695,7 @@ sub AddIssue {
             $item_object->itemlost(0);
             $item_object->onloan($datedue->ymd());
             $item_object->datelastborrowed( dt_from_string()->ymd() );
-            $item_object->datelastseen( dt_from_string()->ymd() );
+            $item_object->datelastseen( dt_from_string() );
             $item_object->store( { log_action => 0, skip_holds_queue => 1 } );
 
             # If the item was lost, it has now been found, charge the overdue if necessary
