@@ -100,7 +100,7 @@
                     <span class="desc" title="[% subfiel.long_desc | html %]">[% subfiel.short_desc | html %]</span></span>
                     [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>[% ELSE %][% subfiel.marc_value | html %][% END %]
                     [% IF ( subfiel.link ) %]
-                        <a class="authlink" href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link | uri %],phr&amp;type=intranet&amp;q=[% subfiel.link | uri %],phr:[% subfiel.marc_value |uri %]">
+                        <a class="authlink" href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link | uri %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |uri %]">
                             <i class="fa fa-link" aria-label="Search on [% subfiel.marc_value | html %]" title="Search on [% subfiel.marc_value | html %]"></i>
                         </a>
                     [% END %]
