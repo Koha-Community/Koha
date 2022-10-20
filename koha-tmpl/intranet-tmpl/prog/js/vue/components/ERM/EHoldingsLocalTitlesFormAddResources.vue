@@ -92,14 +92,14 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import flatPickr from 'vue-flatpickr-component'
-import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
 import { fetchLocalPackages } from "../../fetch"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore() // FIXME We only need that for 'manual'
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
         return { vendors }
     },

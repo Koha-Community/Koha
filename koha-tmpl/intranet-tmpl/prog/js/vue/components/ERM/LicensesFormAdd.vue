@@ -125,9 +125,8 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import flatPickr from 'vue-flatpickr-component'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
 import { fetchLicense } from '../../fetch'
 import { storeToRefs } from "pinia"
@@ -135,9 +134,10 @@ import { storeToRefs } from "pinia"
 export default {
 
     setup() {
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
-        const AVStore = useAVStore()
+
+        const AVStore = inject('AVStore')
         const {
             av_license_types,
             av_license_statuses,

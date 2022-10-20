@@ -11,19 +11,17 @@
 
 <script>
 import Toolbar from "./LicensesToolbar.vue"
-import { createVNode, render } from 'vue'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
+import { inject, createVNode, render } from 'vue'
 import { storeToRefs } from "pinia"
 import { fetchLicenses } from "../../fetch"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "license_list"

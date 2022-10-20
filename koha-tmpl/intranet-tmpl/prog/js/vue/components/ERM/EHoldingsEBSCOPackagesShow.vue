@@ -103,16 +103,16 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
-import { useAVStore } from "../../stores/authorised_values"
 import { fetchEBSCOPackage, checkError } from "../../fetch"
 
 export default {
     setup() {
         const format_date = $date
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av } = AVStore
 
         return {

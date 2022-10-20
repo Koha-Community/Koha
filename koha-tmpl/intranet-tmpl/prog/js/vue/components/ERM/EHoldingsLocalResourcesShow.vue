@@ -95,14 +95,14 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import { fetchLocalResource } from "../../fetch"
-import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
 export default {
     setup() {
         const format_date = $date
 
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
         return {
             format_date,

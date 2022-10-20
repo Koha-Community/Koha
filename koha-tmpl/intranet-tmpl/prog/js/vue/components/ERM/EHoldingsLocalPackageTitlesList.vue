@@ -6,13 +6,12 @@
 
 <script>
 
-import { createVNode, render } from 'vue'
-import { useAVStore } from "../../stores/authorised_values"
+import { inject, createVNode, render } from 'vue'
 import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "title_list"

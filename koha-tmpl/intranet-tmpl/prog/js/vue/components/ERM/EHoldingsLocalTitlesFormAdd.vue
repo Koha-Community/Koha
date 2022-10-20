@@ -379,8 +379,7 @@
 </template>
 
 <script>
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
+import { inject } from 'vue'
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLocalTitle } from '../../fetch'
@@ -388,10 +387,10 @@ import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 

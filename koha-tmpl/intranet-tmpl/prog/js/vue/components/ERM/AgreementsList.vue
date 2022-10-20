@@ -34,19 +34,18 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import Toolbar from "./AgreementsToolbar.vue"
-import { createVNode, render } from 'vue'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
+import { inject, createVNode, render } from 'vue'
 import { storeToRefs } from "pinia"
 import { fetchAgreements } from "../../fetch"
 import { useDataTable, build_url } from "../../composables/datatables"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
+
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "agreement_list"

@@ -15,11 +15,11 @@
 </template>
 
 <script>
+import { inject } from "vue"
 import { storeToRefs } from "pinia"
-import { useMainStore } from "../../stores/main"
 export default {
     setup() {
-        const mainStore = useMainStore()
+        const mainStore = inject("mainStore")
         const { message, error, warning } = storeToRefs(mainStore)
         const { removeMessages } = mainStore
         return { message, error, warning, removeMessages }

@@ -60,19 +60,17 @@
 </template>
 
 <script>
-import { createVNode, render } from 'vue'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
+import { inject, createVNode, render } from 'vue'
 import { storeToRefs } from "pinia"
 import { fetchCountLocalPackages } from './../../fetch'
 import { useDataTable, build_url_params, build_url } from "../../composables/datatables"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore() // FIXME We only need that for 'manual'
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 

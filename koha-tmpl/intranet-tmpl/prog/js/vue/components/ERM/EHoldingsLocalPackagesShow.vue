@@ -104,15 +104,15 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
-import { useAVStore } from "../../stores/authorised_values"
 import { fetchLocalPackage } from "../../fetch"
 
 export default {
     setup() {
         const format_date = $date
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av } = AVStore
 
         return {

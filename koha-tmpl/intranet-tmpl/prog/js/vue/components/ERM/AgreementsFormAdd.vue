@@ -173,22 +173,22 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
 import AgreementRelationships from './AgreementRelationships.vue'
 import AgreementDocuments from './AgreementDocuments.vue'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError, setWarning } from "../../messages"
 import { fetchAgreement } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
-        const AVStore = useAVStore()
+
+        const AVStore = inject('AVStore')
         const {
             av_agreement_statuses,
             av_agreement_closure_reasons,

@@ -116,17 +116,15 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import Breadcrumb from "./Breadcrumb.vue"
 import Dialog from "./Dialog.vue"
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
 import { fetchVendors } from "../../fetch"
 import "vue-select/dist/vue-select.css";
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         AVStore.av_agreement_statuses = agreement_statuses
         AVStore.av_agreement_closure_reasons = agreement_closure_reasons
         AVStore.av_agreement_renewal_priorities = agreement_renewal_priorities
@@ -138,6 +136,8 @@ export default {
         AVStore.av_package_types = package_types
         AVStore.av_package_content_types = package_content_types
         AVStore.av_title_publication_types = title_publication_types
+
+        const vendorStore = inject('vendorStore')
 
         return {
             vendorStore,

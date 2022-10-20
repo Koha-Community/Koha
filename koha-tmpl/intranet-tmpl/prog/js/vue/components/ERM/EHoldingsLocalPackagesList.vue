@@ -15,19 +15,17 @@
 
 <script>
 import Toolbar from "./EHoldingsLocalPackagesToolbar.vue"
-import { createVNode, render } from 'vue'
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
+import { inject, createVNode, render } from 'vue'
 import { storeToRefs } from "pinia"
 import { fetchLocalPackages } from "../../fetch"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore() // FIXME We only need that for 'manual'
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "package_list"

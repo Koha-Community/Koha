@@ -243,12 +243,12 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue"
 import { fetchEBSCOTitle } from "../../fetch"
-import { useAVStore } from "../../stores/authorised_values"
 export default {
     setup() {
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av } = AVStore
 
         return {

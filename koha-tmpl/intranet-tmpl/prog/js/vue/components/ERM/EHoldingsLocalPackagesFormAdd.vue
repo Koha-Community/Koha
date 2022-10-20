@@ -85,18 +85,17 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
-import { useVendorStore } from "../../stores/vendors"
-import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLocalPackage, createPackage, editPackage } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
+        const vendorStore = inject('vendorStore')
         const { vendors } = storeToRefs(vendorStore)
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const {
             av_package_types,
             av_package_content_types,

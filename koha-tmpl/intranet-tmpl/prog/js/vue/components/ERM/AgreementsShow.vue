@@ -299,7 +299,7 @@
 </template>
 
 <script>
-import { useAVStore } from "../../stores/authorised_values"
+import { inject } from 'vue'
 import { fetchAgreement } from "../../fetch"
 
 export default {
@@ -307,7 +307,7 @@ export default {
         const format_date = $date
         const patron_to_html = $patron_to_html
 
-        const AVStore = useAVStore()
+        const AVStore = inject('AVStore')
         const { get_lib_from_av } = AVStore
 
         return {
