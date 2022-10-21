@@ -115,7 +115,7 @@
                             [% ELSE %]
                             [% FOREACH credit IN accountline.credit_offsets %]
                             [% IF credit.debit %]
-                            <tr cnt="[% accountline.credit_offsets.count %]">
+                            <tr>
                                 <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "credit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]", "timestamp": "[% accountline.timestamp | $KohaDates with_hours => 1 %]" }</td>
                                 <td></td>
