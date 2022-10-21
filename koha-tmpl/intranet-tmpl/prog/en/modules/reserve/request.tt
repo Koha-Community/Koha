@@ -1068,7 +1068,7 @@
                                                         [% holds_by_branch.push( h ) %]
                                                     [% END %]
                                                 [% END %]
-                                                <div class="holds_by_library">
+                                                <div class="holds_by_library page-section">
                                                     <h4>[% Branches.GetName( b ) | html %]</h4>
 
                                                     [% INCLUDE holds_table.inc holds=holds_by_branch %]
@@ -1100,7 +1100,7 @@
                                                     [% END %]
                                                 [% END %]
 
-                                                <div class="holds_by_itemtype">
+                                                <div class="holds_by_itemtype page-section">
                                                     [% IF i %]
                                                         <h4>[% ItemTypes.GetDescription( i ) | html %]</h4>
                                                     [% ELSE %]
@@ -1125,7 +1125,7 @@
                                         [% ELSE %]
 
                                             [% FOREACH b IN branchcodes.sort %]
-                                                <div class="holds_by_library">
+                                                <div class="holds_by_library page-section">
                                                     <h4 class="library_holds">[% Branches.GetName( b ) | html %]</h4>
                                                     [% SET holds_by_branch = [] %]
                                                     [% FOREACH h IN biblioloo.reserveloop %]
