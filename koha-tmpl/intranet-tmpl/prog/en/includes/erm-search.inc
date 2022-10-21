@@ -1,36 +1,46 @@
 [% USE Koha %]
-<div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin ERM Resident Search Box -->
+<!-- Begin ERM Resident Search Box -->
 <div id="header_search">
     <div id="agreement_search" class="residentsearch">
         <form action="/cgi-bin/koha/erm/agreements" method="get">
-            <label class="tip" for="agreement_name_filter">Agreement search:</label>
-            <input class="head-searchbox" type="text" name="q" id="agreement_filter" size="40" />
-            <input type="submit" value="OK" class="submit" />
+            <span class="form-title">
+                <label class="control-label">Agreement search</label>
+            </span>
+            <span class="form-content">
+                <input type="text" name="q" id="agreement_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
+            </span>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
     </div>
 
     <div id="package_search" class="residentsearch">
         <form action="/cgi-bin/koha/erm/eholdings/local/packages" method="get">
-            <label class="tip" for="package_name_filter">Package search:</label>
-            <input class="head-searchbox" type="text" name="package_name" id="package_name_filter" size="40" />
-            <input type="submit" value="OK" class="submit" />
+            <span class="form-title">
+                <label class="control-label">Package search</label>
+            </span>
+            <span class="form-content">
+                <input type="text" name="package_name" id="package_name_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
+            </span>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
     </div>
 
     <div id="title_search" class="residentsearch">
         <form action="/cgi-bin/koha/erm/eholdings/local/titles" method="get">
-            <label class="tip" for="title_filter">Title search:</label>
-            <input class="head-searchbox" type="text" name="publication_title" id="title_filter" size="40" />
-            <input type="submit" value="OK" class="submit" />
+            <span class="form-title">
+                <label class="control-label">Title search</label>
+            </span>
+            <span class="form-content">
+                <input type="text" name="publication_title" id="title_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
+            </span>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
     </div>
 
     <ul>
-        <li><a class="keep_text" href="#agreement_search">Search agreements</a></li>
-        <li><a class="keep_text" href="#package_search">Search packages</a></li>
-        <li><a class="keep_text" href="#title_search">Search Titles</a></li>
+        <li><a title="Search agreements" href="#agreement_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Search agreements</span></a></li>
+        <li><a title="Search packages" href="#package_search" class="keep_text"><i class="fa fa-file-text-o"></i> <span class="tab-title">Search packages</span></a></li>
+        <li><a title="Search titles" href="#title_search" class="keep_text"><i class="fa fa-file-text-o"></i> <span class="tab-title">Search titles</span></a></li>
     </ul>
-</div>
 </div>
 <!-- End ERM Resident Search Box -->
