@@ -41,7 +41,6 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-    <h1>System preferences</h1>
     [% IF ( jump_not_found ) %]
     <div class="dialog alert">
         Could not find a system preference named <code>[% jumpfield | html %]</code>.
@@ -51,8 +50,11 @@
     <div class="dialog alert">
         No system preferences matched your search for: <strong>[% searchfield | html %]</strong>
     </div>
+    <h1>System preferences</h1>
     [% ELSIF searchfield %]
-        <h2>You searched for: [% searchfield | html %]</h2>
+    <h1>System preferences matching: [% searchfield | html %]</h1>
+    [% ELSE %]
+    <h1>System preferences</h1>
     [% END %]
     [% FOREACH TAB IN TABS %]
     <div class="prefs-tab">
