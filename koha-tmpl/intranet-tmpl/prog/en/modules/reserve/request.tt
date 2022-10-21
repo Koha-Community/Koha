@@ -1020,6 +1020,7 @@
                         [% END %]
 
                         <h2>Existing holds</h2>
+                        <div class="page-section">
                         <div id="toolbar" class="btn-toolbar">
                             <input type="submit" name="submit" value="Update hold(s)" /> <button class="cancel_selected_holds" data-bulk="true"></button>
                         <fieldset id="cancellation-reason-fieldset" class="action">
@@ -1068,7 +1069,7 @@
                                                         [% holds_by_branch.push( h ) %]
                                                     [% END %]
                                                 [% END %]
-                                                <div class="holds_by_library page-section">
+                                                <div class="holds_by_library">
                                                     <h4>[% Branches.GetName( b ) | html %]</h4>
 
                                                     [% INCLUDE holds_table.inc holds=holds_by_branch %]
@@ -1100,7 +1101,7 @@
                                                     [% END %]
                                                 [% END %]
 
-                                                <div class="holds_by_itemtype page-section">
+                                                <div class="holds_by_itemtype">
                                                     [% IF i %]
                                                         <h4>[% ItemTypes.GetDescription( i ) | html %]</h4>
                                                     [% ELSE %]
@@ -1125,7 +1126,7 @@
                                         [% ELSE %]
 
                                             [% FOREACH b IN branchcodes.sort %]
-                                                <div class="holds_by_library page-section">
+                                                <div class="holds_by_library">
                                                     <h4 class="library_holds">[% Branches.GetName( b ) | html %]</h4>
                                                     [% SET holds_by_branch = [] %]
                                                     [% FOREACH h IN biblioloo.reserveloop %]
@@ -1179,6 +1180,7 @@
                                 </div> <!-- /hold_title -->
                             [% END # /IF biblioloo.reserveloop %]
                         [% END # FOREACH biblioloo %]
+                        </div>
                     </form> <!-- /#existing_holds -->
                 [% END # IF reserveloop %]
             [% END # UNLESS patron %]
