@@ -7,110 +7,124 @@
         <h2 v-else>{{ $t("New license") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
-                <fieldset class="rows">
-                    <ol>
-                        <li>
-                            <label class="required" for="license_name"
-                                >{{ $t("License name") }}:</label
-                            >
-                            <input
-                                id="license_name"
-                                v-model="license.name"
-                                :placeholder="$t('License name')"
-                                required
-                            />
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="license_vendor_id"
-                                >{{ $t("Vendor") }}:</label
-                            >
-                            <v-select
-                                id="license_vendor_id"
-                                v-model="license.vendor_id"
-                                label="name"
-                                :reduce="(vendor) => vendor.id"
-                                :options="vendors"
-                            />
-                        </li>
-                        <li>
-                            <label for="license_description"
-                                >{{ $t("Description") }}:
-                            </label>
-                            <textarea
-                                id="license_description"
-                                v-model="license.description"
-                                :placeholder="$t('Description')"
-                                rows="10"
-                                cols="50"
-                                required
-                            />
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="license_type">{{ $t("Type") }}:</label>
-                            <v-select
-                                id="license_type"
-                                v-model="license.type"
-                                label="lib"
-                                :reduce="(av) => av.authorised_value"
-                                :options="av_license_types"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!license.type"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="license_status"
-                                >{{ $t("Status") }}:</label
-                            >
-                            <v-select
-                                id="license_status"
-                                v-model="license.status"
-                                :reduce="(av) => av.authorised_value"
-                                :options="av_license_statuses"
-                                label="lib"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!license.status"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="started_on"
-                                >{{ $t("Start date") }}:</label
-                            >
-                            <flat-pickr
-                                id="started_on"
-                                v-model="license.started_on"
-                                :config="fp_config"
-                                data-date_to="ended_on"
-                            />
-                        </li>
-                        <li>
-                            <label for="ended_on">{{ $t("End date") }}:</label>
-                            <flat-pickr
-                                id="ended_on"
-                                v-model="license.ended_on"
-                                :config="fp_config"
-                            />
-                        </li>
-                        <Documents :documents="license.documents" />
-                    </ol>
-                </fieldset>
+                <div class="page-section">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label class="required" for="license_name"
+                                    >{{ $t("License name") }}:</label
+                                >
+                                <input
+                                    id="license_name"
+                                    v-model="license.name"
+                                    :placeholder="$t('License name')"
+                                    required
+                                />
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="license_vendor_id"
+                                    >{{ $t("Vendor") }}:</label
+                                >
+                                <v-select
+                                    id="license_vendor_id"
+                                    v-model="license.vendor_id"
+                                    label="name"
+                                    :reduce="(vendor) => vendor.id"
+                                    :options="vendors"
+                                />
+                            </li>
+                            <li>
+                                <label for="license_description"
+                                    >{{ $t("Description") }}:
+                                </label>
+                                <textarea
+                                    id="license_description"
+                                    v-model="license.description"
+                                    :placeholder="$t('Description')"
+                                    rows="10"
+                                    cols="50"
+                                    required
+                                />
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="license_type"
+                                    >{{ $t("Type") }}:</label
+                                >
+                                <v-select
+                                    id="license_type"
+                                    v-model="license.type"
+                                    label="lib"
+                                    :reduce="(av) => av.authorised_value"
+                                    :options="av_license_types"
+                                >
+                                    <template #search="{ attributes, events }">
+                                        <input
+                                            :required="!license.type"
+                                            class="vs__search"
+                                            v-bind="attributes"
+                                            v-on="events"
+                                        />
+                                    </template>
+                                </v-select>
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="license_status"
+                                    >{{ $t("Status") }}:</label
+                                >
+                                <v-select
+                                    id="license_status"
+                                    v-model="license.status"
+                                    :reduce="(av) => av.authorised_value"
+                                    :options="av_license_statuses"
+                                    label="lib"
+                                >
+                                    <template #search="{ attributes, events }">
+                                        <input
+                                            :required="!license.status"
+                                            class="vs__search"
+                                            v-bind="attributes"
+                                            v-on="events"
+                                        />
+                                    </template>
+                                </v-select>
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="started_on"
+                                    >{{ $t("Start date") }}:</label
+                                >
+                                <flat-pickr
+                                    id="started_on"
+                                    v-model="license.started_on"
+                                    :config="fp_config"
+                                    data-date_to="ended_on"
+                                />
+                            </li>
+                            <li>
+                                <label for="ended_on"
+                                    >{{ $t("End date") }}:</label
+                                >
+                                <flat-pickr
+                                    id="ended_on"
+                                    v-model="license.ended_on"
+                                    :config="fp_config"
+                                />
+                            </li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <Documents :documents="license.documents" />
                 <fieldset class="action">
                     <input type="submit" :value="$t('Submit')" />
                     <router-link

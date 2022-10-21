@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows" id="agreement_relationships">
+    <div class="page-section" id="agreement_relationships">
         <legend>{{ $t("Related agreements") }}</legend>
         <fieldset
             class="rows"
@@ -80,7 +80,7 @@
         <span v-else>{{
             $t("There are no other agreements created yet")
         }}</span>
-    </fieldset>
+    </div>
 </template>
 
 <script>

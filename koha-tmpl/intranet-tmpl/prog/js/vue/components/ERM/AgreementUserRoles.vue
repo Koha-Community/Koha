@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows" id="agreement_user_roles">
+    <div class="page-section" id="agreement_user_roles">
         <legend>{{ $t("Users") }}</legend>
         <fieldset
             class="rows"
@@ -57,7 +57,7 @@
         <a class="btn btn-default" @click="addUser"
             ><font-awesome-icon icon="plus" /> {{ $t("Add new user") }}</a
         >
-    </fieldset>
+    </div>
 </template>
 
 <script>

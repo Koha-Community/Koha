@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows" id="agreement_periods">
+    <div class="page-section" id="agreement_periods">
         <legend>{{ $t("Periods") }}</legend>
         <fieldset
             :id="`agreement_period_${counter}`"
@@ -63,7 +63,7 @@
         <a class="btn btn-default" @click="addPeriod"
             ><font-awesome-icon icon="plus" /> {{ $t("Add new period") }}</a
         >
-    </fieldset>
+    </div>
 </template>
 
 <script>

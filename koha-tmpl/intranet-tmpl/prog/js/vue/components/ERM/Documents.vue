@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows" id="documents">
+    <div class="page-section" id="documents">
         <legend>{{ $t("Documents") }}</legend>
         <fieldset
             :id="`document_${counter}`"
@@ -102,7 +102,7 @@
         <a class="btn btn-default" @click="addDocument"
             ><font-awesome-icon icon="plus" /> {{ $t("Add new document") }}</a
         >
-    </fieldset>
+    </div>
 </template>
 
 <script>

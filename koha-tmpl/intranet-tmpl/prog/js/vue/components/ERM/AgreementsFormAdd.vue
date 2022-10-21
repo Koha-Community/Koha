@@ -7,157 +7,166 @@
         <h2 v-else>{{ $t("New agreement") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
-                <fieldset class="rows">
-                    <ol>
-                        <li>
-                            <label class="required" for="agreement_name"
-                                >{{ $t("Agreement name") }}:</label
-                            >
-                            <input
-                                id="agreement_name"
-                                v-model="agreement.name"
-                                :placeholder="$t('Agreement name')"
-                                required
-                            />
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="agreement_vendor_id"
-                                >{{ $t("Vendor") }}:</label
-                            >
-                            <v-select
-                                id="agreement_vendor_id"
-                                v-model="agreement.vendor_id"
-                                label="name"
-                                :reduce="(vendor) => vendor.id"
-                                :options="vendors"
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_description"
-                                >{{ $t("Description") }}:
-                            </label>
-                            <textarea
-                                id="agreement_description"
-                                v-model="agreement.description"
-                                :placeholder="$t('Description')"
-                                rows="10"
-                                cols="50"
-                                required
-                            />
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="agreement_status"
-                                >{{ $t("Status") }}:</label
-                            >
-                            <v-select
-                                id="agreement_status"
-                                v-model="agreement.status"
-                                label="lib"
-                                :reduce="(av) => av.authorised_value"
-                                :options="av_agreement_statuses"
-                                @option:selected="onStatusChanged"
-                                :required="!agreement.status"
-                            >
-                                <template #search="{ attributes, events }">
+                <div class="page-section">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label class="required" for="agreement_name"
+                                    >{{ $t("Agreement name") }}:</label
+                                >
+                                <input
+                                    id="agreement_name"
+                                    v-model="agreement.name"
+                                    :placeholder="$t('Agreement name')"
+                                    required
+                                />
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="agreement_vendor_id"
+                                    >{{ $t("Vendor") }}:</label
+                                >
+                                <v-select
+                                    id="agreement_vendor_id"
+                                    v-model="agreement.vendor_id"
+                                    label="name"
+                                    :reduce="(vendor) => vendor.id"
+                                    :options="vendors"
+                                />
+                            </li>
+                            <li>
+                                <label for="agreement_description"
+                                    >{{ $t("Description") }}:
+                                </label>
+                                <textarea
+                                    id="agreement_description"
+                                    v-model="agreement.description"
+                                    :placeholder="$t('Description')"
+                                    rows="10"
+                                    cols="50"
+                                    required
+                                />
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="agreement_status"
+                                    >{{ $t("Status") }}:</label
+                                >
+                                <v-select
+                                    id="agreement_status"
+                                    v-model="agreement.status"
+                                    label="lib"
+                                    :reduce="(av) => av.authorised_value"
+                                    :options="av_agreement_statuses"
+                                    @option:selected="onStatusChanged"
+                                    :required="!agreement.status"
+                                >
+                                    <template #search="{ attributes, events }">
+                                        <input
+                                            :required="!agreement.status"
+                                            class="vs__search"
+                                            v-bind="attributes"
+                                            v-on="events"
+                                        />
+                                    </template>
+                                </v-select>
+                                <span class="required">{{
+                                    $t("Required")
+                                }}</span>
+                            </li>
+                            <li>
+                                <label for="agreement_closure_reason"
+                                    >{{ $t("Closure reason") }}:</label
+                                >
+                                <v-select
+                                    id="agreement_closure_reason"
+                                    v-model="agreement.closure_reason"
+                                    label="lib"
+                                    :reduce="(av) => av.authorised_value"
+                                    :options="av_agreement_closure_reasons"
+                                    :disabled="
+                                        agreement.status == 'closed'
+                                            ? false
+                                            : true
+                                    "
+                                />
+                            </li>
+                            <li>
+                                <label
+                                    for="agreement_is_perpetual"
+                                    class="radio"
+                                    >{{ $t("Is perpetual") }}:</label
+                                >
+                                <label for="agreement_is_perpetual_yes">
                                     <input
-                                        :required="!agreement.status"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
+                                        type="radio"
+                                        name="is_perpetual"
+                                        id="agreement_is_perpetual_yes"
+                                        :value="true"
+                                        v-model="agreement.is_perpetual"
                                     />
-                                </template>
-                            </v-select>
-                            <span class="required">{{ $t("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="agreement_closure_reason"
-                                >{{ $t("Closure reason") }}:</label
-                            >
-                            <v-select
-                                id="agreement_closure_reason"
-                                v-model="agreement.closure_reason"
-                                label="lib"
-                                :reduce="(av) => av.authorised_value"
-                                :options="av_agreement_closure_reasons"
-                                :disabled="
-                                    agreement.status == 'closed' ? false : true
-                                "
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_is_perpetual" class="radio"
-                                >{{ $t("Is perpetual") }}:</label
-                            >
-                            <label for="agreement_is_perpetual_yes">
-                                <input
-                                    type="radio"
-                                    name="is_perpetual"
-                                    id="agreement_is_perpetual_yes"
-                                    :value="true"
-                                    v-model="agreement.is_perpetual"
+                                    Yes
+                                </label>
+                                <label for="agreement_is_perpetual_no">
+                                    <input
+                                        type="radio"
+                                        name="is_perpetual"
+                                        id="agreement_is_perpetual_no"
+                                        :value="false"
+                                        v-model="agreement.is_perpetual"
+                                    />
+                                    No
+                                </label>
+                            </li>
+                            <li>
+                                <label for="agreement_renewal_priority"
+                                    >{{ $t("Renewal priority") }}:</label
+                                >
+                                <v-select
+                                    id="agreement_renewal_priority"
+                                    v-model="agreement.renewal_priority"
+                                    label="lib"
+                                    :reduce="(av) => av.authorised_value"
+                                    :options="av_agreement_renewal_priorities"
                                 />
-                                Yes
-                            </label>
-                            <label for="agreement_is_perpetual_no">
-                                <input
-                                    type="radio"
-                                    name="is_perpetual"
-                                    id="agreement_is_perpetual_no"
-                                    :value="false"
-                                    v-model="agreement.is_perpetual"
+                            </li>
+                            <li>
+                                <label for="agreement_license_info"
+                                    >{{ $t("License info") }}:
+                                </label>
+                                <textarea
+                                    id="agreement_license_info"
+                                    v-model="agreement.license_info"
+                                    placeholder="License info"
                                 />
-                                No
-                            </label>
-                        </li>
-                        <li>
-                            <label for="agreement_renewal_priority"
-                                >{{ $t("Renewal priority") }}:</label
-                            >
-                            <v-select
-                                id="agreement_renewal_priority"
-                                v-model="agreement.renewal_priority"
-                                label="lib"
-                                :reduce="(av) => av.authorised_value"
-                                :options="av_agreement_renewal_priorities"
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_license_info"
-                                >{{ $t("License info") }}:
-                            </label>
-                            <textarea
-                                id="agreement_license_info"
-                                v-model="agreement.license_info"
-                                placeholder="License info"
-                            />
-                        </li>
-
-                        <AgreementPeriods :periods="agreement.periods" />
-                        <AgreementUserRoles
-                            :user_roles="agreement.user_roles"
-                            :av_agreement_user_roles="av_agreement_user_roles"
-                        />
-                        <AgreementLicenses
-                            :agreement_licenses="agreement.agreement_licenses"
-                            :av_agreement_license_statuses="
-                                av_agreement_license_statuses
-                            "
-                            :av_agreement_license_location="
-                                av_agreement_license_location
-                            "
-                        />
-                        <AgreementRelationships
-                            :agreement_id="agreement.agreement_id"
-                            :relationships="agreement.agreement_relationships"
-                            :av_agreement_relationships="
-                                av_agreement_relationships
-                            "
-                        />
-                        <Documents :documents="agreement.documents" />
-                    </ol>
-                </fieldset>
+                            </li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <AgreementPeriods :periods="agreement.periods" />
+                <AgreementUserRoles
+                    :user_roles="agreement.user_roles"
+                    :av_agreement_user_roles="av_agreement_user_roles"
+                />
+                <AgreementLicenses
+                    :agreement_licenses="agreement.agreement_licenses"
+                    :av_agreement_license_statuses="
+                        av_agreement_license_statuses
+                    "
+                    :av_agreement_license_location="
+                        av_agreement_license_location
+                    "
+                />
+                <AgreementRelationships
+                    :agreement_id="agreement.agreement_id"
+                    :relationships="agreement.agreement_relationships"
+                    :av_agreement_relationships="av_agreement_relationships"
+                />
+                <Documents :documents="agreement.documents" />
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
