@@ -105,9 +105,6 @@ export default {
 </script>
 
 <style scoped>
-#title_list_result {
-    width: 60%;
-}
 #title_list {
     display: table;
 }

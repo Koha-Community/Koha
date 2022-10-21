@@ -150,9 +150,6 @@ export default {
 </script>
 
 <style scoped>
-#package_list_result {
-    width: 60%;
-}
 #package_list {
     display: table;
 }
