@@ -129,7 +129,17 @@
         <td>
             [% IF ( hold_info.barcodes.size ) %]
                 [% SET barcode = hold_info.barcodes.first %]
-                [% IF ( hold_info.item ) %]<span>Only [% barcode | html %]</span>[% ELSE %]<span>[% barcode | html %] or any available.</span>[% END %]
+                [% IF ( hold_info.item ) %]
+                    <span>Only [% barcode | html %]</span>
+                [% ELSE %]
+                    <span>[% barcode | html %] or
+                        [% IF hold_info.item_group %]
+                            any available from item group <em>[% hold_info.item_group.description | html %]</em>.
+                        [% ELSE %]
+                            any available.
+                        [% END %]
+                    </span>
+                [% END %]
             [% END %]
         </td>
         <td>

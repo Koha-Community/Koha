@@ -229,7 +229,7 @@ my $all_holds = {
     map { $_->biblionumber => $_ } @{ Koha::Holds->search(
             { reserve_id => [ values %$holds_biblios_map ]},
             {
-                prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
+                prefetch => [ 'borrowernumber', 'itembib', 'biblio', 'item_group' ],
             }
         )->as_list
     }
@@ -265,6 +265,8 @@ foreach my $bibnum ( @biblionumbers ){
     }
     $hold_info->{itemtypes} = \@res_itemtypes;
 
+    my $res_info = $all_holds->{$bibnum};
+
     # get available values for each biblio
     my $fields = {
         locations       => 'location',
@@ -282,6 +284,10 @@ foreach my $bibnum ( @biblionumbers ){
           [ uniq map { defined $_->$field ? $_->$field : () } @$items ];
     }
 
+    if ( $res_info->item_group ) {
+       $hold_info->{barcodes} = [ uniq map { defined $_->barcode && $_->item_group->id == $res_info->item_group_id  ? $_->barcode : () } @$items ];
+    }
+
     # items available
     $hold_info->{items_count} = $items_count;
 
@@ -292,11 +298,11 @@ foreach my $bibnum ( @biblionumbers ){
     $hold_info->{pull_count} = $pull_count;
 
     # get other relevant information
-    my $res_info = $all_holds->{$bibnum};
     $hold_info->{patron} = $res_info->patron;
     $hold_info->{item}   = $res_info->item;
     $hold_info->{biblio} = $res_info->biblio;
     $hold_info->{hold}   = $res_info;
+    $hold_info->{item_group} = $res_info->item_group;
 
     push @holds_info, $hold_info;
 }
