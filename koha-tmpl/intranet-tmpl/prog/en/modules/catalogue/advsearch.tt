@@ -485,8 +485,8 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: "[% edit_filter.name | html %]",
-                        filter_query: JSON.stringify({ operands: operands, indexes: indexes, operators:operators }),
-                        filter_limits: JSON.stringify({ limits: limits }),
+                        query: JSON.stringify({ operands: operands, indexes: indexes, operators:operators }),
+                        limits: JSON.stringify({ limits: limits }),
                         opac: opac,
                         staff_client: staff_client,
                     })

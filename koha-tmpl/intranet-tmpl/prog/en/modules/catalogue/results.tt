@@ -847,7 +847,7 @@
                             opt.prop('selected', true);
                         }
                         opt.attr("value", filter.search_filter_id);
-                        opt.attr("title", "Query:" + filter.filter_query + " Limit:"+filter.filter_limits);
+                        opt.attr("title", "Query:" + filter.query + " Limit:"+filter.limits);
                         opt.text(filter.name);
                         opt.data("filter", filter);
                     });
@@ -881,8 +881,8 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: name,
-                        filter_query: JSON.stringify(search_result.query_json),
-                        filter_limits: JSON.stringify(search_result.limit_json),
+                        query: JSON.stringify(search_result.query_json),
+                        limits: JSON.stringify(search_result.limit_json),
                         opac: opac,
                         staff_client: staff,
                     })
