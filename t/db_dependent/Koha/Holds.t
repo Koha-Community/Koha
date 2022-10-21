@@ -744,3 +744,53 @@ subtest 'filter_by_has_cancellation_requests() and filter_out_has_cancellation_r
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'get holds in processing' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $item = $builder->build_sample_item;
+
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => 'P',
+                itemnumber     => $item->id,
+                biblionumber   => $item->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => undef,
+                itemnumber     => $item->id,
+                biblionumber   => $item->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+    my $hold_3 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => undef,
+                itemnumber     => $item->id,
+                biblionumber   => $item->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+
+    my $processing_holds = $item->holds->processing;
+    is( $processing_holds->count, 1 );
+
+    $schema->storage->txn_rollback;
+};

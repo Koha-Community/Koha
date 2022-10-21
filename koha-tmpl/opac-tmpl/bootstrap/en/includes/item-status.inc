@@ -61,7 +61,7 @@
     to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
 [% END %]
 
-[% IF (item.isa('Koha::Item') AND item.holds.waiting.count) OR (NOT item.isa('Koha::Item') AND item.waiting) %]
+[% IF (item.isa('Koha::Item') AND item.holds.waiting.count) OR (item.isa('Koha::Item') AND item.holds.processing.count) OR (NOT item.isa('Koha::Item') AND item.waiting) OR (NOT item.isa('Koha::Item') AND item.processing) %]
     [% SET itemavailable = 0 %]
     <span class="item-status onhold">On hold</span>
 [% END %]

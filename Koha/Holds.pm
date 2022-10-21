@@ -48,6 +48,13 @@ sub waiting {
     return $self->search( { found => 'W' } );
 }
 
+
+sub processing {
+    my ( $self ) = @_;
+
+    return $self->search( { found => 'P' } );
+}
+
 =head3 unfilled
 
 returns a set of holds that are unfilled from an existing set
