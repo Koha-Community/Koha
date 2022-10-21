@@ -25,7 +25,7 @@ export default {
                 return this.$route.meta.breadcrumb()
             }
         },
-        currentRoute: () => useRouter().currentRoute.value.path
+        currentRoute() { return this.$route.path }
     },
 };
 </script>
