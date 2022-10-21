@@ -1,5 +1,4 @@
 import { h } from "vue";
-import { RouterView } from "vue-router";
 import ERMHome from "./components/ERM/ERMHome.vue";
 import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
@@ -140,7 +139,6 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/agreements",
-        component: { render: () => h(RouterView) },
         children: [
             {
                 path: "",
@@ -197,7 +195,6 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/eholdings",
-        component: { render: () => h(RouterView) },
         meta: {
             breadcrumb: () => breadcrumb_paths.eholdings,
         },
@@ -211,7 +208,6 @@ export const routes = [
             },
             {
                 path: "local",
-                component: { render: () => h(RouterView) },
                 children: [
                     {
                         path: "",
@@ -222,7 +218,6 @@ export const routes = [
                     },
                     {
                         path: "packages",
-                        component: { render: () => h(RouterView) },
                         children: [
                             {
                                 path: "",
@@ -301,7 +296,6 @@ export const routes = [
                     },
                     {
                         path: "titles",
-                        component: { render: () => h(RouterView) },
                         children: [
                             {
                                 path: "",
@@ -410,7 +404,6 @@ export const routes = [
             },
             {
                 path: "ebsco",
-                component: { render: () => h(RouterView) },
                 children: [
                     {
                         path: "",
@@ -421,7 +414,6 @@ export const routes = [
                     },
                     {
                         path: "packages",
-                        component: { render: () => h(RouterView) },
                         children: [
                             {
                                 path: "",
@@ -454,7 +446,6 @@ export const routes = [
                     },
                     {
                         path: "titles",
-                        component: { render: () => h(RouterView) },
                         children: [
                             {
                                 path: "",
@@ -504,7 +495,6 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/licenses",
-        component: { render: () => h(RouterView) },
         children: [
             {
                 path: "",
