@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-08-12 11:13-0300\n"
-"PO-Revision-Date: 2022-09-21 10:46+0000\n"
+"POT-Creation-Date: 2022-10-14 09:44-0300\n"
+"PO-Revision-Date: 2022-10-17 11:03+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1663757168.854070\n"
+"X-POOTLE-MTIME: 1666004594.745791\n"
 "X-Pootle-Path: /pl/21.05/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -137,13 +137,14 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %s %sOpłata za utworzenie konta %sOpłata za prolongowanie konta "
-"%sEgzemplarz zagubiony %sOpłata ręczna %sNowa karta %sNależność %sOpłata za "
-"przetwarzanie zagubionego egzemplarza %sOpłata za wynajem %sDzienna opłata "
-"za wynajem %sOdnowienie wynajmu %sOdnowienie o dzień wynajmu %sOpłata za "
-"rezerwację %sZamówienie oczekuje zbyt długo %sWypłata %s%s %s %s %s %s "
-"%sPłatność %sWycofanie %sAnulowanie %sZasilenie %sZwrot opłaty za utraconą "
-"pozycję %sZwrot opłaty %sZwrot %sOpłata anulowana %s%s %s %s %s %s %s"
+"%s %s %s %sOpłata za utworzenie konta %sOpłata za prolongatę konta %sOpłata "
+"za zagubiony egzemplarz %sOpłata ręczna %sNowa karta %sNależność %sOpłata za "
+"przetwarzanie zagubionego egzemplarza %sOpłata za wypożyczenie %sOpłata za "
+"dzienne wypożyczenie %sProlongata wypożyczonego egzemplarza %sProlongata "
+"dziennego wypożyczenia %sOpłata za rezerwację %sZamówienie oczekujące zbyt "
+"długo %sWypłata %s%s %s %s %s %s %sPłatność %sWycofanie %sAnulowanie "
+"%sZasilenie %sZwrot opłaty za egzemplarz zagubiony %sZwrot opłaty %sZwrot "
+"%sOpłata anulowana %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -644,7 +645,7 @@ msgstr "%s Automatyczne prolongowanie"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "%s Automatyczne prolongowanie nie powiodło się, konto wygasło."
+msgstr "%s Automatyczna prolongata nie powiodła się, konto wygasło. "
 
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
@@ -1043,29 +1044,6 @@ msgstr "%s Brak egzemplarzy dla tego rekordu. %s "
 msgid "%s Video extracts"
 msgstr "%s Fragment wideo"
 
-#. %1$s:  IF ( itemLoo.waitingdate ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#. %4$s:  IF ( itemLoo.waitingdate ) 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  itemLoo.ExpectedAtLibrary | html 
-#. %8$s:  IF ( itemLoo.waitingdate ) 
-#. %9$s:  itemLoo.waitingdate | $KohaDates 
-#. %10$s:  ELSE 
-#. %11$s:  IF ( itemLoo.reservedate ) 
-#. %12$s:  itemLoo.reservedate | html 
-#. %13$s:  END 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:434
-#, c-format
-msgid ""
-"%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
-"%s %s %s %s %s. "
-msgstr ""
-"%s Oczekuje %s Zarezerwowany %s dla %s w %s oczekiwany w %s %s od %s %s %s "
-"%s %s %s %s. "
-
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -1151,6 +1129,23 @@ msgstr "%s "
 #, c-format
 msgid "%s by %s %s %s %s "
 msgstr "%s przez %s %s %s %s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( itemLoo.waitingdate ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  itemLoo.ExpectedAtLibrary | html 
+#. %6$s:  IF ( itemLoo.waitingdate ) 
+#. %7$s:  itemLoo.waitingdate | $KohaDates 
+#. %8$s:  ELSE 
+#. %9$s:  IF ( itemLoo.reservedate ) 
+#. %10$s:  itemLoo.reservedate | html 
+#. %11$s:  END 
+#. %12$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#, c-format
+msgid "%s for patron %s at %s expected at %s %s since %s %s %s %s %s %s %s. "
+msgstr "%s dla %s w %s oczekiwany w %s %s od %s %s %s %s %s %s %s. "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
@@ -1471,7 +1466,7 @@ msgid ""
 "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
 "%sCollection: %s%s "
 msgstr ""
-"%sPrzeglądanie %s Półki%s %s, %s %sLokalizacja półki: %s%s %s, %s %sKod "
+"%sPrzeglądanie %s półki%s %s, %s %sLokalizacja półki: %s%s %s, %s %sKod "
 "kolekcji: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
@@ -2816,7 +2811,7 @@ msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
 msgstr "Płatność id '%s' została już zaksięgowana na koncie."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:331
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
 #, c-format
 msgid "A specific item"
 msgstr "Konkretny egzemplarz"
@@ -3198,13 +3193,13 @@ msgstr "Dowolna zawartość"
 msgid "Any format"
 msgstr "Dowolny format"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:220
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:227
 #, c-format
 msgid "Any item "
 msgstr "Dowolny egzemplarz "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:307
 #, c-format
 msgid "Any item type"
 msgstr "Wszystkie typy dokumentów"
@@ -3359,7 +3354,7 @@ msgstr ""
 "zeskanowanych kodów kreskowych i rozpoczęcie od nowa."
 
 #. OPTION
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:271
 msgid "At least one item is available at this library"
 msgstr "Przynajmniej jeden egzemplarz jest dostępny w bibliotece"
 
@@ -3473,8 +3468,8 @@ msgstr "Autorzy"
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "Autorzy: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:79
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:82
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:95
 #, c-format
@@ -3609,8 +3604,8 @@ msgstr "Backends"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:177
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:253
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:585
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:634
@@ -3831,8 +3826,8 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:289
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
@@ -3968,8 +3963,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Anuluje zamówienia oczekujące na użytkownika."
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:386
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:396
 msgid "Cannot be put on hold"
 msgstr "Nie może być zarezerwowany"
 
@@ -4055,8 +4050,8 @@ msgstr "Zmień hasło &rsaquo; %s%s%sKoha online%s Katalog"
 msgid "Chapters"
 msgstr "Rozdziały"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:137
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:144
 #, c-format
 msgid "Chapters:"
 msgstr "Rozdziały:"
@@ -4233,7 +4228,7 @@ msgid "Clear all"
 msgstr "Wyczyść wszystko"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 #, c-format
 msgid "Clear date"
 msgstr "Wyczyść datę"
@@ -4365,7 +4360,7 @@ msgstr "Zbierz interesujące Cię egzemplarze"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:114
 #, c-format
 msgid "Collection"
@@ -4469,7 +4464,7 @@ msgid "Components (%s)"
 msgstr "Elementy (%s)"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:477
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:487
 msgid "Confirm hold"
 msgstr "Potwierdź zamówienie"
 
@@ -4553,7 +4548,7 @@ msgstr "Kopiuj"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Copy number"
 msgstr "Numer kopii"
@@ -4862,8 +4857,8 @@ msgstr "Data urodzenia:"
 msgid "Date received"
 msgstr "Data otrzymania"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:109
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:112
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:117
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:85
 #, c-format
 msgid "Date:"
@@ -5040,7 +5035,7 @@ msgstr "Czy chodziło o:"
 msgid "Digests only "
 msgstr "Tylko zestawienia "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:158
 #, c-format
 msgid "Digital scan"
 msgstr "Skan"
@@ -5175,8 +5170,8 @@ msgstr "Dublin Core"
 msgid "Due"
 msgstr "Termin zwrotu"
 
-#. %1$s:  itemLoo.dateDue | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:420
+#. %1$s:  itemLoo.dateDue | $KohaDates as_due_date => 1 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
 #, c-format
 msgid "Due %s"
 msgstr "Do %s"
@@ -5363,7 +5358,7 @@ msgstr "Pozycja %s"
 msgid "Entry %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Pozycja %s &rsaquo; %s%s%sKoha online%s katalog"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:180
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:187
 #, c-format
 msgid "Enumeration"
 msgstr "Numeracja"
@@ -5507,7 +5502,7 @@ msgid "Expected"
 msgstr "Oczekiwany"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 msgid "Expecting a specific item selection."
 msgstr "Oczekiwany wybór konkretnego egzemplarza."
 
@@ -5736,7 +5731,7 @@ msgstr "Odzyskiwanie zapomnianego hasła &rsaquo; %s%s%sKoha online%s katalog"
 msgid "Format"
 msgstr "Format"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:148
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:155
 #, c-format
 msgid "Format:"
 msgstr "Format:"
@@ -6054,11 +6049,11 @@ msgid "Hi,"
 msgstr "Dzień dobry,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 msgid "Hide options"
 msgstr "Ukryj opcje"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:465
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:475
 #, c-format
 msgid "Hide unholdable items"
 msgstr "Ukryj niedostępny egzemplarz"
@@ -6084,12 +6079,12 @@ msgstr "Data zamówienia"
 msgid "Hold date:"
 msgstr "Data zamówienia:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:290
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Zamówienie zbędne po:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:318
 #, c-format
 msgid "Hold notes:"
 msgstr "Uwagi o zamówieniu:"
@@ -6099,7 +6094,7 @@ msgstr "Uwagi o zamówieniu:"
 msgid "Hold requests"
 msgstr "Złóż zamówienie"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:283
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, c-format
 msgid "Hold starts on date:"
 msgstr "Data złożenia zamówienia:"
@@ -6226,8 +6221,8 @@ msgid "Home libraries"
 msgstr "Biblioteki macierzyste"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:178
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #, c-format
 msgid "Home library"
 msgstr "Biblioteka macierzysta"
@@ -6567,7 +6562,7 @@ msgstr ""
 #. %1$s:  Branches.GetName( itemLoo.transfertfrom ) | html 
 #. %2$s:  Branches.GetName( itemLoo.transfertto ) | html 
 #. %3$s:  itemLoo.transfertwhen | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:422
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:430
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:46
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6584,7 +6579,7 @@ msgstr "W schowku"
 msgid "Indexes"
 msgstr "Indeksy"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 #, c-format
 msgid "Information"
 msgstr "Informacja"
@@ -6641,8 +6636,8 @@ msgstr "Wydanie #"
 msgid "Issue renews"
 msgstr "Egzemplarz prolongowany"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:106
 #, c-format
 msgid "Issue:"
 msgstr "Wydanie:"
@@ -6758,8 +6753,8 @@ msgstr "Egzemplarz prolongowany"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:176
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:117
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:250
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:633
@@ -6776,7 +6771,7 @@ msgid "Item type:"
 msgstr "Typ dokumentu:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:223
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:231
 #, c-format
 msgid "Item type: "
 msgstr "Typ dokumentu: "
@@ -6937,7 +6932,7 @@ msgstr "Ostatnia"
 msgid "Last "
 msgstr "Ostatnia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, c-format
 msgid "Last location"
 msgstr "Ostatnia lokalizacja"
@@ -7728,7 +7723,7 @@ msgstr "Dalej "
 msgid "Next &gt;&gt;"
 msgstr "Dalej &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:323
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:331
 #, c-format
 msgid "Next available item"
 msgstr "Następny dostępny egzemplarz"
@@ -7752,7 +7747,7 @@ msgstr "Nie"
 msgid "No "
 msgstr "Nie "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:241
 #, c-format
 msgid "No article requests can be made for this record. "
 msgstr "Brak możliwości zamówienia kopii dla tego rekordu. "
@@ -8027,7 +8022,7 @@ msgid "Not for loan %s"
 msgstr "Nie można wypożyczyć %s"
 
 #. %1$s:  itemLoo.notforloanvalue | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:438
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Nie można wypożyczyć (%s)"
@@ -8037,7 +8032,7 @@ msgstr "Nie można wypożyczyć (%s)"
 msgid "Not issued"
 msgstr "Nieopublikowany"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:456
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:466
 #, c-format
 msgid "Not on hold"
 msgstr "Niezarezerwowane"
@@ -8063,7 +8058,7 @@ msgstr "Uwaga:"
 msgid "Note: "
 msgstr "Uwaga: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:268
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -8157,7 +8152,7 @@ msgstr "Uwagi/Komentarze"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:217
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:143
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:150
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:237
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:241
 #, c-format
@@ -8208,7 +8203,7 @@ msgstr "Listopad"
 msgid "Number"
 msgstr "Numer"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
 #, c-format
 msgid "Number of holds: "
 msgstr "Liczba zamówień: "
@@ -8252,6 +8247,19 @@ msgstr "Październik"
 #, c-format
 msgid "On hold"
 msgstr "Zarezerwowany"
+
+#. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#, c-format
+msgid "On hold for patron expected at %s"
+msgstr "Zamówiony dla użytkownika oczekuje w %s"
+
+#. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
+#. %2$s:  itemLoo.reservedate | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#, c-format
+msgid "On hold for patron expected at %s since %s"
+msgstr "Zamówiony dla użytkownika oczekuje w %s od %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:90
 #, c-format
@@ -8436,8 +8444,8 @@ msgstr "Właściciel"
 msgid "Pages"
 msgstr "Strony"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:124
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:129
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Pages:"
 msgstr "Strony:"
@@ -8588,7 +8596,7 @@ msgstr "Telefon:"
 msgid "Phone: "
 msgstr "Telefon:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:150
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:157
 #, c-format
 msgid "Photocopy"
 msgstr "Fotokopia"
@@ -8598,7 +8606,7 @@ msgstr "Fotokopia"
 msgid "Pick up location"
 msgstr "Miejsce odbioru"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:86
 #, c-format
 msgid "Pick up location:"
@@ -8609,13 +8617,13 @@ msgstr "Miejsce odbioru:"
 msgid "Pickup library"
 msgstr "Miejsce odbioru"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:163
 #, c-format
 msgid "Pickup library:"
 msgstr "Miejsce odbioru:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 msgid "Place a hold on"
 msgstr "Zamów"
 
@@ -8625,7 +8633,7 @@ msgid "Place a hold on "
 msgstr "Zamów "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 msgid "Place a hold on: "
 msgstr "Zamów: "
 
@@ -8658,7 +8666,7 @@ msgid "Place hold "
 msgstr "Zamów "
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:236
 msgid "Place request"
 msgstr "Złóż zamówienie"
 
@@ -8838,7 +8846,7 @@ msgstr "Wprowadź wartość większą bądź równą {0}."
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Wprowadź wartość mniejszą bądź równą {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:320
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr "Wprowadź dodatkowe informacje o zamówionych pozycjach:"
@@ -8881,7 +8889,7 @@ msgid "Please enter your card number:"
 msgstr "Podaj numer karty:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:246
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:253
 msgid "Please fill in at least one field."
 msgstr "Wypełnij przynajmniej jedno pole."
 
@@ -8971,7 +8979,7 @@ msgid "Please see a member of the library staff."
 msgstr "Skontaktuj się z pracownikiem biblioteki."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:246
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:253
 msgid "Please select a specific item for this article request."
 msgstr "Wybierz egzemplarz w celu zamówienia kopii."
 
@@ -9687,7 +9695,7 @@ msgstr "Złożono zamówienie"
 msgid "Request placed:"
 msgstr "Złożono zamówienie:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:297
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
 #, c-format
 msgid "Request specific item type:"
 msgstr "Zamów konkretny typ dokumentu:"
@@ -9785,6 +9793,13 @@ msgstr "Zamówienia"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:938
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:974
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:993
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:82
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:93
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:115
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:131
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:93
@@ -10281,8 +10296,8 @@ msgstr "Wybierz format pobierania"
 msgid "Select a list"
 msgstr "Wybierz listę"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:344
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #, c-format
 msgid "Select a specific item:"
 msgstr "Wybierz konkretny egzemplarz:"
@@ -10614,8 +10629,8 @@ msgstr "Wyświetl listy"
 msgid "Show more"
 msgstr "Wyświetl więcej"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:498
 #, c-format
 msgid "Show more options"
 msgstr "Więcej opcji"
@@ -10625,7 +10640,7 @@ msgstr "Więcej opcji"
 msgid "Show the top "
 msgstr "Wyświetl "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:464
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:474
 #, c-format
 msgid "Show unholdable items"
 msgstr "Wyświetl niedostępny egzemplarz"
@@ -11301,7 +11316,7 @@ msgstr "Spis treści"
 msgid "Table of contents provided by Syndetics"
 msgstr "Spis treści dostarczany przez Syndetics"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:118
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:123
 #, c-format
 msgid "Table of contents:"
 msgstr "Spis treści:"
@@ -11577,7 +11592,7 @@ msgid "The first subscription was started on %s"
 msgstr "Pierwsza prenumerata rozpoczęła się %s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:246
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:253
 msgid "The following fields are required and not filled in: "
 msgstr "Następujące pola są wymagane i niewypełnione: "
 
@@ -11706,7 +11721,7 @@ msgstr "Prenumeraty powiązane z tytułem: %s."
 msgid "There are no comments on this title."
 msgstr "Brak komentarzy dla tego tytułu."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:217
 #, c-format
 msgid "There are no items that can be placed on hold."
 msgstr "Brak egzemplarzy, które można zamówić."
@@ -11944,7 +11959,34 @@ msgstr "Prenumerata jest zakończona."
 msgid "This title cannot be requested because it's already in your possession."
 msgstr "Nie można zamówić tego tytułu, posiadasz już go na swoim koncie."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:214
+#, c-format
+msgid ""
+"This title cannot be requested because you already have hold for this item."
+msgstr "Nie można zamówić tego tytułu, posiadasz już na nie zamówienie."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
+#, c-format
+msgid ""
+"This title cannot be requested because you exceeded max holds per record."
+msgstr ""
+"Nie można zamówić tego tytułu, posiadasz maksymalną liczbę zamówień na "
+"rekord."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:212
+#, c-format
+msgid ""
+"This title cannot be requested because you reached the daily hold limit."
+msgstr "Nie można zamówić tego tytułu, osiągnięto dzienny limit na zamówienia."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:208
+#, c-format
+msgid ""
+"This title cannot be requested because you reached the maximum number of "
+"holds."
+msgstr "Nie można zamówić tego tytułu, osiągnięto maksymalną liczbę zamówień."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:219
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Nie można zamówić tego tytułu."
@@ -12014,7 +12056,7 @@ msgid "Title notes ( %s )"
 msgstr "Uwagi ( %s )"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:72
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
@@ -12197,7 +12239,7 @@ msgstr "Nie można utworzyć zapisu!"
 msgid "Unable to update your setting!"
 msgstr "Nie można uaktualnić ustawień!"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:434
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Niedostępny (zaginiony lub brakujący)"
@@ -12404,7 +12446,7 @@ msgid "View your search history"
 msgstr "Przeglądaj historię wyszukiwania"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "Vol info"
 msgstr "Informacja o numerach"
@@ -12414,8 +12456,8 @@ msgstr "Informacja o numerach"
 msgid "Volume"
 msgstr "Wolumin"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:89
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:95
 #, c-format
 msgid "Volume:"
 msgstr "Wolumin:"
@@ -12424,6 +12466,13 @@ msgstr "Wolumin:"
 #, c-format
 msgid "Waiting date"
 msgstr "Data oczekiwania"
+
+#. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
+#. %2$s:  itemLoo.waitingdate | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#, c-format
+msgid "Waiting for patron at %s since %s"
+msgstr "Oczekuje na użytkownika w %s od %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
@@ -13406,7 +13455,7 @@ msgstr "Płatność $%s została zakończona powodzeniem!"
 msgid "Your personal details"
 msgstr "Dane osobowe"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:232
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
 #, c-format
 msgid "Your priority: "
 msgstr "Kolejka rezerwacji: "
@@ -15059,10 +15108,6 @@ msgstr "×"
 
 #~ msgid "Void payment"
 #~ msgstr "Anuluj płatność"
-
-#, fuzzy
-#~ msgid "Waiting for patron at %s since %s. "
-#~ msgstr "W drodze z %s do %s od %s"
 
 #~ msgid "Writeoff"
 #~ msgstr "Anuluj"

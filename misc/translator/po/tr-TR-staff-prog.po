@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-09-18 09:18-0300\n"
+"POT-Creation-Date: 2022-10-18 09:51-0300\n"
 "PO-Revision-Date: 2022-06-14 08:07+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -3646,7 +3646,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  IF defaultRefundRule == 'refund' 
 #. %3$s:  ELSIF defaultRefundRule == 'charge' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:899
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:907
 #, fuzzy, c-format
 msgid "%s %s Use default (Refund lost item charge) %s "
 msgstr "%s %s Varsayılanı kullan (Evet) %s Varsayılanı kullan (Hayır) %s"
@@ -3723,7 +3723,7 @@ msgstr "%s %s gruba eklendi. %s Grup %s oluşturuldu. %s"
 #. %1$s:  IF ( hardduedate ) 
 #. %2$s:  IF ( hardduedatecompare == '-1' ) 
 #. %3$s:  hardduedate | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:252
 #, c-format
 msgid "%s %s before %s "
 msgstr "%s %sönce %s "
@@ -4520,7 +4520,7 @@ msgstr "%s %sDuyurular%s "
 
 #. %1$s:  selected=relationship | html 
 #. %2$s:  PROCESS selectoptionopen value='' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:143
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:144
 #, c-format
 msgid "%s %sNone specified"
 msgstr "%s %sHiçbiri tanımlı değil"
@@ -4758,6 +4758,20 @@ msgstr ""
 "verilmemiştir. %sMateryal veya kullanıcı mevcut değil. %sBu bibliyografik "
 "kayıt üzerinde bu kullanıcı tarafından ayırtma yapılmamıştır. %s%s %s "
 
+#. %1$s:  IF Koha.Preference('marcflavour') == 'MARC21' 
+#. %2$s:  PROCESS selectoptionopen value='a' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:146
+#, fuzzy, c-format
+msgid "%s %sa - Earlier heading"
+msgstr "%sa- Önceki başlık"
+
+#. %1$s:  ELSIF Koha.Preference('marcflavour') == 'UNIMARC' 
+#. %2$s:  PROCESS selectoptionopen value='a' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:157
+#, fuzzy, c-format
+msgid "%s %sa = earlier name"
+msgstr "%sa- Önceki başlık"
+
 #. %1$s:  END 
 #. %2$s:  IF ( itemloo.waitingdate ) 
 #. %3$s:  ELSE 
@@ -4964,7 +4978,7 @@ msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Tarihinde süresi doluyor %s"
 
 #. %1$s:  itemtypeloo.translated_description | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:379
 #, c-format
 msgid "%s (All)"
 msgstr "%s (Tümü)"
@@ -5052,7 +5066,7 @@ msgstr "%s (boşsa muhtemelen sorun yoktur)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1044
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1045
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - Bu etiketi genişletmek için tıklayınız"
 
@@ -5772,13 +5786,13 @@ msgstr "%s Doğum tarihi: "
 #. %2$s:  ELSIF ( lengthunit == 'hours') 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
 #, c-format
 msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s Günler %s Saatler %s Tanımsız %s"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
 #, c-format
 msgid "%s Default "
 msgstr "%s Varsayılan"
@@ -5931,8 +5945,8 @@ msgstr "%s Yazıcı profilini düzenle %s %s Yeni yazıcı profili %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:816
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:817
 #, c-format
 msgid "%s Editing "
 msgstr "%s Düzenleniyor "
@@ -6028,19 +6042,19 @@ msgid "%s Framework "
 msgstr "%s Çerçeve"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:582
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
 #, c-format
 msgid "%s From any library "
 msgstr "%s Herhangi Bir Kütüphaneden "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
 #, c-format
 msgid "%s From home library "
 msgstr "%s Ana Kütüphaneden "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:598
 #, c-format
 msgid "%s From local hold group "
 msgstr "%s Yerel hold grubundan"
@@ -6183,7 +6197,7 @@ msgid "%s Item being processed at "
 msgstr "%s Materyal yandaki konumda işleniyor"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:702
 #, c-format
 msgid "%s Item floats "
 msgstr "%s Materyal dolaşıma girdi "
@@ -6195,13 +6209,13 @@ msgid "%s Item may be shelved out of order"
 msgstr "%s Materyal rafa düzensiz olarak yerleştirilmiş olabilir"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:688
 #, c-format
 msgid "%s Item returns home "
 msgstr "%s Materyal teslim edildi "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:687
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:695
 #, c-format
 msgid "%s Item returns to issuing library "
 msgstr "%s Materyal kütüphaneye teslim edildi "
@@ -6623,7 +6637,7 @@ msgid "%s No group "
 msgstr "%s Grup yok"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:614
 #, c-format
 msgid "%s No holds allowed "
 msgstr "%s Ayırtmaya izin verilmiyor "
@@ -6789,7 +6803,7 @@ msgstr "%s Henüz tanımlanmamış %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:559
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:567
 #, c-format
 msgid "%s Not set %s "
 msgstr "%s Ayarlanmadı %s"
@@ -7784,7 +7798,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:906
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:914
 #, fuzzy, c-format
 msgid "%s Use default (Leave lost item charge) %s "
 msgstr "Kayıp materyal ücretinden vazgeç"
@@ -7927,7 +7941,7 @@ msgstr "%s ZIP/Posta Kodu: "
 
 #. %1$s:  ELSIF ( hardduedatecompare == '1' ) 
 #. %2$s:  hardduedate | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #, c-format
 msgid "%s after %s "
 msgstr "%s sonra %s "
@@ -8365,7 +8379,7 @@ msgstr "%s üzerinde %s"
 
 #. %1$s:  ELSIF ( hardduedatecompare == '0' ) 
 #. %2$s:  hardduedate | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:256
 #, c-format
 msgid "%s on %s "
 msgstr "%s üzerinde %s "
@@ -9184,8 +9198,8 @@ msgstr "%s/cgi-bin/koha/svc/report?id=%s"
 #. %1$s:  IF ( c == undef ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:192
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:202
 #, c-format
 msgid "%s1%s%s"
 msgstr "%s1%s%s"
@@ -9345,7 +9359,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:720
 #, c-format
 msgid ""
 "%sCheckout, hold policy by patron category for %s%sDefault checkout, hold "
@@ -9770,7 +9784,7 @@ msgstr "%sAyırtılan(lar):%s"
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:952
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:960
 #, c-format
 msgid "%sHolds policy by item type for %s%sDefault holds policy by item type%s"
 msgstr ""
@@ -10190,7 +10204,7 @@ msgstr ""
 #. %1$s:  IF chargeperiod_charge_at 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:271
 #, c-format
 msgid "%sStart of interval%sEnd of interval%s"
 msgstr "%sZaman aralığı başlangıcı%sZaman aralığı sonu%s"
@@ -10322,12 +10336,6 @@ msgstr "%sEvet%sHayır%s"
 msgid "%sYes%sNo%s "
 msgstr "%sEvet%sHayır%s"
 
-#. %1$s:  PROCESS selectoptionopen value='a' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:145
-#, c-format
-msgid "%sa - Earlier heading"
-msgstr "%sa- Önceki başlık"
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:20
@@ -10353,10 +10361,16 @@ msgid "%sat %s%s "
 msgstr "%sde %s%s"
 
 #. %1$s:  PROCESS selectoptionopen value='b' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:146
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:148
 #, c-format
 msgid "%sb - Later heading"
 msgstr "%sb - Sonraki başlık"
+
+#. %1$s:  PROCESS selectoptionopen value='b' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:159
+#, fuzzy, c-format
+msgid "%sb = later name"
+msgstr "%s Diğer adı: "
 
 #. %1$s:  IF ( result_se.author ) 
 #. %2$s:  result_se.author | html 
@@ -10380,11 +10394,29 @@ msgstr "%sb - Sonraki başlık"
 msgid "%sby %s%s [%s], %s%s %s%s%s %s%s%s, %s%s%s%s%s, "
 msgstr "%syazar %s%s [%s], %s%s %s%s%s %s%s%s, %s%s%s%s%s "
 
+#. %1$s:  PROCESS selectoptionopen value='c' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:160
+#, c-format
+msgid "%sc = official name"
+msgstr ""
+
 #. %1$s:  PROCESS selectoptionopen value='d' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:147
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:149
 #, c-format
 msgid "%sd - Acronym"
 msgstr "%sd- Kısaltma"
+
+#. %1$s:  PROCESS selectoptionopen value='d' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
+#, c-format
+msgid "%sd = acronym / initial / abbreviation"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='e' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:162
+#, c-format
+msgid "%se = pseudonym"
+msgstr ""
 
 #. %1$s:  IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) 
 #. %2$s:  ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) 
@@ -10399,37 +10431,97 @@ msgid "%semail %sprint %sfeed %ssms %s%s%s "
 msgstr "%seposta %syazdır %sfeed %ssms %s%s%s "
 
 #. %1$s:  PROCESS selectoptionopen value='f' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:148
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:150
 #, c-format
 msgid "%sf - Musical composition"
 msgstr "%sf- Müzikal kompozisyon"
 
+#. %1$s:  PROCESS selectoptionopen value='f' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:163
+#, fuzzy, c-format
+msgid "%sf = real name"
+msgstr "%s Adı:"
+
 #. %1$s:  PROCESS selectoptionopen value='g' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:149
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:151
 #, c-format
 msgid "%sg - Broader term"
 msgstr "%sg- Daha geniş bir terim"
 
+#. %1$s:  PROCESS selectoptionopen value='g' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:164
+#, fuzzy, c-format
+msgid "%sg = broader term or name"
+msgstr "%sg- Daha geniş bir terim"
+
 #. %1$s:  PROCESS selectoptionopen value='h' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:150
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:152
 #, c-format
 msgid "%sh - Narrower term"
 msgstr "%sh- Daha dar bir terim"
 
+#. %1$s:  PROCESS selectoptionopen value='h' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:165
+#, fuzzy, c-format
+msgid "%sh = narrower term or name"
+msgstr "%sh- Daha dar bir terim"
+
 #. %1$s:  PROCESS selectoptionopen value='i' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:151
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:153
 #, c-format
 msgid "%si - Reference instruction phrase in subfield $i"
 msgstr "%si - $i alt alanında referans yönergeleri"
 
+#. %1$s:  PROCESS selectoptionopen value='i' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:166
+#, c-format
+msgid "%si = name in religion"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='j' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:167
+#, c-format
+msgid "%sj = married name"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='k' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:168
+#, c-format
+msgid "%sk = name before marriage"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='l' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:169
+#, c-format
+msgid "%sl = shared pseudonym"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='m' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:170
+#, fuzzy, c-format
+msgid "%sm = secular name"
+msgstr "%s Kullanıcı adı: "
+
 #. %1$s:  PROCESS selectoptionopen value='n' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:152
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:154
 #, c-format
 msgid "%sn - Not applicable"
 msgstr "%sn - Uygulanamaz"
 
+#. %1$s:  PROCESS selectoptionopen value='n' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:171
+#, c-format
+msgid "%sn = different rule form of a name"
+msgstr ""
+
+#. %1$s:  PROCESS selectoptionopen value='o' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:172
+#, c-format
+msgid "%so = attributed name / conventional title of a work"
+msgstr ""
+
 #. %1$s:  PROCESS selectoptionopen value='r' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:153
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:155
 #, c-format
 msgid "%sr - Relationship designation in $i or $4"
 msgstr "%sr - $i veya $4 içerisinde ilişki tanımı"
@@ -10448,10 +10540,22 @@ msgid "%ssent %spending %sfailed %sdeleted %s%s%s %s "
 msgstr "%sgönderildi %sbeklemede %sbaşarısız oldu %ssilindi %s%s%s %s"
 
 #. %1$s:  PROCESS selectoptionopen value='t' 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:154
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:156
 #, c-format
 msgid "%st - Immediate parent body"
 msgstr "%st - yakın üst gövde"
+
+#. %1$s:  PROCESS selectoptionopen value='x' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:173
+#, fuzzy, c-format
+msgid "%sx = not applicable"
+msgstr "%sn - Uygulanamaz"
+
+#. %1$s:  PROCESS selectoptionopen value='z' 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:174
+#, c-format
+msgid "%sz = other"
+msgstr ""
 
 #. %1$s:  IF currency.active 
 #. %2$s:  END 
@@ -10988,7 +11092,7 @@ msgstr "(Kayıp değil)"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:819
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(Kayıt numarası %s) %s MARC kaydı ekle %s"
@@ -10996,7 +11100,7 @@ msgstr "(Kayıt numarası %s) %s MARC kaydı ekle %s"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:802
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(Kayıt numarası %s)%s MARC kaydı ekle %s"
@@ -11113,7 +11217,7 @@ msgstr "(kontrol ediliyor)"
 msgid "(current stage highlighted)"
 msgstr "(mevcut aşama vurgulandı)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:970
 #, c-format
 msgid "(default if none is defined)"
 msgstr "(eğer hiçbiri tanımlanmışsa varsayılan)"
@@ -11130,7 +11234,7 @@ msgstr "(miktarı sayı olarak giriniz) "
 msgid "(exclusive) "
 msgstr "(özel) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:821
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:151
 #, c-format
 msgid "(fast cataloging)"
@@ -11879,7 +11983,7 @@ msgid "A list of reasons displayed in the suggestion form on the OPAC."
 msgstr "OPAC'daki öneri formunda gösterilen sebeplerin bir listesi."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "A matching authority was found in the local database."
 msgstr "Yerel veritabanında eşleşen bir otorite bulundu."
 
@@ -12455,8 +12559,8 @@ msgstr "Eğer hiç eşleşme bulunamadıysa işlem: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:146
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:545
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:553
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:218
@@ -12489,6 +12593,7 @@ msgstr "Eğer hiç eşleşme bulunamadıysa işlem: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:183
@@ -12497,7 +12602,6 @@ msgstr "Eğer hiç eşleşme bulunamadıysa işlem: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -12620,9 +12724,9 @@ msgstr "Gerçek maliyet:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:784
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:840
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1077
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1085
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:86
@@ -12745,7 +12849,7 @@ msgstr "Yeni bir materyal ekle"
 msgid "Add a new message"
 msgstr "Yeni mesaj ekle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
 #, c-format
 msgid "Add a new record"
 msgstr "Yeni bir kayıt ekle"
@@ -13008,8 +13112,8 @@ msgstr "Materyal türü ekle"
 msgid "Add item(s)"
 msgstr "Materyal(ler) ekle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:12
 #, c-format
 msgid "Add items"
@@ -13940,7 +14044,7 @@ msgstr "Gelişmiş arama &rsaquo; Katalog &rsaquo; Koha"
 msgid "Advanced sort..."
 msgstr "Gelişmiş sıralama..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:414
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:241
 #, c-format
 msgid "After"
@@ -14090,10 +14194,10 @@ msgstr "Alingsås Halk Kütüphanesi, İsveç"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:360
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:369
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:364
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:247
@@ -14104,6 +14208,7 @@ msgstr "Alingsås Halk Kütüphanesi, İsveç"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:263
@@ -14330,8 +14435,8 @@ msgstr "Tüm Sağlayıcılar"
 msgid "Allen Ginsberg Library, USA"
 msgstr "Allen Ginsberg Library, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:331
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:468
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:52
 #, c-format
@@ -15060,7 +15165,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 msgid "Any changes will not be saved. Continue?"
 msgstr "Herhangi bir değişiklik kaydedilmeyecek. Devam edilsin mi?"
@@ -15325,7 +15430,7 @@ msgid "Are you sure you want to cancel this order (%s)"
 msgstr "Bu siparişi iptal etmek istediğinizden emin misiniz (%s)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1097
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1105
 msgid "Are you sure you want to cancel your changes?"
 msgstr "Yaptığınız değişiklikleri iptal etmek istediğinizden emin misiniz?"
 
@@ -15339,7 +15444,7 @@ msgstr ""
 "değiştirmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1097
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1105
 msgid ""
 "Are you sure you want to clone this circulation and fine rule from %s to %s "
 "library? This will override the existing rules in this library."
@@ -15349,7 +15454,7 @@ msgstr ""
 "kılacaktır."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1097
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1105
 msgid ""
 "Are you sure you want to clone this standard rule to %s library? This will "
 "override the existing rules in this library."
@@ -15648,7 +15753,7 @@ msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "Bu raporu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1097
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1105
 msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "Bu kuralı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
 
@@ -15703,7 +15808,7 @@ msgid "Are you sure you want to do this?"
 msgstr "Bunu yapmak istediğinize emin misiniz?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1097
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1105
 msgid "Are you sure you want to edit another rule?"
 msgstr "Diğer bir kuralı düzenlemek istediğinizden emin misiniz?"
 
@@ -15885,8 +15990,8 @@ msgid "Arrows"
 msgstr "Oklar"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:145
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:528
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:98
@@ -16148,11 +16253,11 @@ msgstr "Authname"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:348
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:420
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:320
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-availability-table.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:10
@@ -16435,7 +16540,7 @@ msgstr "Otorite türü"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:196
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:15
 #, c-format
 msgid "Authority type: "
 msgstr "Otorite türü: "
@@ -16592,7 +16697,7 @@ msgstr ""
 "giriş yapıyorsunuz."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Automatic authority link results:"
 msgstr "Otomatik otorite bağlantı sonuçları:"
 
@@ -16631,7 +16736,7 @@ msgid "Automatic ordering: "
 msgstr "Otomatik sipariş:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:136
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:519
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:682
 #, c-format
 msgid "Automatic renewal"
@@ -17567,7 +17672,7 @@ msgstr ""
 "kullanıcı kayıtlarına genişletilmiş kullanıcı nitelikleri verilememektedir. "
 "Bu özelliği açmak isterseniz tıklayın."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:412
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:416
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:242
 #, c-format
 msgid "Before"
@@ -18153,7 +18258,7 @@ msgstr "Şube"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -18290,6 +18395,7 @@ msgstr "Şube"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
@@ -18322,7 +18428,6 @@ msgstr "Şube"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
 msgstr "Breadcrumb"
@@ -18836,11 +18941,11 @@ msgstr "California College of the Arts, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
@@ -19074,6 +19179,8 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -19133,13 +19240,11 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:942
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:946
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:950
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:954
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:959
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:943
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:947
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:960
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -19211,6 +19316,13 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:378
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:57
@@ -19241,15 +19353,8 @@ msgstr "Aşağıdaki alanlar doldurulmadığı için bu kayıt kaydedilemez :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:378
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:68
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:236
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:125
@@ -19696,7 +19801,7 @@ msgid "Cannot unpack file to the plugins directory."
 msgstr "Dosyayı eklenti dizinine açamıyor."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:126
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:503
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:509
 #, c-format
 msgid "Cap fine at replacement price"
 msgstr "Yenileme bedelinde üst fiyat"
@@ -20105,7 +20210,7 @@ msgstr "Katalog istatistikleri"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:797
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
@@ -20362,7 +20467,7 @@ msgstr "Kategori değiştir"
 msgid "Change currency"
 msgstr "Para birimini değiştir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:913
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -20531,7 +20636,7 @@ msgstr "Ceza"
 msgid "Charge lost fee "
 msgstr "Kayıp materyal ücretlendir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:500
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:506
 #, c-format
 msgid "Charge when?"
 msgstr "Ne zaman ceza işleyecek?"
@@ -21931,8 +22036,8 @@ msgstr "İçe aktarım toplu dosya #%s temizlendi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:389
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:480
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:393
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:486
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:103
@@ -21948,10 +22053,10 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -21968,6 +22073,7 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:129
@@ -21978,7 +22084,6 @@ msgstr "Temizle"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:201
 #, c-format
@@ -22004,7 +22109,7 @@ msgstr ""
 msgid "Clear date"
 msgstr "Tarihi temizle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:5
 #, c-format
 msgid "Clear field"
 msgstr "Alanı temizle"
@@ -22143,7 +22248,7 @@ msgstr "Bir tatil eklemek ya da düzenlemek için tarih üzerine tıklayınız."
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:359
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1085
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
 msgid "Click to Expand this Tag"
 msgstr "Bu etiketi genişletmek için tıklayınız"
 
@@ -22193,7 +22298,7 @@ msgstr "Pano"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22221,7 +22326,7 @@ msgstr "-a bu kuralları klonla:"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22296,6 +22401,7 @@ msgstr "Dolaşım ve ceza kurallarının klonlanması başarısız oldu!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:534
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:540
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:107
@@ -22307,7 +22413,6 @@ msgstr "Dolaşım ve ceza kurallarının klonlanması başarısız oldu!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:451
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:185
@@ -24241,7 +24346,7 @@ msgid "Create and modify Interlibrary loan requests"
 msgstr "Kütüphanelerarası ödünç istekleri oluştur ve değiştir"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Create authority"
 msgstr "Otorite oluştur"
 
@@ -24339,7 +24444,7 @@ msgstr "Manuel fatura oluştur &rsaquo; Kullanıcılar &rsaquo; Koha"
 msgid "Create new"
 msgstr "Yeni oluştur"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:5
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:6
 #, c-format
 msgid "Create new authority"
 msgstr "Yeni otorite oluştur"
@@ -24596,7 +24701,7 @@ msgid "Current article requests"
 msgstr "Mevcut makale istekleri"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:491
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:497
 #, c-format
 msgid "Current checkouts allowed"
 msgstr "Şu an Ödünç Verilebilenler"
@@ -24631,7 +24736,7 @@ msgid "Current maintenance team"
 msgstr "Güncel bakım ekibi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:492
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:498
 #, c-format
 msgid "Current on-site checkouts allowed"
 msgstr "İzin verilen mevcut yerinde ödünç almalar"
@@ -24694,7 +24799,7 @@ msgstr "Şu anda kullanılabilir şablonlar"
 msgid "Currently in local use %s "
 msgstr "Şu anda yerel kullanımda %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:957
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:965
 #, c-format
 msgid ""
 "Currently, this means hold policies. The various policies have the following "
@@ -24813,7 +24918,7 @@ msgid "Daily hold limit reached for patron"
 msgstr "Kullanıcı için günlük ayırma sınırına ulaşıldı"
 
 #. %1$s:  Branches.GetName( humanbranch ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:794
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:802
 #, c-format
 msgid "Daily open article requests limit for %s"
 msgstr "%s için günlük açık makale istekleri sınırı"
@@ -25094,10 +25199,10 @@ msgstr "Edinilen tarih"
 msgid "Date acquired (item)"
 msgstr "Alım tarihi (materyal)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #, c-format
 msgid "Date added"
 msgstr "Eklenen Tarih"
@@ -25337,7 +25442,7 @@ msgstr "Gün/Ay"
 msgid "Day: "
 msgstr "Gün: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:406
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:492
@@ -25353,7 +25458,7 @@ msgid "Days in advance"
 msgstr "Öne alınan tarihler"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:494
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:500
 #, c-format
 msgid "Days mode"
 msgstr "Gün modu"
@@ -25403,7 +25508,7 @@ msgid "Decrease indent"
 msgstr "Girintiyi azalt"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:497
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:503
 #, c-format
 msgid "Decreased loan period for high holds (day)"
 msgstr "Uzun süreli ayırtmalar için azaltılmış ödünç alma süresi (gün) "
@@ -25422,9 +25527,9 @@ msgstr "Uzun süreli ayırtmalar için azaltılmış ödünç alma süresi (gün
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:237
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:238
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:397
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:748
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:125
@@ -25464,7 +25569,7 @@ msgstr "Varsayılan tutar:"
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:531
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:539
 #, c-format
 msgid "Default checkout, hold and return policy%s for %s%s"
 msgstr "Varsayılan ödünç, ayırma ve iade kuralı%s - %s%s"
@@ -25505,7 +25610,7 @@ msgstr "Varsayılan çerçeve"
 msgid "Default framework "
 msgstr "Varsayılan çerçeve "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:857
 #, c-format
 msgid "Default lost item fee refund on return policy"
 msgstr "İade politikasında varsayılan kayıp materyal ücreti"
@@ -25515,7 +25620,7 @@ msgstr "İade politikasında varsayılan kayıp materyal ücreti"
 msgid "Default messaging preferences for this patron category"
 msgstr "Bu kullanıcı kategorisi için varsayılan mesajlaşma tercihleri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:804
 #, c-format
 msgid "Default open article requests limit"
 msgstr "Varsayılan açık makale istekleri sınırı"
@@ -25553,7 +25658,7 @@ msgstr "Varsayılan sıralama düzeni:"
 msgid "Default value:"
 msgstr "Varsayılan değer:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:557
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:565
 #, c-format
 msgid "Defaults "
 msgstr "Varsayılanlar "
@@ -25887,11 +25992,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:344
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:350
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:768
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:826
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1026
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:354
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:776
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1034
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:450
@@ -25900,7 +26005,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
@@ -26368,8 +26473,8 @@ msgstr "Dizi halindeki tek tatilleri sil"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:368
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1094
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1096
 msgid "Delete this Tag"
 msgstr "Bu Etiketi Sil"
 
@@ -26406,7 +26511,7 @@ msgstr "Kaydedilmiş bu raporu sil"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
 msgid "Delete this subfield"
 msgstr "Bu alt alanı sil"
 
@@ -26865,8 +26970,8 @@ msgstr "Ayrıntılı mesajlar:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:232
@@ -27434,8 +27539,8 @@ msgstr "Etki Alanı"
 msgid "Domain: "
 msgstr "Etki alanı:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:333
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:463
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:335
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:467
 #, c-format
 msgid "Don't allow"
 msgstr "İzin verme"
@@ -27791,7 +27896,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Duplike kullanıcılar %s: %s numaralı toplu iş grubundan çıkarıldı"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "Duplike kayıt şüphesi"
@@ -28020,8 +28125,8 @@ msgstr "İlk Ayırma Tarihi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:471
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:343
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:450
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:238
@@ -28313,8 +28418,8 @@ msgid "Edit item #%s%s / Barcode %s%s"
 msgstr "Materyali düzenle #%s%s / Barkod %s%s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:534
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:286
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
@@ -28812,7 +28917,7 @@ msgstr "Bitiş tarihi: "
 msgid "End of date range "
 msgstr "Tarih aralığının sonu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:424
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:428
 #, c-format
 msgid "End of interval"
 msgstr "Zaman aralığı sonu"
@@ -29171,7 +29276,7 @@ msgid "Error %s &rsaquo; Koha"
 msgstr "Hata %s &rsaquo; Koha"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid ""
 "Error : You do not have the permissions necessary to use this functionality."
 msgstr "Hata : Bu işlevi kullanmak için gerekli izinlere sahip değilsiniz."
@@ -29329,7 +29434,7 @@ msgid "Error: no field value specified."
 msgstr "Hata: alan değeri belirlenmemiş."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Errors"
 msgstr "Hatalar"
 
@@ -29435,7 +29540,7 @@ msgstr "Herkes"
 msgid "Everything went okay. Update done."
 msgstr "Her şey yolunda gitti. Güncelleme bitti."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:413
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:417
 #, c-format
 msgid "Exactly on"
 msgstr "Tam olarak şu tarihte"
@@ -30179,14 +30284,14 @@ msgid "Field"
 msgstr "Alan"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Field %s is important, at least one of its subfields must be filled."
 msgstr "%s alanı önemlidir, alt alanlarından en az biri doldurulmalıdır."
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Field %s is mandatory, at least one of its subfields must be filled."
 msgstr ""
 "%s alanı zorunludur, alt alanlarından en az birinin doldurulması gerekiyor."
@@ -30210,7 +30315,7 @@ msgid "Field 3"
 msgstr "Alan 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
 msgid "Field autofilled by plugin"
 msgstr "Eklenti tarafından otomatik doldurulmuş alan"
 
@@ -30649,7 +30754,7 @@ msgid "Fine"
 msgstr "Ceza"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:498
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:504
 #, c-format
 msgid "Fine amount"
 msgstr "Ceza miktarı"
@@ -30660,13 +30765,13 @@ msgid "Fine amount: "
 msgstr "Ceza miktarı:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:499
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:505
 #, c-format
 msgid "Fine charging interval"
 msgstr "Ceza ücreti zaman aralığı"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:501
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:507
 #, c-format
 msgid "Fine grace period"
 msgstr "Ceza mühlet süresi"
@@ -30973,7 +31078,7 @@ msgstr ""
 msgid "For the selected operations: "
 msgstr "Seçilmiş olan işlemler için: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:953
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:961
 #, c-format
 msgid ""
 "For this library, you can edit rules for given itemtypes, regardless of the "
@@ -30982,7 +31087,7 @@ msgstr ""
 "Bu kütüphane için, kullanıcının kategorisi gözetilmeyerek, ödünç verilen "
 "materyaller için kuralları düzenleyebilirsiniz. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:713
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:721
 #, c-format
 msgid ""
 "For this library, you can specify the maximum number of loans that a patron "
@@ -30991,8 +31096,8 @@ msgstr ""
 "Bu kütüphane için, belirli bir kategorideki bir kullanıcının materyal türü "
 "gözetilmeksizin maksimum kaç materyal alabileceğini belirleyebilirsiniz. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:465
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:331
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:469
 #, c-format
 msgid "Force"
 msgstr "Zorla"
@@ -31299,13 +31404,13 @@ msgstr "Varolan bir kaynaktan:"
 msgid "From and to values must have the same length."
 msgstr "From ve to değerleri aynı uzunlukta olmalıdır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:994
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1041
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1002
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1049
 #, c-format
 msgid "From any library"
 msgstr "Herhangi bir kütüphaneden"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:970
 #, c-format
 msgid "From any library:"
 msgstr "Herhangi bir kütüphaneden:"
@@ -31336,13 +31441,13 @@ msgstr "Tarihten:"
 msgid "From existing orders (copy)"
 msgstr "Mevcut siparişlerden (kopya)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:998
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1043
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1006
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1051
 #, c-format
 msgid "From home library"
 msgstr "Ana kütüphaneden"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:964
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:972
 #, c-format
 msgid "From home library:"
 msgstr "Ana kütüphaneden:"
@@ -31352,13 +31457,13 @@ msgstr "Ana kütüphaneden:"
 msgid "From item call number: "
 msgstr "Materyal yer numarasından: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:996
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1042
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1004
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1050
 #, c-format
 msgid "From local hold group"
 msgstr "Yerel hold grubundan"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:963
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:971
 #, c-format
 msgid "From local hold group:"
 msgstr "Yerel hold grubundan:"
@@ -31781,7 +31886,7 @@ msgstr "Gelişmiş Aramaya Gidin"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Go to field"
 msgstr "Alana git"
 
@@ -32028,7 +32133,7 @@ msgid "Handy Shortcuts"
 msgstr "Kullanışlı Kısayollar"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:119
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:496
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:502
 #, c-format
 msgid "Hard due date"
 msgstr "En son iade tarihi"
@@ -32144,8 +32249,8 @@ msgstr "Başlık 5"
 msgid "Heading 6"
 msgstr "Başlık 6"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:122
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:124
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:99
@@ -32158,8 +32263,8 @@ msgstr "Başlık 6"
 msgid "Heading A-Z"
 msgstr "Başlık A-Z"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:127
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:129
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:128
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:48
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:50
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:104
@@ -32496,8 +32601,8 @@ msgstr "Bir sonraki kullanılabilir materyali ayırt"
 msgid "Hold notes"
 msgstr "Materyal ayırtma notları"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:978
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:551
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:986
 #, c-format
 msgid "Hold pickup library match"
 msgstr "Materyal ayırtma alma kütüphanesi eşleştirme"
@@ -32507,8 +32612,8 @@ msgstr "Materyal ayırtma alma kütüphanesi eşleştirme"
 msgid "Hold placed by : "
 msgstr "Ayırma yapan: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:542
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:977
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:550
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:985
 #, c-format
 msgid "Hold policy"
 msgstr "Ayırma politikası"
@@ -32600,12 +32705,12 @@ msgstr "Mevcut:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:353
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:235
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:28
 #, c-format
@@ -32621,7 +32726,7 @@ msgid "Holds (%s)"
 msgstr "Ayırtılanlar (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:517
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:523
 #, c-format
 msgid "Holds allowed (daily)"
 msgstr "İzin verilen ayırtma işlemi (günlük)"
@@ -32632,7 +32737,7 @@ msgid "Holds allowed (daily): "
 msgstr "İzin verilen ayırtma işlemi (günlük):"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:139
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:522
 #, c-format
 msgid "Holds allowed (total)"
 msgstr "İzin verilen ayırtma işlemi (toplam)"
@@ -32702,7 +32807,7 @@ msgid "Holds on this record: %s"
 msgstr "Bu kayıt üzerindeki ayırma işlemleri: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:524
 #, c-format
 msgid "Holds per record (count)"
 msgstr "Kayıt başına ayırtma işlemleri (sayı)"
@@ -32954,7 +33059,7 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -33092,6 +33197,7 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
@@ -33124,7 +33230,6 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -33278,7 +33383,7 @@ msgstr "Saatlik kiralama ücreti:"
 msgid "Hourly rentals use calendar: "
 msgstr "Saatlik kiralamalar takvimi kullanır:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:407
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:491
@@ -33704,8 +33809,8 @@ msgstr ""
 "Bir şablon genel kayıt imkanı sağlıyorsa, kullanıcılar bu şablona dayanarak "
 "genel kataloğundan bir club'a kaydolabilirler."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:322
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:458
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:324
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:157
 #, c-format
 msgid "If all unavailable"
@@ -33716,8 +33821,8 @@ msgstr "Eğer tümü kullanılamazsa"
 msgid "If amounts changed, round to a multiple of"
 msgstr "Miktarlar değiştiyse, yandaki sayının katına yuvarlayın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:324
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:457
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:326
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:461
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:156
 #, c-format
 msgid "If any unavailable"
@@ -33937,7 +34042,7 @@ msgstr ""
 "tercihine ekleyin, aksi takdirde sistem yöneticinizin veritabanındaki %s ve/"
 "veya %s içindeki değerleri düzeltmesini sağlayın."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:967
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:975
 #, c-format
 msgid ""
 "If the system preference 'AllowHoldPolicyOverride' is enabled, these "
@@ -33946,7 +34051,7 @@ msgstr ""
 "'AllowHoldPolicyOverride' sistem tercihi etkinleştirilmişse, bu ilkeler "
 "dolaşım personeliniz tarafından geçersiz kılınabilir."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:724
 #, c-format
 msgid ""
 "If the total amount loanable for a given patron category is left blank, no "
@@ -34146,8 +34251,8 @@ msgid "Ignore means that the subfield does not display in the record editor"
 msgstr "yoksay, alt alan kayıt editöründe gösterilmez anlamını taşır"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:236
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:400
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:238
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:404
 #, c-format
 msgid "Ignore the calendar"
 msgstr "Takvimi yoksay"
@@ -34526,21 +34631,21 @@ msgid "Import this batch into the catalog"
 msgstr "Bu çalışma grubunu kataloğa aktar."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1172
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:172
 #, c-format
 msgid "Important"
 msgstr "Önemli"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Important fields(s) are not filled. Are you sure you want to save?"
 msgstr ""
 "Önemli alan(lar) doldurulmamıştır. Kaydetmek istediğinizden emin misiniz?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:968
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:976
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:106
 #, c-format
@@ -35514,7 +35619,7 @@ msgid "Is new"
 msgstr "Yenidir"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "Bu bir duplike mi? "
@@ -35784,8 +35889,8 @@ msgstr "Materyal ayrıntıları"
 msgid "Item details for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "%s için materyal ayrıntıları &rsaquo; Katalog &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1022
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1074
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1030
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1082
 #, c-format
 msgid "Item floats"
 msgstr "Kayıp materyaller"
@@ -35958,8 +36063,8 @@ msgstr "Materyal numarası (dahili)"
 msgid "Item number file: "
 msgstr "Materyal numara dosyası: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:344
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:478
 #, c-format
 msgid "Item only"
 msgstr "Yalnızca materyal"
@@ -35997,18 +36102,18 @@ msgstr "Materyal kayıtlarının en son senkronize edildiği tarih:"
 msgid "Item renewed:"
 msgstr "Materyalin süresi uzatıldı:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1018
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1072
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1026
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1080
 #, c-format
 msgid "Item returns home"
 msgstr "Materyal kütüphaneye iade ediliyor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1020
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1028
 #, c-format
 msgid "Item returns to issuing branch"
 msgstr "Materyal ödünç verme birimine geri döner"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1073
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1081
 #, c-format
 msgid "Item returns to issuing library"
 msgstr "Materyal ödünç alındığı kütüphaneye iade ediliyor"
@@ -36093,11 +36198,11 @@ msgstr "Materyal tag'leri şu anda kaydedilemiyor"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:488
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:976
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:494
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:984
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -36132,9 +36237,9 @@ msgstr "Materyal tag'leri şu anda kaydedilemiyor"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1006
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1008
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #, c-format
@@ -37354,16 +37459,16 @@ msgstr "Sistem varsayılanını (%s) kullanmak için boş bırakın"
 msgid "Leave empty to add via item search (itemnumber) "
 msgstr "Materyal araması (itemnumber) üzerinden eklemek için boş bırakın. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:872
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:877
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:882
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:887
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:892
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:915
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:921
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:931
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:936
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:880
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:885
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:895
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:900
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:923
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:929
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:934
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:939
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:944
 #, c-format
 msgid "Leave lost item charge"
 msgstr "Kayıp materyal ücretinden vazgeç"
@@ -37525,8 +37630,8 @@ msgstr "Kütüphaneler:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:116
@@ -37737,9 +37842,9 @@ msgstr "Kütüphane kullanımı"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
@@ -37964,7 +38069,7 @@ msgstr "Bağlantı"
 msgid "Link a host record to "
 msgstr "Bir ana bilgisayar kaydını şu öğeye bağlayın"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
 #, c-format
 msgid "Link authorities automatically"
 msgstr "Otoriteleri otomatik olarak bağla"
@@ -38224,7 +38329,7 @@ msgid "Loading records, please wait..."
 msgstr "Kayıtlar yükleniyor, lütfen bekleyin..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:785
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:786
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -38247,7 +38352,7 @@ msgid "Loading... "
 msgstr "Yükleniyor..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:116
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:493
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:499
 #, c-format
 msgid "Loan period"
 msgstr "Ödünç verme periyodu"
@@ -38526,7 +38631,7 @@ msgid "Lost card flag"
 msgstr "Kayıp kart işareti"
 
 #. %1$s:  Branches.GetName(current_branch) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:851
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:859
 #, c-format
 msgid "Lost item fee refund on return policy for %s"
 msgstr "%s için iade politikasında kayıp materyal geri ödemesi"
@@ -38667,10 +38772,10 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:12
 #, c-format
 msgid "MARC"
@@ -40181,7 +40286,7 @@ msgid "Max length:"
 msgstr "Maksimum uzunluk:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:505
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:511
 #, c-format
 msgid "Max. suspension duration (day)"
 msgstr "Maksimum süspansiyon süresi (gün)"
@@ -40191,7 +40296,7 @@ msgstr "Maksimum süspansiyon süresi (gün)"
 msgid "Maximum Koha version"
 msgstr "Maksimum Koha sürümü"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:541
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:549
 #, c-format
 msgid "Maximum total holds allowed (count)"
 msgstr "İzin verilen toplam maksimum ayırtma işlemi (sayı)"
@@ -41071,7 +41176,7 @@ msgid "More options"
 msgstr "Daha fazla seçenek"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "More than one local match found. Possibly a duplicate authority!"
 msgstr "Birden fazla yerel eşleşme bulundu. Muhtemelen yinelenen bir otorite!"
 
@@ -41333,11 +41438,11 @@ msgstr "NT"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:113
@@ -41460,8 +41565,8 @@ msgstr "Ad:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:330
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -42343,8 +42448,8 @@ msgstr "Sonraki yayın tarihi tanımlı değil"
 msgid "Next issue publication date:"
 msgstr "Bir sonraki sayının yayın tarihi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:403
 #, c-format
 msgid "Next open day"
 msgstr "Bir sonraki açık gün"
@@ -42380,10 +42485,10 @@ msgstr "Nicholas Rosasco (Dokümantasyon Derleyicisi)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:337
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:292
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:338
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:470
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:446
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:475
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:81
@@ -42579,18 +42684,18 @@ msgid "No authorities have been selected."
 msgstr "Hiçbir otorite seçilmedi."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "No authority link was changed."
 msgstr "Hiçbir otorite bağlantısı değiştirilmedi."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:520
 #, c-format
 msgid "No automatic renewal after"
 msgstr "Şu tarihten sonra otomatik süre uzatma yapılmaz"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:138
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:521
 #, c-format
 msgid "No automatic renewal after (hard limit)"
 msgstr "Şu tarihten sonra otomatik süre uzatma yapılmaz (kesin sınırlayıcı)"
@@ -42772,8 +42877,8 @@ msgstr "Bu arama kriteri için gösterilecek fon yok."
 msgid "No group"
 msgstr "Grup yok"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1000
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1044
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1008
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1052
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:507
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:279
@@ -42781,7 +42886,7 @@ msgstr "Grup yok"
 msgid "No holds allowed"
 msgstr "Materyal ayırtmaya izin verilmiyor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:965
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:973
 #, c-format
 msgid "No holds allowed:"
 msgstr "Hiçbir ayırmaya izin verilmedi:"
@@ -42964,12 +43069,12 @@ msgstr "Eşleşme bulunamadı"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "No matching authority found."
 msgstr "Eşleşen otorite bulunamadı."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "No matching authority found. A new authority was created automatically."
 msgstr ""
 "Eşleşen otorite bulunamadı. Otomatik olarak yeni bir otorite oluşturuldu."
@@ -43061,7 +43166,7 @@ msgstr "Kullanıcı kartı numarası veya okuyucu numarası verilmedi."
 msgid "No patron matched "
 msgstr "Eşleşen kullanıcı yok "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:965
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:973
 #, c-format
 msgid "No patron may put this book on hold."
 msgstr "Hiçbir kullanıcı bu kitabı ayıramaz."
@@ -43212,7 +43317,7 @@ msgid "No records were modified. %s"
 msgstr "Hiçbir kayıt değiştirilmedi. %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:518
 #, c-format
 msgid "No renewal before"
 msgstr "Bu tarihten önce süresi uzatılamaz"
@@ -43412,8 +43517,8 @@ msgstr "Hayır, süresini uzatmayın (H)"
 msgid "No, let me think about it"
 msgstr "Hayır, düşünmeme izin ver"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:845
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:846
 #, c-format
 msgid "No, save as new record"
 msgstr "Hayır, yeni kayıt olarak kaydet"
@@ -43526,8 +43631,8 @@ msgstr "Kırılmaz alan"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1195
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:132
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:134
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:133
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:53
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:55
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:109
@@ -43541,7 +43646,7 @@ msgstr "Kırılmaz alan"
 msgid "None"
 msgstr "Hiç biri"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:265
 #, c-format
 msgid "None defined"
 msgstr "Hiçbir şey tanımlanmamış"
@@ -43773,17 +43878,17 @@ msgstr "Yayınlanmamış"
 msgid "Not seen"
 msgstr "Görülmedi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:575
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:615
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:673
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:583
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:681
 #, c-format
 msgid "Not set "
 msgstr "Belirlenmedi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:490
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:496
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:713
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:877
@@ -43888,7 +43993,7 @@ msgid "Note:"
 msgstr "Not:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:297
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:967
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:975
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:314
@@ -43945,8 +44050,8 @@ msgstr "Not: aşağıdaki iki değerden biri 1’e eşit olmalıdır"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:89
@@ -44553,7 +44658,7 @@ msgid "OPAC info: "
 msgstr "OPAC Bilgisi: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:520
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:526
 #, c-format
 msgid "OPAC item level holds"
 msgstr "OPAC Materyal düzeyinde ayırtmalar"
@@ -44849,7 +44954,7 @@ msgid "On order"
 msgstr "Siparişte"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:142
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:519
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:525
 #, c-format
 msgid "On shelf holds allowed"
 msgstr "Raf üzerinde ayırtmaya izin veriliyor"
@@ -45003,7 +45108,7 @@ msgstr "Sadece mevcut kullanılabilir materyaller:"
 msgid "Only on-site checkouts are allowed"
 msgstr "Yalnızca yerinde ödünç alımlara izin veriliyor"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:963
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:971
 #, c-format
 msgid ""
 "Only patrons from libraries in the same item's home library hold groups may "
@@ -45012,7 +45117,7 @@ msgstr ""
 "Yalnızca aynı materyalin ana kütüphane ayırtma gruplarında bulunan "
 "kütüphanelerden kullanıcılar bu kitabı ayırabilir."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:964
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:972
 #, c-format
 msgid "Only patrons from the item's home library may put this book on hold."
 msgstr "Sadece materyal ana kütüphane kullanıcıları bu kitabı ayırabilir."
@@ -45740,7 +45845,7 @@ msgid "Overdue"
 msgstr "Gecikmiş"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:502
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:508
 #, c-format
 msgid "Overdue fines cap (amount)"
 msgstr "Gecikme Cezaları Üst Sınırı  (Miktar)"
@@ -46369,9 +46474,9 @@ msgid "Patron categories "
 msgstr "Kullanıcı kategorileri"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:109
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:486
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:724
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:492
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:812
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:92
@@ -47155,7 +47260,7 @@ msgstr "Kullanıcılar ve dolaşım"
 msgid "Patrons found for: "
 msgstr "Bulunan kullanıcılar:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:970
 #, c-format
 msgid "Patrons from any library may put this item on hold. "
 msgstr "Başka kütüphane kullanıcıları bu materyali ayırabilir. "
@@ -49539,10 +49644,10 @@ msgstr "Silinmeye karşı koruyun"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:277
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #, c-format
 msgid "Public"
 msgstr "Açık"
@@ -50392,8 +50497,8 @@ msgstr "Kayıt eşleme kuralları"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "Kayıt UTF-8 olarak işaretlenmemiş, bozulmuş olabilir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:342
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:472
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:345
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:477
 #, c-format
 msgid "Record only"
 msgstr "Yalnızca kayıt"
@@ -50524,49 +50629,49 @@ msgstr "Taramanızı gözden geçirin"
 msgid "Refresh "
 msgstr "Tazele"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:869
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:874
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:879
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:884
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:889
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:912
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:918
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:923
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:928
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:933
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:877
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:882
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:887
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:892
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:920
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:926
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:931
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:936
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:941
 #, c-format
 msgid "Refund lost item charge"
 msgstr "Kayıp materyal ücreti geri ödeme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:870
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:875
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:880
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:885
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:890
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:913
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:919
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:924
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:929
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:934
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:878
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:888
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:893
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:898
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:927
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:932
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:937
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:942
 #, c-format
 msgid "Refund lost item charge and charge new overdue fine"
 msgstr "Kayıp materyal ücretini iade edin ve yeni gecikme cezası tahsil edin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:871
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:876
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:881
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:886
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:891
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:914
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:920
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:925
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:930
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:935
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:884
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:889
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:894
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:899
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:922
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:928
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:933
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:938
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:943
 #, c-format
 msgid "Refund lost item charge and restore overdue fine"
 msgstr "Kayıp materyal ücretini iade edin ve gecikme cezasını geri yükleyin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:860
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:868
 #, c-format
 msgid "Refund lost item fee"
 msgstr "Kayıp materyal ücreti geri ödeme"
@@ -50684,7 +50789,7 @@ msgstr "İlgili işlem"
 msgid "Relationship"
 msgstr "İlişki"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:139
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:140
 #, c-format
 msgid "Relationship information"
 msgstr "İlişkili bilgiler"
@@ -50852,6 +50957,7 @@ msgstr "Uzak görüntü:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
@@ -50862,7 +50968,6 @@ msgstr "Uzak görüntü:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:502
@@ -51157,13 +51262,13 @@ msgid "Renewal due date:"
 msgstr "İade tarihini uzatma:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:134
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:511
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:517
 #, c-format
 msgid "Renewal period"
 msgstr "Uzatma süreci"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:507
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:513
 #, c-format
 msgid "Renewals allowed (count)"
 msgstr "İzin verilen uzatmalar (say)"
@@ -51210,8 +51315,8 @@ msgstr "Kiralama ücreti:"
 msgid "Rental charge: "
 msgstr "Kiralama ücreti: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:145
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:522
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:530
 #, c-format
 msgid "Rental discount (%%)"
 msgstr "Kira indirimi (%%)"
@@ -51269,8 +51374,8 @@ msgstr "Onar"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:364
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 msgid "Repeat this Tag"
 msgstr "Bu etiketi tekrar et"
 
@@ -51330,7 +51435,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "Kaydı Z39.50/SRU üzerinden değiştir"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:892
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "Z39.50/SRU arama yoluyla kaydı değiştirin"
@@ -51728,7 +51833,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:61
@@ -51823,6 +51928,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:331
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:169
@@ -51840,7 +51946,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:345
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:331
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:34
@@ -52247,8 +52352,8 @@ msgstr "İade talepleri:"
 msgid "Return date"
 msgstr "İade tarihi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:544
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:979
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:552
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:987
 #, c-format
 msgid "Return policy"
 msgstr "İade politikası"
@@ -52931,8 +53036,8 @@ msgstr "Satış %s"
 msgid "Salutation"
 msgstr "Hitap"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:405
 #, c-format
 msgid "Same week day"
 msgstr "Hafta içi aynı gün"
@@ -52970,6 +53075,7 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -52994,20 +53100,19 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:388
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:479
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:701
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:943
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:392
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:485
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:709
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:951
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:869
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:873
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:886
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:874
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:887
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:138
@@ -53035,6 +53140,11 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:373
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:477
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:199
@@ -53048,11 +53158,6 @@ msgstr "Cumartesiler"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:571
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:477
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:127
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:37
@@ -53080,14 +53185,14 @@ msgstr "Kaydet (eklentiyi kaydet etkinleştirilmişse)"
 msgid "Save all %s preferences"
 msgstr "Tüm %s tercihleri kaydet"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:881
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:266
 #, c-format
 msgid "Save and continue editing"
 msgstr "Kaydet ve düzenlemeye devam et"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
 #, c-format
 msgid "Save and edit items"
 msgstr "Materyalleri kaydet ve düzenle"
@@ -53102,7 +53207,7 @@ msgstr "Kaydet ve öde"
 msgid "Save and preview routing slip"
 msgstr "Yönlendirme slipi kayıt ve ön izleme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:878
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
 #, c-format
 msgid "Save and view record"
 msgstr "Künyeyi kaydet ve görüntüle"
@@ -53265,7 +53370,7 @@ msgstr "Ölçek genişliği (karta göre):"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/adv-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-search.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cataloging-search.inc:18
-#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:86
 #, c-format
@@ -53276,7 +53381,7 @@ msgstr "İade almak için barkod okutun:"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-search.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cataloging-search.inc:25
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkin-search.inc:10
-#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:93
 #, c-format
@@ -53378,7 +53483,7 @@ msgstr "Ekran"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
 #: koha-tmpl/intranet-tmpl/prog/en/includes/currencies-admin-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:17
@@ -53428,7 +53533,7 @@ msgstr "Z39.50/SRU sunucularını ara"
 msgid "Search all headings"
 msgstr "Tüm başlıkları ara"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:71
 #, c-format
 msgid "Search all headings: "
 msgstr "Tüm başlıkları ara:"
@@ -53528,7 +53633,7 @@ msgstr "MARC kaydının tamamını ara"
 msgid "Search entire record"
 msgstr "Tüm kaydı ara"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:95
 #, c-format
 msgid "Search entire record: "
 msgstr "Tüm kaydı ara:"
@@ -53717,12 +53822,12 @@ msgstr "Ana Başlık ara"
 msgid "Search main heading ($a only)"
 msgstr "Ana başlık ara (yalnızca $a)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:20
 #, c-format
 msgid "Search main heading ($a only): "
 msgstr "Ana başlık ara (yalnızca $a):"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:45
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:46
 #, c-format
 msgid "Search main heading: "
 msgstr "Ana başlık ara:"
@@ -53753,7 +53858,7 @@ msgstr "%s üzerinde ara"
 msgid "Search on Mana"
 msgstr "Mana üzerinde ara"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:13
 #, c-format
 msgid "Search options"
 msgstr "Arama seçenekleri"
@@ -54104,7 +54209,7 @@ msgid "Section"
 msgstr "Bölüm"
 
 #. %1$s:  BIG_LOO.number | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1021
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1022
 #, c-format
 msgid "Section %s"
 msgstr "Bölüm %s"
@@ -54381,11 +54486,11 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -54404,6 +54509,7 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:128
@@ -54414,7 +54520,6 @@ msgstr "Bir zaman seçin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:201
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -55404,7 +55509,7 @@ msgstr "Sanal klavye düzenini ayarlayın"
 msgid "Settings"
 msgstr "Ayarlar "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55700,7 +55805,7 @@ msgstr "Çözümlenmemiş %s talebi göster"
 msgid "Show MARC"
 msgstr "MARC göster"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:908
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:909
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "MARC etiket belgeleme bağlantılarını göster"
@@ -55997,7 +56102,7 @@ msgstr "Abonelikleri göster"
 msgid "Show suggestion #%s "
 msgstr "Öneri göster #%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
 #, c-format
 msgid "Show tags"
 msgstr "Etiketleri göster"
@@ -56081,8 +56186,8 @@ msgstr "Boyut (bayt)"
 msgid "Skip"
 msgstr "Geç"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:398
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:402
 #, c-format
 msgid "Skip closed days"
 msgstr "Kapalı günleri atla"
@@ -56278,7 +56383,7 @@ msgstr "Sıralama :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:120
 #, c-format
 msgid "Sort by: "
 msgstr "Sıralama: "
@@ -56445,7 +56550,7 @@ msgstr "Özel karakterler"
 msgid "Special character..."
 msgstr "Özel karakterler... "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:142
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:143
 #, c-format
 msgid "Special relationship: "
 msgstr "Özel bağıntı: "
@@ -56487,14 +56592,14 @@ msgstr "Tatillerin nasıl tekrar etmesi gerektiğini belirtiniz"
 msgid "Specify return date %s: "
 msgstr "İade tarihini belirtin %s:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:861
 #, c-format
 msgid "Specify the default policy for lost item fees on return. "
 msgstr ""
 "Kayıp materyallerin iadesinde kayıp materyal ücreti için varsayılan "
 "politikayı belirtin."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:806
 #, c-format
 msgid ""
 "Specify the maximum number simultaneous current article requests a patron of "
@@ -56878,7 +56983,7 @@ msgstr "Listeyi numaradan başlat"
 msgid "Start of date range "
 msgstr "Tarih aralığı başlangıcı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:429
 #, c-format
 msgid "Start of interval"
 msgstr "Zaman aralığı başlangıcı"
@@ -57539,8 +57644,8 @@ msgstr "Konular:"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cataloging-search.inc:27
 #: koha-tmpl/intranet-tmpl/prog/en/includes/catalogue-search-box.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkin-search.inc:12
-#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:13
-#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/circ-search.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:30
@@ -58088,13 +58193,13 @@ msgid "Suspend?"
 msgstr "Askıya alınsın mı?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:506
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:512
 #, c-format
 msgid "Suspension charging interval"
 msgstr "Askıya alma ücretlendirme zaman aralığı"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:510
 #, c-format
 msgid "Suspension in days (day)"
 msgstr "Gün(ler) olarak ceza erteleme"
@@ -58110,7 +58215,7 @@ msgid "Switch languages"
 msgstr "Dilleri değiştir"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:905
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "Gelişmiş düzenleyiciye geç"
@@ -58151,6 +58256,12 @@ msgstr "Semboller"
 #, c-format
 msgid "Synchronize"
 msgstr "Senkronize et"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1036
+#, fuzzy
+msgid "Syndetics cover image (<a href='%s'>see the original image</a>)"
+msgstr "Amazon kapak resmi (<a href='%s'>orijinal resme bakın</a>)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:218
 #, c-format
@@ -58515,7 +58626,7 @@ msgid "Tag %s Subfield structure "
 msgstr "Tag %s Alt alan yapısı"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "Tag %s subfield %s %s in tab %s"
 msgstr "Tag %s alt alan %s %s sekmesinde %s"
 
@@ -58533,8 +58644,8 @@ msgstr "Etiket silindi"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1187
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:127
 #, c-format
@@ -59453,7 +59564,7 @@ msgid "The following fields are wrong. Please fix them."
 msgstr "Aşağıdaki alanlar hatalıdır. Lütfen düzeltiniz."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "The following fields aren't filled:"
 msgstr "Aşağıdaki alanlar doldurulmaz:"
 
@@ -59479,7 +59590,7 @@ msgid "The following ids exist in both tables %s and %s:"
 msgstr "Aşağıdaki kimlikler her iki tabloda %s ve %s bulunmaktadır:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "The following important subfields aren’t filled:"
 msgstr "Aşağıdaki önemli alt alanlar doldurulmaz:"
 
@@ -59515,7 +59626,7 @@ msgid "The following items were removed from all courses:"
 msgstr "Aşağıdaki materyaller tüm ders programlarından çıkarıldı:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "The following mandatory subfields aren't filled:"
 msgstr "Aşağıdaki zorunlu alt alanlar doldurulmaz:"
 
@@ -59914,7 +60025,7 @@ msgstr ""
 "Kullanıcının vasi ve diğer garantörlerinin toplu olarak %s tutarında borcu "
 "vardır."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:968
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:976
 #, c-format
 msgid ""
 "The policies are applied based on the ReservesControlBranch system "
@@ -59977,7 +60088,7 @@ msgstr ""
 msgid "The record id "
 msgstr "Kayıt kimliği"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:994
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:995
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "Düzenlemeye çalıştığınız kayıt mevcut değil."
@@ -61210,7 +61321,7 @@ msgid ""
 msgstr "Bu kayıt silinemez, en az bir materyal ödünç alınmış durumda."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:20
 msgid "This record cannot be transferred to the advanced editor. Continue?"
 msgstr "Bu kayıt gelişmiş düzenleyiciye aktarılamaz. Devam edilsin mi?"
 
@@ -61588,6 +61699,9 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:229
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:136
@@ -61599,9 +61713,6 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:444
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:347
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:17
@@ -62285,7 +62396,7 @@ msgstr "Ödenecek toplam miktar :"
 msgid "Total amount: "
 msgstr "Toplam miktar: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:813
 #, c-format
 msgid "Total article requests"
 msgstr "Toplam makale istekleri"
@@ -62329,14 +62440,14 @@ msgstr "Toplam Ödünç Verme:"
 msgid "Total cost"
 msgstr "Toplam maliyet"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:539
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:725
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:547
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:733
 #, c-format
 msgid "Total current checkouts allowed"
 msgstr "İzin verilen toplam geçerli ödünç vermeler"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:540
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:548
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:734
 #, c-format
 msgid "Total current on-site checkouts allowed"
 msgstr "İzin verilen mevcut yerinde ödünç alma toplamı"
@@ -62367,7 +62478,7 @@ msgstr "Toplam borç: %s"
 msgid "Total holds"
 msgstr "Toplam ayırmalar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:735
 #, c-format
 msgid "Total holds allowed"
 msgstr "İzin verilen toplam ayırtma miktarı"
@@ -62850,9 +62961,9 @@ msgstr "Turkuaz"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:269
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:403
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
@@ -63174,7 +63285,7 @@ msgid "Unique identifier: "
 msgstr "Tek tanımlayıcı: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:118
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:495
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:501
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:140
 #, c-format
 msgid "Unit"
@@ -63322,18 +63433,18 @@ msgstr "Bilinmeyen alt alan"
 msgid "Unknown tag"
 msgstr "Bilinmeyen tag"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:301
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:565
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:571
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:749
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:756
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:763
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:310
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:573
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:576
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:579
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:829
 #, c-format
 msgid "Unlimited"
 msgstr "Sınırsız"
@@ -63370,12 +63481,12 @@ msgid "Unresolved claims"
 msgstr "Çözümlenmemiş talepler"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:509
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:515
 #, c-format
 msgid "Unseen renewals allowed (count)"
 msgstr "İzin verilen görülmeyen süre uzatma işlemi (sayı)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:703
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:711
 #, c-format
 msgid "Unset"
 msgstr "Geri al"
@@ -63567,7 +63678,7 @@ msgstr "Veritabanı yapısı güncelleniyor"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
@@ -63973,12 +64084,12 @@ msgstr ""
 "Dikkatli kullanın! Eğer kaynak kütüphanenin yürürlükte olan yayın kuralları "
 "varsa, bunlar uyarı yapılmadan silinecektir!"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:912
 #, fuzzy, c-format
 msgid "Use default (Refund lost item charge and charge new overdue fine)"
 msgstr "Kayıp materyal ücretini iade edin ve yeni gecikme cezası tahsil edin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:906
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:914
 #, fuzzy, c-format
 msgid "Use default (Refund lost item charge and restore overdue fine)"
 msgstr "Kayıp materyal ücretini iade edin ve gecikme cezasını geri yükleyin"
@@ -64066,14 +64177,14 @@ msgstr ""
 "Gelişmiş kataloglama düzenleyicisini kullanın (edit_catalogue gerektirir)"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:403
 msgid "Use the calendar to push the due date to the next open day"
 msgstr "Son tarihi bir sonraki açık güne göndermek için takvimi kullanın "
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:405
 msgid ""
 "Use the calendar to push the due date to the next open matching weekday for "
 "weekly loan periods, or the next open day otherwise"
@@ -64082,8 +64193,8 @@ msgstr ""
 "gününe veya sonraki açık güne itmek için takvimi kullanın."
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:398
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:402
 msgid "Use the calendar to skip days the library is closed"
 msgstr "Kütüphanenin kapalı olduğu günleri atlamak için takvimi kullanın"
 
@@ -64122,8 +64233,8 @@ msgid "Use the search form on the left to find subscriptions."
 msgstr "Abonelikleri bulmak için soldaki arama formunu kullanınız."
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:238
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:397
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
 msgid "Use the system preference 'useDaysMode' as a default value"
 msgstr "Varsayılan değer olarak 'useDaysMode' sistem tercihini kullanın"
 
@@ -64817,7 +64928,7 @@ msgstr "Materyalin ödünç alınma geçmişini görün"
 msgid "View message"
 msgstr "İletiyi görüntüle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:216
 #, c-format
 msgid "View note"
 msgstr "Notu görüntüle"
@@ -65774,12 +65885,12 @@ msgstr "Sarı"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:290
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:471
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:292
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:447
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:460
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:476
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:80
@@ -65975,7 +66086,7 @@ msgstr "Evet, bu alt alanı sil"
 msgid "Yes, delete this tag"
 msgstr "Evet, bu tag'i sil"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:833
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:834
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "Evet, var olan materyalleri düzenle"
@@ -66007,7 +66118,7 @@ msgid "Yes: Edit existing authority"
 msgstr "Evet: Mevcut otoriteleri düzenle"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
 msgid "Yes: View existing items"
 msgstr "Evet: Mevcut materyalleri görüntüle"
 
@@ -66273,7 +66384,7 @@ msgstr ""
 msgid "You can make an exception on a range of dates repeated yearly."
 msgstr "Yıllık tekrarlayan tarih dizilerinde bir istisna yapabilirsiniz."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:532
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:540
 #, c-format
 msgid ""
 "You can set a default maximum number of checkouts, hold policy and return "
@@ -67082,7 +67193,7 @@ msgstr "Z39.50, çeşitli biçimlerde kayıt gönderebilir. Birini seçin."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:324
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:894
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -67417,14 +67528,14 @@ msgstr "ve tümü 10 (materyaller) sekmesinde olmalıdır"
 msgid "and:"
 msgstr "ve:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1005
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1013
 #, c-format
 msgid "any library"
 msgstr "herhangi bir kütüphane"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:620
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:624
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1049
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:628
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1057
 #, c-format
 msgid "any library "
 msgstr "herhangi bir kütüphane"
@@ -67933,14 +68044,14 @@ msgstr "Geç kabul edilmiş"
 msgid "containing "
 msgstr "içeren"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:25
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:27
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:51
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:53
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:76
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:78
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:100
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:102
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:28
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:77
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:79
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:101
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:103
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:25
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:27
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:81
@@ -68116,7 +68227,7 @@ msgstr "'Mana' sistem tercihini devre dışı bırakma"
 msgid "display detail for this librarian."
 msgstr "bu kütüphaneci için ayrıntıyı göster."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
 #, c-format
 msgid "do a catalog search"
 msgstr "Katalog araması yapın"
@@ -68602,14 +68713,14 @@ msgstr "zaten üzerinizde"
 msgid "is equal to"
 msgstr "eşittir"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:35
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:37
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:61
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:63
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:86
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:88
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:110
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:112
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:87
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:89
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:111
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:113
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:37
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:91
@@ -68688,38 +68799,38 @@ msgstr "Daha eski sayılar için materyal türü:"
 msgid "item type not defined"
 msgstr "materyal türü tanımlanmamış"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1009
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1017
 #, c-format
 msgid "item's hold group"
 msgstr "Materyalin bulunduğu grup"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:630
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:634
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1053
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:642
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1061
 #, c-format
 msgid "item's hold group "
 msgstr "Materyalin bulunduğu grup"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1013
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1021
 #, c-format
 msgid "item's holding library"
 msgstr "Materyali bulunduran kütüphane"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:660
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:664
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1065
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:668
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:672
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1073
 #, c-format
 msgid "item's holding library "
 msgstr "Materyalin ayırtma kütüphanesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1007
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1015
 #, c-format
 msgid "item's home library"
 msgstr "Materyalin ana kütüphanesi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:650
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:654
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1061
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:662
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1069
 #, c-format
 msgid "item's home library "
 msgstr "Materyalin ana kütüphanesi"
@@ -69221,7 +69332,7 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "veya"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:443
@@ -69302,14 +69413,14 @@ msgstr "kullanıcı kategorisi "
 msgid "patron's account"
 msgstr "kullanıcının hesabı"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1011
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1019
 #, c-format
 msgid "patron's hold group"
 msgstr "kullanıcının bulunduğu grup"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:640
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:644
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1057
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:648
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:652
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1065
 #, c-format
 msgid "patron's hold group "
 msgstr "kullanıcının bulunduğu grup"
@@ -69644,14 +69755,14 @@ msgstr "aşamalar"
 msgid "starting with "
 msgstr "ile başlayan"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:30
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:32
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:56
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:58
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:81
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:83
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:105
-#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:107
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:31
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:82
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:84
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:106
+#: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:108
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:30
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:32
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:86
@@ -69778,7 +69889,7 @@ msgid "system preference if you wish to enable this feature."
 msgstr "sistem tercihi bu özelliği etkinleştirmek istiyorsanız."
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:984
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:985
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -70520,9 +70631,6 @@ msgstr ""
 
 #~ msgid "%s Edit news item %s Add news item %s "
 #~ msgstr "%s Haber öğesini düzenle %s Haber öğesi ekle %s  "
-
-#~ msgid "%s First name:"
-#~ msgstr "%s Adı:"
 
 #~ msgid "%s In transit from %s, to %s, since %s %s "
 #~ msgstr "%s Nakledilmekte %s, nakledileceği konum %s, şu tarihten beri %s %s"
