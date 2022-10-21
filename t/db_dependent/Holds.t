@@ -1682,6 +1682,9 @@ subtest 'ModReserve can only update expirationdate for found holds' => sub {
 
 subtest 'Koha::Holds->get_items_that_can_fill returns items with datecancelled or (inclusive) datearrived' => sub {
     plan tests => 8;
+
+    $schema->storage->txn_begin;
+
     # biblio item with date arrived and date cancelled
     my $biblio1 = $builder->build_sample_biblio();
     my $item1 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
@@ -1768,4 +1771,6 @@ subtest 'Koha::Holds->get_items_that_can_fill returns items with datecancelled o
     is($items_that_can_fill3->count, 1, "Koha::Holds->get_items_that_can_fill returns 1 item with correct parameters");
     is($items_that_can_fill4->next, undef, "Koha::Holds->get_items_that_can_fill doesn't return item with undefined datearrived and undefined datecancelled");
     is($items_that_can_fill4->count, 0, "Koha::Holds->get_items_that_can_fill returns 0 item");
-}
+
+    $schema->storage->txn_rollback;
+};
