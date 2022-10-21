@@ -100,9 +100,6 @@ export default {
 }
 </script>
 <style scoped>
-#package_agreements {
-    padding-left: 26rem;
-}
 .modal {
     position: fixed;
     z-index: 9998;

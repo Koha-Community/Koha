@@ -107,7 +107,6 @@ export default {
 <style scoped>
 #title_list_result {
     width: 60%;
-    padding-left: 10rem;
 }
 #title_list {
     display: table;

@@ -146,9 +146,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-.file_information {
-    margin: 0 10rem;
-}
-</style>

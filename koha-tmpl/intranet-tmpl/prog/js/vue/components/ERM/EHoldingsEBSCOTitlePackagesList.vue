@@ -152,7 +152,6 @@ export default {
 <style scoped>
 #package_list_result {
     width: 60%;
-    padding-left: 26rem;
 }
 #package_list {
     display: table;
