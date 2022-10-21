@@ -28,7 +28,7 @@
         </li>
         <li>
             <a href="#" aria-current="page">
-                Add or remove items
+                Manage items
             </a>
         </li>
     </ol>
@@ -39,8 +39,6 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-                <h1>Add/remove items from collection</h1>
-
               [% IF ( ! colId ) %]
                 <div class="dialog message">
                     <p>Invalid collection id</p>
@@ -48,7 +46,7 @@
                 </div>
               [% ELSE %]
               [% INCLUDE 'rotating-collections-toolbar.inc' %]
-              <h2>Collection <em>[% colTitle | html %]</em></h2>
+              <h1>Manage items for <em>[% colTitle | html %]</em></h1>
 
               [% IF ( previousActionAdd ) %]
                 [% IF ( addSuccess ) %]
@@ -115,10 +113,9 @@
                 </form>
               </div>
 
-              <div>
-                <h2>Items in <em>[% colTitle | html %]</em></h2>
+              <div class="page-section">
                 [% IF ( collectionItemsLoop ) %]
-                  <h3>Total items: [% collectionItemsLoop.size | html%]</h3>
+                  <h2>Total items: [% collectionItemsLoop.size | html%]</h2>
                   <table>
                     <tr>
                       <th>Title</th>
