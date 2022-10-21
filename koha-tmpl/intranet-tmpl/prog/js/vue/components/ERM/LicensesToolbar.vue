@@ -1,7 +1,10 @@
 <template>
-    <router-link to="/cgi-bin/koha/erm/licenses/add" class="btn btn-default"
-        ><font-awesome-icon icon="plus" /> {{ $t("New license") }}</router-link
-    >
+    <div id="toolbar" class="btn-toolbar">
+        <router-link to="/cgi-bin/koha/erm/licenses/add" class="btn btn-default"
+            ><font-awesome-icon icon="plus" />
+            {{ $t("New license") }}</router-link
+        >
+    </div>
 </template>
 
 <script>
