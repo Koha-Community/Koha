@@ -8,8 +8,9 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         my $slip_content = <<~'END_CONTENT';
-[% USE Koha %]
 [% USE Branches %]
+[% USE Koha %]
+[% USE KohaDates %]
 [% USE Price %]
 [% PROCESS 'accounts.inc' %]
 <table>
@@ -85,7 +86,7 @@ return {
 
   <tfoot>
     <tr>
-      <td colspan='3'>Total outstanding dues as on date: </td>
+      <td colspan='3'>Total outstanding dues as of [% today | $KohaDates  %]: </td>
       [% IF ( borrower.account.balance <= 0 ) %]<td class='credit'>[% ELSE %]<td class='debit'>[% END %][% borrower.account.balance | $Price %]</td>
     </tr>
   </tfoot>

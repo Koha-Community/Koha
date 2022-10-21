@@ -1292,8 +1292,9 @@ tables:
           message_transport_type: print
           lang: default
           content:
-            - "[% USE Koha %]"
             - "[% USE Branches %]"
+            - "[% USE Koha %]"
+            - "[% USE KohaDates %]"
             - "[% USE Price %]"
             - "[% PROCESS 'accounts.inc' %]"
             - "<table>"
@@ -1369,7 +1370,7 @@ tables:
             - ""
             - "  <tfoot>"
             - "    <tr>"
-            - "      <td colspan='3'>Total outstanding dues as on date: </td>"
+            - "      <td colspan='3'>Total outstanding dues as of [% today | $KohaDates %]: </td>"
             - "      [% IF ( borrower.account.balance <= 0 ) %]<td class='credit'>[% ELSE %]<td class='debit'>[% END %][% borrower.account.balance | $Price %]</td>"
             - "    </tr>"
             - "  </tfoot>"
