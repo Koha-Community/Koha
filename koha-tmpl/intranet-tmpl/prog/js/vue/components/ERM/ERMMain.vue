@@ -166,6 +166,10 @@ export default {
 #navmenulist a.router-link-active {
     font-weight: 700;
 }
+#menu ul ul, #navmenulist ul ul {
+    padding-left: 2em;
+    font-size: 100%;
+}
 
 form .v-select {
     display: inline-block;
