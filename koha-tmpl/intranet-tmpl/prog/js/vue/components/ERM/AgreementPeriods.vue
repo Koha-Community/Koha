@@ -73,21 +73,10 @@ export default {
     data() {
         return {
             fp_config: flatpickr_defaults,
-            dates_fixed: 0,
         }
     },
     props: {
         periods: Array
-    },
-    beforeCreate() {
-        if (!this.dates_fixed) {
-            this.periods.forEach(p => {
-                p.started_on = $date(p.started_on)
-                p.ended_on = $date(p.ended_on)
-                p.cancellation_deadline = $date(p.cancellation_deadline)
-            })
-            this.dates_fixed = 1
-        }
     },
     methods: {
         addPeriod() {

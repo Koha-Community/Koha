@@ -153,8 +153,7 @@ export default {
     },
     data() {
         return {
-            fp_config: flatpickr_defaults, dates_fixed: 0,
-
+            fp_config: flatpickr_defaults,
             license: {
                 license_id: null,
                 name: '',
@@ -167,13 +166,6 @@ export default {
                 documents: [],
             },
             initialized: false,
-        }
-    },
-    beforeUpdate() {
-        if (!this.dates_fixed) {
-            this.license.started_on = $date(this.license.started_on)
-            this.license.ended_on = $date(this.license.ended_on)
-            this.dates_fixed = 1
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -208,9 +200,6 @@ export default {
             if (license.vendor_id == "") {
                 license.vendor_id = null
             }
-
-            license.started_on = license.started_on ? $date_to_rfc3339(license.started_on) : null
-            license.ended_on = license.ended_on ? $date_to_rfc3339(license.ended_on) : null
 
             license.documents = license.documents.map(({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs)
 

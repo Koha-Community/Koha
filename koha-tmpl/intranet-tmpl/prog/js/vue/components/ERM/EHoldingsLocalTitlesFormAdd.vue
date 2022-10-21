@@ -483,11 +483,6 @@ export default {
             delete title.title_id
             delete title.biblio_id
 
-            title.resources.forEach(r => {
-                r.started_on = r.started_on ? $date_to_rfc3339(r.started_on) : null
-                r.ended_on = r.ended_on ? $date_to_rfc3339(r.ended_on) : null
-            })
-
             // Cannot use the map/keepAttrs because of the reserved keywork 'package'
             title.resources.forEach(function (e) { delete e.package; delete e.resource_id })
 

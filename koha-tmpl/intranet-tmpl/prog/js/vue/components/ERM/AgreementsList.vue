@@ -60,7 +60,7 @@ export default {
     },
     data: function () {
         return {
-            fp_config: flatpickr_defaults, dates_fixed: 0,
+            fp_config: flatpickr_defaults,
             agreements: [],
             initialized: false,
             filters: {
@@ -84,7 +84,7 @@ export default {
         datatable_url() {
             let url = '/api/v1/erm/agreements'
             if (this.filters.by_expired)
-                url += '?max_expiration_date=' + $date_to_rfc3339(this.filters.max_expiration_date)
+                url += '?max_expiration_date=' + this.filters.max_expiration_date
             return url
         }
     },

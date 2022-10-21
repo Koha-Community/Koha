@@ -304,12 +304,6 @@ export default {
                 agreement.vendor_id = null
             }
 
-            agreement.periods.forEach(p => {
-                p.started_on = $date_to_rfc3339(p.started_on)
-                p.ended_on = p.ended_on ? $date_to_rfc3339(p.ended_on) : null
-                p.cancellation_deadline = p.cancellation_deadline ? $date_to_rfc3339(p.cancellation_deadline) : null
-            })
-
             agreement.periods = agreement.periods.map(({ agreement_id, agreement_period_id, ...keepAttrs }) => keepAttrs)
 
             agreement.user_roles = agreement.user_roles.map(({ patron, patron_str, ...keepAttrs }) => keepAttrs)

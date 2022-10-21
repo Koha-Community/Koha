@@ -107,18 +107,10 @@ export default {
         return {
             packages: [],
             fp_config: flatpickr_defaults,
-            dates_fixed: 0,
         }
     },
     beforeCreate() {
         fetchLocalPackages().then((packages) => this.packages = packages)
-        if (!this.dates_fixed) {
-            this.resources.forEach(r => {
-                r.started_on = $date(r.started_on)
-                r.ended_on = $date(r.ended_on)
-            })
-            this.dates_fixed = 1
-        }
     },
     methods: {
         addPackage() {
