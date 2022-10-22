@@ -359,4 +359,7 @@ export default {
     padding-left: 0.2em;
     font-size: 11px;
 }
+#agreement_documents ul {
+    padding-left: 0px;
+}
 </style>

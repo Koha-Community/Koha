@@ -170,4 +170,7 @@ export default {
     padding-left: 0.2em;
     font-size: 11px;
 }
+#license_documents ul {
+    padding-left: 0px;
+}
 </style>
