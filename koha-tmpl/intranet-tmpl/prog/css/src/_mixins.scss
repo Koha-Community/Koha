@@ -40,5 +40,7 @@ $nav-menu-bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 }
 
 @mixin card {
-    background-color: white;
+    &:not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-success):not(.bg-primary) {
+        background-color: white;
+    }
 }
