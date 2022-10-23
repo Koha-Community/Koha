@@ -430,10 +430,9 @@
         <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" style="margin-left:10px"><i class="fa fa-window-restore"></i> Display them</a></p>
         </div>[% END %]
 
-        <div id="acqui_basket_content">
+        <div id="acqui_basket_content" class="page-section">
         [% IF ( books_loop ) %]
             <h2>Orders</h2>
-            <div class="page-section">
                 <table id="orders">
                     <thead>
                         <tr>
@@ -649,14 +648,13 @@
                     [% END %]
                     </tbody>
                 </table>
-            </div><!-- /.page-section -->
-        [% END %]
-        [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>
-        [% END %]
+            [% END %]
+            [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>[% END %]
         </div> <!-- /#acqui_basket_content -->
+
         [% IF (cancelledorders_loop) %]
+        <div id="cancelledorders" class="page-section">
             <h2>Cancelled orders</h2>
-            <div id="cancelledorders" class="page-section">
             <table id="cancelledorderst">
               <thead>
                 <tr>
