@@ -110,7 +110,9 @@ start_z3950()
     if ! is_z3950_running ${instancename}; then
         export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
 
-        Z3950_ADDITIONAL_OPTS="$( xmlstarlet sel -t -v 'yazgfs/config/z3950_responder_options' $KOHA_CONF || true )"
+        if [[ ! $Z3950_ADDITIONAL_OPTS ]]; then
+            Z3950_ADDITIONAL_OPTS="$( xmlstarlet sel -t -v 'yazgfs/config/z3950_responder_options' "$CONFIGDIR/config.xml" || true )"
+        fi
 
         log_daemon_msg "Starting Z39.50/SRU daemon for ${instancename}"
 
