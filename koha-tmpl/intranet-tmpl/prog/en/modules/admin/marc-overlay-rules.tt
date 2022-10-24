@@ -4,6 +4,7 @@
 [% SET footerjs = 1 %]
 [% USE Koha %]
 [% USE KohaSpan %]
+[% USE Categories %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>MARC overlay rules &rsaquo; Koha &rsaquo; Administration</title>
@@ -94,7 +95,7 @@
                                 <th>
                                     <select name="module">
                                         <option value="source">Source</option>
-                                        <option value="categorycode">User category</option>
+                                        <option value="categorycode">Patron category</option>
                                         <option value="userid">Username</option>
                                     </select>
                                 </th>
@@ -226,8 +227,35 @@
                                     <td></td>
                                 [% ELSE %]
                                     <td>[% rule.id | html %]</td>
-                                    <td class="rule-module">[% rule.module | html %]</td>
-                                    <td class="rule-filter">[% rule.filter | html %]</td>
+                                    <td class="rule-module">
+                                        [% SWITCH rule.module %]
+                                            [% CASE 'source' %]<span>Source</span>
+                                            [% CASE 'categorycode' %]<span>Patron category</span>
+                                            [% CASE 'userid' %]<span>Username</span>
+                                            [% CASE %]<span>[% rule.module | html %]</span>
+                                        [% END %]
+                                    </td>
+                                    <td class="rule-filter">
+                                        [% IF rule.module == "source" %]
+                                            [% SWITCH rule.filter %]
+                                                [% CASE 'batchmod' %]<span>Batch record modification</span>
+                                                [% CASE 'intranet' %]<span>Staff interface MARC editor</span>
+                                                [% CASE 'batchimport' %]<span>Staged MARC import</span>
+                                                [% CASE 'z3950' %]<span>Z39.50</span>
+                                                [% CASE 'bulkmarkimport' %]<span>bulkmarkimport.pl</span>
+                                                [% CASE 'import_lexile' %]<span>import_lexile.pl</span>
+                                                [% CASE %]<span>[% rule.filter | html %]</span>
+                                            [% END %]
+                                        [% ELSIF rule.module == "categorycode" %]
+                                            [% IF rule.filter != "*" %]
+                                                [% Categories.GetName( rule.filter ) | html %]
+                                            [% ELSE %]
+                                                [% rule.filter %]
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% rule.filter | html %]
+                                        [% END %]
+                                    </td>
                                     <td>[% rule.tag | html %]</td>
                                     <td class="rule-preset"></td>
                                     <td class="rule-operation-action" data-operation="add">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
@@ -366,31 +394,31 @@
         }));
 
         var overlay_rules_presets = {};
-        overlay_rules_presets[_("protect")] = {
+        overlay_rules_presets["protect"] = {
           'add': 0,
           'append': 0,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("overwrite")] = {
+        overlay_rules_presets["overwrite"] = {
           'add': 1,
           'append': 1,
           'remove': 1,
           'delete': 1
         };
-        overlay_rules_presets[_("add")] = {
+        overlay_rules_presets["add"] = {
           'add': 1,
           'append': 0,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("addappend")] = {
+        overlay_rules_presets["addappend"] = {
           'add': 1,
           'append': 1,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("protectfromdeletion")] = {
+        overlay_rules_presets["protectfromdeletion"] = {
           'add': 1,
           'append': 1,
           'remove': 1,
@@ -398,11 +426,11 @@
         };
 
         var overlay_rules_label_to_value = {};
-        overlay_rules_label_to_value[_("Add")] = 1;
-        overlay_rules_label_to_value[_("Append")] = 1;
-        overlay_rules_label_to_value[_("Remove")] = 1;
-        overlay_rules_label_to_value[_("Delete")] = 1;
-        overlay_rules_label_to_value[_("Skip")] = 0;
+        overlay_rules_label_to_value["add"] = 1;
+        overlay_rules_label_to_value["append"] = 1;
+        overlay_rules_label_to_value["remove"] = 1;
+        overlay_rules_label_to_value["delete"] = 1;
+        overlay_rules_label_to_value["skip"] = 0;
 
         function hash_config(config) {
           return JSON.stringify(config, Object.keys(config).sort());
