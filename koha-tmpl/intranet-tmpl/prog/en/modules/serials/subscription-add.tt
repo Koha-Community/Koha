@@ -107,34 +107,31 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </div>
                                 </li>
                                 <li class="radio">
+                                <label for="creating_record">When receiving this serial:</label>
                                     [% IF ( serialsadditems ) %]
-                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes"> Create an item record when receiving this serial</label></p>
-                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no"> Do not create an item record when receiving this serial </label></p>
+                                        <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" />
+                                        <label class="widelabel" for="serialsadditems-yes"> Create an item record</label>
+                                        <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" />
+                                        <label class="widelabel" for="serialsadditems-no"> Do not create an item record</label>
                                     [% ELSE %]
-                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes"> Create an item record when receiving this serial</label></p>
-                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no"> Do not create an item record when receiving this serial</label></p>
+                                        <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/>
+                                        <label class="widelabel" for="serialsadditems-yes"> Create an item record</label>
+                                        <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" />
+                                        <label class="widelabel" for="serialsadditems-no"> Do not create an item record</label>
                                     [% END %]
                                 </li>
                                 <li class="radio">
-                                  <p>When there is an irregular issue:</p>
+                                <label for="irregular_issue">When there is an irregular issue:</label>
                                   [% IF (skip_serialseq) %]
-                                    <p>
                                       <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" checked="checked" />
                                       <label for="skip_serialseq_yes">Skip issue number</label>
-                                    </p>
-                                    <p>
                                       <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" />
                                       <label for="skip_serialseq_no">Keep issue number</label>
-                                    </p>
                                   [% ELSE %]
-                                    <p>
                                       <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" />
                                       <label for="skip_serialseq_yes">Skip issue number</label>
-                                    </p>
-                                    <p>
                                       <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" checked="checked" />
                                       <label for="skip_serialseq_no">Keep issue number</label>
-                                    </p>
                                   [% END %]
                                 </li>
                                 <li>
@@ -566,7 +563,7 @@ fieldset.rows table { clear: none; margin: 0; }
                     </div>
                 </div> <!-- /.row#page_2 -->
             </form>
-        </div>
+        </div><!-- /.main -->
 
         <!-- Mana Search Result Modal -->
         <div class="modal" id="mana_search_result" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
