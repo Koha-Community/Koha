@@ -37,6 +37,9 @@
                     <label for="booksellerinvoicenumber" class="control-label">Invoice number</label>
                     <input type="text" class="form-control" placeholder="Invoice number" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
                 </div>
+                <div>
+                    <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a>
+                </div>
             </div>
         </form>
     </div>
