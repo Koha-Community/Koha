@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2022-09-06 09:20+0000\n"
-"Last-Translator: Hamideh Aliakbari <h.aliakbari2014@gmail.com>\n"
+"PO-Revision-Date: 2022-10-19 09:20+0000\n"
+"Last-Translator: Shahab bohlooli <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/21.05/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1662456011.443222\n"
+"X-POOTLE-MTIME: 1666171225.149189\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -255,6 +255,8 @@ msgid ""
 "acquisitions.pref#ClaimsBccCopy# blind copy (BCC) to logged in user when "
 "sending serial or acquisitions claims notices."
 msgstr ""
+"acquisitions.pref#ClaimsBccCopy# رونوشت غیر اصل(BCC) برای ورود کاربرهنگام "
+"فرستادن یادداشت های سفارش خرید یا پیایند ."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#CurrencyFormat# 360 000,00 (FR)"
@@ -2909,6 +2911,8 @@ msgid ""
 "for which editing is authorized when the items_batchmod_restricted "
 "permission is enabled, separated by spaces:"
 msgstr ""
+"cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# فهرستی از فیلدهای "
+"فرعی را تعریف کنید که ویرایش آنها مجاز است، با فاصله از هم جدا شوند:"
 
 # Cataloging > Record structure
 msgid ""
@@ -5889,6 +5893,10 @@ msgid ""
 "increases server load significantly; if performance is a concern, use the "
 "update_totalissues.pl cron job to update the total checkouts count)."
 msgstr ""
+"circulation.pref#UpdateTotalIssuesOnCirc# روزآمدسازی تمام امانت های یک رکورد "
+"کتابشناختی هنگامی که یک سند بررسی می شود (هشدار! این ترافیک سرور را به میزان "
+"قابل توجهی افزایش می دهد؛ اگر عملکرد نگران کننده است، از "
+"update_totalissues.pl cron job استفاده کنید تا کل امانت ها بروز رسانی شود)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
@@ -7804,12 +7812,11 @@ msgid "logs.pref#ClaimsLog# Log"
 msgstr "logs.pref#ثبت جریمه ها# ثبت کنید"
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#ClaimsLog# when an acquisitions claim or a serials claim notice is "
 "sent."
 msgstr ""
-"logs.pref#ثبت نامه# هنگامی که یک اعلان پیگیری بطور خودکار ارسال می شود."
+"logs.pref#ClaimsLog# هنگامی که یک اعلان پیگیری بطور خودکار ارسال می شود."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -8005,7 +8012,7 @@ msgstr "logs.pref#ثبت آبونمان# ثبت کردن"
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# when serials are added, deleted or changed."
 msgstr ""
-"logs.pref#ثبت آبونمان# هنگامی که پیایندها افزوده، حذف یا تغییر کرده اند."
+"logs.pref#SubscriptionLog# هنگامی که پیایندها افزوده، حذف یا تغییر کرده اند."
 
 # OPAC
 msgid "opac.pref"
@@ -10304,11 +10311,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
-msgstr ""
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# غیرفعال کردن"
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
-msgstr ""
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# فعال کردن"
 
 # Patrons > General > AutoApprovePatronProfileSettings
 msgid ""
@@ -10316,12 +10323,17 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails"
 "\">OPACPatronDetails</a> to be activated."
 msgstr ""
+"patrons.pref#AutoApprovePatronProfileSettings# نیاز دارد <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails\""
+">OPACPatronDetails</a> فعال شود."
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
 msgstr ""
+"patrons.pref#AutoApprovePatronProfileSettings# تأیید خودکار تغییرات جزئیات "
+"کاربر در اپک."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -11778,7 +11790,7 @@ msgstr "عنوان"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# total number of checkouts"
-msgstr "کل تعداد امانت ها"
+msgstr "searching.pref#OPACdefaultSortField# تعداد کل امانت ها"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResults# By default, show"
@@ -12059,7 +12071,7 @@ msgstr "عنوان"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# total number of checkouts"
-msgstr "تعداد کل امانت ها"
+msgstr "searching.pref#defaultSortField#  تعداد کل امانت ها"
 
 # Searching > Results display
 msgid "searching.pref#displayFacetCount# Don't show"
@@ -12141,11 +12153,11 @@ msgstr ""
 
 # Serials
 msgid "serials.pref"
-msgstr "پیایندها"
+msgstr "پیایندها.pref"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
-msgstr "نمایشِ"
+msgstr "serials.pref#OPACSerialIssueDisplayCount# نشان دادن"
 
 # Serials
 msgid ""
