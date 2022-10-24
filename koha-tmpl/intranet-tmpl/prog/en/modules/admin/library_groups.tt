@@ -78,6 +78,7 @@
                 <h1>Library groups</h1>
 
                 [% FOREACH root_group IN root_groups %]
+                <div class="page-section">
                     <table class="library-groups">
                         <tr>
                             <th>&nbsp;</th>
@@ -87,6 +88,7 @@
                         </tr>
                         [% PROCESS tree group=root_group %]
                     </table>
+                </div>
                 [% END %]
 
             </main>
