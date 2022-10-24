@@ -87,6 +87,7 @@ subtest 'GetReserveFee' => sub {
     plan tests => 5;
 
     C4::Circulation::AddIssue( $patron1, $item1->barcode, '2015-12-31', 0, undef, 0, {} ); # the date does not really matter
+    C4::Circulation::AddIssue( $patron3, $item2->barcode, '2015-12-31', 0, undef, 0, {} ); # the date does not really matter
     my $acc2 = acctlines( $patron2->{borrowernumber} );
     my $res1 = addreserve( $patron1->{borrowernumber} );
 
@@ -138,8 +139,10 @@ subtest 'Integration with AddReserve' => sub {
     };
 
     subtest 'Items are issued' => sub {
-        plan tests => 3;
+        plan tests => 4;
 
+        $dbh->do( "DELETE FROM issues       WHERE itemnumber=?", undef, $item1->itemnumber);
+        $dbh->do( "DELETE FROM issues       WHERE itemnumber=?", undef, $item2->itemnumber);
         C4::Circulation::AddIssue( $patron2, $item1->barcode, '2015-12-31', 0, undef, 0, {} );
 
         t::lib::Mocks::mock_preference('HoldFeeMode', 'not_always');
@@ -152,14 +155,19 @@ subtest 'Integration with AddReserve' => sub {
         $dbh->do( "DELETE FROM accountlines WHERE borrowernumber=?", undef, $patron1->{borrowernumber} );
         addreserve( $patron3->{borrowernumber} );
         addreserve( $patron1->{borrowernumber} );
-        # FIXME Are we sure it's the expected behavior?
-        is( acctlines( $patron1->{borrowernumber} ), 1, 'not_always - Patron should be charged if all the items are not checked out and at least 1 hold is already placed' );
+        is( acctlines( $patron1->{borrowernumber} ), 0, 'not_always - Patron should not be charged if all the items are not checked out, even if 1 hold is already placed' );
 
         C4::Circulation::AddIssue( $patron3, $item2->barcode, '2015-12-31', 0, undef, 0, {} );
         $dbh->do( "DELETE FROM reserves     WHERE biblionumber=?", undef, $biblio->biblionumber );
         $dbh->do( "DELETE FROM accountlines WHERE borrowernumber=?", undef, $patron1->{borrowernumber} );
         addreserve( $patron1->{borrowernumber} );
-        is( acctlines( $patron1->{borrowernumber} ), 1, 'not_always - Patron should be charged if all items are checked out' );
+        is( acctlines( $patron1->{borrowernumber} ), 0, 'not_always - Patron should not be charged if all items are checked out but no holds are placed' );
+
+        $dbh->do( "DELETE FROM reserves     WHERE biblionumber=?", undef, $biblio->biblionumber );
+        $dbh->do( "DELETE FROM accountlines WHERE borrowernumber=?", undef, $patron1->{borrowernumber} );
+        addreserve( $patron3->{borrowernumber} );
+        addreserve( $patron1->{borrowernumber} );
+        is( acctlines( $patron1->{borrowernumber} ), 1, 'not_always - Patron should only be charged if all items are checked out and at least 1 hold is already placed' );
     };
 };
 

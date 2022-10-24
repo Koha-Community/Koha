@@ -141,16 +141,6 @@
                     <h2>Confirm holds for:[% INCLUDE 'patron-title.inc' patron = logged_in_user %] ([% logged_in_user.cardnumber | html %])</h2>
                 [% END # / UNLESS none_available %]
 
-                [% IF (RESERVE_CHARGE) %]
-                    <div class="alert" id="reserve_fee">
-                        [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
-                            <span>You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] when you collect this item</span>
-                        [% ELSE %]
-                            <span>You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] for placing this hold</span>
-                        [% END %]
-                    </div>
-                [% END %]
-
                 [% IF ( new_reserves_allowed ) %]
                     <div id="new_reserves_allowed" class="alert">
                         <strong>Sorry,</strong> you can only place [% new_reserves_allowed | html %] more holds. Please uncheck the checkboxes for the items you wish to not place holds on.
@@ -178,6 +168,17 @@
                                         [% END %]
                                     </div>
                                 [% END %]
+
+                                [% IF ( bibitemloo.reserve_charge ) %]
+                                    <div class="alert" id="reserve_fee">
+                                        [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
+                                            <span>You will be charged a hold fee of [% bibitemloo.reserve_charge | $Price %] when you collect this item</span>
+                                        [% ELSE %]
+                                            <span>You will be charged a hold fee of [% bibitemloo.reserve_charge | $Price %] for placing this hold</span>
+                                        [% END %]
+                                    </div>
+                                [% END %]
+
                                 <p>
                                     [% IF ( bibitemloo.holdable ) %]
                                         <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>

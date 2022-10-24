@@ -25,7 +25,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Koha qw( getitemtypeimagelocation getitemtypeimagesrc );
 use C4::Circulation qw( GetBranchItemRule );
-use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest );
+use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest GetReserveFee );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
@@ -70,12 +70,6 @@ unless ( $can_place_hold_if_available_at_pickup ) {
         my $categorycode = $patron->categorycode;
         $can_place_hold_if_available_at_pickup = grep { $_ eq $categorycode } @patron_categories;
     }
-}
-
-# Pass through any reserve charge
-my $reservefee = $category->reservefee;
-if ( $reservefee > 0){
-    $template->param( RESERVE_CHARGE => $reservefee);
 }
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
@@ -575,6 +569,8 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{forced_hold_level} = $forced_hold_level;
     }
 
+    # Pass through any reserve charge
+    $biblioLoopIter{reserve_charge} = GetReserveFee( $patron->id, $biblioNum );
 
     push @$biblioLoop, \%biblioLoopIter;
 

@@ -773,10 +773,13 @@ SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?
         my ( $notissued, $reserved );
         ( $notissued ) = $dbh->selectrow_array( $issue_qry, undef,
             ( $biblionumber ) );
-        if( $notissued ) {
+        if( $notissued == 0 ) {
+            # all items are issued
             ( $reserved ) = $dbh->selectrow_array( $holds_qry, undef,
                 ( $biblionumber, $borrowernumber ) );
             $fee = 0 if $reserved == 0;
+        } else {
+            $fee = 0;
         }
     }
     return $fee;
