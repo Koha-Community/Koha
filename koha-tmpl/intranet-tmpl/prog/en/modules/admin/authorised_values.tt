@@ -306,6 +306,7 @@
                         </div>
                     [% END # /FOR m IN messages %]
 
+                    <div class="page-section">
                     [% IF ( searchfield ) %]
 
                         <form action="/cgi-bin/koha/admin/authorised_values.pl" method="get" id="category">
@@ -388,7 +389,6 @@
                         [% END # /IF loop %]
 
                     [% ELSE # category was selected %]
-
                         <table id="categoriest" class="authorized_values_table">
                             <thead>
                                 <tr>
@@ -411,8 +411,8 @@
                                 [% END # /FOR c %]
                             </tbody>
                         </table> <!-- /#categoriest -->
-
                     [% END # /IF ( searchfield  )%]
+                    </div>
 
                 [% END # /IF op == 'list' %]
 
