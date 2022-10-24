@@ -201,19 +201,15 @@
             <legend>Ordering information</legend>
             <ol><li><label for="activestatus">Vendor is:</label>
                     [% IF ( active ) %]
-                        <label class="radio" for="activestatus">
-                            Active <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
-                        </label>
-                        <label class="radio" for="inactivestatus">
-                            Inactive <input type="radio" id="inactivestatus" name="status" value="0" />
-                        </label>
+                        <label class="radio" for="activestatus">Active</label>
+                        <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
+                        <label class="radio" for="inactivestatus">Inactive</label>
+                        <input type="radio" id="inactivestatus" name="status" value="0" />
                     [% ELSE %]
-                        <label class="radio" for="activestatus">
-                            Active <input type="radio" id="activestatus" name="status" value="1" />
-                        </label>
-                        <label class="radio" for="inactivestatus">
-                            Inactive <input type="radio" id="inactivestatus" name="status" value="0" checked="checked" />
-                        </label>
+                        <label class="radio" for="activestatus">Active</label>
+                        <input type="radio" id="activestatus" name="status" value="1" />
+                        <label class="radio" for="inactivestatus">Inactive</label>
+                        <input type="radio" id="inactivestatus" name="status" value="0" checked="checked" />
                     [% END %]</li>
             <li><label for="list_currency">List prices are: </label>
                 <select name="list_currency" id="list_currency">
@@ -239,53 +235,41 @@
             </li>
             <li><label for="gstyes">Tax number registered:</label>
                 [% IF ( gstreg ) %]
-                    <label class="radio" for="gstyes">
-                        Yes <input type="radio" name="gst" id="gstyes" value="1" checked="checked" />
-                    </label>
-                    <label class="radio" for="gstno">
-                        No <input type="radio" name="gst" id="gstno" value="0" />
-                    </label>
+                    <label class="radio" for="gstyes">Yes</label>
+                    <input type="radio" name="gst" id="gstyes" value="1" checked="checked" />
+                    <label class="radio" for="gstno">No</label>
+                    <input type="radio" name="gst" id="gstno" value="0" />
                 [% ELSE %]
-                    <label class="radio" for="gstyes">
-                        Yes <input type="radio" name="gst" id="gstyes" value="1" />
-                    </label>
-                    <label class="radio" for="gstno">
-                        No <input type="radio" name="gst" id="gstno" value="0" checked="checked" />
-                    </label>
+                    <label class="radio" for="gstyes">Yes</label>
+                    <input type="radio" name="gst" id="gstyes" value="1" />
+                    <label class="radio" for="gstno">No</label>
+                    <input type="radio" name="gst" id="gstno" value="0" checked="checked" />
                 [% END %]</li>
 
             <li><label for="list_gstyes">List prices:</label>
                 [% IF ( listincgst ) %]
-                    <label class="radio" for="list_gstyes">
-                        Include tax <input type="radio" id="list_gstyes" name="list_gst" value="1" checked="checked" />
-                    </label>
-                    <label class="radio" for="list_gstno">
-                        Don't include tax <input type="radio" id="list_gstno" name="list_gst" value="0" />
-                    </label>
+                    <label class="radio" for="list_gstyes">Include tax</label>
+                    <input type="radio" id="list_gstyes" name="list_gst" value="1" checked="checked" />
+                    <label class="radio" for="list_gstno">Don't include tax</label>
+                    <input type="radio" id="list_gstno" name="list_gst" value="0" />
                 [% ELSE %]
-                    <label class="radio" for="list_gstyes">
-                        Include tax <input type="radio" id="list_gstyes" name="list_gst" value="1" />
-                    </label>
-                    <label class="radio" for="list_gstno">
-                        Don't include tax <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" />
-                    </label>
+                    <label class="radio" for="list_gstyes">Include tax</label>
+                    <input type="radio" id="list_gstyes" name="list_gst" value="1" />
+                    <label class="radio" for="list_gstno">Don't include tax</label>
+                    <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" />
                 [% END %]</li>
 
             <li><label for="invoice_gstyes">Invoice prices:</label>
                 [% IF ( invoiceincgst ) %]
-                    <label class="radio" for="invoice_gstyes">
-                        Include tax <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" />
-                    </label>
-                    <label class="radio" for="invoice_gstno">
-                        Don't include tax <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" />
-                    </label>
+                    <label class="radio" for="invoice_gstyes">Include tax</label>
+                    <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" />
+                    <label class="radio" for="invoice_gstno">Don't include tax</label>
+                    <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" />
                     [% ELSE %]
-                    <label class="radio" for="invoice_gstyes">
-                        Include tax <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" />
-                    </label>
-                    <label class="radio" for="invoice_gstno">
-                        Don't include tax <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
-                    </label>
+                    <label class="radio" for="invoice_gstyes">Include tax</label>
+                    <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" />
+                    <label class="radio" for="invoice_gstno">Don't include tax</label>
+                    <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
                 [% END %]</li>
 
             [% IF gst_values %]
