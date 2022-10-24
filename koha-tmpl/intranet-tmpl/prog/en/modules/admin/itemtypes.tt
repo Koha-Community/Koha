@@ -471,6 +471,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
 [% IF op == 'list' %]
     <h1>Item types administration</h1>
     [% IF itemtypes %]
+    <div class="page-section">
         <table id="table_item_type">
           <thead>
             [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
@@ -594,6 +595,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
           </tr>
           [% END %]
         </table>
+    </div>
     [% ELSE %]
         <div class="dialog message">There are no itemtypes defined</div>
     [% END %]
