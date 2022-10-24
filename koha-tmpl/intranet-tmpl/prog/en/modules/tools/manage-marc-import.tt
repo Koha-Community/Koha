@@ -309,67 +309,71 @@
                             [% PROCESS pagination %]
                         [% END %]
                         <div class="page-section">
-                            <table class="table">
-                                <tr>
-                                    <th>#</th>
-                                    <th>File name</th>
-                                    <th>Profile</th>
-                                    <th>Comments</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Staged</th>
-                                    <th># Records</th>
-                                    <th># Items</th>
-                                    <th>Action</th>
-                                </tr>
-                                [% FOREACH batch_lis IN batch_list %]
+                            <table class="dataTable">
+                                <thead>
                                     <tr>
-                                        <td>[% batch_lis.import_batch_id | html %]</td>
-                                        <td><a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
-                                        <td>[% batch_lis.profile | html %]</td>
-                                        <td>[% batch_lis.comments | html %]</td>
-                                        <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
-                                        <td>
-                                            [% IF ( batch_lis.import_status == 'cleaned' ) %]
-                                                <span>Cleaned</span>
-                                            [% ELSIF ( batch_lis.import_status == 'imported' ) %]
-                                                <span>Imported</span>
-                                            [% ELSIF ( batch_lis.import_status == 'importing' ) %]
-                                                <span>Importing</span>
-                                            [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
-                                                <span>Reverted</span>
-                                            [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
-                                                <span>Reverting</span>
-                                            [% ELSIF ( batch_lis.import_status == 'staged' ) %]
-                                                <span>Staged</span>
-                                            [% ELSE %]
-                                                <span>[% batch_lis.import_status | html %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td>[% batch_lis.upload_timestamp | $KohaDates with_hours=1 %]</td>
-                                        <td>[% batch_lis.num_records | html %]</td>
-                                        <td>[% batch_lis.num_items | html %]
-                                            [% IF ( batch_lis.num_items && batch_lis.import_status == 'imported' ) %]
-                                                (<a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">Create label batch</a>)
-                                            [% END %]
-                                        </td>
-                                        <td class="actions">
-                                            [% IF ( batch_lis.can_clean ) %]
-                                                <form method="post" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">
-                                                    <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
-                                                    <input type="hidden" name="op" value="clean-batch" />
-                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
-                                                </form>
-                                            [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
-                                                <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id | html %]" id="delete_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_delete">
-                                                    <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
-                                                    <input type="hidden" name="op" value="delete-batch" />
-                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
-                                                </form>
-                                            [% END %]
-                                        </td>
+                                        <th>#</th>
+                                        <th>File name</th>
+                                        <th>Profile</th>
+                                        <th>Comments</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Staged</th>
+                                        <th># Records</th>
+                                        <th># Items</th>
+                                        <th>Action</th>
                                     </tr>
-                                [% END # /FOREACH batch_lis %]
+                                </thead>
+                                <tbody>
+                                    [% FOREACH batch_lis IN batch_list %]
+                                        <tr>
+                                            <td>[% batch_lis.import_batch_id | html %]</td>
+                                            <td><a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
+                                            <td>[% batch_lis.profile | html %]</td>
+                                            <td>[% batch_lis.comments | html %]</td>
+                                            <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
+                                            <td>
+                                                [% IF ( batch_lis.import_status == 'cleaned' ) %]
+                                                    <span>Cleaned</span>
+                                                [% ELSIF ( batch_lis.import_status == 'imported' ) %]
+                                                    <span>Imported</span>
+                                                [% ELSIF ( batch_lis.import_status == 'importing' ) %]
+                                                    <span>Importing</span>
+                                                [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
+                                                    <span>Reverted</span>
+                                                [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
+                                                    <span>Reverting</span>
+                                                [% ELSIF ( batch_lis.import_status == 'staged' ) %]
+                                                    <span>Staged</span>
+                                                [% ELSE %]
+                                                    <span>[% batch_lis.import_status | html %]</span>
+                                                [% END %]
+                                            </td>
+                                            <td>[% batch_lis.upload_timestamp | $KohaDates with_hours=1 %]</td>
+                                            <td>[% batch_lis.num_records | html %]</td>
+                                            <td>[% batch_lis.num_items | html %]
+                                                [% IF ( batch_lis.num_items && batch_lis.import_status == 'imported' ) %]
+                                                    (<a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">Create label batch</a>)
+                                                [% END %]
+                                            </td>
+                                            <td class="actions">
+                                                [% IF ( batch_lis.can_clean ) %]
+                                                    <form method="post" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">
+                                                        <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
+                                                        <input type="hidden" name="op" value="clean-batch" />
+                                                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
+                                                    </form>
+                                                [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
+                                                    <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id | html %]" id="delete_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_delete">
+                                                        <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
+                                                        <input type="hidden" name="op" value="delete-batch" />
+                                                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
+                                                    </form>
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END # /FOREACH batch_lis %]
+                                </tbody>
                             </table>
                         </div> <!-- /.page-section -->
 
