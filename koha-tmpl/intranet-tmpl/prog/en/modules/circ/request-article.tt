@@ -124,7 +124,7 @@
 
                                 <fieldset class="rows">
                                     <legend>Place article request from [% biblio.title | html %] for [% patron.firstname | html %] [% patron.surname | html %] ( [% patron.cardnumber | html %] )</legend>
-                                    <ul>
+                                    <ol>
                                         <li>
                                             <label for="title">Title:</label>
                                             <input type="text" name="title" id="title" size="50"/>
@@ -190,67 +190,69 @@
                                                 [% END %]
                                             </select>
                                         </li>
-                                    </ul>
+                                    </ol>
                                 </fieldset>
 
                                 [% SET article_request_type = biblio.article_request_type( patron ) %]
                                 [% IF article_request_type != 'bib_only' %]
-                                    <table id="current-requests-table" class="ar-table table table-bordered table-striped">
-                                        <caption>Select item:</caption>
-                                        <thead>
-                                            <tr>
-                                                <th>&nbsp;</th>
-                                                <th>Item type</th>
-                                                <th>Barcode</th>
-                                                <th>Home library</th>
-                                                <th>Call number</th>
-                                                <th>Enumeration</th>
-                                            </tr>
-                                        </thead>
+                                    <div class="page-section">
+                                        <table id="current-requests-table" class="ar-table table table-bordered table-striped">
+                                            <caption>Select item:</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                    <th>Item type</th>
+                                                    <th>Barcode</th>
+                                                    <th>Home library</th>
+                                                    <th>Call number</th>
+                                                    <th>Enumeration</th>
+                                                </tr>
+                                            </thead>
 
-                                        <tbody>
-                                            [% FOREACH item IN biblio.items %]
-                                                [% IF item.can_article_request( patron ) %]
+                                            <tbody>
+                                                [% FOREACH item IN biblio.items %]
+                                                    [% IF item.can_article_request( patron ) %]
+                                                        <tr>
+                                                            <td>
+                                                                [% IF article_request_type == 'item_only' && !checked %]
+                                                                    [% SET checked = 1 %]
+                                                                    <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" checked="checked" />
+                                                                [% ELSE %]
+                                                                    <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" />
+                                                                [% END %]
+                                                            </td>
+                                                            <td>
+                                                                [% ItemTypes.GetDescription( item.itype ) | html %]
+                                                            </td>
+                                                            <td>
+                                                                [% item.barcode | html %]
+                                                            </td>
+                                                            <td>
+                                                                [% Branches.GetName( item.homebranch ) | html %]
+                                                            </td>
+                                                            <td>
+                                                                [% item.itemcallnumber | html %]
+                                                            </td>
+                                                            <td>
+                                                                [% item.enumchron | html %]
+                                                            </td>
+                                                        </tr>
+                                                    [% END %]
+                                                [% END %]
+
+                                                [% IF article_request_type != 'item_only' %]
                                                     <tr>
                                                         <td>
-                                                            [% IF article_request_type == 'item_only' && !checked %]
-                                                                [% SET checked = 1 %]
-                                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" checked="checked" />
-                                                            [% ELSE %]
-                                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" />
-                                                            [% END %]
+                                                            <input type="radio" name="itemnumber" value="" checked="checked"/>
                                                         </td>
-                                                        <td>
-                                                            [% ItemTypes.GetDescription( item.itype ) | html %]
-                                                        </td>
-                                                        <td>
-                                                            [% item.barcode | html %]
-                                                        </td>
-                                                        <td>
-                                                            [% Branches.GetName( item.homebranch ) | html %]
-                                                        </td>
-                                                        <td>
-                                                            [% item.itemcallnumber | html %]
-                                                        </td>
-                                                        <td>
-                                                            [% item.enumchron | html %]
+                                                        <td colspan="5">
+                                                            Any item
                                                         </td>
                                                     </tr>
                                                 [% END %]
-                                            [% END %]
-
-                                            [% IF article_request_type != 'item_only' %]
-                                                <tr>
-                                                    <td>
-                                                        <input type="radio" name="itemnumber" value="" checked="checked"/>
-                                                    </td>
-                                                    <td colspan="5">
-                                                        Any item
-                                                    </td>
-                                                </tr>
-                                            [% END %]
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div><!-- /.page-section -->
                                 [% END %]
 
                                 <p>
