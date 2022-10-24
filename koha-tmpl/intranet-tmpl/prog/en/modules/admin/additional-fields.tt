@@ -134,41 +134,43 @@
     [% ELSIF op == 'list' %]
         <h1>Additional fields for '[% tablename | html %]'</h1>
         [% IF fields %]
-            <table id="fieldst">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Authorized value category</th>
-                        [% IF show_marcfield %]
-                            <th>MARC field</th>
-                        [% END %]
-                        [% IF show_searchable %]
-                            <th>Searchable</th>
-                        [% END %]
-                        <th class="noExport">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOR field IN fields %]
+            <div class="page-section">
+                <table id="fieldst">
+                    <thead>
                         <tr>
-                            <td>[% field.name | html %]</td>
-                            <td>[% field.authorised_value_category | html %]</td>
+                            <th>Name</th>
+                            <th>Authorized value category</th>
                             [% IF show_marcfield %]
-                                <td>[% field.marcfield | html %]</td>
+                                <th>MARC field</th>
                             [% END %]
                             [% IF show_searchable %]
-                                <td>
-                                    [% IF field.searchable %]Yes[% ELSE %]No[% END %]
-                                </td>
+                                <th>Searchable</th>
                             [% END %]
-                            <td class="actions">
-                                <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id | uri %]&amp;tablename=[% tablename | uri %]"><i class="fa fa-trash"></i> Delete</a>
-                            </td>
+                            <th class="noExport">Actions</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        [% FOR field IN fields %]
+                            <tr>
+                                <td>[% field.name | html %]</td>
+                                <td>[% field.authorised_value_category | html %]</td>
+                                [% IF show_marcfield %]
+                                    <td>[% field.marcfield | html %]</td>
+                                [% END %]
+                                [% IF show_searchable %]
+                                    <td>
+                                        [% IF field.searchable %]Yes[% ELSE %]No[% END %]
+                                    </td>
+                                [% END %]
+                                <td class="actions">
+                                    <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                                    <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id | uri %]&amp;tablename=[% tablename | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div><!-- /.page-section -->
         [% ELSE %]
             [% IF tablename %]There are no additional fields defined for this table.[% END %]
         [% END %]
