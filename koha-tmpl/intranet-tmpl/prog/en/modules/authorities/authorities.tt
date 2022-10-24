@@ -401,7 +401,7 @@
                                                 <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
                                                     [% UNLESS hide_marc %]
                                                         [% IF advancedMARCEditor %]
-                                                            <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
+                                                            <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to expand this tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
                                                         [% ELSE %]
                                                             <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
                                                         [% END %]
@@ -461,7 +461,7 @@
                                                     [% END # /UNLESS hide_marc %]
 
                                                     [% UNLESS advancedMARCEditor %]
-                                                        <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib | html %]</a>
+                                                        <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to expand this tag">[% innerloo.tag_lib | html %]</a>
                                                     [% END %]
                                                     <span class="field_controls">
                                                         [% IF ( innerloo.repeatable ) %]
