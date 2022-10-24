@@ -789,56 +789,7 @@ subtest 'get_lostreturn_policy() tests' => sub {
     );
 
     # Make sure we have an unused branchcode
-    my $branchcode4 = $builder->build( { source => 'Branch' } )->{branchcode};
-    my $specific_lost_rule_dummy = $builder->build(
-        {
-            source => 'CirculationRule',
-            value  => {
-                branchcode   => $branchcode4,
-                categorycode => undef,
-                itemtype     => undef,
-                rule_name    => 'lostreturn',
-                rule_value   => 'refund'
-            }
-        }
-    );
-    my $specific_proc_rule_dummy = $builder->build(
-        {
-            source => 'CirculationRule',
-            value  => {
-                branchcode   => $branchcode4,
-                categorycode => undef,
-                itemtype     => undef,
-                rule_name    => 'processingreturn',
-                rule_value   => 'refund'
-            }
-        }
-    );
-    my $branch_without_rule = $specific_lost_rule_dummy->{ branchcode };
-    Koha::CirculationRules
-        ->search(
-            {
-                branchcode   => $branch_without_rule,
-                categorycode => undef,
-                itemtype     => undef,
-                rule_name    => 'lostreturn',
-                rule_value   => 'refund'
-            }
-          )
-        ->next
-        ->delete;
-    Koha::CirculationRules
-        ->search(
-            {
-                branchcode   => $branch_without_rule,
-                categorycode => undef,
-                itemtype     => undef,
-                rule_name    => 'processingreturn',
-                rule_value   => 'refund'
-            }
-          )
-        ->next
-        ->delete;
+    my $branch_without_rule = $builder->build( { source => 'Branch' } )->{branchcode};
 
     my $item = $builder->build_sample_item(
         {
