@@ -1159,7 +1159,7 @@ sub _set_found_trigger {
         return $self unless $lost_age_in_days < $no_refund_after_days;
     }
 
-    my $lostreturn_policy = Koha::CirculationRules->get_lostreturn_policy(
+    my $lost_proc_return_policy = Koha::CirculationRules->get_lostreturn_policy(
         {
             item          => $self,
             return_branch => C4::Context->userenv
@@ -1167,6 +1167,7 @@ sub _set_found_trigger {
             : undef,
         }
       );
+    my $lostreturn_policy = $lost_proc_return_policy->{lostreturn};
 
     if ( $lostreturn_policy ) {
 
@@ -1324,14 +1325,7 @@ sub _set_found_trigger {
         }
     }
 
-    my $processingreturn_policy = Koha::CirculationRules->get_processingreturn_policy(
-        {
-            item          => $self,
-            return_branch => C4::Context->userenv
-            ? C4::Context->userenv->{'branch'}
-            : undef,
-        }
-      );
+    my $processingreturn_policy = $lost_proc_return_policy->{lostreturn};
 
     if ( $processingreturn_policy ) {
 

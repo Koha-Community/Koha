@@ -577,9 +577,9 @@ sub get_onshelfholds_policy {
 
 =head3 get_lostreturn_policy
 
-  my $lostrefund_policy = Koha::CirculationRules->get_lostreturn_policy( { return_branch => $return_branch, item => $item } );
+  my $lost_proc_refund_policy = Koha::CirculationRules->get_lostreturn_policy( { return_branch => $return_branch, item => $item } );
 
-Return values are:
+lostreturn return values are:
 
 =over 2
 
@@ -592,6 +592,21 @@ Return values are:
 =item 'charge' - Refund the lost item charge and charge a new overdue fine
 
 =back
+
+processing return return values are:
+
+=over 2
+
+=item '0' - Do not refund
+
+=item 'refund' - Refund the lost item processing charge
+
+=item 'restore' - Refund the lost item processing charge and restore the original overdue fine
+
+=item 'charge' - Refund the lost item processing charge and charge a new overdue fine
+
+=back
+
 
 =cut
 
@@ -609,58 +624,16 @@ sub get_lostreturn_policy {
 
     my $branch = $behaviour_mapping->{ $behaviour };
 
-    my $rule = Koha::CirculationRules->get_effective_rule(
+    my $rules = Koha::CirculationRules->get_effective_rules(
         {
             branchcode => $branch,
-            rule_name  => 'lostreturn',
+            rules  => ['lostreturn','processingreturn']
         }
     );
 
-    return $rule ? $rule->rule_value : 'refund';
-}
-
-=head3 get_processingreturn_policy
-
-  my $processingrefund_policy = Koha::CirculationRules->get_processingreturn_policy( { return_branch => $return_branch, item => $item } );
-
-Return values are:
-
-=over 2
-
-=item '0' - Do not refund
-
-=item 'refund' - Refund the lost item processing charge
-
-=item 'restore' - Refund the lost item processing charge and restore the original overdue fine
-
-=item 'charge' - Refund the lost item processing charge and charge a new overdue fine
-
-=back
-
-=cut
-
-sub get_processingreturn_policy {
-    my ( $class, $params ) = @_;
-
-    my $item   = $params->{item};
-
-    my $behaviour = C4::Context->preference( 'RefundLostOnReturnControl' ) // 'CheckinLibrary';
-    my $behaviour_mapping = {
-        CheckinLibrary    => $params->{'return_branch'} // $item->homebranch,
-        ItemHomeBranch    => $item->homebranch,
-        ItemHoldingBranch => $item->holdingbranch
-    };
-
-    my $branch = $behaviour_mapping->{ $behaviour };
-
-    my $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode => $branch,
-            rule_name  => 'processingreturn',
-        }
-    );
-
-    return $rule ? $rule->rule_value : 'refund';
+    $rules->{lostreturn} //= 'refund';
+    $rules->{processingreturn} //= 'refund';
+    return $rules;
 }
 
 =head3 article_requestable_rules
