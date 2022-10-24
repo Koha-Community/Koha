@@ -329,6 +329,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
 [% IF op == 'list' %]
     <h1>Libraries</h1>
     [% IF libraries_count > 0 %]
+    <div class="page-section">
         <table id="libraries">
             <thead>
                 <tr>
@@ -344,6 +345,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                 </tr>
             </thead>
         </table>
+    </div>
     [% ELSE %]
         <div class="dialog message">There are no libraries defined. <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">Start defining libraries</a>.</div>
     [% END %]
@@ -351,7 +353,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
 
 [% IF op == 'view' && library %]
     <h1>[% library.branchname | html %]</h1>
-    <div class="row">
+    <div class="row page-section">
         <div class="col-sm-6">
             <div class="rows">
                 <ol>
@@ -474,8 +476,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
         </div> <!-- /.col-sm-6 -->
     </div> <!-- /.row -->
     [% IF OpacLibraryInfo %]<!-- opac_info -->
-        <hr />
-        <div class="row">
+        <div class="row page-section">
             <div class="col-sm-12">
                 <h2>OPAC information</h2>
                 <div>[% OpacLibraryInfo.content | $raw %]</div>
