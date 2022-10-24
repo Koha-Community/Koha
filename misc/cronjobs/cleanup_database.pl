@@ -27,6 +27,8 @@ use constant DEFAULT_MESSAGES_PURGEDAYS           => 365;
 use constant DEFAULT_SEARCHHISTORY_PURGEDAYS      => 30;
 use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
+use constant DEFAULT_BGJOBS_PURGEDAYS             => 1;
+use constant DEFAULT_BGJOBS_PURGETYPES            => qw{ update_elastic_index };
 
 use Koha::Script -cron;
 use C4::Context;
@@ -36,6 +38,7 @@ use Getopt::Long qw( GetOptions );
 use C4::Log qw( cronlogaction );
 use C4::Accounts qw( purge_zero_balance_fees );
 use Koha::UploadedFiles;
+use Koha::BackgroundJobs;
 use Koha::Old::Biblios;
 use Koha::Old::Items;
 use Koha::Old::Biblioitems;
@@ -49,7 +52,7 @@ use Koha::Patron::Debarments qw( DelDebarment );
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS]
+Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS] [--bg-jobs DAYS [--bg-type TYPE] ]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -107,6 +110,9 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --cards DAY             Purge card creator batches last added to more than DAYS days ago.
    --return-claims         Purge all resolved return claims older than the number of days specified in
                            the system preference CleanUpDatabaseReturnClaims.
+   --bg-days DAYS          Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
+   --bg-type TYPES         What type of background job to purge. Defaults to "update_elastic_index" if omitted
+                           Specifying "all" will purge all types. Repeatable.
 USAGE
     exit $_[0];
 }
@@ -148,6 +154,8 @@ my $labels;
 my $cards;
 my @log_modules;
 my @preserve_logs;
+my $background_days;
+my @background_types;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -190,6 +198,8 @@ GetOptions(
     'labels'            => \$labels,
     'cards'             => \$cards,
     'return-claims'     => \$return_claims,
+    'bg-type:s'        => \@background_types,
+    'bg-jobs:i'         => \$background_days,
 ) || usage(1);
 
 # Use default values
@@ -202,6 +212,8 @@ $pSearchhistory    = DEFAULT_SEARCHHISTORY_PURGEDAYS      if defined($pSearchhis
 $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
 $pDebarments       = DEFAULT_DEBARMENTS_PURGEDAYS         if defined($pDebarments)       && $pDebarments == 0;
 $pMessages         = DEFAULT_MESSAGES_PURGEDAYS           if defined($pMessages)         && $pMessages == 0;
+$background_days   = DEFAULT_BGJOBS_PURGEDAYS             if defined($background_days)   && $background_days == 0;
+@background_types  = (DEFAULT_BGJOBS_PURGETYPES)          if $background_days            && @background_types == 0;
 
 if ($help) {
     usage(0);
@@ -239,6 +251,7 @@ unless ( $sessions
     || $labels
     || $cards
     || $return_claims
+    || $background_days
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -675,6 +688,16 @@ if ($cards) {
     }
 }
 
+if ($background_days) {
+    print "Purging background jobs more than $background_days days ago.\n" if $verbose;
+    my $count = PurgeBackgroundJobs($background_days, \@background_types, $confirm);
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d background jobs of type(s): %s added more than %d days ago.\n", $count, join(',', @background_types), $background_days
+          : sprintf "%d background jobs of type(s): %s added more than %d days ago would have been purged.", $count, join(',', @background_types), $background_days;
+    }
+}
+
 cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);
@@ -811,4 +834,29 @@ sub DeleteSpecialHolidays {
     });
     my $count = $sth->execute( $days ) + 0;
     print "Removed $count unique holidays\n" if $verbose;
+}
+
+sub PurgeBackgroundJobs {
+    my ( $days, $types, $confirm ) = @_;
+
+    my $rs;
+    if ( $types->[0] eq 'all' ){
+        $rs = Koha::BackgroundJobs->search(
+            {
+                ended_on => { '<' => \[ 'date_sub(curdate(), INTERVAL ? DAY)', $days ] },
+                status   => 'finished',
+            });
+
+    } else {
+        $rs = Koha::BackgroundJobs->search(
+            {
+                ended_on => { '<' => \[ 'date_sub(curdate(), INTERVAL ? DAY)', $days ] },
+                type     => \@{$types},
+                status   => 'finished',
+            });
+    }
+    my $count = $rs->count();
+    $rs->delete if $confirm;
+
+    return $count;
 }
