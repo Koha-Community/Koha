@@ -737,11 +737,13 @@
                                 <label for="new_filter">Name:</label>
                                 <input id="new_filter" name="new_filter" type="text">
                                 <a id="save_new_filter" class="btn btn-default btn-xs" href="#">Save</a>
-                                </br>OR</br>
-                                <h6>Replace existing search filter:</h6>
-                                <label for="existing_filters">Choose</label>
-                                <select id="existing_filters" name="existing_filters" class="search_filters_list"></select>
-                                <a id="replace_existing_filter" class="btn btn-default btn-xs" href="#">Replace</a>
+                                <span class="existing_filters_section">
+                                    </br>OR</br>
+                                    <h6>Replace existing search filter:</h6>
+                                    <label for="existing_filters">Choose</label>
+                                    <select id="existing_filters" name="existing_filters" class="search_filters_list"></select>
+                                    <a id="replace_existing_filter" class="btn btn-default btn-xs" href="#">Replace</a>
+                                </span>
                             </div>
                             <div class="modal-footer">
                                 <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
@@ -840,6 +842,11 @@
                     .then(resolve, reject);
                 })
                 .then(function(filters) {
+                    if( filters.length == 0 ){
+                       $(".existing_filters_section").hide();
+                    } else {
+                       $(".existing_filters_section").show();
+                    }
                     filters.forEach(function(filter) {
                         const opt = $("<option/>");
                         select.append(opt);
