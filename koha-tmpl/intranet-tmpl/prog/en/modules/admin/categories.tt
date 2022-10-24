@@ -545,10 +545,11 @@
     </div>
 
     <h1>Patron categories</h1>
+    <div class="page-section">
     [% IF searchfield %]
         You searched for [% searchfield | html %]</span>
     [% END %]
-    [% IF categories%]
+    [% IF categories %]
         <table id="patron_categories">
             <thead>
                 <tr>
@@ -718,6 +719,7 @@
     [% ELSE %]
         <div class="dialog alert">No categories have been defined. <a href="/cgi-bin/koha/admin/categories.pl?op=add_form">Create a new category</a>.</div>
     [% END %]
+    </div>
 [% END %]
 
             </main>
