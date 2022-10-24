@@ -227,7 +227,7 @@ export default {
                         render(n, e)
                     })
                 },
-            }, eholdings_packages_table_settings, 0, additional_filters)
+            }, null, 0, additional_filters)
 
             if (filters.package_name.length) {
                 this.filter_table()

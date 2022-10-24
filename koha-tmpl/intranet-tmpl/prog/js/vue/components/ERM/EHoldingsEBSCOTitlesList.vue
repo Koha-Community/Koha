@@ -244,7 +244,7 @@ export default {
                         render(n, e)
                     })
                 },
-            }, eholdings_titles_table_settings, 0, additional_filters)
+            }, null, 0, additional_filters)
 
             if (filters.publication_title.length) {
                 this.filter_table()
