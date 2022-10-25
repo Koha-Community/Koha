@@ -3,19 +3,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-09-15 10:37+0000\n"
+"PO-Revision-Date: 2022-10-18 07:26+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /uk/22.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1663238273.157214\n"
+"X-POOTLE-MTIME: 1666077963.548355\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3275,6 +3275,11 @@ msgstr "жодному з інтерфейсів"
 msgid "cataloguing.pref#ShowComponentRecords# author"
 msgstr "жодному з інтерфейсів"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "жодному з інтерфейсів"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "бібліотечному інтерфейсі та електронному каталозі"
@@ -5763,29 +5768,24 @@ msgid ""
 msgstr "Не дозволяти"
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
-msgstr "Розділи"
+msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
-msgstr "типу одиниці замовлення"
+msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
-msgstr "типу одиниці замовлення"
+msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
-msgstr "типу одиниці замовлення"
+msgstr ""
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
-msgstr "Розділи"
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -6304,7 +6304,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Stockrotation module
-#, fuzzy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
 msgstr "Приклади: <br/>"
 
@@ -9677,9 +9676,8 @@ msgstr ""
 "музичні написи на сторінках подробиць про бібзаписи в електронному каталозі."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACPlayMusicalInscripts# Play"
-msgstr "Показувати"
+msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
@@ -11808,6 +11806,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
+"Якщо номер квитка користувача (<code>cardnumber</code>) включено до переліку "
+"„<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a>“, "
+"мінімальна довжина, якщо тут не вказано, за умовчанням дорівнює одиниці. "
+"Максимальна довжина не може перевищувати розмір поля бази даних 32."
 
 # Patrons > Patron forms
 msgid ""
@@ -11968,12 +11971,10 @@ msgstr ""
 "запису користувача."
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Don't enable"
 msgstr "Не задіювати"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Задіяти"
 
@@ -11982,17 +11983,20 @@ msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
 "use the 'Forgot your password' feature or have staff"
 msgstr ""
+"Якщо не задіяно, користувачі повинні використовувати функцію „Забули свій "
+"пароль“ або звертатися до персоналу"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# reset their password."
-msgstr " символів."
+msgstr "щоб скинути всій пароль."
 
 # Patrons > Security > EnableExpiredPasswordReset
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# the ability for patrons to directly "
 "reset their password when it is expired."
 msgstr ""
+"можливість користувачам безпосередньо скидати свій пароль, коли він "
+"прострочений."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12260,6 +12264,10 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
+"буде додано до форми швидкого додавання користувача під час реєстрації "
+"нового користувача. Відображає лише обов’язкові поля та поля, вказані тут. "
+"Якщо доступно, також буде показана форма додавання поручителя, тоді окремі "
+"поля у цій формі ігноруватимуться."
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
@@ -14558,24 +14566,22 @@ msgstr "."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# OPAC only"
-msgstr ""
+msgstr "лише для електронного каталогу"
 
 # Tools > Reports
 msgid "tools.pref#NewsAuthorDisplay# Show the author for news items:"
-msgstr ""
+msgstr "Показувати автора новин:"
 
-#, fuzzy
 msgid "tools.pref#NewsAuthorDisplay# both OPAC and staff interface"
-msgstr "Написання новин для електронного каталогу та інтерфейсу бібліотекарів"
+msgstr "для електронного каталогу та інтерфейсу бібліотекарів"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# not at all"
-msgstr ""
+msgstr "ніде не показувати"
 
 # OPAC > Features
-#, fuzzy
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr "бібліотечний інтерфейс"
+msgstr "лише для бібліотечного інтерфейсу"
 
 # Tools > Upload
 msgid ""
