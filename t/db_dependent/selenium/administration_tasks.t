@@ -47,6 +47,7 @@ SKIP: {
 
     my $s        = t::lib::Selenium->new;
     my $driver   = $s->driver;
+    $driver->set_window_size(3840,1080);
     my $mainpage = $s->base_url . q|mainpage.pl|;
     $driver->get($mainpage);
     like( $driver->get_title(), qr(Log in to Koha), );
