@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-09-21 18:39+0000\n"
-"Last-Translator: Marjorie  Barry-Vila <marjorie.barry-vila@ccsr.qc.ca>\n"
+"PO-Revision-Date: 2022-10-24 19:13+0000\n"
+"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fr_CA/22.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1663785555.749456\n"
+"X-POOTLE-MTIME: 1666638833.272621\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -203,6 +203,11 @@ msgid ""
 "ensure your SIP configurations are updated to map a register to your SIP "
 "device.</p>"
 msgstr ""
+"<p class='text-danger'><strong>Attention : </strong>Activer ce paramètre "
+"rendra le champ caisse enregistreuse obligatoire pour TOUS les types de "
+"transaction ; Ceci inclut les transactions SIP00, assurez-vous donc que vos "
+"configurations SIP sont mises à jour pour associer une caisse à votre "
+"matériel SIP.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -2244,17 +2249,17 @@ msgstr "La version du serveur CAS auquel Koha se connectera : "
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Don't show"
-msgstr "non"
+msgstr "admin.pref#noItemTypeImages# Ne pas afficher"
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Show"
-msgstr "non"
+msgstr "admin.pref#noItemTypeImages# Afficher"
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
 msgstr ""
-"Afficher les icônes des types de documents dans l'interface "
-"professionnelle : "
+"admin.pref#noItemTypeImages# les icônes de types de documents dans "
+"l'interface professionnelle."
 
 # Administration > Login options
 msgid ""
@@ -2292,7 +2297,7 @@ msgstr "autorités"
 
 # Authorities > General
 msgid "authorities.pref General"
-msgstr "Générale"
+msgstr "Général"
 
 # Authorities > Linker
 msgid "authorities.pref Linker"
@@ -2321,8 +2326,8 @@ msgid ""
 "<br>"
 msgstr ""
 "Ici, auth1 et auth2 se réfèrent aux indicateurs de la notice d'autorité, tag "
-"est un numéro de zone biblio ou un astérisque (*) et some_value est une "
-"valeur fixe (un caractère).<br>"
+"est un numéro de zone bibliographique ou un astérisque (*) et some_value est "
+"une valeur fixe (un caractère).<br>"
 
 # Authorities > General
 msgid ""
@@ -2331,17 +2336,17 @@ msgid ""
 "unimarc), tag, ind1:(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|"
 "some_value).<br>"
 msgstr ""
-"Lignes commençant par un symbole (#) sont ignorées. Chaque ligne doit avoir "
-"la forme suivante: (marc21 | unimarc), tag, ind1: (auth1 | auth2 | "
-"some_value), ind2: (auth1 | auth2 | thesaurus | some_value).<br>"
+"Les lignes commençant par un symbole de commentaire (#) sont ignorées. "
+"Chaque ligne doit avoir la forme suivante: (marc21|unimarc), tag, ind1:"
+"(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|some_value).<br>"
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# The MARC21 option thesaurus "
 "refers to indicators controlled by authority field 008/11 and 040$f."
 msgstr ""
-" L'option thésaurus de MARC21 fait référence aux indicateurs contrôlés par "
-"le champ d'autorité 008/11 and 040$f."
+"L'option thésaurus de MARC21 fait référence aux indicateurs contrôlés par "
+"les zones d'autorité 008/11 et 040$f."
 
 # Authorities > General
 msgid ""
@@ -2359,17 +2364,16 @@ msgid ""
 "preference requires the <code>misc/cronjobs/merge_authorities.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"autorités.pref#AuthorityMergeLimit# <br><strong>NOTE :</strong> Cette "
-"préférence système requiert la tâche (cronjob) <code>misc/cronjobs/"
-"merge_authorities.pl</code>. Demandez à votre administrateur de système de "
-"la planifier."
+"<br><strong>NOTE :</strong> Cette préférence système requiert la tâche "
+"(cronjob) <code>misc/cronjobs/merge_authorities.pl</code>. Demandez à votre "
+"administrateur de système de la planifier."
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do "
 "not update attached bibliographic records if the number exceeds"
 msgstr ""
-" Lors de la modification d'une notice d'autorité, ne mettez pas à jour les "
+"Lors de la modification d'une notice d'autorité, ne pas mettre à jour les "
 "notices bibliographiques rattachées si le nombre dépasse"
 
 # Authorities > General
@@ -2377,7 +2381,8 @@ msgid ""
 "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the "
 "merge_authority cron job will merge them.)"
 msgstr ""
-"(Au-dessus de cette limite, le cron job merge_authority les fusionnera)."
+"(Au-dessus de cette limite, la tâche (cronjob) merge_authority les mettra à "
+"jour)."
 
 # Authorities > General
 msgid ""
@@ -2385,9 +2390,9 @@ msgid ""
 "from an attached authority record (\"merging\"), handle subfields of "
 "relevant bibliographic record fields in"
 msgstr ""
-" En mettant à jour les notices bibliographiques à l'aide de notices "
-"d'autorité attachées (en les fusionnant), gérer les sous-zones des zones "
-"liées aux notices bibliographiques en mode "
+"Lors de la mise à jour les notices bibliographiques à partir des notices "
+"d'autorité liées, gérer les sous-zones des zones liées aux notices "
+"bibliographiques en mode "
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# loose"
@@ -2399,9 +2404,9 @@ msgid ""
 "not found in the authority record, are deleted. Loose mode will keep them. "
 "Loose mode is the historical behavior and still the default."
 msgstr ""
-". En mode strict, les sous-zones qui ne sont pas trouvées dans les notices "
+". En mode strict, les sous-zones qui ne sont pas dans les notices "
 "d'autorités sont supprimées. En mode libre, ces dernières seront conservées. "
-"Le mode libre est le fonctionnement d'origine et il est le mode par défaut. "
+"Le mode libre est le fonctionnement d'origine et il est le mode par défaut."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# strict"
@@ -2409,7 +2414,7 @@ msgstr "strict"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
-msgstr "Lors de l'édition des notices,"
+msgstr "Lors de l'édition de notices,"
 
 # Authorities > General
 msgid ""
@@ -2432,7 +2437,7 @@ msgstr "générer"
 
 # Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "Quand on saisie une notice bibliographique"
+msgstr "Lors de l'édition de notices,"
 
 # Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# allow"
@@ -2448,24 +2453,24 @@ msgid ""
 "authority records if needed, rather than having to reference existing "
 "authorities."
 msgstr ""
-"autorités.pref#BiblioAddsAuthorities# automatiquement les autorités si "
-"nécessaire (plutôt que d'avoir à faire référence à des autorités existantes)"
+"automatiquement de nouvelles notices d'autorité, si nécessaire, plutôt que "
+"d'avoir à faire référence à des autorités existantes."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
-msgstr "Permettre de"
+msgstr "Relier"
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Don't"
-msgstr "Ne pas"
+msgstr "Ne pas relier"
 
 # Authorities > Linker
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module."
 msgstr ""
-"relier automatiquement les autorités au moment de la sauvegarde de la notice "
-"dans le module Catalogage."
+"automatiquement les autorités qui ont déjà été liées au moment de la "
+"sauvegarde de la notice dans le module Catalogage."
 
 # OPAC > Privacy > OPACPrivacy
 msgid ""
@@ -2476,12 +2481,11 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"authorités.pref#CréerZoneD'Authorité667# Utiliser le texte ci-dessous comme "
-"valeur par défaut pour le zone 667$a des notices d'authorité MARC21 (à "
-"besoin de <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
+"Utiliser le texte ci-dessous comme valeur par défaut pour la zone 667$a des "
+"notices d'autorité MARC21 (requiert <a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> et "
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>) :"
 
 # OPAC > Privacy > OPACPrivacy
 msgid ""
@@ -2492,12 +2496,11 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"authorités.pref#CréerZoneD'AuthoritéZone670# Utiliser le texte ci-dessous "
-"comme valeur par défaut pour le zone 670$a des notices d'authorité MARC21 (à "
-"besoin de <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
+"Utiliser le texte ci-dessous comme valeur par défaut pour la zone 670$a des "
+"notices d'autorité MARC21 (requiert <a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> et "
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>) :"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2512,10 +2515,8 @@ msgid ""
 "authorities.pref#LinkerKeepStale# keep existing links to authority records "
 "for headings where the linker is unable to find a match."
 msgstr ""
-"autoritiés.pref#LinkerKeepStale# les liens aux notices d'autorités là où le "
-"\"linker\" n'a pas réussi à faire un nouveau lien. (Positionné sur "
-"Conserver, cela veut dire que le \"Linker\"ne supprimera jamais un lien vers "
-"une autorité mais selon \"LinkerRelink\", le lien peut changer.)"
+"les liens aux notices d'autorité là où le \"linker\" n'a pas réussi à faire "
+"un nouveau lien."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# Use the"
@@ -2537,7 +2538,7 @@ msgstr "selon la dernière concordance"
 msgid ""
 "authorities.pref#LinkerModule# linker module for matching headings to "
 "authority records."
-msgstr "pour l'arrimage des vedettes vers les notices d'autorités."
+msgstr "pour l'arrimage des vedettes aux notices d'autorités."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerOptions# (separate options with |)."
@@ -2561,8 +2562,7 @@ msgstr "Ne pas relier"
 msgid ""
 "authorities.pref#LinkerRelink# relink headings that have previously been "
 "linked to authority records."
-msgstr ""
-"les vedettes qui ont été précédemment arrimées aux notices d'autorités."
+msgstr "les vedettes qui ont été précédemment arrimées aux notices d'autorité."
 
 # Authorities > General
 msgid ""
@@ -2570,9 +2570,9 @@ msgid ""
 "the contents of MARC21 authority control field 008 position 06-39 (fixed "
 "length data elements). Do NOT include the date (position 00-05):"
 msgstr ""
-"Utiliser la valeur suivante par défaut dans la zone de contrôle 008 position "
-"06-39 d'une notice d'autorité MARC21 (Éléments de données de longueur fixe). "
-"NE DOIT PAS inclure la date (position 00-05) :"
+"Utiliser le texte ci-dessous comme valeur par défaut pour la zone de "
+"contrôle 008 positions 06-39 d'une notice d'autorité MARC21 (éléments de "
+"données de longueur fixe). NE DOIT PAS inclure la date (positions 00-05) :"
 
 # Authorities > General
 msgid ""
@@ -2580,9 +2580,9 @@ msgid ""
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
 msgstr ""
-"Utiliser la valeur suivante par défaut dans la zone de contrôle 100 position "
-"08-35 d'une notice d'autorité UNIMARC (Éléments de données de longueur "
-"fixe). NE DOIT PAS inclure la date (position 00-07) :"
+"Utiliser le texte ci-dessous comme valeur par défaut pour la zone de "
+"contrôle 100 positions 08-35 d'une notice d'autorité UNIMARC (éléments de "
+"données de longueur fixe). NE DOIT PAS inclure la date (positions 00-07) :"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -2597,7 +2597,8 @@ msgid ""
 "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead "
 "of text strings for searches from subject tracings."
 msgstr ""
-"les numéros des autorités à la place du texte pour le traçage des sujets."
+"les numéros d'autorité à la place du texte pour la recherche de rappels de "
+"renvois."
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -3287,9 +3288,8 @@ msgstr ""
 "onglet contient les exemplaires dont"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# ,"
-msgstr "nulle part"
+msgstr " ,"
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
@@ -3300,12 +3300,11 @@ msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Un maximum de"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "cataloguing.pref#ShowComponentRecords# By default, sort component results in "
 "the staff interface by"
 msgstr ""
-"Trier par défaut dans l'intranet les résultats de recherche sur le champ"
+"Par défaut, trier dans l'intranet les résultats de recherche sur le champ"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3325,6 +3324,10 @@ msgstr "cataloguing.pref#ShowComponentRecords# ascendant."
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# author"
 msgstr "cataloguing.pref#ShowComponentRecords# auteur"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "numéro de notice"
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
@@ -4718,9 +4721,8 @@ msgid ""
 "circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
 "system preference is used by the cleanup_database.pl cronjob.</span>"
 msgstr ""
-"circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">Cette "
-"préférence système est utilisée par la tâche (cronjob) cleanup_database.pl.</"
-"span>"
+"<span class=\"hint\">Cette préférence système est utilisée par la tâche "
+"(cronjob) cleanup_database.pl.</span>"
 
 # Circulation > Return claims > CleanUpDatabaseReturnClaims
 msgid ""
@@ -4832,9 +4834,8 @@ msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "années"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# ."
-msgstr "la bibliothèque où on est connecté"
+msgstr "."
 
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
@@ -4851,7 +4852,6 @@ msgstr ""
 "l'exemplaire"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "la bibliothèque propriétaire de l'exemplaire"
 
@@ -5824,8 +5824,7 @@ msgstr ""
 "preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a> :"
 
-# Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
+# Circulation > Holds policy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
 "start date option is only effective and shown on the hold form when <a href="
@@ -5835,11 +5834,13 @@ msgid ""
 "op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
 "a> are enabled."
 msgstr ""
-"le dernier utilisateur à retourner un exemplaire. Ce paramètre est "
-"indépendant des préférences systèmes <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> et <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
+"<br><strong>NOTE :</strong> L'option de date de début de réservation est "
+"seulement activée et affichée dans le formulaire de réservation lorsque les "
+"préférences système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> et "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> sont activées."
 
 # Circulation > Holds policy
 msgid ""
@@ -10199,7 +10200,6 @@ msgid ""
 msgstr "les suggestions d'achat des autres utilisateurs."
 
 # OPAC > Appearance > OPACXSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10210,14 +10210,11 @@ msgid ""
 msgstr ""
 "<br />Options :<ul><li>Entrer \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour "
-"celle par défaut</li><li>Mettre un chemin pour définir un fichier xslt</"
-"li><li>Mettre une URL pour une feuille de style externe spécifique.</"
-"li><li>NOTE : La préférence système <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> doit être activée si votre feuille de style "
-"personnalisée utilise des données dans les zones d'exemplaire</li></ul>Si "
-"vous utilisez plusieurs feuilles de style pour différentes langues, le code "
-"{langcode} sera remplacé par la langue de l'interface actuelle."
+"la feuille de style par défaut</li><li>Inscrire un chemin vers un fichier "
+"xslt</li><li>Inscrire une URL pour une feuille de style externe spécifique.</"
+"li></ul>Si vous utilisez plusieurs feuilles de style pour différentes "
+"langues, le code {langcode} sera remplacé par la langue de l'interface "
+"actuelle."
 
 # OPAC > Appearance
 msgid ""
@@ -10228,7 +10225,6 @@ msgstr ""
 "l'adresse: "
 
 # OPAC > Appearance > OPACXSLTListsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10239,14 +10235,11 @@ msgid ""
 msgstr ""
 "<br />Options :<ul><li>Entrer \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour "
-"celle par défaut</li><li>Mettre un chemin pour définir un fichier xslt</"
-"li><li>Mettre une URL pour une feuille de style externe spécifique.</"
-"li><li>NOTE : La préférence système <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> doit être activée si votre feuille de style "
-"personnalisée utilise des données dans les zones d'exemplaire</li></ul>Si "
-"vous utilisez plusieurs feuilles de style pour différentes langues, le code "
-"{langcode} sera remplacé par la langue de l'interface actuelle."
+"la feuille de style par défaut</li><li>Inscrire un chemin vers un fichier "
+"xslt</li><li>Inscrire une URL pour une feuille de style externe spécifique.</"
+"li></ul>Si vous utilisez plusieurs feuilles de style pour différentes "
+"langues, le code {langcode} sera remplacé par la langue de l'interface "
+"actuelle."
 
 # OPAC > Appearance
 msgid ""
@@ -10854,15 +10847,16 @@ msgstr "une liste de choix de bibliothèque pour les nouvelles à l'OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# Don't show"
-msgstr "Non"
+msgstr "opac.pref#OpacNoItemTypeImages# Ne pas afficher"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# Show"
-msgstr "Afficher"
+msgstr "opac.pref#OpacNoItemTypeImages# Afficher"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
-msgstr "Afficher les icônes de types de document à l'OPAC."
+msgstr ""
+"opac.pref#OpacNoItemTypeImages# les icônes de types de document à l'OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -13505,15 +13499,15 @@ msgid "searching.pref#PassItemMarcToXSLT# Don't"
 msgstr "Ne pas rendre disponibles"
 
 # Searching > Results display > PassItemMarcToXSLT
-#, fuzzy
 msgid ""
 "searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
 "UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
 "results pages."
 msgstr ""
-"les zones MARC des exemplaires aux feuilles de style XSLT. La valeur par "
-"défaut est \"Ne pas rendre disponibles\", les exemplaires sont affichés à "
-"l'aide d'autres méthodes."
+"les champs MARC (MARC21 952, UNIMARC 995) pour les feuilles de style XSLT "
+"des pages de résultats de l'OPAC et de l'interface professionnelle. Par "
+"défaut, la valeur est \"Non, ne pas\", les exemplaires sont affichés selon "
+"d'autres méthodes."
 
 # Searching > Features
 msgid ""
@@ -14339,7 +14333,6 @@ msgstr ""
 "HTML."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14349,15 +14342,12 @@ msgid ""
 "languages the placeholder {langcode} will be replaced with current interface "
 "language."
 msgstr ""
-"<br />Options:<ul><li>Inscrire \"<a href=\"#\" class=\"set_syspref\" data-"
+"<br />Options :<ul><li>Entrer \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" pour la "
-"feuille de style par défaut</li><li>Inscrire un chemin pour définir un "
-"fichier xslt</li><li>Inscrire un URL pour une feuille de style externe.</"
-"li><li>NOTE: La préférence système <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> doit "
-"être activée si votre feuille de style personnalisée utilise les données "
-"d'exemplaires</li></ul>Si vous avez plusieurs feuilles de style dans "
-"différentes langues, {langcode} sera remplacé par la langue de l'interface."
+"feuille de style par défaut</li><li>Inscrire un chemin vers un fichier xslt</"
+"li><li>Inscrire un URL pour une feuille de style externe.</li></ul>Si vous "
+"utilisez plusieurs feuilles de style pour différentes langues, le code "
+"{langcode} sera remplacé par la langue de l'interface."
 
 # Staff interface > Appearance
 msgid ""
@@ -14368,7 +14358,6 @@ msgstr ""
 "l'adresse: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14377,16 +14366,12 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Options:<ul><li>Inscrire \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" pour la "
-"feuille de style par défaut</li><li>Inscrire un chemin pour définir un "
-"fichier xslt</li><li>Inscrire un URL pour une feuille de style externe.</"
-"li><li>NOTE: La préférence système <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> doit "
-"être activée si votre feuille de style personnalisée utilise des données "
-"dans les champs d'exemplaire</li></ul>Si vous utilisez plusieurs feuilles de "
-"style pour différentes langues, {langcode} sera remplacé par la langue de "
-"l'interface actuelle."
+"<br />Options :<ul><li>Entrer \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" pour la "
+"feuille de style par défaut</li><li>Inscrire un cheminvers un fichier xslt</"
+"li><li>Inscrire un URL pour une feuille de style externe.</li></ul>Si vous "
+"utilisez plusieurs feuilles de style pour différentes langues, le code "
+"{langcode} sera remplacé par la langue de l'interface actuelle."
 
 # Staff interface > Appearance
 msgid ""

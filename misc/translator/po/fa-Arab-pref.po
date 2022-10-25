@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2022-09-06 09:37+0000\n"
-"Last-Translator: Hamideh Aliakbari <h.aliakbari2014@gmail.com>\n"
+"PO-Revision-Date: 2022-10-19 09:49+0000\n"
+"Last-Translator: Shahab bohlooli <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/22.05/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1662457048.135416\n"
+"X-POOTLE-MTIME: 1666172993.923099\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3449,6 +3449,11 @@ msgstr "انجام دادن"
 msgid "cataloguing.pref#ShowComponentRecords# author"
 msgstr "انجام دادن"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "cataloguing.pref#ShowComponentRecords# شماره بازیابی"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
@@ -4376,13 +4381,12 @@ msgid "circulation.pref#ArticleRequestsMandatoryFields# Date"
 msgstr "گردش.pref#فیلدهای اجباری درخواست های مقاله# تاریخ"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFields# For records that are record "
 "level or item level requestable, make the following fields mandatory:"
 msgstr ""
-"گردش.pref#فیلدهای اجباری درخواست های مقاله# برای رکوردهایی که سطح رکورد یا "
-"سطح مورد درخواستی هستند، فیلدهای زیر را اجباری کنید"
+"pref.circulation#فیلدهای ضروری درخواست های مقاله#برای رکوردهایی که از سطح "
+"رکورد یا سطح مورد درخواست هستند ، زمینه های زیر را اجباری کنید"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Issue"
@@ -4413,13 +4417,12 @@ msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Date"
 msgstr "گردش.pref#فقط آیتم فیلدهای اجباری درخواست های مقاله# تاریخ"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# For records that "
 "are only item level requestable, make the following fields mandatory:"
 msgstr ""
-"گردش.pref#فقط آیتم اجباری درخواست های مقاله# برای رکوردهایی که فقط در سطح "
-"مورد قابل درخواست هستند، فیلدهای زیر را اجباری کنید"
+"pref.circulation#فقط آیتم فیلدهای ضروری درخواست های مقاله#برای پرونده هایی "
+"که فقط سطح مورد درخواست هستند، قسمت های زیر را اجباری کنید"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Issue"
@@ -6698,6 +6701,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# Use the following mappings to determine "
 "the sort_bin of a returned item.<br/>"
 msgstr ""
+"circulation.pref#SIP2SortBinMapping# از نگاشتهای زیر برای تعیین sort_bin "
+"منابع برگشتی استفاده کنید.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid "circulation.pref#SIP2SortBinMapping# i.e. \\$holdingbranch<br/></br>"
@@ -7285,17 +7290,17 @@ msgid "circulation.pref#UpdateTotalIssuesOnCirc# Don't"
 msgstr "انجام ندادن"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateTotalIssuesOnCirc# update a bibliographic record's "
 "total checkouts count whenever an item is checked out (WARNING! This "
 "increases server load significantly; if performance is a concern, use the "
 "update_totalissues.pl cron job to update the total checkouts count)."
 msgstr ""
-"روزآمد کردن شماره تمام نسخه های یک رکورد کتابشناختی هنگامی که یک شماره از "
-"منبع منتشر می شود (اخطار! این ترافیک سرور را به میزان قابل توجهی افزایش می "
-"دهد؛ اگر اجرا نگرانی تلقی می شود از  update_totalissues.pl استفاده کنید تا "
-"شماره های انتشار روزآمد شود)."
+"circulation.pref#UpdateTotalIssuesOnCirc# روزآمدسازی شماره تمام نسخه های یک "
+"رکورد کتابشناختی هنگامی که یک سند بررسی می شود (هشدار! این ترافیک سرور را به "
+"میزان قابل توجهی افزایش می دهد؛ اگر عملکرد نگران کننده است، از "
+"update_totalissues.pl cron job استفاده کنید تا شماره های انتشار بروز رسانی "
+"شود)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
@@ -7463,13 +7468,12 @@ msgid ""
 msgstr "یک کاربر از یک کتابخانه برای رزرو کردن یک منبع از کتابخانه دیگر"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#decreaseLoanHighHolds# . Ignore items with the following "
 "statuses when counting items:"
 msgstr ""
-"circulation.pref#کاهش امانت بیشتر نگه داشته شده# روزها با تقاضای بالا یا "
-"بیشتر از"
+"circulation.pref#decreaseLoanHighHolds# . هنگام شمارش آیتم ها، آیتم هایی را "
+"با وضعیت زیر نادیده بگیرید:"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# Damaged"
@@ -10256,8 +10260,8 @@ msgid ""
 "detail pages of items on the OPAC, with the following HTML (leave blank to "
 "disable):"
 msgstr ""
-"شامل یک جعبه \"جستجوهای بیشتر\" در صفحات جزئیات منابع در اپک, با HTML  زیر "
-"(برای از غیرفعال کردن خالی بگذارید):"
+"opac.pref#OPACSearchForTitleIn# شامل یک جعبه \"جستجوهای بیشتر\" در صفحات "
+"جزئیات منابع در اپک, با HTML زیر (برای از غیرفعال کردن خالی بگذارید):"
 
 # OPAC > Shelf browser
 msgid "opac.pref#OPACShelfBrowser# Don't show"
@@ -12075,31 +12079,30 @@ msgstr ""
 "امکان مشاهده جریمه های کاربران را در اپک برای کاربران خود فراهم نمایند."
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
-msgstr "فعال کردن"
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# غیرفعال کردن"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
-msgstr "فعال کردن"
+msgstr "patrons.pref#AutoApprovePatronProfileSettings# فعال کردن"
 
 # Patrons > Privacy > PrivacyPolicyURL
-#, fuzzy
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails"
 "\">OPACPatronDetails</a> to be activated."
 msgstr ""
-"patrons.pref#آدرس سیاست حفظ حریم خصوصی# <br><strong>توجه:</strong> آدرس فقط "
-"در صورتی نمایش داده می شود که<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a>تنظیم شده باشد."
+"patrons.pref#AutoApprovePatronProfileSettings# نیاز دارد <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails\""
+">OPACPatronDetails</a> فعال شود."
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
 msgstr ""
+"patrons.pref#AutoApprovePatronProfileSettings# تأیید خودکار تغییرات جزئیات "
+"کاربر در اپک."
 
 # Patrons > Notices and notifications > AutoEmailNewUser
 msgid ""
@@ -13178,7 +13181,9 @@ msgstr ""
 msgid ""
 "patrons.pref#StatisticsFields# Show the following fields from the items "
 "database table as columns on the statistics tab on the patron record: "
-msgstr "نمایش فیلدهای زیر از پایگاه منابع"
+msgstr ""
+"patrons.pref#StatisticsFields# نمایش فیلدهای زیر از جدول پایگاه داده منابع "
+"به عنوان ستون هایی در برگه آمار رکورد کاربر نشان دهید: "
 
 # Patrons > Notices and notifications > TalkingTechItivaPhoneNotification
 msgid ""
@@ -13786,7 +13791,7 @@ msgstr "عنوان"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# total number of checkouts"
-msgstr "کل تعداد امانت ها"
+msgstr "searching.pref#OPACdefaultSortField# تعداد کل امانت ها"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResults# By default, show"
@@ -14100,7 +14105,7 @@ msgstr "عنوان"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# total number of checkouts"
-msgstr "تعداد کل امانت ها"
+msgstr "searching.pref#defaultSortField# تعداد کل امانت ها"
 
 # Searching > Results display
 msgid "searching.pref#displayFacetCount# Don't show"

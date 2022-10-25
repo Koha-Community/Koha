@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-07 17:04+0000\n"
-"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
+"PO-Revision-Date: 2022-10-24 08:06+0000\n"
+"Last-Translator: s.pierros <s.pierros@thessaloniki.gr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /el/22.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1651943092.652532\n"
+"X-POOTLE-MTIME: 1666598774.025637\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3359,6 +3359,11 @@ msgstr "να γίνεται"
 msgid "cataloguing.pref#ShowComponentRecords# author"
 msgstr "να γίνεται"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "να γίνεται"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
@@ -3622,12 +3627,14 @@ msgstr "Τα barcode"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
-msgstr "δημιουργούνται κατά τη μορφή 1, 2, 3."
+msgstr "cataloguing.pref#autoBarcode# δημιουργούνται με την μορφή 1, 2, 3."
 
 # Cataloging > Record Structure
 msgid ""
 "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
-msgstr "δημιουργούνται με τη μορφή <branchcode>εεμμ0001."
+msgstr ""
+"cataloguing.pref#autoBarcode# δημιουργούνται με τη μορφή "
+"<branchcode>εεμμ0001."
 
 # Cataloging > Record Structure
 msgid ""
@@ -3637,9 +3644,8 @@ msgstr ""
 "<year>-0002."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes."
-msgstr "αυξητικά EAN-13 barcodes"
+msgstr "cataloguing.pref#autoBarcode# αύξοντες ραβδοκώδικες EAN-13."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#autoBarcode# not generated automatically."
@@ -3874,6 +3880,12 @@ msgid ""
 "Enabling this system preference will block all checkouts for patrons with "
 "fines both via the web-based self checkout system and via SIP."
 msgstr ""
+"circulation.pref#AllFinesNeedOverride# χειροκίνητη παράκαμψη όλων των "
+"προστίμων, ακόμα και μικρότερων από το όριο της προτίμησης συστήματος <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
+">noissuescharge</a>. Η ενεργοποίηση αυτής της προτίμησης συστήματος θα "
+"εμποδίσει όλους τους δανεισμούς μελών με πρόστιμα και μέσω αυτόματο "
+"δανεισμού και μέσω SIP."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -11567,19 +11579,16 @@ msgid "opac.pref#QuoteOfTheDay# OPAC"
 msgstr "Ενεργοποίηση"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#QuoteOfTheDay# Show quote of the day in the"
-msgstr "Ενεργοποίηση"
+msgstr "opac.pref#QuoteOfTheDay# Εμφάνιση του αποφθέγματος της ημέρας στο"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#QuoteOfTheDay# main page."
-msgstr "Ενεργοποίηση"
+msgstr "opac.pref#QuoteOfTheDay# στην αρχική σελίδα."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr "Ενεργοποίηση"
+msgstr "opac.pref#QuoteOfTheDay# πρόγραμμα προσωπικού"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid "opac.pref#Reference_NFL_Statuses# (Use | as delimiter.)"
@@ -12416,7 +12425,8 @@ msgid ""
 "patrons.pref#ExtendedPatronAttributes# searching, editing and display of "
 "custom attributes on patrons."
 msgstr ""
-"η αναζήτηση, επεξεργασία και εμφάνιση προσαρμοσμένων αποδόσεων στα μέλη."
+"patrons.pref#ExtendedPatronAttributes# η αναζήτηση, επεξεργασία και εμφάνιση "
+"προσαρμοσμένων χαρακτηριστικών στα μέλη."
 
 # Patrons > Security
 msgid ""
@@ -13884,20 +13894,21 @@ msgid ""
 msgstr ""
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Don't use"
-msgstr "Να μη χρησιμοποιείται"
+msgstr "searching.pref#UseICUStyleQuotes# Να μη χρησιμοποιούνται"
 
 # Searching > Features > UseICUStyleQuotes
 msgid ""
 "searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
 "subjects. The default is to use standard quotes (\"\")."
 msgstr ""
+"searching.pref#UseICUStyleQuotes# εισαγωγικά τύπου ICU ({}) κατά την "
+"αναζήτηση θεμάτων. Η προκαθορισμένη ρύθμιση είναι τα τυπικά εισαγωγικά (\"\""
+")."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Use"
-msgstr "Να χρησιμοποιείται"
+msgstr "searching.pref#UseICUStyleQuotes# Να χρησιμοποιούνται"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ,"
@@ -14519,11 +14530,12 @@ msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr "Ναι"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA)."
-msgstr "Χρήση πιστοποίησης εισόδου CAS: "
+msgstr ""
+"staff_interface.pref#TwoFactorAuthentication# επαλήθευση δύο σταδίων/"
+"παραγόντων (2FA)."
 
 # Staff Client > Options
 #, fuzzy
