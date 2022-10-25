@@ -33,7 +33,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -42,7 +42,7 @@ subtest 'list() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**28}
+            value => { flags => 2**28 }
         }
     );
     my $password = 'thePassword123';
@@ -95,6 +95,63 @@ subtest 'list() tests' => sub {
           . $agreement->vendor_id )->status_is(200)
       ->json_is( [ $agreement->to_api, $another_agreement->to_api ] );
 
+    # Attempt to search by name like 'ko'
+    $agreement->delete;
+    $another_agreement->delete;
+    $agreement_with_another_vendor_id->delete;
+    $t->get_ok( qq~//$userid:$password@/api/v1/erm/agreements?q=[{"me.name":{"like":"%ko%"}}]~)
+      ->status_is(200)
+      ->json_is( [] );
+
+    my $agreement_to_search = $builder->build_object(
+        {
+            class => 'Koha::ERM::Agreements',
+            value => {
+                name => 'koha',
+            }
+        }
+    );
+
+    # Search works, searching for name like 'ko'
+    $t->get_ok( qq~//$userid:$password@/api/v1/erm/agreements?q=[{"me.name":{"like":"%ko%"}}]~)
+      ->status_is(200)
+      ->json_is( [ $agreement_to_search->to_api ] );
+
+    # Warn on incorrect filter date format
+    $t->get_ok( "//$userid:$password@/api/v1/erm/agreements?max_expiration_date=19-03-2021")
+      ->status_is(400)
+      ->json_is(
+            "/errors" => [
+                {
+                    message => "Does not match date format.",
+                    path    => "/max_expiration_date"
+                }
+            ]
+        );
+
+    # Attempt to filter by expired on 2021-03-19
+    $t->get_ok( "//$userid:$password@/api/v1/erm/agreements?max_expiration_date=2021-03-19")
+      ->status_is(200)
+      ->json_is( [] );
+
+    my $agreement_to_filter = $builder->build_object(
+        {
+            class => 'Koha::ERM::Agreements'
+        }
+    );
+    $agreement_to_filter->periods(
+        [
+            {
+                'started_on'=>'2021-03-17',
+                'ended_on'=>'2021-03-19'
+            }
+        ]
+    );
+    # Filter by expired on 2021-03-19
+    $t->get_ok( "//$userid:$password@/api/v1/erm/agreements?max_expiration_date=2021-03-19")
+      ->status_is(200)
+      ->json_is( [ $agreement_to_filter->to_api ] );
+
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/erm/agreements?blah=blah")
       ->status_is(400)
@@ -136,24 +193,29 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
+    # This agreement exists, should get returned
     $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id )->status_is(200)
       ->json_is( $agreement->to_api );
 
+    # Return one agreement with some embeds
     $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id  => {'x-koha-embed' => 'periods,user_roles,agreement_licenses'} )->status_is(200)
       ->json_is( { %{ $agreement->to_api }, periods => [], user_roles => [], agreement_licenses => [] });
 
+    # Return one agreement with all embeds
     $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id  => {'x-koha-embed' => 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'} )->status_is(200)
       ->json_is( { %{ $agreement->to_api }, periods => [], user_roles => [], agreement_licenses => [] });
 
+    # Unauthorized access
     $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id )->status_is(403);
 
+    # Attempt to get non-existent agreement
     my $agreement_to_delete =
       $builder->build_object( { class => 'Koha::ERM::Agreements' } );
-    my $non_existent_id = $agreement_to_delete->id;
+    my $non_existent_id = $agreement_to_delete->agreement_id;
     $agreement_to_delete->delete;
 
     $t->get_ok("//$userid:$password@/api/v1/erm/agreements/$non_existent_id")
@@ -354,9 +416,10 @@ subtest 'update() tests' => sub {
         ]
           );
 
+    # Attempt to update non-existent agreement
     my $agreement_to_delete =
       $builder->build_object( { class => 'Koha::ERM::Agreements' } );
-    my $non_existent_id = $agreement_to_delete->id;
+    my $non_existent_id = $agreement_to_delete->agreement_id;
     $agreement_to_delete->delete;
 
     $t->put_ok( "//$userid:$password@/api/v1/erm/agreements/$non_existent_id" =>
@@ -399,16 +462,18 @@ subtest 'delete() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $agreement_id =
-      $builder->build_object( { class => 'Koha::ERM::Agreements' } )->id;
+      $builder->build_object( { class => 'Koha::ERM::Agreements' } )->agreement_id;
 
     # Unauthorized attempt to delete
     $t->delete_ok(
         "//$unauth_userid:$password@/api/v1/erm/agreements/$agreement_id")
       ->status_is(403);
 
+    # Delete existing agreement
     $t->delete_ok("//$userid:$password@/api/v1/erm/agreements/$agreement_id")
       ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
 
+    # Attempt to delete non-existent agreement
     $t->delete_ok("//$userid:$password@/api/v1/erm/agreements/$agreement_id")
       ->status_is(404);
 
