@@ -129,7 +129,7 @@ use C4::Biblio qw(
     TransformHtmlToXml
     TransformKohaToMarc
 );
-use C4::Budgets qw( GetBudget GetBudgetSpent GetBudgetOrdered );
+use C4::Budgets qw( GetBudget GetBudgetSpent GetBudgetOrdered FieldsForCalculatingFundValues );
 use C4::Items qw( AddItemFromMarc );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Log qw( logaction );
@@ -162,7 +162,10 @@ unless($confirm_budget_exceeding) {
     if ( $ordernumber ) {
         # modifying an existing order so remove order price from $budget_ordered
         my $order = Koha::Acquisition::Orders->find($ordernumber);
-        $budget_ordered = $budget_ordered - ( $order->ecost_tax_included * $order->quantity );
+
+        # get correct unitprice and ecost fields
+        my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
+        $budget_ordered = $budget_ordered - ( $order->$ecost_field * $order->quantity );
     }
 
     my $budget_used = $budget_spent + $budget_ordered;
