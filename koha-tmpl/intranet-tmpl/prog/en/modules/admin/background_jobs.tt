@@ -73,38 +73,42 @@
 
     [% PROCESS "background_jobs/${job.type}.inc" %]
 
-    <fieldset class="rows" style="display:none;">
-        <ol>
-            <li><span class="label">Job ID: </span>[% job.id | html %]</li>
-            <li>
-                <label for="job_status">Status: </label>
-                <span id="job_status_description"></span>
-            </li>
-            <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
-            <li>
-                <label for="job_type">Type: </label>
-                <span id="job_type_description"></span>
-            </li>
-            <li>
-                <label for="job_enqueued_on">Queued: </label>
-                [% job.enqueued_on | $KohaDates with_hours = 1 %]
-            </li>
-            <li>
-                <label for="job_started_on">Started: </label>
-                [% job.started_on | $KohaDates with_hours = 1 %]
-            </li>
-            <li>
-                <label for="job_ended_on">Ended: </label>
-                [% job.ended_on | $KohaDates with_hours = 1 %]
-            </li>
-            <li><label for="job_data">Report: </label>
-                [% IF job.status != 'new' %][% PROCESS 'report' %][% END %]
-            </li>
-            <li><label for="job_data">Detailed messages: </label>
-                [% IF job.status != 'new' %][% PROCESS 'detail' %][% END %]
-            </li>
-        </ol>
-    </fieldset>
+    <div id="job_details" style="display:none">
+        <fieldset class="rows">
+            <ol>
+                <li><span class="label">Job ID: </span>[% job.id | html %]</li>
+                <li>
+                    <label for="job_status">Status: </label>
+                    <span id="job_status_description"></span>
+                </li>
+                <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
+                <li>
+                    <label for="job_type">Type: </label>
+                    <span id="job_type_description"></span>
+                </li>
+                <li>
+                    <label for="job_enqueued_on">Queued: </label>
+                    [% job.enqueued_on | $KohaDates with_hours = 1 %]
+                </li>
+                <li>
+                    <label for="job_started_on">Started: </label>
+                    [% job.started_on | $KohaDates with_hours = 1 %]
+                </li>
+                <li>
+                    <label for="job_ended_on">Ended: </label>
+                    [% job.ended_on | $KohaDates with_hours = 1 %]
+                </li>
+            </ol>
+        </fieldset>
+        <div class="page-section">
+            <h2>Report</h2>
+            [% IF job.status != 'new' %][% PROCESS 'report' %][% END %]
+        </div>
+        <div class="page-section">
+            <h3>Detailed messages: </h3>
+            [% IF job.status != 'new' %][% PROCESS 'detail' %][% END %]
+        </div>
+    </div> <!-- /#job_details -->
 
     [% IF CAN_user_parameters_manage_background_jobs %]
         <fieldset class="action">
@@ -127,20 +131,22 @@
         <label for="include_last_hour">Only include jobs started in the last hour</label>
     </div>
 
-    <table id="table_jobs">
-        <thead>
-            <tr>
-                <th>Job ID</th>
-                <th data-filter="job_statuses">Status</th>
-                <th>Progress</th>
-                <th data-filter="job_types">Type</th>
-                <th>Queued</th>
-                <th>Started</th>
-                <th>Ended</th>
-                <th class="noExport">Actions</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="page-section">
+        <table id="table_jobs">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th data-filter="job_statuses">Status</th>
+                    <th>Progress</th>
+                    <th data-filter="job_types">Type</th>
+                    <th>Queued</th>
+                    <th>Started</th>
+                    <th>Ended</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 [% END %]
 
             </main>
@@ -237,7 +243,7 @@
             [% IF op == 'view' %]
                 $("#job_status_description").html( get_job_status("[% job.status | html %]") );
                 $("#job_type_description").html( get_job_type("[% job.type | html %]") );
-                $("fieldset.rows").show();
+                $("#job_details").show();
             [% END %]
 
             let additional_filters = {
