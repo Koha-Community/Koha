@@ -124,6 +124,9 @@
 [% Asset.js("lib/bootstrap/js/bootstrap.bundle.min.js") | $raw %]
 [% Asset.js("lib/fontfaceobserver.min.js") | $raw %]
 [% Asset.js("lib/enquire.min.js") | $raw %]
+<script>
+    let logged_in_user_id = "[% logged_in_user.borrowernumber | html %]";
+</script>
 [% Asset.js("js/global.js") | $raw %]
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
     <script>

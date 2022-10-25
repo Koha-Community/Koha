@@ -42,6 +42,10 @@
         <li><a class="suggest_for_purchase btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-gift" aria-hidden="true"></i> Suggest for purchase</a></li>
     [% END %]
 
+    [% IF Koha.Preference('OpacCatalogConcerns') %]
+        <li><a class="report_a_concern btn btn-link btn-lg" href="#" data-toggle="modal" data-target="#addConcernModal"><i class="fa fa-fw fa-warning" aria-hidden="true"></i> Report a concern</a></li>
+    [% END %]
+
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
         <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Unhighlight</a>

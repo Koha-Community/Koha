@@ -1438,7 +1438,14 @@
     </div> <!-- /.modal-dialog -->
 </div> <!-- /.modal -->
 
+[% IF Koha.Preference('OpacCatalogConcerns') %]
+    [% INCLUDE 'modals/catalog_concern.inc' %]
+[% END %]
+
 [% BLOCK jsinclude %]
+    [% IF Koha.Preference('OpacCatalogConcerns') %]
+        [% Asset.js("js/modals/catalog_concern.js") | $raw %]
+    [% END %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE greybox.inc %]
