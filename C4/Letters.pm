@@ -738,6 +738,7 @@ sub _parseletter_sth {
     ($table eq 'accountlines' )    ? "SELECT * FROM $table WHERE   accountlines_id = ?"                               :
     ($table eq 'biblio'       )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
     ($table eq 'biblioitems'  )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
+    ($table eq 'tickets'      )    ? "SELECT * FROM $table WHERE   id = ?"                                            :
     ($table eq 'credits'      )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'debits'       )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'items'        )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
@@ -1619,7 +1620,7 @@ sub _process_tt {
     my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute, %$objects };
 
     $content = add_tt_filters( $content );
-    $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
+    $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %][% PROCESS 'html_helpers.inc' %]$content|;
 
     my $output;
     my $schema = Koha::Database->new->schema;
@@ -1737,6 +1738,12 @@ sub _get_tt_params {
             singular => 'suggestion',
             plural   => 'suggestions',
             pk       => 'suggestionid',
+        },
+        tickets => {
+            module   => 'Koha::Tickets',
+            singular => 'ticket',
+            plural   => 'tickets',
+            pk       => 'id',
         },
         issues => {
             module   => 'Koha::Checkouts',

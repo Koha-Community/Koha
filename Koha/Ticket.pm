@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use C4::Letters;
+
 use Koha::Ticket::Update;
 use Koha::Ticket::Updates;
 
@@ -95,6 +97,46 @@ sub add_update {
 
     my $rs = $self->_result->add_to_ticket_updates($params)->discard_changes;
     return Koha::Ticket::Update->_new_from_dbic($rs);
+}
+
+=head2 Core methods
+
+=head3 store
+
+Overloaded I<store> method to trigger notices as required
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $is_new = !$self->in_storage;
+    $self = $self->SUPER::store;
+
+    if ($is_new) {
+
+        # Send patron acknowledgement
+        my $acknowledgement_letter = C4::Letters::GetPreparedLetter(
+            module      => 'catalog',
+            letter_code => 'TICKET_ACKNOWLEDGEMENT',
+            branchcode  => $self->reporter->branchcode,
+            tables      => { tickets => $self->id }
+        );
+
+        if ($acknowledgement_letter) {
+            my $acknowledgement_message_id = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $acknowledgement_letter,
+                    message_transport_type => 'email',
+                    borrowernumber         => $self->reporter_id,
+                }
+            );
+            C4::Letters::SendQueuedMessages(
+                { message_id => $acknowledgement_message_id } );
+        }
+    }
+
+    return $self;
 }
 
 =head2 Internal methods

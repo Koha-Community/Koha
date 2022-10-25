@@ -43,6 +43,24 @@ tables:
             - ""
             - "Your library."
 
+        - module: catalog
+          code: TICKET_ACKNOWLEDGEMENT
+          branchcode: ""
+          name: "Concern acknowledgement"
+          is_html: 1
+          title: "Catalog concern acknowledgment"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],"
+            - ""
+            - "Thankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %]."
+            - ""
+            - "You reported: "
+            - "[% ticket.body %]"
+            - ""
+            - "Thankyou"
+
         - module: circulation
           code: ACCOUNT_CREDIT
           branchcode: ""
