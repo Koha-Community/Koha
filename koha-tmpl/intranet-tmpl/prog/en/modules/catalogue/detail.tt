@@ -299,6 +299,7 @@
 [% IF Koha.Preference('AcquisitionDetails') %]<li role="presentation"><a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a></li>[% END %]
 [% IF suggestions.count %]<li role="presentation"><a href="#suggestion_details"  aria-controls="suggestion_details" role="tab" data-toggle="tab">Suggestion details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li role="presentation"><a href="#editions"  aria-controls="editions" role="tab" data-toggle="tab">Editions</a></li>[% END %][% END %]
+[% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]<li role="presentation"><a href="#concerns" aria-controls="concerns" role="tab" data-toggle="tab">Concerns ([% biblio.tickets.count | html %])</a></li>[% END %]
 [% IF ( LocalCoverImages ) %]
     <li role="presentation">
         <a href="#images"  aria-controls="images" role="tab" data-toggle="tab">Images ([% localimages.count || 0 | html %])</a>
@@ -1007,6 +1008,26 @@ Note that permanent location is a code, and location may be an authval.
 </table></div>[% END %]
 [% END %]
 
+[% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+<div role="tabpanel" class="tab-pane" id="concerns">
+    <fieldset class="action" style="cursor:pointer;">
+        <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
+        | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
+    </fieldset>
+
+    <table id="table_concerns" width="100%">
+        <thead>
+            <tr>
+                <th>Reported</th>
+                <th>Details</th>
+                <th>Status</th>
+                <th data-class-name="actions noExport">Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+[% END %]
+
 [% IF ( LocalCoverImages ) %]
     <div role="tabpanel" class="tab-pane" id="images">
         [% IF localimages.count %]
@@ -1310,6 +1331,10 @@ Note that permanent location is a code, and location may be an authval.
     [% INCLUDE 'modals/add_catalog_concern.inc' %]
     [% END %]
 
+    [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+    [% INCLUDE 'modals/display_ticket.inc' %]
+    [% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
@@ -1322,6 +1347,106 @@ Note that permanent location is a code, and location may be an authval.
             var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         </script>
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
+     [% END %]
+     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+         <script>
+            $(document).ready(function() {
+                var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'concerns', 'table_concerns', 'json' ) | $raw %];
+
+                var tickets_url = '/api/v1/tickets';
+                var tickets = $("#table_concerns").kohaTable({
+                    "ajax": {
+                        "url": tickets_url
+                    },
+                    "embed": [
+                        "reporter",
+                        "resolver",
+                        "updates+count",
+                    ],
+                    'emptyTable': '<div class="dialog message">' + _("Congratulations, there are no catalog concerns.") + '</div>',
+                    "columnDefs": [ {
+                        "targets": [0,1,2],
+                        "render": function (data, type, row, meta) {
+                            if ( type == 'display' ) {
+                                if ( data != null ) {
+                                    return data.escapeHtml();
+                                }
+                                else {
+                                    return "";
+                                }
+                            }
+                            return data;
+                        }
+                    } ],
+                    "columns": [
+                        {
+                            "data": "reported_date:reporter.firstname",
+                            "render": function(data, type, row, meta) {
+                                let reported = '<span class="date clearfix">' + $datetime(row.reported_date) + '</span>';
+                                reported += '<span class="reporter clearfix">' + $patron_to_html(row.reporter, {
+                                    display_cardnumber: false,
+                                    url: true
+                                }) + '</span>';
+                                return reported;
+                            },
+                            "searchable": true,
+                            "orderable": true
+                        },
+                        {
+                            "data": "title:body",
+                            "render": function(data, type, row, meta) {
+                                let resolved = ( row.resolved_date ) ? true : false;
+                                let result = '<a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '">' + row.title + '</a>';
+                                if (row.updates_count) {
+                                    result += '<span class="pull-right"><a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
+                                }
+                                result += '<div id="detail_' + row.ticket_id + '" class="hidden">' + row.body + '</div>';
+                                return result;
+                            },
+                            "searchable": true,
+                            "orderable": true
+                        },
+                        {
+                            "data": "resolved_date",
+                            "render": function(data, type, row, meta) {
+                                let result = '';
+                                if (row.resolved_date) {
+                                    result += _("Resolved by:") + ' <span>' + $patron_to_html(row.resolver, {
+                                        display_cardnumber: false,
+                                        url: true
+                                    }) + '</span>';
+                                    result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
+                                } else {
+                                    result += _("Open");
+                                }
+                                return result;
+                            },
+                            "searchable": true,
+                            "orderable": true
+                        },
+                        {
+                            "data": function(row, type, val, meta) {
+                                let resolved = ( row.resolved_date ) ? true : false;
+                                let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '"><i class="fa fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                                return result;
+                            },
+                            "searchable": false,
+                            "orderable": false
+                        },
+                    ]
+                }, table_settings, 0, { biblio_id: [% biblionumber | uri %]});
+
+                $('#hideResolved').on( "click", function() {
+                    // It would be great if we could pass null here but it gets stringified
+                    concerns.DataTable().columns('3').search('special:undefined').draw();
+                });
+
+                $('#showAll').on( "click", function() {
+                    concerns.DataTable().columns('3').search('').draw();
+                });
+            });
+        </script>
+        [% Asset.js("js/modals/display_ticket.js") | $raw %]
     [% END %]
     <script>
         var interface = "[% interface | html %]";

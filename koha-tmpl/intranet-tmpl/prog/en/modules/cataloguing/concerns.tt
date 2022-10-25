@@ -63,37 +63,7 @@
             </div> <!-- /.col-sm-2.col-sm-pull-10 -->
         </div> <!-- /.row -->
 
-        <!-- Display updates concern modal -->
-        <div class="modal" id="ticketDetailsModal" tabindex="-1" role="dialog" aria-labelledby="ticketDetailsLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="displayUpdateLabel">Ticket details</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="concern-details"></div>
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="message">Update: </label>
-                                    <textarea id="update_message" name="message"></textarea>
-                                </li>
-                                <li>
-                                    <label for="public">Notify: </label>
-                                    <input type="checkbox" name="public" id="public">
-                                </li>
-                            </ol>
-                        </fieldset>
-                    </div> <!-- /.modal-body -->
-                    <div class="modal-footer">
-                        <input type="hidden" name="ticket_id" id="ticket_id">
-                        <button type="button" class="btn btn-default" id="resolveTicket">Resolve</button>
-                        <button type="submit" class="btn btn-primary" id="updateTicket">Comment</button>
-                    </div> <!-- /.modal-footer -->
-                </div> <!-- /.modal-content -->
-            </div> <!-- /.modal-dialog -->
-        </div> <!-- /#displayUpdateModal -->
+        [% INCLUDE 'modals/display_ticket.inc' %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -104,7 +74,7 @@
     <script>
         $(document).ready(function() {
 
-            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+            logged_in_user_borrowernumber = [% logged_in_user.borrowernumber | html %];
 
             var table_settings = [% TablesSettings.GetTableSettings('cataloguing', 'concerns', 'table_concerns', 'json') | $raw %];
 
@@ -149,9 +119,10 @@
                     {
                         "data": "title:body",
                         "render": function(data, type, row, meta) {
-                            let result = '<a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '">' + row.title + '</a>';
+                            let resolved = ( row.resolved_date ) ? true : false;
+                            let result = '<a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'">' + row.title + '</a>';
                             if (row.updates_count) {
-                                result += '<span class="pull-right"><a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
+                                result += '<span class="pull-right"><a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
                             }
                             result += '<div id="detail_' + row.ticket_id + '" class="hidden">' + row.body + '</div>';
                             return result;
@@ -189,7 +160,8 @@
                     },
                     {
                         "data": function(row, type, val, meta) {
-                            let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '"><i class="fa fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                            let resolved = ( row.resolved_date ) ? true : false;
+                            let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'"><i class="fa fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                             return result;
                         },
                         "searchable": false,
@@ -206,101 +178,8 @@
             $('#showAll').on("click", function() {
                 tickets.DataTable().columns('3').search('').draw();
             });
-
-            $('#ticketDetailsModal').on('show.bs.modal', function(event) {
-                let modal = $(this);
-                let button = $(event.relatedTarget);
-                let ticket_id = button.data('concern');
-                modal.find('.modal-footer input').val(ticket_id);
-
-                let detail = $('#detail_' + ticket_id).text();
-
-                let display = '<div class="list-group">';
-                display += '<div class="list-group-item">';
-                display += '<span class="wrapfix">' + detail + '</span>';
-                display += '</div>';
-                display += '<div id="concern-updates" class="list-group-item">';
-                display += '<span>Loading updates . . .</span>';
-                display += '</div>';
-                display += '</div>';
-
-                let details = modal.find('#concern-details');
-                details.html(display);
-
-                $.ajax({
-                    url: "/api/v1/tickets/" + ticket_id + "/updates",
-                    method: "GET",
-                    headers: {
-                        "x-koha-embed": "user"
-                    },
-                }).success(function(data) {
-                    let updates_display = $('#concern-updates');
-                    let updates = '';
-                    data.forEach(function(item, index) {
-                        updates += '<div class="list-group-item">';
-                        updates += '<span class="wrapfix">' + item.message + '</span>';
-                        updates += '<span class="clearfix">' + $patron_to_html(item.user, {
-                            display_cardnumber: false,
-                            url: true
-                        }) + ' (' + $datetime(item.date) + ')</span>';
-                        updates += '</div>';
-                    });
-                    updates_display.html(updates);
-                }).error(function() {
-
-                });
-            });
-
-            $('#ticketDetailsModal').on('click', '#updateTicket', function(e) {
-                let ticket_id = $('#ticket_id').val();
-                let params = {
-                    'public': $('#public').is(":checked"),
-                    message: $('#update_message').val(),
-                    user_id: logged_in_user_borrowernumber
-                };
-
-                $.ajax({
-                    url: "/api/v1/tickets/" + ticket_id + "/updates",
-                    method: "POST",
-                    data: JSON.stringify(params),
-                    ontentType: "application/json; charset=utf-8"
-                }).success(function() {
-                    $("#ticketDetailsModal").modal('hide');
-                    tickets.DataTable().ajax.reload(function(data) {
-                        $("#concern_action_result_dialog").hide();
-                        $("#concern_delete_success").html(_("Concern #%s updated successfully.").format(ticket_id)).show();
-                    });
-                }).error(function() {
-                    $("#concern_update_error").html(_("Error resolving concern #%s. Check the logs.").format(ticket_id)).show();
-                });
-            });
-
-            $('#ticketDetailsModal').on('click', '#resolveTicket', function(e) {
-                let ticket_id = $('#ticket_id').val();
-                let params = {
-                    'public': $('#public').is(":checked"),
-                    message: $('#update_message').val(),
-                    user_id: logged_in_user_borrowernumber,
-                    state: 'resolved'
-                };
-
-                $.ajax({
-                    url: "/api/v1/tickets/" + ticket_id + "/updates",
-                    method: "POST",
-                    data: JSON.stringify(params),
-                    ontentType: "application/json; charset=utf-8"
-                }).success(function() {
-                    $("#ticketDetailsModal").modal('hide');
-                    tickets.DataTable().ajax.reload(function(data) {
-                        $("#concern_action_result_dialog").hide();
-                        $("#concern_delete_success").html(_("Concern #%s updated successfully.").format(ticket_id)).show();
-                    });
-                }).error(function() {
-                    $("#concern_update_error").html(_("Error resolving concern #%s. Check the logs.").format(ticket_id)).show();
-                });
-            });
-
         });
     </script>
+    [% Asset.js("js/modals/display_ticket.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
