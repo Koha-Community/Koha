@@ -209,11 +209,21 @@
 
 [% END %]
 
+    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+    [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
+    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+        <script>
+            /* Set a variable needed by add_catalog_concern.js */
+            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        </script>
+        [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
+    [% END %]
     <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();

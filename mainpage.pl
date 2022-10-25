@@ -104,7 +104,7 @@ my $pending_article_requests = Koha::ArticleRequests->search_limited(
 )->count;
 my $pending_problem_reports = Koha::ProblemReports->search({ status => 'New' });
 
-if ( C4::Context->preference('OpacCatalogConcerns') ) {
+if ( C4::Context->preference('OpacCatalogConcerns') || C4::Context->preference('CatalogConcerns') ) {
     my $pending_biblio_tickets = Koha::Tickets->search(
         {
             resolved_date => undef,

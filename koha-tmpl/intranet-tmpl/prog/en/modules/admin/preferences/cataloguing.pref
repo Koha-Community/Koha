@@ -43,6 +43,14 @@ Cataloging:
                   0: "Don't allow"
             - authorized values to be created within the cataloguing module. Librarian will need the manage_auth_values subpermission.
         -
+            - pref: CatalogConcerns
+              default: 0
+              choices:
+                  0: "Don't allow"
+                  1: Allow
+            - "staff to report concerns about catalog records."
+            - '<p><strong>Note:</strong> You can also enable `<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacCatalogConcerns">OpacCatalogConcerns</a>` to allow OPAC users the same option.</p>'
+        -
             - "Use "
             - pref: CatalogerEmails
               default: ''

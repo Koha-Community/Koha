@@ -29,7 +29,7 @@
         </ul>
         [% END %]
 
-        [% IF ( CAN_user_tools_inventory || ( Koha.Preference('OpacCatalogConcerns') && CAN_user_editcatalogue_edit_catalogue ) ) %]
+        [% IF ( CAN_user_tools_inventory || ( ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) ) %]
         <h5>Reports</h5>
         <ul>
             [% IF ( CAN_user_tools_inventory ) %]
@@ -37,7 +37,7 @@
                 <a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a>
             </li>
             [% END %]
-            [% IF Koha.Preference('OpacCatalogConcerns') && CAN_user_editcatalogue_edit_catalogue %]
+            [% IF ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue %]
             <li>
                 <a href="/cgi-bin/koha/cataloguing/concerns.pl">Catalog concerns</a>
             </li>

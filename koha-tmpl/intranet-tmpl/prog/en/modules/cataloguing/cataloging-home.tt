@@ -91,7 +91,7 @@
                         </ul>
                         [% END %]
 
-                        [% IF ( CAN_user_tools_inventory || ( Koha.Preference('OpacCatalogConcerns') && CAN_user_editcatalogue_edit_catalogue ) ) %]
+                        [% IF ( CAN_user_tools_inventory || ( ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) ) %]
                         <h3>Reports</h3>
                         <ul class="buttons-list">
                             [% IF ( CAN_user_tools_inventory ) %]
@@ -100,7 +100,7 @@
                             </li>
                             [% END %]
 
-                            [% IF ( Koha.Preference('OpacCatalogConcerns') && CAN_user_editcatalogue_edit_catalogue ) %]
+                            [% IF ( ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
                             <li>
                                 <a class="circ-button" href="/cgi-bin/koha/cataloguing/concerns.pl"><i class="fa fa-list-ul"></i> Catalog concerns</a>
                             </li>

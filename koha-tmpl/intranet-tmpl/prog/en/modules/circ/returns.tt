@@ -1366,6 +1366,10 @@
     </div> <!-- /#bundleMissingModal -->
     [% END %]
 
+[% IF ( Koha.Preference('CatalogConcerns') ) %]
+[% INCLUDE 'modals/add_catalog_concern.inc' %]
+[% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
@@ -1378,7 +1382,13 @@
         </script>
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
-
+    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+        <script>
+            /* Set a variable needed by add_catalog_concern.js */
+            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        </script>
+        [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
+    [% END %]
     <script>
         function Dopop(link) {
             var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');

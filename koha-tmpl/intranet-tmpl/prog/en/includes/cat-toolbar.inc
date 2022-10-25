@@ -2,7 +2,7 @@
 [% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
 
-[% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) %]
+[% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription || Koha.Preference('CatalogConcerns') ) %]
     <div class="btn-group">
     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
         <ul class="dropdown-menu">
@@ -22,6 +22,9 @@
             [% END %]
             [% IF CAN_user_editcatalogue_edit_catalogue && ! EasyAnalyticalRecords %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?parentbiblionumber=[% biblionumber | uri %]">New child record</a></li>
+            [% END %]
+            [% IF Koha.Preference('CatalogConcerns') %]
+                <li><a id="newconcern" role="button" href="#" data-toggle="modal" data-target="#addConcernModal">New catalog concern</a></li>
             [% END %]
     </ul>
     </div>

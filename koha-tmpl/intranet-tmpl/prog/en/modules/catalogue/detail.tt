@@ -1306,12 +1306,23 @@ Note that permanent location is a code, and location may be an authval.
     </div>
     [% END %]
 
+    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+    [% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/recalls.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
     [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
+    [% IF ( Koha.Preference('CatalogConcerns') ) %]
+        <script>
+            /* Set a variable needed by add_catalog_concern.js */
+            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        </script>
+        [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
+    [% END %]
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";

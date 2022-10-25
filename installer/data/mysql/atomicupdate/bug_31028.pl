@@ -125,5 +125,13 @@ return {
             }
         );
         say $out "Added new notice 'TICKET_NOTIFY'";
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+                ('CatalogConcerns', '0', NULL, 'Allow users to report catalog concerns', 'YesNo')
+            }
+        );
+        say $out "`CatalogConcerns` preference added";
     }
 }
