@@ -1954,7 +1954,7 @@ Note that permanent location is a code, and location may be an authval.
 
         });
 
-        [% IF (found1) %]
+        [% IF found1 && Koha.Preference('RetainCatalogSearchTerms') %]
             $(document).ready(function() {
                 var search_index = localStorage.getItem("cat_search_pulldown_selection");
                 var search_value = localStorage.getItem("searchbox_value");
