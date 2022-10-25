@@ -246,19 +246,21 @@
     </div>
 
     [% IF servers_count > 0 %]
-        <table id="smtp_servers">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Host</th>
-                    <th>Port</th>
-                    <th>Timeout (secs)</th>
-                    <th>SSL</th>
-                    <th>Authenticated</th>
-                    <th data-class-name="actions noExport">Actions</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="page-section">
+            <table id="smtp_servers">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Timeout (secs)</th>
+                        <th>SSL</th>
+                        <th>Authenticated</th>
+                        <th data-class-name="actions noExport">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div> <!-- /.page-section -->
     [% END %]
 [% END %]
 

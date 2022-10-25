@@ -383,52 +383,54 @@
                         <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
                         <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
 
-                        <table id="table_marcsubfieldstructure">
-                            <thead>
-                                <tr>
-                                    <th>Subfield</th>
-                                    <th>Text</th>
-                                    <th>Constraints</th>
-                                    <th class="NoSort noExport">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH loo IN loop %]
+                        <div class="page-section">
+                            <table id="table_marcsubfieldstructure">
+                                <thead>
                                     <tr>
-                                        <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
-                                        <td>
-                                            [% IF loo.tab == -1 %]
-                                                <em>[% loo.liblibrarian | html_entity %]</em>
-                                            [% ELSE %]
-                                                [% loo.liblibrarian | html_entity %]
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% IF loo.tab == -1 %]
-                                                <em>subfield ignored</em>
-                                            [% ELSE %]
-                                                <span>Tab:</span>[% loo.tab | html %],
-                                                [% IF ( loo.kohafield ) %] | <span>Koha field:</span> [% loo.kohafield | html %], [% END %]
-                                                [% IF ( loo.repeatable ) %]<span>Repeatable</span>, [% ELSE %]<span>Not repeatable</span>,[% END %]
-                                                [% IF ( loo.mandatory ) %]<span>Mandatory</span>, [% ELSE %]<span>Not mandatory</span>,[% END %]
-                                                [% IF ( loo.important ) %]<span>Important</span>, [% ELSE %]<span>Not important</span>,[% END %]
-                                                [% IF ( loo.seealso ) %] | <span>See also:</span> [% loo.seealso | html %],[% END %]
-                                                [% IF ( loo.hidden ) %]<span>hidden</span>,[% END %]
-                                                [% IF ( loo.isurl ) %]<span>is a URL</span>,[% END %]
-                                                [% IF ( loo.authorised_value ) %] | <span>Auth value:</span>[% loo.authorised_value | html %],[% END %]
-                                                [% IF ( loo.authtypecode ) %] | <span>Authority:</span>[% loo.authtypecode | html %],[% END %]
-                                                [% IF ( loo.value_builder ) %] | <span>Plugin:</span>[% loo.value_builder | html %],[% END %]
-                                                [% IF ( loo.link ) %] | <span>Link:</span>[% loo.link | html %],[% END %]
-                                            [% END %]
-                                        </td>
-                                        <td class="actions">
-                                            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
-                                        </td>
+                                        <th>Subfield</th>
+                                        <th>Text</th>
+                                        <th>Constraints</th>
+                                        <th class="NoSort noExport">Actions</th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table> <!-- /#table_marcsubfieldstructure -->
+                                </thead>
+                                <tbody>
+                                    [% FOREACH loo IN loop %]
+                                        <tr>
+                                            <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
+                                            <td>
+                                                [% IF loo.tab == -1 %]
+                                                    <em>[% loo.liblibrarian | html_entity %]</em>
+                                                [% ELSE %]
+                                                    [% loo.liblibrarian | html_entity %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF loo.tab == -1 %]
+                                                    <em>subfield ignored</em>
+                                                [% ELSE %]
+                                                    <span>Tab:</span>[% loo.tab | html %],
+                                                    [% IF ( loo.kohafield ) %] | <span>Koha field:</span> [% loo.kohafield | html %], [% END %]
+                                                    [% IF ( loo.repeatable ) %]<span>Repeatable</span>, [% ELSE %]<span>Not repeatable</span>,[% END %]
+                                                    [% IF ( loo.mandatory ) %]<span>Mandatory</span>, [% ELSE %]<span>Not mandatory</span>,[% END %]
+                                                    [% IF ( loo.important ) %]<span>Important</span>, [% ELSE %]<span>Not important</span>,[% END %]
+                                                    [% IF ( loo.seealso ) %] | <span>See also:</span> [% loo.seealso | html %],[% END %]
+                                                    [% IF ( loo.hidden ) %]<span>hidden</span>,[% END %]
+                                                    [% IF ( loo.isurl ) %]<span>is a URL</span>,[% END %]
+                                                    [% IF ( loo.authorised_value ) %] | <span>Auth value:</span>[% loo.authorised_value | html %],[% END %]
+                                                    [% IF ( loo.authtypecode ) %] | <span>Authority:</span>[% loo.authtypecode | html %],[% END %]
+                                                    [% IF ( loo.value_builder ) %] | <span>Plugin:</span>[% loo.value_builder | html %],[% END %]
+                                                    [% IF ( loo.link ) %] | <span>Link:</span>[% loo.link | html %],[% END %]
+                                                [% END %]
+                                            </td>
+                                            <td class="actions">
+                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table> <!-- /#table_marcsubfieldstructure -->
+                        </div><!-- /.page-section -->
 
                         <form action="[% script_name | html %]" method="get">
                             <fieldset class="action"><input type="hidden" name="op" value="add_form" />

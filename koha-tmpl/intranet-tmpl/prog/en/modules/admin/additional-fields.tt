@@ -109,28 +109,31 @@
     [% IF op == 'list_tables' %]
         [% IF CAN_user_acquisitions_order_manage || CAN_user_serials_edit_subscription || CAN_user_updatecharges_remaining_permissions %]
         <h1>Additional fields</h1>
-        <p>Select a table:</p>
-        [% BLOCK table_option %]
-            <li><a href="?tablename=[% value | uri %]">[% content | $raw %] (<span class="ex">[% value | html %]</span>)</a></li>
-        [% END %]
-        <ul>
-            [% IF CAN_user_acquisition_order_manage %]
-                [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
+
+        <div class="page-section">
+            <p>Select a table:</p>
+            [% BLOCK table_option %]
+                <li><a href="?tablename=[% value | uri %]">[% content | $raw %] (<span class="ex">[% value | html %]</span>)</a></li>
             [% END %]
-            [% IF CAN_user_acquisition_edit_invoices %]
-                [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
+            <ul>
+                [% IF CAN_user_acquisition_order_manage %]
+                    [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
+                [% END %]
+                [% IF CAN_user_acquisition_edit_invoices %]
+                    [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
+                [% END %]
+                [% IF CAN_user_serials_edit_subscription %]
+                    [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
+                [% END %]
+                [% IF CAN_user_updatecharges_remaining_permissions %]
+                    [% WRAPPER table_option value="accountlines:credit" %]Account lines (credit)[% END %]
+                    [% WRAPPER table_option value="accountlines:debit" %]Account lines (debit)[% END %]
+                [% END %]
+            </ul>
+            [% ELSE %]
+                Additional permissions are required for editing additional fields
             [% END %]
-            [% IF CAN_user_serials_edit_subscription %]
-                [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
-            [% END %]
-            [% IF CAN_user_updatecharges_remaining_permissions %]
-                [% WRAPPER table_option value="accountlines:credit" %]Account lines (credit)[% END %]
-                [% WRAPPER table_option value="accountlines:debit" %]Account lines (debit)[% END %]
-            [% END %]
-        </ul>
-        [% ELSE %]
-            Additional permissions are required for editing additional fields
-        [% END %]
+        </div><!-- /.page-section -->
     [% ELSIF op == 'list' %]
         <h1>Additional fields for '[% tablename | html %]'</h1>
         [% IF fields %]

@@ -213,39 +213,40 @@
         You searched for [% searchfield | html %]</span>
     [% END %]
 
-    <table id='currencies-table'>
-      <thead>
-        <tr>
-            <th>Currency</th>
-            <th>Rate</th>
-            <th>Symbol</th>
-            <th>ISO code</th>
-            <th>Last updated</th>
-            <th>Active</th>
-            <th>Archived</th>
-            <th class="NoSort noExport">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        [% FOREACH currency IN currencies %]
-          <tr>
-            <td>[% currency.currency | html %]</td>
-            <td>[% currency.rate | html %]</td>
-            <td>[% currency.symbol | html %]</td>
-            <td>[% currency.isocode | html %]</td>
-            <td data-order="[% currency.timestamp | html %]">[% currency.timestamp | $KohaDates %]</td>
-            <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
-            <td>[% IF currency.archived %]Yes[% END %]</td>
-            <td class="actions">
-              <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/currency.pl?op=add_form&amp;currency_code=[% currency.currency | html %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/currency.pl?op=delete_confirm&amp;currency_code=[% currency.currency | html %]"><i class="fa fa-trash"></i> Delete</a>
-            </td>
-          </tr>
-        [% END %]
-      </tbody>
-    </table>
+    <div class="page-section">
+        <table id='currencies-table'>
+        <thead>
+            <tr>
+                <th>Currency</th>
+                <th>Rate</th>
+                <th>Symbol</th>
+                <th>ISO code</th>
+                <th>Last updated</th>
+                <th>Active</th>
+                <th>Archived</th>
+                <th class="NoSort noExport">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH currency IN currencies %]
+            <tr>
+                <td>[% currency.currency | html %]</td>
+                <td>[% currency.rate | html %]</td>
+                <td>[% currency.symbol | html %]</td>
+                <td>[% currency.isocode | html %]</td>
+                <td data-order="[% currency.timestamp | html %]">[% currency.timestamp | $KohaDates %]</td>
+                <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
+                <td>[% IF currency.archived %]Yes[% END %]</td>
+                <td class="actions">
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/currency.pl?op=add_form&amp;currency_code=[% currency.currency | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/currency.pl?op=delete_confirm&amp;currency_code=[% currency.currency | html %]"><i class="fa fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+            [% END %]
+        </tbody>
+        </table>
+    </div>
 
-    <br />
     <div class="hint">
         <p>
             When importing MARC files via the staging tools, the tool will attempt to find and use the price of the currently active currency.

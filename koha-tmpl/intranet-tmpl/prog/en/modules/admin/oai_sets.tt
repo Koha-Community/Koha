@@ -106,46 +106,48 @@
 
         <h1>OAI sets</h1>
         [% IF sets_loop %]
-            <table>
-                <thead>
-                    <tr>
-                        <th>setSpec</th>
-                        <th>setName</th>
-                        <th>setDescriptions</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH set IN sets_loop %]
+            <div class="page-section">
+                <table>
+                    <thead>
                         <tr>
-                            <td>[% set.spec | html %]</td>
-                            <td>[% set.name | html %]</td>
-                            <td>
-                                [% IF set.descriptions %]
-                                    <ul>
-                                        [% FOREACH desc IN set.descriptions %]
-                                            <li>[% desc.description | html %]</li>
-                                        [% END %]
-                                    </ul>
-                                [% ELSE %]
-                                    <em>No descriptions</em>
-                                [% END %]
-                            </td>
-                            <td>
-                              <div class="btn-group dropup">
-                                <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id | html %]" role="button" data-toggle="dropdown" href="#">
-                                  Actions <b class="caret"></b></a>
-                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
-                                  <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
-                                  <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
-                                  <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | uri %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
-                                </ul>
-                              </div>
-                            </td>
+                            <th>setSpec</th>
+                            <th>setName</th>
+                            <th>setDescriptions</th>
+                            <th>&nbsp;</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        [% FOREACH set IN sets_loop %]
+                            <tr>
+                                <td>[% set.spec | html %]</td>
+                                <td>[% set.name | html %]</td>
+                                <td>
+                                    [% IF set.descriptions %]
+                                        <ul>
+                                            [% FOREACH desc IN set.descriptions %]
+                                                <li>[% desc.description | html %]</li>
+                                            [% END %]
+                                        </ul>
+                                    [% ELSE %]
+                                        <em>No descriptions</em>
+                                    [% END %]
+                                </td>
+                                <td>
+                                <div class="btn-group dropup">
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id | html %]" role="button" data-toggle="dropdown" href="#">
+                                    Actions <b class="caret"></b></a>
+                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
+                                    <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+                                    <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+                                    <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | uri %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
+                                    </ul>
+                                </div>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div> <!-- /.page-section -->
         [% ELSE %]
             <div class="dialog message"><p>There are no sets defined.</p></div>
         [% END %]
