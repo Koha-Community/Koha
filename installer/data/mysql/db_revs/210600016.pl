@@ -111,8 +111,6 @@ return {
             # Now this is getting weird
             # We are adding an extra news with the same code when the lang is not "default" (/"en")
 
-            $new_lang = "default" if $new_lang eq 'en'; # Assume that "en" is "default"
-
             my $sth_update = $dbh->prepare(q|
                 UPDATE additional_contents
                 SET category=?, location=?, lang=?
@@ -124,7 +122,7 @@ return {
                 $dbh->do(q|
                     INSERT INTO additional_contents(category, code, location, branchcode, title, content, lang, published_on, updated_on, expirationdate, number, borrowernumber)
                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                |, undef, $category, 'tmp_code', $location, $c->{branchcode}, $c->{title}, $c->{content}, 'default', $c->{published_on}, $c->{updated_on}, $c->{expirationdate}, $c->{number}, $c->{borrowernumber});
+                |, undef, $category, 'tmp_code', $location, $c->{branchcode}, $c->{title}, '', 'default', $c->{published_on}, $c->{updated_on}, $c->{expirationdate}, $c->{number}, $c->{borrowernumber});
 
                 $parent_idnew = $dbh->last_insert_id(undef, undef, 'additional_contents', undef);
             }
