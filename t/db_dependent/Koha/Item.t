@@ -1432,12 +1432,13 @@ subtest 'store() tests' => sub {
             }
         );
 
-        my $lostreturn_policy = 'charge';
-        my $processingreturn_policy = 'refund';
+        my $lostreturn_policy = {
+            lostreturn       => 'charge',
+            processingreturn => 'refund'
+        };
 
         my $mocked_circ_rules = Test::MockModule->new('Koha::CirculationRules');
         $mocked_circ_rules->mock( 'get_lostreturn_policy', sub { return $lostreturn_policy; } );
-        $mocked_circ_rules->mock( 'get_processingreturn_policy', sub { return $processingreturn_policy; } );
 
         # simulate it was found
         $item->set( { itemlost => 0 } )->store;
