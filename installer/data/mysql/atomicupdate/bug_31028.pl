@@ -109,5 +109,21 @@ return {
             }
         );
         say $out "Added new notice 'TICKET_RESOLVE'";
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+                ('CatalogerEmails', '', '', 'Notify these catalogers by email when a catalog concern is submitted', 'free')
+            }
+        );
+        say $out "`CatalogerEmails` preference added";
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
+                VALUES ( 'catalog', 'TICKET_NOTIFY', '', 'Catalog concern notification', '1', 'Catalog concern reported', "Dear cataloger,\r\n\r\n[% INCLUDE 'patron-title.inc' patron => ticket.reporter %] reported the following concern with [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 %]\r\n\r\n\r\n\r\n[% ticket.body %]\r\n\r\n\r\n\r\nYou can mark this concern as resolved from the concern management <a href='[% Koha.Preference('IntranetBaseURL') %]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>.", 'email' );
+            }
+        );
+        say $out "Added new notice 'TICKET_NOTIFY'";
     }
 }

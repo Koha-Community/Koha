@@ -134,6 +134,32 @@ sub store {
             C4::Letters::SendQueuedMessages(
                 { message_id => $acknowledgement_message_id } );
         }
+
+        # Notify cataloger by email
+        if ( $self->biblio_id && C4::Context->preference('CatalogerEmails') ) {
+
+            # notify the library if a notice exists
+            my $notify_letter = C4::Letters::GetPreparedLetter(
+                module      => 'catalog',
+                letter_code => 'TICKET_NOTIFY',
+                branchcode  => $self->reporter->branchcode,
+                tables      => { tickets => $self->id }
+            );
+
+            if ($notify_letter) {
+                my $message_id = C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $notify_letter,
+                        message_transport_type => 'email',
+                        to_address             =>
+                          C4::Context->preference('CatalogerEmails'),
+                        reply_address => $self->reporter->notice_email_address,
+                    }
+                );
+                C4::Letters::SendQueuedMessages(
+                    { message_id => $message_id } );
+            }
+        }
     }
 
     return $self;

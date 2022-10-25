@@ -97,6 +97,22 @@ tables:
             - ""
             - "Thankyou"
 
+        - module: catalog
+          code: TICKET_NOTIFY
+          branchcode: ""
+          name: "Concern notification"
+          is_html: 1
+          title: "Catalog concern reported"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear cataloger,"
+            - "[% INCLUDE 'patron-title.inc' patron => ticket.reporter %] reported the following concern with [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 %]"
+            - ""
+            - "[% ticket.body %]"
+            - ""
+            - "You can mark this concern as resolved from the concern management <a href='[% Koha.Preference('IntranetBaseURL') %]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>."
+
         - module: circulation
           code: ACCOUNT_CREDIT
           branchcode: ""
