@@ -586,12 +586,18 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                         var part = {};
                                         var attr = attributes[i];
                                         let criteria = options.criteria;
-                                        if ( value.match(/^\^(.*)\$$/) ) {
-                                            value = value.replace(/^\^/, '').replace(/\$$/, '');
+                                        if ( value === 'special:undefined' ) {
+                                            value = null;
                                             criteria = "exact";
-                                        } else {
-                                           // escape SQL LIKE special characters % and _
-                                           value = value.replace(/(\%|\\)/g, "\\$1");
+                                        }
+                                        if ( value !== null ) {
+                                            if ( value.match(/^\^(.*)\$$/) ) {
+                                                value = value.replace(/^\^/, '').replace(/\$$/, '');
+                                                criteria = "exact";
+                                            } else {
+                                                // escape SQL LIKE special characters %
+                                                value = value.replace(/(\%|\\)/g, "\\$1");
+                                            }
                                         }
                                         part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
                                             ? value

@@ -57,6 +57,17 @@ sub user {
 
 =head2 Internal methods
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Ticket::Update object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return { id => 'update_id', };
+}
+
 =head3 _type
 
 =cut

@@ -28,6 +28,7 @@
             - reporter
             - resolver
             - biblio
+            - updates+count
         collectionFormat: csv
     responses:
       "200":
@@ -187,6 +188,108 @@
     responses:
       "204":
         description: Ticket deleted
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Ticket not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        editcatalogue: edit_catalogue
+"/tickets/{ticket_id}/updates":
+  get:
+    x-mojo-to: Tickets#list_updates
+    operationId: listTicketUpdates
+    tags:
+      - tickets
+    summary: List ticket updates
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/ticket_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+        collectionFormat: csv
+    responses:
+      "200":
+        description: A list of ticket updates
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/ticket_update"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Ticket not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+  post:
+    x-mojo-to: Tickets#add_update
+    operationId: addTicketUpdate
+    tags:
+      - tickets
+    summary: Add an update to the ticket
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/ticket_id_pp"
+      - name: body
+        in: body
+        description: A ticket update object
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/ticket_update"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Ticket added
+        schema:
+          $ref: "../swagger.yaml#/definitions/ticket_update"
       "401":
         description: Authentication required
         schema:

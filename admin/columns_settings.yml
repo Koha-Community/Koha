@@ -643,6 +643,23 @@ modules:
             -
               columnname: stocknumber
 
+    concerns:
+      table_concerns:
+        default_sort_order: 0
+        columns:
+            -
+              columnname: reported
+            -
+              columnname: details
+            -
+              columnname: title
+            -
+              columnname: status
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+
     z3950_search:
       resultst:
         default_sort_order: 1

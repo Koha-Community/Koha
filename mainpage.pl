@@ -35,6 +35,7 @@ use Koha::Quotes;
 use Koha::Suggestions;
 use Koha::BackgroundJobs;
 use Koha::CurbsidePickups;
+use Koha::Tickets;
 
 my $query = CGI->new;
 
@@ -102,6 +103,17 @@ my $pending_article_requests = Koha::ArticleRequests->search_limited(
     }
 )->count;
 my $pending_problem_reports = Koha::ProblemReports->search({ status => 'New' });
+
+if ( C4::Context->preference('OpacCatalogConcerns') ) {
+    my $pending_biblio_tickets = Koha::Tickets->search(
+        {
+            resolved_date => undef,
+            biblio_id     => { '!=' => undef }
+        }
+    );
+    $template->param(
+        pending_biblio_tickets => $pending_biblio_tickets->count );
+}
 
 unless ( $logged_in_user->has_permission( { parameters => 'manage_background_jobs' } ) ) {
     my $already_ran_jobs = Koha::BackgroundJobs->search(

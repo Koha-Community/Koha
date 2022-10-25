@@ -739,6 +739,7 @@ sub _parseletter_sth {
     ($table eq 'biblio'       )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
     ($table eq 'biblioitems'  )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
     ($table eq 'tickets'      )    ? "SELECT * FROM $table WHERE   id = ?"                                            :
+    ($table eq 'ticket_updates' )  ? "SELECT * FROM $table WHERE   id = ?"                                            :
     ($table eq 'credits'      )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'debits'       )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'items'        )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
@@ -1743,6 +1744,12 @@ sub _get_tt_params {
             module   => 'Koha::Tickets',
             singular => 'ticket',
             plural   => 'tickets',
+            pk       => 'id',
+        },
+        ticket_updates => {
+            module   => 'Koha::Ticket::Updates',
+            singular => 'ticket_update',
+            plural   => 'ticket_updates',
             pk       => 'id',
         },
         issues => {

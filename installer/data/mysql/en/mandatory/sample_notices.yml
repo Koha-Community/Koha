@@ -61,6 +61,42 @@ tables:
             - ""
             - "Thankyou"
 
+        - module: catalog
+          code: TICKET_RESOLVE
+          branchcode: ""
+          name: "Concern resolved"
+          is_html: 1
+          title: "Catalog concern resolved"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],"
+            - ""
+            - "The library has now marked your concern with [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %] as resolved."
+            - ""
+            - "The following comment was left: "
+            - "[% ticket_update.message %]"
+            - ""
+            - "Thankyou"
+
+        - module: catalog
+          code: TICKET_UPDATE
+          branchcode: ""
+          name: "Concern updated"
+          is_html: 1
+          title: "Catalog concern updated"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],"
+            - ""
+            - "The library has added an update to the concern you reported against [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %]."
+            - ""
+            - "The following comment was left: "
+            - "[% ticket_update.message %]"
+            - ""
+            - "Thankyou"
+
         - module: circulation
           code: ACCOUNT_CREDIT
           branchcode: ""

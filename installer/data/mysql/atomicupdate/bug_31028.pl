@@ -93,5 +93,21 @@ return {
             }
         );
         say $out "Added new notice 'TICKET_ACKNOWLEDGEMENT'";
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
+                VALUES ( 'catalog', 'TICKET_UPDATE', '', 'Concern updated', '1', 'Catalog concern updated', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],\r\n\r\nThe library has added an update to the concern you reported against [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %].\r\n\r\nThe following comment was left: \r\n[% ticket_update.message %]\r\n\r\nThankyou", 'email' );
+            }
+        );
+        say $out "Added new notice 'TICKET_UPDATE'";
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
+                VALUES ( 'catalog', 'TICKET_RESOLVE', '', 'Concern resolved', '1', 'Catalog concern resolved', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],\r\n\r\nThe library has now marked your concern with [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %] as resolved.\r\n\r\nThe following comment was left:   \r\n[% ticket_update.message %]\r\n\r\nThankyou", 'email' );
+            }
+        );
+        say $out "Added new notice 'TICKET_RESOLVE'";
     }
 }

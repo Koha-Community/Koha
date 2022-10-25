@@ -94,6 +94,8 @@ definitions:
     $ref: ./definitions/suggestion.yaml
   ticket:
     $ref: ./definitions/ticket.yaml
+  ticket_update:
+    $ref: ./definitions/ticket_update.yaml
   transfer_limit:
     $ref: ./definitions/transfer_limit.yaml
   vendor:
@@ -329,6 +331,8 @@ paths:
     $ref: "./paths/tickets.yaml#/~1tickets"
   "/tickets/{ticket_id}":
     $ref: "./paths/tickets.yaml#/~1tickets~1{ticket_id}"
+  "/tickets/{ticket_id}/updates":
+    $ref: "./paths/tickets.yaml#/~1tickets~1{ticket_id}~1updates"
   /transfer_limits:
     $ref: ./paths/transfer_limits.yaml#/~1transfer_limits
   /transfer_limits/batch:
