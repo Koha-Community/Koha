@@ -44,5 +44,13 @@ return {
 
             say $out "Added new table 'ticket_updates'";
         }
+
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+                ('OpacCatalogConcerns', '0', NULL, 'Allow logged in OPAC users to report catalog concerns', 'YesNo')
+            }
+        );
+        say $out "`OpacCatalogConcerns` preference added";
     }
 }

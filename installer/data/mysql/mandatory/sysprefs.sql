@@ -434,6 +434,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacBrowser','0',NULL,'If ON, enables subject authorities browser on OPAC (needs to set misc/cronjob/sbuild_browser_and_cloud.pl)','YesNo'),
 ('OpacBrowseResults','1',NULL,'Disable/enable browsing and paging search results from the OPAC detail page.','YesNo'),
 ('OpacBrowseSearch', '0',NULL, "Elasticsearch only: add a page allowing users to 'browse' all items in the collection",'YesNo'),
+('OpacCatalogConcerns', '0', NULL, 'Allow logged in OPAC users to report catalog concerns', 'YesNo'),
 ('OpacCloud','0',NULL,'If ON, enables subject cloud on OPAC','YesNo'),
 ('OpacAdditionalStylesheet','','','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','free'),
 ('OpacCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the OPAC', 'YesNo'),
