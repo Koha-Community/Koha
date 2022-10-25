@@ -48,6 +48,7 @@ use Koha::Subscriptions;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::Tickets;
 
 =head1 NAME
 
@@ -117,6 +118,20 @@ sub active_orders {
     my ( $self ) = @_;
 
     return $self->orders->search({ datecancellationprinted => undef });
+}
+
+=head3 tickets
+
+  my $tickets = $biblio->tickets();
+
+Returns all tickets linked to the biblio
+
+=cut
+
+sub tickets {
+    my ( $self ) = @_;
+    my $rs = $self->_result->tickets;
+    return Koha::Tickets->_new_from_dbic( $rs );
 }
 
 =head3 item_groups
