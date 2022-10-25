@@ -52,5 +52,38 @@ return {
             }
         );
         say $out "`OpacCatalogConcerns` preference added";
+
+        if ( ( $dbh->selectrow_array('SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernHelp') )[0] == 0 ) { # Check to make idempotent
+            $dbh->do(
+                q{
+                    INSERT INTO additional_contents ( category, code, location, title, content, lang, published_on, expirationdate, number ) VALUES ('html_customizations', 'CatalogConcernHelp_1', 'CatalogConcernHelp', 'Catalog concern help text', 'Please describe your concern clearly and the library will try to deal with it as quickly as possible', 'default', CAST(NOW() AS date), '2099-01-10', 1 )
+                }
+            );
+            say $out "`CatalogConcernHelp` block added to html_customization";
+        }
+
+        if ( ( $dbh->selectrow_array('SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernTemplate') )[0] == 0 ) { # Check to make idempotent
+            my $cc_template = <<~ 'END_TEMPLATE';
+            **Describe the concern**
+            A clear and concise description of what the concern is.
+
+            **To Reproduce**
+            Steps to reproduce the behavior:
+            1. Go to '...'
+            2. Click on '....'
+            3. Scroll down to '....'
+            4. See error
+
+            **Expected behavior**
+            A clear and concise description of what you expected to happen.
+            END_TEMPLATE
+
+            $dbh->do(
+                qq{
+                    INSERT INTO additional_contents ( category, code, location, title, content, lang, published_on, expirationdate, number ) VALUES ('html_customizations', 'CatalogConcernTemplate_1', 'CatalogConcernTemplate', 'Catalog concern template text', "$cc_template", 'default', CAST(NOW() AS date), '2099-01-10', 1 )
+                }
+            );
+            say $out "`CatalogConcernTemplate` block added to html_customization";
+        }
     }
 }

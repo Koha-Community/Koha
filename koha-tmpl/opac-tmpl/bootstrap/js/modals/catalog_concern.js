@@ -13,10 +13,18 @@ $(document).ready(function() {
     }
 
     $('#addConcernModal').on('show.bs.modal', function(e) {
+        // Redirect to login modal if not logged in
         if (logged_in_user_id === "") {
             $('#modalAuth').append('<input type="hidden" name="return" value="' + window.location.pathname + window.location.search + '&modal=concern" />');
             $('#loginModal').modal('show');
             return false;
+        }
+
+        $('#addConfirm').prop('disabled', false);
+        let concern_body = $('#concern_body');
+        if ( concern_body.val() === "" ) {
+            let template = $('#concern_template').text();
+            concern_body.val(template);
         }
     });
 

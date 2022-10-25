@@ -1,3 +1,7 @@
+[% USE raw %]
+[% USE AdditionalContents %]
+[% SET CatalogConcernHelp = AdditionalContents.get( location => "CatalogConcernHelp", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
+[% SET CatalogConcernTemplate = AdditionalContents.get( location => "CatalogConcernTemplate", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 <!-- Add concern modal -->
 <div class="modal" id="addConcernModal" tabindex="-1" role="dialog" aria-labelledby="addConcernModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -16,7 +20,19 @@
                     </div>
                     <div class="form-group">
                         <label for="concern_body">Please describe your concerns: </label>
-                        <textarea class="form-control" name="concern_body" id="concern_body" required="required" rows="15"></textarea>
+                        <textarea class="form-control" name="concern_body" id="concern_body" aria-describedby="helpBlock" required="required" rows="15"></textarea>
+                        [%- IF CatalogConcernHelp && CatalogConcernHelp.content && CatalogConcernHelp.content.count > 0 -%]
+                        [%- FOREACH help IN CatalogConcernHelp.content -%]
+                        <p id="helpBlock" class="help-block">[%- help.content | $raw -%]</p>
+                        [%- END -%]
+                        [%- END -%]
+                        <div id="concern_template" style="display: none;">
+                        [%- IF CatalogConcernTemplate && CatalogConcernTemplate.content && CatalogConcernTemplate.content.count > 0 -%]
+                        [%- FOREACH template IN CatalogConcernTemplate.content -%]
+                        [%- template.content | $raw -%]
+                        [%- END -%]
+                        [%- END -%]
+                        </div>
                     </div>
                 </fieldset>
             </div>
