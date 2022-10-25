@@ -1,0 +1,59 @@
+---
+type: object
+properties:
+  ticket_id:
+    type: integer
+    description: Internal ticket identifier
+    readOnly: true
+  reported_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Date the ticket was reported
+    readOnly: true
+  biblio:
+    type:
+      - object
+      - "null"
+    description: The object representing the biblio the ticket is related to
+    readOnly: true
+  biblio_id:
+    type: integer
+    description: Internal identifier for the biblio the ticket is related to
+  title:
+    type: string
+    description: Ticket title
+  body:
+    type: string
+    description: Ticket details
+  reporter:
+    type:
+      - object
+      - "null"
+    description: The object representing the patron who reported the ticket
+    readOnly: true
+  reporter_id:
+    type: integer
+    description: Internal identifier for the patron who reported the ticket
+  resolver:
+    type:
+      - object
+      - "null"
+    description: The object representing the user who resolved the ticket
+    readOnly: true
+  resolver_id:
+    type:
+      - integer
+      - "null"
+    description: Internal identifier for the user who resolved the ticket
+  resolved_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Date the ticket was resolved_date
+additionalProperties: false
+required:
+  - title
+  - body

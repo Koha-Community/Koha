@@ -92,6 +92,8 @@ definitions:
     $ref: ./definitions/smtp_server.yaml
   suggestion:
     $ref: ./definitions/suggestion.yaml
+  ticket:
+    $ref: ./definitions/ticket.yaml
   transfer_limit:
     $ref: ./definitions/transfer_limit.yaml
   vendor:
@@ -301,6 +303,8 @@ paths:
     $ref: "./paths/public_patrons.yaml#/~1public~1patrons~1{patron_id}~1guarantors~1can_see_checkouts"
   "/public/patrons/{patron_id}/password":
     $ref: "./paths/public_patrons.yaml#/~1public~1patrons~1{patron_id}~1password"
+  "/public/tickets":
+    $ref: "./paths/tickets.yaml#/~1public~1tickets"
   /quotes:
     $ref: ./paths/quotes.yaml#/~1quotes
   "/quotes/{quote_id}":
@@ -321,6 +325,10 @@ paths:
     $ref: "./paths/suggestions.yaml#/~1suggestions~1{suggestion_id}"
   /suggestions/managers:
     $ref: paths/suggestions.yaml#/~1suggestions~1managers
+  "/tickets":
+    $ref: "./paths/tickets.yaml#/~1tickets"
+  "/tickets/{ticket_id}":
+    $ref: "./paths/tickets.yaml#/~1tickets~1{ticket_id}"
   /transfer_limits:
     $ref: ./paths/transfer_limits.yaml#/~1transfer_limits
   /transfer_limits/batch:
@@ -577,6 +585,12 @@ parameters:
     description: Internal suggestion identifier
     in: path
     name: suggestion_id
+    required: true
+    type: integer
+  ticket_id_pp:
+    description: Internal ticket identifier
+    in: path
+    name: ticket_id
     required: true
     type: integer
   transfer_limit_id_pp:
