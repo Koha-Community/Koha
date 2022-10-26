@@ -690,7 +690,11 @@ if ($cards) {
 
 if ($background_days) {
     print "Purging background jobs more than $background_days days ago.\n" if $verbose;
-    my $count = PurgeBackgroundJobs($background_days, \@background_types, $confirm);
+    my $params = { job_types => \@background_types ,
+                   days      => $background_days,
+                   confirm   => $confirm,
+                };
+    my $count = Koha::BackgroundJobs->purge( $params );
     if ($verbose) {
         say $confirm
           ? sprintf "Done with purging %d background jobs of type(s): %s added more than %d days ago.\n", $count, join(',', @background_types), $background_days
@@ -836,27 +840,3 @@ sub DeleteSpecialHolidays {
     print "Removed $count unique holidays\n" if $verbose;
 }
 
-sub PurgeBackgroundJobs {
-    my ( $days, $types, $confirm ) = @_;
-
-    my $rs;
-    if ( $types->[0] eq 'all' ){
-        $rs = Koha::BackgroundJobs->search(
-            {
-                ended_on => { '<' => \[ 'date_sub(curdate(), INTERVAL ? DAY)', $days ] },
-                status   => 'finished',
-            });
-
-    } else {
-        $rs = Koha::BackgroundJobs->search(
-            {
-                ended_on => { '<' => \[ 'date_sub(curdate(), INTERVAL ? DAY)', $days ] },
-                type     => \@{$types},
-                status   => 'finished',
-            });
-    }
-    my $count = $rs->count();
-    $rs->delete if $confirm;
-
-    return $count;
-}
