@@ -37,7 +37,8 @@
                     <li v-if="false">
                         <label>{{ $__("External ID") }}:</label>
                         <span>
-                            <!-- FIXME Create a syspref to store the URL -->
+                            <span v-if="false">FIXME - Does not replace this v-if with an HTML comment, it breaks xgettext</span>
+                            <span v-if="false">FIXME - Create a syspref to store the URL</span>
                             <a
                                 :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
                             >
