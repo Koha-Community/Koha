@@ -58,6 +58,9 @@ describe("Package CRUD operations", () => {
     });
 
     it("Add package", () => {
+
+        cy.intercept("GET", "/api/v1/erm/agreements", []);
+
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.contains("New package").click();
@@ -84,6 +87,7 @@ describe("Package CRUD operations", () => {
         cy.get("#package_agreements").contains(
             "There are no agreements created yet"
         );
+        // FIXME Test with agreements
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
