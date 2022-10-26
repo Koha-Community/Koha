@@ -34,7 +34,7 @@ describe("Package CRUD operations", () => {
         // GET packages returns empty list
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", []);
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
-        cy.get("#packages_list").contains("There are no packages defined.");
+        cy.get("#packages_list").contains("There are no packages defined");
 
         // GET packages returns something
         let erm_package = get_package();
@@ -82,7 +82,7 @@ describe("Package CRUD operations", () => {
         );
 
         cy.get("#package_agreements").contains(
-            "There are no agreements created yet."
+            "There are no agreements created yet"
         );
 
         // Submit the form, get 500

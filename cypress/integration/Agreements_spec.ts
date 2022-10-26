@@ -62,7 +62,7 @@ describe("Agreement CRUD operations", () => {
         // GET agreements returns empty list
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
         cy.visit("/cgi-bin/koha/erm/agreements");
-        cy.get("#agreements_list").contains("There are no agreements defined.");
+        cy.get("#agreements_list").contains("There are no agreements defined");
 
         // GET agreements returns something
         let agreement = get_agreement();
@@ -179,10 +179,10 @@ describe("Agreement CRUD operations", () => {
         //cy.contains("Select user").click();
 
         cy.get("#agreement_licenses").contains(
-            "There are no licenses created yet."
+            "There are no licenses created yet"
         );
         cy.get("#agreement_relationships").contains(
-            "There are no other agreements created yet."
+            "There are no other agreements created yet"
         );
 
         cy.get("#agreement_documents").contains("Add new document");
