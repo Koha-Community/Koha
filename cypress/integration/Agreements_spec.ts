@@ -257,15 +257,15 @@ describe("Agreement CRUD operations", () => {
         );
         cy.get("#agreement_status .vs__selected").contains("Active");
         cy.get("#agreement_is_perpetual_no").should("be.checked");
-        cy.get("#started_on_0").invoke("val").should("eq", dates["today_us"]);
-        cy.get("#ended_on_0").invoke("val").should("eq", dates["tomorrow_us"]);
+        cy.get("#started_on_0").invoke("val").should("eq", dates["today_iso"]);
+        cy.get("#ended_on_0").invoke("val").should("eq", dates["tomorrow_iso"]);
         cy.get("#cancellation_deadline_0").invoke("val").should("eq", "");
         cy.get("#notes_0").should("have.value", "");
-        cy.get("#started_on_1").invoke("val").should("eq", dates["today_us"]);
+        cy.get("#started_on_1").invoke("val").should("eq", dates["today_iso"]);
         cy.get("#ended_on_1").invoke("val").should("eq", "");
         cy.get("#cancellation_deadline_1")
             .invoke("val")
-            .should("eq", dates["tomorrow_us"]);
+            .should("eq", dates["tomorrow_iso"]);
         cy.get("#notes_1").should("have.value", "this is a note");
 
         // Submit the form, get 500

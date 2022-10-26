@@ -145,8 +145,8 @@ describe("License CRUD operations", () => {
         );
         cy.get("#license_type .vs__selected").contains("Local");
         cy.get("#license_status .vs__selected").contains("Active");
-        cy.get("#started_on").invoke("val").should("eq", dates["today_us"]);
-        cy.get("#ended_on").invoke("val").should("eq", dates["tomorrow_us"]);
+        cy.get("#started_on").invoke("val").should("eq", dates["today_iso"]);
+        cy.get("#ended_on").invoke("val").should("eq", dates["tomorrow_iso"]);
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/licenses/*", {
