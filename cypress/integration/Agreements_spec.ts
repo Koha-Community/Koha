@@ -185,7 +185,7 @@ describe("Agreement CRUD operations", () => {
             "There are no other agreements created yet"
         );
 
-        cy.get("#agreement_documents").contains("Add new document");
+        cy.get("#documents").contains("Add new document");
         // TODO Test document upload
 
         // Submit the form, get 500
