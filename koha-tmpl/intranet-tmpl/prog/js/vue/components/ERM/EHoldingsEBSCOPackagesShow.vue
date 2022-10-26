@@ -34,14 +34,14 @@
                         <label>{{ $t("Vendor") }}:</label>
                         <span>{{ erm_package.vendor.name }}</span>
                     </li>
-                    <li v-if="erm_package.external_id">
+                    <li v-if="false">
                         <label>{{ $t("External ID") }}:</label>
                         <span>
                             <!-- FIXME Create a syspref to store the URL -->
                             <a
                                 :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
                             >
-                                {{ erm_package.external_id }}
+                                {{ erm_package.vendor.external_id }}-{{ erm_package.external_id }}
                             </a>
                         </span>
                     </li>
