@@ -35,12 +35,14 @@
     <li>
       <label for="ordernumber">Order line:</label>
       <input type="text" name="ordernumber" id="ordernumber" value="[% filters.ordernumber | html %]" />
-      [% IF filters.search_children_too %]
-        <input type="checkbox" name="search_children_too" id="search_children_too" value="1" checked="checked" />
-      [% ELSE %]
-        <input type="checkbox" name="search_children_too" id="search_children_too" value="1" />
-      [% END %]
-      <label class="yesno" for="search_children_too">Display children too.</label>
+        <label class="yesno" for="search_children_too">
+            [% IF filters.search_children_too %]
+                <input type="checkbox" name="search_children_too" id="search_children_too" value="1" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" name="search_children_too" id="search_children_too" value="1" />
+            [% END %]
+            Display children too
+        </label>
     </li>
 
     <li>
@@ -77,12 +79,14 @@
               <option value="cancelled">Cancelled</option>
             [% END %]
         </select>
-        [% IF filters.is_standing %]
-            <input type="checkbox" name="is_standing" id="is_standing" value="1" checked="checked" />
-        [% ELSE %]
-            <input type="checkbox" name="is_standing" id="is_standing" value="1" />
-        [% END %]
-         <label class="yesno" for="search_children_too">Standing order</label>
+        <label class="yesno" for="search_children_too">
+            [% IF filters.is_standing %]
+                <input type="checkbox" name="is_standing" id="is_standing" value="1" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" name="is_standing" id="is_standing" value="1" />
+            [% END %]
+            Standing order
+        </label>
     </li>
     <li>
         <label for="fund">Fund: </label>

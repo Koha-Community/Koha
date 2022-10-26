@@ -196,110 +196,52 @@ a {
 
 
 aside {
+    h5 {
+        font-size: 100%;
+        margin: .5em 0;
+    }
+
     fieldset {
-        @include card;
-        padding: .9em;
+        &.brief {
+            padding: .4em .7em;
 
-        button + button,
-        input + input {
-            margin-left: 5px;
-        }
+            button + button,
+            input + input {
+                margin-left: 5px;
+            }
 
-        fieldset.brief {
-            width: 100%;
+            fieldset {
+                border-left: 2px solid #CCC;
+                border-radius: 0;
+                margin: .5em 0;
+                padding: .5em;
 
-            legend {
+                legend {
+                    font-size: 95%;
+                    margin: 0;
+                }
+
+                &.action {
+                    border: 0;
+                    margin-left: 0;
+                    padding: .5em 0;
+                }
+            }
+
+            input[type="text"],
+            select {
+                height: calc(1.5em + .75rem + 2px);
+            }
+
+            label {
                 color: #696969;
-                font-weight: bold;
-                font-size: 13px;
-                margin: 0;
-                border-bottom: 0;
+                display: block;
+                margin: .5em 0 0 0;
             }
 
             li {
                 margin-top: 0;
                 padding: 0;
-
-                &.radio {
-                    padding: 0;
-                }
-
-                label {
-                    color: #696969;
-                    font-size: 13px;
-                    padding: .5em .3em 0 0;
-                    margin: 0;
-                    font-weight: normal;
-                }
-
-                input, select {
-                    height: calc(1.5em + .75rem + 2px);
-                    width: calc(100% - 20px);
-                }
-            }
-        }
-
-        ol {
-            padding: 0;
-            li {
-                list-style: none;
-                left: 0;
-                flex-direction: row;
-                width: 100%;
-
-                fieldset {
-                    width: 100%;
-
-                    legend {
-                        color: #696969;
-                        font-weight: bold;
-                        font-size: 13px;
-                        margin: 0;
-                        border-bottom: 0;
-                    }
-
-                    li {
-                        margin-top: 0;
-                        padding: 0;
-
-                        label {
-                            color: #696969;
-                            font-size: 13px;
-                            padding: .5em .3em 0 0;
-                            margin: 0;
-                            font-weight: normal;
-                        }
-
-                        input,
-                        select {
-                            height: calc(1.5em + .75rem + 2px);
-                            width: calc(100% - 20px);
-                        }
-                    }
-
-                }
-
-                label {
-                    color: #696969;
-                    padding: .5em .3em 0 0;
-                    margin: 0;
-                }
-
-                input,
-                select {
-                    height: calc(1.5em + .75rem + 2px);
-                    width: calc(100% - 20px);
-
-
-                    &[type="checkbox"],
-                    &[type="radio"] {
-                        width: auto;
-                        margin: 0;
-                        vertical-align: middle;
-                    }
-                }
-
-
 
                 &.checkbox {
                     label {
@@ -321,6 +263,8 @@ aside {
                 }
 
                 &.radio {
+                    padding: .7em 0;
+
                     input {
                         padding: .3em 0;
                     }
@@ -334,41 +278,27 @@ aside {
                             display: inline;
                         }
                     }
-
-                    select,
-                    [type="text"] {
-                        width: 100%;
-                    }
-
-                    .flatpickr-input {
-                        margin-right: 3px;
-                        width: calc(100% - 20px);
-                    }
-
-                    &+.action {
-                        margin-left: 0;
-                        padding: 0;
-                    }
-
-                    .radio, .checkbox {
-                        margin: 0;
-                    }
-
-                    select,
-                    [type="text"] {
-                        width: 100%;
-                    }
-
-                    .flatpickr-input {
-                        margin-right: 3px;
-                        width: calc(100% - 20px);
-                    }
-
-                    &.action {
-                        margin-left: 0;
-                        padding: 0;
-                    }
                 }
+            }
+
+            ol {
+                margin: 0;
+                padding: 0;
+            }
+
+            select,
+            [type="text"] {
+                width: 100%;
+            }
+
+            .flatpickr-input {
+                margin-right: 3px;
+                width: calc(100% - 20px);
+            }
+
+            &+.action {
+                margin-left: 0;
+                padding: 0;
             }
         }
     }
@@ -638,12 +568,6 @@ textarea {
 }
 
 input {
-    &[type="checkbox"],
-    &[type="radio"] {
-        margin: 0;
-        vertical-align: middle;
-    }
-
     &[type="submit"],
     &[type="reset"],
     &[type="button"] {
@@ -652,6 +576,13 @@ input {
         &:disabled {
             @include disabled-button;
         }
+    }
+
+    &[type="checkbox"],
+    &[type="radio"] {
+        height: unset;
+        margin: 0;
+        vertical-align: middle;
     }
 
     &.submit {
@@ -689,8 +620,6 @@ label,
     white-space: normal;
 
     input {
-        &[type="checkbox"],
-        &[type="radio"],
         &[type="checkbox"],
         &[type="radio"] {
             margin-top: 0;
