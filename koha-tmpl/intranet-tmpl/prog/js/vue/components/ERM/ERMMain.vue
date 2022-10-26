@@ -14,14 +14,14 @@
                     <aside>
                         <div id="navmenu">
                             <div id="navmenulist">
-                                <h5>{{ $t("E-Resource management") }}</h5>
+                                <h5>{{ $__("E-Resource management") }}</h5>
                                 <ul>
                                     <li>
                                         <router-link
                                             to="/cgi-bin/koha/erm/agreements"
                                         >
                                             <i class="fa fa-upload"></i>
-                                            {{ $t("Agreements") }}</router-link
+                                            {{ $__("Agreements") }}</router-link
                                         >
                                     </li>
                                     <li>
@@ -29,7 +29,7 @@
                                             to="/cgi-bin/koha/erm/licenses"
                                         >
                                             <i class="fa fa-file-text-o"></i>
-                                            {{ $t("Licenses") }}</router-link
+                                            {{ $__("Licenses") }}</router-link
                                         >
                                     </li>
                                     <li>
@@ -37,7 +37,7 @@
                                             to="/cgi-bin/koha/erm/eholdings"
                                         >
                                             <i class="fa fa-file-text-o"></i>
-                                            {{ $t("eHoldings") }}</router-link
+                                            {{ $__("eHoldings") }}</router-link
                                         >
                                     </li>
 
@@ -53,7 +53,7 @@
                                                 <i
                                                     class="fa fa-file-text-o"
                                                 ></i>
-                                                {{ $t("Local") }}</router-link
+                                                {{ $__("Local") }}</router-link
                                             >
                                             <router-link
                                                 v-else-if="provider == 'ebsco'"
@@ -62,7 +62,7 @@
                                                 <i
                                                     class="fa fa-file-text-o"
                                                 ></i>
-                                                {{ $t("EBSCO") }}</router-link
+                                                {{ $__("EBSCO") }}</router-link
                                             >
                                             <ul>
                                                 <li>
@@ -76,7 +76,7 @@
                                                             "
                                                         ></i>
                                                         {{
-                                                            $t("Packages")
+                                                            $__("Packages")
                                                         }}</router-link
                                                     >
                                                 </li>
@@ -91,7 +91,7 @@
                                                             "
                                                         ></i>
                                                         {{
-                                                            $t("Titles")
+                                                            $__("Titles")
                                                         }}</router-link
                                                     >
                                                 </li>
@@ -108,7 +108,7 @@
     </div>
     <div v-else>
         {{
-            $t(
+            $__(
                 "The E-Resource management module is disabled, turn on 'ERMModule' to use it"
             )
         }}
@@ -143,7 +143,6 @@ export default {
             vendorStore,
             erm_providers,
             ERMModule,
-            lang,
         }
     },
     data() {
@@ -153,7 +152,6 @@ export default {
     },
     beforeCreate() {
         fetchVendors().then((vendors) => this.vendorStore.vendors = vendors)
-        this.$i18n.locale = this.lang
     },
     components: {
         Breadcrumb,

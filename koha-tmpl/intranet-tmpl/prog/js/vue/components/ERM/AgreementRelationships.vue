@@ -1,22 +1,22 @@
 <template>
     <div class="page-section" id="agreement_relationships">
-        <legend>{{ $t("Related agreements") }}</legend>
+        <legend>{{ $__("Related agreements") }}</legend>
         <fieldset
             class="rows"
             v-for="(relationship, counter) in relationships"
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Related agreement .counter", { counter: counter + 1 }) }}
+                {{ $__("Related agreement %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteRelationship(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove this relationship") }}</a
+                    {{ $__("Remove this relationship") }}</a
                 >
             </legend>
             <ol>
                 <li>
                     <label :for="`related_agreement_id_${counter}`"
-                        >{{ $t("Related agreement") }}:
+                        >{{ $__("Related agreement") }}:
                     </label>
                     <v-select
                         :id="`related_agreement_id_${counter}`"
@@ -34,11 +34,11 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`related_agreement_relationship_${counter}`"
-                        >{{ $t("Relationship") }}:
+                        >{{ $__("Relationship") }}:
                     </label>
                     <v-select
                         :id="`related_agreement_relationship_${counter}`"
@@ -56,16 +56,16 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`related_agreement_notes_${counter}`"
-                        >{{ $t("Notes") }}:</label
+                        >{{ $__("Notes") }}:</label
                     >
                     <input
                         :id="`related_agreement_notes_${counter}`"
                         v-model="relationship.notes"
-                        :placeholder="$t('Notes')"
+                        :placeholder="$__('Notes')"
                     />
                 </li>
             </ol>
@@ -75,10 +75,10 @@
             class="btn btn-default"
             @click="addRelationship"
             ><font-awesome-icon icon="plus" />
-            {{ $t("Add new related agreement") }}</a
+            {{ $__("Add new related agreement") }}</a
         >
         <span v-else>{{
-            $t("There are no other agreements created yet")
+            $__("There are no other agreements created yet")
         }}</span>
     </div>
 </template>

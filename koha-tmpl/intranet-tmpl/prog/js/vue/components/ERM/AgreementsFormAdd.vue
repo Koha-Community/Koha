@@ -1,10 +1,10 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_add">
         <h2 v-if="agreement.agreement_id">
-            {{ $t("Edit agreement .id", { id: agreement.agreement_id }) }}
+            {{ $__("Edit agreement #%s").format(agreement.agreement_id) }}
         </h2>
-        <h2 v-else>{{ $t("New agreement") }}</h2>
+        <h2 v-else>{{ $__("New agreement") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <div class="page-section">
@@ -12,21 +12,21 @@
                         <ol>
                             <li>
                                 <label class="required" for="agreement_name"
-                                    >{{ $t("Agreement name") }}:</label
+                                    >{{ $__("Agreement name") }}:</label
                                 >
                                 <input
                                     id="agreement_name"
                                     v-model="agreement.name"
-                                    :placeholder="$t('Agreement name')"
+                                    :placeholder="$__('Agreement name')"
                                     required
                                 />
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="agreement_vendor_id"
-                                    >{{ $t("Vendor") }}:</label
+                                    >{{ $__("Vendor") }}:</label
                                 >
                                 <v-select
                                     id="agreement_vendor_id"
@@ -38,23 +38,23 @@
                             </li>
                             <li>
                                 <label for="agreement_description"
-                                    >{{ $t("Description") }}:
+                                    >{{ $__("Description") }}:
                                 </label>
                                 <textarea
                                     id="agreement_description"
                                     v-model="agreement.description"
-                                    :placeholder="$t('Description')"
+                                    :placeholder="$__('Description')"
                                     rows="10"
                                     cols="50"
                                     required
                                 />
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="agreement_status"
-                                    >{{ $t("Status") }}:</label
+                                    >{{ $__("Status") }}:</label
                                 >
                                 <v-select
                                     id="agreement_status"
@@ -75,12 +75,12 @@
                                     </template>
                                 </v-select>
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="agreement_closure_reason"
-                                    >{{ $t("Closure reason") }}:</label
+                                    >{{ $__("Closure reason") }}:</label
                                 >
                                 <v-select
                                     id="agreement_closure_reason"
@@ -99,7 +99,7 @@
                                 <label
                                     for="agreement_is_perpetual"
                                     class="radio"
-                                    >{{ $t("Is perpetual") }}:</label
+                                    >{{ $__("Is perpetual") }}:</label
                                 >
                                 <label for="agreement_is_perpetual_yes">
                                     <input
@@ -124,7 +124,7 @@
                             </li>
                             <li>
                                 <label for="agreement_renewal_priority"
-                                    >{{ $t("Renewal priority") }}:</label
+                                    >{{ $__("Renewal priority") }}:</label
                                 >
                                 <v-select
                                     id="agreement_renewal_priority"
@@ -136,7 +136,7 @@
                             </li>
                             <li>
                                 <label for="agreement_license_info"
-                                    >{{ $t("License info") }}:
+                                    >{{ $__("License info") }}:
                                 </label>
                                 <textarea
                                     id="agreement_license_info"
@@ -173,7 +173,7 @@
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
                         class="cancel"
-                        >{{ $t("Cancel") }}</router-link
+                        >{{ $__("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -265,22 +265,22 @@ export default {
             const duplicate_license_ids = license_ids.filter((id, i) => license_ids.indexOf(id) !== i)
 
             if (duplicate_license_ids.length) {
-                errors.push(this.$t("A license is used several times"))
+                errors.push(this.$__("A license is used several times"))
             }
 
             const related_agreement_ids = agreement.agreement_relationships.map(rs => rs.related_agreement_id)
             const duplicate_related_agreement_ids = related_agreement_ids.filter((id, i) => related_agreement_ids.indexOf(id) !== i)
 
             if (duplicate_related_agreement_ids.length) {
-                errors.push(this.$t("An agreement is used as relationship several times"))
+                errors.push(this.$__("An agreement is used as relationship several times"))
             }
 
             if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
-                errors.push(this.$t("Only one controlling license is allowed"))
+                errors.push(this.$__("Only one controlling license is allowed"))
             }
 
             if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
-                errors.push(this.$t("Only one controlling license is allowed"))
+                errors.push(this.$__("Only one controlling license is allowed"))
             }
 
             errors.forEach(function (e) {
@@ -337,10 +337,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage(this.$t("Agreement updated"))
+                        setMessage(this.$__("Agreement updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage(this.$t("Agreement created"))
+                        setMessage(this.$__("Agreement created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

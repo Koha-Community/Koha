@@ -42,7 +42,7 @@ describe("License CRUD operations", () => {
         // GET licenses returns empty list
         cy.intercept("GET", "/api/v1/erm/licenses*", []);
         cy.visit("/cgi-bin/koha/erm/licenses");
-        cy.get("#licenses_list").contains("There are no licenses defined.");
+        cy.get("#licenses_list").contains("There are no licenses defined");
 
         // GET licenses returns something
         let license = get_license();

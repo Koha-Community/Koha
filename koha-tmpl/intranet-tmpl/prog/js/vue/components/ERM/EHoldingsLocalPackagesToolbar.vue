@@ -4,7 +4,7 @@
             to="/cgi-bin/koha/erm/eholdings/local/packages/add"
             class="btn btn-default"
             ><font-awesome-icon icon="plus" />
-            {{ $t("New package") }}</router-link
+            {{ $__("New package") }}</router-link
         >
     </div>
 </template>

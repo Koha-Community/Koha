@@ -1,22 +1,22 @@
 <template>
     <fieldset class="rows" id="package_agreements">
-        <legend>{{ $t("Agreements") }}</legend>
+        <legend>{{ $__("Agreements") }}</legend>
         <fieldset
             class="rows"
             v-for="(package_agreement, counter) in package_agreements"
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement .counter", { counter: counter + 1 }) }}
+                {{ $__("Agreement %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteAgreement(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove this agreement") }}</a
+                    {{ $__("Remove this agreement") }}</a
                 >
             </legend>
             <ol>
                 <li>
                     <label :for="`agreement_id_${counter}`" class="required"
-                        >{{ $t("Agreement") }}:
+                        >{{ $__("Agreement") }}:
                     </label>
                     <v-select
                         :id="`agreement_id_${counter}`"
@@ -34,7 +34,7 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
             </ol>
         </fieldset>
@@ -42,9 +42,9 @@
             v-if="agreements.length"
             class="btn btn-default"
             @click="addAgreement"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new agreement") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new agreement") }}</a
         >
-        <span v-else>{{ $t("There are no agreements created yet") }}</span>
+        <span v-else>{{ $__("There are no agreements created yet") }}</span>
     </fieldset>
 </template>
 

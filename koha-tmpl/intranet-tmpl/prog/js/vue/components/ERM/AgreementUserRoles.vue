@@ -1,20 +1,20 @@
 <template>
     <div class="page-section" id="agreement_user_roles">
-        <legend>{{ $t("Users") }}</legend>
+        <legend>{{ $__("Users") }}</legend>
         <fieldset
             class="rows"
             v-for="(user_role, counter) in user_roles"
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement user .counter", { counter: counter + 1 }) }}
+                {{ $__("Agreement user %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteUser(counter)"
-                    ><i class="fa fa-trash"></i> {{ $t("Remove this user") }}</a
+                    ><i class="fa fa-trash"></i> {{ $__("Remove this user") }}</a
                 >
             </legend>
             <ol>
                 <li>
-                    <label :for="`user_id_${counter}`">{{ $t("User") }}:</label>
+                    <label :for="`user_id_${counter}`">{{ $__("User") }}:</label>
                     <span class="user">
                         {{ user_role.patron_str }}
                     </span>
@@ -22,12 +22,12 @@
                         href="#"
                         @click="selectUser(counter)"
                         class="btn btn-default"
-                        >{{ $t("Select user") }}</a
+                        >{{ $__("Select user") }}</a
                     >)
                 </li>
                 <li>
                     <label :for="`user_role_${counter}`"
-                        >{{ $t("Role") }}:</label
+                        >{{ $__("Role") }}:</label
                     >
                     <v-select
                         :id="`user_role_${counter}`"
@@ -45,7 +45,7 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
             </ol>
         </fieldset>
@@ -55,7 +55,7 @@
             id="selected_patron_id"
         />
         <a class="btn btn-default" @click="addUser"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new user") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new user") }}</a
         >
     </div>
 </template>

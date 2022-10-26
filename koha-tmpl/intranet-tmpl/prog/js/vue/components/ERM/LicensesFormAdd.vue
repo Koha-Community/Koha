@@ -1,10 +1,10 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="licenses_add">
         <h2 v-if="license.license_id">
-            {{ $t("Edit license .id", { id: license.license_id }) }}
+            {{ $__("Edit license %s").format(license.license_id) }}
         </h2>
-        <h2 v-else>{{ $t("New license") }}</h2>
+        <h2 v-else>{{ $__("New license") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <div class="page-section">
@@ -12,21 +12,21 @@
                         <ol>
                             <li>
                                 <label class="required" for="license_name"
-                                    >{{ $t("License name") }}:</label
+                                    >{{ $__("License name") }}:</label
                                 >
                                 <input
                                     id="license_name"
                                     v-model="license.name"
-                                    :placeholder="$t('License name')"
+                                    :placeholder="$__('License name')"
                                     required
                                 />
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="license_vendor_id"
-                                    >{{ $t("Vendor") }}:</label
+                                    >{{ $__("Vendor") }}:</label
                                 >
                                 <v-select
                                     id="license_vendor_id"
@@ -38,23 +38,23 @@
                             </li>
                             <li>
                                 <label for="license_description"
-                                    >{{ $t("Description") }}:
+                                    >{{ $__("Description") }}:
                                 </label>
                                 <textarea
                                     id="license_description"
                                     v-model="license.description"
-                                    :placeholder="$t('Description')"
+                                    :placeholder="$__('Description')"
                                     rows="10"
                                     cols="50"
                                     required
                                 />
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="license_type"
-                                    >{{ $t("Type") }}:</label
+                                    >{{ $__("Type") }}:</label
                                 >
                                 <v-select
                                     id="license_type"
@@ -73,12 +73,12 @@
                                     </template>
                                 </v-select>
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="license_status"
-                                    >{{ $t("Status") }}:</label
+                                    >{{ $__("Status") }}:</label
                                 >
                                 <v-select
                                     id="license_status"
@@ -97,12 +97,12 @@
                                     </template>
                                 </v-select>
                                 <span class="required">{{
-                                    $t("Required")
+                                    $__("Required")
                                 }}</span>
                             </li>
                             <li>
                                 <label for="started_on"
-                                    >{{ $t("Start date") }}:</label
+                                    >{{ $__("Start date") }}:</label
                                 >
                                 <flat-pickr
                                     id="started_on"
@@ -113,7 +113,7 @@
                             </li>
                             <li>
                                 <label for="ended_on"
-                                    >{{ $t("End date") }}:</label
+                                    >{{ $__("End date") }}:</label
                                 >
                                 <flat-pickr
                                     id="ended_on"
@@ -126,12 +126,12 @@
                 </div>
                 <Documents :documents="license.documents" />
                 <fieldset class="action">
-                    <input type="submit" :value="$t('Submit')" />
+                    <input type="submit" :value="$__('Submit')" />
                     <router-link
                         to="/cgi-bin/koha/erm/licenses"
                         role="button"
                         class="cancel"
-                        >{{ $t("Cancel") }}</router-link
+                        >{{ $__("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -229,10 +229,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage(this.$t("License updated"))
+                        setMessage(this.$__("License updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage(this.$t("License created"))
+                        setMessage(this.$__("License created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

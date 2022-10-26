@@ -1,17 +1,17 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="titles_add">
         <h2 v-if="title.title_id">
-            {{ $t("Edit title .id", { id: title.title_id }) }}
+            {{ $__("Edit title #%s").format(title.title_id) }}
         </h2>
-        <h2 v-else>{{ $t("New title") }}</h2>
+        <h2 v-else>{{ $__("New title") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li v-if="title.title_id">
                             <label for="title_title_id"
-                                >{{ $t("Title identifier") }}:</label
+                                >{{ $__("Title identifier") }}:</label
                             >
                             <span>
                                 {{ title.title_id }}
@@ -20,43 +20,43 @@
 
                         <li>
                             <label class="required" for="title_name"
-                                >{{ $t("Publication title") }}:</label
+                                >{{ $__("Publication title") }}:</label
                             >
                             <input
                                 id="title_publication_title"
                                 v-model="title.publication_title"
-                                :placeholder="$t('Publication title')"
+                                :placeholder="$__('Publication title')"
                                 required
                             />
-                            <span class="required">{{ $t("Required") }}</span>
+                            <span class="required">{{ $__("Required") }}</span>
                         </li>
 
                         <li>
                             <label for="title_print_identifier"
-                                >{{ $t("Print-format identifier") }}:</label
+                                >{{ $__("Print-format identifier") }}:</label
                             >
                             <input
                                 id="title_print_identifier"
                                 v-model="title.print_identifier"
-                                :placeholder="$t('Print-format identifier')"
+                                :placeholder="$__('Print-format identifier')"
                             />
                         </li>
 
                         <li>
                             <label for="title_online_identifier"
-                                >{{ $t("Online-format identifier") }}:</label
+                                >{{ $__("Online-format identifier") }}:</label
                             >
                             <input
                                 id="title_online_identifier"
                                 v-model="title.online_identifier"
-                                :placeholder="$t('Online-format identifier')"
+                                :placeholder="$__('Online-format identifier')"
                             />
                         </li>
 
                         <li>
                             <label for="title_date_first_issue_online"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Date of first serial issue available online"
                                     )
                                 }}:</label
@@ -65,7 +65,7 @@
                                 id="title_date_first_issue_online"
                                 v-model="title.date_first_issue_online"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Date of first serial issue available online'
                                     )
                                 "
@@ -75,7 +75,7 @@
                         <li>
                             <label for="title_num_first_vol_online"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Number of first volume available online"
                                     )
                                 }}:</label
@@ -84,7 +84,7 @@
                                 id="title_num_first_vol_online"
                                 v-model="title.num_first_vol_online"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Number of first volume available online'
                                     )
                                 "
@@ -94,7 +94,7 @@
                         <li>
                             <label for="title_num_first_issue_online"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Number of first issue available online"
                                     )
                                 }}:</label
@@ -103,7 +103,7 @@
                                 id="title_num_first_issue_online"
                                 v-model="title.num_first_issue_online"
                                 :placeholder="
-                                    $t('Number of first issue available online')
+                                    $__('Number of first issue available online')
                                 "
                             />
                         </li>
@@ -111,14 +111,14 @@
                         <li>
                             <label for="title_date_last_issue_online"
                                 >{{
-                                    $t("Date of last issue available online")
+                                    $__("Date of last issue available online")
                                 }}:</label
                             >
                             <input
                                 id="title_date_last_issue_online"
                                 v-model="title.date_last_issue_online"
                                 :placeholder="
-                                    $t('Date of last issue available online')
+                                    $__('Date of last issue available online')
                                 "
                             />
                         </li>
@@ -126,7 +126,7 @@
                         <li>
                             <label for="title_num_last_vol_online"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Number of last volume available online"
                                     )
                                 }}:</label
@@ -135,7 +135,7 @@
                                 id="title_num_last_vol_online"
                                 v-model="title.num_last_vol_online"
                                 :placeholder="
-                                    $t('Number of last volume available online')
+                                    $__('Number of last volume available online')
                                 "
                             />
                         </li>
@@ -143,85 +143,85 @@
                         <li>
                             <label for="title_num_last_issue_online"
                                 >{{
-                                    $t("Number of last issue available online")
+                                    $__("Number of last issue available online")
                                 }}:</label
                             >
                             <input
                                 id="title_num_last_issue_online"
                                 v-model="title.num_last_issue_online"
                                 :placeholder="
-                                    $t('Number of last issue available online')
+                                    $__('Number of last issue available online')
                                 "
                             />
                         </li>
 
                         <li>
                             <label for="title_title_url"
-                                >{{ $t("Title-level URL") }}:</label
+                                >{{ $__("Title-level URL") }}:</label
                             >
                             <input
                                 id="title_title_url"
                                 v-model="title.title_url"
-                                :placeholder="$t('Title-level URL')"
+                                :placeholder="$__('Title-level URL')"
                             />
                         </li>
 
                         <li>
                             <label for="title_first_author"
-                                >{{ $t("First author") }}:</label
+                                >{{ $__("First author") }}:</label
                             >
                             <input
                                 id="title_first_author"
                                 v-model="title.first_author"
-                                :placeholder="$t('First author')"
+                                :placeholder="$__('First author')"
                             />
                         </li>
 
                         <li>
                             <label for="title_embargo_info"
-                                >{{ $t("Embargo information") }}:</label
+                                >{{ $__("Embargo information") }}:</label
                             >
                             <input
                                 id="title_embargo_info"
                                 v-model="title.embargo_info"
-                                :placeholder="$t('Embargo information')"
+                                :placeholder="$__('Embargo information')"
                             />
                         </li>
 
                         <li>
                             <label for="title_coverage_depth"
-                                >{{ $t("Coverage depth") }}:</label
+                                >{{ $__("Coverage depth") }}:</label
                             >
                             <input
                                 id="title_coverage_depth"
                                 v-model="title.coverage_depth"
-                                :placeholder="$t('Coverage depth')"
+                                :placeholder="$__('Coverage depth')"
                             />
                         </li>
 
                         <li>
-                            <label for="title_notes">{{ $t("Notes") }}:</label>
+                            <label for="title_notes">{{ $__("Notes") }}:</label>
                             <input
                                 id="title_notes"
                                 v-model="title.notes"
-                                :placeholder="$t('Notes')"
+                                :placeholder="$__('Notes')"
                             />
                         </li>
 
                         <li>
                             <label for="title_publisher_name"
-                                >{{ $t("Publisher name") }}:</label
+                                >{{ $__("Publisher name") }}:</label
                             >
                             <input
                                 id="title_publisher_name"
                                 v-model="title.publisher_name"
-                                :placeholder="$t('Publisher name')"
+                                :placeholder="$__('Publisher name')"
                             />
                         </li>
 
                         <li>
                             <label for="title_publication_type"
-                                >{{ $t("Publication type") }}:</label
+                                >{{ $__("Publication type") }}:</label
                             >
                             <v-select
                                 id="title_publication_type"
@@ -235,7 +235,7 @@
                         <li>
                             <label for="title_date_monograph_published_print"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Date the monograph is first published in print"
                                     )
                                 }}:</label
@@ -244,7 +244,7 @@
                                 id="title_date_monograph_published_print"
                                 v-model="title.date_monograph_published_print"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Date the monograph is first published in print'
                                     )
                                 "
@@ -254,7 +254,7 @@
                         <li>
                             <label for="title_date_monograph_published_online"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Date the monograph is first published online"
                                     )
                                 }}:</label
@@ -263,7 +263,7 @@
                                 id="title_date_monograph_published_online"
                                 v-model="title.date_monograph_published_online"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Date the monograph is first published online'
                                     )
                                 "
@@ -273,44 +273,44 @@
                         <li>
                             <label for="title_monograph_volume"
                                 >{{
-                                    $t("Number of volume for monograph")
+                                    $__("Number of volume for monograph")
                                 }}:</label
                             >
                             <input
                                 id="title_monograph_volume"
                                 v-model="title.monograph_volume"
                                 :placeholder="
-                                    $t('Number of volume for monograph')
+                                    $__('Number of volume for monograph')
                                 "
                             />
                         </li>
 
                         <li>
                             <label for="title_monograph_edition"
-                                >{{ $t("Edition of the monograph") }}:</label
+                                >{{ $__("Edition of the monograph") }}:</label
                             >
                             <input
                                 id="title_monograph_edition"
                                 v-model="title.monograph_edition"
-                                :placeholder="$t('Edition of the monograph')"
+                                :placeholder="$__('Edition of the monograph')"
                             />
                         </li>
 
                         <li>
                             <label for="title_first_editor"
-                                >{{ $t("First editor") }}:</label
+                                >{{ $__("First editor") }}:</label
                             >
                             <input
                                 id="title_first_editor"
                                 v-model="title.first_editor"
-                                :placeholder="$t('First editor')"
+                                :placeholder="$__('First editor')"
                             />
                         </li>
 
                         <li>
                             <label for="title_parent_publication_title_id"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Title identifier of the parent publication"
                                     )
                                 }}:</label
@@ -319,7 +319,7 @@
                                 id="title_parent_publication_title_id"
                                 v-model="title.parent_publication_title_id"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Title identifier of the parent publication'
                                     )
                                 "
@@ -329,7 +329,7 @@
                         <li>
                             <label for="title_preceeding_publication_title_id"
                                 >{{
-                                    $t(
+                                    $__(
                                         "Title identifier of any preceding publication title"
                                     )
                                 }}:</label
@@ -338,7 +338,7 @@
                                 id="title_preceeding_publication_title_id"
                                 v-model="title.preceeding_publication_title_id"
                                 :placeholder="
-                                    $t(
+                                    $__(
                                         'Title identifier of any preceding publication title'
                                     )
                                 "
@@ -349,13 +349,13 @@
                             <label for="title_access_type"
                                 >{{
                                     // FIXME May be fee-based (P) or Open Access (F).
-                                    $t("Access type")
+                                    $__("Access type")
                                 }}:</label
                             >
                             <input
                                 id="title_access_type"
                                 v-model="title.access_type"
-                                :placeholder="$t('Access type')"
+                                :placeholder="$__('Access type')"
                             />
                         </li>
 
@@ -370,7 +370,7 @@
                         to="/cgi-bin/koha/erm/eholdings/local/titles"
                         role="button"
                         class="cancel"
-                        >{{ $t("Cancel") }}</router-link
+                        >{{ $__("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -457,7 +457,7 @@ export default {
             const duplicate_package_ids = package_ids.filter((id, i) => package_ids.indexOf(id) !== i)
 
             if (duplicate_package_ids.length) {
-                errors.push(this.$t("A package is used several times"))
+                errors.push(this.$__("A package is used several times"))
             }
 
             errors.forEach(function (e) {
@@ -498,10 +498,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
-                        setMessage(this.$t("Title updated"))
+                        setMessage(this.$__("Title updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
-                        setMessage(this.$t("Title created"))
+                        setMessage(this.$__("Title created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

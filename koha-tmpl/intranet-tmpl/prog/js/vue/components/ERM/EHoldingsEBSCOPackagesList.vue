@@ -1,16 +1,16 @@
 <template>
     <div>
         <fieldset>
-            {{ $t("Package name") }}:
+            {{ $__("Package name") }}:
             <input
                 type="text"
                 id="package_name_filter"
                 v-model="filters.package_name"
                 @keyup.enter="filter_table"
             />
-            {{ $t("Content type") }}:
+            {{ $__("Content type") }}:
             <select id="content_type_filter" v-model="filters.content_type">
-                <option value="">{{ $t("All") }}</option>
+                <option value="">{{ $__("All") }}</option>
                 <option
                     v-for="type in av_package_content_types"
                     :key="type.authorised_values"
@@ -19,17 +19,17 @@
                     {{ type.lib }}
                 </option>
             </select>
-            {{ $t("Selection status") }}:
+            {{ $__("Selection status") }}:
             <select id="selection_type_filter" v-model="filters.selection_type">
-                <option value="0">{{ $t("All") }}</option>
-                <option value="1">{{ $t("Selected") }}</option>
-                <option value="2">{{ $t("Not selected") }}</option>
+                <option value="0">{{ $__("All") }}</option>
+                <option value="1">{{ $__("Selected") }}</option>
+                <option value="2">{{ $__("Not selected") }}</option>
             </select>
             <input
                 @click="filter_table"
                 id="filter_table"
                 type="button"
-                :value="$t('Submit')"
+                :value="$__('Submit')"
             />
         </fieldset>
 
@@ -46,9 +46,9 @@
             >
                 <router-link :to="local_packages_url">
                     {{
-                        $t("{count} packages found locally", {
-                            count: local_count_packages,
-                        })
+                        $__("%s packages found locally").format(
+                            local_count_packages
+                        )
                     }}</router-link
                 >
             </div>
@@ -117,7 +117,7 @@ export default {
             this.$router.push(new_route)
             this.show_table = true
             this.local_count_packages = null
-            $('#'+this.table_id).DataTable().draw()
+            $('#' + this.table_id).DataTable().draw()
             if (this.erm_providers.includes('local')) {
                 this.local_count_packages = await fetchCountLocalPackages(this.filters)
             }
@@ -156,7 +156,7 @@ export default {
                 },
             }
 
-            $('#'+table_id).kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/ebsco/packages",
                 },

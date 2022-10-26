@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_confirm_delete">
-        <h2>{{ $t("Delete agreement") }}</h2>
+        <h2>{{ $__("Delete agreement") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("Agreement name") }}:
+                            {{ $__("Agreement name") }}:
                             {{ agreement.name }}
                         </li>
-                        <li>{{ $t("Vendor") }}: {{ agreement.vendor_id }}</li>
+                        <li>{{ $__("Vendor") }}: {{ agreement.vendor_id }}</li>
                         <li>
-                            {{ $t("Description") }}:
+                            {{ $__("Description") }}:
                             {{ agreement.description }}
                         </li>
                     </ol>
@@ -21,13 +21,13 @@
                     <input
                         type="submit"
                         variant="primary"
-                        :value="$t('Yes, delete')"
+                        :value="$__('Yes, delete')"
                     />
                     <router-link
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
                         class="cancel"
-                        >{{ $t("No, do not delete") }}</router-link
+                        >{{ $__("No, do not delete") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -73,7 +73,7 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            setMessage(this.$t("Agreement deleted"))
+                            setMessage(this.$__("Agreement deleted"))
                             this.$router.push("/cgi-bin/koha/erm/agreements")
                         } else {
                             setError(response.message || response.statusText)

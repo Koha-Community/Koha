@@ -29,7 +29,7 @@ const pinia = createPinia();
 
 const i18n = {
     install: (app, options) => {
-        app.config.globalProperties.__ = (key) => {
+        app.config.globalProperties.$__ = (key) => {
             return window["__"](key);
         };
     },
@@ -38,9 +38,9 @@ const i18n = {
 const app = createApp(App);
 
 const rootComponent = app
+    .use(i18n)
     .use(pinia)
     .use(router)
-    .use(i18n)
     .component("font-awesome-icon", FontAwesomeIcon)
     .component("v-select", vSelect);
 

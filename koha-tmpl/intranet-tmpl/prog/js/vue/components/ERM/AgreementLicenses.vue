@@ -1,6 +1,6 @@
 <template>
     <div class="page-section" id="agreement_licenses">
-        <legend>{{ $t("Licenses") }}</legend>
+        <legend>{{ $__("Licenses") }}</legend>
         <fieldset
             :id="`agreement_license_${counter}`"
             class="rows"
@@ -8,16 +8,16 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement license .counter", { counter: counter + 1 }) }}
+                {{ $__("Agreement license %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteLicense(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove this license") }}</a
+                    {{ $__("Remove this license") }}</a
                 >
             </legend>
             <ol>
                 <li>
                     <label :for="`license_id_${counter}`"
-                        >{{ $t("License") }}:</label
+                        >{{ $__("License") }}:</label
                     >
                     <v-select
                         :id="`license_id_${counter}`"
@@ -35,11 +35,11 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`license_status_${counter}`"
-                        >{{ $t("Status") }}:</label
+                        >{{ $__("Status") }}:</label
                     >
                     <v-select
                         :id="`license_status_${counter}`"
@@ -57,11 +57,11 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`license_location_${counter}`"
-                        >{{ $t("Physical location") }}:
+                        >{{ $__("Physical location") }}:
                     </label>
                     <v-select
                         :id="`license_location_${counter}`"
@@ -73,30 +73,30 @@
                 </li>
                 <li>
                     <label :for="`license_notes_${counter}`"
-                        >{{ $t("Notes") }}:</label
+                        >{{ $__("Notes") }}:</label
                     >
                     <input
                         :id="`license_notes_${counter}`"
                         v-model="agreement_license.notes"
-                        :placeholder="$t('Notes')"
+                        :placeholder="$__('Notes')"
                     />
                 </li>
                 <li>
                     <label :for="`license_uri_${counter}`"
-                        >{{ $t("URI") }}:</label
+                        >{{ $__("URI") }}:</label
                     >
                     <input
                         :id="`license_uri_${counter}`"
                         v-model="agreement_license.uri"
-                        :placeholder="$t('URI')"
+                        :placeholder="$__('URI')"
                     />
                 </li>
             </ol>
         </fieldset>
         <a v-if="licenses.length" class="btn btn-default" @click="addLicense"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new license") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new license") }}</a
         >
-        <span v-else>{{ $t("There are no licenses created yet") }}</span>
+        <span v-else>{{ $__("There are no licenses created yet") }}</span>
     </div>
 </template>
 

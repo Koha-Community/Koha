@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="erm_package" id="packages_show">
         <h2>
-            {{ $t("Package .id", { id: erm_package.package_id }) }}
+            {{ $__("Package #%s").format(erm_package.package_id) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/local/packages/edit/${erm_package.package_id}`"
-                    :title="$t('Edit')"
+                    :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/local/packages/delete/${erm_package.package_id}`"
-                    :title="$t('Delete')"
+                    :title="$__('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Package name") }}:</label>
+                        <label>{{ $__("Package name") }}:</label>
                         <span>
                             {{ erm_package.name }}
                         </span>
                     </li>
                     <li v-if="erm_package.vendor">
-                        <label>{{ $t("Vendor") }}:</label>
+                        <label>{{ $__("Vendor") }}:</label>
                         <span>
                             <a
                                 :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`"
@@ -36,7 +36,7 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Package type") }}:</label>
+                        <label>{{ $__("Package type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_types",
@@ -45,7 +45,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Content type") }}:</label>
+                        <label>{{ $__("Content type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_content_types",
@@ -54,15 +54,15 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Notes") }}:</label>
+                        <label>{{ $__("Notes") }}:</label>
                         <span>{{ erm_package.notes }}</span>
                     </li>
                     <li v-if="erm_package.created_on">
-                        <label>{{ $t("Created on") }}:</label>
+                        <label>{{ $__("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
                     <li v-if="erm_package.package_agreements.length">
-                        <label>{{ $t("Agreements") }}</label>
+                        <label>{{ $__("Agreements") }}</label>
                         <div
                             v-for="package_agreement in erm_package.package_agreements"
                             :key="package_agreement.agreement_id"
@@ -77,9 +77,9 @@
                     </li>
                     <li>
                         <label>{{
-                            $t("Titles ({count})", {
-                                count: erm_package.resources_count,
-                            })
+                            $__("Titles (%s)").format(
+                                erm_package.resources_count
+                            )
                         }}</label>
                         <div v-if="erm_package.resources_count">
                             <EHoldingsPackageTitlesList
@@ -96,7 +96,7 @@
                     to="/cgi-bin/koha/erm/eholdings/local/packages"
                     role="button"
                     class="cancel"
-                    >{{ $t("Close") }}</router-link
+                    >{{ $__("Close") }}</router-link
                 >
             </fieldset>
         </div>

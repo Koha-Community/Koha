@@ -3,12 +3,12 @@
         <div id="filters">
             <a href="#" @click.prevent="toggle_filters($event)"
                 ><i class="fa fa-search"></i>
-                {{ display_filters ? $t("Hide filters") : $t("Show filters") }}
+                {{ display_filters ? $__("Hide filters") : $__("Show filters") }}
             </a>
             <fieldset v-if="display_filters">
                 <ol>
                     <li>
-                        <label>{{ $t("Title") }}:</label>
+                        <label>{{ $__("Title") }}:</label>
                         <input
                             type="text"
                             id="publication_title_filter"
@@ -17,12 +17,12 @@
                         />
                     </li>
                     <li>
-                        <label>{{ $t("Publication type") }}:</label>
+                        <label>{{ $__("Publication type") }}:</label>
                         <select
                             id="publication_type_filter"
                             v-model="filters.publication_type"
                         >
-                            <option value="">{{ $t("All") }}</option>
+                            <option value="">{{ $__("All") }}</option>
                             <option
                                 v-for="type in av_title_publication_types"
                                 :key="type.authorised_values"
@@ -33,14 +33,14 @@
                         </select>
                     </li>
                     <li>
-                        <label>{{ $t("Selection status") }}:</label>
+                        <label>{{ $__("Selection status") }}:</label>
                         <select
                             id="selection_type_filter"
                             v-model="filters.selection_type"
                         >
-                            <option value="0">{{ $t("All") }}</option>
-                            <option value="1">{{ $t("Selected") }}</option>
-                            <option value="2">{{ $t("Not selected") }}</option>
+                            <option value="0">{{ $__("All") }}</option>
+                            <option value="1">{{ $__("Selected") }}</option>
+                            <option value="2">{{ $__("Not selected") }}</option>
                         </select>
                     </li>
                 </ol>
@@ -49,7 +49,7 @@
                     @click="filter_table"
                     id="filter_table"
                     type="button"
-                    :value="$t('Filter')"
+                    :value="$__('Filter')"
                 />
             </fieldset>
         </div>

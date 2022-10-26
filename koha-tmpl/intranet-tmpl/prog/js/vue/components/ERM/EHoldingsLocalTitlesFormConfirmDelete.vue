@@ -1,13 +1,13 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="eholdings_confirm_delete">
-        <h2>{{ $t("Delete title") }}</h2>
+        <h2>{{ $__("Delete title") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("Title") }}:
+                            {{ $__("Title") }}:
                             {{ eholding.publication_title }}
                         </li>
                     </ol>
@@ -16,13 +16,13 @@
                     <input
                         type="submit"
                         variant="primary"
-                        :value="$t('Yes, delete')"
+                        :value="$__('Yes, delete')"
                     />
                     <router-link
                         to="/cgi-bin/koha/erm/eholdings/local/titles"
                         role="button"
                         class="cancel"
-                        >{{ $t("No, do not delete") }}</router-link
+                        >{{ $__("No, do not delete") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -68,7 +68,7 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            setMessage(this.$t("Title deleted"))
+                            setMessage(this.$__("Title deleted"))
                             this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
                         } else {
                             setError(response.message || response.statusText)

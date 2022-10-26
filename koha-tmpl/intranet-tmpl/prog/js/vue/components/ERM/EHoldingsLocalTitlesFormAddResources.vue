@@ -1,16 +1,16 @@
 <template>
     <fieldset class="rows" id="resources">
-        <legend>{{ $t("Packages") }}</legend>
+        <legend>{{ $__("Packages") }}</legend>
         <fieldset
             class="rows"
             v-for="(resource, counter) in resources"
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Package .counter", { counter: counter + 1 }) }}
+                {{ $__("Package %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deletePackage(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove from this package") }}</a
+                    {{ $__("Remove from this package") }}</a
                 >
             </legend>
             <ol>
@@ -18,7 +18,7 @@
                     <label
                         :for="`resource_package_id_${counter}`"
                         class="required"
-                        >{{ $t("Package") }}:
+                        >{{ $__("Package") }}:
                     </label>
                     <!-- Parse to integer, resource.package_id is an integer, but GET /packages return package_id as string -->
                     <v-select
@@ -37,11 +37,11 @@
                             />
                         </template>
                     </v-select>
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`resource_vendor_id_${counter}`"
-                        >{{ $t("Vendor") }}:</label
+                        >{{ $__("Vendor") }}:</label
                     >
                     <v-select
                         :id="`resource_vendor_id_${counter}`"
@@ -54,7 +54,7 @@
 
                 <li>
                     <label :for="`started_on_${counter}`"
-                        >{{ $t("Start date") }}:
+                        >{{ $__("Start date") }}:
                     </label>
                     <flat-pickr
                         :id="`started_on_${counter}`"
@@ -65,7 +65,7 @@
                 </li>
                 <li>
                     <label :for="`ended_on_${counter}`"
-                        >{{ $t("End date") }}:</label
+                        >{{ $__("End date") }}:</label
                     >
                     <flat-pickr
                         :id="`ended_on_${counter}`"
@@ -74,20 +74,20 @@
                     />
                 </li>
                 <li>
-                    <label :for="`${counter}`">{{ $t("Proxy") }}:</label>
+                    <label :for="`${counter}`">{{ $__("Proxy") }}:</label>
                     <input
                         :id="`proxy_${counter}`"
                         v-model="resource.proxy"
-                        :placeholder="$t('Proxy')"
+                        :placeholder="$__('Proxy')"
                     />
                 </li>
             </ol>
         </fieldset>
         <a v-if="packages.length" class="btn btn-default" @click="addPackage"
             ><font-awesome-icon icon="plus" />
-            {{ $t("Add to another package") }}</a
+            {{ $__("Add to another package") }}</a
         >
-        <span v-else>{{ $t("There are no packages created yet") }}</span>
+        <span v-else>{{ $__("There are no packages created yet") }}</span>
     </fieldset>
 </template>
 

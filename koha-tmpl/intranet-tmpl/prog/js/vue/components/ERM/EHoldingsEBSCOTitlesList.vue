@@ -1,19 +1,19 @@
 <template>
     <div>
         <fieldset>
-            {{ $t("Publication title") }}:
+            {{ $__("Publication title") }}:
             <input
                 type="text"
                 id="publication_title_filter"
                 v-model="filters.publication_title"
                 @keyup.enter="filter_table"
             />
-            {{ $t("Publication type") }}:
+            {{ $__("Publication type") }}:
             <select
                 id="publication_type_filter"
                 v-model="filters.publication_type"
             >
-                <option value="">{{ $t("All") }}</option>
+                <option value="">{{ $__("All") }}</option>
                 <option
                     v-for="type in av_title_publication_types"
                     :key="type.authorised_values"
@@ -22,20 +22,20 @@
                     {{ type.lib }}
                 </option>
             </select>
-            {{ $t("Selection status") }}:
+            {{ $__("Selection status") }}:
             <select id="selection_type_filter" v-model="filters.selection_type">
-                <option value="0">{{ $t("All") }}</option>
-                <option value="1">{{ $t("Selected") }}</option>
-                <option value="2">{{ $t("Not selected") }}</option>
+                <option value="0">{{ $__("All") }}</option>
+                <option value="1">{{ $__("Selected") }}</option>
+                <option value="2">{{ $__("Not selected") }}</option>
             </select>
             <input
                 @click="filter_table"
                 id="filter_table"
                 type="button"
-                :value="$t('Submit')"
+                :value="$__('Submit')"
             />
             <span v-if="cannot_search">{{
-                $t("Please enter a search term")
+                $__("Please enter a search term")
             }}</span>
         </fieldset>
 
@@ -52,9 +52,9 @@
             >
                 <router-link :to="local_titles_url">
                     {{
-                        $t("{count} titles found locally", {
-                            count: local_count_titles,
-                        })
+                        $__("%s titles found locally").format(
+                            local_count_titles
+                        )
                     }}</router-link
                 >
             </div>

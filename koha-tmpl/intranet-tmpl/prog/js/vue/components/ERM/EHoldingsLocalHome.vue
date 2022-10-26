@@ -3,13 +3,13 @@
         <li>
             <router-link :to="`/cgi-bin/koha/erm/eholdings/local/packages`">
                 <i class="fa fa-file-text-o"></i>
-                {{ $t("Packages") }}</router-link
+                {{ $__("Packages") }}</router-link
             >
         </li>
         <li>
             <router-link :to="`/cgi-bin/koha/erm/eholdings/local/titles`">
                 <i class="fa fa-file-text-o"></i>
-                {{ $t("Titles") }}</router-link
+                {{ $__("Titles") }}</router-link
             >
         </li>
     </ul>

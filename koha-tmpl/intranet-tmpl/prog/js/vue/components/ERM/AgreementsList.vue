@@ -1,16 +1,16 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="agreements" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
         <fieldset v-if="agreements.length">
-            <label for="expired_filter">{{ $t("Filter by expired") }}:</label>
+            <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
             <input
                 type="checkbox"
                 id="expired_filter"
                 v-model="filters.by_expired"
                 @keyup.enter="filter_table"
             />
-            {{ $t("on") }}
+            {{ $__("on") }}
             <flat-pickr
                 id="max_expiration_date_filter"
                 v-model="filters.max_expiration_date"
@@ -21,12 +21,12 @@
                 @click="filter_table"
                 id="filter_table"
                 type="button"
-                :value="$t('Filter')"
+                :value="$__('Filter')"
             />
         </fieldset>
         <table v-if="agreements.length" :id="table_id"></table>
         <div v-else-if="initialized" class="dialog message">
-            {{ $t("There are no agreements defined") }}
+            {{ $__("There are no agreements defined") }}
         </div>
     </div>
 </template>

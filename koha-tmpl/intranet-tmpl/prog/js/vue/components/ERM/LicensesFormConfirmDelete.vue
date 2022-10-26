@@ -1,17 +1,17 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="licenses_confirm_delete">
-        <h2>{{ $t("Delete license") }}</h2>
+        <h2>{{ $__("Delete license") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("License name") }}:
+                            {{ $__("License name") }}:
                             {{ license.name }}
                         </li>
                         <li>
-                            {{ $t("Description") }}:
+                            {{ $__("Description") }}:
                             {{ license.description }}
                         </li>
                     </ol>
@@ -20,13 +20,13 @@
                     <input
                         type="submit"
                         variant="primary"
-                        :value="$t('Yes, delete')"
+                        :value="$__('Yes, delete')"
                     />
                     <router-link
                         to="/cgi-bin/koha/erm/licenses"
                         role="button"
                         class="cancel"
-                        >{{ $t("No, do not delete") }}</router-link
+                        >{{ $__("No, do not delete") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -74,7 +74,7 @@ export default {
                     (response) => {
                         if (response.status == 204) {
                             this.$router.push("/cgi-bin/koha/erm/licenses")
-                            setMessage(this.$t("License deleted"))
+                            setMessage(this.$__("License deleted"))
                         } else {
                             setError(response.message || response.statusText)
                         }

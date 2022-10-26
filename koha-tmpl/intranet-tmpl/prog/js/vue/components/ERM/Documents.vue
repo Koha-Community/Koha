@@ -1,6 +1,6 @@
 <template>
     <div class="page-section" id="documents">
-        <legend>{{ $t("Documents") }}</legend>
+        <legend>{{ $__("Documents") }}</legend>
         <fieldset
             :id="`document_${counter}`"
             class="rows"
@@ -8,18 +8,18 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Document .counter", { counter: counter + 1 }) }}
+                {{ $__("Document %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteDocument(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove this document") }}</a
+                    {{ $__("Remove this document") }}</a
                 >
             </legend>
             <ol>
                 <li>
-                    <label>{{ $t("File") }}:</label>
+                    <label>{{ $__("File") }}:</label>
                     <div class="file_information">
                         <span v-if="!document.file_name">
-                            {{ $t("Select a file") }}
+                            {{ $__("Select a file") }}
                             <input
                                 type="file"
                                 @change="selectFile($event, counter)"
@@ -28,7 +28,7 @@
                             />
                         </span>
                         <span v-else>
-                            {{ $t("Update file") }}
+                            {{ $__("Update file") }}
                             <input
                                 type="file"
                                 @change="selectFile($event, counter)"
@@ -38,26 +38,26 @@
                         </span>
                         <ol>
                             <li v-show="document.file_name">
-                                {{ $t("File name") }}:
+                                {{ $__("File name") }}:
                                 <span>{{ document.file_name }}</span>
                             </li>
                             <li v-show="document.file_type">
-                                {{ $t("File type") }}:
+                                {{ $__("File type") }}:
                                 <span>{{ document.file_type }}</span>
                             </li>
                             <li v-show="document.file_name">
-                                {{ $t("File description") }}:
+                                {{ $__("File description") }}:
                                 <input
                                     :id="`file_description_${counter}`"
                                     type="text"
                                     class="file_description"
                                     :name="`file_description_${counter}`"
                                     v-model="document.file_description"
-                                    :placeholder="$t('File description')"
+                                    :placeholder="$__('File description')"
                                 />
                             </li>
                             <li v-show="document.uploaded_on">
-                                {{ $t("Uploaded on") }}:
+                                {{ $__("Uploaded on") }}:
                                 <span>{{
                                     format_date(document.uploaded_on)
                                 }}</span>
@@ -67,7 +67,7 @@
                 </li>
                 <li>
                     <label :for="`physical_location_${counter}`"
-                        >{{ $t("Physical location") }}:
+                        >{{ $__("Physical location") }}:
                     </label>
                     <input
                         :id="`physical_location_${counter}`"
@@ -75,32 +75,32 @@
                         class="physical_location"
                         :name="`physical_location_${counter}`"
                         v-model="document.physical_location"
-                        :placeholder="$t('Physical location')"
+                        :placeholder="$__('Physical location')"
                     />
                 </li>
                 <li>
-                    <label :for="`uri_${counter}`">{{ $t("URI") }}:</label>
+                    <label :for="`uri_${counter}`">{{ $__("URI") }}:</label>
                     <input
                         :id="`uri_${counter}`"
                         v-model="document.uri"
-                        :placeholder="$t('URI')"
+                        :placeholder="$__('URI')"
                     />
                 </li>
                 <li>
-                    <label :for="`notes_${counter}`">{{ $t("Notes") }}:</label>
+                    <label :for="`notes_${counter}`">{{ $__("Notes") }}:</label>
                     <input
                         :id="`notes_${counter}`"
                         type="text"
                         class="notes"
                         :name="`notes_${counter}`"
                         v-model="document.notes"
-                        :placeholder="$t('Notes')"
+                        :placeholder="$__('Notes')"
                     />
                 </li>
             </ol>
         </fieldset>
         <a class="btn btn-default" @click="addDocument"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new document") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new document") }}</a
         >
     </div>
 </template>

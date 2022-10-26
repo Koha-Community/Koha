@@ -6,10 +6,10 @@
                     v-if="!item.path && counter == breadCrumbs.length - 1"
                     :to="`${currentRoute}`"
                 >
-                    {{ $t(item.text) }}</router-link
+                    {{ $__(item.text) }}</router-link
                 >
                 <router-link v-else :to="item.path">
-                    {{ $t(item.text) }}</router-link
+                    {{ $__(item.text) }}</router-link
                 >
             </li>
         </ol>

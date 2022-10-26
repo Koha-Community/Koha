@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div v-if="!initialized">{{ $t("Loading") }}</div>
+        <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else-if="packages" id="packages_list">
             <Toolbar />
             <div v-if="packages.length" id="package_list_result">
                 <table :id="table_id"></table>
             </div>
             <div v-else-if="initialized" class="dialog message">
-                {{ $t("There are no packages defined") }}
+                {{ $__("There are no packages defined") }}
             </div>
         </div>
     </div>

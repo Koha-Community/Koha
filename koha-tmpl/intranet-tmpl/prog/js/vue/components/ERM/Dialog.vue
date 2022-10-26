@@ -8,7 +8,7 @@
             class="btn btn-default btn-xs"
             role="button"
             @click="removeMessages"
-            >{{ $t("Close") }}</a
+            >{{ $__("Close") }}</a
         >
     </div>
     <!-- Must be styled differently -->

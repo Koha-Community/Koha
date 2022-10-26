@@ -1,17 +1,17 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="licenses_show">
         <h2>
-            {{ $t("License .id", { id: license.license_id }) }}
+            {{ $__("License #%s").format(license.license_id) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/licenses/edit/${license.license_id}`"
-                    :title="$t('Edit')"
+                    :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
                 <router-link
                     :to="`/cgi-bin/koha/erm/licenses/delete/${license.license_id}`"
-                    :title="$t('Delete')"
+                    :title="$__('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -20,13 +20,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("License name") }}:</label>
+                        <label>{{ $__("License name") }}:</label>
                         <span>
                             {{ license.name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Vendor") }}:</label>
+                        <label>{{ $__("Vendor") }}:</label>
                         <span v-if="license.vendor_id">
                             <a
                                 :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${license.vendor_id}`"
@@ -36,19 +36,19 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Description") }}:</label>
+                        <label>{{ $__("Description") }}:</label>
                         <span>
                             {{ license.description }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Type") }}:</label>
+                        <label>{{ $__("Type") }}:</label>
                         <span>{{
                             get_lib_from_av("av_license_types", license.type)
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Status") }}:</label>
+                        <label>{{ $__("Status") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_license_statuses",
@@ -58,16 +58,16 @@
                     </li>
 
                     <li>
-                        <label>{{ $t("Started on") }}:</label>
+                        <label>{{ $__("Started on") }}:</label>
                         <span>{{ format_date(license.started_on) }}</span>
                     </li>
 
                     <li>
-                        <label>{{ $t("Ended on") }}:</label>
+                        <label>{{ $__("Ended on") }}:</label>
                         <span>{{ format_date(license.ended_on) }}</span>
                     </li>
                     <li v-if="license.documents.length">
-                        <label>{{ $t("Documents") }}</label>
+                        <label>{{ $__("Documents") }}</label>
                         <div id="license_documents">
                             <ul>
                                 <li
@@ -89,14 +89,14 @@
                                         {{ format_date(document.uploaded_on) }}
                                     </div>
                                     <div v-if="document.physical_location">
-                                        {{ $t("Physical location") }}:
+                                        {{ $__("Physical location") }}:
                                         {{ document.physical_location }}
                                     </div>
                                     <div v-if="document.uri">
-                                        {{ $t("URI") }}: {{ document.uri }}
+                                        {{ $__("URI") }}: {{ document.uri }}
                                     </div>
                                     <div v-if="document.notes">
-                                        {{ $t("Notes") }}: {{ document.notes }}
+                                        {{ $__("Notes") }}: {{ document.notes }}
                                     </div>
                                 </li>
                             </ul>
@@ -109,7 +109,7 @@
                     to="/cgi-bin/koha/erm/licenses"
                     role="button"
                     class="cancel"
-                    >{{ $t("Close") }}</router-link
+                    >{{ $__("Close") }}</router-link
                 >
             </fieldset>
         </div>

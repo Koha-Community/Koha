@@ -1,13 +1,13 @@
 <template>
-    <h2>{{ $t("Import from a list") }}</h2>
+    <h2>{{ $__("Import from a list") }}</h2>
     <div v-if="job_id" class="dialog message">
-        {{ $t("Import in progress,") }}
+        {{ $__("Import in progress,") }}
         <router-link :to="`/cgi-bin/koha/admin/background_jobs/${job_id}`">
-            {{ $t("see job #%s").format(job_id) }}
+            {{ $__("see job #%s").format(job_id) }}
         </router-link>
     </div>
     <div id="package_list">
-        {{ $t("To the following local package") }}:
+        {{ $__("To the following local package") }}:
         <v-select
             v-model="package_id"
             label="name"
@@ -56,7 +56,7 @@ export default {
     methods: {
         import_from_list: async function (list_id) {
             if (!this.package_id) {
-                setError(this.$t("Cannot import, no package selected"))
+                setError(this.$__("Cannot import, no package selected"))
                 return
             }
             if (!list_id) return

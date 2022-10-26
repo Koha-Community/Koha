@@ -1,6 +1,6 @@
 <template>
     <div class="page-section" id="agreement_periods">
-        <legend>{{ $t("Periods") }}</legend>
+        <legend>{{ $__("Periods") }}</legend>
         <fieldset
             :id="`agreement_period_${counter}`"
             class="rows"
@@ -8,16 +8,16 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement period .counter", { counter: counter + 1 }) }}
+                {{ $__("Agreement period %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deletePeriod(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{ $t("Remove this period") }}</a
+                    {{ $__("Remove this period") }}</a
                 >
             </legend>
             <ol>
                 <li>
                     <label :for="`started_on_${counter}`" class="required"
-                        >{{ $t("Start date") }}:
+                        >{{ $__("Start date") }}:
                     </label>
                     <flat-pickr
                         :id="`started_on_${counter}`"
@@ -26,11 +26,11 @@
                         :config="fp_config"
                         :data-date_to="`ended_on_${counter}`"
                     />
-                    <span class="required">{{ $t("Required") }}</span>
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`ended_on_${counter}`"
-                        >{{ $t("End date") }}:</label
+                        >{{ $__("End date") }}:</label
                     >
                     <flat-pickr
                         :id="`ended_on_${counter}`"
@@ -40,7 +40,7 @@
                 </li>
                 <li>
                     <label :for="`cancellation_deadline_${counter}`"
-                        >{{ $t("Cancellation deadline") }}:
+                        >{{ $__("Cancellation deadline") }}:
                     </label>
                     <flat-pickr
                         :id="`cancellation_deadline_${counter}`"
@@ -49,7 +49,7 @@
                     />
                 </li>
                 <li>
-                    <label :for="`notes_${counter}`">{{ $t("Notes") }}:</label>
+                    <label :for="`notes_${counter}`">{{ $__("Notes") }}:</label>
                     <input
                         :id="`notes_${counter}`"
                         type="text"
@@ -61,7 +61,7 @@
             </ol>
         </fieldset>
         <a class="btn btn-default" @click="addPeriod"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new period") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new period") }}</a
         >
     </div>
 </template>

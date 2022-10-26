@@ -5,7 +5,7 @@
             <input
                 type="button"
                 @click="showModal = false"
-                :value="$t('Close')"
+                :value="$__('Close')"
             />
         </div>
     </transition>
@@ -24,12 +24,12 @@
             <a
                 href="#"
                 @click.prevent="deleteAgreement(counter)"
-                :title="$t('Remove this agreement')"
+                :title="$__('Remove this agreement')"
                 ><i class="fa fa-trash"></i
             ></a>
         </div>
         <a class="btn btn-default btn-xs" @click="showModal = true"
-            ><font-awesome-icon icon="plus" /> {{ $t("Add new agreement") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $__("Add new agreement") }}</a
         >
     </div>
 </template>
@@ -78,7 +78,7 @@ export default {
                     })
                 }
             } else {
-                setWarning(this.$t("This agreement is already linked with this package"))
+                setWarning(this.$__("This agreement is already linked with this package"))
             }
         },
         deleteAgreement(counter) {

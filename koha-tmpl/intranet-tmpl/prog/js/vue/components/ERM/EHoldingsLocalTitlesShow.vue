@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if=title id="eholdings_title_show">
         <h2>
-            {{ $t("Title .id", { id: title.title_id }) }}
+            {{ $__("Title #%s").format(title.title_id) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/local/titles/edit/${title.title_id}`"
-                    :title="$t('Edit')"
+                    :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/local/titles/delete/${title.title_id}`"
-                    :title="$t('Delete')"
+                    :title="$__('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -21,31 +21,31 @@
             <fieldset class="rows">
                 <ol>
                     <li v-if="title.title_id">
-                        <label>{{ $t("Title identifier") }}:</label>
+                        <label>{{ $__("Title identifier") }}:</label>
                         <span>
                             {{ title.title_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Publication title") }}:</label>
+                        <label>{{ $__("Publication title") }}:</label>
                         <span>
                             {{ title.publication_title }}
                             <a
                                 v-if="title.biblio_id"
                                 :href="`/cgi-bin/koha/catalogue/detail.pl?biblionumber=${title.biblio_id}`"
                             >
-                                {{ $t("Local bibliographic record") }}
+                                {{ $__("Local bibliographic record") }}
                             </a>
                         </span>
                     </li>
                     <li v-if="title.print_identifier">
-                        <label>{{ $t("Print-format identifier") }}:</label>
+                        <label>{{ $__("Print-format identifier") }}:</label>
                         <span>
                             {{ title.print_identifier }}
                         </span>
                     </li>
                     <li v-if="title.online_identifier">
-                        <label>{{ $t("Online-format identifier") }}:</label>
+                        <label>{{ $__("Online-format identifier") }}:</label>
                         <span>
                             {{ title.online_identifier }}
                         </span>
@@ -53,7 +53,7 @@
                     <li v-if="title.date_first_issue_online">
                         <label
                             >{{
-                                $t(
+                                $__(
                                     "Date of first serial issue available online"
                                 )
                             }}:</label
@@ -65,7 +65,7 @@
                     <li v-if="title.num_first_vol_online">
                         <label
                             >{{
-                                $t("Number of first volume available online")
+                                $__("Number of first volume available online")
                             }}:</label
                         >
                         <span>
@@ -75,7 +75,7 @@
                     <li v-if="title.num_first_issue_online">
                         <label
                             >{{
-                                $t("Number of first issue available online")
+                                $__("Number of first issue available online")
                             }}:</label
                         >
                         <span>
@@ -85,7 +85,7 @@
                     <li v-if="title.date_last_issue_online">
                         <label
                             >{{
-                                $t("Date of last issue available online")
+                                $__("Date of last issue available online")
                             }}:</label
                         >
                         <span>
@@ -95,7 +95,7 @@
                     <li v-if="title.num_last_vol_online">
                         <label
                             >{{
-                                $t("Number of last volume available online")
+                                $__("Number of last volume available online")
                             }}:</label
                         >
                         <span>
@@ -105,7 +105,7 @@
                     <li v-if="title.num_last_issue_online">
                         <label
                             >{{
-                                $t("Number of last issue available online")
+                                $__("Number of last issue available online")
                             }}:</label
                         >
                         <span>
@@ -113,43 +113,43 @@
                         </span>
                     </li>
                     <li v-if="title.title_url">
-                        <label>{{ $t("Title-level URL") }}:</label>
+                        <label>{{ $__("Title-level URL") }}:</label>
                         <span>
                             {{ title.title_url }}
                         </span>
                     </li>
                     <li v-if="title.first_author">
-                        <label>{{ $t("First author") }}:</label>
+                        <label>{{ $__("First author") }}:</label>
                         <span>
                             {{ title.first_author }}
                         </span>
                     </li>
                     <li v-if="title.embargo_info">
-                        <label>{{ $t("Embargo information") }}:</label>
+                        <label>{{ $__("Embargo information") }}:</label>
                         <span>
                             {{ title.embargo_info }}
                         </span>
                     </li>
                     <li v-if="title.coverage_depth">
-                        <label>{{ $t("Coverage depth") }}:</label>
+                        <label>{{ $__("Coverage depth") }}:</label>
                         <span>
                             {{ title.coverage_depth }}
                         </span>
                     </li>
                     <li v-if="title.notes">
-                        <label>{{ $t("Notes") }}:</label>
+                        <label>{{ $__("Notes") }}:</label>
                         <span>
                             {{ title.notes }}
                         </span>
                     </li>
                     <li v-if="title.publisher_name">
-                        <label>{{ $t("Publisher name") }}:</label>
+                        <label>{{ $__("Publisher name") }}:</label>
                         <span>
                             {{ title.publisher_name }}
                         </span>
                     </li>
                     <li v-if="title.publication_type">
-                        <label>{{ $t("Publication type") }}:</label>
+                        <label>{{ $__("Publication type") }}:</label>
                         <span
                             >{{
                                 get_lib_from_av(
@@ -162,7 +162,7 @@
                     <li v-if="title.date_monograph_published_print">
                         <label
                             >{{
-                                $t(
+                                $__(
                                     "Date the monograph is first published in print"
                                 )
                             }}:</label
@@ -174,7 +174,7 @@
                     <li v-if="title.date_monograph_published_online">
                         <label
                             >{{
-                                $t(
+                                $__(
                                     "Date the monograph is first published online"
                                 )
                             }}:</label
@@ -185,20 +185,20 @@
                     </li>
                     <li v-if="title.monograph_volume">
                         <label
-                            >{{ $t("Number of volume for monograph") }}:</label
+                            >{{ $__("Number of volume for monograph") }}:</label
                         >
                         <span>
                             {{ title.monograph_volume }}
                         </span>
                     </li>
                     <li v-if="title.monograph_edition">
-                        <label>{{ $t("Edition of the monograph") }}:</label>
+                        <label>{{ $__("Edition of the monograph") }}:</label>
                         <span>
                             {{ title.monograph_edition }}
                         </span>
                     </li>
                     <li v-if="title.first_editor">
-                        <label>{{ $t("First editor") }}:</label>
+                        <label>{{ $__("First editor") }}:</label>
                         <span>
                             {{ title.first_editor }}
                         </span>
@@ -206,7 +206,7 @@
                     <li v-if="title.parent_publication_title_id">
                         <label
                             >{{
-                                $t(
+                                $__(
                                     "Title identifier of the parent publication"
                                 )
                             }}:</label
@@ -218,7 +218,7 @@
                     <li v-if="title.preceeding_publication_title_id">
                         <label
                             >{{
-                                $t(
+                                $__(
                                     "Title identifier of any preceding publication title"
                                 )
                             }}:</label
@@ -228,7 +228,7 @@
                         </span>
                     </li>
                     <li v-if="title.access_type">
-                        <label>{{ $t("Access type") }}:</label>
+                        <label>{{ $__("Access type") }}:</label>
                         <span>
                             {{ title.access_type }}
                         </span>
@@ -248,7 +248,7 @@
                     to="/cgi-bin/koha/erm/eholdings/local/titles"
                     role="button"
                     class="cancel"
-                    >{{ $t("Close") }}</router-link
+                    >{{ $__("Close") }}</router-link
                 >
             </fieldset>
         </div>

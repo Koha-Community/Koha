@@ -1,21 +1,21 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="resource" id="eholdings_resources_show">
         <h2>
-            {{ $t("Resource .id", { id: resource.resource_id }) }}
+            {{ $__("Resource #%s").format(resource.resource_id) }}
         </h2>
         <div>
             <fieldset class="rows">
-                <legend>{{ $t("Resource information") }}</legend>
+                <legend>{{ $__("Resource information") }}</legend>
                 <ol>
                     <li v-if="resource.resource_id">
-                        <label>{{ $t("Resource identifier") }}:</label>
+                        <label>{{ $__("Resource identifier") }}:</label>
                         <span>
                             {{ resource.resource_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Publication title") }}:</label>
+                        <label>{{ $__("Publication title") }}:</label>
                         <span
                             ><router-link
                                 :to="`/cgi-bin/koha/erm/eholdings/local/titles/${resource.title_id}`"
@@ -26,25 +26,25 @@
                         >
                     </li>
                     <li>
-                        <label>{{ $t("Publisher name") }}:</label>
+                        <label>{{ $__("Publisher name") }}:</label>
                         <span>
                             {{ resource.title.publisher_name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Publication type") }}:</label>
+                        <label>{{ $__("Publication type") }}:</label>
                         <span>
                             {{ resource.title.publication_type }}
                         </span>
                     </li>
                     <li v-if="resource.title.print_identifier">
-                        <label>{{ $t("Print-format identifier") }}:</label>
+                        <label>{{ $__("Print-format identifier") }}:</label>
                         <span>
                             {{ resource.title.print_identifier }}
                         </span>
                     </li>
                     <li v-if="resource.title.online_identifier">
-                        <label>{{ $t("Online-format identifier") }}:</label>
+                        <label>{{ $__("Online-format identifier") }}:</label>
                         <span>
                             {{ resource.title.online_identifier }}
                         </span>
@@ -55,7 +55,7 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Package") }}:</label>
+                        <label>{{ $__("Package") }}:</label>
                         <span
                             ><router-link
                                 :to="`/cgi-bin/koha/erm/eholdings/local/packages/${resource.package_id}`"
@@ -65,13 +65,13 @@
                     </li>
 
                     <li>
-                        <label>{{ $t("Vendor") }}:</label>
+                        <label>{{ $__("Vendor") }}:</label>
                         <span v-if="resource.vendor">
                             {{ resource.vendor.name }}
                         </span>
                     </li>
                     <li v-if="resource.package.content_type">
-                        <label>{{ $t("Package content type") }}:</label>
+                        <label>{{ $__("Package content type") }}:</label>
                         <span>{{ resource.package.content_type }}</span>
                     </li>
                 </ol>
@@ -81,7 +81,7 @@
                 <legend>Resource settings</legend>
                 <ol>
                     <li>
-                        <label>{{ $t("Coverage dates") }}:</label>
+                        <label>{{ $__("Coverage dates") }}:</label>
                         <span
                             >{{ format_date(resource.started_on) }}-{{
                                 format_date(resource.ended_on)

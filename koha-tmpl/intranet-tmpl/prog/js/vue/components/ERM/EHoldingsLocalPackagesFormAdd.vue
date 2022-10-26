@@ -1,29 +1,29 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="packages_add">
         <h2 v-if="erm_package.package_id">
-            {{ $t("Edit package .id", { id: erm_package.package_id }) }}
+            {{ $__("Edit package #%s").format(erm_package.package_id) }}
         </h2>
-        <h2 v-else>{{ $t("New package") }}</h2>
+        <h2 v-else>{{ $__("New package") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
                             <label class="required" for="package_name"
-                                >{{ $t("Package name") }}:</label
+                                >{{ $__("Package name") }}:</label
                             >
                             <input
                                 id="package_name"
                                 v-model="erm_package.name"
-                                :placeholder="$t('Package name')"
+                                :placeholder="$__('Package name')"
                                 required
                             />
-                            <span class="required">{{ $t("Required") }}</span>
+                            <span class="required">{{ $__("Required") }}</span>
                         </li>
                         <li>
                             <label for="package_vendor_id"
-                                >{{ $t("Vendor") }}:</label
+                                >{{ $__("Vendor") }}:</label
                             >
                             <v-select
                                 id="package_vendor_id"
@@ -34,7 +34,7 @@
                             />
                         </li>
                         <li>
-                            <label for="package_type">{{ $t("Type") }}:</label>
+                            <label for="package_type">{{ $__("Type") }}:</label>
                             <v-select
                                 id="package_type"
                                 v-model="erm_package.package_type"
@@ -45,7 +45,7 @@
                         </li>
                         <li>
                             <label for="package_content_type">{{
-                                $t("Content type: ")
+                                $__("Content type: ")
                             }}</label>
                             <v-select
                                 id="package_content_type"
@@ -57,7 +57,7 @@
                         </li>
                         <li>
                             <label for="package_notes">{{
-                                $t("Notes")
+                                $__("Notes")
                             }}:</label>
                             <textarea
                                 id="package_notes"
@@ -76,7 +76,7 @@
                         to="/cgi-bin/koha/erm/eholdings/local/packages"
                         role="button"
                         class="cancel"
-                        >{{ $t("Cancel") }}</router-link
+                        >{{ $__("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>
@@ -146,7 +146,7 @@ export default {
             const duplicate_agreement_ids = agreement_ids.filter((id, i) => agreement_ids.indexOf(id) !== i)
 
             if (duplicate_agreement_ids.length) {
-                errors.push(this.$t("An agreement is used several times"))
+                errors.push(this.$__("An agreement is used several times"))
             }
 
             errors.forEach(function (e) {
@@ -167,7 +167,7 @@ export default {
                 editPackage(erm_package).then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
-                        setMessage(this.$t("Package updated"))
+                        setMessage(this.$__("Package updated"))
                     } else {
                         setError(response.message || response.statusText)
                     }
@@ -176,7 +176,7 @@ export default {
                 createPackage(erm_package).then(response => {
                     if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
-                        setMessage(this.$t("Package created"))
+                        setMessage(this.$__("Package created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

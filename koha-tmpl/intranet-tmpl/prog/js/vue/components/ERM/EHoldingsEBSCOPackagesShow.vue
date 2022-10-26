@@ -1,15 +1,15 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="erm_package" id="packages_show">
         <h2>
-            {{ $t("Package .id", { id: erm_package.package_id }) }}
+            {{ $__("Package #%s").format(erm_package.package_id) }}
             <span v-if="!updating_is_selected">
                 <a
                     v-if="!erm_package.is_selected"
                     class="btn btn-default btn-xs"
                     role="button"
                     @click="add_to_holdings"
-                    ><font-awesome-icon icon="plus" /> Add package to holdings</a
+                    ><font-awesome-icon icon="plus" /> {{ $__("Add package to holdings") }}</a
                 >
                 <a
                     v-else
@@ -17,7 +17,7 @@
                     role="button"
                     id="remove-from-holdings"
                     @click="remove_from_holdings"
-                    ><font-awesome-icon icon="minus" /> Remove package from holdings</a
+                    ><font-awesome-icon icon="minus" /> {{ $__("Remove package from holdings") }}</a
                 > </span
             ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
@@ -25,17 +25,17 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Package name") }}:</label>
+                        <label>{{ $__("Package name") }}:</label>
                         <span>
                             {{ erm_package.name }}
                         </span>
                     </li>
                     <li v-if="erm_package.vendor">
-                        <label>{{ $t("Vendor") }}:</label>
+                        <label>{{ $__("Vendor") }}:</label>
                         <span>{{ erm_package.vendor.name }}</span>
                     </li>
                     <li v-if="false">
-                        <label>{{ $t("External ID") }}:</label>
+                        <label>{{ $__("External ID") }}:</label>
                         <span>
                             <!-- FIXME Create a syspref to store the URL -->
                             <a
@@ -46,7 +46,7 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Package type") }}:</label>
+                        <label>{{ $__("Package type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_types",
@@ -55,7 +55,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Content type") }}:</label>
+                        <label>{{ $__("Content type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_content_types",
@@ -64,7 +64,7 @@
                         }}</span>
                     </li>
                     <li v-if="erm_package.created_on">
-                        <label>{{ $t("Created on") }}:</label>
+                        <label>{{ $__("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
 
@@ -95,7 +95,7 @@
                     to="/cgi-bin/koha/erm/eholdings/ebsco/packages"
                     role="button"
                     class="cancel"
-                    >{{ $t("Close") }}</router-link
+                    >{{ $__("Close") }}</router-link
                 >
             </fieldset>
         </div>

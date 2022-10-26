@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_show">
         <h2>
-            {{ $t("Agreement .id", { id: agreement.agreement_id }) }}
+            {{ $__("Agreement #%s").format(agreement.agreement_id) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/agreements/edit/${agreement.agreement_id}`"
-                    :title="$t('Edit')"
+                    :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
                     :to="`/cgi-bin/koha/erm/agreements/delete/${agreement.agreement_id}`"
-                    :title="$t('Delete')"
+                    :title="$__('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Agreement name") }}:</label>
+                        <label>{{ $__("Agreement name") }}:</label>
                         <span>
                             {{ agreement.name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Vendor") }}:</label>
+                        <label>{{ $__("Vendor") }}:</label>
                         <span v-if="agreement.vendor_id">
                             <a
                                 :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${agreement.vendor_id}`"
@@ -37,13 +37,13 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Description") }}:</label>
+                        <label>{{ $__("Description") }}:</label>
                         <span>
                             {{ agreement.description }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Status") }}:</label>
+                        <label>{{ $__("Status") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_statuses",
@@ -52,7 +52,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Closure reason") }}:</label>
+                        <label>{{ $__("Closure reason") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_closure_reasons",
@@ -61,12 +61,12 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Is perpetual") }}:</label>
+                        <label>{{ $__("Is perpetual") }}:</label>
                         <span v-if="agreement.is_perpetual">Yes</span>
                         <span v-else>No</span>
                     </li>
                     <li>
-                        <label>{{ $t("Renewal priority") }}:</label>
+                        <label>{{ $__("Renewal priority") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_renewal_priorities",
@@ -75,18 +75,18 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("License info") }}:</label>
+                        <label>{{ $__("License info") }}:</label>
                         <span>{{ agreement.license_info }}</span>
                     </li>
 
                     <li v-if="agreement.periods.length">
-                        <label>{{ $t("Periods") }}</label>
+                        <label>{{ $__("Periods") }}</label>
                         <table>
                             <thead>
-                                <th>{{ $t("Period start") }}</th>
-                                <th>{{ $t("Period end") }}</th>
-                                <th>{{ $t("Cancellation deadline") }}</th>
-                                <th>{{ $t("Period note") }}</th>
+                                <th>{{ $__("Period start") }}</th>
+                                <th>{{ $__("Period end") }}</th>
+                                <th>{{ $__("Cancellation deadline") }}</th>
+                                <th>{{ $__("Period note") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -113,11 +113,11 @@
                     </li>
 
                     <li v-if="agreement.user_roles.length">
-                        <label>{{ $t("Users") }}</label>
+                        <label>{{ $__("Users") }}</label>
                         <table>
                             <thead>
-                                <th>{{ $t("Name") }}</th>
-                                <th>{{ $t("Role") }}</th>
+                                <th>{{ $__("Name") }}</th>
+                                <th>{{ $__("Role") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -141,14 +141,14 @@
                     </li>
 
                     <li v-if="agreement.agreement_licenses.length">
-                        <label>{{ $t("Licenses") }}</label>
+                        <label>{{ $__("Licenses") }}</label>
                         <table>
                             <thead>
-                                <th>{{ $t("Name") }}</th>
-                                <th>{{ $t("Status") }}</th>
-                                <th>{{ $t("Physical location") }}</th>
-                                <th>{{ $t("Notes") }}</th>
-                                <th>{{ $t("URI") }}</th>
+                                <th>{{ $__("Name") }}</th>
+                                <th>{{ $__("Status") }}</th>
+                                <th>{{ $__("Physical location") }}</th>
+                                <th>{{ $__("Notes") }}</th>
+                                <th>{{ $__("URI") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -188,7 +188,7 @@
                     </li>
 
                     <li v-if="agreement.agreement_relationships.length">
-                        <label>{{ $t("Related agreements") }}</label>
+                        <label>{{ $__("Related agreements") }}</label>
                         <div id="agreement_relationships">
                             <div
                                 v-for="relationship in agreement.agreement_relationships"
@@ -214,7 +214,7 @@
                     </li>
 
                     <li v-if="agreement.agreement_packages.length">
-                        <label>{{ $t("Packages") }}</label>
+                        <label>{{ $__("Packages") }}</label>
                         <div id="agreement_packages">
                             <div
                                 v-for="agreement_package in agreement.agreement_packages"
@@ -249,7 +249,7 @@
                     </li>
 
                     <li v-if="agreement.documents.length">
-                        <label>{{ $t("Documents") }}</label>
+                        <label>{{ $__("Documents") }}</label>
                         <div id="agreement_documents">
                             <ul>
                                 <li
@@ -271,14 +271,14 @@
                                         {{ format_date(document.uploaded_on) }}
                                     </div>
                                     <div v-if="document.physical_location">
-                                        {{ $t("Physical location") }}:
+                                        {{ $__("Physical location") }}:
                                         {{ document.physical_location }}
                                     </div>
                                     <div v-if="document.uri">
-                                        {{ $t("URI") }}: {{ document.uri }}
+                                        {{ $__("URI") }}: {{ document.uri }}
                                     </div>
                                     <div v-if="document.notes">
-                                        {{ $t("Notes") }}: {{ document.notes }}
+                                        {{ $__("Notes") }}: {{ document.notes }}
                                     </div>
                                 </li>
                             </ul>
@@ -291,7 +291,7 @@
                     to="/cgi-bin/koha/erm/agreements"
                     role="button"
                     class="cancel"
-                    >{{ $t("Close") }}</router-link
+                    >{{ $__("Close") }}</router-link
                 >
             </fieldset>
         </div>
