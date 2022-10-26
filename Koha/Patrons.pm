@@ -237,6 +237,7 @@ sub search_unsubscribed {
     return $class->search(
         {
             'patron_consents.refused_on' => { '<=' => $str },
+            'patron_consents.type' => 'GDPR_PROCESSING',
             'login_attempts' => $cond,
         },
         { join => 'patron_consents' },
