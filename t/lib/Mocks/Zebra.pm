@@ -136,8 +136,8 @@ sub load_records_ui {
 
     $agent->get_ok( "$cgi_root/mainpage.pl", 'load main page' );
 
-    $agent->follow_link_ok( { url_regex => qr/tools-home/i }, 'open tools module' );
-    $agent->follow_link_ok( { text => 'Stage MARC records for import' },
+    $agent->follow_link_ok( { url_regex => qr/cataloging-home/i }, 'open caaloging module' );
+    $agent->follow_link_ok( { text => 'Stage records for import' },
         'go to stage MARC' );
 
     $agent->post(
