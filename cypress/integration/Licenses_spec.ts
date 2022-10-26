@@ -80,13 +80,13 @@ describe("License CRUD operations", () => {
         cy.get("#license_type .vs__search").type(license.type + '{enter}',{force:true});
         cy.get("#license_status .vs__search").type(license.status + '{enter}',{force:true});
 
-        cy.get("#started_on").click();
+        cy.get("#started_on+input").click();
         cy.get(".flatpickr-calendar")
             .eq(0)
             .find("span.today")
             .click({ force: true });
 
-        cy.get("#ended_on").click();
+        cy.get("#ended_on+input").click();
         cy.get(".flatpickr-calendar")
             .eq(1)
             .find("span.today")

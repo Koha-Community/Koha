@@ -137,14 +137,14 @@ describe("Agreement CRUD operations", () => {
 
         // Selecting the flatpickr values is a bit tedious here...
         // We have 3 date inputs per period
-        cy.get("#ended_on_0").click();
+        cy.get("#ended_on_0+input").click();
         // Second flatpickr => ended_on for the first period
         cy.get(".flatpickr-calendar")
             .eq(1)
             .find("span.today")
             .click({ force: true }); // select today. No idea why we should force, but there is a random failure otherwise
 
-        cy.get("#started_on_0").click();
+        cy.get("#started_on_0+input").click();
         cy.get(".flatpickr-calendar")
             .eq(0)
             .find("span.today")
@@ -153,9 +153,9 @@ describe("Agreement CRUD operations", () => {
 
         cy.get("#ended_on_0").should("have.value", ""); // Has been reset correctly
 
-        cy.get("#started_on_0").click();
+        cy.get("#started_on_0+input").click();
         cy.get(".flatpickr-calendar").eq(0).find("span.today").click(); // select today
-        cy.get("#ended_on_0").click({ force: true }); // No idea why we should force, but there is a random failure otherwise
+        cy.get("#ended_on_0+input").click({ force: true }); // No idea why we should force, but there is a random failure otherwise
         cy.get(".flatpickr-calendar")
             .eq(1)
             .find("span.today")
@@ -163,9 +163,9 @@ describe("Agreement CRUD operations", () => {
             .click(); // select tomorrow
 
         // Second period
-        cy.get("#started_on_1").click({ force: true });
+        cy.get("#started_on_1+input").click({ force: true });
         cy.get(".flatpickr-calendar").eq(3).find("span.today").click(); // select today
-        cy.get("#cancellation_deadline_1").click();
+        cy.get("#cancellation_deadline_1+input").click();
         cy.get(".flatpickr-calendar")
             .eq(5)
             .find("span.today")
