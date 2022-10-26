@@ -184,10 +184,13 @@ function po_extract_opac () {
 const xgettext_options = '--from-code=UTF-8 --package-name Koha '
     + '--package-version= -k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 '
     + '-k__p:1c,2 -k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 -kN__ '
-    + '-kN__n:1,2 -kN__p:1c,2 -kN__np:1c,2,3 --force-po';
+    + '-kN__n:1,2 -kN__p:1c,2 -kN__np:1c,2,3 '
+    + '-k -k$__ -k$__x -k$__n:1,2 -k$__nx:1,2 -k$__xn:1,2 '
+    + '--force-po';
 
 function po_extract_messages_js () {
     const globs = [
+        'koha-tmpl/intranet-tmpl/prog/js/vue/**/*.vue',
         'koha-tmpl/intranet-tmpl/prog/js/**/*.js',
         'koha-tmpl/opac-tmpl/bootstrap/js/**/*.js',
     ];

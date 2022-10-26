@@ -25,18 +25,16 @@ import { useMainStore } from "./stores/main";
 import { useVendorStore } from "./stores/vendors";
 import { useAVStore } from "./stores/authorised_values";
 
-import { createI18n } from "vue-i18n";
-
-// FIXME How do we load the locale list?
-import * as en from "./locales/en.json"; // We could async the load here, see https://vue-i18n.intlify.dev/guide/advanced/lazy.html
-import * as de_DE from "./locales/de-DE.json";
-import * as es_ES from "./locales/es-ES.json";
-import * as fr_FR from "./locales/fr-FR.json";
-const languages = { en, "de-DE": de_DE, "es-ES": es_ES, "fr-FR": fr_FR };
-const messages = Object.assign(languages);
-const i18n = createI18n({ locale: "en", messages });
-
 const pinia = createPinia();
+
+const i18n = {
+    install: (app, options) => {
+        app.config.globalProperties.__ = (key) => {
+            return window["__"](key);
+        };
+    },
+};
+
 const app = createApp(App);
 
 const rootComponent = app
