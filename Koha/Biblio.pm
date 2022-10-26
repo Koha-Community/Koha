@@ -616,13 +616,13 @@ sub get_components_query {
         $cleaned_title = $builder->clean_search_term($cleaned_title);
         $searchstr = qq#Host-item:("$cleaned_title")#;
     }
-    my ($error, $query_str) = $builder->build_query_compat( undef, [$searchstr], undef, undef, [$sort], 0 );
+    my ($error, $query ,$query_str) = $builder->build_query_compat( undef, [$searchstr], undef, undef, [$sort], 0 );
     if( $error ){
         warn $error;
         return;
     }
 
-    return ($query_str, $sort);
+    return ($query, $query_str, $sort);
 }
 
 =head3 subscriptions

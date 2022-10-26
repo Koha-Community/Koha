@@ -616,8 +616,8 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
               );
         }
         $template->param( ComponentParts => $parts );
-        my ( $comp_query, $comp_sort ) = $biblio->get_components_query;
-        my $cpq = $comp_query . "&sort_by=" . $comp_sort;
+        my ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
+        my $cpq = $comp_query_str . "&sort_by=" . $comp_sort;
         $template->param( ComponentPartsQuery => $cpq );
     }
 } else { # check if we should show analytics anyway

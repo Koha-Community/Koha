@@ -562,40 +562,45 @@ subtest 'get_marc_components() tests' => sub {
 };
 
 subtest 'get_components_query' => sub {
-    plan tests => 6;
+    plan tests => 12;
 
     my $biblio = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
     my $record = $biblio->metadata->record;
 
-    t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
-    t::lib::Mocks::mock_preference( 'ComponentSortField', 'author' );
-    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'za' );
-    my ( $comp_q, $comp_s ) = $biblio->get_components_query;
-    is($comp_q, 'Host-item:("Some boring read")', "UseControlNumber disabled");
-    is($comp_s, "author_za", "UseControlNumber disabled sort is correct");
+    foreach my $engine ('Zebra','Elasticsearch'){
+        t::lib::Mocks::mock_preference( 'SearchEngine', $engine );
 
-    t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
-    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'az' );
-    my $marc_001_field = MARC::Field->new('001', $biblionumber);
-    $record->append_fields($marc_001_field);
-    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
-    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+        t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
+        t::lib::Mocks::mock_preference( 'ComponentSortField', 'author' );
+        t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'za' );
+        my ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
+        is($comp_query_str, 'Host-item:("Some boring read")', "$engine: UseControlNumber disabled");
+        is($comp_sort, "author_za", "$engine: UseControlNumber disabled sort is correct");
 
-    ( $comp_q, $comp_s ) = $biblio->get_components_query;
-    is($comp_q, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled without MarcOrgCode");
-    is($comp_s, "author_az", "UseControlNumber enabled without MarcOrgCode sort is correct");
+        t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
+        t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'az' );
+        my $marc_001_field = MARC::Field->new('001', $biblionumber);
+        $record->append_fields($marc_001_field);
+        C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+        $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    my $marc_003_field = MARC::Field->new('003', 'OSt');
-    $record->append_fields($marc_003_field);
-    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
-    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+        ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
+        is($comp_query_str, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled without MarcOrgCode");
+        is($comp_sort, "author_az", "$engine: UseControlNumber enabled without MarcOrgCode sort is correct");
 
-    t::lib::Mocks::mock_preference( 'ComponentSortField', 'title' );
-    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'asc' );
-    ( $comp_q, $comp_s ) = $biblio->get_components_query;
-    is($comp_q, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled with MarcOrgCode");
-    is($comp_s, "title_asc", "UseControlNumber enabled with MarcOrgCode sort if correct");
+        my $marc_003_field = MARC::Field->new('003', 'OSt');
+        $record->append_fields($marc_003_field);
+        C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+        $biblio = Koha::Biblios->find( $biblio->biblionumber);
+
+        t::lib::Mocks::mock_preference( 'ComponentSortField', 'title' );
+        t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'asc' );
+        ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
+        is($comp_query_str, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled with MarcOrgCode");
+        is($comp_sort, "title_asc", "$engine: UseControlNumber enabled with MarcOrgCode sort if correct");
+        $record->delete_field($marc_003_field);
+    }
 };
 
 subtest 'orders() and active_orders() tests' => sub {
