@@ -69,8 +69,8 @@ $agent->click_ok( '', 'login to staff interface' );
 
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 
-$agent->follow_link_ok( { url_regex => qr/tools-home/i }, 'open tools module' );
-$agent->follow_link_ok( { text => 'Stage MARC records for import' },
+$agent->follow_link_ok( { url_regex => qr/cataloging-home/i }, 'open cataloging module' );
+$agent->follow_link_ok( { text => 'Stage records for import' },
     'go to stage MARC' );
 
 $agent->post(
