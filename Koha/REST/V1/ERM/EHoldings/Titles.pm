@@ -71,7 +71,7 @@ sub add{
     my $c = shift->openapi->valid_input or return;
 
     my $provider = $c->validation->param('provider');
-    if ( $provider eq 'ebsco' ) {
+    if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
         return Koha::REST::V1::ERM::EHoldings::Titles::Local::add($c);
@@ -89,7 +89,7 @@ sub update {
     my $c = shift->openapi->valid_input or return;
 
     my $provider = $c->validation->param('provider');
-    if ( $provider eq 'ebsco' ) {
+    if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
         return Koha::REST::V1::ERM::EHoldings::Titles::Local::update($c);
@@ -104,7 +104,7 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $provider = $c->validation->param('provider');
-    if ( $provider eq 'ebsco' ) {
+    if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
         return Koha::REST::V1::ERM::EHoldings::Titles::Local::delete($c);
