@@ -222,7 +222,7 @@ if ( $op eq 'list' ) {
         { order_by => ['category_name'] }
     )->get_column('category_name');
 
-    $searchfield ||= $category_names[0];
+    $searchfield ||= "";
 
     my @avs_by_category = Koha::AuthorisedValues->new->search( { category => $searchfield } )->as_list;
     my @loop_data = ();
