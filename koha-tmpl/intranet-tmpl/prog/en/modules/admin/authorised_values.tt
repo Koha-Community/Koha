@@ -7,6 +7,9 @@
         [% IF ( action_modify ) %]Modify authorized value &rsaquo; [% END %]
         [% IF ( action_add_value ) %]New authorized value &rsaquo; [% END %]
         [% IF ( action_add_category ) %]New category &rsaquo; [% END %]
+        [% IF ( action_modify || action_add_value ) %]
+            Authorized values for category [% category_name | html %] &rsaquo;
+        [% END %]
     [% END %]
     Authorized values &rsaquo; Administration &rsaquo; Koha
 </title>
@@ -56,19 +59,26 @@
             <li>
                 <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a>
             </li>
-            [% IF ( action_modify ) %]
+            [% IF ( action_modify || action_add_value ) %]
                 <li>
-                    <a href="#" aria-current="page">
-                        Modify authorized value
+                    <a href="#">
+                        <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category_name | uri %]">Authorized values for category [% category_name | html %]</a>
                     </a>
                 </li>
-            [% END %]
-            [% IF ( action_add_value ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New authorized value
-                    </a>
-                </li>
+                [% IF ( action_modify ) %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            Modify authorized value
+                        </a>
+                    </li>
+                [% END %]
+                [% IF ( action_add_value ) %]
+                    <li>
+                        <a href="#" aria-current="page">
+                            New authorized value
+                        </a>
+                    </li>
+                [% END %]
             [% END %]
             [% IF ( action_add_category ) %]
                 <li>
