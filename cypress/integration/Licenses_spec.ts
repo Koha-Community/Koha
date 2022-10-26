@@ -17,6 +17,7 @@ function get_license() {
         status: "active",
         started_on: dates["today_iso"],
         ended_on: dates["tomorrow_iso"],
+        documents: [],
     };
 }
 
