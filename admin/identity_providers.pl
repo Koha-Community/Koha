@@ -26,24 +26,24 @@ use Try::Tiny qw( catch try );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Providers;
 
 my $input         = CGI->new;
 my $op            = $input->param('op') || 'list';
 my $domain_ops    = $input->param('domain_ops');
-my $auth_provider_id = $input->param('auth_provider_id');
-my $auth_provider;
+my $identity_provider_id = $input->param('identity_provider_id');
+my $identity_provider;
 
-$auth_provider = Koha::Auth::Providers->find($auth_provider_id)
-    unless !$auth_provider_id;
+$identity_provider = Koha::Auth::Identity::Providers->find($identity_provider_id)
+    unless !$identity_provider_id;
 
-my $template_name = $domain_ops ? 'admin/authentication_provider_domains.tt' : 'admin/authentication_providers.tt';
+my $template_name = $domain_ops ? 'admin/identity_provider_domains.tt' : 'admin/identity_providers.tt';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => $template_name,
         query           => $input,
         type            => "intranet",
-        flagsrequired   => { parameters => 'manage_authentication_providers' },
+        flagsrequired   => { parameters => 'manage_identity_providers' },
     }
 );
 
@@ -60,7 +60,7 @@ if ( !$domain_ops && $op eq 'add' ) {
     my $protocol    = $input->param('protocol');
 
     try {
-        my $provider = Koha::Auth::Provider->new(
+        my $provider = Koha::Auth::Identity::Provider->new(
             {   code        => $code,
                 config      => $config,
                 description => $description,
@@ -71,9 +71,9 @@ if ( !$domain_ops && $op eq 'add' ) {
             }
         )->store;
 
-        Koha::Auth::Provider::Domain->new(
+        Koha::Auth::Identity::Provider::Domain->new(
             {
-                auth_provider_id => $provider->auth_provider_id,
+                identity_provider_id => $provider->identity_provider_id,
             }
         )->store;
 
@@ -97,7 +97,7 @@ elsif ( $domain_ops && $op eq 'add' ) {
 
     my $allow_opac          = $input->param('allow_opac');
     my $allow_staff         = $input->param('allow_staff');
-    my $auth_provider_id    = $input->param('auth_provider_id');
+    my $identity_provider_id    = $input->param('identity_provider_id');
     my $auto_register       = $input->param('auto_register');
     my $default_category_id = $input->param('default_category_id');
     my $default_library_id  = $input->param('default_library_id');
@@ -106,11 +106,11 @@ elsif ( $domain_ops && $op eq 'add' ) {
 
     try {
 
-        Koha::Auth::Provider::Domain->new(
+        Koha::Auth::Identity::Provider::Domain->new(
             {
                 allow_opac          => $allow_opac,
                 allow_staff         => $allow_staff,
-                auth_provider_id    => $auth_provider_id,
+                identity_provider_id    => $identity_provider_id,
                 auto_register       => $auto_register,
                 default_category_id => $default_category_id,
                 default_library_id  => $default_library_id,
@@ -137,9 +137,9 @@ elsif ( $domain_ops && $op eq 'add' ) {
 }
 elsif ( !$domain_ops && $op eq 'edit_form' ) {
 
-    if ( $auth_provider ) {
+    if ( $identity_provider ) {
         $template->param(
-            auth_provider => $auth_provider
+            identity_provider => $identity_provider
         );
     }
     else {
@@ -152,15 +152,15 @@ elsif ( !$domain_ops && $op eq 'edit_form' ) {
     }
 }
 elsif ( $domain_ops && $op eq 'edit_form' ) {
-    my $auth_provider_domain_id = $input->param('auth_provider_domain_id');
-    my $auth_provider_domain;
+    my $identity_provider_domain_id = $input->param('identity_provider_domain_id');
+    my $identity_provider_domain;
 
-    $auth_provider_domain = Koha::Auth::Provider::Domains->find($auth_provider_domain_id)
-        unless !$auth_provider_domain_id;
+    $identity_provider_domain = Koha::Auth::Identity::Provider::Domains->find($identity_provider_domain_id)
+        unless !$identity_provider_domain_id;
 
-    if ( $auth_provider_domain ) {
+    if ( $identity_provider_domain ) {
         $template->param(
-            auth_provider_domain => $auth_provider_domain
+            identity_provider_domain => $identity_provider_domain
         );
     }
     else {
@@ -174,7 +174,7 @@ elsif ( $domain_ops && $op eq 'edit_form' ) {
 }
 elsif ( !$domain_ops && $op eq 'edit_save' ) {
 
-    if ( $auth_provider ) {
+    if ( $identity_provider ) {
 
         my $code        = $input->param('code');
         my $config      = $input->param('config');
@@ -186,7 +186,7 @@ elsif ( !$domain_ops && $op eq 'edit_save' ) {
 
         try {
 
-            $auth_provider->set(
+            $identity_provider->set(
                 {   code        => $code,
                     config      => $config,
                     description => $description,
@@ -225,15 +225,15 @@ elsif ( !$domain_ops && $op eq 'edit_save' ) {
 }
 elsif ( $domain_ops && $op eq 'edit_save' ) {
 
-    my $auth_provider_domain_id = $input->param('auth_provider_domain_id');
-    my $auth_provider_domain;
+    my $identity_provider_domain_id = $input->param('identity_provider_domain_id');
+    my $identity_provider_domain;
 
-    $auth_provider_domain = Koha::Auth::Provider::Domains->find($auth_provider_domain_id)
-        unless !$auth_provider_domain_id;
+    $identity_provider_domain = Koha::Auth::Identity::Provider::Domains->find($identity_provider_domain_id)
+        unless !$identity_provider_domain_id;
 
-    if ( $auth_provider_domain ) {
+    if ( $identity_provider_domain ) {
 
-        my $auth_provider_id    = $input->param('auth_provider_id');
+        my $identity_provider_id    = $input->param('identity_provider_id');
         my $domain              = $input->param('domain');
         my $auto_register       = $input->param('auto_register');
         my $update_on_auth      = $input->param('update_on_auth');
@@ -244,9 +244,9 @@ elsif ( $domain_ops && $op eq 'edit_save' ) {
 
         try {
 
-            $auth_provider_domain->set(
+            $identity_provider_domain->set(
                 {
-                    auth_provider_id    => $auth_provider_id,
+                    identity_provider_id    => $identity_provider_id,
                     domain              => $domain,
                     auto_register       => $auto_register,
                     update_on_auth      => $update_on_auth,
@@ -286,8 +286,8 @@ elsif ( $domain_ops && $op eq 'edit_save' ) {
 
 if ( $domain_ops ) {
     $template->param(
-        auth_provider_code => $auth_provider->code,
-        auth_provider_id   => $auth_provider_id,
+        identity_provider_code => $identity_provider->code,
+        identity_provider_id   => $identity_provider_id,
     );
 }
 

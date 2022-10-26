@@ -20,7 +20,7 @@ package Koha::Auth::Client;
 use Modern::Perl;
 
 use Koha::Exceptions::Auth;
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Providers;
 
 =head1 NAME
 
@@ -58,7 +58,7 @@ sub get_user {
     my $interface     = $params->{interface};
     my $config        = $params->{config};
 
-    my $provider = Koha::Auth::Providers->search({ code => $provider_code })->next;
+    my $provider = Koha::Auth::Identity::Providers->search({ code => $provider_code })->next;
 
     my ( $mapped_data, $patron ) = $self->_get_data_and_patron({ provider => $provider, data => $data, config => $config });
 
@@ -67,6 +67,8 @@ sub get_user {
 
         $mapped_data->{categorycode} = $domain->default_category_id;
         $mapped_data->{branchcode}   = $domain->default_library_id;
+
+        $patron->set($mapped_data)->store if $patron && $domain->update_on_auth;
 
         return ( $patron, $mapped_data, $domain );
     }
@@ -93,7 +95,6 @@ sub get_valid_domain_config {
     my $interface  = $params->{interface};
 
     my $domains = $provider->domains;
-    my $pattern = '@';
     my $allow   = "allow_$interface";
     my @subdomain_matches;
     my $default_match;
@@ -101,19 +102,20 @@ sub get_valid_domain_config {
     while ( my $domain = $domains->next ) {
         next unless $domain->$allow;
 
+        my $pattern = '@';
         my $domain_text = $domain->domain;
         unless ( defined $domain_text && $domain_text ne '') {
             $default_match = $domain;
             next;
         }
         my ( $asterisk, $domain_name ) = ( $domain_text =~ /^(\*)?(.+)$/ );
-        if ( $asterisk eq '*' ) {
+        if ( defined $asterisk && $asterisk eq '*' ) {
             $pattern .= '.*';
         }
         $domain_name =~ s/\./\\\./g;
         $pattern .= $domain_name . '$';
         if ( $user_email =~ /$pattern/ ) {
-            if ( $asterisk eq '*' ) {
+            if ( defined $asterisk && $asterisk eq '*' ) {
                 push @subdomain_matches, { domain => $domain, match_length => length $domain_name };
             } else {
 
@@ -129,7 +131,7 @@ sub get_valid_domain_config {
         return $subdomain_matches[0]->{domain};
     }
 
-    return $default_match || 0;
+    return $default_match;
 }
 
 =head3 has_valid_domain_config
@@ -176,15 +178,15 @@ sub _get_data_and_patron {
     return {};
 }
 
-=head3 _tranverse_hash
+=head3 _traverse_hash
 
-    my $value = $auth_client->_tranverse_hash( { base => $base_hash, keys => $key_string } );
+    my $value = $auth_client->_traverse_hash( { base => $base_hash, keys => $key_string } );
 
 Get deep nested value in a hash.
 
 =cut
 
-sub _tranverse_hash {
+sub _traverse_hash {
     my ($self, $params) = @_;
     my $base = $params->{base};
     my $keys = $params->{keys};
@@ -192,7 +194,7 @@ sub _tranverse_hash {
     return unless defined $key;
     my $value = ref $base eq 'HASH' ? $base->{$key} : $base->[$key];
     return $value unless $rest;
-    return $self->_tranverse_hash({ base => $value, keys => $rest });
+    return $self->_traverse_hash({ base => $value, keys => $rest });
 }
 
 1;

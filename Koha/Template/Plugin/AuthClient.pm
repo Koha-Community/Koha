@@ -22,7 +22,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Providers;
 
 =head1 NAME
 
@@ -49,7 +49,7 @@ sub get_providers {
     $interface = 'staff'
       if $interface eq 'intranet';
 
-    my $providers = Koha::Auth::Providers->search( { "domains.allow_$interface" => 1 }, { prefetch => 'domains' } );
+    my $providers = Koha::Auth::Identity::Providers->search( { "domains.allow_$interface" => 1 }, { prefetch => 'domains' } );
     my $base_url  = ( $interface ne 'staff' ) ? "/api/v1/public/oauth/login" : "/api/v1/public/oauth/login";
 
     my @urls;

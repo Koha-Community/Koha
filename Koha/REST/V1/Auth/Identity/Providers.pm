@@ -1,4 +1,4 @@
-package Koha::REST::V1::Auth::Providers;
+package Koha::REST::V1::Auth::Identity::Providers;
 
 # This file is part of Koha.
 #
@@ -19,9 +19,9 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::Auth::Provider::OAuth;
-use Koha::Auth::Provider::OIDC;
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Provider::OAuth;
+use Koha::Auth::Identity::Provider::OIDC;
+use Koha::Auth::Identity::Providers;
 
 use Koha::Database;
 
@@ -30,7 +30,7 @@ use Try::Tiny;
 
 =head1 NAME
 
-Koha::REST::V1::Auth::Providers - Controller library for handling
+Koha::REST::V1::Auth::Identity::Providers - Controller library for handling
 authentication providers routes.
 
 =head2 Operations
@@ -45,7 +45,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $providers_rs = Koha::Auth::Providers->new;
+        my $providers_rs = Koha::Auth::Identity::Providers->new;
         return $c->render(
             status  => 200,
             openapi => $c->objects->search($providers_rs)
@@ -66,8 +66,8 @@ sub get {
 
     return try {
 
-        my $auth_provider_id = $c->validation->param('auth_provider_id');
-        my $provider = $c->objects->find( Koha::Auth::Providers->new, $auth_provider_id );
+        my $identity_provider_id = $c->validation->param('identity_provider_id');
+        my $provider = $c->objects->find( Koha::Auth::Identity::Providers->new, $identity_provider_id );
 
         unless ( $provider ) {
             return $c->render(
@@ -106,7 +106,7 @@ sub add {
                 my $mapping  = delete $body->{mapping};
                 my $protocol = delete $body->{protocol};
 
-                my $class = Koha::Auth::Provider::protocol_to_class_mapping->{$protocol};
+                my $class = Koha::Auth::Identity::Provider::protocol_to_class_mapping->{$protocol};
 
                 my $provider = $class->new_from_api( $body );
                 $provider->store;
@@ -114,7 +114,7 @@ sub add {
                 $provider->set_config( $config );
                 $provider->set_mapping( $mapping );
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $provider->auth_provider_id );
+                $c->res->headers->location( $c->req->url->to_string . '/' . $provider->identity_provider_id );
                 return $c->render(
                     status  => 201,
                     openapi => $provider->to_api
@@ -148,8 +148,8 @@ Controller method for updating an authentication provider.
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $auth_provider_id = $c->validation->param('auth_provider_id');
-    my $provider = Koha::Auth::Providers->find( $auth_provider_id );
+    my $identity_provider_id = $c->validation->param('identity_provider_id');
+    my $provider = Koha::Auth::Identity::Providers->find( $identity_provider_id );
 
     unless ( $provider ) {
         return $c->render(
@@ -211,7 +211,7 @@ Controller method for deleting an authentication provider.
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = Koha::Auth::Providers->find( $c->validation->param('auth_provider_id') );
+    my $provider = Koha::Auth::Identity::Providers->find( $c->validation->param('identity_provider_id') );
     unless ( $provider ) {
         return $c->render(
             status  => 404,

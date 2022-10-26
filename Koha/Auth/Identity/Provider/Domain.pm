@@ -1,4 +1,4 @@
-package Koha::Auth::Providers;
+package Koha::Auth::Identity::Provider::Domain;
 
 # Copyright Theke Solutions 2022
 #
@@ -19,35 +19,22 @@ package Koha::Auth::Providers;
 
 use Modern::Perl;
 
-use Koha::Database;
-use Koha::Auth::Provider;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Auth::Providers - Koha Auth Provider Object class
+Koha::Auth::Identity::Provider::Domain - Koha Auth Provider Domain Object class
 
 =head1 API
 
 =head2 Internal methods
-
-=cut
 
 =head3 _type
 
 =cut
 
 sub _type {
-    return 'AuthProvider';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Auth::Provider';
+    return 'IdentityProviderDomain';
 }
 
 1;

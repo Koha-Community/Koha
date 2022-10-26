@@ -1,4 +1,4 @@
-package Koha::REST::Plugin::Auth;
+package Koha::REST::Plugin::Auth::IdP;
 
 # Copyright Theke Solutions 2022
 #
@@ -31,7 +31,7 @@ use CGI;
 
 =head1 NAME
 
-Koha::REST::Plugin::Auth
+Koha::REST::Plugin::Auth::IdP
 
 =head1 API
 

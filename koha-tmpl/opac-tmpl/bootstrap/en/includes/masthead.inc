@@ -385,9 +385,9 @@
                             [% END %]
                         [% END %]
                         [% UNLESS Koha.Preference('opacShibOnly') %]
-                            [% SET auth_providers = AuthClient.get_providers('opac') %]
-                            [% IF ( ! auth_providers.empty ) %]
-                                [% FOREACH provider IN auth_providers %]
+                            [% SET identity_providers = AuthClient.get_providers('opac') %]
+                            [% IF ( ! identity_providers.empty ) %]
+                                [% FOREACH provider IN identity_providers %]
                                     <p class="clearfix">
                                         <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
                                             [% IF provider.icon_url %]
@@ -401,7 +401,7 @@
                                 [% END %]
                                 <hr/>
                                 <p>If you do not have an external account, but do have a local account, you can still log in: </p>
-                            [% END # /IF  auth_providers.size %]
+                            [% END # /IF  identity_providers.size %]
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
                                 <div class="local-login">

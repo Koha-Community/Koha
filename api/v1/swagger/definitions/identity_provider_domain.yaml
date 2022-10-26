@@ -1,11 +1,11 @@
 ---
 type: object
 properties:
-  auth_provider_domain_id:
+  identity_provider_domain_id:
     type: integer
     description: Internally assigned authentication provider domain identifier
     readOnly: true
-  auth_provider_id:
+  identity_provider_id:
     type: integer
     description: Internally assigned authentication provider identifier
   domain:
@@ -37,8 +37,7 @@ properties:
     type: boolean
 additionalProperties: false
 required:
-  - auth_provider_domain_id
-  - auth_provider_id
+  - identity_provider_domain_id
   - domain
   - auto_register
   - update_on_auth

@@ -141,11 +141,11 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_parameters_manage_authentication_providers || CAN_user_parameters_manage_smtp_servers || CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || ( CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields || ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts ) ) %]
+    [% IF ( CAN_user_parameters_manage_identity_providers || CAN_user_parameters_manage_smtp_servers || CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || ( CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields || ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts ) ) %]
         <h5>Additional parameters</h5>
         <ul>
-            [% IF ( CAN_user_parameters_manage_authentication_providers) %]
-                <li><a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a></li>
+            [% IF ( CAN_user_parameters_manage_identity_providers) %]
+                <li><a href="/cgi-bin/koha/admin/identity_providers.pl">Authentication providers</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_search_targets ) %]
                 <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></li>

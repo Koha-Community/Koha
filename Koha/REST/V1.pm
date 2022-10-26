@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Context;
 use Koha::Logger;
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Providers;
 
 use Mojolicious::Plugin::OAuth2;
 use JSON::Validator::Schema::OpenAPIv2;
@@ -141,7 +141,7 @@ sub startup {
 
     my $oauth_configuration = {};
     my $search_options = { protocol => [ "OIDC", "OAuth" ] };
-    my $providers = Koha::Auth::Providers->search( $search_options );
+    my $providers = Koha::Auth::Identity::Providers->search( $search_options );
 
     while(my $provider = $providers->next) {
         $oauth_configuration->{$provider->code} = decode_json($provider->config);
@@ -151,7 +151,7 @@ sub startup {
     $self->plugin( 'Koha::REST::Plugin::Query' );
     $self->plugin( 'Koha::REST::Plugin::Objects' );
     $self->plugin( 'Koha::REST::Plugin::Exceptions' );
-    $self->plugin( 'Koha::REST::Plugin::Auth' );
+    $self->plugin( 'Koha::REST::Plugin::Auth::IdP' );
     $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
 }
 

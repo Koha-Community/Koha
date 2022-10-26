@@ -1,7 +1,7 @@
 ---
 type: object
 properties:
-  auth_provider_id:
+  identity_provider_id:
     type: integer
     description: Internally assigned authentication provider identifier
     readOnly: true
@@ -36,7 +36,9 @@ properties:
     type: object
   icon_url:
     description: Icon url
-    type: string
+    type:
+     - string
+     - "null"
   domains:
     description: Configured domains for the authentication provider
     type:

@@ -78,9 +78,6 @@ sub _get_data_and_patron {
         if ( defined $value and $matchpoint_rs->count ) {
             $patron = $matchpoint_rs->next;
         }
-
-        return ( $mapped_data, $patron )
-          if $patron;
     }
 
     if ( defined $config->{userinfo_url} ) {
@@ -97,22 +94,25 @@ sub _get_data_and_patron {
 
         foreach my $key ( keys %$mapping ) {
             my $pkey  = $mapping->{$key};
-            my $value = $self->_tranverse_hash( { base => $claim, keys => $pkey } );
+            my $value = $self->_traverse_hash( { base => $claim, keys => $pkey } );
             $mapped_data->{$key} = $value
               if defined $value;
         }
 
-        my $value = $mapped_data->{$matchpoint};
+        unless ($patron) {
+            my $value = $mapped_data->{$matchpoint};
 
-        my $matchpoint_rs = Koha::Patrons->search( { $matchpoint => $value } );
+            my $matchpoint_rs = Koha::Patrons->search( { $matchpoint => $value } );
 
-        if ( defined $value and $matchpoint_rs->count ) {
-            $patron = $matchpoint_rs->next;
+            if ( defined $value and $matchpoint_rs->count ) {
+                $patron = $matchpoint_rs->next;
+            }
         }
 
-        return ( $mapped_data, $patron )
-          if $patron;
     }
+
+    return ( $mapped_data, $patron )
+          if $patron;
 }
 
 1;

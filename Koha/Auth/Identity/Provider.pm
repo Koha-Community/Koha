@@ -1,4 +1,4 @@
-package Koha::Auth::Provider;
+package Koha::Auth::Identity::Provider;
 
 # Copyright Theke Solutions 2022
 #
@@ -24,13 +24,13 @@ use base qw(Koha::Object);
 use JSON qw( decode_json encode_json );
 use Try::Tiny;
 
-use Koha::Auth::Provider::Domains;
+use Koha::Auth::Identity::Provider::Domains;
 use Koha::Exceptions;
 use Koha::Exceptions::Object;
 
 =head1 NAME
 
-Koha::Auth::Provider - Koha Auth Provider Object class
+Koha::Auth::Identity::Provider - Koha Auth Provider Object class
 
 =head1 API
 
@@ -40,14 +40,14 @@ Koha::Auth::Provider - Koha Auth Provider Object class
 
     my $domains = $provider->domains;
 
-Returns the related I<Koha::Auth::Provider::Domains> iterator.
+Returns the related I<Koha::Auth::Identity::Provider::Domains> iterator.
 
 =cut
 
 sub domains {
     my ($self) = @_;
 
-    return Koha::Auth::Provider::Domains->_new_from_dbic( scalar $self->_result->domains );
+    return Koha::Auth::Identity::Provider::Domains->_new_from_dbic( scalar $self->_result->domains );
 }
 
 =head3 get_config
@@ -183,7 +183,7 @@ sub upgrade_class {
 
     my $json = $provider->to_api;
 
-Overloaded method that returns a JSON representation of the Koha::Auth::Provider object,
+Overloaded method that returns a JSON representation of the Koha::Auth::Identity::Provider object,
 suitable for API output.
 
 =cut
@@ -206,12 +206,12 @@ sub to_api {
 =cut
 
 sub _type {
-    return 'AuthProvider';
+    return 'IdentityProvider';
 }
 
 =head3 protocol_to_class_mapping
 
-    my $mapping = Koha::Auth::Provider::protocol_to_class_mapping
+    my $mapping = Koha::Auth::Identity::Provider::protocol_to_class_mapping
 
 Internal method that returns a mapping between I<protocol> codes and
 implementing I<classes>. To be used by B<upgrade_class>.
@@ -220,8 +220,8 @@ implementing I<classes>. To be used by B<upgrade_class>.
 
 sub protocol_to_class_mapping {
     return {
-        OAuth => 'Koha::Auth::Provider::OAuth',
-        OIDC  => 'Koha::Auth::Provider::OIDC',
+        OAuth => 'Koha::Auth::Identity::Provider::OAuth',
+        OIDC  => 'Koha::Auth::Identity::Provider::OIDC',
     };
 }
 

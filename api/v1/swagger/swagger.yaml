@@ -8,10 +8,10 @@ definitions:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
     $ref: ./definitions/allows_renewal.yaml
-  auth_provider:
-    "$ref": ./definitions/auth_provider.yaml
-  auth_provider_domain:
-    "$ref": ./definitions/auth_provider_domain.yaml
+  identity_provider:
+    "$ref": ./definitions/identity_provider.yaml
+  identity_provider_domain:
+    "$ref": ./definitions/identity_provider_domain.yaml
   basket:
     $ref: ./definitions/basket.yaml
   bundle_link:
@@ -129,14 +129,14 @@ paths:
     $ref: paths/auth.yaml#/~1auth~1two-factor~1registration
   /auth/two-factor/registration/verification:
     $ref: paths/auth.yaml#/~1auth~1two-factor~1registration~1verification
-  /auth/providers:
-    $ref: paths/auth.yaml#/~1auth~1providers
-  "/auth/providers/{auth_provider_id}":
-    $ref: paths/auth.yaml#/~1auth~1providers~1{auth_provider_id}
-  "/auth/providers/{auth_provider_id}/domains":
-    $ref: paths/auth.yaml#/~1auth~1providers~1{auth_provider_id}~1domains
-  "/auth/providers/{auth_provider_id}/domains/{auth_provider_domain_id}":
-    $ref: paths/auth.yaml#/~1auth~1providers~1{auth_provider_id}~1domains~1{auth_provider_domain_id}
+  /auth/identity_providers:
+    $ref: paths/auth.yaml#/~1auth~1identity_providers
+  "/auth/identity_providers/{identity_provider_id}":
+    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}
+  "/auth/identity_providers/{identity_provider_id}/domains":
+    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains
+  "/auth/identity_providers/{identity_provider_id}/domains/{identity_provider_domain_id}":
+    $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains~1{identity_provider_domain_id}
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
   "/biblios/{biblio_id}/checkouts":
@@ -336,16 +336,16 @@ parameters:
     name: agreement_period_id
     required: true
     type: integer
-  auth_provider_id_pp:
+  identity_provider_id_pp:
     description: Authentication provider internal identifier
     in: path
-    name: auth_provider_id
+    name: identity_provider_id
     required: true
     type: integer
-  auth_provider_domain_id_pp:
+  identity_provider_domain_id_pp:
     description: Authentication provider domain internal identifier
     in: path
-    name: auth_provider_domain_id
+    name: identity_provider_domain_id
     required: true
     type: integer
   biblio_id_pp:
@@ -680,9 +680,9 @@ tags:
   - description: "Manage article requests\n"
     name: article_requests
     x-displayName: Article requests
-  - description: "Manage authentication providers\n"
-    name: auth_providers
-    x-displayName: Authentication providers
+  - description: "Manage identity providers\n"
+    name: identity_providers
+    x-displayName: Identity providers
   - description: "Manage baskets for the acquisitions module\n"
     name: baskets
     x-displayName: Baskets

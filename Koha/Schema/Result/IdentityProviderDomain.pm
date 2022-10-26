@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::AuthProviderDomain;
+package Koha::Schema::Result::IdentityProviderDomain;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::AuthProviderDomain
+Koha::Schema::Result::IdentityProviderDomain
 
 =cut
 
@@ -15,15 +15,15 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<auth_provider_domains>
+=head1 TABLE: C<identity_provider_domains>
 
 =cut
 
-__PACKAGE__->table("auth_provider_domains");
+__PACKAGE__->table("identity_provider_domains");
 
 =head1 ACCESSORS
 
-=head2 auth_provider_domain_id
+=head2 identity_provider_domain_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -31,7 +31,7 @@ __PACKAGE__->table("auth_provider_domains");
 
 unique key, used to identify providers domain
 
-=head2 auth_provider_id
+=head2 identity_provider_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -92,7 +92,7 @@ Allow provider from opac interface
 =head2 allow_staff
 
   data_type: 'tinyint'
-  default_value: 1
+  default_value: 0
   is_nullable: 0
 
 Allow provider from staff interface
@@ -100,9 +100,9 @@ Allow provider from staff interface
 =cut
 
 __PACKAGE__->add_columns(
-  "auth_provider_domain_id",
+  "identity_provider_domain_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "auth_provider_id",
+  "identity_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "domain",
   { data_type => "varchar", is_nullable => 1, size => 100 },
@@ -117,28 +117,28 @@ __PACKAGE__->add_columns(
   "allow_opac",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "allow_staff",
-  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</auth_provider_domain_id>
+=item * L</identity_provider_domain_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("auth_provider_domain_id");
+__PACKAGE__->set_primary_key("identity_provider_domain_id");
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<auth_provider_id>
+=head2 C<identity_provider_id>
 
 =over 4
 
-=item * L</auth_provider_id>
+=item * L</identity_provider_id>
 
 =item * L</domain>
 
@@ -146,24 +146,9 @@ __PACKAGE__->set_primary_key("auth_provider_domain_id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("auth_provider_id", ["auth_provider_id", "domain"]);
+__PACKAGE__->add_unique_constraint("identity_provider_id", ["identity_provider_id", "domain"]);
 
 =head1 RELATIONS
-
-=head2 auth_provider
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::AuthProvider>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "auth_provider",
-  "Koha::Schema::Result::AuthProvider",
-  { auth_provider_id => "auth_provider_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
-);
 
 =head2 default_category
 
@@ -205,22 +190,37 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 identity_provider
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-24 15:03:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1b0q+e8Ym8icJ6bYAY/Mbw
+Type: belongs_to
 
-sub koha_object_class {
-    'Koha::Auth::Provider::Domain';
-}
-sub koha_objects_class {
-    'Koha::Auth::Providers::Domains';
-}
+Related object: L<Koha::Schema::Result::IdentityProvider>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "identity_provider",
+  "Koha::Schema::Result::IdentityProvider",
+  { identity_provider_id => "identity_provider_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-08 17:35:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uUnzFzRKWAiYUsmapofXwQ
 
 __PACKAGE__->add_columns(
     '+auto_register'  => { is_boolean => 1 },
     '+update_on_auth' => { is_boolean => 1 },
     '+allow_opac'     => { is_boolean => 1 },
-    '+allow_staff'    => { is_boolean => 1 },
+    '+allow_staff'    => { is_boolean => 1 }
 );
+
+sub koha_object_class {
+    'Koha::Auth::Identity::Provider::Domain';
+}
+sub koha_objects_class {
+    'Koha::Auth::Identity::Provider::Domains';
+}
 
 1;

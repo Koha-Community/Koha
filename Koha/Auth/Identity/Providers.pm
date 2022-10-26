@@ -1,4 +1,4 @@
-package Koha::Auth::Provider::OAuth;
+package Koha::Auth::Identity::Providers;
 
 # Copyright Theke Solutions 2022
 #
@@ -19,47 +19,35 @@ package Koha::Auth::Provider::OAuth;
 
 use Modern::Perl;
 
-use base qw(Koha::Auth::Provider);
+use Koha::Database;
+use Koha::Auth::Identity::Provider;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Auth::Provider::OAuth - Koha Auth Provider Object class
+Koha::Auth::Identity::Providers - Koha Auth Provider Object class
 
 =head1 API
 
-=head2 Class methods
-
-=head3 new
-
-    my $oauth = Koha::Auth::Provider::OAuth->new( \%{params} );
-
-Overloaded class to create a new OAuth provider.
-
-=cut
-
-sub new {
-    my ( $class, $params ) = @_;
-
-    $params->{protocol} = 'OAuth';
-
-    return $class->SUPER::new($params);
-}
-
 =head2 Internal methods
 
-=head3 mandatory_config_attributes
+=cut
 
-Returns a list of the mandatory config entries for the protocol.
+=head3 _type
 
 =cut
 
-sub mandatory_config_attributes {
-    return qw(
-      key
-      secret
-      authorize_url
-      token_url
-    );
+sub _type {
+    return 'IdentityProvider';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::Auth::Identity::Provider';
 }
 
 1;

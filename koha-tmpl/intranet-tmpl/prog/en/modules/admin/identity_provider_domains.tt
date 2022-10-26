@@ -6,15 +6,15 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op == 'add_form' %]
-        New authentication provider domain &rsaquo; [% ELSIF op == 'edit_form' %]
-        Edit authentication provider domain &rsaquo; [% END %]
+        New identity provider domain &rsaquo; [% ELSIF op == 'edit_form' %]
+        Edit identity provider domain &rsaquo; [% END %]
 
-    Authentication providers &rsaquo; Administration &rsaquo; Koha
+    Identity providers &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
-<body id="admin_auth_provider_domains" class="admin">
+<body id="admin_identity_provider_domains" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
@@ -28,12 +28,12 @@
         </li>
 
         <li>
-            <a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a>
+            <a href="/cgi-bin/koha/admin/identity_providers.pl">Identity providers</a>
         </li>
 
         [% IF op == 'add_form' %]
             <li>
-                <a href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | uri -%]">Domains for [%- auth_provider_name | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_name | html -%]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
@@ -43,7 +43,7 @@
 
         [% ELSIF op == 'edit_form' %]
             <li>
-                <a href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | uri -%]">Domains for [%- auth_provider_name | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_name | html -%]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
@@ -54,7 +54,7 @@
         [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
-                    Domains for [%- auth_provider_code | html -%]
+                    Domains for [%- identity_provider_code | html -%]
                 </a>
             </li>
         [% END %]
@@ -67,31 +67,31 @@
             <main>
 
 [% FOREACH m IN messages %]
-    <div class="dialog [% m.type | html %]" id="auth_provider_domain_action_result_dialog">
+    <div class="dialog [% m.type | html %]" id="identity_provider_domain_action_result_dialog">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            <span>An error occurred trying to open the authentication provider domain for editing. The passed id is invalid.</span>
+            <span>An error occurred trying to open the identity provider domain for editing. The passed id is invalid.</span>
         [% CASE 'error_on_insert' %]
-            <span>An error occurred when adding a new authentication provider domain.</span>
+            <span>An error occurred when adding a new identity provider domain.</span>
         [% CASE 'success_on_update' %]
-            <span>Authentication provider domain updated successfully.</span>
+            <span>Identity provider domain updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            <span>Authentication provider domain added successfully.</span>
+            <span>Identity provider domain added successfully.</span>
         [% CASE %]
             <span>[% m.code | html %]</span>
         [% END %]
     </div>
 [% END %]
 
-    <div class="dialog message" id="auth_provider_domain_delete_success" style="display: none;"></div>
-    <div class="dialog alert"   id="auth_provider_domain_delete_error"   style="display: none;"></div>
+    <div class="dialog message" id="identity_provider_domain_delete_success" style="display: none;"></div>
+    <div class="dialog alert"   id="identity_provider_domain_delete_error"   style="display: none;"></div>
 
 [% IF op == 'add_form' %]
-    <h1>New authentication provider domain</h1>
-    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="add" name="add" class="validated" method="post">
+    <h1>New identity provider domain</h1>
+    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
         <input type="hidden" name="op" value="add" />
         <input type="hidden" name="domain_ops" value="1" />
-        <input type="hidden" name="auth_provider_id" value="[%- auth_provider_id | html -%]" />
+        <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
         <fieldset class="rows">
             <ol>
                 <li>
@@ -140,7 +140,7 @@
                         <option value="1" selected="selected">Allow</option>
                         <option value="0">Don't allow</option>
                     </select>
-                    <span>opac users of this domain to login with this authentication provider</span>
+                    <span>opac users of this domain to login with this identity provider</span>
                 </li>
                 <li>
                     <label for="allow_opac">Allow staff: </label>
@@ -154,23 +154,23 @@
         </fieldset>
         <fieldset class="action">
             <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
         </fieldset>
     </form>
 [% END %]
 
 [% IF op == 'edit_form' %]
-    <h1>Edit authentication provider domain</h1>
-    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+    <h1>Edit identity provider domain</h1>
+    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
         <input type="hidden" name="op" value="edit_save" />
         <input type="hidden" name="domain_ops" value="1" />
-        <input type="hidden" name="auth_provider_id" value="[%- auth_provider_id | html -%]" />
-        <input type="hidden" name="auth_provider_domain_id" value="[%- auth_provider_domain.auth_provider_domain_id | html -%]" />
+        <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
+        <input type="hidden" name="identity_provider_domain_id" value="[%- identity_provider_domain.identity_provider_domain_id | html -%]" />
         <fieldset class="rows">
             <ol>
                 <li>
                     <label for="domain">Domain: </label>
-                    <input type="text" name="domain" id="domain" size="60" value="[%- auth_provider_domain.domain | html -%]"/>
+                    <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]"/>
                 </li>
             </ol>
         </fieldset>
@@ -180,7 +180,7 @@
                 <li>
                     <label for="update_on_auth">Update on login: </label>
                     <select name="update_on_auth" id="update_on_auth">
-                    [% IF auth_provider_domain.update_on_auth == "1" %]
+                    [% IF identity_provider_domain.update_on_auth == "1" %]
                         <option value="1" selected="selected">Update</option>
                         <option value="0">Don't update</option>
                     [% ELSE %]
@@ -193,7 +193,7 @@
                 <li>
                     <label for="auto_register">Auto register: </label>
                     <select name="auto_register" id="auto_register">
-                    [% IF auth_provider_domain.auto_register == "1" %]
+                    [% IF identity_provider_domain.auto_register == "1" %]
                         <option value="1" selected="selected">Allow</option>
                         <option value="0">Don't allow</option>
                     [% ELSE %]
@@ -206,7 +206,7 @@
                 <li>
                     <label for="default_library_id">Default library: </label>
                     <select id="default_library_id" name="default_library_id">
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => auth_provider_domain.default_library_id, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => identity_provider_domain.default_library_id, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
                 </li>
                 <li>
@@ -214,7 +214,7 @@
                     [% SET categories = Categories.all() %]
                     <select name="default_category_id" id="default_category_id">
                         [% FOREACH category IN categories %]
-                            [% IF category.categorycode == auth_provider_domain.default_category_id %]
+                            [% IF category.categorycode == identity_provider_domain.default_category_id %]
                                 <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
                             [% ELSE %]
                                 <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
@@ -225,7 +225,7 @@
                 <li>
                     <label for="allow_opac">Allow opac: </label>
                     <select name="allow_opac" id="allow_opac">
-                    [% IF auth_provider_domain.allow_opac == "1" %]
+                    [% IF identity_provider_domain.allow_opac == "1" %]
                         <option value="1" selected="selected">Allow</option>
                         <option value="0">Don't allow</option>
                     [% ELSE %]
@@ -233,12 +233,12 @@
                         <option value="0" selected="selected">Don't allow</option>
                     [% END %]
                     </select>
-                    <span>opac users of this domain to login with this authentication provider</span>
+                    <span>opac users of this domain to login with this identity provider</span>
                 </li>
                 <li>
                     <label for="allow_opac">Allow staff: </label>
                     <select name="allow_staff" id="allow_staff">
-                    [% IF auth_provider_domain.allow_staff == "1" %]
+                    [% IF identity_provider_domain.allow_staff == "1" %]
                         <option value="1" selected="selected">Allow</option>
                         <option value="0">Don't allow</option>
                     [% ELSE %]
@@ -246,13 +246,13 @@
                         <option value="0" selected="selected">Don't allow</option>
                     [% END %]
                     </select>
-                    <span>staff users of this domain to login with this authentication provider</span>
+                    <span>staff users of this domain to login with this identity provider</span>
                 </li>
             </ol>
         </fieldset>
         <fieldset class="action">
             <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
         </fieldset>
     </form>
 [% END %]
@@ -260,12 +260,12 @@
 [% IF op == 'list' %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="new_auth_provider_domain" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New authentication provider domain</a>
+        <a class="btn btn-default" id="new_identity_provider_domain" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New identity provider domain</a>
     </div>
 
-    <h1>Authentication provider domains</h1>
+    <h1>Identity provider domains</h1>
 
-    <table id="auth_provider_domains">
+    <table id="identity_provider_domains">
         <thead>
             <tr>
                 <th>Domain</th>
@@ -286,7 +286,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="delete_confirm_modal_label">Delete authentication provider domain</h3>
+                            <h3 id="delete_confirm_modal_label">Delete identity provider domain</h3>
                         </div>
                         <div class="modal-body">
                             <div id="delete_confirm_dialog"></div>
@@ -316,7 +316,7 @@
     <script>
         $(document).ready(function() {
 
-            var auth_provider_domains_url = '/api/v1/auth/providers/[%- auth_provider_id | html -%]/domains';
+            var identity_provider_domains_url = '/api/v1/auth/identity_providers/[%- identity_provider_id | html -%]/domains';
             [% SET categories = Categories.all() %]
             var categories = {
             [% FOREACH category IN categories %]
@@ -329,12 +329,12 @@
                 "[% library.branchcode | html %]": "[% library.branchname | html %]",
             [% END %]
             };
-            window.auth_provider_domains = $("#auth_provider_domains").kohaTable({
+            window.identity_provider_domains = $("#identity_provider_domains").kohaTable({
                 "ajax": {
-                    "url": auth_provider_domains_url
+                    "url": identity_provider_domains_url
                 },
                 'language': {
-                    'emptyTable': '<div class="dialog message">'+_("There are no authentication provider domains defined.")+'</div>'
+                    'emptyTable': '<div class="dialog message">'+_("There are no identity provider domains defined.")+'</div>'
                 },
                 "columnDefs": [ {
                     "targets": [1],
@@ -424,8 +424,8 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]&amp;op=edit_form&amp;auth_provider_domain_id='+ encodeURIComponent(row.auth_provider_domain_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs delete_auth_provider_domain" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.auth_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=edit_form&amp;identity_provider_domain_id='+ encodeURIComponent(row.identity_provider_domain_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.identity_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },
                         "searchable": false,
@@ -439,32 +439,32 @@
                 },
             });
 
-            $('#auth_provider_domains').on( "click", '.delete_auth_provider_domain', function () {
-                var auth_provider_domain_id   = $(this).data('auth-provider-domain-id');
-                var auth_provider_domain = decodeURIComponent($(this).data('auth-provider-domain'));
+            $('#identity_provider_domains').on( "click", '.delete_identity_provider_domain', function () {
+                var identity_provider_domain_id   = $(this).data('auth-provider-domain-id');
+                var identity_provider_domain = decodeURIComponent($(this).data('auth-provider-domain'));
 
                 $("#delete_confirm_dialog").html(
-                    _("You are about to delete the '%s' authentication provider domain.").format(auth_provider_domain)
+                    _("You are about to delete the '%s' identity provider domain.").format(identity_provider_domain)
                 );
-                $("#delete_confirm_modal_button").data('auth-provider-domain-id', auth_provider_domain_id);
-                $("#delete_confirm_modal_button").data('auth-provider-domain', auth_provider_domain);
+                $("#delete_confirm_modal_button").data('auth-provider-domain-id', identity_provider_domain_id);
+                $("#delete_confirm_modal_button").data('auth-provider-domain', identity_provider_domain);
             });
 
             $("#delete_confirm_modal_button").on( "click", function () {
 
-                var auth_provider_domain_id   = $(this).data('auth-provider-domain-id');
-                var auth_provider_domain = $(this).data('auth-provider-domain');
+                var identity_provider_domain_id   = $(this).data('auth-provider-domain-id');
+                var identity_provider_domain = $(this).data('auth-provider-domain');
 
                 $.ajax({
                     method: "DELETE",
-                    url: auth_provider_domains_url+"/"+auth_provider_domain_id
+                    url: identity_provider_domains_url+"/"+identity_provider_domain_id
                 }).success(function() {
-                    window.auth_provider_domains.api().ajax.reload(function (data) {
+                    window.identity_provider_domains.api().ajax.reload(function (data) {
                         $("#smtp_action_result_dialog").hide();
-                        $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(auth_provider_domain)).show();
+                        $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_domain)).show();
                     });
                 }).fail(function () {
-                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(auth_provider_domain)).show();
+                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(identity_provider_domain)).show();
                 }).done(function () {
                     $("#delete_confirm_modal").modal('hide');
                 });

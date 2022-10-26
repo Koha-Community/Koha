@@ -1,4 +1,4 @@
-package Koha::Auth::Provider::OIDC;
+package Koha::Auth::Identity::Provider::OAuth;
 
 # Copyright Theke Solutions 2022
 #
@@ -19,11 +19,11 @@ package Koha::Auth::Provider::OIDC;
 
 use Modern::Perl;
 
-use base qw(Koha::Auth::Provider);
+use base qw(Koha::Auth::Identity::Provider);
 
 =head1 NAME
 
-Koha::Auth::Provider::OIDC - Koha Auth Provider Object class
+Koha::Auth::Identity::Provider::OAuth - Koha Auth Provider Object class
 
 =head1 API
 
@@ -31,16 +31,16 @@ Koha::Auth::Provider::OIDC - Koha Auth Provider Object class
 
 =head3 new
 
-    my $oidc = Koha::Auth::Provider::OIDC->new( \%{params} );
+    my $oauth = Koha::Auth::Identity::Provider::OAuth->new( \%{params} );
 
-Overloaded class to create a new OIDC provider.
+Overloaded class to create a new OAuth provider.
 
 =cut
 
 sub new {
     my ( $class, $params ) = @_;
 
-    $params->{protocol} = 'OIDC';
+    $params->{protocol} = 'OAuth';
 
     return $class->SUPER::new($params);
 }
@@ -57,7 +57,8 @@ sub mandatory_config_attributes {
     return qw(
       key
       secret
-      well_known_url
+      authorize_url
+      token_url
     );
 }
 

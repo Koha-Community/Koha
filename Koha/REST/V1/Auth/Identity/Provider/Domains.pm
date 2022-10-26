@@ -1,4 +1,4 @@
-package Koha::REST::V1::Auth::Provider::Domains;
+package Koha::REST::V1::Auth::Identity::Provider::Domains;
 
 # This file is part of Koha.
 #
@@ -19,8 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::Auth::Provider::Domains;
-use Koha::Auth::Providers;
+use Koha::Auth::Identity::Provider::Domains;
+use Koha::Auth::Identity::Providers;
 
 use Koha::Database;
 
@@ -29,7 +29,7 @@ use Try::Tiny;
 
 =head1 NAME
 
-Koha::REST::V1::Auth::Provider::Domains - Controller library for handling
+Koha::REST::V1::Auth::Identity::Provider::Domains - Controller library for handling
 authentication provider domains routes.
 
 =head2 Operations
@@ -44,8 +44,8 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $auth_provider_id = $c->validation->param('auth_provider_id');
-        my $provider         = Koha::Auth::Providers->find($auth_provider_id);
+        my $identity_provider_id = $c->validation->param('identity_provider_id');
+        my $provider         = Koha::Auth::Identity::Providers->find($identity_provider_id);
 
         unless ($provider) {
             return $c->render(
@@ -78,8 +78,8 @@ sub get {
 
     return try {
 
-        my $auth_provider_id = $c->validation->param('auth_provider_id');
-        my $provider         = Koha::Auth::Providers->find($auth_provider_id);
+        my $identity_provider_id = $c->validation->param('identity_provider_id');
+        my $provider         = Koha::Auth::Identity::Providers->find($identity_provider_id);
 
         unless ($provider) {
             return $c->render(
@@ -93,8 +93,8 @@ sub get {
 
         my $domains_rs = $provider->domains;
 
-        my $auth_provider_domain_id = $c->validation->param('auth_provider_domain_id');
-        my $domain                  = $c->objects->find( $domains_rs, $auth_provider_domain_id );
+        my $identity_provider_domain_id = $c->validation->param('identity_provider_domain_id');
+        my $domain                  = $c->objects->find( $domains_rs, $identity_provider_domain_id );
 
         unless ($domain) {
             return $c->render(
@@ -122,10 +122,11 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-
+        my $params = $c->validation->param('body');
+        $params->{identity_provider_id} = $c->validation->param('identity_provider_id');
         Koha::Database->new->schema->txn_do(
             sub {
-                my $domain = Koha::Auth::Provider::Domain->new_from_api( $c->validation->param('body') );
+                my $domain = Koha::Auth::Identity::Provider::Domain->new_from_api( $params );
                 $domain->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $domain->id );
@@ -159,11 +160,11 @@ Controller method for updating an authentication provider domain.
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $auth_provider_id        = $c->validation->param('auth_provider_id');
-    my $auth_provider_domain_id = $c->validation->param('auth_provider_domain_id');
+    my $identity_provider_id        = $c->validation->param('identity_provider_id');
+    my $identity_provider_domain_id = $c->validation->param('identity_provider_domain_id');
 
-    my $domain = Koha::Auth::Provider::Domains->find(
-        { auth_provider_id => $auth_provider_id, auth_provider_domain_id => $auth_provider_domain_id } );
+    my $domain = Koha::Auth::Identity::Provider::Domains->find(
+        { identity_provider_id => $identity_provider_id, identity_provider_domain_id => $identity_provider_domain_id } );
 
     unless ($domain) {
         return $c->render(
@@ -203,11 +204,11 @@ Controller method for deleting an authentication provider.
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $auth_provider_id        = $c->validation->param('auth_provider_id');
-    my $auth_provider_domain_id = $c->validation->param('auth_provider_domain_id');
+    my $identity_provider_id        = $c->validation->param('identity_provider_id');
+    my $identity_provider_domain_id = $c->validation->param('identity_provider_domain_id');
 
-    my $domain = Koha::Auth::Provider::Domains->find(
-        { auth_provider_id => $auth_provider_id, auth_provider_domain_id => $auth_provider_domain_id } );
+    my $domain = Koha::Auth::Identity::Provider::Domains->find(
+        { identity_provider_id => $identity_provider_id, identity_provider_domain_id => $identity_provider_domain_id } );
 
     unless ($domain) {
         return $c->render(
