@@ -1020,10 +1020,14 @@
                         [% END %]
 
                         <h2>Existing holds</h2>
-                        <div class="page-section">
                         <div id="toolbar" class="btn-toolbar">
-                            <input type="submit" name="submit" value="Update hold(s)" /> <button class="cancel_selected_holds" data-bulk="true"></button>
-                        <fieldset id="cancellation-reason-fieldset" class="action">
+                            <div class="btn-group">
+                                <input type="submit" class="btn btn-primary" name="submit" value="Update hold(s)" />
+                            </div>
+                            <div class="btn-group">
+                                <button class="cancel_selected_holds" data-bulk="true"></button>
+                            </div>
+                        <fieldset id="cancellation-reason-fieldset" class="action" style="display:none">
                             [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                             [% IF hold_cancellation.count %]
                                 <label for="cancellation-reason">Cancellation reason: </label>
@@ -1036,6 +1040,7 @@
                             [% END %]
                         </fieldset>
                         </div>
+                        <div class="page-section">
 
                         [% FOREACH biblioloo IN biblioloop %]
                             [% IF ( biblioloo.reserveloop ) %]
