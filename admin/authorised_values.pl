@@ -218,7 +218,7 @@ if ( $op eq 'list' ) {
         push( @category_list, $category->category_name );
     }
 
-    $searchfield ||= $category_list[0];
+    $searchfield ||= "";
 
     my @avs_by_category = Koha::AuthorisedValues->new->search( { category => $searchfield } );
     my @loop_data = ();
