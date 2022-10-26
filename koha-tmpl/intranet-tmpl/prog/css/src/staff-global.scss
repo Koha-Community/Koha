@@ -693,11 +693,6 @@ ul {
         }
     }
 
-    &.nav-tabs {
-        border-bottom: 1px solid transparent;
-        padding: .2em 1.4em 0 1.4em;
-    }
-
     &.budget_hierarchy {
         margin-left: 0;
         padding-left: 0;
@@ -2826,11 +2821,11 @@ td.bundle {
 
 .toptabs {
     margin-top: 5px;
-    .ui-tabs-panel {
-        fieldset {
-            box-shadow: none;
-        }
-    }
+}
+
+fieldset > .toptabs {
+    background-color: #F3F4F4;
+    padding: 1em;
 }
 
 .authref {
@@ -3414,28 +3409,35 @@ code {
 
 .tab-content {
     background-color: #fff;
-    border: 2px solid $background-color-primary;
-    border-radius: 4px;
+    border: 0;
+    border-radius: 0;
     padding: 1em;
 }
 
 .nav-tabs {
+    border-bottom: 0;
+    padding: .2em 1.4em 0 0;
+
     > li {
+        margin-bottom: -2px;
+
         > a {
-            background-color: $background-color-secondary;
-            border-radius: 4px 4px 0 0;
-            border-color: $background-color-secondary;
-            color: #111;
+            background-color: $background-color-primary;
+            border: 2px solid $background-color-primary;
+            border-bottom: 0;
+            border-radius: 0;
+            color: #FFF;
+            font-weight: bold;
             line-height: 1.3;
             margin-right: .4em;
             padding: .5em 1em;
 
             &:hover, &:focus, &:active {
                 background-color: $background-color-primary;
-                border-color: $background-color-primary;
+                border: 2px solid $background-color-primary;
+                border-bottom: 0;
                 padding: .5em 1em;
                 text-decoration: none;
-                color: #FFFFFF;
             }
         }
 
@@ -3443,9 +3445,11 @@ code {
             a,
             a:hover,
             a:focus {
-                background-color: $background-color-primary;
-                color: #FFFFFF;
+                background-color: #FFF;
+                border: 2px solid #FFF;
+                color: #111;
                 cursor: default;
+                padding: .5em 1em;
             }
         }
     }
