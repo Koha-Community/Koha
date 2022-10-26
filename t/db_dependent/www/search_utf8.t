@@ -63,7 +63,7 @@ elsif ( not $opac ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_OPAC_URL to do tests\n";
 }
 else {
-    plan tests => 89;
+    plan tests => 80;
 }
 
 $intranet =~ s#/$##;

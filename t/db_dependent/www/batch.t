@@ -26,6 +26,8 @@ use JSON;
 use File::Basename;
 use File::Spec;
 use POSIX;
+use t::lib::Mocks::Zebra;
+use Koha::BackgroundJobs;
 
 my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
 
@@ -52,114 +54,19 @@ if (not defined $intranet) {
          "your username and password";
 }
 else {
-    plan tests => 26;
+    plan tests => 24;
 }
 
 $intranet =~ s#/$##;
 
-my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
-my $jsonresponse;
-
-$agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
-$agent->form_name('loginform');
-$agent->field( 'password', $password );
-$agent->field( 'userid',   $user );
-$agent->field( 'branch',   '' );
-$agent->click_ok( '', 'login to staff interface' );
-
-$agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
-
-$agent->follow_link_ok( { url_regex => qr/cataloging-home/i }, 'open cataloging module' );
-$agent->follow_link_ok( { text => 'Stage records for import' },
-    'go to stage MARC' );
-
-$agent->post(
-    "$intranet/cgi-bin/koha/tools/upload-file.pl?temp=1",
-    [ 'fileToUpload' => [$file], ],
-    'Content_Type' => 'form-data',
-);
-ok( $agent->success, 'uploaded file' );
-
-$jsonresponse = decode_json $agent->content();
-is( $jsonresponse->{'status'}, 'done', 'upload succeeded' );
-my $fileid = $jsonresponse->{'fileid'};
-
-$agent->get_ok( "$intranet/cgi-bin/koha/tools/stage-marc-import.pl",
-    'reopen stage MARC page' );
-$agent->submit_form_ok(
+my $mock_zebra = t::lib::Mocks::Zebra->new(
     {
-        form_number => 5,
-        fields      => {
-            'uploadedfileid'  => $fileid,
-            'nomatch_action'  => 'create_new',
-            'overlay_action'  => 'replace',
-            'item_action'     => 'always_add',
-            'matcher'         => '',
-            'comments'        => '',
-            'encoding'        => 'UTF-8',
-            'parse_items'     => '1',
-            'runinbackground' => '1',
-            'record_type'     => 'biblio'
-        }
-    },
-    'stage MARC'
-);
-
-$jsonresponse = decode_json $agent->content();
-my $jobID = $jsonresponse->{'jobID'};
-ok( $jobID, 'have job ID' );
-
-my $completed = 0;
-
-# if we haven't completed the batch in two minutes, it's not happening
-for my $counter ( 1 .. 24 ) {
-    $agent->get(
-        "$intranet/cgi-bin/koha/tools/background-job-progress.pl?jobID=$jobID"
-    ); # get job progress
-    $jsonresponse = decode_json $agent->content();
-    if ( $jsonresponse->{'job_status'} eq 'completed' ) {
-        $completed = 1;
-        last;
+        intranet  => $intranet,
+        koha_conf => $ENV{KOHA_CONF},
     }
-    warn(
-        (
-            $jsonresponse->{'job_size'}
-            ? floor(
-                100 * $jsonresponse->{'progress'} / $jsonresponse->{'job_size'}
-              )
-            : '100'
-        )
-        . "% completed"
-    );
-    sleep 5;
-}
-is( $jsonresponse->{'job_status'}, 'completed', 'job was completed' );
-
-$agent->get_ok(
-    "$intranet/cgi-bin/koha/tools/stage-marc-import.pl",
-    'reopen stage MARC page at end of upload'
-);
-$agent->submit_form_ok(
-    {
-        form_number => 5,
-        fields      => {
-            'uploadedfileid'  => $fileid,
-            'nomatch_action'  => 'create_new',
-            'overlay_action'  => 'replace',
-            'item_action'     => 'always_add',
-            'matcher'         => '1',
-            'comments'        => '',
-            'encoding'        => 'UTF-8',
-            'parse_items'     => '1',
-            'runinbackground' => '1',
-            'completedJobID'  => $jobID,
-            'record_type'     => 'biblio'
-        }
-    },
-    'stage MARC'
 );
 
-$agent->follow_link_ok( { text => 'Manage staged records' }, 'view batch' );
+my $import_batch_id = $mock_zebra->load_records_ui($file);
 
 my $bookdescription;
 if ( $marcflavour eq 'UNIMARC' ) {
@@ -169,29 +76,20 @@ else {
     $bookdescription = 'Data structures';
 }
 
-# Save the staged records URI for later use
-my $staged_records_uri = $agent->uri;
+my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
+$agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
+$agent->form_name('loginform');
+$agent->field( 'password', $password );
+$agent->field( 'userid',   $user );
+$agent->field( 'branch',   '' );
+$agent->click_ok( '', 'login to staff interface' );
 
-my $import_batch_id = ( split( '=', $staged_records_uri->as_string ) )[-1];
 # Get datatable for the batch id
-$agent->get_ok(
-    "$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id",
-    'get the datatable for the new batch id'
-);
-$jsonresponse = decode_json $agent->content;
-like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found book' );
-is( $jsonresponse->{ aaData }[0]->{ status }, 'staged', 'record marked as staged' );
-is( $jsonresponse->{ aaData }[0]->{ overlay_status }, 'no_match', 'record has no matches' );
-
-# Back to the manage staged records page
-$agent->get($staged_records_uri);
-$agent->form_number(6);
-$agent->field( 'framework', '' );
-$agent->click_ok( 'mainformsubmit', "imported records into catalog" );
-
 $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
-$jsonresponse = decode_json $agent->content;
-is( $jsonresponse->{ aaData }[0]->{ status }, 'imported', 'record marked as imported' );
+my $jsonresponse = decode_json $agent->content;
+like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found book' );
+is( $jsonresponse->{ aaData }[0]->{ status }, 'imported', 'record marked as staged' );
+is( $jsonresponse->{ aaData }[0]->{ overlay_status }, 'no_match', 'record has no matches' );
 
 my $biblionumber = $jsonresponse->{aaData}[0]->{matched};
 
@@ -201,9 +99,20 @@ $agent->get_ok(
 $agent->content_contains( 'Details for ' . $bookdescription,
     'bib is imported' );
 
-$agent->get($staged_records_uri);
+$agent->get("$intranet/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=$import_batch_id");
 $agent->form_number(5);
 $agent->click_ok( 'mainformsubmit', "revert import" );
+
+sleep(1);
+# FIXME - This if fragile and can fail if there is a race condition
+my $job = Koha::BackgroundJobs->search({ type => 'marc_import_revert_batch' })->last;
+my $i;
+while ( $job->discard_changes->status ne 'finished' ) {
+    sleep(1);
+    last if ++$i > 10;
+}
+is ( $job->status, 'finished', 'job is finished' );
+
 $agent->get_ok(
     "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
     'getting reverted bib' );

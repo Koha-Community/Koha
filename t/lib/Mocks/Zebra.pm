@@ -22,6 +22,7 @@ use File::Temp qw( tempdir );
 use File::Path qw( rmtree );
 use JSON qw( decode_json );
 use C4::ImportBatch;
+use Koha::BackgroundJobs;
 
 =head1 NAME
 
@@ -172,75 +173,31 @@ sub load_records_ui {
         'stage MARC'
     );
 
-    $jsonresponse = decode_json $agent->content();
-    my $jobID = $jsonresponse->{'jobID'};
-    ok( $jobID, 'have job ID' );
-
-    my $completed = 0;
-
-    # if we haven't completed the batch in two minutes, it's not happening
-    for my $counter ( 1 .. 24 ) {
-        $agent->get(
-            "$cgi_root/tools/background-job-progress.pl?jobID=$jobID"
-        ); # get job progress
-        $jsonresponse = decode_json $agent->content();
-        if ( $jsonresponse->{'job_status'} eq 'completed' ) {
-            $completed = 1;
-            last;
-        }
-        warn(
-            (
-                $jsonresponse->{'job_size'}
-                ? floor(
-                    100 * $jsonresponse->{'progress'} / $jsonresponse->{'job_size'}
-                  )
-                : '100'
-            )
-            . "% completed"
-        );
-        sleep 5;
+    sleep(1);
+    # FIXME - This if fragile and can fail if there is a race condition
+    my $job = Koha::BackgroundJobs->search({ type => 'stage_marc_for_import' })->last;
+    my $i;
+    while ( $job->discard_changes->status ne 'finished' ) {
+        sleep(1);
+        last if ++$i > 10;
     }
-    is( $jsonresponse->{'job_status'}, 'completed', 'job was completed' );
+    is ( $job->status, 'finished', 'job is finished' );
+
+    $job->discard_changes;
+    my $import_batch_id = $job->report->{import_batch_id};
 
     $agent->get_ok(
-        "$cgi_root/tools/stage-marc-import.pl",
-        'reopen stage MARC page at end of upload'
+        "$cgi_root/tools/manage-marc-import.pl?import_batch_id=$import_batch_id",
     );
-    $agent->submit_form_ok(
-        {
-            form_number => 5,
-            fields      => {
-                'uploadedfileid'  => $fileid,
-                'nomatch_action'  => 'create_new',
-                'overlay_action'  => 'replace',
-                'item_action'     => 'always_add',
-                'matcher'         => '1',
-                'comments'        => '',
-                'encoding'        => 'utf8',
-                'parse_items'     => '1',
-                'runinbackground' => '1',
-                'completedJobID'  => $jobID,
-                'record_type'     => 'biblio'
-            }
-        },
-        'stage MARC'
-    );
-
-    $agent->follow_link_ok( { text => 'Manage staged records' }, 'view batch' );
-
 
     $agent->form_number(6);
     $agent->field( 'framework', '' );
     $agent->click_ok( 'mainformsubmit', "imported records into catalog" );
-    my $webpage = $agent->{content};
-
-    $webpage =~ /(.*<title>.*?)(\d{1,})(.*<\/title>)/sx;
-    my $batch_id = $2;
 
     # wait enough time for the indexer
     sleep 10;
 
-    return $batch_id;
+    return $import_batch_id;
 
 }
 
