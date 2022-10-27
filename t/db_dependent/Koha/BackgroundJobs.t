@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 
 use List::MoreUtils qw(any);
@@ -139,4 +139,69 @@ subtest 'search_limited' => sub {
     is( Koha::BackgroundJobs->search_limited->count, 0, 'No jobs for me' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'purge' => sub {
+    plan tests => 9;
+    $schema->storage->txn_begin;
+
+    my $recent_date = dt_from_string;
+    my $old_date = dt_from_string->subtract({ days => 3 });
+    my $job_recent_t1_new      = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'new', ended_on => $old_date, type => 'type1' } } );
+    my $job_recent_t2_fin = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished', ended_on => $recent_date, type => 'type2' } } );
+    my $job_old_t1_fin    = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished', ended_on => $old_date, type => 'type1' } } );
+    my $job_old_t2_fin  = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished', ended_on => $old_date, type => 'type2' } } );
+
+    my $params = { job_types => ['type1'] , # Arrayref of jobtypes to be purged
+                   days      => 1,        # Age in days of jobs to be purged
+                   confirm   => 0,        # Confirm deletion
+                };
+    is( Koha::BackgroundJobs->purge($params), 1, 'Only the old finished type1 job would be purged' );
+
+    $params->{'job_types'} = ['all'];
+    is( Koha::BackgroundJobs->purge($params), 2, 'All finished old jobs would be purged with job_types = all' );
+
+    my $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_recent_t1_new->id, $job_recent_t2_fin->id, $job_old_t1_fin->id, $job_old_t2_fin->id ]
+        }
+    );
+    is( $rs->count, 4, 'All jobs still left in queue');
+
+    $params->{'job_types'} = ['type1'];
+    $params->{'confirm'} = 1;
+    is( Koha::BackgroundJobs->purge($params), 1, 'Only the old finished type1 job is purged' );
+
+    $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_recent_t1_new->id, $job_recent_t2_fin->id, $job_old_t1_fin->id, $job_old_t2_fin->id ]
+        }
+    );
+    is( $rs->count, 3, '3 jobs still left in queue');
+
+    $params->{'job_types'} = ['all'];
+    is( Koha::BackgroundJobs->purge($params), 1, 'The remaining old finished jobs is purged' );
+        $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_recent_t1_new->id, $job_recent_t2_fin->id, $job_old_t1_fin->id, $job_old_t2_fin->id ]
+        }
+    );
+    is( $rs->count, 2, '2 jobs still left in queue');
+
+    $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_recent_t1_new->id ]
+        }
+    );
+    is( $rs->count, 1, 'Unfinished job still left in queue');
+
+    $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_recent_t2_fin->id ]
+        }
+    );
+    is( $rs->count, 1, 'Recent finished job still left in queue');
+
+    $schema->storage->txn_rollback;
+
 };
