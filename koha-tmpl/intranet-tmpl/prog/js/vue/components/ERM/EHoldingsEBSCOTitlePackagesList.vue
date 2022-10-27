@@ -121,7 +121,7 @@ export default {
                             `${row.package.name}`
                         )
                         if (row.is_selected) {
-                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green", float: "right" }, title: __("Is selected") })])
                         }
                         render(n, e)
                     })
