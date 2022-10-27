@@ -321,8 +321,8 @@ sub process_invoice {
                     $line->quantity );
 
                 my $order = $schema->resultset('Aqorder')->find($ordernumber);
-                if ($order->biblionumber->biblionumber) {
-                    my $b = $order->biblionumber->biblionumber;
+                if (my $bib = $order->biblionumber) {
+                    my $b = $bib->biblionumber;
                     my $id = $line->item_number_id;
                     $logger->trace("Updating bib:$b id:$id");
                 }
