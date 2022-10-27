@@ -21,8 +21,6 @@
 .page-section {
     @include card;
 
-    padding: .5em 1em;
-
     & + .page-section {
         margin-top: 1em;
     }
@@ -783,7 +781,7 @@ ol {
 fieldset {
     + fieldset {
         &.action {
-            padding-top: 20px;
+            margin-top: -1em;
         }
     }
 
@@ -806,12 +804,17 @@ fieldset {
     &.action {
         background-color: transparent;
         border: 0;
-        clear: both;
         box-shadow: none;
+        clear: both;
         float: none;
-        margin: .9em 0 0;
-        padding: .4em;
+        padding: 1rem;
         width: auto;
+
+        a {
+            &.cancel {
+                padding-left: 1em;
+            }
+        }
     }
 
 
@@ -1263,8 +1266,6 @@ dd {
 }
 
 .patroninfo-section {
-    padding: .5em;
-    margin: .5em 0;
     @include card;
 }
 
@@ -2755,9 +2756,6 @@ td.bundle {
 
 .statictabs {
     @include card;
-
-    margin-top: 20px;
-    padding: 20px;
 
     h3{
         padding-bottom: .7em;
