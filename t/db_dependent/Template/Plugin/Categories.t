@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -31,24 +31,34 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
-
 my $nb_categories = Koha::Patron::Categories->count;
 
 # Create sample categories
-my $category_1 = $builder->build( { source => 'Category' } );
+my $category_1 = $builder->build_object( { class => 'Koha::Patron::Categories' } );
 my @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 1 + $nb_categories, '->all returns all defined categories' );
 
-my $category_2 = $builder->build( { source => 'Category' } );
+my $category_2 = $builder->build_object( { class => 'Koha::Patron::Categories' } );
 @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 2 + $nb_categories, '->all returns all defined categories' );
 
 is( Koha::Template::Plugin::Categories->GetName(
-        $category_1->{categorycode}
+        $category_1->categorycode
     ),
-    $category_1->{description},
+    $category_1->description,
     '->GetName returns the right description'
 );
+
+my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+$category_1->library_limits( [ $library_1->branchcode ] );
+$category_2->library_limits( [ $library_2->branchcode ] );
+t::lib::Mocks::mock_userenv( { branchcode => $library_1->branchcode } );
+my $limited = Koha::Template::Plugin::Categories->limited;
+is( $limited->search( { 'me.categorycode' => $category_1->categorycode } )->count,
+    1, 'Category 1 is available from library 1' );
+is( $limited->search( { 'me.categorycode' => $category_2->categorycode } )->count,
+    0, 'Category 2 is not available from library 1' );
 
 $schema->storage->txn_rollback;
 
