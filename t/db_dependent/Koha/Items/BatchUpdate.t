@@ -16,7 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests=> 7;
+use Test::More tests=> 8;
+use Test::Warn;
 use utf8;
 
 use Koha::Database;
@@ -27,6 +28,7 @@ use Koha::Item::Attributes;
 use Koha::MarcSubfieldStructures;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -250,6 +252,31 @@ subtest 'encoding' => sub {
 
     $item = $item->get_from_storage;
     is( $item->as_marc_field->subfield('é'), 'new note é', );
+};
+
+subtest 'mark_items_returned' => sub {
+    plan tests => 2;
+
+    my $circ = Test::MockModule->new( 'C4::Circulation' );
+    $circ->mock( 'MarkIssueReturned', sub {
+        warn "MarkIssueReturned";
+    });
+
+    my $issue = $builder->build_object({class => 'Koha::Checkouts'});
+    my $items = Koha::Items->search({ itemnumber => $issue->itemnumber });
+
+    warning_is
+        { $items->batch_update({new_values => {},mark_items_returned => 1}) }
+        qq{MarkIssueReturned},
+        "MarkIssueReturned called for item";
+
+    $items->reset;
+
+    warning_is
+        { $items->batch_update({new_values => {},mark_items_returned => 0}) }
+        qq{},
+        "MarkIssueReturned not called for item";
+
 };
 
 subtest 'report' => sub {
