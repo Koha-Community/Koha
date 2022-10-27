@@ -164,6 +164,8 @@ Reports - Guided Reports
 
 =cut
 
+binmode STDOUT, ":encoding(UTF-8)";
+
 # These variables can be set by command line options,
 # initially set to default values.
 
