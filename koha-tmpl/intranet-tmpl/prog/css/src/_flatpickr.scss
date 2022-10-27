@@ -946,6 +946,7 @@ span.flatpickr-weekday {
     border-style: inset;
     border-width: 1px;
     padding: 3px 3px 3px 20px;
+    width: calc( 100% - 40px );
 
     &:focus {
         border-radius: 0;
@@ -986,9 +987,13 @@ span.flatpickr-weekday {
         .shortcut-buttons-flatpickr-button {
             background: transparent none;
             border: 0;
-            color: #004D99;
+            color: #006100;
             font-size: 90%;
             margin: 2px;
+
+            &:active {
+                box-shadow: none;
+            }
 
             &:disabled {
                 color: #999;
@@ -999,7 +1004,7 @@ span.flatpickr-weekday {
             }
 
             &:hover {
-                color: #538200;
+                text-decoration: underline;
             }
         }
     }
