@@ -368,7 +368,7 @@ subtest 'store' => sub {
 
         subtest 'Full payment tests' => sub {
 
-            plan tests => 14;
+            plan tests => 16;
 
             my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
@@ -455,6 +455,18 @@ subtest 'store' => sub {
 'The account line of type LOST_FOUND has an amountoutstanding of -99'
             );
 
+            my $processing_return = Koha::Account::Lines->search(
+                {
+                    itemnumber       => $item->itemnumber,
+                    credit_type_code => 'PROCESSING_FOUND'
+                },
+                { rows => 1 }
+            )->single;
+            ok( $processing_return, 'An account line of type PROCESSING_FOUND is added' );
+            is( $processing_return->amount + 0,
+                -20.00,
+                'The account line of type PROCESSING_FOUND has an amount of -20' );
+
             $lost_fee_line->discard_changes;
             is( $lost_fee_line->amountoutstanding + 0,
                 0, 'Lost fee has no outstanding amount' );
@@ -463,8 +475,8 @@ subtest 'store' => sub {
             is( $lost_fee_line->status, 'FOUND',
                 "Lost fee now has account status of FOUND" );
 
-            is( $patron->account->balance, -99,
-'The patron balance is -99, a credit that equals the lost fee payment'
+            is( $patron->account->balance, -119,
+'The patron balance is -119, a credit that equals the lost fee payment and the processing fee'
             );
         };
 
@@ -522,6 +534,21 @@ subtest 'store' => sub {
             is( $lost_fee_line->amountoutstanding + 0,
                 $replacement_amount,
                 'The right LOST amountountstanding is generated' );
+
+            # Set processingreturn_policy to '0' so processing fee is retained
+            # these tests are just for lostreturn
+            my $processingreturn_rule = $builder->build(
+                {
+                    source => 'CirculationRule',
+                    value  => {
+                        branchcode   => undef,
+                        categorycode => undef,
+                        itemtype     => undef,
+                        rule_name    => 'processingreturn',
+                        rule_value   => '0'
+                    }
+                }
+            );
 
             # Simulate item marked as found
             $item->itemlost(0)->store;

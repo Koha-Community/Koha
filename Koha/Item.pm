@@ -1325,7 +1325,7 @@ sub _set_found_trigger {
         }
     }
 
-    my $processingreturn_policy = $lost_proc_return_policy->{lostreturn};
+    my $processingreturn_policy = $lost_proc_return_policy->{processingreturn};
 
     if ( $processingreturn_policy ) {
 
