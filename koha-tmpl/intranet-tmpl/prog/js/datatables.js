@@ -53,18 +53,24 @@ var dataTablesDefaults = {
     "fixedHeader": true,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
+        var state =  $("#" + tableId ).DataTable().state();
+        state && toggledClearFilter(state.search.search, tableId);
         // When the DataTables search function is triggered,
         // enable or disable the "Clear filter" button based on
         // the presence of a search string
         $("#" + tableId ).on( 'search.dt', function ( e, settings ) {
-            if( settings.oPreviousSearch.sSearch == "" ){
-                $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").addClass("disabled");
-            } else {
-                $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").removeClass("disabled");
-            }
+            toggledClearFilter(settings.oPreviousSearch.sSearch, tableId);
         });
     }
 };
+
+function toggledClearFilter(searchText, tableId){
+    if( searchText == "" ){
+        $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").addClass("disabled");
+    } else {
+        $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").removeClass("disabled");
+    }
+}
 
 
 // Return an array of string containing the values of a particular column
@@ -833,6 +839,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         if ( add_filters ) {
             var table_dt = table.DataTable();
+            // table_dt.on('search', console.log);
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 if ( is_searchable ) {
