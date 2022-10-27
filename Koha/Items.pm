@@ -227,6 +227,10 @@ Allows to modify existing subfield's values using a regular expression
 
 Set the passed boolean value to items.exclude_from_local_holds_priority
 
+=item mark_items_returned
+
+Move issues on these items to the old issues table, do not mark items found or adjust statuses or fines
+
 =item callback
 
 Callback function to call after an item has been modified
@@ -241,6 +245,7 @@ sub batch_update {
     my $regex_mod = $params->{regex_mod} || {};
     my $new_values = $params->{new_values} || {};
     my $exclude_from_local_holds_priority = $params->{exclude_from_local_holds_priority};
+    my $mark_items_returned = $params->{mark_items_returned};
     my $callback = $params->{callback};
 
     my (@modified_itemnumbers, $modified_fields);
@@ -250,6 +255,7 @@ sub batch_update {
 
         try {$schema->txn_do(sub {
             my $modified_holds_priority = 0;
+            my $item_returned = 0;
             if ( defined $exclude_from_local_holds_priority ) {
                 if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
                     $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
@@ -336,9 +342,25 @@ sub batch_update {
                 ) if $item->itemlost
                       and not $itemlost_pre;
             }
+            if ( $mark_items_returned ){
+                my $issue = $item->checkout;
+                if( $issue ){
+                        $item_returned = 1;
+                        C4::Circulation::MarkIssueReturned(
+                        $issue->borrowernumber,
+                        $item->itemnumber,
+                        undef,
+                        $issue->patron->privacy,
+                        {
+                            skip_record_index => 1,
+                            skip_holds_queue  => 1,
+                        }
+                    );
+                }
+            }
 
-            push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority;
-            $modified_fields += $modified + $modified_holds_priority;
+            push @modified_itemnumbers, $item->itemnumber if $modified || $modified_holds_priority || $item_returned;
+            $modified_fields += $modified + $modified_holds_priority + $item_returned;
         })}
         catch {
             warn $_

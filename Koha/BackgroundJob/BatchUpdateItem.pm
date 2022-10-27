@@ -98,6 +98,8 @@ sub process {
     my $new_values = $args->{new_values};
     my $exclude_from_local_holds_priority =
       $args->{exclude_from_local_holds_priority};
+    my $mark_items_returned =
+      $args->{mark_items_returned};
 
     my $report = {
         total_records            => scalar @record_ids,
@@ -113,6 +115,7 @@ sub process {
                 new_values => $new_values,
                 exclude_from_local_holds_priority =>
                   $exclude_from_local_holds_priority,
+                mark_items_returned => $mark_items_returned,
                 callback => sub {
                     my ($progress) = @_;
                     $self->progress($progress)->store;

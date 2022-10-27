@@ -52,6 +52,7 @@ my $del_records  = $input->param('del_records');
 my $src          = $input->param('src');
 my $use_default_values = $input->param('use_default_values');
 my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
+my $mark_items_returned = $input->param('mark_items_returned');
 
 my $template_name;
 my $template_flag;
@@ -171,6 +172,11 @@ if ( $op eq "action" ) {
               )
             ? $exclude_from_local_holds_priority
             : undef,
+            mark_items_returned => (
+                defined $mark_items_returned
+                  && $mark_items_returned ne ""
+                )
+            ? $mark_items_returned : undef,
 
         };
         try {
