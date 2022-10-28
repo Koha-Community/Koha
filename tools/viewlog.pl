@@ -157,6 +157,7 @@ if ($do_it) {
             $itemnumber = $log->info if ( $log->module eq "CIRCULATION" );
             my $item = Koha::Items->find($itemnumber);
             if ($item) {
+                $result->{'object_found'}     = 1;
                 $result->{'biblionumber'}     = $item->biblionumber;
                 $result->{'biblioitemnumber'} = $item->biblionumber;
                 $result->{'barcode'}          = $item->barcode;
