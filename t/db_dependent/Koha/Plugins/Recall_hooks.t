@@ -95,6 +95,6 @@ subtest 'after_recall_action hook' => sub {
     qr/after_recall_action called with action: add, ref: Koha::Recall/,
       '->add_recall calls the after_recall_action hook with action add';
 
-    $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
+    $schema->storage->txn_rollback;
 };
