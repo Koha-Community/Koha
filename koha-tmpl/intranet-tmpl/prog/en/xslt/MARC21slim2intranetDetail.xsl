@@ -1458,6 +1458,85 @@
         </span>
         </xsl:if>
 
+        <!--  787 Other Relationship Entry  -->
+        <xsl:if test="marc:datafield[@tag=787]">
+        <span class="results_summary other_relationship_entry"><span class="label">Other related works: </span>
+        <xsl:for-each select="marc:datafield[@tag=580]">
+            <span class="linking_complexity_note">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">a</xsl:with-param>
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+            </span>
+        </xsl:for-each>
+        <xsl:for-each select="marc:datafield[@tag=787]">
+            <span class="other_relationship_entry">
+                <xsl:variable name="f787">
+                    <xsl:call-template name="chopPunctuation"><xsl:with-param name="chopString"><xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">a_t</xsl:with-param>
+                    </xsl:call-template></xsl:with-param></xsl:call-template>
+                </xsl:variable>
+                <xsl:if test="marc:subfield[@code='i']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">i</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>: </xsl:text>
+                </xsl:if>
+                <xsl:choose>
+                <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                        <xsl:value-of select="$f787"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="relation_query">
+                        <xsl:text>ti,phr:(</xsl:text>
+                        <xsl:call-template name="quote_search_term">
+                            <xsl:with-param name="term"><xsl:value-of select="marc:subfield[@code='t']"/></xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>)</xsl:text>
+                        <xsl:if test="marc:subfield[@code='a']">
+                            <xsl:text> AND au:(</xsl:text>
+                            <xsl:call-template name="quote_search_term">
+                                <xsl:with-param name="term">
+                                  <xsl:value-of select="marc:subfield[@code='a']"/>
+				</xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text>)</xsl:text>
+                        </xsl:if>
+                    </xsl:variable>
+                    <a>
+                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($relation_query, true())" />
+                    </xsl:attribute>
+                        <xsl:value-of select="$f787"/>
+                    </a>
+                </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="position()=last()"></xsl:when>
+                    <xsl:otherwise><span class="separator"><xsl:text>; </xsl:text></span></xsl:otherwise>
+                </xsl:choose>
+            </span>
+        </xsl:for-each>
+        </span>
+        </xsl:if>
+
+        <!-- Indicate if record is suppressed in OPAC -->
+        <xsl:choose>
+            <xsl:when test="$OpacSuppression = 1 and marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+                <span class="results_summary suppressed_opac">
+                    <span class="label">OPAC view: </span>
+                    Suppressed in OPAC
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="$OPACBaseURL!=''">
+                    <span class="results_summary opac_view"><span class="label">OPAC view: </span>
+                        <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+                    </span>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="nameABCQ">
