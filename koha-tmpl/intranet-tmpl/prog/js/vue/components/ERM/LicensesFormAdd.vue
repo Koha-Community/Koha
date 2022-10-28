@@ -124,6 +124,11 @@
                         </ol>
                     </fieldset>
                 </div>
+                <UserRoles
+                    :user_type="$__('License user')"
+                    :user_roles="license.user_roles"
+                    :av_user_roles="av_user_roles"
+                />
                 <Documents :documents="license.documents" />
                 <fieldset class="action">
                     <input type="submit" :value="$__('Submit')" />
@@ -142,6 +147,7 @@
 <script>
 import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
+import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLicense } from "../../fetch"
@@ -153,12 +159,14 @@ export default {
         const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = inject("AVStore")
-        const { av_license_types, av_license_statuses } = storeToRefs(AVStore)
+        const { av_license_types, av_license_statuses, av_user_roles } =
+            storeToRefs(AVStore)
 
         return {
             vendors,
             av_license_types,
             av_license_statuses,
+            av_user_roles,
             max_allowed_packet,
         }
     },
@@ -174,6 +182,7 @@ export default {
                 status: "",
                 started_on: undefined,
                 ended_on: undefined,
+                user_roles: [],
                 documents: [],
             },
             initialized: false,
@@ -239,6 +248,10 @@ export default {
                 license.vendor_id = null
             }
 
+            license.user_roles = license.user_roles.map(
+                ({ patron, patron_str, ...keepAttrs }) => keepAttrs
+            )
+
             license.documents = license.documents.map(
                 ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
             )
@@ -275,6 +288,7 @@ export default {
     },
     components: {
         flatPickr,
+        UserRoles,
         Documents,
     },
     name: "LicensesFormAdd",

@@ -22,6 +22,7 @@ use Koha::Database;
 use base qw(Koha::Object);
 
 use Koha::Acquisition::Bookseller;
+use Koha::ERM::UserRoles;
 use Koha::ERM::Documents;
 
 =head1 NAME
@@ -33,6 +34,31 @@ Koha::ERM::License - Koha ERM License Object class
 =head2 Class Methods
 
 =cut
+
+=head3 user_roles
+
+Returns the user roles for this license
+
+=cut
+
+sub user_roles {
+    my ( $self, $user_roles ) = @_;
+
+    if ( $user_roles ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->user_roles->delete;
+
+                for my $user_role (@$user_roles) {
+                    $self->_result->add_to_erm_user_roles($user_role);
+                }
+            }
+        );
+    }
+    my $user_roles_rs = $self->_result->erm_user_roles;
+    return Koha::ERM::UserRoles->_new_from_dbic($user_roles_rs);
+}
 
 =head3 documents
 

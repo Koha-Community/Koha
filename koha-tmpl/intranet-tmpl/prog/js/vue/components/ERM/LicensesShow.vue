@@ -66,6 +66,33 @@
                         <label>{{ $__("Ended on") }}:</label>
                         <span>{{ format_date(license.ended_on) }}</span>
                     </li>
+                    <li v-if="license.user_roles.length">
+                        <label>{{ $__("Users") }}</label>
+                        <table>
+                            <thead>
+                                <th>{{ $__("Name") }}</th>
+                                <th>{{ $__("Role") }}</th>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(
+                                        role, counter
+                                    ) in license.user_roles"
+                                    v-bind:key="counter"
+                                >
+                                    <td>{{ patron_to_html(role.patron) }}</td>
+                                    <td>
+                                        {{
+                                            get_lib_from_av(
+                                                "av_user_roles",
+                                                role.role
+                                            )
+                                        }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
                     <li v-if="license.documents.length">
                         <label>{{ $__("Documents") }}</label>
                         <div id="license_documents">
@@ -123,12 +150,14 @@ import { fetchLicense } from "../../fetch"
 export default {
     setup() {
         const format_date = $date
+        const patron_to_html = $patron_to_html
 
         const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
             format_date,
+            patron_to_html,
             get_lib_from_av,
         }
     },
@@ -142,6 +171,7 @@ export default {
                 description: "",
                 type: "",
                 status: "",
+                user_roles: [],
                 started_on: undefined,
                 ended_on: undefined,
             },
