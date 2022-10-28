@@ -1560,23 +1560,25 @@ sub PrepareItemrecordDisplay {
 }
 
 sub ToggleNewStatus {
-    my ( $params ) = @_;
-    my @rules = @{ $params->{rules} };
+    my ($params)    = @_;
+    my @rules       = @{ $params->{rules} };
     my $report_only = $params->{report_only};
 
     my $dbh = C4::Context->dbh;
     my @errors;
-    my @item_columns = map { "items.$_" } Koha::Items->columns;
+    my @item_columns       = map { "items.$_" } Koha::Items->columns;
     my @biblioitem_columns = map { "biblioitems.$_" } Koha::Biblioitems->columns;
+    my @biblio_columns     = map { "biblio.$_" } Koha::Biblios->columns;
     my $report;
-    for my $rule ( @rules ) {
+    for my $rule (@rules) {
         my $age = $rule->{age};
+
         # Default to using items.dateaccessioned if there's an old item modification rule
         # missing an agefield value
-        my $agefield = $rule->{agefield} ? $rule->{agefield} : 'items.dateaccessioned';
-        my $conditions = $rule->{conditions};
+        my $agefield      = $rule->{agefield} ? $rule->{agefield} : 'items.dateaccessioned';
+        my $conditions    = $rule->{conditions};
         my $substitutions = $rule->{substitutions};
-        foreach ( @$substitutions ) {
+        foreach (@$substitutions) {
             ( $_->{item_field} ) = ( $_->{field} =~ /items\.(.*)/ );
         }
         my @params;
@@ -1585,19 +1587,18 @@ sub ToggleNewStatus {
             SELECT items.*
             FROM items
             LEFT JOIN biblioitems ON biblioitems.biblionumber = items.biblionumber
+            LEFT JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
             WHERE 1
         |;
-        for my $condition ( @$conditions ) {
+        for my $condition (@$conditions) {
             next unless $condition->{field};
-            if (
-                 grep { $_ eq $condition->{field} } @item_columns
-              or grep { $_ eq $condition->{field} } @biblioitem_columns
-            ) {
+            if (   grep { $_ eq $condition->{field} } @item_columns
+                or grep { $_ eq $condition->{field} } @biblioitem_columns
+                or grep { $_ eq $condition->{field} } @biblio_columns )
+            {
                 if ( $condition->{value} =~ /\|/ ) {
                     my @values = split /\|/, $condition->{value};
-                    $query .= qq| AND $condition->{field} IN (|
-                        . join( ',', ('?') x scalar @values )
-                        . q|)|;
+                    $query .= qq| AND $condition->{field} IN (| . join( ',', ('?') x scalar @values ) . q|)|;
                     push @params, @values;
                 } else {
                     $query .= qq| AND $condition->{field} = ?|;
@@ -1610,16 +1611,18 @@ sub ToggleNewStatus {
             push @params, $age;
         }
         my $sth = $dbh->prepare($query);
-        $sth->execute( @params );
+        $sth->execute(@params);
         while ( my $values = $sth->fetchrow_hashref ) {
             my $biblionumber = $values->{biblionumber};
-            my $itemnumber = $values->{itemnumber};
-            my $item = Koha::Items->find($itemnumber);
-            for my $substitution ( @$substitutions ) {
+            my $itemnumber   = $values->{itemnumber};
+            my $item         = Koha::Items->find($itemnumber);
+            for my $substitution (@$substitutions) {
                 my $field = $substitution->{item_field};
                 my $value = $substitution->{value};
                 next unless $substitution->{field};
-                next if ( defined $values->{ $substitution->{item_field} } and $values->{ $substitution->{item_field} } eq $substitution->{value} );
+                next
+                    if ( defined $values->{ $substitution->{item_field} }
+                    and $values->{ $substitution->{item_field} } eq $substitution->{value} );
                 $item->$field($value);
                 push @{ $report->{$itemnumber} }, $substitution;
             }

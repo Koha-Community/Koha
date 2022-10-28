@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use MARC::Record;
 use MARC::Field;
 use DateTime;
@@ -46,9 +46,9 @@ $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 my $record = MARC::Record->new();
 $record->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-    MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
-    MARC::Field->new('942', ' ', ' ', c => 'ITEMTYPE_T'),
+    MARC::Field->new( '100', ' ', ' ', a => 'Moffat, Steven' ),
+    MARC::Field->new( '245', ' ', ' ', a => 'Silence in the library', h => 'Book' ),
+    MARC::Field->new( '942', ' ', ' ', c => 'ITEMTYPE_T' ),
 );
 my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, $frameworkcode);
 
@@ -329,6 +329,31 @@ $rules[0]->{age} = 2;
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = Koha::Items->find( $itemnumber );
 is( $modified_item->new_status, 'agefield_new_value', q|ToggleNewStatus: Age = 2, agefield = 'items.datelastseen' : The new_status value is updated|);
+
+# Condition on biblio column
+@rules = (
+    {
+        # does not exist
+        conditions => [
+            {
+                field => 'biblio.medium',
+                value => 'Book',
+            },
+        ],
+        substitutions => [
+            {
+                field => 'items.new_status',
+                value => 'new_updated_value_biblio',
+            },
+        ],
+        age => '0',
+    },
+);
+
+C4::Items::ToggleNewStatus( { rules => \@rules } );
+
+$modified_item = Koha::Items->find( $itemnumber );
+is( $modified_item->new_status, 'new_updated_value_biblio', q|ToggleNewStatus: conditions on biblio|);
 
 # Run twice
 t::lib::Mocks::mock_preference('CataloguingLog', 1);
