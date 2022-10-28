@@ -14,7 +14,27 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+cy.get_agreements_to_relate = () => {
+    return [
+        {
+            agreement_id: 2,
+            description: "a second agreement",
+            name: "second agreement name"
+        },
+        {
+            agreement_id: 3,
+            description: "a third agreement",
+            name: "third agreement name"
+        },
+        {
+            agreement_id: 4,
+            description: "a fourth agreement",
+            name: "fourth agreement name"
+        },
+    ]
+}

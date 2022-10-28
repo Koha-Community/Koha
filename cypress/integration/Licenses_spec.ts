@@ -17,7 +17,17 @@ function get_license() {
         status: "active",
         started_on: dates["today_iso"],
         ended_on: dates["tomorrow_iso"],
-        documents: [],
+        documents: [
+            {
+                license_id:1,
+                file_description: "file description",
+                file_name: "file.json",
+                notes: "file notes",
+                physical_location: "file physical location",
+                uri: "file uri",
+                uploaded_on: "2022-10-27T11:57:02+00:00"
+            }
+        ],
     };
 }
 
@@ -94,6 +104,16 @@ describe("License CRUD operations", () => {
             .next("span")
             .click();
 
+        // Add new document
+        cy.get("#documents").contains("Add new document").click();
+        cy.get("#document_0 input[id=file_0]").click();
+        cy.get('#document_0 input[id=file_0]').selectFile('cypress/fixtures/file.json');
+        cy.get("#document_0 .file_information span").contains("file.json");
+        cy.get('#document_0 input[id=file_description_0]').type('file description');
+        cy.get('#document_0 input[id=physical_location_0]').type('file physical location');
+        cy.get('#document_0 input[id=uri_0]').type('file URI');
+        cy.get('#document_0 input[id=notes_0]').type('file notes');
+
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/licenses", {
             statusCode: 500,
@@ -148,6 +168,9 @@ describe("License CRUD operations", () => {
         cy.get("#license_status .vs__selected").contains("Active");
         cy.get("#started_on").invoke("val").should("eq", dates["today_iso"]);
         cy.get("#ended_on").invoke("val").should("eq", dates["tomorrow_iso"]);
+
+        // Test related document
+        cy.get("#document_0 .file_information span").contains("file.json" );
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/licenses/*", {

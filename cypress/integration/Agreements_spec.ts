@@ -34,11 +34,86 @@ function get_agreement() {
             },
         ],
         user_roles: [],
-        agreement_licenses: [],
-        agreement_relationships: [],
+        agreement_licenses: [
+            {
+                agreement_id: 1,
+                agreement_license_id: 3,
+                license: {
+                    description: "license description",
+                    license_id: 1,
+                    name: "license name",
+                    status: "expired",
+                    type: "alliance"
+                },
+                license_id:1,
+                notes: "license notes",
+                physical_location: "cupboard",
+                status: "controlling",
+                uri: "license uri"
+            },
+            {
+                agreement_id: 1,
+                agreement_license_id: 4,
+                license: {
+                    description: "second license description",
+                    license_id: 2,
+                    name: "second license name",
+                    status: "expired",
+                    type: "alliance"
+                },
+                license_id:2,
+                notes: "second license notes",
+                physical_location: "cupboard",
+                status: "future",
+                uri: "license uri"
+            }
+        ],
+        agreement_relationships: [
+            {
+                agreement_id: 1,
+                notes: 'related agreement notes',
+                related_agreement: {
+                    agreement_id: 2,
+                    description: "agreement description",
+                    name: "agreement name"
+                },
+                related_agreement_id: 2,
+                relationship: "supersedes"
+            }
+        ],
         agreement_packages: [],
-        documents: [],
+        documents: [
+            {
+                agreement_id:1,
+                file_description: "file description",
+                file_name: "file.json",
+                notes: "file notes",
+                physical_location: "file physical location",
+                uri: "file uri",
+                uploaded_on: "2022-10-27T11:57:02+00:00"
+            }
+        ],
     };
+}
+
+function get_licenses_to_relate() {
+    return [
+        {
+            license_id: 1,
+            description: "a license",
+            name: "first license name"
+        },
+        {
+            license_id: 2,
+            description: "a second license",
+            name: "second license name"
+        },
+        {
+            license_id: 3,
+            description: "a third license",
+            name: "third license name"
+        },
+    ]
 }
 
 describe("Agreement CRUD operations", () => {
@@ -185,8 +260,15 @@ describe("Agreement CRUD operations", () => {
             "There are no other agreements created yet"
         );
 
-        cy.get("#documents").contains("Add new document");
-        // TODO Test document upload
+        // Add new document
+        cy.get("#documents").contains("Add new document").click();
+        cy.get("#document_0 input[id=file_0]").click();
+        cy.get('#document_0 input[id=file_0]').selectFile('cypress/fixtures/file.json');
+        cy.get("#document_0 .file_information span").contains("file.json");
+        cy.get('#document_0 input[id=file_description_0]').type('file description');
+        cy.get('#document_0 input[id=physical_location_0]').type('file physical location');
+        cy.get('#document_0 input[id=uri_0]').type('file URI');
+        cy.get('#document_0 input[id=notes_0]').type('file notes');
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/agreements", {
@@ -212,36 +294,96 @@ describe("Agreement CRUD operations", () => {
             statusCode: 200,
             body: [{ agreement_id: 1, description: "an existing agreement" }],
         });
+
+        // Add new license
+        let licenses_to_relate = get_licenses_to_relate();
+        let related_license = agreement.agreement_licenses[0];
         cy.intercept("GET", "/api/v1/erm/licenses", {
             statusCode: 200,
-            body: [{ license_id: 1, description: "a license" }],
+            body: licenses_to_relate,
         });
         cy.visit("/cgi-bin/koha/erm/agreements/add");
-        cy.get("#agreement_licenses").contains(
-            "Add new license"
+        cy.get("#agreement_licenses").contains("Add new license").click();
+        cy.get("#agreement_license_0").contains("Agreement license 1");
+        cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
+            related_license.license.name
         );
-        cy.get("#agreement_relationships").contains(
-            "Add new related agreement"
+        cy.get("#agreement_license_0 #license_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first license suggestion
+        cy.get("#agreement_license_0 #license_status_0 .vs__search").type(
+            related_license.status + "{enter}",
+            { force: true }
         );
+        cy.get("#agreement_license_0 #license_location_0 .vs__search").type(
+            related_license.physical_location + "{enter}",
+            { force: true }
+        );
+        cy.get("#agreement_license_0 #license_notes_0").type(related_license.notes);
+        cy.get("#agreement_license_0 #license_uri_0").type(related_license.uri);
 
+        // Add new related agreement
+        let related_agreement = agreement.agreement_relationships[0];
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: cy.get_agreements_to_relate(),
+        });
+        cy.visit("/cgi-bin/koha/erm/agreements/add");
+        cy.get("#agreement_relationships").contains("Add new related agreement").click();
+        cy.get("#related_agreement_0").contains("Related agreement 1");
+        cy.get("#related_agreement_0 #related_agreement_id_0 .vs__search").type(
+            related_agreement.related_agreement.name
+        );
+        cy.get("#related_agreement_0 #related_agreement_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first agreement suggestion
+        cy.get("#related_agreement_0 #related_agreement_notes_0").type(related_agreement.notes);
+        cy.get("#related_agreement_0 #related_agreement_relationship_0 .vs__search").type(
+            related_agreement.relationship + "{enter}",
+            { force: true }
+        );
     });
 
     it("Edit agreement", () => {
+        let licenses_to_relate = get_licenses_to_relate();
         let agreement = get_agreement();
         let agreements = [agreement];
-        // Click the 'Edit' button from the list
-        cy.intercept("GET", "/api/v1/erm/agreements*", {
+
+        // Intercept initial /agreements request once
+        cy.intercept(
+            {
+                method: "GET",
+                url: "/api/v1/erm/agreements",
+                times: 1
+            },
+            {
+                body: agreements
+            }
+        );
+
+        // Intercept follow-up 'search' request after entering /agreements
+        cy.intercept("GET", "/api/v1/erm/agreements?_page*", {
             statusCode: 200,
             body: agreements,
             headers: {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-single-agreement-search-result");
+        cy.visit("/cgi-bin/koha/erm/agreements");
+
+        // Intercept request after edit click
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
             "get-agreement"
         );
-        cy.visit("/cgi-bin/koha/erm/agreements");
+        // Intercept related licenses request after entering agreement edit
+        cy.intercept("GET", "/api/v1/erm/licenses", {
+            statusCode: 200,
+            body: licenses_to_relate,
+        }).as("get-related-licenses");
+        // Intercept related agreements request after entering agreement edit
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: cy.get_agreements_to_relate(),
+        }).as("get-related-agreements");
+
+        // Click the 'Edit' button from the list
         cy.get("#agreements_list table tbody tr:first")
             .contains("Edit")
             .click();
@@ -267,6 +409,12 @@ describe("Agreement CRUD operations", () => {
             .invoke("val")
             .should("eq", dates["tomorrow_iso"]);
         cy.get("#notes_1").should("have.value", "this is a note");
+
+        //Test related content
+        cy.get("#agreement_license_0 #license_id_0 .vs__selected").contains("first license name");
+        cy.get("#agreement_license_1 #license_id_1 .vs__selected").contains("second license name");
+        cy.get("#document_0 .file_information span").contains("file.json" );
+        cy.get("#related_agreement_0 #related_agreement_id_0 .vs__selected").contains("agreement name");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/agreements/*", {

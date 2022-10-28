@@ -8,7 +8,17 @@ function get_package() {
         name: "package 1",
         package_type: "complete",
         content_type: "Print",
-        package_agreements: [],
+        package_agreements: [
+            {
+                agreement: {
+                    agreement_id: 2,
+                    description: "agreement description",
+                    name: "agreement name"
+                },
+                agreement_id: 2,
+                package_id: 1
+            }
+        ],
         resources_count: 0,
     };
 }
@@ -87,7 +97,6 @@ describe("Package CRUD operations", () => {
         cy.get("#package_agreements").contains(
             "There are no agreements created yet"
         );
-        // FIXME Test with agreements
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
@@ -107,13 +116,19 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog message']").contains("Package created");
 
-        // Link with an agreement
+        // Add new related agreement
+        let related_agreement = erm_package.package_agreements[0];
         cy.intercept("GET", "/api/v1/erm/agreements", {
             statusCode: 200,
-            body: [{ package_id: 1, description: "an agreement" }],
+            body: cy.get_agreements_to_relate(),
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/add");
-        cy.get("#package_agreements").contains("Add new agreement");
+        cy.get("#package_agreements").contains("Add new agreement").click();
+        cy.get("#package_agreement_0").contains("Agreement 1");
+        cy.get("#agreement_id_0 .vs__search").type(
+            related_agreement.agreement.name
+        );
+        cy.get("#agreement_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first agreement suggestion
     });
 
     it("Edit package", () => {
@@ -134,6 +149,11 @@ describe("Package CRUD operations", () => {
             erm_package
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        // Intercept related agreements request after entering agreement edit
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: cy.get_agreements_to_relate(),
+        }).as("get-related-agreements");
         cy.get("#packages_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-package");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
@@ -143,6 +163,9 @@ describe("Package CRUD operations", () => {
         cy.get("#package_name").should("have.value", erm_package.name);
         cy.get("#package_type .vs__selected").contains("Complete");
         cy.get("#package_content_type .vs__selected").contains("Print");
+
+        //Test related content
+        cy.get("#package_agreement_0 #agreement_id_0 .vs__selected").contains("second agreement name");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
