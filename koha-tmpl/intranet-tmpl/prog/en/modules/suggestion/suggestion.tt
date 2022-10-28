@@ -31,7 +31,7 @@
                 font-size: 80%;
                 text-decoration: none;
             }
-            fieldset.brief ol {
+            #limits fieldset.brief {
                 display: none;
             }
             .overlay {
@@ -880,9 +880,13 @@
                                 </table> <!-- /#table_[% loop.count | html %] -->
 
                                 <div class="row">
-                                    <h2 style="padding-left:1em;">Change selected suggestions</h2>
+                                    <div class="col-sm-12">
+                                        <h2>Change selected suggestions</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-4">
-                                        <fieldset>
+                                        <fieldset class="brief">
                                             <div id="select-reason[% loop.index | html %]">
                                                 <label for="STATUSreason[% loop.index | html %]">Mark selected as: </label>
                                                 <select name="STATUS" id="STATUSreason[% loop.index | html %]">
@@ -941,46 +945,46 @@
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-default btn-xs" value="update_status">Submit</button>
+                                                <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
                                             </fieldset>
                                         </fieldset>
                                     </div> <!-- /.col-sm-4 -->
 
                                     <div class="col-sm-4">
-                                        <fieldset>
-                                            <label>
+                                        <fieldset class="brief">
+                                            <label id="suggestion_itemtype">
                                                 Update item types with:
-                                                [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
                                             </label>
+                                            [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-default btn-xs" value="update_itemtype">Submit</button>
+                                                <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
                                             </fieldset>
                                         </fieldset>
                                     </div> <!-- /.col-sm-4 -->
 
                                     <div class="col-sm-2">
-                                        <fieldset>
-                                            <span class="label">Update manager</span><br/>
+                                        <fieldset class="brief">
+                                            <span class="label">Update manager</span>
                                             <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
                                             <span id="managedby_name[% loop.count | html %]"></span>
                                             <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-default btn-xs" value="update_manager">Submit</button>
+                                                <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
                                             </fieldset>
                                         </fieldset>
                                     </div> <!-- /.col-sm-2 -->
 
                                     <div class="col-sm-2">
-                                        <fieldset>
+                                        <fieldset class="brief">
                                             <span class="label">Delete selected</span>
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-default btn-xs" value="delete">Delete</button>
+                                                <button type="submit" class="btn btn-primary" value="delete">Delete</button>
                                             </fieldset>
                                         </fieldset>
                                     </div> <!-- /.col-sm-2 -->
@@ -1007,10 +1011,11 @@
                         <form name="suggestionfilter" action="suggestion.pl" method="get">
                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                             <fieldset class="brief">
-                                <ol style="display:block;">
+                                <h4>Organize by:</h4>
+                                <ol>
                                     <li>
-                                        <label for="displayby">Organize by: </label>
-                                        <select name="displayby" id="displayby" style="width:auto;">
+                                        <label for="displayby" class="sr-only">Organize by: </label>
+                                        <select name="displayby" id="displayby">
                                             [% IF ( displayby == "STATUS" ) %]
                                                 <option value="STATUS" selected="selected">Status</option>
                                             [% ELSE %]
@@ -1037,197 +1042,204 @@
                                                 <option value="acceptedby">Accepted by</option>
                                             [% END %]
                                         </select>
-                                        <input type="submit" value="Go" />
                                     </li>
                                 </ol>
+                                <fieldset class="action">
+                                    <input type="submit" value="Go" />
+                                </fieldset>
                             </fieldset> <!-- /.brief -->
 
-                            <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
+                            <fieldset class="brief">
+                                <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
 
-                            <div id="limits">
-                                <fieldset class="brief">
-                                    <h4 class="local_collapse"><a href="#">Bibliographic information</a></h4>
-                                    <ol>
-                                        <li>
-                                            <label for="title"> Title:</label>
-                                            <input type="text" id="title" name="title" value="[% title | html %]" />
-                                        </li>
-                                        <li>
-                                            <label for="author"> Author:</label>
-                                            <input type="text" id="author" name="author" value="[% author | html %]" />
-                                        </li>
-                                        <li>
-                                            <label for="isbn"> ISBN:</label>
-                                            <input type="text" id="isbn"  name="isbn" value="[% isbn | html %]" />
-                                        </li>
-                                        <li>
-                                            <label for="publishercode"> Publisher:</label>
-                                            <input type="text" id="publishercode" name="publishercode" value="[% publishercode | html %]" />
-                                        </li>
-                                        <li>
-                                            <label for="copyrightdate_filter"> Copyright date:</label>
-                                            <input type="text" id="copyrightdate_filter" name="copyrightdate" value="[% copyrightdate | html %]" />
-                                        </li>
-                                        <li>
-                                            <label for="collectiontitle"> Collection title:</label>
-                                            <input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle | html %]" /></li><li><input type="submit" value="Go" />
-                                        </li>
-                                    </ol>
-                                </fieldset> <!-- /.brief -->
-
-                                <fieldset class="brief">
-                                    <h4 class="local_collapse"><a href="#">Suggestion information</a></h4>
-                                    <ol>
-                                        <li>
-                                            <label for="archived" style="display: inline;">Include archived:</label>
-                                            [% IF filter_archived %]
-                                                <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
-                                            [% ELSE %]
-                                                <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            <label for="STATUS[% loop.index | html %]"> Status:</label>
-                                            <select name="STATUS" id="STATUS[% loop.index | html %]">
-                                                <option value="">Any</option>
-                                                [% IF (statusselected_ASKED ) %]
-                                                    <option value="ASKED" selected="selected">Pending</option>
-                                                [% ELSE %]
-                                                    <option value="ASKED">Pending</option>
-                                                [% END %]
-
-                                                [% IF (statusselected_ACCEPTED ) %]
-                                                    <option value="ACCEPTED" selected="selected">Accepted</option>
-                                                [% ELSE %]
-                                                    <option value="ACCEPTED">Accepted</option>
-                                                [% END %]
-
-                                                [% IF (statusselected_CHECKED ) %]
-                                                    <option value="CHECKED" selected="selected">Checked</option>
-                                                [% ELSE %]
-                                                    <option value="CHECKED">Checked</option>
-                                                [% END %]
-
-                                                [% IF ( statusselected_REJECTED ) %]
-                                                    <option value="REJECTED" selected="selected">Rejected</option>
-                                                [% ELSE %]
-                                                    <option value="REJECTED">Rejected</option>
-                                                [% END %]
-
-                                                [% IF ( statusselected_ORDERED ) %]
-                                                    <option value="ORDERED" selected="selected">Ordered</option>
-                                                [% ELSE %]
-                                                    <option value="ORDERED">Ordered</option>
-                                                [% END %]
-
-                                                [% FOREACH s IN SuggestionStatuses %]
-                                                    [% IF s.authorised_value == selected_status %]
-                                                        <option value="[% s.authorised_value | html %]" selected="selected">[% s.lib | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                        </li>
-
-                                        <li>
-                                            <label for="suggestedby"> Suggested by:</label>
-                                            <select id="suggestedby" name="suggestedby">
-                                                <option value="">Any</option>
-                                                [% FOREACH suggestedby_loo IN suggestedby_loop %]
-                                                    [% IF ( suggestedby_loo.selected ) %]
-                                                        <option value="[% suggestedby_loo.code | html %]" selected="selected">[% suggestedby_loo.desc | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% suggestedby_loo.code | html %]">[% suggestedby_loo.desc | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="suggesteddate_from">Suggested date from:</label>
-                                            <input type="text" id="suggesteddate_from" size="10" name="suggesteddate_from" value="[% suggesteddate_from | html %]" data-date_to="suggesteddate_to" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="suggesteddate_to">To:</label>
-                                            <input type="text" id="suggesteddate_to" size="10" name="suggesteddate_to" value="[% suggesteddate_to | html %]" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="managedby"> Managed by:</label>
-                                            <select id="managedby" name="managedby">
-                                                <option value="">Any</option>
-                                                [% FOREACH managedby_loo IN managedby_loop %]
-                                                    [% IF ( managedby_loo.selected ) %]
-                                                        <option value="[% managedby_loo.code | html %]" selected="selected">[% managedby_loo.desc | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% managedby_loo.code | html %]">[% managedby_loo.desc | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="manageddate_from">Management date from:</label>
-                                            <input type="text" id="manageddate_from" size="10" name="manageddate_from" value="[% manageddate_from | html %]" data-date_to="manageddate_to" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="manageddate_to">To:</label>
-                                            <input type="text" id="manageddate_to" size="10" name="manageddate_to" value="[% manageddate_to | html %]" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="acceptedby"> Accepted by:</label>
-                                            <select id="acceptedby" name="acceptedby">
-                                                <option value="">Any</option>
-                                                [% FOREACH acceptedby_loo IN acceptedby_loop %]
-                                                    [% IF ( acceptedby_loo.selected ) %]
-                                                        <option value="[% acceptedby_loo.code | html %]" selected="selected">[% acceptedby_loo.desc | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% acceptedby_loo.code | html %]">[% acceptedby_loo.desc | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <label for="accepteddate_from">Accepted date from:</label>
-                                            <input type="text" id="accepteddate_from" size="10" name="accepteddate_from" value="[% accepteddate_from | html %]" data-date_to="accepteddate_to" class="flatpickr" />
-                                        </li>
-                                        <li>
-                                            <label for="accepteddate_to">To:</label>
-                                            <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" class="flatpickr" />
-                                        </li>
-                                        <li>
+                                <div id="limits">
+                                    <h4 class="local_collapse"><a href="#" data-target="biblio_information">Bibliographic information</a></h4>
+                                    <fieldset class="brief" id="biblio_information">
+                                        <ol>
+                                            <li>
+                                                <label for="title"> Title:</label>
+                                                <input type="text" id="title" name="title" value="[% title | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="author"> Author:</label>
+                                                <input type="text" id="author" name="author" value="[% author | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="isbn"> ISBN:</label>
+                                                <input type="text" id="isbn"  name="isbn" value="[% isbn | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="publishercode"> Publisher:</label>
+                                                <input type="text" id="publishercode" name="publishercode" value="[% publishercode | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="copyrightdate_filter"> Copyright date:</label>
+                                                <input type="text" id="copyrightdate_filter" name="copyrightdate" value="[% copyrightdate | html %]" />
+                                            </li>
+                                            <li>
+                                                <label for="collectiontitle"> Collection title:</label>
+                                                <input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle | html %]" />
+                                            </li>
+                                        </ol>
+                                        <fieldset class="action">
                                             <input type="submit" value="Go" />
-                                        </li>
-                                    </ol>
-                                </fieldset>
+                                        </fieldset>
+                                    </fieldset> <!-- /#biblio_information -->
 
-                                <fieldset class="brief">
+                                    <h4 class="local_collapse"><a href="#" data-target="suggestion_information">Suggestion information</a></h4>
+                                    <fieldset class="brief" id="suggestion_information">
+                                        <ol>
+                                            <li>
+                                                <label for="archived" style="display: inline;">Include archived:</label>
+                                                [% IF filter_archived %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
+                                                [% END %]
+                                            </li>
+                                            <li>
+                                                <label for="STATUS[% loop.index | html %]"> Status:</label>
+                                                <select name="STATUS" id="STATUS[% loop.index | html %]">
+                                                    <option value="">Any</option>
+                                                    [% IF (statusselected_ASKED ) %]
+                                                        <option value="ASKED" selected="selected">Pending</option>
+                                                    [% ELSE %]
+                                                        <option value="ASKED">Pending</option>
+                                                    [% END %]
+
+                                                    [% IF (statusselected_ACCEPTED ) %]
+                                                        <option value="ACCEPTED" selected="selected">Accepted</option>
+                                                    [% ELSE %]
+                                                        <option value="ACCEPTED">Accepted</option>
+                                                    [% END %]
+
+                                                    [% IF (statusselected_CHECKED ) %]
+                                                        <option value="CHECKED" selected="selected">Checked</option>
+                                                    [% ELSE %]
+                                                        <option value="CHECKED">Checked</option>
+                                                    [% END %]
+
+                                                    [% IF ( statusselected_REJECTED ) %]
+                                                        <option value="REJECTED" selected="selected">Rejected</option>
+                                                    [% ELSE %]
+                                                        <option value="REJECTED">Rejected</option>
+                                                    [% END %]
+
+                                                    [% IF ( statusselected_ORDERED ) %]
+                                                        <option value="ORDERED" selected="selected">Ordered</option>
+                                                    [% ELSE %]
+                                                        <option value="ORDERED">Ordered</option>
+                                                    [% END %]
+
+                                                    [% FOREACH s IN SuggestionStatuses %]
+                                                        [% IF s.authorised_value == selected_status %]
+                                                            <option value="[% s.authorised_value | html %]" selected="selected">[% s.lib | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+
+                                            <li>
+                                                <label for="suggestedby"> Suggested by:</label>
+                                                <select id="suggestedby" name="suggestedby">
+                                                    <option value="">Any</option>
+                                                    [% FOREACH suggestedby_loo IN suggestedby_loop %]
+                                                        [% IF ( suggestedby_loo.selected ) %]
+                                                            <option value="[% suggestedby_loo.code | html %]" selected="selected">[% suggestedby_loo.desc | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% suggestedby_loo.code | html %]">[% suggestedby_loo.desc | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <label for="suggesteddate_from">Suggested date from:</label>
+                                                <input type="text" id="suggesteddate_from" size="10" name="suggesteddate_from" value="[% suggesteddate_from | html %]" data-date_to="suggesteddate_to" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="suggesteddate_to">To:</label>
+                                                <input type="text" id="suggesteddate_to" size="10" name="suggesteddate_to" value="[% suggesteddate_to | html %]" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="managedby"> Managed by:</label>
+                                                <select id="managedby" name="managedby">
+                                                    <option value="">Any</option>
+                                                    [% FOREACH managedby_loo IN managedby_loop %]
+                                                        [% IF ( managedby_loo.selected ) %]
+                                                            <option value="[% managedby_loo.code | html %]" selected="selected">[% managedby_loo.desc | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% managedby_loo.code | html %]">[% managedby_loo.desc | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <label for="manageddate_from">Management date from:</label>
+                                                <input type="text" id="manageddate_from" size="10" name="manageddate_from" value="[% manageddate_from | html %]" data-date_to="manageddate_to" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="manageddate_to">To:</label>
+                                                <input type="text" id="manageddate_to" size="10" name="manageddate_to" value="[% manageddate_to | html %]" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="acceptedby"> Accepted by:</label>
+                                                <select id="acceptedby" name="acceptedby">
+                                                    <option value="">Any</option>
+                                                    [% FOREACH acceptedby_loo IN acceptedby_loop %]
+                                                        [% IF ( acceptedby_loo.selected ) %]
+                                                            <option value="[% acceptedby_loo.code | html %]" selected="selected">[% acceptedby_loo.desc | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% acceptedby_loo.code | html %]">[% acceptedby_loo.desc | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <label for="accepteddate_from">Accepted date from:</label>
+                                                <input type="text" id="accepteddate_from" size="10" name="accepteddate_from" value="[% accepteddate_from | html %]" data-date_to="accepteddate_to" class="flatpickr" />
+                                            </li>
+                                            <li>
+                                                <label for="accepteddate_to">To:</label>
+                                                <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" class="flatpickr" />
+                                            </li>
+                                        </ol>
+                                        <fieldset class="action">
+                                            <input type="submit" value="Go" />
+                                        </fieldset>
+                                    </fieldset> <!-- /#suggestion_information -->
+
                                     <h4 class="local_collapse">
-                                        <a href="#">Acquisition information</a>
+                                        <a href="#" data-target="acquisition_information">Acquisition information</a>
                                     </h4>
-                                    <ol>
-                                        <li>
-                                            <label for="budgetid"> Book fund:</label>
-                                            <select name="budgetid" id="budgetid">
-                                                <option value="__ANY__">Any</option>
-                                                [% IF budgetid == '__NONE__' %]
-                                                    <option value="__NONE__" selected="selected">None</option>
-                                                [% ELSE %]
-                                                    <option value="__NONE__">None</option>
-                                                [% END %]
-                                                [% FOREACH budgetsloo IN budgetsloop %]
-                                                    [% IF ( budgetsloo.selected ) %]
-                                                        <option value="[% budgetsloo.budget_id | html %]" selected="selected">[% budgetsloo.budget_name | html %]</option>
+                                    <fieldset class="brief" id="acquisition_information">
+                                        <ol>
+                                            <li>
+                                                <label for="budgetid"> Book fund:</label>
+                                                <select name="budgetid" id="budgetid">
+                                                    <option value="__ANY__">Any</option>
+                                                    [% IF budgetid == '__NONE__' %]
+                                                        <option value="__NONE__" selected="selected">None</option>
                                                     [% ELSE %]
-                                                        <option value="[% budgetsloo.budget_id | html %]">[% budgetsloo.budget_name | html %]</option>
+                                                        <option value="__NONE__">None</option>
                                                     [% END %]
-                                                [% END %]
-                                            </select>
-                                        </li>
-                                        <li>
+                                                    [% FOREACH budgetsloo IN budgetsloop %]
+                                                        [% IF ( budgetsloo.selected ) %]
+                                                            <option value="[% budgetsloo.budget_id | html %]" selected="selected">[% budgetsloo.budget_name | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% budgetsloo.budget_id | html %]">[% budgetsloo.budget_name | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+                                        </ol>
+                                        <fieldset class="action">
                                             <input type="submit" value="Go" />
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </div> <!-- /#limits -->
+                                        </fieldset>
+                                    </fieldset> <!-- /#acquisition_information -->
+                                </div> <!-- /#limits -->
+                            </fieldset> <!-- /.brief -->
                         </form> <!-- /suggestionsfilter -->
 
                         [% INCLUDE 'acquisitions-menu.inc' %]
@@ -1379,9 +1391,11 @@
                     $(this).siblings("input[name='other_reason']").hide();
                     e.preventDefault();
                 });
-                $("h4.local_collapse a").click(function(){
-                    $(this).parent().parent().find("ol").toggle();
-                    return false;
+
+                $("h4.local_collapse a").on("click", function(e){
+                    e.preventDefault();
+                    const target = $(this).data("target");
+                    $("#" + target).toggle();
                 });
 
                 $("button[type='submit']").on("click", function(e) {

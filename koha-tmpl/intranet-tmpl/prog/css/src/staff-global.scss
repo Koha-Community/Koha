@@ -817,7 +817,6 @@ fieldset {
         }
     }
 
-
     &.brief {
         div {
             &.hint {
@@ -825,8 +824,12 @@ fieldset {
             }
         }
 
-        label {
+        label,
+        span.label {
+            display: block;
+            font-weight: bold;
             padding: .3em 0;
+            text-align: left;
 
             &.inline {
                 display: inline;
@@ -837,7 +840,7 @@ fieldset {
         }
 
         li {
-            margin-top: 1em;
+            margin-top: .5em;
 
             &:first-child {
                 margin-top: 0;
@@ -865,23 +868,15 @@ fieldset {
         ol,
         li {
             list-style-type: none;
-        }
-
-        span {
-            .label {
-                display: block;
-                font-weight: bold;
-                padding: .3em 0;
-                text-align: left;
-                white-space: normal;
-            }
+            padding-left: 0;
         }
 
         .action {
             margin: 0;
-            padding: .4em 0;
+            padding: 1em 0 0 0;
         }
     }
+
 
     ol {
         li {
