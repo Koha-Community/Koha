@@ -15,17 +15,19 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use File::Basename;
 use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 
-use File::Basename;
-
-use Koha::Account qw( add_credit );
-
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+
+use Koha::Database;
+use C4::Circulation qw();
+use Koha::CirculationRules;
+use Koha::Plugins::Methods;
+use Koha::Recalls;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
