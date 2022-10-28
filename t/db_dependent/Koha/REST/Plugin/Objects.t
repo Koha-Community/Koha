@@ -621,7 +621,8 @@ subtest 'objects.search helper, search_limited() tests' => sub {
 };
 
 subtest 'objects.find helper with expanded authorised values' => sub {
-    plan tests => 14;
+
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -670,17 +671,25 @@ subtest 'objects.find helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        '_fetch_authorised_values',
+        'api_av_mapping',
         sub {
-            my ($self) = @_;
+            my ($self, $params) = @_;
             use Koha::AuthorisedValues;
+
             my $av = Koha::AuthorisedValues->find(
                 {
                     authorised_value => $self->city_country,
                     category         => 'Countries'
                 }
             );
-            return { country => $av->unblessed };
+
+            return {
+                city_country => {
+                    category => $av->category,
+                    str      => ( $params->{public} ) ? $av->lib_opac : $av->lib,
+                    type     => 'av',
+                }
+            };
         }
     );
 
@@ -703,26 +712,30 @@ subtest 'objects.find helper with expanded authorised values' => sub {
         }
     );
 
-    $t->get_ok( '/cities/' . $manuel->cityid => { 'x-koha-av-expand' => 1 } )
+    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-av-expand' => 1 } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
-      ->json_has('/_authorised_values')
-      ->json_is( '/_authorised_values/country/lib' => $ar->lib );
+      ->json_has('/_str')
+      ->json_is( '/_str/country/type'     => 'av' )
+      ->json_is( '/_str/country/category' => $cat->category_name )
+      ->json_is( '/_str/country/str'      => $ar->lib );
 
-    $t->get_ok( '/cities/' . $manuel->cityid => { 'x-koha-av-expand' => 0 } )
+    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-av-expand' => 0 } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
-      ->json_hasnt('/_authorised_values');
+      ->json_hasnt('/_str');
 
-    $t->get_ok( '/cities/' . $manuela->cityid => { 'x-koha-av-expand' => 1 } )
+    $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-av-expand' => 1 } )
       ->status_is(200)->json_is( '/name' => 'Manuela' )
-      ->json_has('/_authorised_values')
-      ->json_is( '/_authorised_values/country/lib' => $us->lib );
+      ->json_has('/_str')
+      ->json_is( '/_str/country/type'     => 'av' )
+      ->json_is( '/_str/country/category' => $cat->category_name )
+      ->json_is( '/_str/country/str'      => $us->lib );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'objects.search helper with expanded authorised values' => sub {
 
-    plan tests => 20;
+    plan tests => 24;
 
     my $t = Test::Mojo->new;
 
@@ -771,19 +784,28 @@ subtest 'objects.search helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        '_fetch_authorised_values',
+        'api_av_mapping',
         sub {
-            my ($self) = @_;
+            my ($self, $params) = @_;
             use Koha::AuthorisedValues;
+
             my $av = Koha::AuthorisedValues->find(
                 {
                     authorised_value => $self->city_country,
                     category         => 'Countries'
                 }
             );
-            return { country => $av->unblessed };
+
+            return {
+                city_country => {
+                    category => $av->category,
+                    str      => ( $params->{public} ) ? $av->lib_opac : $av->lib,
+                    type     => 'av',
+                }
+            };
         }
     );
+
 
     $builder->build_object(
         {
@@ -808,17 +830,21 @@ subtest 'objects.search helper with expanded authorised values' => sub {
           { 'x-koha-av-expand' => 1 } )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
       ->json_is( '/0/name' => 'Manuel' )
-      ->json_has('/0/_authorised_values')
-      ->json_is( '/0/_authorised_values/country/lib' => $ar->lib )
+      ->json_has('/0/_str')
+      ->json_is( '/0/_str/country/str'      => $ar->lib )
+      ->json_is( '/0/_str/country/type'     => 'av' )
+      ->json_is( '/0/_str/country/category' => $cat->category_name )
       ->json_is( '/1/name' => 'Manuela' )
-      ->json_has('/1/_authorised_values')
-      ->json_is( '/1/_authorised_values/country/lib' => $us->lib );
+      ->json_has('/1/_str')
+      ->json_is( '/1/_str/country/str' => $us->lib )
+      ->json_is( '/1/_str/country/type'     => 'av' )
+      ->json_is( '/1/_str/country/category' => $cat->category_name );
 
     $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
           { 'x-koha-av-expand' => 0 } )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
-      ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_authorised_values')
-      ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_authorised_values');
+      ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_str')
+      ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_str');
 
 
     $schema->storage->txn_rollback;

@@ -555,8 +555,8 @@ sub to_api {
 
     # coded values handling
     my $avs = {};
-    if ( $params->{av_expand} and $self->can('_fetch_authorised_values') ) {
-        $avs = $self->_fetch_authorised_values;
+    if ( $params->{av_expand} and $self->can('api_av_mapping') ) {
+        $avs = $self->api_av_mapping($params);
     }
 
     # Remove forbidden attributes if required (including their coded values)
@@ -597,7 +597,7 @@ sub to_api {
         }
     }
 
-    $json_object->{_authorised_values} = $avs
+    $json_object->{_str} = $avs
       if $params->{av_expand};
 
     # Make sure we duplicate the $params variable to avoid

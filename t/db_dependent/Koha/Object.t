@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -226,7 +226,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 29;
+    plan tests => 30;
 
     $schema->storage->txn_begin;
 
@@ -421,6 +421,97 @@ subtest "to_api() tests" => sub {
                 );
             }
         }
+    };
+
+    subtest 'Authorised values expansion' => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # new category
+        my $category = $builder->build_object({ class => 'Koha::AuthorisedValueCategories' });
+        # add two countries
+        my $argentina = $builder->build_object(
+            {   class => 'Koha::AuthorisedValues',
+                value => {
+                    category => $category->category_name,
+                    lib      => 'AR (Argentina)',
+                    lib_opac => 'Argentina',
+                }
+            }
+        );
+        my $france = $builder->build_object(
+            {   class => 'Koha::AuthorisedValues',
+                value => {
+                    category => $category->category_name,
+                    lib      => 'FR (France)',
+                    lib_opac => 'France',
+                }
+            }
+        );
+
+        my $city_mock = Test::MockModule->new('Koha::City');
+        $city_mock->mock(
+            'api_av_mapping',
+            sub {
+                my ( $self, $params ) = @_;
+
+                my $av = Koha::AuthorisedValues->find(
+                    {
+                        authorised_value => $self->city_country,
+                        category         => $category->category_name,
+                    }
+                );
+
+                return {
+                    city_country => {
+                        category => $av->category,
+                        str      => ( $params->{public} ) ? $av->lib_opac : $av->lib,
+                        type     => 'av',
+                    }
+                };
+            }
+        );
+        $city_mock->mock( 'public_read_list', sub { return [ 'city_id', 'city_country', 'city_name', 'city_state' ] } );
+
+        my $cordoba = $builder->build_object(
+            {   class => 'Koha::Cities',
+                value => { city_country => $argentina->authorised_value, city_name => 'Cordoba' }
+            }
+        );
+        my $marseille = $builder->build_object(
+            {   class => 'Koha::Cities',
+                value => { city_country => $france->authorised_value, city_name => 'Marseille' }
+            }
+        );
+
+        my $mobj = $marseille->to_api( { av_expand => 1, public => 1 } );
+        my $cobj = $cordoba->to_api( { av_expand => 1, public => 0 } );
+
+        ok( exists $mobj->{_str}, '_str exists for Marseille' );
+        ok( exists $cobj->{_str}, '_str exists for Córdoba' );
+
+        is_deeply(
+            $mobj->{_str}->{country},
+            {
+                category => $category->category_name,
+                str      => $france->lib_opac,
+                type     => 'av',
+            },
+            'Authorised value for country expanded'
+        );
+        is_deeply(
+            $cobj->{_str}->{country},
+            {
+                category => $category->category_name,
+                str      => $argentina->lib,
+                type     => 'av'
+            },
+            'Authorised value for country expanded'
+        );
+
+        $schema->storage->txn_rollback;
     };
 
     $schema->storage->txn_rollback;
@@ -996,45 +1087,6 @@ subtest 'messages() and add_message() tests' => sub {
 
     isnt( $patron->object_messages, undef, '->messages initializes the array if required' );
     is( scalar @{ $patron->object_messages }, 0, '->messages returns an empty arrayref' );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'Authorised values expansion' => sub {
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    Koha::AuthorisedValues->search({category => 'Countries'})->delete;
-    Koha::AuthorisedValueCategories->search({category_name =>'Countries'})->delete;
-
-    my $cat = $builder->build_object({ class => 'Koha::AuthorisedValueCategories', value => {category_name =>'Countries'} });
-    my $fr = $builder->build_object({ class => 'Koha::AuthorisedValues', value => {authorised_value => 'FR', lib=>'France', category=>$cat->category_name} });
-    my $us = $builder->build_object({ class => 'Koha::AuthorisedValues', value => {authorised_value => 'US', lib=>'United States of America', category=>$cat->category_name} });
-    my $ar = $builder->build_object({ class => 'Koha::AuthorisedValues', value => {authorised_value => 'AR', lib=>'Argentina', category=>$cat->category_name} });
-
-    my $city_class = Test::MockModule->new('Koha::City');
-    $city_class->mock( '_fetch_authorised_values',
-        sub {
-            my ($self) = @_;
-            use Koha::AuthorisedValues;
-            my $av = Koha::AuthorisedValues->find({authorised_value => $self->city_country, category => 'Countries'});
-            return {country => $av->unblessed};
-        }
-    );
-
-    my $marseille = $builder->build_object({ class => 'Koha::Cities', value => {city_country => 'FR', city_name => 'Marseille'} });
-    my $cordoba = $builder->build_object({ class => 'Koha::Cities', value => {city_country => 'AR', city_name => 'Córdoba'} });
-
-    my $mobj = $marseille->to_api({av_expand => 1});
-    my $cobj = $cordoba->to_api({av_expand => 1});
-
-    isnt($mobj->{_authorised_values}, undef, '_authorised_values exists for Marseille');
-    isnt($cobj->{_authorised_values}, undef, '_authorised_values exists for Córdoba');
-
-    is($mobj->{_authorised_values}->{country}->{lib}, $fr->lib, 'Authorised value for country expanded');
-    is($cobj->{_authorised_values}->{country}->{lib}, $ar->lib, 'Authorised value for country expanded');
-
 
     $schema->storage->txn_rollback;
 };
