@@ -23,7 +23,7 @@
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
                         label="name"
-                        :reduce="(l) => l.license_id"
+                        :reduce="l => l.license_id"
                         :options="licenses"
                     >
                         <template #search="{ attributes, events }">
@@ -45,7 +45,7 @@
                         :id="`license_status_${counter}`"
                         v-model="agreement_license.status"
                         label="lib"
-                        :reduce="(av) => av.authorised_value"
+                        :reduce="av => av.authorised_value"
                         :options="av_agreement_license_statuses"
                     >
                         <template #search="{ attributes, events }">
@@ -67,7 +67,7 @@
                         :id="`license_location_${counter}`"
                         v-model="agreement_license.physical_location"
                         label="lib"
-                        :reduce="(av) => av.authorised_value"
+                        :reduce="av => av.authorised_value"
                         :options="av_agreement_license_location"
                     />
                 </li>
@@ -101,9 +101,9 @@
 </template>
 
 <script>
-import { fetchLicenses } from '../../fetch'
+import { fetchLicenses } from "../../fetch"
 export default {
-    name: 'AgreementLicenses',
+    name: "AgreementLicenses",
     data() {
         return {
             licenses: [],
@@ -115,7 +115,7 @@ export default {
         agreement_licenses: Array,
     },
     beforeCreate() {
-        fetchLicenses().then((licenses) => this.licenses = licenses)
+        fetchLicenses().then(licenses => (this.licenses = licenses))
     },
     methods: {
         addLicense() {
@@ -123,8 +123,8 @@ export default {
                 license_id: null,
                 status: null,
                 physical_location: null,
-                notes: '',
-                uri: '',
+                notes: "",
+                uri: "",
             })
         },
         deleteLicense(counter) {

@@ -25,7 +25,7 @@
                         :id="`resource_package_id_${counter}`"
                         v-model="resource.package_id"
                         label="name"
-                        :reduce="(p) => parseInt(p.package_id)"
+                        :reduce="p => parseInt(p.package_id)"
                         :options="packages"
                     >
                         <template #search="{ attributes, events }">
@@ -47,7 +47,7 @@
                         :id="`resource_vendor_id_${counter}`"
                         v-model="resource.vendor_id"
                         label="name"
-                        :reduce="(vendor) => vendor.id"
+                        :reduce="vendor => vendor.id"
                         :options="vendors"
                     />
                 </li>
@@ -92,14 +92,14 @@
 </template>
 
 <script>
-import { inject } from 'vue'
-import flatPickr from 'vue-flatpickr-component'
+import { inject } from "vue"
+import flatPickr from "vue-flatpickr-component"
 import { storeToRefs } from "pinia"
 import { fetchLocalPackages } from "../../fetch"
 
 export default {
     setup() {
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
         return { vendors }
     },
@@ -110,7 +110,7 @@ export default {
         }
     },
     beforeCreate() {
-        fetchLocalPackages().then((packages) => this.packages = packages)
+        fetchLocalPackages().then(packages => (this.packages = packages))
     },
     methods: {
         addPackage() {
@@ -119,7 +119,7 @@ export default {
                 vendor_id: null,
                 started_on: null,
                 ended_on: null,
-                proxy: '',
+                proxy: "",
             })
         },
         deletePackage(counter) {
@@ -130,6 +130,6 @@ export default {
         resources: Array,
     },
     components: { flatPickr },
-    name: 'EHoldingsLocalTitlesFormAddResources',
+    name: "EHoldingsLocalTitlesFormAddResources",
 }
 </script>

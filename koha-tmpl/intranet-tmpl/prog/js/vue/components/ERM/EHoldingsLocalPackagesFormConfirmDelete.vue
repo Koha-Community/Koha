@@ -55,31 +55,32 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/eholdings/local/packages/' + this.erm_package.package_id
+            let apiUrl =
+                "/api/v1/erm/eholdings/local/packages/" +
+                this.erm_package.package_id
 
             const options = {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
+                    "Content-Type": "application/json;charset=utf-8",
                 },
             }
 
             fetch(apiUrl, options)
-                .then(
-                    (response) => {
-                        if (response.status == 204) {
-                            setMessage(this.$__("Package deleted"))
-                            this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
-                        } else {
-                            setError(response.message || response.statusText)
-                        }
+                .then(response => {
+                    if (response.status == 204) {
+                        setMessage(this.$__("Package deleted"))
+                        this.$router.push(
+                            "/cgi-bin/koha/erm/eholdings/local/packages"
+                        )
+                    } else {
+                        setError(response.message || response.statusText)
                     }
-                ).catch(
-                    (error) => {
-                        setError(error)
-                    }
-                )
-        }
+                })
+                .catch(error => {
+                    setError(error)
+                })
+        },
     },
     name: "EHoldingsLocalPackagesFormConfirmDelete",
 }

@@ -3,7 +3,9 @@
         <div id="filters">
             <a href="#" @click.prevent="toggle_filters($event)"
                 ><i class="fa fa-search"></i>
-                {{ display_filters ? $__("Hide filters") : $__("Show filters") }}
+                {{
+                    display_filters ? $__("Hide filters") : $__("Show filters")
+                }}
             </a>
             <fieldset v-if="display_filters">
                 <ol>
@@ -58,14 +60,13 @@
 </template>
 
 <script>
-
-import { inject, createVNode, render } from 'vue'
+import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
@@ -91,10 +92,14 @@ export default {
     },
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id)
+            this.$router.push(
+                "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id
+            )
         },
         filter_table: function () {
-            $('#' + this.table_id).DataTable().draw()
+            $("#" + this.table_id)
+                .DataTable()
+                .draw()
         },
         toggle_filters: function (e) {
             this.display_filters = !this.display_filters
@@ -107,7 +112,9 @@ export default {
             let filters = this.filters
             let table_id = this.table_id
 
-            window['av_title_publication_types'] = map_av_dt_filter('av_title_publication_types')
+            window["av_title_publication_types"] = map_av_dt_filter(
+                "av_title_publication_types"
+            )
 
             let additional_filters = {
                 publication_title: function () {
@@ -121,61 +128,94 @@ export default {
                 },
             }
 
-            $('#' + table_id).kohaTable({
-                ajax: {
-                    url: "/api/v1/erm/eholdings/ebsco/packages/" + package_id + "/resources",
-                },
-                ordering: false,
-                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
-                embed: ['title'],
-                autoWidth: false,
-                columns: [
-                    {
-                        title: __("Name"),
-                        data: "title.publication_title",
-                        searchable: false,
-                        orderable: false,
-                        render: function (data, type, row, meta) {
-                            // Rendering done in drawCallback
-                            return ""
-                        }
+            $("#" + table_id).kohaTable(
+                {
+                    ajax: {
+                        url:
+                            "/api/v1/erm/eholdings/ebsco/packages/" +
+                            package_id +
+                            "/resources",
                     },
-                    {
-                        title: __("Publication type"),
-                        data: "title.publication_type",
-                        searchable: false,
-                        orderable: false,
-                        render: function (data, type, row, meta) {
-                            return escape_str(get_lib_from_av("av_title_publication_types", row.title.publication_type))
-                        }
-                    },
-                ],
-                drawCallback: function (settings) {
-
-                    var api = new $.fn.dataTable.Api(settings)
-
-                    $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                        let tr = $(this).parent()
-                        let row = api.row(tr).data()
-                        if (!row) return // Happen if the table is empty
-                        let n = createVNode("a", {
-                            role: "button",
-                            href: "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + row.resource_id,
-                            onClick: (e) => {
-                                e.preventDefault()
-                                show_resource(row.resource_id)
-                            }
+                    ordering: false,
+                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                    aLengthMenu: [
+                        [10, 20, 50, 100],
+                        [10, 20, 50, 100],
+                    ],
+                    embed: ["title"],
+                    autoWidth: false,
+                    columns: [
+                        {
+                            title: __("Name"),
+                            data: "title.publication_title",
+                            searchable: false,
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                // Rendering done in drawCallback
+                                return ""
+                            },
                         },
-                            `${row.title.publication_title}`
+                        {
+                            title: __("Publication type"),
+                            data: "title.publication_type",
+                            searchable: false,
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                return escape_str(
+                                    get_lib_from_av(
+                                        "av_title_publication_types",
+                                        row.title.publication_type
+                                    )
+                                )
+                            },
+                        },
+                    ],
+                    drawCallback: function (settings) {
+                        var api = new $.fn.dataTable.Api(settings)
+
+                        $.each(
+                            $(this).find("tbody tr td:first-child"),
+                            function (index, e) {
+                                let tr = $(this).parent()
+                                let row = api.row(tr).data()
+                                if (!row) return // Happen if the table is empty
+                                let n = createVNode(
+                                    "a",
+                                    {
+                                        role: "button",
+                                        href:
+                                            "/cgi-bin/koha/erm/eholdings/ebsco/resources/" +
+                                            row.resource_id,
+                                        onClick: e => {
+                                            e.preventDefault()
+                                            show_resource(row.resource_id)
+                                        },
+                                    },
+                                    `${row.title.publication_title}`
+                                )
+                                if (row.is_selected) {
+                                    n = createVNode("span", {}, [
+                                        n,
+                                        " ",
+                                        createVNode("i", {
+                                            class: "fa fa-check-square-o",
+                                            style: {
+                                                color: "green",
+                                                float: "right",
+                                            },
+                                            title: __("Is selected"),
+                                        }),
+                                    ])
+                                }
+                                render(n, e)
+                            }
                         )
-                        if (row.is_selected) {
-                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green", float: "right" }, title: __("Is selected") })])
-                        }
-                        render(n, e)
-                    })
+                    },
                 },
-            }, null, 0, additional_filters)
+                null,
+                0,
+                additional_filters
+            )
         },
     },
     mounted() {
@@ -184,7 +224,7 @@ export default {
     props: {
         package_id: String,
     },
-    name: 'EHoldingsEBSCOPackageTitlesList',
+    name: "EHoldingsEBSCOPackageTitlesList",
 }
 </script>
 

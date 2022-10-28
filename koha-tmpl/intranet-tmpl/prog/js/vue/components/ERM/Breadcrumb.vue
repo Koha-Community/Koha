@@ -11,16 +11,14 @@
                 <router-link v-else-if="item.path" :to="item.path">
                     {{ $__(item.text) }}</router-link
                 >
-                <a v-else class="disabled">
-                    {{ $__(item.text) }}</a
-                >
+                <a v-else class="disabled"> {{ $__(item.text) }}</a>
             </li>
         </ol>
     </nav>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router"
 export default {
     computed: {
         breadCrumbs() {
@@ -28,14 +26,16 @@ export default {
                 return this.$route.meta.breadcrumb()
             }
         },
-        currentRoute() { return this.$route.path }
+        currentRoute() {
+            return this.$route.path
+        },
     },
-};
+}
 </script>
 
 <style scoped>
 a.disabled {
-    padding: .6em .3em;
+    padding: 0.6em 0.3em;
     text-decoration: none;
     color: #000;
 }

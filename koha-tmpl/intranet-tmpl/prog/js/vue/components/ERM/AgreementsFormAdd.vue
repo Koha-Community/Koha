@@ -32,7 +32,7 @@
                                     id="agreement_vendor_id"
                                     v-model="agreement.vendor_id"
                                     label="name"
-                                    :reduce="(vendor) => vendor.id"
+                                    :reduce="vendor => vendor.id"
                                     :options="vendors"
                                 />
                             </li>
@@ -60,7 +60,7 @@
                                     id="agreement_status"
                                     v-model="agreement.status"
                                     label="lib"
-                                    :reduce="(av) => av.authorised_value"
+                                    :reduce="av => av.authorised_value"
                                     :options="av_agreement_statuses"
                                     @option:selected="onStatusChanged"
                                     :required="!agreement.status"
@@ -86,7 +86,7 @@
                                     id="agreement_closure_reason"
                                     v-model="agreement.closure_reason"
                                     label="lib"
-                                    :reduce="(av) => av.authorised_value"
+                                    :reduce="av => av.authorised_value"
                                     :options="av_agreement_closure_reasons"
                                     :disabled="
                                         agreement.status == 'closed'
@@ -130,7 +130,7 @@
                                     id="agreement_renewal_priority"
                                     v-model="agreement.renewal_priority"
                                     label="lib"
-                                    :reduce="(av) => av.authorised_value"
+                                    :reduce="av => av.authorised_value"
                                     :options="av_agreement_renewal_priorities"
                                 />
                             </li>
@@ -182,22 +182,22 @@
 </template>
 
 <script>
-import { inject } from 'vue'
-import AgreementPeriods from './AgreementPeriods.vue'
-import AgreementUserRoles from './AgreementUserRoles.vue'
-import AgreementLicenses from './AgreementLicenses.vue'
-import AgreementRelationships from './AgreementRelationships.vue'
-import Documents from './Documents.vue'
+import { inject } from "vue"
+import AgreementPeriods from "./AgreementPeriods.vue"
+import AgreementUserRoles from "./AgreementUserRoles.vue"
+import AgreementLicenses from "./AgreementLicenses.vue"
+import AgreementRelationships from "./AgreementRelationships.vue"
+import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchAgreement } from '../../fetch'
+import { fetchAgreement } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const {
             av_agreement_statuses,
             av_agreement_closure_reasons,
@@ -223,14 +223,14 @@ export default {
         return {
             agreement: {
                 agreement_id: null,
-                name: '',
+                name: "",
                 vendor_id: null,
-                description: '',
-                status: '',
-                closure_reason: '',
+                description: "",
+                status: "",
+                closure_reason: "",
                 is_perpetual: false,
-                renewal_priority: '',
-                license_info: '',
+                renewal_priority: "",
+                license_info: "",
                 periods: [],
                 user_roles: [],
                 agreement_licenses: [],
@@ -262,24 +262,41 @@ export default {
             // Do not use al.license.name here! Its name is not the one linked with al.license_id
             // At this point al.license is meaningless, form/template only modified al.license_id
             const license_ids = agreement_licenses.map(al => al.license_id)
-            const duplicate_license_ids = license_ids.filter((id, i) => license_ids.indexOf(id) !== i)
+            const duplicate_license_ids = license_ids.filter(
+                (id, i) => license_ids.indexOf(id) !== i
+            )
 
             if (duplicate_license_ids.length) {
                 errors.push(this.$__("A license is used several times"))
             }
 
-            const related_agreement_ids = agreement.agreement_relationships.map(rs => rs.related_agreement_id)
-            const duplicate_related_agreement_ids = related_agreement_ids.filter((id, i) => related_agreement_ids.indexOf(id) !== i)
+            const related_agreement_ids = agreement.agreement_relationships.map(
+                rs => rs.related_agreement_id
+            )
+            const duplicate_related_agreement_ids =
+                related_agreement_ids.filter(
+                    (id, i) => related_agreement_ids.indexOf(id) !== i
+                )
 
             if (duplicate_related_agreement_ids.length) {
-                errors.push(this.$__("An agreement is used as relationship several times"))
+                errors.push(
+                    this.$__(
+                        "An agreement is used as relationship several times"
+                    )
+                )
             }
 
-            if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
+            if (
+                agreement_licenses.filter(al => al.status == "controlling")
+                    .length > 1
+            ) {
                 errors.push(this.$__("Only one controlling license is allowed"))
             }
 
-            if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
+            if (
+                agreement_licenses.filter(al => al.status == "controlling")
+                    .length > 1
+            ) {
                 errors.push(this.$__("Only one controlling license is allowed"))
             }
 
@@ -298,12 +315,12 @@ export default {
                 return false
             }
 
-            let apiUrl = '/api/v1/erm/agreements'
+            let apiUrl = "/api/v1/erm/agreements"
 
-            let method = 'POST'
+            let method = "POST"
             if (agreement.agreement_id) {
-                method = 'PUT'
-                apiUrl += '/' + agreement.agreement_id
+                method = "PUT"
+                apiUrl += "/" + agreement.agreement_id
             }
             delete agreement.agreement_id
             delete agreement.vendor
@@ -313,15 +330,32 @@ export default {
                 agreement.vendor_id = null
             }
 
-            agreement.periods = agreement.periods.map(({ agreement_id, agreement_period_id, ...keepAttrs }) => keepAttrs)
+            agreement.periods = agreement.periods.map(
+                ({ agreement_id, agreement_period_id, ...keepAttrs }) =>
+                    keepAttrs
+            )
 
-            agreement.user_roles = agreement.user_roles.map(({ patron, patron_str, ...keepAttrs }) => keepAttrs)
+            agreement.user_roles = agreement.user_roles.map(
+                ({ patron, patron_str, ...keepAttrs }) => keepAttrs
+            )
 
-            agreement.agreement_licenses = agreement.agreement_licenses.map(({ license, agreement_id, agreement_license_id, ...keepAttrs }) => keepAttrs)
+            agreement.agreement_licenses = agreement.agreement_licenses.map(
+                ({
+                    license,
+                    agreement_id,
+                    agreement_license_id,
+                    ...keepAttrs
+                }) => keepAttrs
+            )
 
-            agreement.agreement_relationships = agreement.agreement_relationships.map(({ related_agreement, ...keepAttrs }) => keepAttrs)
+            agreement.agreement_relationships =
+                agreement.agreement_relationships.map(
+                    ({ related_agreement, ...keepAttrs }) => keepAttrs
+                )
 
-            agreement.documents = agreement.documents.map(({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs)
+            agreement.documents = agreement.documents.map(
+                ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
+            )
 
             delete agreement.agreement_packages
 
@@ -329,7 +363,7 @@ export default {
                 method: method,
                 body: JSON.stringify(agreement),
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
+                    "Content-Type": "application/json;charset=utf-8",
                 },
             }
 
@@ -344,17 +378,16 @@ export default {
                     } else {
                         setError(response.message || response.statusText)
                     }
-                }).catch(
-                    (error) => {
-                        this.setError(error)
-                    }
-                )
+                })
+                .catch(error => {
+                    this.setError(error)
+                })
         },
         onStatusChanged(e) {
-            if (e.authorised_value != 'closed') {
-                this.agreement.closure_reason = ''
+            if (e.authorised_value != "closed") {
+                this.agreement.closure_reason = ""
             }
-        }
+        },
     },
     components: {
         AgreementPeriods,

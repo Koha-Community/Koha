@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
 import { fetchLocalPackage } from "../../fetch"
 
@@ -112,7 +112,7 @@ export default {
     setup() {
         const format_date = $date
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
@@ -125,10 +125,10 @@ export default {
             erm_package: {
                 package_id: null,
                 vendor_id: null,
-                name: '',
-                external_id: '',
-                package_type: '',
-                content_type: '',
+                name: "",
+                external_id: "",
+                package_type: "",
+                content_type: "",
                 created_on: null,
                 resources: null,
                 package_agreements: [],

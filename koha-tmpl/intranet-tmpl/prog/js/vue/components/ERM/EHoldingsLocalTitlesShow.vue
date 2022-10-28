@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if=title id="eholdings_title_show">
+    <div v-else-if="title" id="eholdings_title_show">
         <h2>
             {{ $__("Title #%s").format(title.title_id) }}
             <span class="action_links">
@@ -256,12 +256,12 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import EHoldingsTitlePackagesList from "./EHoldingsLocalTitlePackagesList.vue"
 import { fetchLocalTitle } from "../../fetch"
 export default {
     setup() {
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
@@ -272,31 +272,31 @@ export default {
         return {
             title: {
                 title_id: null,
-                publication_title: '',
-                external_id: '',
-                print_identifier: '',
-                online_identifier: '',
-                date_first_issue_online: '',
-                num_first_vol_online: '',
-                num_first_issue_online: '',
-                date_last_issue_online: '',
-                num_last_vol_online: '',
-                num_last_issue_online: '',
-                title_url: '',
-                first_author: '',
-                embargo_info: '',
-                coverage_depth: '',
-                notes: '',
-                publisher_name: '',
-                publication_type: '',
-                date_monograph_published_print: '',
-                date_monograph_published_online: '',
-                monograph_volume: '',
-                monograph_edition: '',
-                first_editor: '',
-                parent_publication_title_id: '',
-                preceeding_publication_title_id: '',
-                access_type: '',
+                publication_title: "",
+                external_id: "",
+                print_identifier: "",
+                online_identifier: "",
+                date_first_issue_online: "",
+                num_first_vol_online: "",
+                num_first_issue_online: "",
+                date_last_issue_online: "",
+                num_last_vol_online: "",
+                num_last_issue_online: "",
+                title_url: "",
+                first_author: "",
+                embargo_info: "",
+                coverage_depth: "",
+                notes: "",
+                publisher_name: "",
+                publication_type: "",
+                date_monograph_published_print: "",
+                date_monograph_published_online: "",
+                monograph_volume: "",
+                monograph_edition: "",
+                first_editor: "",
+                parent_publication_title_id: "",
+                preceeding_publication_title_id: "",
+                access_type: "",
                 resources: [],
             },
             initialized: false,

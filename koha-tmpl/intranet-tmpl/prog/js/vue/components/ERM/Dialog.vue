@@ -24,7 +24,7 @@ export default {
         const { removeMessages } = mainStore
         return { message, error, warning, removeMessages }
     },
-};
+}
 </script>
 
 <style scoped>

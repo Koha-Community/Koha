@@ -9,7 +9,8 @@
                     class="btn btn-default btn-xs"
                     role="button"
                     @click="add_to_holdings"
-                    ><font-awesome-icon icon="plus" /> {{ $__("Add package to holdings") }}</a
+                    ><font-awesome-icon icon="plus" />
+                    {{ $__("Add package to holdings") }}</a
                 >
                 <a
                     v-else
@@ -17,7 +18,8 @@
                     role="button"
                     id="remove-from-holdings"
                     @click="remove_from_holdings"
-                    ><font-awesome-icon icon="minus" /> {{ $__("Remove package from holdings") }}</a
+                    ><font-awesome-icon icon="minus" />
+                    {{ $__("Remove package from holdings") }}</a
                 > </span
             ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
@@ -37,12 +39,19 @@
                     <li v-if="false">
                         <label>{{ $__("External ID") }}:</label>
                         <span>
-                            <span v-if="false">FIXME - Does not replace this v-if with an HTML comment, it breaks xgettext</span>
-                            <span v-if="false">FIXME - Create a syspref to store the URL</span>
+                            <span v-if="false"
+                                >FIXME - Does not replace this v-if with an HTML
+                                comment, it breaks xgettext</span
+                            >
+                            <span v-if="false"
+                                >FIXME - Create a syspref to store the URL</span
+                            >
                             <a
                                 :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
                             >
-                                {{ erm_package.vendor.external_id }}-{{ erm_package.external_id }}
+                                {{ erm_package.vendor.external_id }}-{{
+                                    erm_package.external_id
+                                }}
                             </a>
                         </span>
                     </li>
@@ -104,7 +113,7 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
 import { fetchEBSCOPackage, checkError } from "../../fetch"
@@ -113,7 +122,7 @@ export default {
     setup() {
         const format_date = $date
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
@@ -126,11 +135,11 @@ export default {
             erm_package: {
                 package_id: null,
                 vendor_id: null,
-                name: '',
-                external_id: '',
-                provider: '',
-                package_type: '',
-                content_type: '',
+                name: "",
+                external_id: "",
+                provider: "",
+                package_type: "",
+                content_type: "",
                 created_on: null,
                 resources: null,
                 package_agreements: [],
@@ -156,25 +165,26 @@ export default {
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true
-            fetch('/api/v1/erm/eholdings/ebsco/packages/' + this.erm_package.package_id, {
-                method: "PATCH",
-                body: JSON.stringify({ is_selected }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then(checkError)
-                .then(
-                    (result) => {
-                        // Refresh the page. We should not need that actually.
-                        this.getPackage(this.erm_package.package_id)
+            fetch(
+                "/api/v1/erm/eholdings/ebsco/packages/" +
+                    this.erm_package.package_id,
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ is_selected }),
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
                     },
-                ).catch(
-                    (error) => {
-                        setError(error)
-                    }
-                )
+                }
+            )
+                .then(checkError)
+                .then(result => {
+                    // Refresh the page. We should not need that actually.
+                    this.getPackage(this.erm_package.package_id)
+                })
+                .catch(error => {
+                    setError(error)
+                })
         },
         add_to_holdings() {
             this.edit_selected(true)

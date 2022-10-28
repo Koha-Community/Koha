@@ -29,7 +29,7 @@
                                 id="package_vendor_id"
                                 v-model="erm_package.vendor_id"
                                 label="name"
-                                :reduce="(vendor) => vendor.id"
+                                :reduce="vendor => vendor.id"
                                 :options="vendors"
                             />
                         </li>
@@ -39,7 +39,7 @@
                                 id="package_type"
                                 v-model="erm_package.package_type"
                                 label="lib"
-                                :reduce="(av) => av.authorised_value"
+                                :reduce="av => av.authorised_value"
                                 :options="av_package_types"
                             />
                         </li>
@@ -51,14 +51,14 @@
                                 id="package_content_type"
                                 v-model="erm_package.content_type"
                                 label="lib"
-                                :reduce="(av) => av.authorised_value"
+                                :reduce="av => av.authorised_value"
                                 :options="av_package_content_types"
                             />
                         </li>
                         <li>
-                            <label for="package_notes">{{
-                                $__("Notes")
-                            }}:</label>
+                            <label for="package_notes"
+                                >{{ $__("Notes") }}:</label
+                            >
                             <textarea
                                 id="package_notes"
                                 v-model="erm_package.notes"
@@ -85,21 +85,19 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalPackage, createPackage, editPackage } from '../../fetch'
+import { fetchLocalPackage, createPackage, editPackage } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
-        const AVStore = inject('AVStore')
-        const {
-            av_package_types,
-            av_package_content_types,
-        } = storeToRefs(AVStore)
+        const AVStore = inject("AVStore")
+        const { av_package_types, av_package_content_types } =
+            storeToRefs(AVStore)
 
         return {
             vendors,
@@ -112,11 +110,11 @@ export default {
             erm_package: {
                 package_id: null,
                 vendor_id: null,
-                name: '',
-                external_id: '',
-                package_type: '',
-                content_type: '',
-                notes: '',
+                name: "",
+                external_id: "",
+                package_type: "",
+                content_type: "",
+                notes: "",
                 created_on: null,
                 resources: null,
                 package_agreements: [],
@@ -143,7 +141,9 @@ export default {
             let errors = []
             let package_agreements = erm_package.package_agreements
             const agreement_ids = package_agreements.map(pa => pa.agreement_id)
-            const duplicate_agreement_ids = agreement_ids.filter((id, i) => agreement_ids.indexOf(id) !== i)
+            const duplicate_agreement_ids = agreement_ids.filter(
+                (id, i) => agreement_ids.indexOf(id) !== i
+            )
 
             if (duplicate_agreement_ids.length) {
                 errors.push(this.$__("An agreement is used several times"))
@@ -166,7 +166,9 @@ export default {
             if (erm_package.package_id) {
                 editPackage(erm_package).then(response => {
                     if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
+                        this.$router.push(
+                            "/cgi-bin/koha/erm/eholdings/local/packages"
+                        )
                         setMessage(this.$__("Package updated"))
                     } else {
                         setError(response.message || response.statusText)
@@ -175,7 +177,9 @@ export default {
             } else {
                 createPackage(erm_package).then(response => {
                     if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
+                        this.$router.push(
+                            "/cgi-bin/koha/erm/eholdings/local/packages"
+                        )
                         setMessage(this.$__("Package created"))
                     } else {
                         setError(response.message || response.statusText)

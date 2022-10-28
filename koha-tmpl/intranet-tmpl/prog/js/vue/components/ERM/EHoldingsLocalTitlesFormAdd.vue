@@ -103,7 +103,9 @@
                                 id="title_num_first_issue_online"
                                 v-model="title.num_first_issue_online"
                                 :placeholder="
-                                    $__('Number of first issue available online')
+                                    $__(
+                                        'Number of first issue available online'
+                                    )
                                 "
                             />
                         </li>
@@ -135,7 +137,9 @@
                                 id="title_num_last_vol_online"
                                 v-model="title.num_last_vol_online"
                                 :placeholder="
-                                    $__('Number of last volume available online')
+                                    $__(
+                                        'Number of last volume available online'
+                                    )
                                 "
                             />
                         </li>
@@ -143,7 +147,9 @@
                         <li>
                             <label for="title_num_last_issue_online"
                                 >{{
-                                    $__("Number of last issue available online")
+                                    $__(
+                                        "Number of last issue available online"
+                                    )
                                 }}:</label
                             >
                             <input
@@ -227,7 +233,7 @@
                                 id="title_publication_type"
                                 v-model="title.publication_type"
                                 label="lib"
-                                :reduce="(av) => av.authorised_value"
+                                :reduce="av => av.authorised_value"
                                 :options="av_title_publication_types"
                             />
                         </li>
@@ -379,18 +385,18 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalTitle } from '../../fetch'
+import { fetchLocalTitle } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
@@ -404,31 +410,31 @@ export default {
         return {
             title: {
                 title_id: null,
-                publication_title: '',
-                external_id: '',
-                print_identifier: '',
-                online_identifier: '',
-                date_first_issue_online: '',
-                num_first_vol_online: '',
-                num_first_issue_online: '',
-                date_last_issue_online: '',
-                num_last_vol_online: '',
-                num_last_issue_online: '',
-                title_url: '',
-                first_author: '',
-                embargo_info: '',
-                coverage_depth: '',
-                notes: '',
-                publisher_name: '',
-                publication_type: '',
-                date_monograph_published_print: '',
-                date_monograph_published_online: '',
-                monograph_volume: '',
-                monograph_edition: '',
-                first_editor: '',
-                parent_publication_title_id: '',
-                preceeding_publication_title_id: '',
-                access_type: '',
+                publication_title: "",
+                external_id: "",
+                print_identifier: "",
+                online_identifier: "",
+                date_first_issue_online: "",
+                num_first_vol_online: "",
+                num_first_issue_online: "",
+                date_last_issue_online: "",
+                num_last_vol_online: "",
+                num_last_issue_online: "",
+                title_url: "",
+                first_author: "",
+                embargo_info: "",
+                coverage_depth: "",
+                notes: "",
+                publisher_name: "",
+                publication_type: "",
+                date_monograph_published_print: "",
+                date_monograph_published_online: "",
+                monograph_volume: "",
+                monograph_edition: "",
+                first_editor: "",
+                parent_publication_title_id: "",
+                preceeding_publication_title_id: "",
+                access_type: "",
                 resources: [],
             },
             initialized: false,
@@ -454,7 +460,9 @@ export default {
 
             let resources = title.resources
             const package_ids = resources.map(al => al.package_id)
-            const duplicate_package_ids = package_ids.filter((id, i) => package_ids.indexOf(id) !== i)
+            const duplicate_package_ids = package_ids.filter(
+                (id, i) => package_ids.indexOf(id) !== i
+            )
 
             if (duplicate_package_ids.length) {
                 errors.push(this.$__("A package is used several times"))
@@ -473,41 +481,54 @@ export default {
             if (!this.checkForm(title)) {
                 return false
             }
-            let apiUrl = '/api/v1/erm/eholdings/local/titles'
+            let apiUrl = "/api/v1/erm/eholdings/local/titles"
 
-            let method = 'POST'
+            let method = "POST"
             if (title.title_id) {
-                method = 'PUT'
-                apiUrl += '/' + title.title_id
+                method = "PUT"
+                apiUrl += "/" + title.title_id
             }
             delete title.title_id
             delete title.biblio_id
 
             // Cannot use the map/keepAttrs because of the reserved keywork 'package'
-            title.resources.forEach(function (e) { delete e.package; delete e.resource_id })
+            title.resources.forEach(function (e) {
+                delete e.package
+                delete e.resource_id
+            })
 
             const options = {
                 method: method,
                 body: JSON.stringify(title),
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
+                    "Content-Type": "application/json;charset=utf-8",
                 },
             }
 
             fetch(apiUrl, options)
-                .then(response => {
-                    if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
-                        setMessage(this.$__("Title updated"))
-                    } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
-                        setMessage(this.$__("Title created"))
-                    } else {
-                        setError(response.message || response.statusText)
+                .then(
+                    response => {
+                        if (response.status == 200) {
+                            this.$router.push(
+                                "/cgi-bin/koha/erm/eholdings/local/titles"
+                            )
+                            setMessage(this.$__("Title updated"))
+                        } else if (response.status == 201) {
+                            this.$router.push(
+                                "/cgi-bin/koha/erm/eholdings/local/titles"
+                            )
+                            setMessage(this.$__("Title created"))
+                        } else {
+                            setError(response.message || response.statusText)
+                        }
+                    },
+                    error => {
+                        setError(error)
                     }
-                }, (error) => {
-                    setError(error)
-                }).catch(e => { console.log(e) })
+                )
+                .catch(e => {
+                    console.log(e)
+                })
         },
     },
     components: { EHoldingsTitlesFormAddResources },

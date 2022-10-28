@@ -41,10 +41,9 @@ import { setWarning, removeMessages } from "../../messages"
 
 export default {
     data() {
-        return { showModal: false, }
+        return { showModal: false }
     },
-    beforeCreate() {
-    },
+    beforeCreate() {},
     methods: {
         serializeAgreement() {
             let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
@@ -56,7 +55,7 @@ export default {
             delete erm_package.content_type
             erm_package.external_id = erm_package.package_id
             delete erm_package.package_id
-            erm_package.provider = 'ebsco'
+            erm_package.provider = "ebsco"
             erm_package.package_id = erm_package.koha_internal_id
             delete erm_package.koha_internal_id
             return erm_package
@@ -66,26 +65,34 @@ export default {
             this.showModal = false
             let erm_package = this.serializeAgreement()
             // Only add if it does not exist
-            if (!erm_package.package_agreements.find((a) => a.agreement_id == agreement_id)) {
+            if (
+                !erm_package.package_agreements.find(
+                    a => a.agreement_id == agreement_id
+                )
+            ) {
                 erm_package.package_agreements.push({ agreement_id })
                 if (this.erm_package.koha_internal_id) {
                     editPackage(erm_package).then(() => {
-                        this.$emit('refresh-agreements')
+                        this.$emit("refresh-agreements")
                     })
                 } else {
                     createPackage(erm_package).then(() => {
-                        this.$emit('refresh-agreements')
+                        this.$emit("refresh-agreements")
                     })
                 }
             } else {
-                setWarning(this.$__("This agreement is already linked with this package"))
+                setWarning(
+                    this.$__(
+                        "This agreement is already linked with this package"
+                    )
+                )
             }
         },
         deleteAgreement(counter) {
             let erm_package = this.serializeAgreement()
             erm_package.package_agreements.splice(counter, 1)
             editPackage(erm_package).then(() => {
-                this.$emit('refresh-agreements')
+                this.$emit("refresh-agreements")
             })
         },
     },
@@ -95,8 +102,8 @@ export default {
     components: {
         AgreementsList,
     },
-    emits: ['refresh-agreements'],
-    name: 'EHoldingsEBSCOPackageAgreements',
+    emits: ["refresh-agreements"],
+    name: "EHoldingsEBSCOPackageAgreements",
 }
 </script>
 <style scoped>

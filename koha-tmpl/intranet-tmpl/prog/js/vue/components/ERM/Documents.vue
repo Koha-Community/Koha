@@ -137,12 +137,11 @@ export default {
         },
         deleteDocument(counter) {
             this.documents.splice(counter, 1)
-        }
+        },
     },
-    name: 'Documents',
+    name: "Documents",
     props: {
-        documents: Array
+        documents: Array,
     },
-
 }
 </script>

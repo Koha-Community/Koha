@@ -11,7 +11,7 @@
         <v-select
             v-model="package_id"
             label="name"
-            :reduce="(p) => p.package_id"
+            :reduce="p => p.package_id"
             :options="packages"
             :clearable="false"
         >
@@ -24,9 +24,9 @@
 
 <script>
 import { setMessage, setError, setWarning } from "../../messages"
-import { createVNode, render } from 'vue'
+import { createVNode, render } from "vue"
 import { useDataTable } from "../../composables/datatables"
-import { checkError, fetchLocalPackages } from '../../fetch.js'
+import { checkError, fetchLocalPackages } from "../../fetch.js"
 
 export default {
     setup() {
@@ -46,7 +46,7 @@ export default {
         }
     },
     beforeCreate() {
-        fetchLocalPackages().then((packages) => {
+        fetchLocalPackages().then(packages => {
             this.packages = packages
             if (this.packages.length) {
                 this.package_id = packages[0].package_id
@@ -60,20 +60,20 @@ export default {
                 return
             }
             if (!list_id) return
-            await fetch('/api/v1/erm/eholdings/local/titles/import', {
+            await fetch("/api/v1/erm/eholdings/local/titles/import", {
                 method: "POST",
                 body: JSON.stringify({ list_id, package_id: this.package_id }),
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
                 },
             })
                 .then(checkError)
                 .then(
-                    (result) => {
+                    result => {
                         this.job_id = result.job_id
                     },
-                    (error) => {
+                    error => {
                         setError(error)
                     }
                 )
@@ -82,50 +82,70 @@ export default {
             let lists = this.logged_in_user_lists
             let table_id = this.table_id
             let import_from_list = this.import_from_list
-            $('#' + table_id).dataTable($.extend(true, {}, dataTablesDefaults, {
-                data: lists,
-                order: [[0, "asc"]],
-                autoWidth: false,
-                columns: [
-                    {
-                        title: __("Name"),
-                        data: "shelfname",
-                        searchable: true,
-                        orderable: true,
-                        width: '100%',
-                        render: function (data, type, row, meta) {
-                            return row.shelfname + ' (#' + row.shelfnumber + ')'
-                        }
-                    },
-                    {
-                        title: __("Actions"),
-                        data: function (row, type, val, meta) {
-                            return '<div class="actions"></div>'
+            $("#" + table_id).dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    data: lists,
+                    order: [[0, "asc"]],
+                    autoWidth: false,
+                    columns: [
+                        {
+                            title: __("Name"),
+                            data: "shelfname",
+                            searchable: true,
+                            orderable: true,
+                            width: "100%",
+                            render: function (data, type, row, meta) {
+                                return (
+                                    row.shelfname +
+                                    " (#" +
+                                    row.shelfnumber +
+                                    ")"
+                                )
+                            },
                         },
-                        className: "actions noExport",
-                        searchable: false,
-                        orderable: false
-                    }
-                ],
-                drawCallback: function (settings) {
+                        {
+                            title: __("Actions"),
+                            data: function (row, type, val, meta) {
+                                return '<div class="actions"></div>'
+                            },
+                            className: "actions noExport",
+                            searchable: false,
+                            orderable: false,
+                        },
+                    ],
+                    drawCallback: function (settings) {
+                        var api = new $.fn.dataTable.Api(settings)
 
-                    var api = new $.fn.dataTable.Api(settings)
+                        $.each(
+                            $(this).find("td .actions"),
+                            function (index, e) {
+                                let tr = $(this).parent().parent()
+                                let list_id = api.row(tr).data().shelfnumber
+                                let importButton = createVNode(
+                                    "a",
+                                    {
+                                        class: "btn btn-default btn-xs",
+                                        role: "button",
+                                        onClick: () => {
+                                            import_from_list(list_id)
+                                        },
+                                    },
+                                    [
+                                        createVNode("i", {
+                                            class: "fa fa-download",
+                                            "aria-hidden": "true",
+                                        }),
+                                        __("Import"),
+                                    ]
+                                )
 
-                    $.each($(this).find("td .actions"), function (index, e) {
-                        let tr = $(this).parent().parent()
-                        let list_id = api.row(tr).data().shelfnumber
-                        let importButton = createVNode("a", {
-                            class: "btn btn-default btn-xs", role: "button", onClick: () => {
-                                import_from_list(list_id)
+                                let n = createVNode("span", {}, [importButton])
+                                render(n, e)
                             }
-                        },
-                            [createVNode("i", { class: "fa fa-download", 'aria-hidden': "true" }), __("Import")])
-
-                        let n = createVNode('span', {}, [importButton])
-                        render(n, e)
-                    })
-                }
-            }))
+                        )
+                    },
+                })
+            )
         },
     },
     mounted() {

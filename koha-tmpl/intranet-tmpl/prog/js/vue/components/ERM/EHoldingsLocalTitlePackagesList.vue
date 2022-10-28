@@ -5,8 +5,7 @@
 </template>
 
 <script>
-
-import { createVNode, render } from 'vue'
+import { createVNode, render } from "vue"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -19,58 +18,67 @@ export default {
         }
     },
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/local/resources/" + resource_id)
+            this.$router.push(
+                "/cgi-bin/koha/erm/eholdings/local/resources/" + resource_id
+            )
         },
         build_datatable: function () {
             let show_resource = this.show_resource
             let resources = this.resources
             let table_id = this.table_id
 
-            $('#' + table_id).dataTable($.extend(true, {}, dataTablesDefaults, {
-                data: resources,
-                embed: ['package.name'],
-                order: [[0, "asc"]],
-                autoWidth: false,
-                columns: [
-                    {
-                        title: __("Name"),
-                        data: "package.name",
-                        searchable: true,
-                        orderable: true,
-                        render: function (data, type, row, meta) {
-                            // Rendering done in drawCallback
-                            return ""
+            $("#" + table_id).dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    data: resources,
+                    embed: ["package.name"],
+                    order: [[0, "asc"]],
+                    autoWidth: false,
+                    columns: [
+                        {
+                            title: __("Name"),
+                            data: "package.name",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                // Rendering done in drawCallback
+                                return ""
+                            },
+                            width: "100%",
                         },
-                        width: '100%',
-                    },
-                ],
-                drawCallback: function (settings) {
+                    ],
+                    drawCallback: function (settings) {
+                        var api = new $.fn.dataTable.Api(settings)
 
-                    var api = new $.fn.dataTable.Api(settings)
-
-                    $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                        let tr = $(this).parent()
-                        let row = api.row(tr).data()
-                        if (!row) return // Happen if the table is empty
-                        let n = createVNode("a", {
-                            role: "button",
-                            href: "/cgi-bin/koha/erm/eholdings/local/resources/" + row.resource_id,
-                            onClick: (e) => {
-                                e.preventDefault()
-                                show_resource(row.resource_id)
+                        $.each(
+                            $(this).find("tbody tr td:first-child"),
+                            function (index, e) {
+                                let tr = $(this).parent()
+                                let row = api.row(tr).data()
+                                if (!row) return // Happen if the table is empty
+                                let n = createVNode(
+                                    "a",
+                                    {
+                                        role: "button",
+                                        href:
+                                            "/cgi-bin/koha/erm/eholdings/local/resources/" +
+                                            row.resource_id,
+                                        onClick: e => {
+                                            e.preventDefault()
+                                            show_resource(row.resource_id)
+                                        },
+                                    },
+                                    `${row.package.name}`
+                                )
+                                render(n, e)
                             }
-                        },
-                            `${row.package.name}`
                         )
-                        render(n, e)
-                    })
-                },
-            }))
+                    },
+                })
+            )
         },
     },
     mounted() {
@@ -79,7 +87,7 @@ export default {
     props: {
         resources: Array,
     },
-    name: 'EHoldingsLocalTitlePackagesList',
+    name: "EHoldingsLocalTitlePackagesList",
 }
 </script>
 

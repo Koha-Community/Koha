@@ -22,7 +22,7 @@
                         :id="`agreement_id_${counter}`"
                         v-model="package_agreement.agreement_id"
                         label="name"
-                        :reduce="(a) => a.agreement_id"
+                        :reduce="a => a.agreement_id"
                         :options="agreements"
                     >
                         <template #search="{ attributes, events }">
@@ -58,7 +58,7 @@ export default {
         }
     },
     beforeCreate() {
-        fetchAgreements().then((agreements) => {
+        fetchAgreements().then(agreements => {
             this.agreements = agreements
         })
     },
@@ -75,6 +75,6 @@ export default {
     props: {
         package_agreements: Array,
     },
-    name: 'EHoldingsLocalPackageAgreements',
+    name: "EHoldingsLocalPackageAgreements",
 }
 </script>

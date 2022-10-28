@@ -9,12 +9,15 @@
             <legend>
                 {{ $__("Agreement user %s").format(counter + 1) }}
                 <a href="#" @click.prevent="deleteUser(counter)"
-                    ><i class="fa fa-trash"></i> {{ $__("Remove this user") }}</a
+                    ><i class="fa fa-trash"></i>
+                    {{ $__("Remove this user") }}</a
                 >
             </legend>
             <ol>
                 <li>
-                    <label :for="`user_id_${counter}`">{{ $__("User") }}:</label>
+                    <label :for="`user_id_${counter}`"
+                        >{{ $__("User") }}:</label
+                    >
                     <span class="user">
                         {{ user_role.patron_str }}
                     </span>
@@ -33,7 +36,7 @@
                         :id="`user_role_${counter}`"
                         v-model="user_role.role"
                         label="lib"
-                        :reduce="(av) => av.authorised_value"
+                        :reduce="av => av.authorised_value"
                         :options="av_agreement_user_roles"
                     >
                         <template #search="{ attributes, events }">
@@ -64,7 +67,7 @@
 import { fetchPatron } from "../../fetch"
 
 export default {
-    name: 'AgreementUserRoles',
+    name: "AgreementUserRoles",
     props: {
         av_agreement_user_roles: Array,
         user_roles: Array,
@@ -79,29 +82,35 @@ export default {
             this.user_roles.push({
                 user_id: null,
                 role: null,
-                patron_str: '',
+                patron_str: "",
             })
         },
         deleteUser(counter) {
             this.user_roles.splice(counter, 1)
         },
         selectUser(counter) {
-            let select_user_window = window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=select&filter=erm_users",
-                'PatronPopup',
-                'width=740,height=450,location=yes,toolbar=no,'
-                + 'scrollbars=yes,resize=yes'
+            let select_user_window = window.open(
+                "/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=select&filter=erm_users",
+                "PatronPopup",
+                "width=740,height=450,location=yes,toolbar=no," +
+                    "scrollbars=yes,resize=yes"
             )
             // This is a bit dirty, the "select user" window should be rewritten and be a Vue component
             // but that's not for now...
-            select_user_window.addEventListener('beforeunload', this.newUserSelected, false)
+            select_user_window.addEventListener(
+                "beforeunload",
+                this.newUserSelected,
+                false
+            )
             select_user_window.counter = counter
         },
         newUserSelected(e) {
             let c = e.currentTarget.counter
-            let selected_patron_id = document.getElementById("selected_patron_id").value
+            let selected_patron_id =
+                document.getElementById("selected_patron_id").value
             let patron
             // FIXME We are missing a "loading..."
-            fetchPatron(selected_patron_id).then((p) => {
+            fetchPatron(selected_patron_id).then(p => {
                 patron = p
                 this.user_roles[c].patron = patron
                 this.user_roles[c].patron_str = $patron_to_html(patron)

@@ -60,31 +60,28 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/licenses/' + this.license.license_id
+            let apiUrl = "/api/v1/erm/licenses/" + this.license.license_id
 
             const options = {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
+                    "Content-Type": "application/json;charset=utf-8",
                 },
             }
 
             fetch(apiUrl, options)
-                .then(
-                    (response) => {
-                        if (response.status == 204) {
-                            this.$router.push("/cgi-bin/koha/erm/licenses")
-                            setMessage(this.$__("License deleted"))
-                        } else {
-                            setError(response.message || response.statusText)
-                        }
+                .then(response => {
+                    if (response.status == 204) {
+                        this.$router.push("/cgi-bin/koha/erm/licenses")
+                        setMessage(this.$__("License deleted"))
+                    } else {
+                        setError(response.message || response.statusText)
                     }
-                ).catch(
-                    (error) => {
-                        setError(error)
-                    }
-                )
-        }
+                })
+                .catch(error => {
+                    setError(error)
+                })
+        },
     },
     name: "LicensesFormConfirmDelete",
 }

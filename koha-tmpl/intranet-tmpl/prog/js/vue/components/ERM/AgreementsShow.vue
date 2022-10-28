@@ -299,7 +299,7 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import { fetchAgreement } from "../../fetch"
 
 export default {
@@ -307,7 +307,7 @@ export default {
         const format_date = $date
         const patron_to_html = $patron_to_html
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
@@ -320,15 +320,15 @@ export default {
         return {
             agreement: {
                 agreement_id: null,
-                name: '',
+                name: "",
                 vendor_id: null,
                 vendor: null,
-                description: '',
-                status: '',
-                closure_reason: '',
+                description: "",
+                status: "",
+                closure_reason: "",
                 is_perpetual: false,
-                renewal_priority: '',
-                license_info: '',
+                renewal_priority: "",
+                license_info: "",
                 periods: [],
                 user_roles: [],
                 agreement_packages: [],

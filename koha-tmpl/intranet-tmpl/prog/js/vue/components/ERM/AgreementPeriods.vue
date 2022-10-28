@@ -67,16 +67,16 @@
 </template>
 
 <script>
-import flatPickr from 'vue-flatpickr-component'
+import flatPickr from "vue-flatpickr-component"
 export default {
-    name: 'AgreementPeriods',
+    name: "AgreementPeriods",
     data() {
         return {
             fp_config: flatpickr_defaults,
         }
     },
     props: {
-        periods: Array
+        periods: Array,
     },
     methods: {
         addPeriod() {
@@ -89,10 +89,10 @@ export default {
         },
         deletePeriod(counter) {
             this.periods.splice(counter, 1)
-        }
+        },
     },
     components: {
-        flatPickr
-    }
+        flatPickr,
+    },
 }
 </script>

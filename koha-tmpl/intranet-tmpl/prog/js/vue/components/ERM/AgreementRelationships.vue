@@ -22,7 +22,7 @@
                         :id="`related_agreement_id_${counter}`"
                         v-model="relationship.related_agreement_id"
                         label="name"
-                        :reduce="(a) => a.agreement_id"
+                        :reduce="a => a.agreement_id"
                         :options="agreements"
                     >
                         <template #search="{ attributes, events }">
@@ -44,7 +44,7 @@
                         :id="`related_agreement_relationship_${counter}`"
                         v-model="relationship.relationship"
                         label="lib"
-                        :reduce="(av) => av.authorised_value"
+                        :reduce="av => av.authorised_value"
                         :options="av_agreement_relationships"
                     >
                         <template #search="{ attributes, events }">
@@ -93,8 +93,10 @@ export default {
         }
     },
     beforeCreate() {
-        fetchAgreements().then((agreements) => {
-            this.agreements = agreements.filter((agreement) => agreement.agreement_id !== this.agreement_id)
+        fetchAgreements().then(agreements => {
+            this.agreements = agreements.filter(
+                agreement => agreement.agreement_id !== this.agreement_id
+            )
         })
     },
     methods: {
@@ -102,7 +104,7 @@ export default {
             this.relationships.push({
                 related_agreement_id: null,
                 relationship: null,
-                notes: '',
+                notes: "",
             })
         },
         deleteRelationship(counter) {
@@ -114,6 +116,6 @@ export default {
         av_agreement_relationships: Array,
         relationships: Array,
     },
-    name: 'AgreementRelationships',
+    name: "AgreementRelationships",
 }
 </script>

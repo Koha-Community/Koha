@@ -5,13 +5,12 @@
 </template>
 
 <script>
-
-import { inject, createVNode, render } from 'vue'
+import { inject, createVNode, render } from "vue"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "title_list"
@@ -24,12 +23,13 @@ export default {
         }
     },
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/local/resources/" + resource_id)
+            this.$router.push(
+                "/cgi-bin/koha/erm/eholdings/local/resources/" + resource_id
+            )
         },
         build_datatable: function () {
             let show_resource = this.show_resource
@@ -38,60 +38,83 @@ export default {
             let map_av_dt_filter = this.map_av_dt_filter
             let table_id = this.table_id
 
-            window['av_title_publication_types'] = map_av_dt_filter('av_title_publication_types')
+            window["av_title_publication_types"] = map_av_dt_filter(
+                "av_title_publication_types"
+            )
 
-            $('#' + table_id).kohaTable({
-                ajax: {
-                    url: "/api/v1/erm/eholdings/local/packages/" + package_id + "/resources",
-                },
-                embed: ['title'],
-                autoWidth: false,
-                columns: [
-                    {
-                        title: __("Name"),
-                        data: "title.publication_title",
-                        searchable: true,
-                        orderable: true,
-                        render: function (data, type, row, meta) {
-                            // Rendering done in drawCallback
-                            return ""
-                        }
+            $("#" + table_id).kohaTable(
+                {
+                    ajax: {
+                        url:
+                            "/api/v1/erm/eholdings/local/packages/" +
+                            package_id +
+                            "/resources",
                     },
-                    {
-                        title: __("Publication type"),
-                        data: "title.publication_type",
-                        searchable: true,
-                        orderable: true,
-                        render: function (data, type, row, meta) {
-                            return escape_str(get_lib_from_av("av_title_publication_types", row.title.publication_type))
-                        }
-                    },
-                ],
-                drawCallback: function (settings) {
-
-                    var api = new $.fn.dataTable.Api(settings)
-
-                    $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                        let tr = $(this).parent()
-                        let row = api.row(tr).data()
-                        if (!row) return // Happen if the table is empty
-                        let n = createVNode("a", {
-                            role: "button",
-                            href: "/cgi-bin/koha/erm/eholdings/local/resources/" + row.resource_id,
-                            onClick: (e) => {
-                                e.preventDefault()
-                                show_resource(row.resource_id)
-                            }
+                    embed: ["title"],
+                    autoWidth: false,
+                    columns: [
+                        {
+                            title: __("Name"),
+                            data: "title.publication_title",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                // Rendering done in drawCallback
+                                return ""
+                            },
                         },
-                            `${row.title.publication_title}`
+                        {
+                            title: __("Publication type"),
+                            data: "title.publication_type",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return escape_str(
+                                    get_lib_from_av(
+                                        "av_title_publication_types",
+                                        row.title.publication_type
+                                    )
+                                )
+                            },
+                        },
+                    ],
+                    drawCallback: function (settings) {
+                        var api = new $.fn.dataTable.Api(settings)
+
+                        $.each(
+                            $(this).find("tbody tr td:first-child"),
+                            function (index, e) {
+                                let tr = $(this).parent()
+                                let row = api.row(tr).data()
+                                if (!row) return // Happen if the table is empty
+                                let n = createVNode(
+                                    "a",
+                                    {
+                                        role: "button",
+                                        href:
+                                            "/cgi-bin/koha/erm/eholdings/local/resources/" +
+                                            row.resource_id,
+                                        onClick: e => {
+                                            e.preventDefault()
+                                            show_resource(row.resource_id)
+                                        },
+                                    },
+                                    `${row.title.publication_title}`
+                                )
+                                render(n, e)
+                            }
                         )
-                        render(n, e)
-                    })
+                    },
+                    preDrawCallback: function (settings) {
+                        $("#" + table_id)
+                            .find("thead th")
+                            .eq(1)
+                            .attr("data-filter", "av_title_publication_types")
+                    },
                 },
-                preDrawCallback: function (settings) {
-                    $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_title_publication_types')
-                }
-            }, null, 1)
+                null,
+                1
+            )
         },
     },
     mounted() {
@@ -100,7 +123,7 @@ export default {
     props: {
         package_id: String,
     },
-    name: 'EHoldingsLocalPackageTitlesList',
+    name: "EHoldingsLocalPackageTitlesList",
 }
 </script>
 

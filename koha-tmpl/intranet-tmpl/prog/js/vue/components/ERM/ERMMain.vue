@@ -78,10 +78,7 @@
                                                             :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
                                                         >
                                                             <i
-                                                                class="
-                                                                    fa
-                                                                    fa-archive
-                                                                "
+                                                                class="fa fa-archive"
                                                             ></i>
                                                             {{
                                                                 $__("Packages")
@@ -93,10 +90,7 @@
                                                             :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
                                                         >
                                                             <i
-                                                                class="
-                                                                    fa
-                                                                    fa-sort-alpha-asc
-                                                                "
+                                                                class="fa fa-sort-alpha-asc"
                                                             ></i>
                                                             {{
                                                                 $__("Titles")
@@ -125,7 +119,7 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import Breadcrumb from "./Breadcrumb.vue"
 import Dialog from "./Dialog.vue"
 import { fetchVendors } from "../../fetch"
@@ -133,7 +127,7 @@ import "vue-select/dist/vue-select.css"
 
 export default {
     setup() {
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         AVStore.av_agreement_statuses = agreement_statuses
         AVStore.av_agreement_closure_reasons = agreement_closure_reasons
         AVStore.av_agreement_renewal_priorities = agreement_renewal_priorities
@@ -146,7 +140,7 @@ export default {
         AVStore.av_package_content_types = package_content_types
         AVStore.av_title_publication_types = title_publication_types
 
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
 
         return {
             vendorStore,
@@ -160,13 +154,13 @@ export default {
         }
     },
     beforeCreate() {
-        fetchVendors().then((vendors) => this.vendorStore.vendors = vendors)
+        fetchVendors().then(vendors => (this.vendorStore.vendors = vendors))
     },
     components: {
         Breadcrumb,
         Dialog,
     },
-};
+}
 </script>
 
 <style>

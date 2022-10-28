@@ -9,7 +9,8 @@
                     class="btn btn-default btn-xs"
                     role="button"
                     @click="add_to_holdings"
-                    ><font-awesome-icon icon="plus" /> {{ $__("Add title to holdings") }}</a
+                    ><font-awesome-icon icon="plus" />
+                    {{ $__("Add title to holdings") }}</a
                 >
                 <a
                     v-else
@@ -17,7 +18,8 @@
                     role="button"
                     id="remove-from-holdings"
                     @click="remove_from_holdings"
-                    ><font-awesome-icon icon="minus" /> {{ $__("Remove title from holdings") }}</a
+                    ><font-awesome-icon icon="minus" />
+                    {{ $__("Remove title from holdings") }}</a
                 > </span
             ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
@@ -112,16 +114,16 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import { fetchEBSCOResource } from "../../fetch"
 import { storeToRefs } from "pinia"
-import { checkError } from '../../fetch.js'
+import { checkError } from "../../fetch.js"
 
 export default {
     setup() {
         const format_date = $date
 
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
         return {
             format_date,
@@ -134,9 +136,9 @@ export default {
                 resource_id: null,
                 title_id: null,
                 package_id: null,
-                started_on: '',
-                ended_on: '',
-                proxy: '',
+                started_on: "",
+                ended_on: "",
+                proxy: "",
                 title: {},
                 package: {},
             },
@@ -162,25 +164,26 @@ export default {
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true
-            fetch('/api/v1/erm/eholdings/ebsco/resources/' + this.resource.resource_id, {
-                method: "PATCH",
-                body: JSON.stringify({ is_selected }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then(checkError)
-                .then(
-                    (result) => {
-                        // Refresh the page. We should not need that actually.
-                        this.getResource(this.resource.resource_id)
+            fetch(
+                "/api/v1/erm/eholdings/ebsco/resources/" +
+                    this.resource.resource_id,
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ is_selected }),
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
                     },
-                ).catch(
-                    (error) => {
-                        setError(error)
-                    }
-                )
+                }
+            )
+                .then(checkError)
+                .then(result => {
+                    // Refresh the page. We should not need that actually.
+                    this.getResource(this.resource.resource_id)
+                })
+                .catch(error => {
+                    setError(error)
+                })
         },
         add_to_holdings() {
             this.edit_selected(true)

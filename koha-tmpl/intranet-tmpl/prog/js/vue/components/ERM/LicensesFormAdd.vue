@@ -32,7 +32,7 @@
                                     id="license_vendor_id"
                                     v-model="license.vendor_id"
                                     label="name"
-                                    :reduce="(vendor) => vendor.id"
+                                    :reduce="vendor => vendor.id"
                                     :options="vendors"
                                 />
                             </li>
@@ -60,7 +60,7 @@
                                     id="license_type"
                                     v-model="license.type"
                                     label="lib"
-                                    :reduce="(av) => av.authorised_value"
+                                    :reduce="av => av.authorised_value"
                                     :options="av_license_types"
                                 >
                                     <template #search="{ attributes, events }">
@@ -83,7 +83,7 @@
                                 <v-select
                                     id="license_status"
                                     v-model="license.status"
-                                    :reduce="(av) => av.authorised_value"
+                                    :reduce="av => av.authorised_value"
                                     :options="av_license_statuses"
                                     label="lib"
                                 >
@@ -140,24 +140,20 @@
 </template>
 
 <script>
-import { inject } from 'vue'
-import flatPickr from 'vue-flatpickr-component'
-import Documents from './Documents.vue'
+import { inject } from "vue"
+import flatPickr from "vue-flatpickr-component"
+import Documents from "./Documents.vue"
 import { setMessage, setError } from "../../messages"
-import { fetchLicense } from '../../fetch'
+import { fetchLicense } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
-
     setup() {
-        const vendorStore = inject('vendorStore')
+        const vendorStore = inject("vendorStore")
         const { vendors } = storeToRefs(vendorStore)
 
-        const AVStore = inject('AVStore')
-        const {
-            av_license_types,
-            av_license_statuses,
-        } = storeToRefs(AVStore)
+        const AVStore = inject("AVStore")
+        const { av_license_types, av_license_statuses } = storeToRefs(AVStore)
 
         return {
             vendors,
@@ -170,11 +166,11 @@ export default {
             fp_config: flatpickr_defaults,
             license: {
                 license_id: null,
-                name: '',
+                name: "",
                 vendor_id: null,
-                description: '',
-                type: '',
-                status: '',
+                description: "",
+                type: "",
+                status: "",
                 started_on: undefined,
                 ended_on: undefined,
                 documents: [],
@@ -201,12 +197,12 @@ export default {
             e.preventDefault()
 
             let license = JSON.parse(JSON.stringify(this.license)) // copy
-            let apiUrl = '/api/v1/erm/licenses'
+            let apiUrl = "/api/v1/erm/licenses"
 
-            let method = 'POST'
+            let method = "POST"
             if (license.license_id) {
-                method = 'PUT'
-                apiUrl += '/' + license.license_id
+                method = "PUT"
+                apiUrl += "/" + license.license_id
             }
             delete license.license_id
             delete license.vendor
@@ -215,30 +211,38 @@ export default {
                 license.vendor_id = null
             }
 
-            license.documents = license.documents.map(({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs)
+            license.documents = license.documents.map(
+                ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
+            )
 
             const options = {
                 method: method,
                 body: JSON.stringify(license),
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
+                    "Content-Type": "application/json;charset=utf-8",
                 },
             }
 
             fetch(apiUrl, options)
-                .then(response => {
-                    if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage(this.$__("License updated"))
-                    } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage(this.$__("License created"))
-                    } else {
-                        setError(response.message || response.statusText)
+                .then(
+                    response => {
+                        if (response.status == 200) {
+                            this.$router.push("/cgi-bin/koha/erm/licenses")
+                            setMessage(this.$__("License updated"))
+                        } else if (response.status == 201) {
+                            this.$router.push("/cgi-bin/koha/erm/licenses")
+                            setMessage(this.$__("License created"))
+                        } else {
+                            setError(response.message || response.statusText)
+                        }
+                    },
+                    error => {
+                        setError(error)
                     }
-                }, (error) => {
-                    setError(error)
-                }).catch(e => { console.log(e) })
+                )
+                .catch(e => {
+                    console.log(e)
+                })
         },
     },
     components: {

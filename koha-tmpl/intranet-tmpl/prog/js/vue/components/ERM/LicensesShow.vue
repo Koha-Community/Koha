@@ -117,14 +117,14 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
 import { fetchLicense } from "../../fetch"
 
 export default {
     setup() {
         const format_date = $date
 
-        const AVStore = inject('AVStore')
+        const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
@@ -136,12 +136,12 @@ export default {
         return {
             license: {
                 license_id: null,
-                name: '',
+                name: "",
                 vendor_id: null,
                 vendor: null,
-                description: '',
-                type: '',
-                status: '',
+                description: "",
+                type: "",
+                status: "",
                 started_on: undefined,
                 ended_on: undefined,
             },
@@ -160,8 +160,7 @@ export default {
             this.initialized = true
         },
     },
-    components: {
-    },
+    components: {},
     name: "LicensesShow",
 }
 </script>
