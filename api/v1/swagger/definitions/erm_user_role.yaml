@@ -2,8 +2,15 @@
 type: object
 properties:
   agreement_id:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: Internal agreement identifier
+  license_id:
+    type:
+      - integer
+      - "null"
+    description: Internal license identifier
   user_id:
     type: integer
     description: Internal patron identifier
