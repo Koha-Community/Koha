@@ -263,7 +263,7 @@ sub add_credit {
                         action  => "add_credit",
                         payload => {
                             type => lc($credit_type),
-                            line => $line->get_from_storage
+                            line => $line->get_from_storage, #TODO Seems unneeded
                         }
                     }
                 );

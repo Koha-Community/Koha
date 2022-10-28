@@ -69,6 +69,6 @@ subtest 'Koha::Account tests' => sub {
     qr/after_account_action called with action: add_credit, type: payment, ref: Koha::Account::Line/,
       '->add_credit calls the after_account_action hook with type payment';
 
-    $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
+    $schema->storage->txn_rollback;
 };
