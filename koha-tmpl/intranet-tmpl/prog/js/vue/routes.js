@@ -4,8 +4,6 @@ import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "./components/ERM/AgreementsFormConfirmDelete.vue";
-import EHoldingsMain from "./components/ERM/EHoldingsMain.vue";
-import EHoldingsLocalHome from "./components/ERM/EHoldingsLocalHome.vue";
 import EHoldingsLocalPackagesFormAdd from "./components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormConfirmDelete from "./components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue";
 import EHoldingsLocalTitlesFormAdd from "./components/ERM/EHoldingsLocalTitlesFormAdd.vue";
@@ -16,7 +14,6 @@ import EHoldingsLocalPackagesFormConfirmDelete from "./components/ERM/EHoldingsL
 import EHoldingsLocalResourcesShow from "./components/ERM/EHoldingsLocalResourcesShow.vue";
 import EHoldingsLocalTitlesList from "./components/ERM/EHoldingsLocalTitlesList.vue";
 import EHoldingsLocalTitlesShow from "./components/ERM/EHoldingsLocalTitlesShow.vue";
-import EHoldingsEBSCOHome from "./components/ERM/EHoldingsEBSCOHome.vue";
 import EHoldingsEBSCOPackagesList from "./components/ERM/EHoldingsEBSCOPackagesList.vue";
 import EHoldingsEBSCOPackagesShow from "./components/ERM/EHoldingsEBSCOPackagesShow.vue";
 import EHoldingsEBSCOResourcesShow from "./components/ERM/EHoldingsEBSCOResourcesShow.vue";
@@ -43,12 +40,10 @@ const breadcrumbs = {
     eholdings: {
         home: {
             text: "eHoldings", // $t("eHoldings")
-            path: "/cgi-bin/koha/erm/eholdings",
         },
         local: {
             home: {
                 text: "Local", // $t("Local")
-                path: "/cgi-bin/koha/erm/eholdings/local",
             },
             titles: {
                 text: "Titles", // $t("Titles")
@@ -62,7 +57,6 @@ const breadcrumbs = {
         ebsco: {
             home: {
                 text: "EBSCO", // $t("EBSCO")
-                path: "/cgi-bin/koha/erm/eholdings/ebsco",
             },
             titles: {
                 text: "Titles", // $t("Titles")
@@ -201,7 +195,6 @@ export const routes = [
         children: [
             {
                 path: "",
-                component: EHoldingsMain,
                 meta: {
                     breadcrumb: () => breadcrumb_paths.eholdings,
                 },
@@ -211,7 +204,6 @@ export const routes = [
                 children: [
                     {
                         path: "",
-                        component: EHoldingsLocalHome,
                         meta: {
                             breadcrumb: () => breadcrumb_paths.eholdings_local,
                         },
@@ -407,7 +399,6 @@ export const routes = [
                 children: [
                     {
                         path: "",
-                        component: EHoldingsEBSCOHome,
                         meta: {
                             breadcrumb: () => breadcrumb_paths.eholdings_ebsco,
                         },

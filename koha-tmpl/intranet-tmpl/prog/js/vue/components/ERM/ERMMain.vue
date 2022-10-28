@@ -35,69 +35,78 @@
                                     <li>
                                         <router-link
                                             to="/cgi-bin/koha/erm/eholdings"
+                                            class="disabled"
                                         >
                                             <i class="fa fa-crosshairs"></i>
-                                            {{ $__("eHoldings") }}</router-link
-                                        >
+                                            {{ $__("eHoldings") }}
+                                        </router-link>
                                     </li>
 
-                                    <ul>
-                                        <li
-                                            v-for="provider in erm_providers"
-                                            :key="provider"
-                                        >
-                                            <router-link
-                                                v-if="provider == 'local'"
-                                                :to="`/cgi-bin/koha/erm/eholdings/local`"
+                                    <li>
+                                        <ul>
+                                            <li
+                                                v-for="provider in erm_providers"
+                                                :key="provider"
                                             >
-                                                <i
-                                                    class="fa fa-map-marker"
-                                                ></i>
-                                                {{ $__("Local") }}</router-link
-                                            >
-                                            <router-link
-                                                v-else-if="provider == 'ebsco'"
-                                                :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
-                                            >
-                                                <i
-                                                    class="fa fa-globe"
-                                                ></i>
-                                                {{ $__("EBSCO") }}</router-link
-                                            >
-                                            <ul>
-                                                <li>
-                                                    <router-link
-                                                        :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
-                                                    >
-                                                        <i
-                                                            class="
-                                                                fa
-                                                                fa-archive
-                                                            "
-                                                        ></i>
-                                                        {{
-                                                            $__("Packages")
-                                                        }}</router-link
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <router-link
-                                                        :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
-                                                    >
-                                                        <i
-                                                            class="
-                                                                fa
-                                                                fa-sort-alpha-asc
-                                                            "
-                                                        ></i>
-                                                        {{
-                                                            $__("Titles")
-                                                        }}</router-link
-                                                    >
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                                <router-link
+                                                    v-if="provider == 'local'"
+                                                    :to="`/cgi-bin/koha/erm/eholdings/local`"
+                                                    class="disabled"
+                                                >
+                                                    <i
+                                                        class="fa fa-map-marker"
+                                                    ></i>
+                                                    {{
+                                                        $__("Local")
+                                                    }}</router-link
+                                                >
+                                                <router-link
+                                                    v-else-if="
+                                                        provider == 'ebsco'
+                                                    "
+                                                    :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
+                                                    class="disabled"
+                                                >
+                                                    <i class="fa fa-globe"></i>
+                                                    {{
+                                                        $__("EBSCO")
+                                                    }}</router-link
+                                                >
+                                                <ul>
+                                                    <li>
+                                                        <router-link
+                                                            :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
+                                                        >
+                                                            <i
+                                                                class="
+                                                                    fa
+                                                                    fa-archive
+                                                                "
+                                                            ></i>
+                                                            {{
+                                                                $__("Packages")
+                                                            }}</router-link
+                                                        >
+                                                    </li>
+                                                    <li>
+                                                        <router-link
+                                                            :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
+                                                        >
+                                                            <i
+                                                                class="
+                                                                    fa
+                                                                    fa-sort-alpha-asc
+                                                                "
+                                                            ></i>
+                                                            {{
+                                                                $__("Titles")
+                                                            }}</router-link
+                                                        >
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -120,7 +129,7 @@ import { inject } from 'vue'
 import Breadcrumb from "./Breadcrumb.vue"
 import Dialog from "./Dialog.vue"
 import { fetchVendors } from "../../fetch"
-import "vue-select/dist/vue-select.css";
+import "vue-select/dist/vue-select.css"
 
 export default {
     setup() {
@@ -164,7 +173,8 @@ export default {
 #navmenulist a.router-link-active {
     font-weight: 700;
 }
-#menu ul ul, #navmenulist ul ul {
+#menu ul ul,
+#navmenulist ul ul {
     padding-left: 2em;
     font-size: 100%;
 }
@@ -175,10 +185,21 @@ form .v-select {
     width: 30%;
 }
 
-.v-select, input:not([type=submit]):not([type=search]):not([type=button]):not([type=checkbox]), textarea {
-    border-color: rgba(60,60,60,0.26);
+.v-select,
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]),
+textarea {
+    border-color: rgba(60, 60, 60, 0.26);
     border-width: 1px;
     border-radius: 4px;
     min-width: 30%;
+}
+
+#navmenulist ul li a.disabled {
+    color: #666;
+    pointer-events: none;
+    font-weight: 700;
+}
+#navmenulist ul li a.disabled.router-link-active {
+    color: #000;
 }
 </style>

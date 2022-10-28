@@ -8,8 +8,11 @@
                 >
                     {{ $__(item.text) }}</router-link
                 >
-                <router-link v-else :to="item.path">
+                <router-link v-else-if="item.path" :to="item.path">
                     {{ $__(item.text) }}</router-link
+                >
+                <a v-else class="disabled">
+                    {{ $__(item.text) }}</a
                 >
             </li>
         </ol>
@@ -29,3 +32,11 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+a.disabled {
+    padding: .6em .3em;
+    text-decoration: none;
+    color: #000;
+}
+</style>
