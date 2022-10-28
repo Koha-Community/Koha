@@ -38,9 +38,9 @@
     </div>
 
     <ul>
-        <li><a title="Search agreements" href="#agreement_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Search agreements</span></a></li>
-        <li><a title="Search packages" href="#package_search" class="keep_text"><i class="fa fa-file-text-o"></i> <span class="tab-title">Search packages</span></a></li>
-        <li><a title="Search titles" href="#title_search" class="keep_text"><i class="fa fa-file-text-o"></i> <span class="tab-title">Search titles</span></a></li>
+        <li><a title="Search agreements" href="#agreement_search" class="keep_text"><i class="fa fa-check-circle-o"></i> <span class="tab-title">Search agreements</span></a></li>
+        <li><a title="Search packages" href="#package_search" class="keep_text"><i class="fa fa-archive"></i> <span class="tab-title">Search packages</span></a></li>
+        <li><a title="Search titles" href="#title_search" class="keep_text"><i class="fa fa-sort-alpha-asc"></i> <span class="tab-title">Search titles</span></a></li>
     </ul>
 </div>
 <!-- End ERM Resident Search Box -->

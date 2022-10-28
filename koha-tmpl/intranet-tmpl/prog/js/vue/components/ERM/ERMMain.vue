@@ -20,7 +20,7 @@
                                         <router-link
                                             to="/cgi-bin/koha/erm/agreements"
                                         >
-                                            <i class="fa fa-upload"></i>
+                                            <i class="fa fa-check-circle-o"></i>
                                             {{ $__("Agreements") }}</router-link
                                         >
                                     </li>
@@ -28,7 +28,7 @@
                                         <router-link
                                             to="/cgi-bin/koha/erm/licenses"
                                         >
-                                            <i class="fa fa-file-text-o"></i>
+                                            <i class="fa fa-gavel"></i>
                                             {{ $__("Licenses") }}</router-link
                                         >
                                     </li>
@@ -36,7 +36,7 @@
                                         <router-link
                                             to="/cgi-bin/koha/erm/eholdings"
                                         >
-                                            <i class="fa fa-file-text-o"></i>
+                                            <i class="fa fa-crosshairs"></i>
                                             {{ $__("eHoldings") }}</router-link
                                         >
                                     </li>
@@ -51,7 +51,7 @@
                                                 :to="`/cgi-bin/koha/erm/eholdings/local`"
                                             >
                                                 <i
-                                                    class="fa fa-file-text-o"
+                                                    class="fa fa-map-marker"
                                                 ></i>
                                                 {{ $__("Local") }}</router-link
                                             >
@@ -60,7 +60,7 @@
                                                 :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
                                             >
                                                 <i
-                                                    class="fa fa-file-text-o"
+                                                    class="fa fa-globe"
                                                 ></i>
                                                 {{ $__("EBSCO") }}</router-link
                                             >
@@ -72,7 +72,7 @@
                                                         <i
                                                             class="
                                                                 fa
-                                                                fa-file-text-o
+                                                                fa-archive
                                                             "
                                                         ></i>
                                                         {{
@@ -87,7 +87,7 @@
                                                         <i
                                                             class="
                                                                 fa
-                                                                fa-file-text-o
+                                                                fa-sort-alpha-asc
                                                             "
                                                         ></i>
                                                         {{
