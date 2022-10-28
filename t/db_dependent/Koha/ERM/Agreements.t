@@ -85,7 +85,7 @@ subtest 'user_role' => sub {
         {
             class => 'Koha::AuthorisedValues',
             value => {
-                category         => 'ERM_AGREEMENT_USER_ROLES',
+                category         => 'ERM_USER_ROLES',
                 authorised_value => 'TEST_ROLE',
                 lib              => 'a role for testing'
             }
@@ -95,13 +95,14 @@ subtest 'user_role' => sub {
     my $user_roles = [
         {
             user_id => $patron->borrowernumber,
+            license_id => undef,
             role    => $role
         }
     ];
     $agreement->user_roles($user_roles);
 
     my $retrieved_user_roles = $agreement->user_roles;
-    is( ref($retrieved_user_roles), 'Koha::ERM::Agreement::UserRoles' );
+    is( ref($retrieved_user_roles), 'Koha::ERM::UserRoles' );
     $retrieved_user_roles =
       [ map { delete $_->{agreement_id}; $_ }
           @{ $retrieved_user_roles->unblessed } ];

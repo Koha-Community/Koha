@@ -28,9 +28,9 @@ use Koha::Acquisition::Bookseller;
 use base qw(Koha::Object);
 
 use Koha::ERM::Agreement::Periods;
-use Koha::ERM::Agreement::UserRoles;
 use Koha::ERM::Agreement::Licenses;
 use Koha::ERM::Agreement::Relationships;
+use Koha::ERM::UserRoles;
 use Koha::ERM::Documents;
 use Koha::ERM::EHoldings::Package::Agreements;
 
@@ -86,13 +86,13 @@ sub user_roles {
                 $self->user_roles->delete;
 
                 for my $user_role (@$user_roles) {
-                    $self->_result->add_to_erm_agreement_user_roles($user_role);
+                    $self->_result->add_to_erm_user_roles($user_role);
                 }
             }
         );
     }
-    my $user_roles_rs = $self->_result->erm_agreement_user_roles;
-    return Koha::ERM::Agreement::UserRoles->_new_from_dbic($user_roles_rs);
+    my $user_roles_rs = $self->_result->erm_user_roles;
+    return Koha::ERM::UserRoles->_new_from_dbic($user_roles_rs);
 }
 
 =head3 agreement_licenses

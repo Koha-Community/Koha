@@ -1,5 +1,5 @@
 <template>
-    <div class="page-section" id="agreement_user_roles">
+    <div class="page-section" id="user_roles">
         <legend>{{ $__("Users") }}</legend>
         <fieldset
             class="rows"
@@ -7,7 +7,7 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $__("Agreement user %s").format(counter + 1) }}
+                {{ user_type.format(counter + 1) }}
                 <a href="#" @click.prevent="deleteUser(counter)"
                     ><i class="fa fa-trash"></i>
                     {{ $__("Remove this user") }}</a
@@ -37,7 +37,7 @@
                         v-model="user_role.role"
                         label="lib"
                         :reduce="av => av.authorised_value"
-                        :options="av_agreement_user_roles"
+                        :options="av_user_roles"
                     >
                         <template #search="{ attributes, events }">
                             <input
@@ -67,9 +67,10 @@
 import { fetchPatron } from "../../fetch"
 
 export default {
-    name: "AgreementUserRoles",
+    name: "UserRoles",
     props: {
-        av_agreement_user_roles: Array,
+        user_type: String,
+        av_user_roles: Array,
         user_roles: Array,
     },
     beforeCreate() {

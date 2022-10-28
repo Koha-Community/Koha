@@ -148,9 +148,10 @@
                     </fieldset>
                 </div>
                 <AgreementPeriods :periods="agreement.periods" />
-                <AgreementUserRoles
+                <UserRoles
+                    :user_type="$__('Agreement user')"
                     :user_roles="agreement.user_roles"
-                    :av_agreement_user_roles="av_agreement_user_roles"
+                    :av_user_roles="av_user_roles"
                 />
                 <AgreementLicenses
                     :agreement_licenses="agreement.agreement_licenses"
@@ -184,7 +185,7 @@
 <script>
 import { inject } from "vue"
 import AgreementPeriods from "./AgreementPeriods.vue"
-import AgreementUserRoles from "./AgreementUserRoles.vue"
+import UserRoles from "./UserRoles.vue"
 import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
@@ -202,7 +203,7 @@ export default {
             av_agreement_statuses,
             av_agreement_closure_reasons,
             av_agreement_renewal_priorities,
-            av_agreement_user_roles,
+            av_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
             av_agreement_relationships,
@@ -213,7 +214,7 @@ export default {
             av_agreement_statuses,
             av_agreement_closure_reasons,
             av_agreement_renewal_priorities,
-            av_agreement_user_roles,
+            av_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
             av_agreement_relationships,
@@ -406,7 +407,7 @@ export default {
     },
     components: {
         AgreementPeriods,
-        AgreementUserRoles,
+        UserRoles,
         AgreementLicenses,
         AgreementRelationships,
         Documents,

@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement::UserRoles;
+package Koha::ERM::UserRoles;
 
 # This file is part of Koha.
 #
@@ -20,13 +20,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::ERM::Agreement::UserRole;
+use Koha::ERM::UserRole;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::ERM::Agreement::UserRoles- Koha Agreement UserRole Object set class
+Koha::ERM::UserRoles- Koha ERM UserRole Object set class
 
 =head1 API
 
@@ -39,7 +39,7 @@ Koha::ERM::Agreement::UserRoles- Koha Agreement UserRole Object set class
 =cut
 
 sub _type {
-    return 'ErmAgreementUserRole';
+    return 'ErmUserRole';
 }
 
 =head3 object_class
@@ -47,7 +47,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::ERM::Agreement::UserRole';
+    return 'Koha::ERM::UserRole';
 }
 
 1;

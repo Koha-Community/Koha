@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement::UserRole;
+package Koha::ERM::UserRole;
 
 # This file is part of Koha.
 #
@@ -25,7 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ERM::Agreement::UserRole - Koha Agreement UserRole Object class
+Koha::ERM::UserRole - Koha ERM UserRole Object class
 
 =head1 API
 
@@ -52,7 +52,7 @@ sub patron {
 =cut
 
 sub _type {
-    return 'ErmAgreementUserRole';
+    return 'ErmUserRole';
 }
 
 1;

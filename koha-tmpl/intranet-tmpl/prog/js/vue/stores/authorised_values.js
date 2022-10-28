@@ -5,7 +5,7 @@ export const useAVStore = defineStore("authorised_values", {
         av_agreement_statuses: [],
         av_agreement_closure_reasons: [],
         av_agreement_renewal_priorities: [],
-        av_agreement_user_roles: [],
+        av_user_roles: [],
         av_license_types: [],
         av_license_statuses: [],
         av_agreement_license_statuses: [],

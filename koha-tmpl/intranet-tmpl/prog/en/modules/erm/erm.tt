@@ -33,7 +33,7 @@
 
         const agreement_closure_reasons = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_CLOSURE_REASON')) | $raw %];
         const agreement_renewal_priorities = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_RENEWAL_PRIORITY')) | $raw %];
-        const agreement_user_roles = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_USER_ROLES')) | $raw %];
+        const user_roles = [% To.json(AuthorisedValues.Get('ERM_USER_ROLES')) | $raw %];
 
         const license_types = [% To.json(AuthorisedValues.Get('ERM_LICENSE_TYPE')) | $raw %];
         const license_statuses = [% To.json(AuthorisedValues.Get('ERM_LICENSE_STATUS')) | $raw %];

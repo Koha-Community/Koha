@@ -131,7 +131,7 @@ export default {
         AVStore.av_agreement_statuses = agreement_statuses
         AVStore.av_agreement_closure_reasons = agreement_closure_reasons
         AVStore.av_agreement_renewal_priorities = agreement_renewal_priorities
-        AVStore.av_agreement_user_roles = agreement_user_roles
+        AVStore.av_user_roles = user_roles
         AVStore.av_license_types = license_types
         AVStore.av_license_statuses = license_statuses
         AVStore.av_agreement_license_statuses = agreement_license_statuses

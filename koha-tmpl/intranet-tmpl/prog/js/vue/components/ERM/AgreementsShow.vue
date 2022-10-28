@@ -130,7 +130,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                "av_agreement_user_roles",
+                                                "av_user_roles",
                                                 role.role
                                             )
                                         }}
