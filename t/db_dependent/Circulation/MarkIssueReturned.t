@@ -245,7 +245,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_1->itemnumber );
 
     $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaning items would not result in patron debarment' );
+    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
 
     $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
 
