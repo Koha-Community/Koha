@@ -88,10 +88,18 @@ $(document).ready(function(){
     });
 
     $("#template_id").on("change", function() {
-        if ( $(this).find(":selected").data("editor") ) {
+        let option = $(this).find(":selected");
+
+        if ( option.data("editor") ) {
             $("#delete_template_submit").removeAttr("disabled");
         } else {
             $("#delete_template_submit").attr("disabled", "disabled");
+        }
+
+        if ( option.val() != 0 ) {
+            $("#load_template_submit").removeAttr("disabled");
+        } else {
+            $("#load_template_submit").attr("disabled", "disabled");
         }
     });
     $("#template_id").change(); // Trigger to enable delete button if patron's template is in use
