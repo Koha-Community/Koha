@@ -105,29 +105,6 @@ label {
 	text-align: center;
 }
 
-#login #submit-button, #login .button {
-	font-size: 1.4em;
-	padding : .3em .6em;
-    background: rgba(254, 195, 44, 1);
-    border: none;
-    color: #000;
-}
-
-#login #submit-button:hover, #login #submit-button:focus, #login #submit-button:active {
-    background: rgba(254, 195, 44, 0.7);
-    border: none;
-}
-
-#login #onerror_actions {
-    margin-bottom: 1em;
-    text-align: center;
-}
-
-#login #onerror_actions .button {
-    margin: 3px;
-    color: #333333;
-}
-
 #footer {
         text-align: center;
         border-top: 1px solid #ccc;
@@ -135,35 +112,25 @@ label {
         font-style: italic;
 }
 
-.submit input, .submit input:focus, .button {
-	border: 1px outset #999999;
-	border-top-color: #666;
-	border-left-color: #666;
-	-moz-border-radius : 2px;
-	padding: 0.25em;
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 35%, #e0e0e0 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(35%,#f7f7f7), color-stop(100%,#e0e0e0)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 35%,#e0e0e0 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffffff 0%,#f7f7f7 35%,#e0e0e0 100%); /* Opera11.10+ */
-	background: -ms-linear-gradient(top, #ffffff 0%,#f7f7f7 35%,#e0e0e0 100%); /* IE10+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
-	background: linear-gradient(top, #ffffff 0%,#f7f7f7 35%,#e0e0e0 100%); /* W3C */
-	color: #333333;
-	padding: 0.25em;
+.submit {
+    text-align: right;
 }
 
-.submit input:active, .button:active {
-	background: #fff;
-	border: 1px solid #999;
-	border-left-color: #999;
-	border-top-color: #999;
+#submit-button {
+    font-size: 135%;
 }
 
-.submit, .editform th, #postcustomsubmit {
-	text-align: right;
+input[type="submit"]:active,
+input[type="submit"]:focus {
+    box-shadow: inset 0 0 0 1px #edb423;
 }
 
+input[type="submit"]:active,
+input[type="submit"]:focus,
+input[type="submit"]:hover {
+    background: #ffd15e none;
+    border: 1px solid #ffc32b;
+}
 
 textarea, input, select {
     background: #fff;

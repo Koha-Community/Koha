@@ -14,7 +14,9 @@
 .btn-success,
 .btn-info,
 .btn-warning,
-.btn-danger {
+.btn-danger,
+button {
+    box-shadow: unset;
     text-shadow: unset;
 }
 
@@ -566,7 +568,10 @@ textarea {
 }
 
 input {
-    &[type="submit"],
+    &[type="submit"] {
+        @include primary-button;
+    }
+
     &[type="reset"],
     &[type="button"] {
         @include default-button;
@@ -584,19 +589,10 @@ input {
     }
 
     &.submit {
-        @include default-button;
+        @include primary-button;
 
         &:disabled {
             @include disabled-button;
-        }
-    }
-
-    &[type="submit"], &.submit {
-        background-color: #FEC32C;
-        border: 0;
-
-        &:hover {
-            background-color: #fec22c9f;
         }
     }
 }
@@ -1557,9 +1553,7 @@ i {
     button,
     a.approve {
         background: #FFF none;
-        border: 1px outset #999999;
-        border-left-color: #666;
-        border-top-color: #666;
+        border: 1px solid #555;
         margin: .4em;
         padding: .4em;
         white-space: pre-line;
@@ -3055,22 +3049,23 @@ nav {
 
 button,
 .btn {
-    display: inline-block;
-    margin-bottom: 0;
-    font-weight: normal;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    touch-action: manipulation;
-    cursor: pointer;
-    background-image: none;
-    font-size: 12px;
-    line-height: 1.42857143;
-    border-radius: 4px;
-    user-select: none;
+    @include default-button;
+
+    &.btn-default {
+        color: #555;
+    }
 
     &.btn-link {
+        background: transparent none;
         border: 0;
+    }
+
+    &.btn-primary {
+        @include primary-button;
+
+        &.dropdown-toggle {
+            border-left: 1px solid darken( saturate( $btn-primary, 15 ), 15 );
+        }
     }
 }
 
@@ -3365,6 +3360,10 @@ label {
     label,
     select {
         font-size: 13px;
+    }
+
+    > .btn:first-child:not( :last-child ):not( .dropdown-toggle ) {
+        border-right: 1px solid darken( saturate( $btn-primary, 15 ), 15 );
     }
 }
 
