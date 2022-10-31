@@ -54,10 +54,14 @@ $(document).ready(function(){
     var multiCopyControl = $("#add_multiple_copies_span");
     var addMultipleBlock = $("#addmultiple");
     var addSingleBlock = $("#addsingle");
+    var saveAsTemplateControl = $("#save_as_template_span");
+    var saveTemplateBlock = $("#savetemplate");
+
     multiCopyControl.hide();
     $("#add_multiple_copies").on("click",function(e){
         e.preventDefault;
         addMultipleBlock.toggle();
+        saveTemplateBlock.toggle();
         addSingleBlock.toggle();
         multiCopyControl.toggle();
         $('body,html').animate({ scrollTop: $('body').height() }, 100);
@@ -65,12 +69,11 @@ $(document).ready(function(){
     $("#cancel_add_multiple").on("click",function(e){
         e.preventDefault();
         addMultipleBlock.toggle();
+        saveTemplateBlock.toggle();
         addSingleBlock.toggle();
         multiCopyControl.toggle();
     });
 
-    var saveAsTemplateControl = $("#save_as_template_span");
-    var saveTemplateBlock = $("#savetemplate");
     saveAsTemplateControl.hide();
     $("#save_as_template").on("click",function(e){
         e.preventDefault;
