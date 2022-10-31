@@ -285,7 +285,7 @@ foreach my $bibnum ( @biblionumbers ){
     }
 
     if ( $res_info->item_group ) {
-       $hold_info->{barcodes} = [ uniq map { defined $_->barcode && $_->item_group->id == $res_info->item_group_id  ? $_->barcode : () } @$items ];
+       $hold_info->{barcodes} = [ uniq map { defined $_->barcode && $_->item_group && ( $_->item_group->id == $res_info->item_group_id )  ? $_->barcode : () } @$items ];
     }
 
     # items available
