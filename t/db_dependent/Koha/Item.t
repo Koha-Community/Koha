@@ -1471,7 +1471,7 @@ subtest 'store() tests' => sub {
 
     subtest '_set_found_trigger() tests' => sub {
 
-        plan tests => 8;
+        plan tests => 9;
 
         $schema->storage->txn_begin;
 
@@ -1540,6 +1540,14 @@ subtest 'store() tests' => sub {
             { credit_id => $processing_credit->id },
             'type is correct'
         );
+
+        # Let's build a new item
+        $item   = $builder->build_sample_item({ itemlost => 1, itemlost_on => dt_from_string() });
+        $item->set( { itemlost => 0 } )->store;
+
+        $messages = $item->object_messages;
+        warn Data::Dumper::Dumper( $messages );
+        is( scalar @{$messages}, 0, 'This item has no history, no associated lost fines, presumed not lost by patron, no messages returned');
 
         $schema->storage->txn_rollback;
     };
