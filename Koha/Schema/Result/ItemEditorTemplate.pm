@@ -114,9 +114,26 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-28 16:49:35
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7JIe4z78F9oMOAnAZdqmtA
 
+__PACKAGE__->add_columns(
+    '+is_shared' => { is_boolean => 1 },
+);
+
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
+
 sub koha_object_class {
     'Koha::Item::Template';
 }
+
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
+
 sub koha_objects_class {
     'Koha::Item::Templates';
 }

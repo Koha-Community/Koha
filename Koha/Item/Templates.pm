@@ -28,6 +28,8 @@ use base qw(Koha::Objects);
 
 Koha::Item::Templates - Koha Item Template Object set class
 
+=head2 METHODS
+
 =head3 get_available
 
 Returns a hashref with keys 'owned' and 'shared' pointing to Koha::Item::Templats objects
