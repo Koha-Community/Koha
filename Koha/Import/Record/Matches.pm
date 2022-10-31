@@ -35,6 +35,24 @@ Koha::Import::Record::Matches - Koha Import Record Matches Object set class
 
 =cut
 
+=head3 filter_by_chosen
+
+    Koha::Import::Record::Matches->filter_by_chosen();
+
+    Returns chosen import record matches
+
+=cut
+
+sub filter_by_chosen {
+
+    my ( $self ) = @_;
+
+    my $chosen = $self->search({ chosen => 1 });
+
+    return $chosen;
+
+}
+
 =head3 _type
 
 =cut

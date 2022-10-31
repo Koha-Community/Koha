@@ -30,7 +30,7 @@ use Encode;
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::ImportBatch qw( GetImportRecordMatches SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
+use C4::ImportBatch qw( SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
 use C4::Matcher;
 use C4::Search qw( FindDuplicate );
 use C4::Biblio qw(
@@ -157,8 +157,9 @@ if ($op eq ""){
         # Check if this import_record_id was selected
         next if not grep { $_ eq $import_record->import_record_id } @import_record_id_selected;
         my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
-        my $match = GetImportRecordMatches( $import_record->import_record_id, 1 );
-        my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
+        my $matches = $import_record->get_import_record_matches({ chosen => 1 });
+        my $match = $matches->count ? $matches->next : undef;
+        my $biblionumber = $match ? $match->candidate_match_id : 0;
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
         my $c_discount = shift ( @discount);
@@ -472,7 +473,9 @@ sub import_biblios_list {
     while ( my $import_record = $import_records->next ) {
         my $item_id = 1;
         $biblio_count++;
-        my $match = GetImportRecordMatches($import_record->import_record_id, 1);
+        my $matches = $import_record->get_import_record_matches({ chosen => 1 });
+        my $match = $matches->count ? $matches->next : undef;
+        my $match_biblio = $match ? Koha::Biblios->find({ biblionumber => $match->candidate_match_id }) : undef;
         my %cellrecord = (
             import_record_id => $import_record->import_record_id,
             import_biblio => $import_record->import_biblio,
@@ -480,9 +483,9 @@ sub import_biblios_list {
             status => $import_record->status,
             record_sequence => $import_record->record_sequence,
             overlay_status => $import_record->overlay_status,
-            match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
-            match_citation     => $#$match > -1 ? $match->[0]->{'title'} || '' . ' ' . $match->[0]->{'author'} || '': '',
-            match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
+            match_biblionumber => $match ? $match->candidate_match_id : 0,
+            match_citation     => $match_biblio ? ($match_biblio->title || '') . ' ' .( $match_biblio->author || ''): '',
+            match_score => $match ? $match->score : 0,
         );
         my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
 
