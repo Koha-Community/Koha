@@ -23,6 +23,7 @@ use MARC::Record;
 use C4::Context;
 use Koha::Database;
 use Koha::Import::Record::Biblios;
+use Koha::Import::Record::Matches;
 
 use base qw(Koha::Object);
 
@@ -69,6 +70,27 @@ sub import_biblio {
     my ( $self ) = @_;
     my $import_biblio_rs = $self->_result->import_biblio;
     return Koha::Import::Record::Biblio->_new_from_dbic( $import_biblio_rs );
+}
+
+=head3 get_import_record_matches
+
+Returns the Import::Record::Matches for the record
+optionally specify a 'chosen' param to get only the chosen match
+
+    my $matches = $import_record->get_import_record_matches([{ chosen => 1 }])
+
+=cut
+
+sub get_import_record_matches {
+    my ($self, $params) = @_;
+    my $chosen = $params->{chosen};
+
+    my $matches = $self->_result->import_record_matches;
+    $matches = Koha::Import::Record::Matches->_new_from_dbic( $matches );
+
+    return $matches->filter_by_chosen() if $chosen;
+
+    return $matches->search({},{ order_by => { -desc => ['score','candidate_match_id'] } });
 }
 
 =head2 Internal methods
