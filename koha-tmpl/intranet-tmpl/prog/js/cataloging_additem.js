@@ -134,7 +134,7 @@ $(document).ready(function(){
 
 function CheckTemplateForm(f) {
     if ( $('#replace_template_id').val() == "0" &&  $('#template_name').val() == "" ) {
-        alert(MSG_TEMPLATE_NAME_REQUIRED);
+        alert(__("Template name is required."));
         return false;
     } else {
         return true;
