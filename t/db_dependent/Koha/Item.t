@@ -1206,7 +1206,7 @@ subtest 'store() tests' => sub {
 
     subtest '_set_found_trigger() tests' => sub {
 
-        plan tests => 6;
+        plan tests => 7;
 
         $schema->storage->txn_begin;
 
@@ -1252,6 +1252,14 @@ subtest 'store() tests' => sub {
         is( $message_2->type,    'info',        'type is correct' );
         is( $message_2->message, 'lost_charge', 'message is correct' );
         is( $message_2->payload, undef,         'no payload' );
+
+
+        # Let's build a new item
+        $item   = $builder->build_sample_item({ itemlost => 1, itemlost_on => dt_from_string() });
+        $item->set( { itemlost => 0 } )->store;
+
+        $messages = $item->object_messages;
+        is( scalar @{$messages}, 0, 'This item has no history, no associated lost fines, presumed not lost by patron, no messages returned');
 
         $schema->storage->txn_rollback;
     };

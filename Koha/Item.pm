@@ -1187,58 +1187,56 @@ sub _set_found_trigger {
             }
         }
 
-        # restore fine for lost book
-        if ( $lostreturn_policy eq 'restore' ) {
-            my $lost_overdue = Koha::Account::Lines->search(
-                {
-                    itemnumber      => $self->itemnumber,
-                    debit_type_code => 'OVERDUE',
-                    status          => 'LOST'
-                },
-                {
-                    order_by => { '-desc' => 'date' },
-                    rows     => 1
-                }
-            )->single;
+        # possibly restore fine for lost book
+        my $lost_overdue = Koha::Account::Lines->search(
+            {
+                itemnumber      => $self->itemnumber,
+                debit_type_code => 'OVERDUE',
+                status          => 'LOST'
+            },
+            {
+                order_by => { '-desc' => 'date' },
+                rows     => 1
+            }
+        )->single;
+        if ( $lostreturn_policy eq 'restore' && $lost_overdue ) {
 
-            if ( $lost_overdue ) {
+            my $patron = $lost_overdue->patron;
+            if ($patron) {
+                my $account = $patron->account;
 
-                my $patron = $lost_overdue->patron;
-                if ($patron) {
-                    my $account = $patron->account;
+                # Update status of fine
+                $lost_overdue->status('FOUND')->store();
 
-                    # Update status of fine
-                    $lost_overdue->status('FOUND')->store();
+                # Find related forgive credit
+                my $refund = $lost_overdue->credits(
+                    {
+                        credit_type_code => 'FORGIVEN',
+                        itemnumber       => $self->itemnumber,
+                        status           => [ { '!=' => 'VOID' }, undef ]
+                    },
+                    { order_by => { '-desc' => 'date' }, rows => 1 }
+                )->single;
 
-                    # Find related forgive credit
-                    my $refund = $lost_overdue->credits(
+                if ( $refund ) {
+                    # Revert the forgive credit
+                    $refund->void({ interface => 'trigger' });
+                    $self->add_message(
                         {
-                            credit_type_code => 'FORGIVEN',
-                            itemnumber       => $self->itemnumber,
-                            status           => [ { '!=' => 'VOID' }, undef ]
-                        },
-                        { order_by => { '-desc' => 'date' }, rows => 1 }
-                    )->single;
+                            type    => 'info',
+                            message => 'lost_restored',
+                            payload => { refund_id => $refund->id }
+                        }
+                    );
+                }
 
-                    if ( $refund ) {
-                        # Revert the forgive credit
-                        $refund->void({ interface => 'trigger' });
-                        $self->add_message(
-                            {
-                                type    => 'info',
-                                message => 'lost_restored',
-                                payload => { refund_id => $refund->id }
-                            }
-                        );
-                    }
-
-                    # Reconcile balances if required
-                    if ( C4::Context->preference('AccountAutoReconcile') ) {
-                        $account->reconcile_balance;
-                    }
+                # Reconcile balances if required
+                if ( C4::Context->preference('AccountAutoReconcile') ) {
+                    $account->reconcile_balance;
                 }
             }
-        } elsif ( $lostreturn_policy eq 'charge' ) {
+
+        } elsif ( $lostreturn_policy eq 'charge' && ( $lost_overdue || $lost_charge ) ) {
             $self->add_message(
                 {
                     type    => 'info',
