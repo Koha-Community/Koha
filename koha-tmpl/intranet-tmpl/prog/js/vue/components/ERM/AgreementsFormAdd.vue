@@ -217,6 +217,7 @@ export default {
             av_agreement_license_statuses,
             av_agreement_license_location,
             av_agreement_relationships,
+            max_allowed_packet,
         }
     },
     data() {
@@ -300,6 +301,20 @@ export default {
                 errors.push(this.$__("Only one controlling license is allowed"))
             }
 
+            let documents_with_uploaded_files = agreement.documents.filter(
+                doc => typeof doc.file_content !== "undefined"
+            )
+            if (
+                documents_with_uploaded_files.filter(
+                    doc => atob(doc.file_content).length >= max_allowed_packet
+                ).length >= 1
+            ) {
+                errors.push(
+                    this.$__("File size exceeds maximum allowed: %s MB").format(
+                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
+                    )
+                )
+            }
             errors.forEach(function (e) {
                 setWarning(e)
             })

@@ -35,8 +35,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
+
 $template->param(
     vendors => Koha::Acquisition::Booksellers->search,
+    max_allowed_packet => $max_allowed_packet,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -143,7 +143,7 @@
 import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import Documents from "./Documents.vue"
-import { setMessage, setError } from "../../messages"
+import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLicense } from "../../fetch"
 import { storeToRefs } from "pinia"
 
@@ -159,6 +159,7 @@ export default {
             vendors,
             av_license_types,
             av_license_statuses,
+            max_allowed_packet,
         }
     },
     data() {
@@ -193,10 +194,37 @@ export default {
             this.license = license
             this.initialized = true
         },
+        checkForm(license) {
+            let errors = []
+
+            let documents_with_uploaded_files = license.documents.filter(
+                doc => typeof doc.file_content !== "undefined"
+            )
+            if (
+                documents_with_uploaded_files.filter(
+                    doc => atob(doc.file_content).length >= max_allowed_packet
+                ).length >= 1
+            ) {
+                errors.push(
+                    this.$__("File size exceeds maximum allowed: %s MB").format(
+                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
+                    )
+                )
+            }
+            errors.forEach(function (e) {
+                setWarning(e)
+            })
+            return !errors.length
+        },
         onSubmit(e) {
             e.preventDefault()
 
             let license = JSON.parse(JSON.stringify(this.license)) // copy
+
+            if (!this.checkForm(license)) {
+                return false
+            }
+
             let apiUrl = "/api/v1/erm/licenses"
 
             let method = "POST"
