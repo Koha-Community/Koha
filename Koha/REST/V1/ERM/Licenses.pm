@@ -135,6 +135,12 @@ sub add {
                     }
                 );
             }
+            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+                return $c->render(
+                    status  => 413,
+                    openapi => { error => $_->error }
+                );
+            }
         }
 
         $c->unhandled_exception($_);
@@ -201,6 +207,12 @@ sub update {
                             . $to_api_mapping->{ $_->parameter }
                             . " does not exist"
                     }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+                return $c->render(
+                    status  => 413,
+                    openapi => { error => $_->error }
                 );
             }
         }

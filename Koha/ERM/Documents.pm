@@ -48,7 +48,7 @@ sub replace_with {
     $schema->txn_do(
         sub {
             my $existing_documents = $obj->documents;
-
+            my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
             # FIXME Here we are not deleting all the documents before recreating them, like we do for other related resources.
             # As we do not want the content of the documents to transit over the network we need to use the document_id (and allow it in the API spec)
             # to distinguish from each other
@@ -69,6 +69,9 @@ sub replace_with {
             for my $document (@$documents) {
                 my $file_content = defined($document->{file_content}) ? decode_base64( $document->{file_content} ) : "";
                 my $mt = MIME::Types->new();
+                # Throw exception if uploaded file exceeds server limit
+                Koha::Exceptions::PayloadTooLarge->throw("File size exceeds limit defined by server") if length($file_content) > $max_allowed_packet;
+
                 if ( $document->{document_id} ) {
                     # The document already exists in DB
                     $existing_documents->find( $document->{document_id} )

@@ -24,6 +24,10 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'The required object doesn\'t exist',
     },
+    'Koha::Exceptions::PayloadTooLarge' => {
+        isa => 'Koha::Exception',
+        description => 'Request entity is larger than limits defined by server',
+    },
     'Koha::Exceptions::ObjectNotCreated' => {
         isa => 'Koha::Exception',
         description => 'The object have not been created',
