@@ -229,7 +229,8 @@ Set the passed boolean value to items.exclude_from_local_holds_priority
 
 =item mark_items_returned
 
-Move issues on these items to the old issues table, do not mark items found or adjust statuses or fines
+Move issues on these items to the old issues table, do not mark items found, or
+adjust damaged/withdrawn statuses, or fines, or locations.
 
 =item callback
 

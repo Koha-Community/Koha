@@ -199,13 +199,12 @@
                             <legend>Options</legend>
                             <ol>
                                 <li>
+                                    <div class="hint">This option checks in items to remove them from patron accounts.</br>Items are not marked found, nor do damaged/withdrawn statuses prevent this return, nor are item locations updated. This feature is intended to allow removal of checkouts from patron accounts without affecting fines or other statuses.</div></br>
                                     <div class="subfield_line">
-                                        <p>This option allows returning items to remove them from patron accounts</br>Items are not marked found nor do statuses prevent this return. This feature is intended to allow removal and deletion of items without affecting fines or other statuses</p></br>
-                                        <label for="mark_items_returned">Mark items returned:</label>
+                                        <label for="mark_items_returned">Check in items:</label>
                                         <select id="mark_items_returned" name="mark_items_returned" class="input_marceditor select2" style="width: 50px">
-                                            <option selected></option>
                                             <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="0" selected>No</option>
                                         </select>
                                     </div>
                                 </li>
