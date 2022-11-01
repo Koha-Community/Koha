@@ -450,7 +450,7 @@
             </fieldset>
         [% END %]
         <fieldset class="action">
-            <input type="submit" value="Save" />
+            <input type="submit" class="btn btn-primary" value="Save" />
             <a href="/cgi-bin/koha/admin/categories.pl" class="cancel">Cancel</a>
         </fieldset>
     </form>
@@ -526,11 +526,11 @@
             </table>
             <fieldset class="action">
                 [% IF patrons_in_category > 0 %]
-                    <input type="submit" value="OK" />
+                    <input type="submit" class="btn btn-primary" value="OK" />
                 [% ELSE %]
                     <input type="hidden" name="op" value="delete_confirmed" />
                     <input type="hidden" name="categorycode" value="[% categorycode | html %]" />
-                    <input type="submit" value="Delete this category" />
+                    <input type="submit" class="btn btn-primary" value="Delete this category" />
                     <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>
                 [% END %]
             </fieldset>

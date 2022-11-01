@@ -211,7 +211,7 @@
                 [% END %]
                 </li>
         </ol></fieldset>
-        <fieldset class="action"><input type="submit" value="Save" /> 
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" />
           [% IF ( return_tab ) %]
             <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab | html %]">Cancel</a>
           [% ELSE %]
@@ -293,7 +293,7 @@
         <h1>Data recorded</h1>
         
         <form action="[% script_name | html %]" method="post">
-        <input type="submit" value="OK" />
+        <input type="submit" class="btn btn-primary" value="OK" />
         </form>
     [% END %]
     
@@ -318,7 +318,7 @@
     [% IF ( delete_confirmed ) %]
         <h1>Data deleted</h1>
         <form action="[% script_name | html %]" method="post">
-            <input type="submit" value="Back to system preferences" />
+            <input type="submit" class="btn btn-primary" value="Back to system preferences" />
         </form>
     [% END %]
    

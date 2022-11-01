@@ -147,14 +147,14 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>
+                            <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>
                         </fieldset>
                     </form>
             [% END %]
             [% IF ( add_validate ) %]
                 <h1>Data recorded</h1>
                 <form action="[% script_name | html %]" method="post">
-                    <input type="submit" value="OK" />
+                    <input type="submit" class="btn btn-primary" value="OK" />
                 </form>
             [% END %]
             [% IF ( delete_confirm ) %]
@@ -185,7 +185,7 @@
                 <h1>Contract deleted</h1>
                 <form action="[% script_name | html %]" method="post">
                     <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                    <input type="submit" value="OK" />
+                    <input type="submit" class="btn btn-primary" value="OK" />
                 </form>
             [% END %]
             [% IF ( else ) %]

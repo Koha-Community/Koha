@@ -222,7 +222,7 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
         </ol>
         </fieldset>
         <fieldset class="action">
-            <input type="submit" value="Submit" />
+            <input type="submit" class="btn btn-primary" value="Submit" />
             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]" class="cancel">Cancel</a>
         </fieldset>
     </form>
@@ -253,7 +253,7 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
     <form action="[% script_name | html %]" method="post">
     <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
     <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-    <input type="submit" value="OK" class="submit" />
+    <input type="submit" value="OK" class="btn btn-primary" />
     </form></div>
 [% END %]
 [% IF ( authtype_create ) %]
@@ -271,7 +271,7 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
             [% END %]
         [% END %]
         </select>
-        <input type="submit" value="OK" class="submit" />
+        <input type="submit" value="OK" class="btn btn-primary" />
     </form>
 [% END %]
 
@@ -294,7 +294,7 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
     [% END %]
     </select>
     <input type="text" name="searchfield" value="[% searchfield | html %]" />
-    <input type="submit" value="OK" class="submit" />
+    <input type="submit" value="OK" class="btn btn-primary" />
 </form><br />
 <div id="pagertable_authtagstructure">
 </div>

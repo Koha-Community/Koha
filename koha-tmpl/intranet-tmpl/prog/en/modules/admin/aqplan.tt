@@ -170,7 +170,7 @@
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
     [% ELSE %]
         <input type="hidden" name="op" value="save" />
-        <fieldset class="action"><input type="submit" value="Save"/></fieldset>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
     [% END %]
 
 
@@ -255,7 +255,7 @@
     </li>
     </ol>
     <fieldset class="action">
-        <input type="submit" name="option_submit" value="Submit" />
+        <input type="submit" name="option_submit" class="btn btn-primary" value="Submit" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     </fieldset>
 </fieldset>
@@ -279,7 +279,7 @@
             </select>
         </li>
     </ol>
-    <fieldset class="action">    <input type="submit" value="Submit"/>
+    <fieldset class="action">    <input type="submit" class="btn btn-primary" value="Submit" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     <input type="hidden" name="report_name" value="[% report_name | html %]" />
     <input type="hidden" name="output" value="file" /></fieldset>

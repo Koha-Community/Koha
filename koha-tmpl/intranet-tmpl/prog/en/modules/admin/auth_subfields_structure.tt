@@ -89,7 +89,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
-        <fieldset class="action"><input type="submit" class="submit" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
 
         [% BLOCK outputsubfield %][% FILTER collapse %]
             [% SWITCH ( subfieldanchor ) %]
@@ -371,7 +371,7 @@
     <fieldset class="action"><input type="hidden" name="op" value="add_form" />
     <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
     <input type="hidden" name="authtypecode" value="[% edit_authtypecode | html %]" />
-    <input type="submit" value="Edit subfields" />
+    <input type="submit" class="btn btn-primary" value="Edit subfields" />
     <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
     </form>
 

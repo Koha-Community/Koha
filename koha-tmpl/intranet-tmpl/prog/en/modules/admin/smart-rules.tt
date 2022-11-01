@@ -97,7 +97,7 @@
                     <select name="tobranch" id="tobranch">
                         [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                     </select>
-                    <input type="submit" id="clone_rules" value="Clone" />
+                    <input type="submit" id="clone_rules" class="btn btn-primary" value="Clone" />
                 </form>
             [% END %]
         [% END %]
@@ -434,7 +434,7 @@
                     </td>
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
-                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
+                        <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-save"></i> Save</button>
                         <button name="cancel" class="clear_edit btn btn-default btn-xs"><i class="fa fa-undo"></i> Clear</button>
                     </td>
                     <td><input type="text" name="note" id="note" size="15" value="" maxlength="100"></td>

@@ -185,7 +185,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
         (if you select a value here, the indicators will be limited to the authorized value list)</li>
 </ol></fieldset> 
     <fieldset class="action">
-        <input type="submit" value="Save changes" />
+        <input type="submit" class="btn btn-primary" value="Save changes" />
         <a class="cancel" href="[% script_name | url %]?frameworkcode=[% framework.frameworkcode | uri %]">Cancel</a>
     </fieldset>
     </form>
@@ -228,7 +228,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             <option value="[% fw.frameworkcode | html %]">[% fw.frameworktext | html %]</option>
         [% END %]
         </select>
-        <input type="submit" value="OK" />
+        <input type="submit" class="btn btn-primary" value="OK" />
     </form>
 [% END %]
 
@@ -250,7 +250,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                 [% END %]
             [% END %]
         </select>
-    <input type="submit" value="Search" />
+    <input type="submit" class="btn btn-primary" value="Search" />
 <p>        <label for="select_display">Display only used tags/subfields</label>
         [% IF ( select_display ) %]
             <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked" />

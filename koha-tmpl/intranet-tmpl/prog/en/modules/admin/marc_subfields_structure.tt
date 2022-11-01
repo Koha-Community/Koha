@@ -345,7 +345,7 @@
                             </div><!-- /subfieldtabs -->
 
                             <fieldset class="action">
-                                <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="cancel">Cancel</a>
+                                <input type="submit" class="btn btn-primary" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="cancel">Cancel</a>
                             </fieldset>
                         </form>
                     [% END # /IF ( add_form ) %]
@@ -436,7 +436,7 @@
                             <fieldset class="action"><input type="hidden" name="op" value="add_form" />
                                 <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% edit_frameworkcode | html %]" />
-                                <input type="submit" value="Edit subfields" />
+                                <input type="submit" class="btn btn-primary" value="Edit subfields" />
                                 <a class="cancel" href="marctagstructure.pl?searchfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | html %]">Cancel</a>
                             </fieldset>
                         </form>
