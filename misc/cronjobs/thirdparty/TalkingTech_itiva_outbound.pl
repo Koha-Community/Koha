@@ -339,17 +339,6 @@ sub GetWaitingHolds {
 
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
 
-        my $rule = Koha::CirculationRules->get_effective_rule({
-            categorycode => $issue->{categorycode},
-            itemtype => $item->effective_itemtype,
-            branchcode => $issue->{branchcode},
-            rule_name => 'holds_pickup_period',
-        });
-        if ( defined($rule) and $rule->rule_value ne '' ){
-            # circulation rule overrides ReservesMaxPickUpDelay
-            $pickupdelay = $rule->rule_value;
-        }
-
         $issue->{'date_due'} = output_pref({dt => dt_from_string($issue->{expirationdate}), dateformat => 'iso' });
         $issue->{'level'} = 1;    # only one level for Hold Waiting notifications
 
