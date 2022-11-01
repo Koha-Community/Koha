@@ -2,6 +2,7 @@
     <fieldset class="rows" id="package_agreements">
         <legend>{{ $__("Agreements") }}</legend>
         <fieldset
+            :id="`package_agreement_${counter}`"
             class="rows"
             v-for="(package_agreement, counter) in package_agreements"
             v-bind:key="counter"

@@ -2,6 +2,7 @@
     <div class="page-section" id="agreement_relationships">
         <legend>{{ $__("Related agreements") }}</legend>
         <fieldset
+            :id="`related_agreement_${counter}`"
             class="rows"
             v-for="(relationship, counter) in relationships"
             v-bind:key="counter"
