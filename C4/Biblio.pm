@@ -1832,10 +1832,16 @@ sub UpsertMarcControlField {
 
 sub GetFrameworkCode {
     my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
-    $sth->execute($biblionumber);
-    my ($frameworkcode) = $sth->fetchrow;
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key = "FrameworkCode-$biblionumber";
+    my $frameworkcode = $cache->get_from_cache($cache_key);
+    unless (defined $frameworkcode) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
+        $sth->execute($biblionumber);
+        ($frameworkcode) = $sth->fetchrow;
+        $cache->set_in_cache($cache_key, $frameworkcode);
+    }
     return $frameworkcode;
 }
 
@@ -2556,6 +2562,9 @@ sub _koha_modify_biblio {
         $biblio->{'notes'},    $biblio->{'serial'},      $biblio->{'seriestitle'}, $biblio->{'copyrightdate'} ? int($biblio->{'copyrightdate'}) : undef,
         $biblio->{'abstract'}, $biblio->{'biblionumber'}
     ) if $biblio->{'biblionumber'};
+
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+    $cache->clear_from_cache("FrameworkCode-" . $biblio->{biblionumber});
 
     if ( $dbh->errstr || !$biblio->{'biblionumber'} ) {
         $error .= "ERROR in _koha_modify_biblio $query" . $dbh->errstr;
