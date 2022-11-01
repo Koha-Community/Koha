@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -920,6 +920,27 @@ subtest 'record_schema test' => sub {
 };
 
 
+subtest 'GetFrameworkCode' => sub {
+    plan tests => 4;
+
+    my $biblio = $builder->build_sample_biblio({ frameworkcode => 'OBP' });
+
+    is(GetFrameworkCode($biblio->biblionumber), 'OBP', 'GetFrameworkCode returns correct frameworkcode');
+
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key = "FrameworkCode-" . $biblio->biblionumber;
+    my $frameworkcode = $cache->get_from_cache($cache_key);
+    is($frameworkcode, 'OBP', 'Cache has been set in GetFrameworkCode');
+
+    # Set new value directly in cache to make sure it's actually being used
+    $cache->set_in_cache($cache_key, 'OD');
+    is(GetFrameworkCode($biblio->biblionumber), 'OD', 'GetFrameworkCode returns correct frameworkcode, using cache');
+
+    # Test cache invalidation
+    ModBiblio($biblio->metadata->record, $biblio->biblionumber, 'OGR');
+    is(GetFrameworkCode($biblio->biblionumber), 'OGR', 'GetFrameworkCode returns correct frameworkcode after setting a new one though ModBiblio');
+
+};
 
 # Cleanup
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );

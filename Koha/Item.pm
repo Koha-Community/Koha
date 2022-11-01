@@ -1051,16 +1051,14 @@ This is meant to be used for display purpose only.
 
 sub columns_to_str {
     my ( $self ) = @_;
+    my $frameworkcode = C4::Biblio::GetFrameworkCode($self->biblionumber);
+    my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
+    my $mss           = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
 
-    my $frameworkcode = $self->biblio->frameworkcode;
-    my $tagslib = C4::Biblio::GetMarcStructure(1, $frameworkcode);
     my ( $itemtagfield, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
-    my $columns_info = $self->_result->result_source->columns_info;
-
-    my $mss = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
     my $values = {};
-    for my $column ( keys %$columns_info ) {
+    for my $column ( @{$self->_columns}) {
 
         next if $column eq 'more_subfields_xml';
 
@@ -2099,10 +2097,8 @@ or staff client strings.
 
 sub strings_map {
     my ( $self, $params ) = @_;
-
-    my $columns_info  = $self->_result->result_source->columns_info;
-    my $frameworkcode = $self->biblio->frameworkcode;
-    my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
+    my $frameworkcode = C4::Biblio::GetFrameworkCode($self->biblionumber);
+    my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
     my $mss           = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
 
     my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
@@ -2117,7 +2113,7 @@ sub strings_map {
     # Handle not null and default values for integers and dates
     my $strings = {};
 
-    foreach my $col ( keys %{$columns_info} ) {
+    foreach my $col ( @{$self->_columns} ) {
 
         # By now, we are done with known columns, now check the framework for mappings
         my $field = $self->_result->result_source->name . '.' . $col;
