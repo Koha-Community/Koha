@@ -94,9 +94,26 @@ sub logaction {
         ? basename($0)
         : undef;
 
+    my @trace;
+    my $depth = C4::Context->preference('ActionLogsTraceDepth') || 0;
+    for ( my $i = 0 ; $i < $depth ; $i++ ) {
+        my ( $package, $filename, $line, $subroutine ) = caller($i);
+        last unless defined $line;
+        push(
+            @trace,
+            {
+                package    => $package,
+                filename   => $filename,
+                line       => $line,
+                subroutine => $subroutine,
+            }
+        );
+    }
+    my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 1 } ) : undef;
+
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface,script) values (now(),?,?,?,?,?,?,?)");
-    $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface,$script);
+    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface,script,trace) values (now(),?,?,?,?,?,?,?,?)");
+    $sth->execute( $usernumber, $modulename, $actionname, $objectnumber, $infos, $interface, $script, $trace );
     $sth->finish;
 
     my $logger = Koha::Logger->get(

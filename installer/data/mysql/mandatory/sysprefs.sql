@@ -9,6 +9,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AcquisitionLog','0',NULL,'If ON, log acquisitions activity','YesNo'),
 ('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: their own only, any within their branch, or all','Choice'),
 ('AcqWarnOnDuplicateInvoice','0','','Warn librarians when they try to create a duplicate invoice','YesNo'),
+('ActionLogsTraceDepth', '0', '', 'Sets the maximum depth of the action logs stack trace', 'Integer'),
 ('AdditionalContentsEditor','tinymce','tinymce|codemirror','Choose tool for editing News.', 'Choice'),
 ('AdditionalFieldsInZ3950ResultSearch', '', NULL, 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of a search Z3950', 'Free'),
 ('AddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress', 'free'),

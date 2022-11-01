@@ -171,6 +171,7 @@ CREATE TABLE `action_logs` (
   `info` mediumtext DEFAULT NULL COMMENT 'information about the action (usually includes SQL statement)',
   `interface` varchar(30) DEFAULT NULL COMMENT 'the context this action was taken in',
   `script` varchar(255) DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
+  `trace` TEXT DEFAULT NULL COMMENT 'An optional stack trace enabled by ActionLogsTraceDepth',
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
