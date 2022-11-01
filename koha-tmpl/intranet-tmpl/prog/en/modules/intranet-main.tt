@@ -227,7 +227,7 @@
                                 </div>
                                 [% END %]
 
-                                [% IF ( ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+                                [% IF ( ( Koha.Preference('OpacCatalogConcerns') || Koha.Preference('CatalogConcerns') ) && pending_biblio_tickets && CAN_user_editcatalogue_edit_catalogue ) %]
                                 <div class="pending-info" id="catalog_concerns_pending">
                                     <a href="/cgi-bin/koha/cataloguing/concerns.pl">Catalog concerns pending</a>:
                                     <span class="pending-number-link">[% pending_biblio_tickets | html %]</span>
