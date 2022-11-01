@@ -29,7 +29,7 @@ function checkCodes( new_lettercode, new_branchcode ){
         }
     });
 }
-
+//This has bug
 function confirmOverwrite( new_lettercode, new_branchcode ){
     var letter_exists;
     $.ajax({
@@ -127,7 +127,7 @@ $(document).ready(function() {
                     var new_lettercode = $("#code").val();
                     var new_branchcode = $("#branch").val();
                     var confirm = confirmOverwrite( new_lettercode, new_branchcode );
-                    if( confirm && confirm === false){
+                    if(confirm === false){
                         return false;
                     }
                 }
