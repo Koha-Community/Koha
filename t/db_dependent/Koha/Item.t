@@ -1546,7 +1546,6 @@ subtest 'store() tests' => sub {
         $item->set( { itemlost => 0 } )->store;
 
         $messages = $item->object_messages;
-        warn Data::Dumper::Dumper( $messages );
         is( scalar @{$messages}, 0, 'This item has no history, no associated lost fines, presumed not lost by patron, no messages returned');
 
         $schema->storage->txn_rollback;
