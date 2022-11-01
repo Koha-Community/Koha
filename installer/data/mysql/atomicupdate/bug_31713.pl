@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "31713",
-    description => "Add FEE_SUMMARY slip notice",
+    description => "Add ACCOUNTS_SUMMARY slip notice",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -34,12 +34,12 @@ return {
     </th>
   </tr>
 
-  [% IF borrower.account.outstanding_debits.total_outstanding %]
   <tr>
     <th colspan='4' class='centerednames'>
       <h4>Debts</h4>
     </th>
   </tr>
+  [% IF borrower.account.outstanding_debits.total_outstanding %]
   <tr>
     <th>Date</th>
     <th>Charge</th>
@@ -57,14 +57,18 @@ return {
     <td class='debit'>[% debit.amountoutstanding | $Price %]</td>
   </tr>
   [% END %]
+  [% ELSE %]
+  <tr>
+    <td colspan='4'>There are no outstanding debts on your account</td>
+  </tr>
   [% END %]
 
-  [% IF borrower.account.outstanding_credits.total_outstanding %]
   <tr>
     <th colspan='4' class='centerednames'>
       <h4>Credits</h4>
     </th>
   </tr>
+  [% IF borrower.account.outstanding_credits.total_outstanding %]
   <tr>
     <th>Date</th>
     <th>Credit</th>
@@ -82,6 +86,10 @@ return {
     <td class='credit'>[% credit.amountoutstanding | $Price %]</td>
   </tr>
   [% END %]
+  [% ELSE %]
+  <tr>
+    <td colspan='4'>There are no outstanding credits on your account</td>
+  </tr>
   [% END %]
 
   <tfoot>
@@ -95,7 +103,7 @@ END_CONTENT
 
         $dbh->do(qq{
            INSERT IGNORE INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
-           VALUES ( 'members', 'FEE_SUMMARY', '', 'Fee Summary Slip', 1, 'Fee Summary for [% borrower.firstname %] [% borrower.surname %]', "$slip_content", 'print', 'default' )
+           VALUES ( 'members', 'ACCOUNTS_SUMMARY', '', 'Account balance slip', 1, 'Account summary for [% borrower.firstname %] [% borrower.surname %]', "$slip_content", 'print', 'default' )
         });
         say $out "Notice added";
     },

@@ -1284,11 +1284,11 @@ tables:
             - "It is valid one minute."
 
         - module: members
-          code: FEE_SUMMARY
+          code: ACCOUNTS_SUMMARY
           branchcode: ""
-          name: "Fee Summary Slip"
+          name: "Account balance slip"
           is_html: 1
-          title: "Fee Summary for [% borrower.firstname %] [% borrower.surname %]"
+          title: "Account summary for [% borrower.firstname %] [% borrower.surname %]"
           message_transport_type: print
           lang: default
           content:
@@ -1318,12 +1318,12 @@ tables:
             - "    </th>"
             - "  </tr>"
             - ""
-            - "  [% IF borrower.account.outstanding_debits.total_outstanding %]"
             - "  <tr>"
             - "    <th colspan='4' class='centerednames'>"
             - "      <h4>Debts</h4>"
             - "    </th>"
             - "  </tr>"
+            - "  [% IF borrower.account.outstanding_debits.total_outstanding %]"
             - "  <tr>"
             - "    <th>Date</th>"
             - "    <th>Charge</th>"
@@ -1341,14 +1341,18 @@ tables:
             - "    <td class='debit'>[% debit.amountoutstanding | $Price %]</td>"
             - "  </tr>"
             - "  [% END %]"
+            - "  [% ELSE %]"
+            - "  <tr>"
+            - "    <td colspan='4'>There are no outstanding debts on your account</td>"
+            - "  </tr>"
             - "  [% END %]"
             - ""
-            - "  [% IF borrower.account.outstanding_credits.total_outstanding %]"
             - "  <tr>"
             - "    <th colspan='4' class='centerednames'>"
             - "      <h4>Credits</h4>"
             - "    </th>"
             - "  </tr>"
+            - "  [% IF borrower.account.outstanding_credits.total_outstanding %]"
             - "  <tr>"
             - "    <th>Date</th>"
             - "    <th>Credit</th>"
@@ -1366,6 +1370,10 @@ tables:
             - "    <td class='credit'>[% credit.amountoutstanding | $Price %]</td>"
             - "  </tr>"
             - "  [% END %]"
+            - "  [% ELSE %]"
+            - "  <tr>"
+            - "    <td colspan='4'>There are no outstanding credits on your account</td>"
+            - "  </tr>"
             - "  [% END %]"
             - ""
             - "  <tfoot>"
