@@ -396,7 +396,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    this.setError(error)
+                    setError(error)
                 })
         },
         onStatusChanged(e) {
