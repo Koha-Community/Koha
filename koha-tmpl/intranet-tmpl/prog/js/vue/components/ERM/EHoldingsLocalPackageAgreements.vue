@@ -1,7 +1,10 @@
 <template>
     <fieldset class="rows" id="package_agreements">
         <legend>{{ $__("Agreements") }}</legend>
+
+        <div v-if="!initialized">{{ $__("Loading") }}</div>
         <fieldset
+            v-else
             :id="`package_agreement_${counter}`"
             class="rows"
             v-for="(package_agreement, counter) in package_agreements"
@@ -40,12 +43,14 @@
             </ol>
         </fieldset>
         <a
-            v-if="agreements.length"
+            v-if="initialized && agreements.length"
             class="btn btn-default"
             @click="addAgreement"
             ><font-awesome-icon icon="plus" /> {{ $__("Add new agreement") }}</a
         >
-        <span v-else>{{ $__("There are no agreements created yet") }}</span>
+        <span v-else-if="initialized">{{
+            $__("There are no agreements created yet")
+        }}</span>
     </fieldset>
 </template>
 
@@ -56,11 +61,13 @@ export default {
     data() {
         return {
             agreements: [],
+            initialized: false,
         }
     },
     beforeCreate() {
         fetchAgreements().then(agreements => {
             this.agreements = agreements
+            this.initialized = true
         })
     },
     methods: {
