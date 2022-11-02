@@ -43,7 +43,7 @@ Prints the manual page and exits.
 
 =item B<--force>
 
-Allows this script to rebuild the entire holds queue even if RealTimeHoldsQueue is enabled.
+Allows this script to rebuild the entire holds queue even if the RealTimeHoldsQueue system preference is enabled.
 
 =back
 
@@ -70,7 +70,7 @@ pod2usage( -exitval => 0, -verbose => 2 ) if $man;
 my $rthq = C4::Context->preference('RealTimeHoldsQueue');
 
 if ( $rthq && !$force ) {
-    say "Real Time Holds Queue is enabled, holds queue not built.";
+    say "RealTimeHoldsQueue system preference is enabled, holds queue not built.";
     say "Use --force to force building the holds queue.";
     exit(1);
 }
