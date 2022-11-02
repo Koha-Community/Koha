@@ -100,6 +100,14 @@ sub call {
     return @responses;
 }
 
+=head2 get_enabled_plugins
+
+Returns a list of enabled plugins.
+
+    @plugins = Koha::Plugins->get_enabled_plugins();
+
+=cut
+
 sub get_enabled_plugins {
     my ($class) = @_;
 
