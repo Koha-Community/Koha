@@ -553,9 +553,17 @@ sub to_api {
     my ( $self, $params ) = @_;
     my $json_object = $self->TO_JSON;
 
+    # Make sure we duplicate the $params variable to avoid
+    # breaking calls in a loop (Koha::Objects->to_api)
+    $params = defined $params ? {%$params} : {};
+
+    # children should be able to handle without
+    my $embeds    = delete $params->{embed};
+    my $av_expand = delete $params->{av_expand};
+
     # coded values handling
     my $avs = {};
-    if ( $params->{av_expand} and $self->can('api_av_mapping') ) {
+    if ( $av_expand and $self->can('api_av_mapping') ) {
         $avs = $self->api_av_mapping($params);
     }
 
@@ -565,7 +573,7 @@ sub to_api {
             delete $json_object->{$field} unless any { $_ eq $field } @{ $self->public_read_list };
         }
 
-        if ( $params->{av_expand} ) {
+        if ( $av_expand ) {
             foreach my $field (keys %{$avs}) {
                 delete $avs->{$field}
                     unless any { $_ eq $field } @{ $self->public_read_list };
@@ -598,12 +606,7 @@ sub to_api {
     }
 
     $json_object->{_str} = $avs
-      if $params->{av_expand};
-
-    # Make sure we duplicate the $params variable to avoid
-    # breaking calls in a loop (Koha::Objects->to_api)
-    $params    = {%$params};
-    my $embeds = delete $params->{embed};
+      if $av_expand;
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
@@ -616,6 +619,9 @@ sub to_api {
             else {
                 my $curr = $embed;
                 my $next = $embeds->{$curr}->{children};
+
+                $params->{av_expand} = 1
+                  if $embeds->{$embed}->{av_expand};
 
                 my $children = $self->$curr;
 

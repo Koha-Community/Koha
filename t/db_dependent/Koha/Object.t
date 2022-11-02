@@ -226,7 +226,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 30;
+    plan tests => 31;
 
     $schema->storage->txn_begin;
 
@@ -303,14 +303,36 @@ subtest "to_api() tests" => sub {
     is($biblio_api->{items}->[0]->{holds}->[0]->{hold_id}, $hold->reserve_id, 'Hold matches');
     is_deeply($biblio_api->{biblioitem}, $biblio->biblioitem->to_api, 'More than one root');
 
+    my $_str = {
+        location => {
+            category => 'ASD',
+            str      => 'Estante alto',
+            type     => 'av'
+        }
+    };
+
+    # mock Koha::Item so it implements 'api_av_mapping'
+    my $item_mock = Test::MockModule->new('Koha::Item');
+    $item_mock->mock(
+        'api_av_mapping',
+        sub {
+            return $_str;
+        }
+    );
+
     my $hold_api = $hold->to_api(
         {
-            embed => { 'item' => {} }
+            embed => { 'item' => { av_expand => 1 } }
         }
     );
 
     is( ref($hold_api->{item}), 'HASH', 'Single nested object works correctly' );
     is( $hold_api->{item}->{item_id}, $item->itemnumber, 'Object embedded correctly' );
+    is_deeply(
+        $hold_api->{item}->{_str},
+        $_str,
+        '_str correctly added to nested embed'
+    );
 
     # biblio with no items
     my $new_biblio = $builder->build_sample_biblio;

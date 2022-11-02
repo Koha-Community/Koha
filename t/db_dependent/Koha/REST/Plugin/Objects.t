@@ -38,6 +38,7 @@ plugin 'Koha::REST::Plugin::Pagination';
 get '/cities' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
+    $c->stash_embed;
     my $cities = $c->objects->search(Koha::Cities->new);
     $c->render( status => 200, json => $cities );
 };
@@ -45,6 +46,7 @@ get '/cities' => sub {
 get '/cities/:city_id' => sub {
     my $c = shift;
     my $id = $c->stash("city_id");
+    $c->stash_embed;
     my $city = $c->objects->find(Koha::Cities->new, $id);
     $c->render( status => 200, json => $city );
 };
@@ -712,7 +714,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
         }
     );
 
-    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-av-expand' => 1 } )
+    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '+av_expand' } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
       ->json_has('/_str')
       ->json_is( '/_str/country/type'     => 'av' )
@@ -723,7 +725,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
       ->status_is(200)->json_is( '/name' => 'Manuel' )
       ->json_hasnt('/_str');
 
-    $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-av-expand' => 1 } )
+    $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-embed' => '+av_expand' } )
       ->status_is(200)->json_is( '/name' => 'Manuela' )
       ->json_has('/_str')
       ->json_is( '/_str/country/type'     => 'av' )
@@ -827,7 +829,7 @@ subtest 'objects.search helper with expanded authorised values' => sub {
     );
 
     $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
-          { 'x-koha-av-expand' => 1 } )->status_is(200)
+          { 'x-koha-embed' => '+av_expand' } )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
       ->json_is( '/0/name' => 'Manuel' )
       ->json_has('/0/_str')
@@ -840,8 +842,7 @@ subtest 'objects.search helper with expanded authorised values' => sub {
       ->json_is( '/1/_str/country/type'     => 'av' )
       ->json_is( '/1/_str/country/category' => $cat->category_name );
 
-    $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
-          { 'x-koha-av-expand' => 0 } )->status_is(200)
+    $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
       ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_str')
       ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_str');

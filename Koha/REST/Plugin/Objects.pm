@@ -54,7 +54,7 @@ the requested object. It passes through any embeds if specified.
 
             # Look for embeds
             my $embed     = $c->stash('koha.embed');
-            my $av_expand = $c->req->headers->header('x-koha-av-expand');
+            my $av_expand = $c->stash('koha.av_expand');
 
             # Generate prefetches for embedded stuff
             $c->dbic_merge_prefetch(
@@ -100,7 +100,7 @@ shouldn't be called twice in it.
             my $is_public = $c->stash('is_public');
             # Look for embeds
             my $embed     = $c->stash('koha.embed');
-            my $av_expand = $c->req->headers->header('x-koha-av-expand');
+            my $av_expand = $c->stash('koha.av_expand');
 
             # Merge sorting into query attributes
             $c->dbic_merge_sorting(

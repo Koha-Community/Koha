@@ -210,11 +210,15 @@ get '/stash_embed' => sub {
     my $c = shift;
 
     $c->stash_embed();
-    my $embed = $c->stash('koha.embed');
+    my $embed     = $c->stash('koha.embed');
+    my $av_expand = $c->stash('koha.av_expand');
 
     $c->render(
         status => 200,
-        json   => $embed
+        json   => {
+            av_expand => $av_expand,
+            embed     => $embed,
+        }
     );
 };
 
@@ -429,24 +433,38 @@ subtest '_build_query_params_from_api' => sub {
 
 subtest 'stash_embed() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 14;
 
     my $t = Test::Mojo->new;
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item' } )
-      ->json_is( { checkouts => { children => { item => { } } } } );
+      ->json_is( '/embed' => { checkouts => { children => { item => { } } } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,library' } )
-      ->json_is( { checkouts => { children => { item => {} } }, library => {} } );
+      ->json_is( '/embed' => { checkouts => { children => { item => {} } }, library => {} } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'holds+count' } )
-      ->json_is( { holds_count => { is_count => 1 } } );
+      ->json_is( '/embed' => { holds_count => { is_count => 1 } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,patron' } )
-      ->json_is({
+      ->json_is( '/embed' => {
             checkouts => { children => { item => {} } },
             patron    => {}
         });
+
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item+av_expand,patron+av_expand' } )
+      ->json_is( '/embed' => {
+            checkouts => { children => { item => { av_expand => 1 } } },
+            patron    => { av_expand => 1 }
+        })
+      ->json_is( '/av_expand' => undef );
+
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts+av_expand,checkouts.item,patron,+av_expand' } )
+      ->json_is( '/embed' => {
+            checkouts => { children => { item => { } }, av_expand => 1 },
+            patron    => { }
+        })
+      ->json_is( '/av_expand' => 1 );
 };
 
 subtest 'stash_overrides() tests' => sub {
