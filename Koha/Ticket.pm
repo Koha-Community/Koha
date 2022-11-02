@@ -117,7 +117,7 @@ sub store {
 
         # Send patron acknowledgement
         my $acknowledgement_letter = C4::Letters::GetPreparedLetter(
-            module      => 'catalog',
+            module      => 'catalogue',
             letter_code => 'TICKET_ACKNOWLEDGE',
             branchcode  => $self->reporter->branchcode,
             tables      => { tickets => $self->id }
@@ -140,7 +140,7 @@ sub store {
 
             # notify the library if a notice exists
             my $notify_letter = C4::Letters::GetPreparedLetter(
-                module      => 'catalog',
+                module      => 'catalogue',
                 letter_code => 'TICKET_NOTIFY',
                 branchcode  => $self->reporter->branchcode,
                 tables      => { tickets => $self->id }

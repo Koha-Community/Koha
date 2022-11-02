@@ -228,7 +228,7 @@ sub add_update {
               ? 'TICKET_RESOLVE'
               : 'TICKET_UPDATE';
             my $letter = C4::Letters::GetPreparedLetter(
-                module      => 'catalog',
+                module      => 'catalogue',
                 letter_code => $notice,
                 branchcode  => $update->user->branchcode,
                 tables      => { ticket_updates => $update->id }
