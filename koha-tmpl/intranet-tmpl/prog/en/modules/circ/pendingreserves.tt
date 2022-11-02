@@ -140,6 +140,8 @@
                         [% END %]
                     </span>
                 [% END %]
+            [% ELSIF hold_info.item_group %]
+                Any available from item group <em>[% hold_info.item_group.description | html %]</em>.
             [% END %]
         </td>
         <td>
