@@ -333,7 +333,8 @@
         <table>
     [% ELSE %]
         <h1>Local use preferences</h1>
-        <table width="80%" id="sysprefst">
+        <div class="page-section">
+        <table id="sysprefst">
         <thead><tr>
         <th>Preference</th>
         <th>Explanation</th>
@@ -455,9 +456,10 @@
 
         <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit | url %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete | url %]"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
-    [% END %]</tbody>
+    [% END %]
+    </tbody>
     </table>
-    
+    [% IF tab == 'local_use' %]</div>[% END %]
     [% END %]
 
             </main>
