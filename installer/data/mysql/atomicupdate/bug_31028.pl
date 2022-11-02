@@ -89,10 +89,10 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalog', 'TICKET_ACKNOWLEDGEMENT', '', 'Concern acknowledgement', '1', 'Catalog concern acknowledgement', "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],\r\n\r\nThankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %].\r\n\r\nYou reported: \r\n[% ticket.body %]\r\n\r\nThankyou", 'email' );
+                VALUES ( 'catalog', 'TICKET_ACKNOWLEDGE', '', 'Concern acknowledgement', '1', 'Catalog concern acknowledgement', "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],\r\n\r\nThankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %].\r\n\r\nYou reported: \r\n[% ticket.body %]\r\n\r\nThankyou", 'email' );
             }
         );
-        say $out "Added new notice 'TICKET_ACKNOWLEDGEMENT'";
+        say $out "Added new notice 'TICKET_ACKNOWLEDGE'";
 
         $dbh->do(
             q{
