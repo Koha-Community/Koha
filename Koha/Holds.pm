@@ -48,6 +48,11 @@ sub waiting {
     return $self->search( { found => 'W' } );
 }
 
+=head3 processing
+
+returns a set of holds that are processing from an existing set
+
+=cut
 
 sub processing {
     my ( $self ) = @_;
