@@ -279,35 +279,43 @@
     </span>
     <fieldset id="save_as_template_span">
         <legend>Save template</legend>
-        <select name="replace_template_id" id="replace_template_id" class="select2" style="width: 20em">
-            <option value="0" selected="selected">Save as new template</option>
-            <optgroup label="Update existing template">
-                [% FOREACH t IN item_templates.owned %]
-                    <option data-editor="1" data-shared="[% t.is_shared | html %]" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
-                [% END %]
-                [% IF CAN_user_editcatalogue_manage_item_editor_templates && item_templates.shared.count %]
-                    <optgroup label="Update shared template">
-                        [% FOREACH t IN item_templates.shared %]
-                            <option data-editor="1" data-shared="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
-                        [% END %]
-                    </optgroup>
-                [% END %]
-            </optgroup>
-        </select>
+        <div class="btn-group">
+            <select name="replace_template_id" id="replace_template_id" class="select2" style="width: 20em">
+                <option value="0" selected="selected">Save as new template</option>
+                <optgroup label="Update existing template">
+                    [% FOREACH t IN item_templates.owned %]
+                        <option data-editor="1" data-shared="[% t.is_shared | html %]" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                    [% END %]
+                    [% IF CAN_user_editcatalogue_manage_item_editor_templates && item_templates.shared.count %]
+                        <optgroup label="Update shared template">
+                            [% FOREACH t IN item_templates.shared %]
+                                <option data-editor="1" data-shared="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                            [% END %]
+                        </optgroup>
+                    [% END %]
+                </optgroup>
+            </select>
+        </div>
 
-        <span id="template_name_block">
-            <label for="template_name" class="required">Template name: </label>
-            <input type="text" id="template_name" name="template_name" class="required"/>
-            <span class="required">Required</span>
-        </span>
+        <div class="btn-group">
+            <span id="template_name_block">
+                <label for="template_name" class="required">Template name: </label>
+                <input type="text" id="template_name" name="template_name" class="required"/>
+                <span class="required">Required</span>
+            </span>
+        </div>
 
-        <label for="template_is_shared">
-            <input type="checkbox" id="template_is_shared" name="template_is_shared"/>
-            Share template
-        </label>
+        <div class="btn-group">
+            <label for="template_is_shared">
+                <input type="checkbox" id="template_is_shared" name="template_is_shared"/>
+                Share template
+            </label>
+        </div>
 
-        <input type="submit" id="save_as_template_submit" name="save_as_template_submit" value="Save" onclick="javascript:return CheckTemplateForm(this.form);" />
-        <a href="#" id="cancel_save_as_template" class="cancel">Cancel</a>
+        <div class="btn-group">
+            <input type="submit" id="save_as_template_submit" name="save_as_template_submit" value="Save" onclick="javascript:return CheckTemplateForm(this.form);" />
+            <a href="#" id="cancel_save_as_template" class="cancel">Cancel</a>
+        </div>
     </fieldset>
 
     [% ELSE %]
