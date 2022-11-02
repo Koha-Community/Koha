@@ -333,7 +333,7 @@ subtest "BatchCommitRecords overlay into framework" => sub {
     t::lib::Mocks::mock_config( 'enable_plugins', 0 );
     my $mock_import = Test::MockModule->new("C4::ImportBatch");
     my $biblio = $builder->build_sample_biblio;
-    $mock_import->mock( _get_commit_action => sub { return ('replace',undef,$biblio->biblionumber); } );
+    $mock_import->mock( _get_commit_action => sub { return ('replace','ignore',$biblio->biblionumber); } );
 
     my $import_batch = {
         matcher_id => 2,
