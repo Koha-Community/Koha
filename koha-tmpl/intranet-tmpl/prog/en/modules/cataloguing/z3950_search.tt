@@ -108,7 +108,7 @@
 
                 <nav class="navbar navbar-default navbar-fixed-bottom">
                     <div class="container-fluid">
-                        <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+                        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
                     </div>
                 </nav>
             </form> <!-- /.checkboxed -->
@@ -243,7 +243,7 @@
                             [% IF ( show_nextbutton ) %]
                                 <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
                             [% END %]
-                            <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" value="Go" />
+                            <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
                         </form> <!-- /#page_form -->
 
                     [% ELSE %]
@@ -254,7 +254,7 @@
                         <p>
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                             <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]"/>
-                            <input type="submit" value="Try another search"/>
+                            <input type="submit" class="btn btn-primary" value="Try another search" />
                         </p>
                     </form>
                 </div> <!-- /.col-xs-12 -->

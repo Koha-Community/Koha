@@ -38,14 +38,14 @@
 	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
     </div>
     <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
-	<input type="submit" value="OK" />
+    <input type="submit" class="btn btn-primary" value="OK" />
 	<input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
     </form>
 [% ELSE %]
     [% IF ( success ) %]
     <div class="dialog message">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
 	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
-	    <input type="submit" value="OK" />
+        <input type="submit" class="btn btn-primary" value="OK" />
 	    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
 	</form>
     [% ELSE %]
@@ -77,7 +77,7 @@
 	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
 	    [% END %]
 
-	    <input type="submit" value="Select" />
+        <input type="submit" class="btn btn-primary" value="Select" />
 
 	</form>
 	[% END %]

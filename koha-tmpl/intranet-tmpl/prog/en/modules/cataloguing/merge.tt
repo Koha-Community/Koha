@@ -138,7 +138,7 @@ div#result { margin-top: 1em; }
         <input type="hidden" name="biblionumber" value="[% record.biblionumber | html %]" />
     [% END %]
     <fieldset class="action">
-        <input type="submit" value="Next" />
+        <input type="submit" class="btn btn-primary" value="Next" />
     </fieldset>
     </fieldset>
 </form>
@@ -184,7 +184,7 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
 
 <fieldset class="action">
-    <input type="submit" name="merge" value="Merge" />
+    <input type="submit" name="merge" class="btn btn-primary" value="Merge" />
     <label for="report_fields">Fields to display in report:</label>
     <input type="text" name="report_fields" id="report_fields" value="[% MergeReportFields | html %]" />
     <span class="hint">(Example: "001,245ab,600")</span>
