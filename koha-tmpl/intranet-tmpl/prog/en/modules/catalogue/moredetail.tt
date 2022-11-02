@@ -185,7 +185,7 @@
                                 <p class="help-block">Item has been claimed as returned.</p>
                             [% ELSE %]
                                 <input type="hidden" name="op" value="set_lost" />
-                                <input type="submit" name="submit" class="submit" value="Set status" />
+                                <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
                             [% END %]
                         </form>
                     [% ELSE %]
@@ -219,7 +219,7 @@
             [% END %]
                     </select>
                     <input type="hidden" name="op" value="set_damaged" />
-                    <input type="submit" name="submit" class="submit" value="Set status" /></form>
+                    <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" /></form>
                 [% ELSE %]
                     [% FOREACH itemdamagedloo IN itemdamagedloop %]
                         [% IF ( itemdamagedloo.selected ) %]
@@ -252,7 +252,7 @@
                                 [% END %]
                             </select>
                             <input type="hidden" name="op" value="set_withdrawn" />
-                            <input type="submit" name="submit" class="submit" value="Set status" /></form>
+                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" /></form>
                     [% ELSE %]
                         [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
                             [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
@@ -288,7 +288,7 @@
                             [% END %]
                             </select>
                             <input type="hidden" name="op" value="set_exclude_priority" />
-                            <input type="submit" name="submit" class="submit" value="Update" /></form>
+                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" /></form>
                         </li>
                     </ol>
                 </div>
@@ -351,7 +351,7 @@
                     <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
                         <input type="hidden" name="op" value="set_public_note" />
-                        <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
+                        <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                     </form>
                     [% ELSE %]
                         [% ITEM_DAT.itemnotes | html %]
@@ -365,7 +365,7 @@
                     <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
                         <input type="hidden" name="op" value="set_non_public_note" />
-                        <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
+                        <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                     </form>
                     [% ELSE %]
                         [% ITEM_DAT.itemnotes_nonpublic | html %]
