@@ -93,6 +93,7 @@ subtest 'more call() tests' => sub {
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
     Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete();
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
@@ -198,6 +199,7 @@ subtest 'is_enabled() tests' => sub {
 
 $schema->storage->txn_begin;
 Koha::Plugins::Methods->delete;
+$schema->resultset('PluginData')->delete;
 
 warning_is { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); } undef;
 
