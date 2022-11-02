@@ -42,7 +42,7 @@ subtest 'normal staff user test' => sub {
         'plugins'          => 0,
         'problem_reports'  => 0,
         'recalls'          => 0,
-        'reports'          => 0,
+        'reports'          => 1,
         'reserveforothers' => 0,
         'self_check'       => 0,
         'serials'          => 0,
@@ -58,6 +58,10 @@ subtest 'normal staff user test' => sub {
         'CAN_user_staffaccess'                               => 1,
         'CAN_user_circulate'                                 => 1,
         'CAN_user_circulate_circulate_remaining_permissions' => 1,
+        'CAN_user_reports'                                   => 1,
+        'CAN_user_reports_create_reports'                    => 1,
+        'CAN_user_reports_delete_reports'                    => 1,
+        'CAN_user_reports_execute_reports'                   => 1,
     };
     is_deeply( $authz, $expected, 'Expected permissions generated for normal staff user' );
 };
