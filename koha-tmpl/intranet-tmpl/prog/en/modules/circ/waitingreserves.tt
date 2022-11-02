@@ -110,7 +110,7 @@
             <div role="tabpanel" class="tab-pane active" id="holdswaiting">
         [% IF ( reserveloop ) %]
             <div id="toolbar" class="btn-toolbar">
-                <button class="cancel_selected_holds" data-bulk="true"></button>
+                <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
             </div>
             [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
         [% ELSE %]
@@ -127,9 +127,9 @@
                        <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
                        <input type="hidden" name="tab" value="holdsover">
                        [% IF TransferWhenCancelAllWaitingHolds %]
-                           <input type="submit" value="Cancel and Transfer all" />
+                           <input type="submit" class="btn btn-primary" value="Cancel and Transfer all" />
                        [% ELSE %]
-                           <input type="submit" value="Cancel all" />
+                           <input type="submit" class="btn btn-primary" value="Cancel all" />
                        [% END %]
                    </form>
                    [% UNLESS TransferWhenCancelAllWaitingHolds %]

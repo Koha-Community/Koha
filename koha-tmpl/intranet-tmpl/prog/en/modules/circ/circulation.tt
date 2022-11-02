@@ -941,7 +941,7 @@
                                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
                                             <input type="hidden" name="from" value="circ" />
                                             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                            <input type="submit" value="Suspend all holds" />
+                                            <input type="submit" class="btn btn-primary" value="Suspend all holds" />
 
                                             [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                                             <label for="suspend_until">until</label>
@@ -956,7 +956,7 @@
                                             <input type="hidden" name="from" value="circ" />
                                             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                             <input type="hidden" name="suspend" value="0" />
-                                            <input type="submit" value="Resume all suspended holds" />
+                                            <input type="submit" class="btn btn-primary" value="Resume all suspended holds" />
                                         </form>
                                     </fieldset>
                                 [% END # /IF SuspendHoldsIntranet %]

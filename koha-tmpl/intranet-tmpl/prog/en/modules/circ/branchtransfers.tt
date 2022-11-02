@@ -76,11 +76,11 @@
                         <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         [% IF ( waiting or transferred or processing ) %]
                             <input type="hidden" name="request" value="KillWaiting" />
-                            <input type="submit" value="Cancel" />
+                            <input type="submit" class="btn btn-primary" value="Cancel" />
                         [% END %]
                         [% IF ( reserved ) %]
                             <input type="hidden" name="request" value="SetTransit" />
-                            <input type="submit" value="Transfer" />
+                            <input type="submit" class="btn btn-primary" value="Transfer" />
                         [% END %]
                     </form>
                 </td>
@@ -100,7 +100,7 @@
                                 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                 <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                 <input type="hidden" name="request" value="KillReserved" />
-                                <input type="submit" value="Cancel" />
+                                <input type="submit" class="btn btn-primary" value="Cancel" />
                             </form>
                         </td>
                     </tr>
@@ -116,7 +116,7 @@
                                         <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
                                         <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                                     [% END %]
-                                    <input type="submit" value="Ignore" />
+                                    <input type="submit" class="btn btn-primary" value="Ignore" />
                                 </form>
                             </td>
                     </tr>
@@ -185,7 +185,7 @@
             </li>
             <li>
                 <label for="barcode">Enter barcode: </label>
-                <input name="barcode" id="barcode" size="15" class="focus" type="text" /> <input type="submit" value="Submit" />
+                <input name="barcode" id="barcode" size="15" class="focus" type="text" /> <input type="submit" class="btn btn-primary" value="Submit" />
             </li>
 			</ol>
         </fieldset>
