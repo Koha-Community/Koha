@@ -28,7 +28,6 @@ use Module::Load::Conditional qw( check_install );
 use Koha::Tags;
 use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
-#use Data::Dumper;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
 use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
 
@@ -115,28 +114,28 @@ sub get_count_by_tag_status  {
 }
 
 sub remove_tag {
-	my $tag_id  = shift or return;
-	my $user_id = (@_) ? shift : undef;
-	my $rows = (defined $user_id) ?
-			get_tag_rows({tag_id=>$tag_id, borrowernumber=>$user_id}) :
-			get_tag_rows({tag_id=>$tag_id}) ;
-	$rows or return 0;
-	(scalar(@$rows) == 1) or return;	# should never happen (duplicate ids)
-	my $row = shift(@$rows);
-	($tag_id == $row->{tag_id}) or return 0;
-	my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
-	my $index = shift(@$tags);
-	if ($index->{weight} <= 1) {
-		Koha::Tags::Indexes->search({ term => $row->{term}, biblionumber => $row->{biblionumber} })->delete;
-	} else {
-		decrement_weight($row->{term},$row->{biblionumber});
-	}
-	if ($index->{weight_total} <= 1) {
-		Koha::Tags::Approvals->search({ term => $row->{term} })->delete;
-	} else {
-		decrement_weight_total($row->{term});
-	}
-	Koha::Tags->search({ tag_id => $tag_id })->delete;
+    my $tag_id  = shift or return;
+    my $user_id = (@_) ? shift : undef;
+    my $rows = (defined $user_id) ?
+            get_tag_rows({tag_id=>$tag_id, borrowernumber=>$user_id}) :
+            get_tag_rows({tag_id=>$tag_id}) ;
+    $rows or return 0;
+    (scalar(@$rows) == 1) or return;    # should never happen (duplicate ids)
+    my $row = shift(@$rows);
+    ($tag_id == $row->{tag_id}) or return 0;
+    my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
+    my $index = shift(@$tags);
+    if ($index->{weight} <= 1) {
+        Koha::Tags::Indexes->search({ term => $row->{term}, biblionumber => $row->{biblionumber} })->delete;
+    } else {
+        decrement_weight($row->{term},$row->{biblionumber});
+    }
+    if ($index->{weight_total} <= 1) {
+        Koha::Tags::Approvals->search({ term => $row->{term} })->delete;
+    } else {
+        decrement_weight_total($row->{term});
+    }
+    Koha::Tags->search({ tag_id => $tag_id })->delete;
 }
 
 sub get_tag_rows {
