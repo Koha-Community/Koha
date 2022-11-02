@@ -279,6 +279,7 @@ SKIP: {
         $driver->find_element('//*[@id="pin_code"]')->clear;
         $driver->find_element('//*[@id="pin_code"]')->send_keys($pin_code);
         $driver->find_element('//*[@id="register-2FA"]')->click;
+        $s->wait_for_ajax;
         is( $driver->get_alert_text,
             "Two-factor authentication correctly configured. You will be redirected to the login screen."
         );

@@ -279,8 +279,7 @@
                     type: 'POST',
                     url: '/api/v1/auth/two-factor/registration/verification',
                     success: function (data) {
-                        alert(_("Two-factor authentication correctly configured. You will be redirected to the login screen."));
-                        window.location = "/cgi-bin/koha/mainpage.pl";
+                        return;
                     },
                     error: function (data) {
                         const error = data.responseJSON.error;
@@ -290,6 +289,9 @@
                             alert(error);
                         }
                     },
+                }).then(function(){
+                    alert(_("Two-factor authentication correctly configured. You will be redirected to the login screen."));
+                    window.location = "/cgi-bin/koha/mainpage.pl";
                 });
             });
 
