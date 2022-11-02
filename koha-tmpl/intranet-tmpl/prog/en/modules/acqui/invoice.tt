@@ -183,7 +183,7 @@
           <input type="hidden" name="op" value="mod" />
           <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
             <fieldset class="action">
-                <input type="submit" value="Save" />
+                <input type="submit" class="btn btn-primary" value="Save" />
                 [% IF CAN_user_acquisition_delete_invoices AND NOT orders_loop.size %]
                 <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
                 [% END %]
@@ -334,7 +334,7 @@
                           </fieldset>
                           <fieldset class="action">
                               <input type="hidden" name="op" value="mod_adj" />
-                              <input type="submit" value="Update adjustments" />
+                              <input type="submit" class="btn btn-primary" value="Update adjustments" />
                           </fieldset>
                     [% END %]
                   </fieldset>

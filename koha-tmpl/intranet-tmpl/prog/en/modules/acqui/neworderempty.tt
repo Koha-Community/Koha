@@ -96,7 +96,7 @@
                 <input type="hidden" value="mod_basket" name="op" />
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             </li>
-            <fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Change basketgroup" /></fieldset>
         [% END %]
         </form>
         [% END %]
@@ -123,7 +123,7 @@
                     </ul>
                     <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
                     <input type="hidden" id="op" name="op" value="mod_users" />
-                    <input type="button" id="add_user" onclick="UserSearchPopup();" value="Add user" />
+                    <input type="button" id="add_user" class="btn btn-default" onclick="UserSearchPopup();" value="Add user" />
                 </div>
             </li>
         </ol>
@@ -500,7 +500,7 @@
     </fieldset>
     <fieldset class="action">
         <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-        <input type="submit" value="Save" />
+        <input type="submit" class="btn btn-primary" value="Save" />
         [% IF (suggestionid) %]
             <a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">Cancel</a>
         [% ELSE %]

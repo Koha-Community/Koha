@@ -71,7 +71,7 @@
             <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates dateformat => 'iso' %]" />
             <input type="hidden" name="shipmentcost" value="[% shipmentcost | html %]" />
             <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid | html %]" />
-            <input type="submit" class="button" value="Create new invoice anyway" />
+            <input type="submit" class="btn btn-primary" value="Create new invoice anyway" />
         </form>
     </div>
     [% END %]
@@ -196,7 +196,7 @@
                     [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
                 [% END %]
             </fieldset>
-            <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-default" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
         </form>
     </div>
 </main>
@@ -234,8 +234,8 @@
                 <option value="100">100</option>
                 </select></li>
         </ol>
-    <fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a></fieldset>
-	</fieldset>
+        <fieldset class="action"><input type="submit" class="btn btn-default" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a></fieldset>
+    </fieldset>
 </form>
 </aside>
 </div>  <!-- /.col-sm-2.col-sm-pull-10 -->

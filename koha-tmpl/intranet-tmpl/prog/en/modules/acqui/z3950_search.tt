@@ -148,7 +148,7 @@ tr.selected td {
 
 <div class="row">
     <div class="col-md-12">
-    <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a></fieldset>
+    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a></fieldset>
     </div>
 </div>
 </form>
@@ -269,7 +269,7 @@ tr.selected td {
         [% IF ( show_nextbutton ) %]
             <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
         [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /> <input type="submit" name="changepage_goto" value="Go" />
+        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /> <input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
     </form>
 
     [% ELSE %]
