@@ -1,6 +1,7 @@
 const { VueLoaderPlugin } = require("vue-loader");
 const autoprefixer = require("autoprefixer");
 const path = require("path");
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -34,5 +35,9 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+    }),
   ],
 };
