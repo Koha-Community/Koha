@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 63;
+use Test::More tests => 64;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5691,6 +5691,46 @@ subtest "GetSoonestRenewDate tests" => sub {
         $datedue,
         'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
     );
+};
+
+subtest "CanBookBeIssued + needsconfirmation message" => sub {
+    plan tests => 4;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $biblioitem = $builder->build_object({ class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber }});
+    my $item = $builder->build_object({ class => 'Koha::Items' , value => { biblionumber => $biblio->biblionumber }});
+
+    my $hold = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber => $item->biblionumber,
+        branchcode => $library->branchcode,
+        itemnumber => undef,
+        itemtype => undef,
+        priority => 1,
+        found => undef,
+        suspend => 0,
+        item_group_id => $item->item_group
+    }});
+
+    my ( $error, $needsconfirmation, $alerts, $messages );
+
+    ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued( $patron, $item->barcode );
+    is($needsconfirmation->{resbranchcode}, $hold->branchcode, "Branchcodes match when hold exists.");
+
+    $hold->priority(0)->store();
+
+    $hold->found("W")->store();
+    ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued( $patron, $item->barcode );
+    is($needsconfirmation->{resbranchcode}, $hold->branchcode, "Branchcodes match when hold is waiting.");
+
+    $hold->found("T")->store();
+    ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued( $patron, $item->barcode );
+    is($needsconfirmation->{resbranchcode}, $hold->branchcode, "Branchcodes match when hold is being transferred.");
+
+    $hold->found("P")->store();
+    ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued( $patron, $item->barcode );
+    is($needsconfirmation->{resbranchcode}, $hold->branchcode, "Branchcodes match when hold is being processed.");
 };
 
 $schema->storage->txn_rollback;
