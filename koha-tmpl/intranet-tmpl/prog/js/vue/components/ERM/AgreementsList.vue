@@ -121,6 +121,8 @@ export default {
             if (this.filters.by_expired) {
                 if (!this.filters.max_expiration_date)
                     this.filters.max_expiration_date = new Date()
+                        .toISOString()
+                        .substring(0, 10)
             }
             $("#" + this.table_id)
                 .DataTable()
