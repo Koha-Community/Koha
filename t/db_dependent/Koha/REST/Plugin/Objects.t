@@ -721,7 +721,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
       ->json_is( '/_str/country/category' => $cat->category_name )
       ->json_is( '/_str/country/str'      => $ar->lib );
 
-    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-av-expand' => 0 } )
+    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '' } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
       ->json_hasnt('/_str');
 
