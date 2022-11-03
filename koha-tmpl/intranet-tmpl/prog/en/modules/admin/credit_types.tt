@@ -162,59 +162,61 @@
 
                     <h1>Account credit types</h1>
                     [% IF credit_types.count %]
-                        <table id="table_credit_types">
-                            <thead>
-                                <th>Archived</th>
-                                <th>System</th>
-                                <th>Code</th>
-                                <th>Description</th>
-                                <th>Available for</th>
-                                <th>Credit number enabled</th>
-                                <th>Library limitations</th>
-                                <th class="noExport">Actions</th>
-                            </thead>
-                            <tbody>
-                                [% FOREACH credit_type IN credit_types %]
-                                <tr>
-                                    <td>[% credit_type.archived | html %]</td>
-                                    <td>[% credit_type.is_system | html %]</td>
-                                    <td>[% credit_type.code | html %]</td>
-                                    <td>[% credit_type.description | html %]</td>
-                                    <td>[% IF credit_type.can_be_added_manually %]Manual credit[% END %]</td>
-                                    <td>[% IF credit_type.credit_number_enabled %]Yes[% ELSE %]No[% END %]</td>
-                                    <td>
-                                        [% IF credit_type.library_limits.count > 0 %]
-                                            [% library_limits_str = "" %]
-                                            [% FOREACH library IN credit_type.library_limits %]
-                                                [%- IF loop.first -%]
-                                                [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                [% ELSE %]
-                                                [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                        <div class="page-section">
+                            <table id="table_credit_types">
+                                <thead>
+                                    <th>Archived</th>
+                                    <th>System</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>Available for</th>
+                                    <th>Credit number enabled</th>
+                                    <th>Library limitations</th>
+                                    <th class="noExport">Actions</th>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH credit_type IN credit_types %]
+                                    <tr>
+                                        <td>[% credit_type.archived | html %]</td>
+                                        <td>[% credit_type.is_system | html %]</td>
+                                        <td>[% credit_type.code | html %]</td>
+                                        <td>[% credit_type.description | html %]</td>
+                                        <td>[% IF credit_type.can_be_added_manually %]Manual credit[% END %]</td>
+                                        <td>[% IF credit_type.credit_number_enabled %]Yes[% ELSE %]No[% END %]</td>
+                                        <td>
+                                            [% IF credit_type.library_limits.count > 0 %]
+                                                [% library_limits_str = "" %]
+                                                [% FOREACH library IN credit_type.library_limits %]
+                                                    [%- IF loop.first -%]
+                                                    [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                    [% ELSE %]
+                                                    [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                    [% END %]
                                                 [% END %]
+                                                <span class="library_limitation" title="[% library_limits_str | html %]">
+                                                    [% limits_count = credit_type.library_limits.count %]
+                                                    [% tnx('{count} library limitation', '{count} library limitations', limits_count, { count => limits_count }) %]
+                                            [% ELSE %]
+                                                <span>No library limitation</span>
                                             [% END %]
-                                            <span class="library_limitation" title="[% library_limits_str | html %]">
-                                                [% limits_count = credit_type.library_limits.count %]
-                                                [% tnx('{count} library limitation', '{count} library limitations', limits_count, { count => limits_count }) %]
-                                        [% ELSE %]
-                                            <span>No library limitation</span>
-                                        [% END %]
-                                    </td>
-                                    <td class="actions">
-                                        [% IF !credit_type.archived %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa fa-pencil"></i> Edit</a>
-                                        [% END %]
-                                        [% IF !credit_type.is_system && !credit_type.archived %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
-                                        [% END %]
+                                        </td>
+                                        <td class="actions">
+                                            [% IF !credit_type.archived %]
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa fa-pencil"></i> Edit</a>
+                                            [% END %]
+                                            [% IF !credit_type.is_system && !credit_type.archived %]
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                            [% END %]
 
-                                        [% IF !credit_type.is_system && credit_type.archived %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=unarchive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
-                                        [% END %]
-                                    </td>
-                                </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                                            [% IF !credit_type.is_system && credit_type.archived %]
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=unarchive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div><!-- /.page-section -->
                     [% ELSE %]
                         <div class="dialog message">
                             There are no account credit types defined.

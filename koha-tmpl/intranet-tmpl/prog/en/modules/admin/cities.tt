@@ -181,19 +181,21 @@
     [% END %]
 
     [% IF cities_count > 0 %]
-        <div class="table_cities_table_controls"></div>
-        <table id="table_cities">
-            <thead>
-                <tr>
-                    <th>City ID</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>ZIP/Postal code</th>
-                    <th>Country</th>
-                    <th data-class-name="actions noExport">Actions</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="page-section">
+            <div class="table_cities_table_controls"></div>
+            <table id="table_cities">
+                <thead>
+                    <tr>
+                        <th>City ID</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>ZIP/Postal code</th>
+                        <th>Country</th>
+                        <th data-class-name="actions noExport">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div><!-- /.page-section -->
     [% ELSE %]
         <div class="dialog message">
             There are no cities defined. <a href="/cgi-bin/koha/admin/cities.pl?op=add_form">Create a new city</a>.

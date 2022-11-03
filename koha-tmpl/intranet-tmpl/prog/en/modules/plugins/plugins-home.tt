@@ -74,27 +74,29 @@
 
                     [% IF search_results %]
                         <h2>Search results</h2>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Organization</th>
-                                    <th>Latest version</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
+                        <div class="page-section">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Organization</th>
+                                        <th>Latest version</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
 
-                            [% FOREACH sr IN search_results %]
-                                <tr>
-                                    <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name | html %]</a></td>
-                                    <td>[% sr.result.description | html %]</td>
-                                    <td>[% sr.repo.name | html %]</td>
-                                    <td>[% sr.result.tag_name | html %]</td>
-                                    <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
-                                </tr>
-                            [% END %]
-                        </table>
+                                [% FOREACH sr IN search_results %]
+                                    <tr>
+                                        <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name | html %]</a></td>
+                                        <td>[% sr.result.description | html %]</td>
+                                        <td>[% sr.repo.name | html %]</td>
+                                        <td>[% sr.result.tag_name | html %]</td>
+                                        <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
+                                    </tr>
+                                [% END %]
+                            </table>
+                        </div><!-- /.page-section -->
                     [% END %]
 
                     [% UNLESS ( plugins ) %]
@@ -116,105 +118,107 @@
                             [% END %]
                         [% END %]
                     [% ELSE %]
-                        <table id="installed_plugins">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Author</th>
-                                    <th>Plugin version</th>
-                                    <th>Minimum Koha version</th>
-                                    <th>Maximum Koha version</th>
-                                    <th>Last updated</th>
-                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                        <th class="noExport">Actions</th>
-                                    [% END %]
-                                </tr>
-                            </thead>
-
-                            [% FOREACH plugin IN plugins %]
-                                [% IF plugin.error %]
-                                <tr class="warn">
-                                    <td>
-                                        <strong>[% plugin.name | html %]</strong>
-                                        <span class="label label-warning">ERRORS</span>
-                                    </td>
-                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                    <td colspan="7">Error found whilst attempting to load plugin</td>
-                                    [% ELSE %]
-                                    <td colspan="6">Error found whilst attempting to load plugin</td>
-                                    [% END %]
-                                </tr>
-                                [% ELSE %]
-                                <tr>
-                                    <td>
-                                        <strong>[% plugin.metadata.name | html %]</strong>
-                                        [% IF ( plugin.is_enabled ) %]
-                                            <span class="label label-primary">ENABLED</span>
-                                        [% ELSE %]
-                                            <span class="label label-default">DISABLED</span>
+                        <div class="page-section">
+                            <table id="installed_plugins">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Author</th>
+                                        <th>Plugin version</th>
+                                        <th>Minimum Koha version</th>
+                                        <th>Maximum Koha version</th>
+                                        <th>Last updated</th>
+                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                            <th class="noExport">Actions</th>
                                         [% END %]
-                                    </td>
-                                    <td>
-                                        [% plugin.metadata.description | html %]
+                                    </tr>
+                                </thead>
 
-                                        [% IF ( plugin.metadata.minimum_version && koha_version < plugin.metadata.minimum_version ) %]
-                                            <div class="dialog alert">
-                                                Warning: This plugin was written for a newer version of Koha. Use at your own risk.
-                                            </div>
-                                        [% END %]
-
-                                        [% IF ( plugin.metadata.maximum_version && koha_version > plugin.metadata.maximum_version ) %]
-                                            <div class="dialog alert">
-                                                Warning: This plugin was written for an older version of Koha. Use at your own risk.
-                                            </div>
-                                        [% END %]
-                                    </td>
-                                    <td>[% plugin.metadata.author | html %]</td>
-                                    <td>[% plugin.metadata.version | html %]</td>
-                                    <td>[% plugin.metadata.minimum_version | html %]</td>
-                                    <td>[% plugin.metadata.maximum_version | html %]</td>
-                                    <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
-                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                        <td class="actions">
-                                            <div class="btn-group dropup">
-                                                <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-toggle="dropdown" href="#">
-                                                   Actions <b class="caret"></b>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
-                                                    [% IF ( CAN_user_plugins_report ) %]
-                                                        [% IF plugin.can('report') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li>
-                                                        [% END %]
-                                                    [% END %]
-
-                                                    [% IF ( CAN_user_plugins_tool ) %]
-                                                        [% IF plugin.can('tool') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li>
-                                                        [% END %]
-                                                    [% END %]
-
-                                                    [% IF ( CAN_user_plugins_configure ) %]
-                                                        [% IF plugin.can('configure') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog fa-fw"></i> Configure</a></li>
-                                                        [% END %]
-                                                    [% END %]
-                                                    [% IF ( CAN_user_plugins_manage ) %]
-                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash fa-fw"></i> Uninstall</a></li>
-                                                        [% IF ( plugin.is_enabled ) %]
-                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
-                                                        [% ELSE %]
-                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play fa-fw"></i> Enable</a></li>
-                                                        [% END %]
-                                                    [% END %]
-                                                </ul>
-                                            </div>
+                                [% FOREACH plugin IN plugins %]
+                                    [% IF plugin.error %]
+                                    <tr class="warn">
+                                        <td>
+                                            <strong>[% plugin.name | html %]</strong>
+                                            <span class="label label-warning">ERRORS</span>
                                         </td>
+                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                        <td colspan="7">Error found whilst attempting to load plugin</td>
+                                        [% ELSE %]
+                                        <td colspan="6">Error found whilst attempting to load plugin</td>
+                                        [% END %]
+                                    </tr>
+                                    [% ELSE %]
+                                    <tr>
+                                        <td>
+                                            <strong>[% plugin.metadata.name | html %]</strong>
+                                            [% IF ( plugin.is_enabled ) %]
+                                                <span class="label label-primary">ENABLED</span>
+                                            [% ELSE %]
+                                                <span class="label label-default">DISABLED</span>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% plugin.metadata.description | html %]
+
+                                            [% IF ( plugin.metadata.minimum_version && koha_version < plugin.metadata.minimum_version ) %]
+                                                <div class="dialog alert">
+                                                    Warning: This plugin was written for a newer version of Koha. Use at your own risk.
+                                                </div>
+                                            [% END %]
+
+                                            [% IF ( plugin.metadata.maximum_version && koha_version > plugin.metadata.maximum_version ) %]
+                                                <div class="dialog alert">
+                                                    Warning: This plugin was written for an older version of Koha. Use at your own risk.
+                                                </div>
+                                            [% END %]
+                                        </td>
+                                        <td>[% plugin.metadata.author | html %]</td>
+                                        <td>[% plugin.metadata.version | html %]</td>
+                                        <td>[% plugin.metadata.minimum_version | html %]</td>
+                                        <td>[% plugin.metadata.maximum_version | html %]</td>
+                                        <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
+                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                            <td class="actions">
+                                                <div class="btn-group dropup">
+                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-toggle="dropdown" href="#">
+                                                       Actions <b class="caret"></b>
+                                                    </a>
+                                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
+                                                        [% IF ( CAN_user_plugins_report ) %]
+                                                            [% IF plugin.can('report') %]
+                                                                <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li>
+                                                            [% END %]
+                                                        [% END %]
+
+                                                        [% IF ( CAN_user_plugins_tool ) %]
+                                                            [% IF plugin.can('tool') %]
+                                                                <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li>
+                                                            [% END %]
+                                                        [% END %]
+
+                                                        [% IF ( CAN_user_plugins_configure ) %]
+                                                            [% IF plugin.can('configure') %]
+                                                                <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog fa-fw"></i> Configure</a></li>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( CAN_user_plugins_manage ) %]
+                                                                <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash fa-fw"></i> Uninstall</a></li>
+                                                            [% IF ( plugin.is_enabled ) %]
+                                                                    <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
+                                                            [% ELSE %]
+                                                                    <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play fa-fw"></i> Enable</a></li>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        [% END %]
+                                    </tr>
                                     [% END %]
-                                </tr>
                                 [% END %]
-                            [% END %]
-                        </table>
+                            </table>
+                        </div><!-- /.page-section -->
                     [% END %]
                 </div>
 

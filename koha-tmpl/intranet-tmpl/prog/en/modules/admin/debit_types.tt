@@ -153,65 +153,67 @@
 
                     <h1>Account debit types</h1>
                     [% IF debit_types.count %]
-                        <table id="table_debit_types">
-                            <thead>
-                                <th>Archived</th>
-                                <th>System</th>
-                                <th>Code</th>
-                                <th>Description</th>
-                                <th>Default amount</th>
-                                <th>Available for</th>
-                                <th>Library limitations</th>
-                                <th class="noExport">Actions</th>
-                            </thead>
-                            <tbody>
-                                [% FOREACH debit_type IN debit_types %]
-                                <tr>
-                                    <td>[% debit_type.archived | html %]</td>
-                                    <td>[% debit_type.is_system | html %]</td>
-                                    <td>[% debit_type.code | html %]</td>
-                                    <td>[% debit_type.description | html %]</td>
-                                    <td>[% debit_type.default_amount | $Price %]</td>
-                                    <td>[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
-                                        <i class="fa fa-id-card-o"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
-                                        [% ELSIF debit_type.can_be_invoiced %]
-                                        <i class="fa fa-id-card-o"></i> Invoicing
-                                        [% ELSIF debit_type.can_be_sold %]
-                                        <i class="fa fa-shopping-cart"></i> Sale
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% IF debit_type.library_limits.count > 0 %]
-                                            [% library_limits_str = "" %]
-                                            [% FOREACH library IN debit_type.library_limits %]
-                                                [%- IF loop.first -%]
-                                                [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                [% ELSE %]
-                                                [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
-                                                [% END %]
+                        <div class="page-section">
+                            <table id="table_debit_types">
+                                <thead>
+                                    <th>Archived</th>
+                                    <th>System</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>Default amount</th>
+                                    <th>Available for</th>
+                                    <th>Library limitations</th>
+                                    <th class="noExport">Actions</th>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH debit_type IN debit_types %]
+                                    <tr>
+                                        <td>[% debit_type.archived | html %]</td>
+                                        <td>[% debit_type.is_system | html %]</td>
+                                        <td>[% debit_type.code | html %]</td>
+                                        <td>[% debit_type.description | html %]</td>
+                                        <td>[% debit_type.default_amount | $Price %]</td>
+                                        <td>[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
+                                            <i class="fa fa-id-card-o"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
+                                            [% ELSIF debit_type.can_be_invoiced %]
+                                            <i class="fa fa-id-card-o"></i> Invoicing
+                                            [% ELSIF debit_type.can_be_sold %]
+                                            <i class="fa fa-shopping-cart"></i> Sale
                                             [% END %]
-                                            <span class="library_limitation" title="[% library_limits_str | html %]">
-                                                [% IF debit_type.library_limits.count > 1 %]
-                                                    <span>[% debit_type.library_limits.count | html %] library limitations</span>
-                                                [% ELSE %]
-                                                    <span>[% debit_type.library_limits.count | html %] library limitation</span>
+                                        </td>
+                                        <td>
+                                            [% IF debit_type.library_limits.count > 0 %]
+                                                [% library_limits_str = "" %]
+                                                [% FOREACH library IN debit_type.library_limits %]
+                                                    [%- IF loop.first -%]
+                                                    [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                    [% ELSE %]
+                                                    [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                    [% END %]
                                                 [% END %]
-                                        [% ELSE %]
-                                            <span>No limitation</span>
-                                        [% END %]
-                                    </td>
-                                    <td class="actions">
-                                        [% IF !debit_type.is_system && !debit_type.archived %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
-                                        [% ELSIF debit_type.archived %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
-                                        [% END %]
-                                    </td>
-                                </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                                                <span class="library_limitation" title="[% library_limits_str | html %]">
+                                                    [% IF debit_type.library_limits.count > 1 %]
+                                                        <span>[% debit_type.library_limits.count | html %] library limitations</span>
+                                                    [% ELSE %]
+                                                        <span>[% debit_type.library_limits.count | html %] library limitation</span>
+                                                    [% END %]
+                                            [% ELSE %]
+                                                <span>No limitation</span>
+                                            [% END %]
+                                        </td>
+                                        <td class="actions">
+                                            [% IF !debit_type.is_system && !debit_type.archived %]
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                            [% ELSIF debit_type.archived %]
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div><!-- /.page-section -->
                     [% ELSE %]
                         <div class="dialog message">
                             There are no account debit types defined. <a href="/cgi-bin/koha/admin/debit_types.pl?op=add_form">Create new debit type</a>

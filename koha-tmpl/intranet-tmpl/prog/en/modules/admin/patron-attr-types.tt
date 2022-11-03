@@ -291,65 +291,67 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
     &mdash; it was already absent from the database.</div>
 [% END %]
 [% IF ( available_attribute_types ) %]
-  [% FOREACH attribute IN available_attribute_types %]
+    [% FOREACH attribute IN available_attribute_types %]
     [% IF attribute.class %]
         <h4>[% attribute.lib | html %]</h4>
     [% END %]
-    <table class="patron_attributes_types" id="patron_attr[% attribute.class | html %]">
-      <thead>
-        <tr>
-          <th>Code</th>
-          <th>Description</th>
-          <th>Library limitation</th>
-          <th>Authorized value category</th>
-          <th>Mandatory</th>
-          <th class="NoSort noExport">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        [% FOREACH item IN attribute.items %]
-          <tr>
-            <td>[% item.code | html %]</td>
-            <td>[% item.description | html %]</td>
-            <td>
-                [% SET libraries = item.library_limits %]
-                [% IF ( libraries && libraries.count > 0 ) %]
-                    [% branches_str = "" %]
-                    [% FOREACH branch IN libraries %]
-                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
-                    [% END %]
-                    <span title="[% branches_str | html %]">
-                        [% IF libraries.count > 1 %]
-                            <span>[% libraries.count | html %] library limitations</span>
-                        [% ELSE %]
-                            <span>[% libraries.count | html %] library limitation</span>
+    <div class="page-section">
+        <table class="patron_attributes_types" id="patron_attr[% attribute.class | html %]">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Description</th>
+              <th>Library limitation</th>
+              <th>Authorized value category</th>
+              <th>Mandatory</th>
+              <th class="NoSort noExport">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            [% FOREACH item IN attribute.items %]
+              <tr>
+                <td>[% item.code | html %]</td>
+                <td>[% item.description | html %]</td>
+                <td>
+                    [% SET libraries = item.library_limits %]
+                    [% IF ( libraries && libraries.count > 0 ) %]
+                        [% branches_str = "" %]
+                        [% FOREACH branch IN libraries %]
+                            [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                         [% END %]
-                    </span>
-                [% ELSE %]
-                    No limitation
-                [% END %]
-            </td>
-            <td>
-                [% IF ( CAN_user_parameters_manage_auth_values ) %]
-                    <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% item.authorised_value_category | uri %]">[% item.authorised_value_category | html %]</a></td>
-                [% ELSE %]
-                    [% item.authorised_value_category | html %]
-                [% END %]
-            <td>
-                [% IF ( item.mandatory ) -%]
-                   <span>Yes</span>
-                [% ELSE -%]
-                   <span>No</span>
-                [% END %]
-            </td>
-            <td class="actions">
-              <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
-            </td>
-          </tr>
-        [% END %]
-      </tbody>
-    </table>
+                        <span title="[% branches_str | html %]">
+                            [% IF libraries.count > 1 %]
+                                <span>[% libraries.count | html %] library limitations</span>
+                            [% ELSE %]
+                                <span>[% libraries.count | html %] library limitation</span>
+                            [% END %]
+                        </span>
+                    [% ELSE %]
+                        No limitation
+                    [% END %]
+                </td>
+                <td>
+                    [% IF ( CAN_user_parameters_manage_auth_values ) %]
+                        <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% item.authorised_value_category | uri %]">[% item.authorised_value_category | html %]</a></td>
+                    [% ELSE %]
+                        [% item.authorised_value_category | html %]
+                    [% END %]
+                <td>
+                    [% IF ( item.mandatory ) -%]
+                       <span>Yes</span>
+                    [% ELSE -%]
+                       <span>No</span>
+                    [% END %]
+                </td>
+                <td class="actions">
+                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                </td>
+              </tr>
+            [% END %]
+          </tbody>
+        </table>
+    </div><!-- ./page-section -->
   [% END %]
 [% ELSE %]
   <p>There are no saved patron attribute types.</p>

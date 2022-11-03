@@ -165,40 +165,42 @@
         You Searched for [% searchfield | html %]</span>
     [% END %]
     [% IF restrictions %]
-        <table id="restriction_types">
-            <thead>
-                <tr>
-                    <th scope="col">Code</th>
-                    <th scope="col">Label</th>
-                    <th scope="col">Default</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH restriction IN restrictions %]
+        <div class="page-section">
+            <table id="restriction_types">
+                <thead>
                     <tr>
-                        <td>
-                            [% restriction.code | html %]
-                        </td>
-                        <td>
-                            [% PROCESS restriction_type_description %]
-                        </td>
-                        <td>
-                            [% IF restriction.is_default %]Yes[% END %]
-                        </td>
-                        <td class="actions">
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                            [% IF !restriction.is_system && !restriction.is_default %]
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
-                            [% END %]
-                            [% IF !restriction.is_system && !restriction.is_default %]
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=make_default&amp;code=[% restriction.code | uri %]"><i class="fa fa-archive"></i> Make default</a>
-                            [% END %]
-                        </td>
+                        <th scope="col">Code</th>
+                        <th scope="col">Label</th>
+                        <th scope="col">Default</th>
+                        <th scope="col">Actions</th>
                     </tr>
-                [% END %]
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    [% FOREACH restriction IN restrictions %]
+                        <tr>
+                            <td>
+                                [% restriction.code | html %]
+                            </td>
+                            <td>
+                                [% PROCESS restriction_type_description %]
+                            </td>
+                            <td>
+                                [% IF restriction.is_default %]Yes[% END %]
+                            </td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                                [% IF !restriction.is_system && !restriction.is_default %]
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                [% END %]
+                                [% IF !restriction.is_system && !restriction.is_default %]
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=make_default&amp;code=[% restriction.code | uri %]"><i class="fa fa-archive"></i> Make default</a>
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div><!-- /.page-section -->
     [% ELSE %]
         <div class="dialog alert">No restrictions have been defined. <a href="/cgi-bin/koha/admin/restrictions.pl?op=add_form">Create a new restriction</a>.</div>
     [% END %]
