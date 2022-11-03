@@ -1084,7 +1084,7 @@
                 </xsl:if>
                 <xsl:choose>
                 <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
                         <xsl:value-of select="$f787"/>
                     </a>
                 </xsl:when>
@@ -1106,7 +1106,7 @@
                         </xsl:if>
                     </xsl:variable>
                     <a>
-                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($relation_query, true())" />
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="str:encode-uri($relation_query, true())" />
                     </xsl:attribute>
                         <xsl:value-of select="$f787"/>
                     </a>
