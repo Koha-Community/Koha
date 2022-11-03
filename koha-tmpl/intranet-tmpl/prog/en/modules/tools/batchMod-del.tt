@@ -150,9 +150,9 @@
          <fieldset class="action">
         <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
         [% IF too_many_items_display %]
-            <input type="submit" name="mainformsubmit" value="Delete ALL submitted items" />
+            <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Delete ALL submitted items" />
         [% ELSE %]
-            <input type="submit" name="mainformsubmit" value="Delete selected items" />
+            <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Delete selected items" />
         [% END %]
 
         <a href="/cgi-bin/koha/tools/batchMod.pl?del=1" class="cancel">Cancel</a>

@@ -195,7 +195,7 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="submit" value="Save">
+                            <input type="submit" class="btn btn-primary" value="Save" />
                             <a href="/cgi-bin/koha/tools/stockrotation.pl" class="cancel">Cancel</a>
                         </fieldset>
                         [% IF rota.rota_id %]
@@ -352,7 +352,7 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="submit" value="Save">
+                            <input type="submit" class="btn btn-primary" value="Save" />
                             <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_stages&amp;rota_id=[% rota_id | uri %]" class="cancel">Cancel</a>
                         </fieldset>
                         <input type="hidden" name="stage_id" value="[% stage.id | html %]">
@@ -573,7 +573,7 @@
 
                             </fieldset>
                             <fieldset class="action">
-                                <input type="submit" value="Save">
+                                <input type="submit" class="btn btn-primary" value="Save" />
                             </fieldset>
                             <input type="hidden" name="rota_id" value="[% rota_id | html %]">
                             <input type="hidden" name="op" value="move_items_to_rota">

@@ -120,7 +120,7 @@
                             </fieldset>
                             <fieldset class="action">
                                 <input type="hidden" name="op" value="list" />
-                                <input type="submit" value="Continue" class="button" />
+                                <input type="submit" class="btn btn-primary" value="Continue" />
                                 <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
                             </fieldset>
                         </form> <!-- /#extend_due_dates_form -->
@@ -166,7 +166,7 @@
                                     <input type="hidden" name="op" value="modify" />
                                     <input type="hidden" name="new_hard_due_date" value="[% new_hard_due_date | $KohaDates dateformat => 'iso' %]" />
                                     <input type="hidden" name="due_date_days" value="[% due_date_days | html %]" />
-                                    <input type="submit" value="Modify selected checkouts" class="button" />
+                                    <input type="submit" class="btn btn-primary" value="Modify selected checkouts" />
                                     <a class="cancel" href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Cancel</a>
                                 </fieldset>
                             </form> <!-- /#process -->

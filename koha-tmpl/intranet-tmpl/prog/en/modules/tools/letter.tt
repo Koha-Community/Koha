@@ -287,8 +287,8 @@
 
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
-                            <button class="btn btn-default" id="submit_form"><i class="fa fa-save"></i> Save</button>
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
@@ -584,7 +584,7 @@
                 [% IF ( add_validate or copy_validate) %]
                     Data recorded
                     <form action="[% action | html %]" method="post">
-                        <input type="submit" value="OK" />
+                        <input type="submit" class="btn btn-primary" value="OK" />
                     </form>
                 [% END %]
 
@@ -624,7 +624,7 @@
                 [% IF ( delete_confirmed ) %]
                     <span>Data deleted</span>
                     <form action="[% action | html %]" method="post">
-                    <input type="submit" value="OK" />
+                    <input type="submit" class="btn btn-primary" value="OK" />
                     </form>
                 [% END %]
 

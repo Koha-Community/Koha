@@ -78,7 +78,7 @@
 <input type="text" name="email" id="email" size="50" />
 </li>
 </ol></fieldset>
-<fieldset class="action"><input class="submit-button" type="submit" value="Save" /></fieldset>
+<fieldset class="action"><input class="btn btn-primary" type="submit" value="Save" /></fieldset>
 </form>
 
 [% IF ( JOBS ) %]<h2>Jobs already entered</h2>
@@ -95,7 +95,7 @@
 <tr>
 <td>[% JOB.TIME | html %]</td>
 <td>[% JOB.TAG | html %]</td>
-<td><input type="submit" name="delete" value="Delete" /></td>
+<td><input type="submit" name="delete" class="btn btn-primary" value="Delete" /></td>
 </tr>
 <input type="hidden" name="jobid" value="[% JOB.JOBID | html %]" />
 </form>

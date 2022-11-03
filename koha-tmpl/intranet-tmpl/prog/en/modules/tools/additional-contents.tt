@@ -183,8 +183,8 @@
 
     <div id="toolbar" class="btn-toolbar">
         <div class="btn-group">
-            <button class="btn btn-default" id="submit_form"><i class="fa fa-save"></i> Save</button>
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
+            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
@@ -447,7 +447,7 @@
             </table>
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="category" value="[% category | html %]" />
-            <fieldset class="action"><input type="submit" class="button" value="Delete selected" /></fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Delete selected" /></fieldset>
         </form>
         <form action="/cgi-bin/koha/tools/additional-contents.pl" method="post" id="delete_single">
             <input type="hidden" id="del_op" name="op" value="delete_confirmed" />

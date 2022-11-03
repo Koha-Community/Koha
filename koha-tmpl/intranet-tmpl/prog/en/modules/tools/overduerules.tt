@@ -49,7 +49,7 @@
                     <option value="">Default</option>
                     [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                 </select>
-                <input type="submit" value="Select" />
+                <input type="submit" class="btn btn-primary" value="Select" />
             </form>
             [% IF ( ERROR ) %]
             <div class="dialog alert">
@@ -160,7 +160,7 @@
                     </div> <!-- /.tab-content -->
                 </div>
 
-                <fieldset class="action"><input type="submit" value="Save changes" /></fieldset>
+                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save changes" /></fieldset>
             </form>
             [% ELSE %]
                 <div class="warning">You don't have patron categories defined, or the patron categories are not set to receive overdue notices.</div>
