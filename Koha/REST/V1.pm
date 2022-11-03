@@ -140,12 +140,17 @@ sub startup {
     };
 
     my $oauth_configuration = {};
-    my $search_options = { protocol => [ "OIDC", "OAuth" ] };
-    my $providers = Koha::Auth::Identity::Providers->search( $search_options );
+    try {
+        my $search_options = { protocol => [ "OIDC", "OAuth" ] };
 
-    while(my $provider = $providers->next) {
-        $oauth_configuration->{$provider->code} = decode_json($provider->config);
-    }
+        my $providers = Koha::Auth::Identity::Providers->search($search_options);
+        while ( my $provider = $providers->next ) {
+            $oauth_configuration->{ $provider->code } = decode_json( $provider->config );
+        }
+    } catch {
+        my $logger = Koha::Logger->get( { interface => 'api' } );
+        $logger->warn( "Warning: Failed to fetch oauth configuration: " . $_ );
+    };
 
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
     $self->plugin( 'Koha::REST::Plugin::Query' );
