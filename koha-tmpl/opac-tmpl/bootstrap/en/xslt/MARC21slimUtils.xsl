@@ -391,7 +391,7 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="position()=last()">
-                    <xsl:if test="../marc:datafield[@tag=490][@ind1!=1]">
+                    <xsl:if test="../marc:datafield[@tag=490][@ind1!=1] or ../marc:datafield[(@tag=800 or @tag=810 or @tag=811) and @ind1!='z'] or ../marc:datafield[@tag=830 and @ind1!='z']">
                         <span class="separator"> | </span>
                     </xsl:if>
                 </xsl:when>
@@ -416,7 +416,7 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="position()=last()">
-                    <xsl:if test="../marc:datafield[@tag=490][@ind1=1]">
+                    <xsl:if test="../marc:datafield[(@tag=800 or @tag=810 or @tag=811) and @ind1!='z'] or ../marc:datafield[@tag=830 and @ind1!='z']">
                         <span class="separator"> | </span>
                     </xsl:if>
                 </xsl:when>
@@ -463,7 +463,16 @@
             <xsl:call-template name="part"/>
             <xsl:text> ; </xsl:text>
             <xsl:value-of  select="marc:subfield[@code='v']" />
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"> | </span></xsl:otherwise></xsl:choose>
+        <xsl:choose>
+            <xsl:when test="position()=last()">
+                <xsl:if test="../marc:datafield[@tag=830 and @ind1!='z']">
+                    <span class="separator"> | </span>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <span class="separator"> | </span>
+            </xsl:otherwise>
+        </xsl:choose>
         </xsl:for-each>
 
         <xsl:for-each select="marc:datafield[@tag=830 and @ind1!='z']">
