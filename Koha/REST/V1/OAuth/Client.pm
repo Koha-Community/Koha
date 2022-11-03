@@ -51,14 +51,17 @@ sub login {
     my $provider_config = $c->oauth2->providers->{$provider};
 
     my $uri;
+    my $base_url;
 
     if ( $interface eq 'opac' ) {
+        $base_url = C4::Context->preference('OPACBaseURL');
         if ( C4::Context->preference('OpacPublic') ) {
             $uri = '/cgi-bin/koha/opac-user.pl';
         } else {
             $uri = '/cgi-bin/koha/opac-main.pl';
         }
     } else {
+        $base_url = C4::Context->preference('staffClientBaseURL');
         $uri = '/cgi-bin/koha/mainpage.pl';
     }
 
@@ -73,7 +76,7 @@ sub login {
         $provider_config->{authorize_url} = $authorize_url->to_string;
     }
 
-    return $c->oauth2->get_token_p($provider)->then(
+    return $c->oauth2->get_token_p( $provider, { redirect_uri => $base_url . '/api/v1/public/oauth/login/' . $provider . "/" . $interface } )->then(
         sub {
             return unless my $response = shift;
 
