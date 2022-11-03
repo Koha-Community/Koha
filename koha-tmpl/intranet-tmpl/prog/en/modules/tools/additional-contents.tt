@@ -30,6 +30,10 @@
         .customisation-link:first-child::before {
             content: none;
         }
+        label[for^="title_"],
+        label[for^="content_"] {
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -277,7 +281,7 @@
                 <div class="tab-content">
                     [% FOR language IN languages %]
                         <div id="lang_[% language.lang | uri %]" class="lang clearfix tab-pane" data-lang="[% language.description | html %]">
-                            <fieldset class="rows">
+                            <fieldset>
                                 <ol>
                                     <li>
                                         <label for="title_[% language.lang | html %]">Title: </label>
