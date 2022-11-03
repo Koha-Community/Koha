@@ -153,6 +153,7 @@ subtest 'checkauth() tests' => sub {
     };
 
     subtest 'Two-factor authentication' => sub {
+        plan tests => 18;
 
         my $patron = $builder->build_object(
             { class => 'Koha::Patrons', value => { flags => 1 } } );
@@ -245,7 +246,18 @@ subtest 'checkauth() tests' => sub {
         is( $userid, $patron->userid, 'Succesful login at the OPAC' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'No second auth required at the OPAC' );
 
+        #
         t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'disabled' );
+        $session = C4::Auth::get_session($sessionID);
+        $session->param('waiting-for-2FA', 1);
+        $session->flush;
+        my ($auth_status, undef ) = C4::Auth::check_cookie_auth($sessionID, undef );
+        is( $auth_status, 'ok', 'User authenticated, pref was disabled, access OK' );
+        $session->param('waiting-for-2FA', 0);
+        $session->param('waiting-for-2FA-setup', 1);
+        $session->flush;
+        ($auth_status, undef ) = C4::Auth::check_cookie_auth($sessionID, undef );
+        is( $auth_status, 'ok', 'User waiting for 2FA setup, pref was disabled, access OK' );
     };
 
     C4::Context->_new_userenv; # For next tests
