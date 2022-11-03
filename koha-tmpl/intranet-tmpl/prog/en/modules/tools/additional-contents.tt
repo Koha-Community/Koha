@@ -680,7 +680,9 @@
                     /* Activate first tab and initialize its CodeMirror instance */
                     let firstTab = $("#tabs a:first");
                     firstTab.tab("show");
-                    initCodeMirror( firstTab[0].hash );
+                    if ( firstTab[0] ) {
+                        initCodeMirror( firstTab[0].hash );
+                    }
                 }
 
                 $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
