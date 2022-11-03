@@ -433,7 +433,7 @@ subtest '_build_query_params_from_api' => sub {
 
 subtest 'stash_embed() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     my $t = Test::Mojo->new;
 
@@ -444,6 +444,9 @@ subtest 'stash_embed() tests' => sub {
       ->json_is( '/embed' => { checkouts => { children => { item => {} } }, library => {} } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'holds+count' } )
+      ->json_is( '/embed' => { holds_count => { is_count => 1 } } );
+
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'holds:count' } )
       ->json_is( '/embed' => { holds_count => { is_count => 1 } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,patron' } )
