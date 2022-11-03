@@ -1000,7 +1000,7 @@ subtest 'Koha::Hold::item_group tests' => sub {
 
 subtest 'change_type tests' => sub {
 
-    plan tests => 9;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -1009,6 +1009,7 @@ subtest 'change_type tests' => sub {
         class => 'Koha::Holds',
         value => {
             itemnumber => undef,
+            item_level_hold => 0,
         }
     } );
 
@@ -1025,11 +1026,15 @@ subtest 'change_type tests' => sub {
 
     is( $hold->itemnumber, undef, 'record hold to record hold, no changes');
 
+    is( $hold->item_level_hold, 0, 'item_level_hold=0' );
+
     ok( $hold->change_type( $item->itemnumber ) );
 
     $hold->discard_changes;
 
     is( $hold->itemnumber, $item->itemnumber, 'record hold to item hold');
+
+    is( $hold->item_level_hold, 1, 'item_level_hold=1' );
 
     ok( $hold->change_type( $item->itemnumber ) );
 
@@ -1037,11 +1042,15 @@ subtest 'change_type tests' => sub {
 
     is( $hold->itemnumber, $item->itemnumber, 'item hold to item hold, no changes');
 
+    is( $hold->item_level_hold, 1, 'item_level_hold=1' );
+
     ok( $hold->change_type );
 
     $hold->discard_changes;
 
     is( $hold->itemnumber, undef, 'item hold to record hold');
+
+    is( $hold->item_level_hold, 0, 'item_level_hold=0' );
 
     my $hold3 = $builder->build_object( {
         class => 'Koha::Holds',

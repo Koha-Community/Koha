@@ -877,7 +877,10 @@ sub change_type {
     }
 
     if ( $record_holds_per_patron->count == 1 ) {
-        $self->set({ itemnumber => $itemnumber ? $itemnumber : undef })->store;
+        $self->set({
+            itemnumber => $itemnumber ? $itemnumber : undef,
+            item_level_hold => $itemnumber ? 1 : 0,
+        })->store;
     } else {
         Koha::Exceptions::Hold::CannotChangeHoldType->throw();
     }
