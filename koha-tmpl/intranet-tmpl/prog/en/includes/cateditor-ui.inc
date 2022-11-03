@@ -1300,6 +1300,15 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             },
         });
 
+        // Whitelist table elements to ensure popover displays all the info
+        $.fn.popover.Constructor.DEFAULTS.whiteList.table = [];
+        $.fn.popover.Constructor.DEFAULTS.whiteList.tr = [];
+        $.fn.popover.Constructor.DEFAULTS.whiteList.td = [];
+        $.fn.popover.Constructor.DEFAULTS.whiteList.div = [];
+        $.fn.popover.Constructor.DEFAULTS.whiteList.tbody = [];
+        $.fn.popover.Constructor.DEFAULTS.whiteList.thead = [];
+        // https://getbootstrap.com/docs/3.4/javascript/#popovers
+
         $('#show-shortcuts').popover({
             html: true,
             placement: 'bottom',
