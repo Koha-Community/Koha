@@ -44,7 +44,7 @@
                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
             [% END %]
             <fieldset class="action">
-              <input type="submit" value="Search" />
+              <input type="submit" class="btn btn-primary" value="Search" />
             </fieldset>
             </div>
         </fieldset>
