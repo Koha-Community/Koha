@@ -219,7 +219,7 @@
 [% END %]
 
         <div class="action">
-            <input type="submit" name="submitbutton" value="Confirm" />
+            <input type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
         </div>
     </form>
@@ -276,7 +276,7 @@
         [% END %]
 
         <div class="action">
-            <input type="submit" value="Write off this charge" />
+            <input type="submit" class="btn btn-primary" value="Write off this charge" />
             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
         </div>
     </form>
@@ -364,7 +364,7 @@
     [% END %]
 
     <div class="action">
-        <input type="submit" name="submitbutton" value="Confirm" />
+        <input type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
         <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
     </div>
     </form>

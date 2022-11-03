@@ -794,7 +794,7 @@
                                                 <fieldset class="action">
                                                     <input type="hidden" name="from" value="borrower" />
                                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                                    <input type="submit" value="Suspend all holds" />
+                                                    <input type="submit" class="btn btn-primary" value="Suspend all holds" />
 
                                                     [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                                                         <label for="suspend_until">until</label>
@@ -809,7 +809,7 @@
                                                     <input type="hidden" name="from" value="borrower" />
                                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                                     <input type="hidden" name="suspend" value="0" />
-                                                    <input type="submit" value="Resume all suspended holds" />
+                                                    <input type="submit" class="btn btn-primary" value="Resume all suspended holds" />
                                                 </fieldset>
                                             </form>
                                         [% END # IF SuspendHoldsIntranet %]

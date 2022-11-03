@@ -10,7 +10,7 @@
     <form id="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
         <input type="text" size="40" id="search_patron_filter" class="focus" autocomplete="off" />
-        <input type="submit" value="Search" />
+        <input type="submit" class="btn btn-primary" value="Search" />
     </form>
 [% END %]
 
@@ -91,7 +91,7 @@
                 [% END %]
             </ol>
             <fieldset class="action">
-                <input type="submit" value="Search" />
+                <input type="submit" class="btn btn-primary" value="Search" />
                 <input type="button" value="Clear" id="clear_search" />
             </fieldset>
         </fieldset>

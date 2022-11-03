@@ -63,7 +63,7 @@
         <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
     [% END %]
     <form method="post">
-        <input type="submit" value="Generate discharge" name="discharge" />
+        <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
         <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
     </form>
 [% END %]
