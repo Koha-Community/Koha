@@ -151,7 +151,7 @@
 
     <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
 
-    <p class="submit"><input id="submit-button" type="submit" value="Log in" tabindex="4" /></p>
+    <p class="submit"><input id="submit-button" type="submit" class="btn btn-primary" value="Log in" tabindex="4" /></p>
     </form>
 
     [% IF ( casAuthentication ) %]
@@ -191,7 +191,7 @@
             <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
         </p>
         <p>
-            <input id="submit-button" type="submit" value="Verify code" />
+            <input type="submit" id="submit-button" class="btn btn-primary" value="Verify code" />
             <a class="send_otp" id="send_otp" href="#">Send the code by email</a>
             <a class="cancel" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Cancel</a>
         </p>

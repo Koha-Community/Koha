@@ -651,17 +651,17 @@
                     [% IF ( suggestionid ) %]
                         [% IF ( need_confirm ) %]
                             <input type="hidden" name="save_confirmed" value="1" />
-                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" value="Confirm your suggestion" />
+                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                         [% ELSE %]
-                            <input type="submit" value="Save" />
+                            <input type="submit" class="btn btn-primary" value="Save" />
                         [% END %]
                         <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | uri %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>
                     [% ELSE %]
                         [% IF ( need_confirm ) %]
                             <input type="hidden" name="save_confirmed" value="1" />
-                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" value="Confirm your suggestion" />
+                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                         [% ELSE %]
-                            <input type="submit" value="Submit your suggestion" />
+                            <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                         [% END %]
                         <a class="cancel" href="suggestion.pl">Cancel</a>
                     [% END %]
@@ -1045,7 +1045,7 @@
                                     </li>
                                 </ol>
                                 <fieldset class="action">
-                                    <input type="submit" value="Go" />
+                                    <input type="submit" class="btn btn-primary" value="Go" />
                                 </fieldset>
                             </fieldset> <!-- /.brief -->
 

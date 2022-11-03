@@ -245,7 +245,7 @@
                                     <form id="holds_clubsearch" action="request.pl" method="post">
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
-                                        <input type="submit" value="Search" />
+                                        <input type="submit" class="btn btn-primary" value="Search" />
                                         [% FOREACH biblionumber IN biblionumbers %]
                                         <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                                         [% END %]
@@ -339,7 +339,7 @@
                             [% END %]
                         [% UNLESS ( multi_hold ) %]
                             <fieldset class="action">
-                                <input type="submit" value="Place hold" />
+                                <input type="submit" class="btn btn-primary" value="Place hold" />
                             </fieldset>
                         [% ELSE %]
                             <table id="requesttitles">

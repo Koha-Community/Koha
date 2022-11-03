@@ -102,7 +102,7 @@
                                 </li>
                             </ol>
                             <fieldset class="action">
-                                <input type="submit" value="Search" />
+                                <input type="submit" class="btn btn-primary" value="Search" />
                                 <input type="button" value="Clear" id="clear_search" />
                             </fieldset>
                         </fieldset>
@@ -264,7 +264,7 @@
                                         <input name="item_type" type="hidden" value="[% items.0.itype | html %]">
                                     [% END %]
                                     <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
-                                    <input type="submit" value="Submit">
+                                    <input type="submit" class="btn btn-primary" value="Submit" />
                                     <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                                 </fieldset>
                             </form>
@@ -467,7 +467,7 @@
                             <input type="hidden" value="edit_action" name="method">
                             <input type="hidden" value="form" name="stage">
                             <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
-                            <input type="submit" value="Submit">
+                            <input type="submit" class="btn btn-primary" value="Submit" />
                             <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                         </fieldset>
                     </form>
@@ -773,7 +773,7 @@
                                                 </ol>
                                             </fieldset>
                                             <fieldset class="action">
-                                                <input type="submit" value="Submit">
+                                                <input type="submit" class="btn btn-primary" value="Submit" />
                                             </fieldset>
                                         </form>
                                     </div>
