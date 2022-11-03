@@ -62,16 +62,16 @@ sub get_user {
 
     my ( $mapped_data, $patron ) = $self->_get_data_and_patron({ provider => $provider, data => $data, config => $config });
 
-    if ($mapped_data) {
-        my $domain = $self->has_valid_domain_config({ provider => $provider, email => $mapped_data->{email}, interface => $interface});
+    $mapped_data //= {};
 
-        $mapped_data->{categorycode} = $domain->default_category_id;
-        $mapped_data->{branchcode}   = $domain->default_library_id;
+    my $domain = $self->has_valid_domain_config({ provider => $provider, email => $mapped_data->{email}, interface => $interface});
 
-        $patron->set($mapped_data)->store if $patron && $domain->update_on_auth;
+    $patron->set($mapped_data)->store if $patron && $domain->update_on_auth;
 
-        return ( $patron, $mapped_data, $domain );
-    }
+    $mapped_data->{categorycode} = $domain->default_category_id;
+    $mapped_data->{branchcode}   = $domain->default_library_id;
+
+    return ( $patron, $mapped_data, $domain );
 }
 
 =head3 get_valid_domain_config
@@ -97,15 +97,15 @@ sub get_valid_domain_config {
     my $domains = $provider->domains;
     my $allow   = "allow_$interface";
     my @subdomain_matches;
-    my $default_match;
+    my $perfect_match;
+    my $response;
 
     while ( my $domain = $domains->next ) {
-        next unless $domain->$allow;
 
         my $pattern = '@';
         my $domain_text = $domain->domain;
         unless ( defined $domain_text && $domain_text ne '') {
-            $default_match = $domain;
+            $response = $domain;
             next;
         }
         my ( $asterisk, $domain_name ) = ( $domain_text =~ /^(\*)?(.+)$/ );
@@ -118,20 +118,22 @@ sub get_valid_domain_config {
             if ( defined $asterisk && $asterisk eq '*' ) {
                 push @subdomain_matches, { domain => $domain, match_length => length $domain_name };
             } else {
-
-                # Perfect match.. return this one.
-                return $domain;
+                $perfect_match = $domain;
             }
         }
     }
 
-    if ( @subdomain_matches ) {
+    if ( !$perfect_match && @subdomain_matches ) {
         @subdomain_matches = sort { $b->{match_length} <=> $a->{match_length} } @subdomain_matches
           unless scalar @subdomain_matches == 1;
-        return $subdomain_matches[0]->{domain};
+        $response = $subdomain_matches[0]->{domain};
+    } elsif ($perfect_match) {
+        $response = $perfect_match;
     }
 
-    return $default_match;
+    return unless $response && $response->$allow;
+
+    return $response;
 }
 
 =head3 has_valid_domain_config

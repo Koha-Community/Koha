@@ -70,7 +70,8 @@
         [% CASE 'success_on_update' %]
             <span>Identity provider updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            <span>Identity provider added successfully.</span>
+            <div>Identity provider added successfully.</div>
+            <div>You will need to restart Koha for the provider to work.</div>
         [% CASE %]
             <span>[% m.code | html %]</span>
         [% END %]
@@ -82,176 +83,202 @@
 
 [% IF op == 'add_form' %]
     <h1>New identity provider</h1>
-    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
-        <input type="hidden" name="op" value="add" />
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="code" class="required">Code: </label>
-                    <input type="text" name="code" id="code" size="60" class="required" required="required" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="description" class="required">Description: </label>
-                    <input type="text" name="description" id="description" size="60" class="required" required="required" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="protocol">Protocol: </label>
-                    <select name="protocol" id="protocol">
-                        <option value="OAuth">OAuth</option>
-                        <option value="OIDC">OIDC</option>
-                        <!-- Not implemented yet
-                        <option value="LDAP">LDAP</option>
-                        <option value="CAS">CAS</option>
-                        -->
-                    </select>
-                </li>
-            </ol>
-        </fieldset>
+    <div class="page-section">
+        <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
+            <input type="hidden" name="op" value="add" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="code" class="required">Code: </label>
+                        <input type="text" name="code" id="code" size="60" class="required" required="required" />
+                        <span class="required">Required</span>
+                        <div class="hint">Code that identifies this provider. Only alphanumeric and "_" characters are allowed</div>
+                    </li>
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        <input type="text" name="description" id="description" size="60" class="required" required="required" />
+                        <span class="required">Required</span>
+                        <div class="hint">User friendly name of this provider</div>
+                    </li>
+                    <li>
+                        <label for="protocol">Protocol: </label>
+                        <select name="protocol" id="protocol">
+                            <option value="OAuth">OAuth</option>
+                            <option value="OIDC">OIDC</option>
+                            <!-- Not implemented yet
+                            <option value="LDAP">LDAP</option>
+                            <option value="CAS">CAS</option>
+                            -->
+                        </select>
+                        <div class="hint">Choose the protocol this external identity provider uses</div>
+                    </li>
+                </ol>
+            </fieldset>
 
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <div>
+            <fieldset class="rows">
+                <ol>
+                    <li>
                         <label for="config" class="required json">Configuration: </label>
                         <textarea name="config" id="config" class="required"></textarea>
                         <span class="required">Required</span>
-                    </div>
-                    <div>
-                        <label></label>
-                        <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default OAuth configuration</button>
-                    </div>
-                </li>
-                <li>
-                    <div>
+                        <div class="hint">Provider's main configuration. <button class="more btn btn-ligth" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-config" style="display: none">
+                            <div>This configuration differs for each protocol.</div>
+                            <div>It is recommended to add the default configuration, and then replace with appropriate values</div>
+                        </div>
+                        <div class="hint">
+                            <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default OAuth configuration</button>
+                        </div>
+                    </li>
+                    <li>
                         <label for="mapping" class="required json">Mapping: </label>
                         <textarea name="mapping" id="mapping" class="required"></textarea>
                         <span class="required">Required</span>
-                    </div>
-                    <div>
-                        <label></label>
-                        <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default OAuth mapping</button>
-                    </div>
-                </li>
-                <li>
-                    <label for="matchpoint" class="required">Matchpoint: </label>
-                    <select name="matchpoint" id="matchpoint" class="required">
-                        <option value="email">Email</option>
-                        <option value="userid">User id</option>
-                        <option value="cardnumber">Card number</option>
-                    </select>
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="icon_url">Icon URL: </label>
-                    <input type="text" name="icon_url" id="icon_url" size="60" />
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
-        </fieldset>
-    </form>
+                        <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-ligth" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-mapping" style="display: none">
+                            <div>It is recommended to add the default mapping, and then modify to suit this provider's response</div>
+                            <div>Keys represent Koha's fields, and values represent the keys in provider's result</div>
+                            <div>For nested values in provider's results, you can use dot separation.</div>
+                            <div>For example, <i>firstname: "users.0.name"</i> will match the 'name' attribute of the first object in the array named 'users', and place it in 'firstname' field</div>
+                            <div>If you plan to use auto register feature, either <i>userid</i> or <i>cardnumber</i> must be present in this mapping</div>
+                        </div>
+                        <div class="hint">
+                            <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default OAuth mapping</button>
+                        </div>
+                    </li>
+                    <li>
+                        <label for="matchpoint">Matchpoint: </label>
+                        <select name="matchpoint" id="matchpoint">
+                            <option value="email">Email</option>
+                            <option value="userid">User id</option>
+                            <option value="cardnumber">Card number</option>
+                        </select>
+                        <div class="hint">Koha patron's field that will be used to match provider's user with Koha's</div>
+                        <div class="hint">It must be present in mapping</div>
+                    </li>
+                    <li>
+                        <label for="icon_url">Icon URL: </label>
+                        <input type="text" name="icon_url" id="icon_url" size="60" />
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Submit" />
+                <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'edit_form' %]
     <h1>Edit identity provider</h1>
-    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
-        <input type="hidden" name="op" value="edit_save" />
-        <input type="hidden" name="identity_provider_id" value="[%- identity_provider.identity_provider_id | html -%]" />
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="code" class="required">Code: </label>
-                    <input type="text" name="code" id="code" size="60" class="required" required="required" value="[%- identity_provider.code | html -%]"/>
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="description" class="required">Description: </label>
-                    <input type="text" name="description" id="description" size="60" class="required" required="required" value="[%- identity_provider.description | html -%]"/>
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="protocol">Protocol: </label>
-                    <select name="protocol" id="protocol">
-                    [% IF identity_provider.protocol == 'OAuth' %]
-                        <option value="OAuth" selected="selected">OAuth</option>
-                        <option value="OIDC">OIDC</option>
-                        <!-- Not implemented yet
-                        <option value="LDAP">LDAP</option>
-                        <option value="CAS">CAS</option>
-                        -->
-                    [% ELSE %]
-                        <option value="OAuth">OAuth</option>
-                        <option value="OIDC" selected="selected">OIDC</option>
-                        <!-- Not implemented yet
-                        <option value="LDAP">LDAP</option>
-                        <option value="CAS">CAS</option>
-                        -->
-                    [% END %]
-                    </select>
-                </li>
-            </ol>
-        </fieldset>
+    <div class="page-section">
+        <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+            <input type="hidden" name="op" value="edit_save" />
+            <input type="hidden" name="identity_provider_id" value="[%- identity_provider.identity_provider_id | html -%]" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="code" class="required">Code: </label>
+                        <input type="text" name="code" id="code" size="60" class="required" required="required" value="[%- identity_provider.code | html -%]"/>
+                        <span class="required">Required</span>
+                        <div class="hint">Code that identifies this provider. Only alphanumeric and "_" characters are allowed</div>
+                    </li>
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        <input type="text" name="description" id="description" size="60" class="required" required="required" value="[%- identity_provider.description | html -%]"/>
+                        <span class="required">Required</span>
+                        <div class="hint">User friendly name of this provider</div>
+                    </li>
+                    <li>
+                        <label for="protocol">Protocol: </label>
+                        <select name="protocol" id="protocol">
+                        [% IF identity_provider.protocol == 'OAuth' %]
+                            <option value="OAuth" selected="selected">OAuth</option>
+                            <option value="OIDC">OIDC</option>
+                            <!-- Not implemented yet
+                            <option value="LDAP">LDAP</option>
+                            <option value="CAS">CAS</option>
+                            -->
+                        [% ELSE %]
+                            <option value="OAuth">OAuth</option>
+                            <option value="OIDC" selected="selected">OIDC</option>
+                            <!-- Not implemented yet
+                            <option value="LDAP">LDAP</option>
+                            <option value="CAS">CAS</option>
+                            -->
+                        [% END %]
+                        </select>
+                        <div class="hint">Choose the protocol this external identity provider uses</div>
+                    </li>
+                </ol>
+            </fieldset>
 
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <div>
+            <fieldset class="rows">
+                <ol>
+                    <li>
                         <label for="config" class="required json">Configuration: </label>
                         <textarea name="config" id="config" class="required">[%- identity_provider.config | html -%]</textarea>
                         <span class="required">Required</span>
-                    </div>
-                    <div>
-                        <label></label>
-                        <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default [%- identity_provider.protocol | html -%] configuration</button>
-                    </div>
-                </li>
-                <li>
-                    <div>
+                        <div class="hint">Provider's main configuration. <button class="more btn btn-ligth" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-config" style="display: none">
+                            <div>This configuration differs for each protocol.</div>
+                            <div>It is recommended to add the default configuration, and then replace with appropriate values</div>
+                        </div>
+                        <div class="hint">
+                            <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default [%- identity_provider.protocol | html -%] configuration</button>
+                        </div>
+                    </li>
+                    <li>
                         <label for="mapping" class="required json">Mapping: </label>
                         <textarea name="mapping" id="mapping" class="required">[%- identity_provider.mapping | html -%]</textarea>
                         <span class="required">Required</span>
-                    </div>
-                    <div>
-                        <label></label>
-                        <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default [%- identity_provider.protocol | html -%] mapping</button>
-                    </div>
-                </li>
-                <li>
-                    <label for="matchpoint" class="required">matchpoint: </label>
-                    <select name="matchpoint" id="matchpoint" class="required">
-                        [%- IF identity_provider.matchpoint == 'email'      -%]
-                            <option value="email" selected="selected">Email</option>
-                        [%- ELSE -%]
-                            <option value="email">Email</option>
-                        [%- END -%]
-                        [%- IF identity_provider.matchpoint == 'userid'     -%]
-                            <option value="userid" selected="selected">User id</option>
-                        [%- ELSE -%]
-                            <option value="userid">User id</option>
-                        [%- END -%]
-                        [%- IF identity_provider.matchpoint == 'cardnumber' -%]
-                            <option value="cardnumber" selected="selected">Card number</option>
-                        [%- ELSE -%]
-                            <option value="cardnumber">Card number</option>
-                        [%- END -%]
-                    </select>
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="icon_url">Icon URL: </label>
-                    <input type="text" name="icon_url" id="icon_url" size="60"  value="[%- identity_provider.icon_url | html -%]"/>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
-        </fieldset>
-    </form>
+                        <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-ligth" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-mapping" style="display: none">
+                            <div>It is recommended to add the default mapping, and then modify to suit this provider's response</div>
+                            <div>Keys represent Koha's fields, and values represent the keys in provider's result</div>
+                            <div>For nested values in provider's results, you can use dot separation.</div>
+                            <div>For example, <i>firstname: "users.0.name"</i> will match the 'name' attribute of the first object in the array named 'users', and place it in 'firstname' field</div>
+                            <div>If you plan to use auto register feature, either <i>userid</i> or <i>cardnumber</i> must be present in this mapping</div>
+                        </div>
+                        <div class="hint">
+                            <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default [%- identity_provider.protocol | html -%] mapping</button>
+                        </div>
+                    </li>
+                    <li>
+                        <label for="matchpoint">matchpoint: </label>
+                        <select name="matchpoint" id="matchpoint">
+                            [%- IF identity_provider.matchpoint == 'email'      -%]
+                                <option value="email" selected="selected">Email</option>
+                            [%- ELSE -%]
+                                <option value="email">Email</option>
+                            [%- END -%]
+                            [%- IF identity_provider.matchpoint == 'userid'     -%]
+                                <option value="userid" selected="selected">User id</option>
+                            [%- ELSE -%]
+                                <option value="userid">User id</option>
+                            [%- END -%]
+                            [%- IF identity_provider.matchpoint == 'cardnumber' -%]
+                                <option value="cardnumber" selected="selected">Card number</option>
+                            [%- ELSE -%]
+                                <option value="cardnumber">Card number</option>
+                            [%- END -%]
+                        </select>
+                        <div class="hint">Koha patron's field that will be used to match provider's user with Koha's</div>
+                        <div class="hint">It must be present in mapping</div>
+                    </li>
+                    <li>
+                        <label for="icon_url">Icon URL: </label>
+                        <input type="text" name="icon_url" id="icon_url" size="60"  value="[%- identity_provider.icon_url | html -%]"/>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Submit" />
+                <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'list' %]
@@ -261,17 +288,18 @@
     </div>
 
     <h1>Identity providers</h1>
-
-    <table id="identity_providers">
-        <thead>
-            <tr>
-                <th>Code</th>
-                <th>Description</th>
-                <th>Protocol</th>
-                <th data-class-name="actions noExport">Actions</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="page-section">
+        <table id="identity_providers">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Protocol</th>
+                    <th data-class-name="actions noExport">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 [% END %]
 
             <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
@@ -397,20 +425,36 @@
             });
 
             $.validator.addMethod('json', function(value, element) {
-                if (this.optional(element)) return true;
+                if (this.optional(element) && value === '') return true;
                 try {
                     JSON.parse(value)
                 } catch (error) {
                     return false;
                 }
                 return true;
-            }, _('Not a valid JSON'));
+            }, _("Not a valid JSON"));
+
+            $.validator.addMethod('alphanum', function(value, element) {
+                if (this.optional(element) && value === '') return true;
+                return /^[a-zA-Z0-9_]+$/.test(value);
+            }, _("Value must have alphanumeric characters or '_'"));
 
             $('#config, #mapping').each(function() {
                 $(this).rules('add', {
                     required: true,
                     json: true
                 });
+            });
+
+            $('button.more').on('click', function(event) {
+                event.preventDefault();
+                var target = $(this).hide().data('target');
+                $('.more-'+target).show();
+            });
+
+            $('#code').rules('add', {
+                alphanum: true,
+                required: true
             });
 
             var defaults = {
@@ -424,7 +468,7 @@
                     mapping: {
                         email: "email",
                         given_name: "firstname",
-	                    family_name: "surname"
+                        family_name: "surname"
                     }
                 },
                 OAuth: {
@@ -439,25 +483,25 @@
                     mapping: {
                         email: "email",
                         firstname: "given_name",
-	                    surname: "family_name"
+                        surname: "family_name"
                     }
                 }
             };
 
             $('#protocol').on('change', function() {
                 var protocol = $(this).val();
-                $('#default-config').html(_('Add default %s configuration').format(protocol));
-                $('#default-mapping').html(_('Add default %s mapping').format(protocol));
+                $('#default-config').html(_("Add default %s configuration").format(protocol));
+                $('#default-mapping').html(_("Add default %s mapping").format(protocol));
             });
 
             $('button.defaults').on('click', function(event) {
                 event.preventDefault();
                 var target = $(this).data('defaultTarget');
-                if($('#'+target).html() !== '' && !confirm(_('Are you sure you want to replace current %s contents?').format(target))) {
+                if($('#'+target).val() !== '' && !confirm(_("Are you sure you want to replace current %s contents?").format(target))) {
                     return;
                 }
                 var protocol = $('#protocol').val();
-                $('#'+target).html(JSON.stringify(defaults[protocol][target], null, 2));
+                $('#'+target).val(JSON.stringify(defaults[protocol][target], null, 2));
             })
         });
     </script>

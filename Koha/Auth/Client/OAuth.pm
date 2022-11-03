@@ -65,6 +65,7 @@ sub _get_data_and_patron {
         my ( $header_part, $claims_part, $footer_part ) = split( /\./, $data->{id_token} );
 
         my $claim = decode_json( decode_base64url($claims_part) );
+
         foreach my $key ( keys %$mapping ) {
             my $pkey = $mapping->{$key};
             $mapped_data->{$key} = $claim->{$pkey}
@@ -111,8 +112,7 @@ sub _get_data_and_patron {
 
     }
 
-    return ( $mapped_data, $patron )
-          if $patron;
+    return ( $mapped_data, $patron );
 }
 
 1;

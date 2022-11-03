@@ -44,12 +44,12 @@ subtest 'get_user() tests' => sub {
 
   my $client   = Koha::Auth::Client::OAuth->new;
   my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
-  my $domain   = $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => '', allow_opac => 1, allow_staff => 0 } } );
+  my $domain   = $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => '', update_on_auth => 0, allow_opac => 1, allow_staff => 0 } } );
   my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'patron@test.com' } } );
   my $mapping = {
     email     => 'electronic_mail',
     firstname => 'given_name',
-	  surname   => 'family_name'
+    surname   => 'family_name'
   };
   $provider->set_mapping($mapping)->store;
 
@@ -163,7 +163,7 @@ subtest '_traverse_hash() tests' => sub {
     base => $hash,
     keys => 'a.hash.with'
   });
-  is($first_result, 'complicated structure', 'get the value whithin a hash structure');
+  is($first_result, 'complicated structure', 'get the value within a hash structure');
 
   my $second_result = $client->_traverse_hash({
     base => $hash,

@@ -50,22 +50,6 @@ sub login {
 
     my $provider_config = $c->oauth2->providers->{$provider};
 
-    unless ( $provider_config ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error      => 'Object not found',
-                error_code => 'not_found',
-            }
-        );
-    }
-
-    unless ( $provider_config->{authorize_url} =~ /response_type=code/ ) {
-        my $authorize_url = Mojo::URL->new($provider_config->{authorize_url});
-        $authorize_url->query->append(response_type => 'code');
-        $provider_config->{authorize_url} = $authorize_url->to_string;
-    }
-
     my $uri;
 
     if ( $interface eq 'opac' ) {
@@ -78,20 +62,30 @@ sub login {
         $uri = '/cgi-bin/koha/mainpage.pl';
     }
 
+    unless ( $provider_config ) {
+        my $error = "No configuration found for your provider";
+        return $c->redirect_to($uri."?auth_error=$error");
+    }
+
+    unless ( $provider_config->{authorize_url} =~ /response_type=code/ ) {
+        my $authorize_url = Mojo::URL->new($provider_config->{authorize_url});
+        $authorize_url->query->append(response_type => 'code');
+        $provider_config->{authorize_url} = $authorize_url->to_string;
+    }
+
     return $c->oauth2->get_token_p($provider)->then(
         sub {
             return unless my $response = shift;
 
-            my ( $patron, $mapped_data, $domain ) = Koha::Auth::Client::OAuth->new->get_user(
-                {   provider  => $provider,
-                    data      => $response,
-                    interface => $interface,
-                    config    => $c->oauth2->providers->{$provider}
-                }
-            );
-
             try {
-                # FIXME: We could check if the backend allows registering
+                my ( $patron, $mapped_data, $domain ) = Koha::Auth::Client::OAuth->new->get_user(
+                    {   provider  => $provider,
+                        data      => $response,
+                        interface => $interface,
+                        config    => $c->oauth2->providers->{$provider}
+                    }
+                );
+
                 if ( !$patron ) {
                     $patron = $c->auth->register(
                         {
@@ -113,7 +107,10 @@ sub login {
                 # TODO: Review behavior
                 if ( blessed $error ) {
                     if ( $error->isa('Koha::Exceptions::Auth::Unauthorized') ) {
-                        $error = "$error";
+                        $error = "User cannot access this resource";
+                    }
+                    if ( $error->isa('Koha::Exceptions::Auth::NoValidDomain') ) {
+                        $error = "No configuration found for your email domain";
                     }
                 }
 

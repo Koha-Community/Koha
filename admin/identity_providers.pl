@@ -95,14 +95,14 @@ if ( !$domain_ops && $op eq 'add' ) {
 }
 elsif ( $domain_ops && $op eq 'add' ) {
 
-    my $allow_opac          = $input->param('allow_opac');
-    my $allow_staff         = $input->param('allow_staff');
+    my $allow_opac              = $input->param('allow_opac');
+    my $allow_staff             = $input->param('allow_staff');
     my $identity_provider_id    = $input->param('identity_provider_id');
-    my $auto_register       = $input->param('auto_register');
-    my $default_category_id = $input->param('default_category_id');
-    my $default_library_id  = $input->param('default_library_id');
-    my $domain              = $input->param('domain');
-    my $update_on_auth      = $input->param('update_on_auth');
+    my $auto_register           = $input->param('auto_register');
+    my $default_category_id     = $input->param('default_category_id') || undef;
+    my $default_library_id      = $input->param('default_library_id') || undef;
+    my $domain                  = $input->param('domain');
+    my $update_on_auth          = $input->param('update_on_auth');
 
     try {
 
@@ -237,8 +237,8 @@ elsif ( $domain_ops && $op eq 'edit_save' ) {
         my $domain              = $input->param('domain');
         my $auto_register       = $input->param('auto_register');
         my $update_on_auth      = $input->param('update_on_auth');
-        my $default_library_id  = $input->param('default_library_id');
-        my $default_category_id = $input->param('default_category_id');
+        my $default_library_id  = $input->param('default_library_id') || undef;
+        my $default_category_id = $input->param('default_category_id') || undef;
         my $allow_opac          = $input->param('allow_opac');
         my $allow_staff         = $input->param('allow_staff');
 

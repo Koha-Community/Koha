@@ -33,7 +33,7 @@
 
         [% IF op == 'add_form' %]
             <li>
-                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_name | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_code | html -%]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
@@ -43,7 +43,7 @@
 
         [% ELSIF op == 'edit_form' %]
             <li>
-                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_name | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_code | html -%]</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
@@ -87,198 +87,225 @@
     <div class="dialog alert"   id="identity_provider_domain_delete_error"   style="display: none;"></div>
 
 [% IF op == 'add_form' %]
-    <h1>New identity provider domain</h1>
-    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
-        <input type="hidden" name="op" value="add" />
-        <input type="hidden" name="domain_ops" value="1" />
-        <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="domain">Domain: </label>
-                    <input type="text" name="domain" id="domain" size="60" />
-                </li>
-            </ol>
-        </fieldset>
+    <h1>New email domain</h1>
+    <div class="page-section">
+        <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
+            <input type="hidden" name="op" value="add" />
+            <input type="hidden" name="domain_ops" value="1" />
+            <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="domain">Domain: </label>
+                        <input type="text" name="domain" id="domain" size="60" />
+                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-domain" style="display: none">
+                            <div>If this field is empty, or '*' any email domain will match this rule.</div>
+                            <div>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</div>
+                            <div>Exact matches have presedence over wildcard ones, so 'library.com' domain will take presedence over '*library.com' when the email is 'somebody@library.com'</div>
+                            <div>The same way, the longest match will take presedence over the shorter one, so '*teacher.university.com' will take presedence over '*.university.com' if the email is 'user@math.teacher.university.com'</div>
+                        </div>
+                    </li>
+                </ol>
+            </fieldset>
 
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="update_on_auth">Update on login: </label>
-                    <select name="update_on_auth" id="update_on_auth">
-                        <option value="1">Update</option>
-                        <option value="0" selected="selected">Don't update</option>
-                    </select>
-                    <span>user data on login</span>
-                </li>
-                <li>
-                    <label for="auto_register">Auto register: </label>
-                    <select name="auto_register" id="auto_register">
-                        <option value="1">Allow</option>
-                        <option value="0" selected="selected">Don't allow</option>
-                    </select>
-                    <span>users to auto register on login</span>
-                </li>
-                <li>
-                    <label for="default_library_id">Default library: </label>
-                    <select id="default_library_id" name="default_library_id">
-                        [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
-                    </select>
-                </li>
-                <li>
-                    <label for="default_category_id">Default category: </label>
-                    [% SET categories = Categories.all() %]
-                    <select name="default_category_id" id="default_category_id">
-                        [% FOREACH category IN categories %]
-                            <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                        [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="allow_opac">Allow opac: </label>
-                    <select name="allow_opac" id="allow_opac">
-                        <option value="1" selected="selected">Allow</option>
-                        <option value="0">Don't allow</option>
-                    </select>
-                    <span>opac users of this domain to login with this identity provider</span>
-                </li>
-                <li>
-                    <label for="allow_opac">Allow staff: </label>
-                    <select name="allow_staff" id="allow_staff">
-                        <option value="1" selected="selected">Allow</option>
-                        <option value="0">Don't allow</option>
-                    </select>
-                    <span>of this domain </span>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
-        </fieldset>
-    </form>
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="update_on_auth">Update on login: </label>
+                        <select name="update_on_auth" id="update_on_auth">
+                            <option value="1">Update</option>
+                            <option value="0" selected="selected">Don't update</option>
+                        </select>
+                        <span>user data on login</span>
+                    </li>
+                    <li>
+                        <label for="auto_register">Auto register: </label>
+                        <select name="auto_register" id="auto_register">
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        </select>
+                        <span>users to auto register on login</span>
+                    </li>
+                    <li>
+                        <label for="default_library_id">Default library: </label>
+                        <select id="default_library_id" name="default_library_id">
+                            <option value="">None</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        </select>
+                        <div class="hint">Use this library for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="default_category_id">Default category: </label>
+                        [% SET categories = Categories.all() %]
+                        <select name="default_category_id" id="default_category_id">
+                            <option value="">None</option>
+                            [% FOREACH category IN categories %]
+                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                            [% END %]
+                        </select>
+                        <div class="hint">Use this category for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow opac: </label>
+                        <select name="allow_opac" id="allow_opac">
+                            <option value="1" selected="selected">Allow</option>
+                            <option value="0">Don't allow</option>
+                        </select>
+                        <span>opac users of this domain to login with this identity provider</span>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow staff: </label>
+                        <select name="allow_staff" id="allow_staff">
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        </select>
+                        <span>of this domain to login with this identity provider</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Submit" />
+                <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'edit_form' %]
     <h1>Edit identity provider domain</h1>
-    <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
-        <input type="hidden" name="op" value="edit_save" />
-        <input type="hidden" name="domain_ops" value="1" />
-        <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
-        <input type="hidden" name="identity_provider_domain_id" value="[%- identity_provider_domain.identity_provider_domain_id | html -%]" />
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="domain">Domain: </label>
-                    <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]"/>
-                </li>
-            </ol>
-        </fieldset>
+    <div class="page-section">
+        <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+            <input type="hidden" name="op" value="edit_save" />
+            <input type="hidden" name="domain_ops" value="1" />
+            <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
+            <input type="hidden" name="identity_provider_domain_id" value="[%- identity_provider_domain.identity_provider_domain_id | html -%]" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="domain">Domain: </label>
+                        <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]"/>
+                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint more-domain" style="display: none">
+                            <div>If this field is empty, or '*' any email domain will match this rule.</div>
+                            <div>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</div>
+                            <div>Exact matches have presedence over asterix ones, so if the 'library.com' domain will take presedence over '*library.com' when the email is 'somebody@library.com'</div>
+                            <div>The same way, the longest match will take presedence over the shorter one, so '*teacher.university.com' will take presedence over '*.university.com' if the email is 'user@math.teacher.university.com'</div>
+                        </div>
+                    </li>
+                </ol>
+            </fieldset>
 
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label for="update_on_auth">Update on login: </label>
-                    <select name="update_on_auth" id="update_on_auth">
-                    [% IF identity_provider_domain.update_on_auth == "1" %]
-                        <option value="1" selected="selected">Update</option>
-                        <option value="0">Don't update</option>
-                    [% ELSE %]
-                        <option value="1">Update</option>
-                        <option value="0" selected="selected">Don't update</option>
-                    [% END %]
-                    </select>
-                    <span>user data on login</span>
-                </li>
-                <li>
-                    <label for="auto_register">Auto register: </label>
-                    <select name="auto_register" id="auto_register">
-                    [% IF identity_provider_domain.auto_register == "1" %]
-                        <option value="1" selected="selected">Allow</option>
-                        <option value="0">Don't allow</option>
-                    [% ELSE %]
-                        <option value="1">Allow</option>
-                        <option value="0" selected="selected">Don't allow</option>
-                    [% END %]
-                    </select>
-                    <span>users to auto register on login</span>
-                </li>
-                <li>
-                    <label for="default_library_id">Default library: </label>
-                    <select id="default_library_id" name="default_library_id">
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => identity_provider_domain.default_library_id, unfiltered => 1, do_not_select_my_library => 1 ) %]
-                    </select>
-                </li>
-                <li>
-                    <label for="default_category_id">Default category: </label>
-                    [% SET categories = Categories.all() %]
-                    <select name="default_category_id" id="default_category_id">
-                        [% FOREACH category IN categories %]
-                            [% IF category.categorycode == identity_provider_domain.default_category_id %]
-                                <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
-                            [% ELSE %]
-                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                            [% END %]
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="update_on_auth">Update on login: </label>
+                        <select name="update_on_auth" id="update_on_auth">
+                        [% IF identity_provider_domain.update_on_auth == "1" %]
+                            <option value="1" selected="selected">Update</option>
+                            <option value="0">Don't update</option>
+                        [% ELSE %]
+                            <option value="1">Update</option>
+                            <option value="0" selected="selected">Don't update</option>
                         [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="allow_opac">Allow opac: </label>
-                    <select name="allow_opac" id="allow_opac">
-                    [% IF identity_provider_domain.allow_opac == "1" %]
-                        <option value="1" selected="selected">Allow</option>
-                        <option value="0">Don't allow</option>
-                    [% ELSE %]
-                        <option value="1">Allow</option>
-                        <option value="0" selected="selected">Don't allow</option>
-                    [% END %]
-                    </select>
-                    <span>opac users of this domain to login with this identity provider</span>
-                </li>
-                <li>
-                    <label for="allow_opac">Allow staff: </label>
-                    <select name="allow_staff" id="allow_staff">
-                    [% IF identity_provider_domain.allow_staff == "1" %]
-                        <option value="1" selected="selected">Allow</option>
-                        <option value="0">Don't allow</option>
-                    [% ELSE %]
-                        <option value="1">Allow</option>
-                        <option value="0" selected="selected">Don't allow</option>
-                    [% END %]
-                    </select>
-                    <span>staff users of this domain to login with this identity provider</span>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" value="Submit" />
-            <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
-        </fieldset>
-    </form>
+                        </select>
+                        <span>user data on login</span>
+                    </li>
+                    <li>
+                        <label for="auto_register">Auto register: </label>
+                        <select name="auto_register" id="auto_register">
+                        [% IF identity_provider_domain.auto_register == "1" %]
+                            <option value="1" selected="selected">Allow</option>
+                            <option value="0">Don't allow</option>
+                        [% ELSE %]
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        [% END %]
+                        </select>
+                        <span>users to auto register on login</span>
+                    </li>
+                    <li>
+                        <label for="default_library_id">Default library: </label>
+                        <select id="default_library_id" name="default_library_id">
+                            <option value="">None</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => identity_provider_domain.default_library_id, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        </select>
+                        <div class="hint">Use this library for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="default_category_id">Default category: </label>
+                        [% SET categories = Categories.all() %]
+                        <select name="default_category_id" id="default_category_id">
+                            <option value="">None</option>
+                            [% FOREACH category IN categories %]
+                                [% IF category.categorycode == identity_provider_domain.default_category_id %]
+                                    <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <div class="hint">Use this category for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow opac: </label>
+                        <select name="allow_opac" id="allow_opac">
+                        [% IF identity_provider_domain.allow_opac == "1" %]
+                            <option value="1" selected="selected">Allow</option>
+                            <option value="0">Don't allow</option>
+                        [% ELSE %]
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        [% END %]
+                        </select>
+                        <span>opac users of this domain to login with this identity provider</span>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow staff: </label>
+                        <select name="allow_staff" id="allow_staff">
+                        [% IF identity_provider_domain.allow_staff == "1" %]
+                            <option value="1" selected="selected">Allow</option>
+                            <option value="0">Don't allow</option>
+                        [% ELSE %]
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        [% END %]
+                        </select>
+                        <span>staff users of this domain to login with this identity provider</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Submit" />
+                <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'list' %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="new_identity_provider_domain" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New identity provider domain</a>
+        <a class="btn btn-default" id="new_identity_provider_domain" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New email domain</a>
     </div>
 
-    <h1>Identity provider domains</h1>
-
-    <table id="identity_provider_domains">
-        <thead>
-            <tr>
-                <th>Domain</th>
-                <th>Update on login</th>
-                <th>Auto register</th>
-                <th>Default library</th>
-                <th>Default category</th>
-                <th>Allow opac</th>
-                <th>Allow staff</th>
-                <th data-class-name="actions noExport">Actions</th>
-            </tr>
-        </thead>
-    </table>
+    <h1>Identity provider email domains</h1>
+    <div class="page-section">
+        <table id="identity_provider_domains">
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Update on login</th>
+                    <th>Auto register</th>
+                    <th>Default library</th>
+                    <th>Default category</th>
+                    <th>Allow opac</th>
+                    <th>Allow staff</th>
+                    <th data-class-name="actions noExport">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 [% END %]
 
             <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
@@ -468,6 +495,12 @@
                 }).done(function () {
                     $("#delete_confirm_modal").modal('hide');
                 });
+            });
+
+            $('button.more').on('click', function(event) {
+                event.preventDefault();
+                var target = $(this).hide().data('target');
+                $('.more-'+target).show();
             });
         });
     </script>
