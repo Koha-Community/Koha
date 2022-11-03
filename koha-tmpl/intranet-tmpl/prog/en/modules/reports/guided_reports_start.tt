@@ -184,21 +184,21 @@
                     [% IF ( CAN_user_reports_create_reports ) %]
                         <form action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Build new" />
-                            <input type="submit" name="submit" value="Build new"/>
+                            <input type="submit" name="submit" class="btn btn-primary" value="Build new" />
                         </form>
                     [% END %]
 
                     [% IF ( CAN_user_reports_execute_reports ) %]
                         <form action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Use saved"/>
-                            <input type="submit" name="submit" value="Use saved"/>
+                            <input type="submit" name="submit" class="btn btn-primary" value="Use saved" />
                         </form>
                     [% END %]
 
                     [% IF ( CAN_user_reports_create_reports ) %]
                         <form action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Create report from SQL"/>
-                            <input type="submit" name="submit" value="Create report from SQL"/>
+                            <input type="submit" name="submit" class="btn btn-primary" value="Create report from SQL" />
                         </form>
                     [% END %]
 
@@ -206,7 +206,7 @@
                     <p>Use the reports dictionary to define custom criteria to use in your reports</p>
                     <form action="/cgi-bin/koha/reports/dictionary.pl">
                         <input type="hidden" name="phase" value="View Dictionary"/>
-                        <input type="submit" name="submit" value="View dictionary"/>
+                        <input type="submit" name="submit" class="btn btn-primary" value="View dictionary" />
                     </form>
                 [% END # /IF (start) %]
 
@@ -414,7 +414,7 @@
 
                                         [% IF ( CAN_user_reports_delete_reports ) %]
                                             <fieldset class="action">
-                                                <input type="submit" value="Delete selected" />
+                                                <input type="submit" class="btn btn-primary" value="Delete selected" />
                                             </fieldset>
                                         [% END %]
                                     </form>
@@ -755,7 +755,7 @@
                         </fieldset>
                         <fieldset class="action">
                             <input type="hidden" name="phase" value="Build report" />
-                            <input type="submit" name="submit" value="Finish" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Finish" />
                         </fieldset>
                     </form>
                 [% END #/ IF ( build6 ) %]
@@ -774,7 +774,7 @@
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <p>You will need to save the report before you can execute it</p>
                         <fieldset class="action"><input type="hidden" name="phase" value="Save" />
-                            <input type="submit" name="submit" value="Next" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Next" />
                         </fieldset>
                     </form>
                 [% END #/ IF ( showreport ) %]
@@ -802,7 +802,7 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
-                            <input type="submit" name="submit" value="Save report" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Save report" />
                         </fieldset>
                     </form>
                 [% END # /IF( save ) %]
@@ -858,7 +858,7 @@
                                     </p>
                                 [% END %]
                             </div>
-                            <fieldset class="action"><input type="submit" value="Edit SQL" /></fieldset>
+                            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Edit SQL" /></fieldset>
                         [% ELSE #  IF ( auth_val_error ) %]
                             <input type='hidden' name='phase' value='Run this report' />
                             <h1>Enter parameters for report [% name | html %]:</h1>
@@ -900,7 +900,7 @@
                                 </ol>
                             </fieldset> <!-- /.rows -->
                             <fieldset class="action">
-                                <input type="submit" value="Run the report" />
+                                <input type="submit" class="btn btn-primary" value="Run the report" />
                             </fieldset>
                         [% END # / IF ( auth_val_error ) %]
                     </form>
@@ -1265,7 +1265,7 @@
 
                         <fieldset class="action">
                             <input type="hidden" name="phase" value="Save Report" />
-                            <input type="submit" name="submit" value="Save report" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Save report" />
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
@@ -1374,7 +1374,7 @@
                         </fieldset>
 
                         <fieldset class="action">
-                            <input type="submit" name="submit" value="Update SQL" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Update SQL" />
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
@@ -1403,7 +1403,7 @@
                         </div>
                         <fieldset class="action">
                             <input type="hidden" name="phase" value="Use saved" />
-                            <input type="submit" name="submit" value="Saved reports" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="Saved reports" />
                         </fieldset>
                     </form>
                 [% END # /IF ( errors ) %]
@@ -1437,7 +1437,7 @@
                                 </ol>
                             </fieldset> <!-- /.brief -->
                             <fieldset class="action">
-                                <input type="submit" value="Apply filter" />
+                                <input type="submit" class="btn btn-primary" value="Apply filter" />
                                 <a id="resetReportsFilter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1">Clear</a>
                             </fieldset>
                         </form>
