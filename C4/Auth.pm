@@ -1784,11 +1784,13 @@ sub check_cookie_auth {
                     $session->param('desk_id'),      $session->param('desk_name'),
                     $session->param('register_id'),  $session->param('register_name')
                 );
-                return ( "additional-auth-needed", $session )
-                    if $session->param('waiting-for-2FA');
+                if ( C4::Context->preference('TwoFactorAuthentication') ne 'disabled' ) {
+                    return ( "additional-auth-needed", $session )
+                        if $session->param('waiting-for-2FA');
 
-                return ( "setup-additional-auth-needed", $session )
-                    if $session->param('waiting-for-2FA-setup');
+                    return ( "setup-additional-auth-needed", $session )
+                        if $session->param('waiting-for-2FA-setup');
+                }
 
                 return ( "ok", $session );
             } else {
