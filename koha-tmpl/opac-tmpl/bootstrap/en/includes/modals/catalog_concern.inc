@@ -41,7 +41,7 @@
             <div class="modal-footer">
                 <input type="hidden" name="biblio_id" id="concern_biblio" value="[% biblio.biblionumber | html %]">
                 <input type="hidden" name="reporter_id" id="concern_reporter" value="[% borrowernumber | html %]">
-                <button type="submit" id="addConfirm" class="btn btn-primary">Submit</button>
+                <button type="submit" id="addConfirm" class="btn btn-primary">Submit <i id="concern-submit-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

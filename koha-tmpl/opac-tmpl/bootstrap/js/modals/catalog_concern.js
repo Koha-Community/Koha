@@ -41,13 +41,23 @@ $(document).ready(function() {
             reporter_id: reporter_id,
         };
 
+        $('#concern-submit-spinner').show();
+        $('#addConfirm').prop('disabled', true);
         $.ajax({
             url: '/api/v1/public/tickets',
             type: 'POST',
             data: JSON.stringify(params),
             success: function(data) {
+                $('#concern-submit-spinner').hide();
                 $('#addConcernModal').modal('hide');
                 $('#concern_body').val('');
+                $('#concern_title').val('');
+                $('h1:first').before('<div class="alert alert-success">Your concern was sucessfully submitted.</div>');
+            },
+            error: function(data) {
+                $('#concern-submit-spinner').hide();
+                $('#addConcernModal').modal('hide');
+                $('h1:first').before('<div class="alert alert-error">There was an error when submitting your concern, please contact a librarian.</div>');
             },
             contentType: "json"
         });
