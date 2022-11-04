@@ -28,7 +28,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "cataloguing/concerns.tt",
         query           => $query,
         type            => "intranet",
-        flagsrequired   => { cataloguing => '*' },
+        flagsrequired   => { editcatalogue => 'edit_catalogue' },
     }
 );
 
