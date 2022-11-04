@@ -187,6 +187,9 @@ textarea {
     border-radius: 4px;
     min-width: 30%;
 }
+.flatpickr-input {
+    width: 30%;
+}
 
 #navmenulist ul li a.disabled {
     color: #666;
