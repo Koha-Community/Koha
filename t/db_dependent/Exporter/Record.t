@@ -36,6 +36,10 @@ use Koha::Biblioitem;
 use Koha::Exporter::Record;
 use Koha::Biblio::Metadatas;
 
+use t::lib::TestBuilder;
+
+my $builder = t::lib::TestBuilder->new;
+
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
@@ -43,26 +47,39 @@ my $dbh = C4::Context->dbh;
 
 my $biblio_1_title = 'Silence in the library';
 my $biblio_2_title = 'The art of computer programming ກ ຂ ຄ ງ ຈ ຊ ຍ é';
-my $biblio_1 = MARC::Record->new();
-$biblio_1->leader('00266nam a22001097a 4500');
-$biblio_1->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-    MARC::Field->new('245', ' ', ' ', a => $biblio_1_title),
+my $biblio_1 = $builder->build_sample_biblio(
+    {
+        title => $biblio_1_title,
+        author => 'Moffat, Steven',
+    }
 );
-my ($biblionumber_1, $biblioitemnumber_1) = AddBiblio($biblio_1, '');
-my $biblio_2 = MARC::Record->new();
-$biblio_2->leader('00266nam a22001097a 4500');
-$biblio_2->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Knuth, Donald Ervin'),
-    MARC::Field->new('245', ' ', ' ', a => $biblio_2_title),
+my $biblionumber_1 = $biblio_1->biblionumber;
+my $biblio_2 = $builder->build_sample_biblio(
+    {
+        title => $biblio_2_title,
+        author => 'Knuth, Donald Ervin',
+    }
 );
-my ($biblionumber_2, $biblioitemnumber_2) = AddBiblio($biblio_2, '');
+my $biblionumber_2 = $biblio_2->biblionumber;
+
+my $marcflavour = C4::Context->preference('marcflavour');
+my ($title_field_tag, $item_field_tag, $barcode_subfield_code, $homebranch_subfield_code);
+if ($marcflavour eq 'UNIMARC') {
+    $title_field_tag = '200';
+    $item_field_tag = '995';
+    $barcode_subfield_code = 'f';
+    $homebranch_subfield_code = 'b';
+} else {
+    $title_field_tag = '245';
+    $item_field_tag = '952';
+    $barcode_subfield_code = 'p';
+    $homebranch_subfield_code = 'a';
+}
 
 my $bad_biblio = Koha::Biblio->new()->store();
-Koha::Biblio::Metadata->new( { biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', schema => C4::Context->preference('marcflavour') } )->store();
+Koha::Biblio::Metadata->new( { biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', schema => $marcflavour } )->store();
 my $bad_biblionumber = $bad_biblio->id;
 
-my $builder = t::lib::TestBuilder->new;
 my $item_1_1 = $builder->build_sample_item(
     {
         biblionumber => $biblionumber_1,
@@ -87,7 +104,7 @@ my $bad_item = $builder->build({ # Cannot call build_sample_item, we want incons
 
 subtest 'export csv' => sub {
     plan tests => 3;
-    my $csv_content = q{Title=245$a|Barcode=952$p};
+    my $csv_content = "Title=$title_field_tag\$a|Barcode=$item_field_tag\$$barcode_subfield_code";
     $dbh->do(q|INSERT INTO export_format(profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)|, {}, "TEST_PROFILE_Records.t", "my useless desc", $csv_content, '|', ';', ',', 'utf8', 'marc');
     my $csv_profile_id = $dbh->last_insert_id( undef, undef, 'export_format', undef );
     my $generated_csv_file = '/tmp/test_export_1.csv';
@@ -160,7 +177,7 @@ subtest 'export xml' => sub {
     }
     is( scalar( @records ), 2, 'Export XML: 2 records should have been exported' );
     my $second_record = $records[1];
-    my $title = $second_record->subfield(245, 'a');
+    my $title = $second_record->subfield($title_field_tag, 'a');
     $title = Encode::encode('UTF-8', $title);
     is( $title, $biblio_2_title, 'Export XML: The title is correctly encoded' );
 };
@@ -187,7 +204,7 @@ subtest 'export iso2709' => sub {
     }
     is( scalar( @records ), 2, 'Export ISO2709: 2 records should have been exported' );
     my $second_record = $records[1];
-    my $title = $second_record->subfield(245, 'a');
+    my $title = $second_record->subfield($title_field_tag, 'a');
     $title = Encode::encode('UTF-8', $title);
     is( $title, $biblio_2_title, 'Export ISO2709: The title is correctly encoded' );
 };
@@ -207,13 +224,13 @@ subtest 'export without record_type' => sub {
 subtest '_get_biblio_for_export' => sub {
     plan tests => 4;
 
-    my $biblio = MARC::Record->new();
-    $biblio->leader('00266nam a22001097a 4500');
-    $biblio->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Thurber, James' ),
-        MARC::Field->new( '245', ' ', ' ', a => "The 13 Clocks" ),
+    my $biblio = $builder->build_sample_biblio(
+        {
+            title => 'The 13 Clocks',
+            author => 'Thurber, James',
+        }
     );
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+    my $biblionumber = $biblio->biblionumber;
     my $branch_a = $builder->build({source => 'Branch',});
     my $branch_b = $builder->build({source => 'Branch',});
     my $item_branch_a = $builder->build_sample_item(
@@ -236,7 +253,7 @@ subtest '_get_biblio_for_export' => sub {
             only_export_items_for_branches => undef
         }
     );
-    my @items = $record->field('952');
+    my @items = $record->field($item_field_tag);
     is( scalar @items, 2, "We should retrieve all items if we don't pass specific branches and request items" );
 
     $record = Koha::Exporter::Record::_get_biblio_for_export(
@@ -246,10 +263,10 @@ subtest '_get_biblio_for_export' => sub {
             only_export_items_for_branches => [ $branch_b->{branchcode} ]
         }
     );
-    @items = $record->field('952');
+    @items = $record->field($item_field_tag);
     is( scalar @items, 1, "We should retrieve only item for branch_b item if we request items and pass branch" );
     is(
-        $items[0]->subfield('a'),
+        $items[0]->subfield($homebranch_subfield_code),
         $branch_b->{branchcode},
         "And the homebranch for that item should be branch_b branchcode"
     );
@@ -261,7 +278,7 @@ subtest '_get_biblio_for_export' => sub {
             only_export_items_for_branches => [ $branch_b->{branchcode} ]
         }
     );
-    @items = $record->field('952');
+    @items = $record->field($item_field_tag);
     is( scalar @items, 0, "We should not have any items if we don't request items and pass a branch");
 
 };
@@ -269,17 +286,20 @@ subtest '_get_biblio_for_export' => sub {
 subtest '_get_record_for_export MARC field conditions' => sub {
     plan tests => 11;
 
-    my $biblio = MARC::Record->new();
-    $biblio->leader('00266nam a22001097a 4500');
-    $biblio->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Thurber, James' ),
-        MARC::Field->new( '245', ' ', ' ', a => 'The 13 Clocks' ),
+    my $biblio = $builder->build_sample_biblio(
+        {
+            title => 'The 13 Clocks',
+            author => 'Thurber, James',
+        }
+    );
+    my $record = $biblio->metadata->record;
+    $record->append_fields(
         MARC::Field->new( '080', ' ', ' ', a => '12345' ),
         MARC::Field->new( '035', ' ', ' ', a => '(TEST)123' ),
         MARC::Field->new( '035', ' ', ' ', a => '(TEST)1234' ),
     );
-    my ( $biblionumber ) = AddBiblio( $biblio, '' );
-    my $record;
+    $biblio->metadata->metadata($record->as_xml)->store;
+    my $biblionumber = $biblio->biblionumber;
 
     $record = Koha::Exporter::Record::_get_record_for_export(
         {

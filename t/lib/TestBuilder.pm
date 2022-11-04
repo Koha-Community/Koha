@@ -177,7 +177,7 @@ sub build_sample_biblio {
         MARC::Field->new( $tag, ' ', ' ', $subfield => $author ),
     );
 
-    ( $tag, $subfield ) = $marcflavour eq 'UNIMARC' ? ( 995, 'r' ) : ( 942, 'c' );
+    ( $tag, $subfield ) = $marcflavour eq 'UNIMARC' ? ( '099', 't' ) : ( 942, 'c' );
     $record->append_fields(
         MARC::Field->new( $tag, ' ', ' ', $subfield => $itemtype )
     );
