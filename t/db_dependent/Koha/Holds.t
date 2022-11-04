@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
@@ -745,52 +745,37 @@ subtest 'filter_by_has_cancellation_requests() and filter_out_has_cancellation_r
     $schema->storage->txn_rollback;
 };
 
-subtest 'get holds in processing' => sub {
+subtest 'processing() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
-
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-
-    my $item = $builder->build_sample_item;
 
     my $hold_1 = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => {
-                found          => 'P',
-                itemnumber     => $item->id,
-                biblionumber   => $item->biblionumber,
-                borrowernumber => $patron->id
-            }
+            value => { found => 'P' }
         }
     );
     my $hold_2 = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => {
-                found          => undef,
-                itemnumber     => $item->id,
-                biblionumber   => $item->biblionumber,
-                borrowernumber => $patron->id
-            }
+            value => { found => undef }
         }
     );
     my $hold_3 = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => {
-                found          => undef,
-                itemnumber     => $item->id,
-                biblionumber   => $item->biblionumber,
-                borrowernumber => $patron->id
-            }
+            value => { found => 'T' }
         }
     );
 
-    my $processing_holds = $item->holds->processing;
-    is( $processing_holds->count, 1 );
+    my $holds = Koha::Holds->search({ reserve_id => [ $hold_1->id, $hold_2->id, $hold_3->id ] });
+    is( $holds->count, 3, 'Resultset contains 3 holds' );
+
+    my $processing = $holds->processing;
+    is( $processing->count, 1 );
+    is( $processing->next->id, $hold_1->id, "First hold is the only one in 'processing'" );
 
     $schema->storage->txn_rollback;
 };
