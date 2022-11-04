@@ -243,7 +243,7 @@
                                                 </li>
                                                 <li id="pickup_date_item">
                                                     <label for="pickup-date">Pickup date:</label>
-                                                    <input name="pickup_date" type="text" class="flatpickr" id="pickup-date" disabled required="required"/>
+                                                    <input name="pickup_date" type="text" class="flatpickr" id="pickup-date" required="required"/>
                                                     <div class="required_label required">Required</div>
                                                 </li>
 
@@ -343,12 +343,10 @@
 
                 if (existing_pickup) {
                     $('#existing-pickup-warning').show();
-                    $("#pickup_date_item,#pickup_notes_item").hide();
-                    $('#pickup-date').prop("disabled", true);
+                    $("#pickup-date,#pickup_date_item,#pickup_notes_item").hide();
                 } else {
                     $('#existing-pickup-warning').hide();
-                    $("#pickup_date_item").show();
-                    $('#pickup-date').prop("disabled", branchcode == "");
+                    $("#pickup-date,#pickup_date_item").show();
                 }
             });
 
