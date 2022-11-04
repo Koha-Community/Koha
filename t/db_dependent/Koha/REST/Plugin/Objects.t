@@ -716,21 +716,21 @@ subtest 'objects.find helper with expanded authorised values' => sub {
 
     $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '+av_expand' } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
-      ->json_has('/_str')
-      ->json_is( '/_str/country/type'     => 'av' )
-      ->json_is( '/_str/country/category' => $cat->category_name )
-      ->json_is( '/_str/country/str'      => $ar->lib );
+      ->json_has('/_strings')
+      ->json_is( '/_strings/country/type'     => 'av' )
+      ->json_is( '/_strings/country/category' => $cat->category_name )
+      ->json_is( '/_strings/country/str'      => $ar->lib );
 
     $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '' } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
-      ->json_hasnt('/_str');
+      ->json_hasnt('/_strings');
 
     $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-embed' => '+av_expand' } )
       ->status_is(200)->json_is( '/name' => 'Manuela' )
-      ->json_has('/_str')
-      ->json_is( '/_str/country/type'     => 'av' )
-      ->json_is( '/_str/country/category' => $cat->category_name )
-      ->json_is( '/_str/country/str'      => $us->lib );
+      ->json_has('/_strings')
+      ->json_is( '/_strings/country/type'     => 'av' )
+      ->json_is( '/_strings/country/category' => $cat->category_name )
+      ->json_is( '/_strings/country/str'      => $us->lib );
 
     $schema->storage->txn_rollback;
 };
@@ -832,20 +832,20 @@ subtest 'objects.search helper with expanded authorised values' => sub {
           { 'x-koha-embed' => '+av_expand' } )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
       ->json_is( '/0/name' => 'Manuel' )
-      ->json_has('/0/_str')
-      ->json_is( '/0/_str/country/str'      => $ar->lib )
-      ->json_is( '/0/_str/country/type'     => 'av' )
-      ->json_is( '/0/_str/country/category' => $cat->category_name )
+      ->json_has('/0/_strings')
+      ->json_is( '/0/_strings/country/str'      => $ar->lib )
+      ->json_is( '/0/_strings/country/type'     => 'av' )
+      ->json_is( '/0/_strings/country/category' => $cat->category_name )
       ->json_is( '/1/name' => 'Manuela' )
-      ->json_has('/1/_str')
-      ->json_is( '/1/_str/country/str' => $us->lib )
-      ->json_is( '/1/_str/country/type'     => 'av' )
-      ->json_is( '/1/_str/country/category' => $cat->category_name );
+      ->json_has('/1/_strings')
+      ->json_is( '/1/_strings/country/str' => $us->lib )
+      ->json_is( '/1/_strings/country/type'     => 'av' )
+      ->json_is( '/1/_strings/country/category' => $cat->category_name );
 
     $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
-      ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_str')
-      ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_str');
+      ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_strings')
+      ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_strings');
 
 
     $schema->storage->txn_rollback;

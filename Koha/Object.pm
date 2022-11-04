@@ -605,7 +605,7 @@ sub to_api {
         }
     }
 
-    $json_object->{_str} = $avs
+    $json_object->{_strings} = $avs
       if $av_expand;
 
     if ($embeds) {

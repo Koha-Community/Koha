@@ -329,7 +329,7 @@ subtest "to_api() tests" => sub {
     is( ref($hold_api->{item}), 'HASH', 'Single nested object works correctly' );
     is( $hold_api->{item}->{item_id}, $item->itemnumber, 'Object embedded correctly' );
     is_deeply(
-        $hold_api->{item}->{_str},
+        $hold_api->{item}->{_strings},
         $_str,
         '_str correctly added to nested embed'
     );
@@ -511,11 +511,11 @@ subtest "to_api() tests" => sub {
         my $mobj = $marseille->to_api( { av_expand => 1, public => 1 } );
         my $cobj = $cordoba->to_api( { av_expand => 1, public => 0 } );
 
-        ok( exists $mobj->{_str}, '_str exists for Marseille' );
-        ok( exists $cobj->{_str}, '_str exists for Córdoba' );
+        ok( exists $mobj->{_strings}, '_str exists for Marseille' );
+        ok( exists $cobj->{_strings}, '_str exists for Córdoba' );
 
         is_deeply(
-            $mobj->{_str}->{country},
+            $mobj->{_strings}->{country},
             {
                 category => $category->category_name,
                 str      => $france->lib_opac,
@@ -524,7 +524,7 @@ subtest "to_api() tests" => sub {
             'Authorised value for country expanded'
         );
         is_deeply(
-            $cobj->{_str}->{country},
+            $cobj->{_strings}->{country},
             {
                 category => $category->category_name,
                 str      => $argentina->lib,
