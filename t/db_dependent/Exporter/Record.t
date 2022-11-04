@@ -222,7 +222,7 @@ subtest 'export without record_type' => sub {
 };
 
 subtest '_get_biblio_for_export' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $biblio = $builder->build_sample_biblio(
         {
@@ -280,6 +280,16 @@ subtest '_get_biblio_for_export' => sub {
     );
     @items = $record->field($item_field_tag);
     is( scalar @items, 0, "We should not have any items if we don't request items and pass a branch");
+
+    $record = Koha::Exporter::Record::_get_biblio_for_export(
+        {
+            biblionumber => $biblionumber,
+            export_items => 1,
+            itemnumbers => [$item_branch_a->itemnumber],
+        }
+    );
+    @items = $record->field($item_field_tag);
+    is( scalar @items, 1, "We should have only items requested if we pass itemnumbers");
 
 };
 
