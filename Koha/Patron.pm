@@ -1014,6 +1014,15 @@ sub has_overdues {
     return $self->_result->issues->search({ date_due => { '<' => $dtf->format_datetime($date) } })->count;
 }
 
+
+=head3 has_debarring_overdues
+
+my $has_debarring_overdues = $patron->has_debarring_overdues({ issue_branchcode => $branchcode });
+
+Returns true if patron has overdues that would result in debarment.
+
+=cut
+
 sub has_debarring_overdues {
     my ($self, $params) = @_;
     $params //= {};
@@ -1082,7 +1091,6 @@ sub _get_overdue_debarred_delay {
         return $overdue_rules->{"delay2"} if($overdue_rules->{"debarred2"});
         return $overdue_rules->{"delay3"} if($overdue_rules->{"debarred3"});
     }
-    return undef;
 }
 
 =head3 track_login
