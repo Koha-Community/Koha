@@ -132,7 +132,7 @@ sub _get_biblio_for_export {
                 record       => $record,
                 embed_items  => 1,
                 biblionumber => $biblionumber,
-                item_numbers => $itemnumbers,
+                itemnumbers => $itemnumbers,
             }
         );
         if ($only_export_items_for_branches && @$only_export_items_for_branches) {
