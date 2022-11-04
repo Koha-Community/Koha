@@ -17,7 +17,7 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: "vue-loader",
-        exclude: [path.resolve(__dirname, "cypress/")],
+        exclude: [path.resolve(__dirname, "t/cypress/")],
       },
       {
         test: /\.ts$/,
@@ -25,7 +25,7 @@ module.exports = {
         options: {
           appendTsSuffixTo: [/\.vue$/]
         },
-        exclude: [path.resolve(__dirname, "cypress/")],
+        exclude: [path.resolve(__dirname, "t/cypress/")],
       },
       {
         test: /\.css$/,

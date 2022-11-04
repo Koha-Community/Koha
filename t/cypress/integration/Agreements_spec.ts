@@ -263,7 +263,7 @@ describe("Agreement CRUD operations", () => {
         // Add new document
         cy.get("#documents").contains("Add new document").click();
         cy.get("#document_0 input[id=file_0]").click();
-        cy.get('#document_0 input[id=file_0]').selectFile('cypress/fixtures/file.json');
+        cy.get('#document_0 input[id=file_0]').selectFile('t/cypress/fixtures/file.json');
         cy.get("#document_0 .file_information span").contains("file.json");
         cy.get('#document_0 input[id=file_description_0]').type('file description');
         cy.get('#document_0 input[id=physical_location_0]').type('file physical location');
