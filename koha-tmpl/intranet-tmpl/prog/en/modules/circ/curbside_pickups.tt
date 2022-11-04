@@ -547,6 +547,14 @@
                 $('#input-patron-cardnumber').focus();
             });
 
+            const pickup_date = document.querySelector("#pickup_date");
+            if ( pickup_date ) {
+                const fp = pickup_date._flatpickr;
+                fp.set('disable', [function(date) {
+                    return !slots_per_day.hasOwnProperty(date.getDay());
+                }]);
+            }
+
             $("#pickup_date").on('change', function() {
 
                 $('#pickup-times').empty();

@@ -350,8 +350,11 @@
                 }
             });
 
-            const pickupDate = document.getElementById("pickup-date");
-            pickupDate._flatpickr.config.onClose.push(function( selectedDates, dateStr, instance ){
+            const pickupDate_fp = document.getElementById("pickup-date")._flatpickr;
+            pickupDate_fp.set('disable', [function(date) {
+                return !slots_per_day.hasOwnProperty(date.getDay());
+            }]);
+            pickupDate_fp.config.onClose.push(function( selectedDates, dateStr, instance ){
                 /* Here we add an onClose event to the existing flatpickr instance */
                 /* It fires after the user has selected a date from the calendar popup */
                 $('#pickup-times').html("<label>" + _("Select a time") + ":</label><div id=\"pickup-time-slots\"></div>");
