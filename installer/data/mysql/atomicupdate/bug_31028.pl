@@ -89,7 +89,7 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalogue', 'TICKET_ACKNOWLEDGE', '', 'Concern acknowledgement', '1', 'Catalog concern acknowledgement', "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],\r\n\r\nThankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %].\r\n\r\nYou reported: \r\n[% ticket.body %]\r\n\r\nThankyou", 'email' );
+                VALUES ( 'catalogue', 'TICKET_ACKNOWLEDGE', '', 'Concern acknowledgement', '1', 'Catalog concern acknowledgement', "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],<br><br>Thankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %].<br><br>You reported: <br>[% ticket.body %]<br><br>Thankyou", 'email' );
             }
         );
         say $out "Added new notice 'TICKET_ACKNOWLEDGE'";
@@ -97,7 +97,7 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalogue', 'TICKET_UPDATE', '', 'Concern updated', '1', 'Catalog concern updated', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],\r\n\r\nThe library has added an update to the concern you reported against [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %].\r\n\r\nThe following comment was left: \r\n[% ticket_update.message %]\r\n\r\nThankyou", 'email' );
+                VALUES ( 'catalogue', 'TICKET_UPDATE', '', 'Concern updated', '1', 'Catalog concern updated', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],<br><br>The library has added an update to the concern you reported against [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %].<br><br>The following comment was left: <br>[% ticket_update.message %]<br><br>Thankyou", 'email' );
             }
         );
         say $out "Added new notice 'TICKET_UPDATE'";
@@ -105,7 +105,7 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalogue', 'TICKET_RESOLVE', '', 'Concern resolved', '1', 'Catalog concern resolved', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],\r\n\r\nThe library has now marked your concern with [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %] as resolved.\r\n\r\nThe following comment was left:   \r\n[% ticket_update.message %]\r\n\r\nThankyou", 'email' );
+                VALUES ( 'catalogue', 'TICKET_RESOLVE', '', 'Concern resolved', '1', 'Catalog concern resolved', "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],<br><br>The library has now marked your concern with [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %] as resolved.<br><br>The following comment was left:   <br>[% ticket_update.message %]<br><br>Thankyou", 'email' );
             }
         );
         say $out "Added new notice 'TICKET_RESOLVE'";
@@ -121,7 +121,7 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalogue', 'TICKET_NOTIFY', '', 'Catalog concern notification', '1', 'Catalog concern reported', "Dear cataloger,\r\n\r\n[% INCLUDE 'patron-title.inc' patron => ticket.reporter %] reported the following concern with [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 %]\r\n\r\n\r\n\r\n[% ticket.body %]\r\n\r\n\r\n\r\nYou can mark this concern as resolved from the concern management <a href='[% Koha.Preference('IntranetBaseURL') %]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>.", 'email' );
+                VALUES ( 'catalogue', 'TICKET_NOTIFY', '', 'Catalog concern notification', '1', 'Catalog concern reported', "Dear cataloger,<br><br>[% INCLUDE 'patron-title.inc' patron => ticket.reporter %] reported the following concern with [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 %]<br><br>[% ticket.body %]<br><br>You can mark this concern as resolved from the concern management <a href='[% Koha.Preference('IntranetBaseURL') %]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>.", 'email' );
             }
         );
         say $out "Added new notice 'TICKET_NOTIFY'";
