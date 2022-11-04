@@ -138,7 +138,7 @@
   [% ELSIF op == 'list' %]
     [% IF records %]
       [% IF recordtype == 'biblio' %]
-        <div id="toolbar">
+        <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
           | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           | <a id="selectwithoutitems" href="#">Select without items</a>
@@ -174,7 +174,7 @@
           </table>
           <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected bibliographic records, attached subscriptions, existing holds, and attached items!</div>
       [% ELSE %]
-        <div id="toolbar">
+        <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
           | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
