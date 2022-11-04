@@ -2,7 +2,7 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="agreements" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
-        <fieldset v-if="agreements.length">
+        <fieldset v-if="agreements.length" class="filters">
             <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
             <input
                 type="checkbox"
@@ -432,5 +432,9 @@ export default {
 <style scoped>
 #agreement_list {
     display: table;
+}
+.filters > input[type="checkbox"],
+.filters > input[type="button"] {
+    margin-left: 1rem;
 }
 </style>
