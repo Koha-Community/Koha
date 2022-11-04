@@ -130,7 +130,8 @@
             let refresh_max_date = 0;
             let disable_buttons = [];
 
-            if( $(this).data("flatpickr-futuredate") === true ) {
+            if( $(this).data("flatpickr-futureinclusive") === true
+             || $(this).data("flatpickr-futuredate") === true ) {
                 let original_date = $(this).val();
                 if ( original_date ) {
                     original_date = Date_from_syspref( original_date ).getTime();
@@ -143,10 +144,18 @@
                     }];
                 }
                 else {
-                    options['minDate'] = new Date().fp_incr(1);
+                    if( $(this).data("flatpickr-futureinclusive") === true ) {
+                        options['minDate'] = new Date().setHours(00, 00, 00, 00);
+                    } else {
+                        options['minDate'] = new Date().fp_incr(1);
+                    }
                 }
+
                 disable_buttons.push(0); /* Yesterday */
-                disable_buttons.push(1); /* Today */
+
+                if ( $(this).data("flatpickr-futuredate") === true ) {
+                    disable_buttons.push(1); /* Today */
+                }
             }
             if( $(this).data("flatpickr-pastinclusive") === true ) {
                 options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
