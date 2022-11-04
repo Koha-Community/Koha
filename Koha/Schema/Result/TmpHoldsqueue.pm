@@ -108,6 +108,15 @@ __PACKAGE__->table("tmp_holdsqueue");
   default_value: 0
   is_nullable: 0
 
+=head2 timestamp
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+date and time this entry as added/last updated
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -141,6 +150,13 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "item_level_request",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "timestamp",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
 );
 
 =head1 RELATIONS
@@ -201,8 +217,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ytvFiixR/AIAgTV/5sewcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RdIrLi+vbzj3ab/UP7e9pw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

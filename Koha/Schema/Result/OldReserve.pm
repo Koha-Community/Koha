@@ -54,6 +54,14 @@ the date the hold was places
 
 foreign key from the biblio table defining which bib record this hold is on
 
+=head2 item_group_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key from the item_groups table defining if this is an item group level hold
+
 =head2 branchcode
 
   data_type: 'varchar'
@@ -226,6 +234,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "item_group_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "desk_id",
@@ -336,6 +346,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 item_group
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::ItemGroup>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "item_group",
+  "Koha::Schema::Result::ItemGroup",
+  { item_group_id => "item_group_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -377,8 +407,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:08:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A3iHpf4nDeIpPsapNzdv8w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zoepd1m+pi6dEnOlhWttQQ
 
 __PACKAGE__->belongs_to(
   "item",
