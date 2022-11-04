@@ -46,230 +46,221 @@ my $remote_address = '127.0.0.1';
 
 # my $idp_port = t::lib::IdP::ExternalIdP->start;
 
-
 my $oauth_provider_data = {
-  code        => 'oauth_test',
-  description => 'OAuth provider',
-  protocol    => 'OAuth',
-  mapping     => {
+    code        => 'oauth_test',
+    description => 'OAuth provider',
+    protocol    => 'OAuth',
+    mapping     => {
         email     => 'users.0.email',
         firstname => 'users.0.custom_name',
         surname   => 'users.0.custom_surname',
         userid    => 'users.0.id'
-  },
-  matchpoint  => 'email',
-  config      => {
-    authorize_url => "/idp/test/authorization_endpoint",
-    token_url     => "/idp/test/token_endpoint/without_id_token",
-    userinfo_url  => "/idp/test/userinfo_endpoint",
-    key           => "client_id",
-    secret        => "client_secret"
-  }
+    },
+    matchpoint => 'email',
+    config     => {
+        authorize_url => "/idp/test/authorization_endpoint",
+        token_url     => "/idp/test/token_endpoint/without_id_token",
+        userinfo_url  => "/idp/test/userinfo_endpoint",
+        key           => "client_id",
+        secret        => "client_secret"
+    }
 };
 
 my $oidc_with_email_provider_data = {
-  code => 'oidc_email',
-  description => 'OIDC with email provider',
-  protocol => 'OIDC',
-  mapping => {
-    email     => 'email',
-    firstname => 'given_name',
-    surname   => 'family_name',
-    userid    => 'sub'
-  },
-  matchpoint => 'email',
-  config => {
-    authorize_url  => "/idp/test/authorization_endpoint",
-    well_known_url => "/idp/test/with_email/.well_known",
-    key            => "client_id",
-    secret         => "client_secret"
-  }
+    code        => 'oidc_email',
+    description => 'OIDC with email provider',
+    protocol    => 'OIDC',
+    mapping     => {
+        email     => 'email',
+        firstname => 'given_name',
+        surname   => 'family_name',
+        userid    => 'sub'
+    },
+    matchpoint => 'email',
+    config     => {
+        authorize_url  => "/idp/test/authorization_endpoint",
+        well_known_url => "/idp/test/with_email/.well_known",
+        key            => "client_id",
+        secret         => "client_secret"
+    }
 };
 
 my $oidc_without_email_provider_data = {
-  code => 'oidc_no_email',
-  description => 'OIDC without email provider',
-  protocol => 'OIDC',
-  mapping => {
-    email     => 'users.0.email',
-    firstname => 'given_name',
-    surname   => 'family_name',
-    userid    => 'sub'
-  },
-  matchpoint => 'email',
-  config => {
-    authorize_url  => "/idp/test/authorization_endpoint",
-    well_known_url => "/idp/test/without_email/.well_known",
-    key            => "client_id",
-    secret         => "client_secret"
-  }
+    code        => 'oidc_no_email',
+    description => 'OIDC without email provider',
+    protocol    => 'OIDC',
+    mapping     => {
+        email     => 'users.0.email',
+        firstname => 'given_name',
+        surname   => 'family_name',
+        userid    => 'sub'
+    },
+    matchpoint => 'email',
+    config     => {
+        authorize_url  => "/idp/test/authorization_endpoint",
+        well_known_url => "/idp/test/without_email/.well_known",
+        key            => "client_id",
+        secret         => "client_secret"
+    }
 };
 
 my $domain_not_matching = {
-  domain => 'gmail.com',
-  auto_register => 0,
-  update_on_auth => 0,
-  default_library_id => undef,
-  default_category_id => undef,
-  allow_opac => 1,
-  allow_staff => 0
+    domain              => 'gmail.com',
+    auto_register       => 0,
+    update_on_auth      => 0,
+    default_library_id  => undef,
+    default_category_id => undef,
+    allow_opac          => 1,
+    allow_staff         => 0
 };
 
 my $domain_no_register = {
-  domain => 'some.library.com',
-  auto_register => 0,
-  update_on_auth => 0,
-  default_library_id => undef,
-  default_category_id => undef,
-  allow_opac => 1,
-  allow_staff => 0
+    domain              => 'some.library.com',
+    auto_register       => 0,
+    update_on_auth      => 0,
+    default_library_id  => undef,
+    default_category_id => undef,
+    allow_opac          => 1,
+    allow_staff         => 0
 };
 
-my $library = $builder->build_object({class => 'Koha::Libraries'});
-my $category = $builder->build_object({class => 'Koha::Patron::Categories'});
+my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
 
 my $domain_register = {
-  domain => 'some.library.com',
-  auto_register => 1,
-  update_on_auth => 0,
-  default_library_id => $library->branchcode,
-  default_category_id => $category->categorycode,
-  allow_opac => 1,
-  allow_staff => 1
+    domain              => 'some.library.com',
+    auto_register       => 1,
+    update_on_auth      => 0,
+    default_library_id  => $library->branchcode,
+    default_category_id => $category->categorycode,
+    allow_opac          => 1,
+    allow_staff         => 1
 };
 
 my $domain_register_update = {
-  domain => 'some.library.com',
-  auto_register => 1,
-  update_on_auth => 1,
-  default_library_id => $library->branchcode,
-  default_category_id => $category->categorycode,
-  allow_opac => 1,
-  allow_staff => 0
+    domain              => 'some.library.com',
+    auto_register       => 1,
+    update_on_auth      => 1,
+    default_library_id  => $library->branchcode,
+    default_category_id => $category->categorycode,
+    allow_opac          => 1,
+    allow_staff         => 0
 };
 
 subtest 'provider endpoint tests' => sub {
-  plan tests => 12;
+    plan tests => 12;
 
-  $schema->storage->txn_begin;
+    $schema->storage->txn_begin;
 
-  Koha::Auth::Identity::Provider::Domains->delete;
-  Koha::Auth::Identity::Providers->delete;
+    Koha::Auth::Identity::Provider::Domains->delete;
+    Koha::Auth::Identity::Providers->delete;
 
-  my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
+    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 1 } );
 
-  my $t = Test::Mojo->new('Koha::REST::V1');
+    my $t = Test::Mojo->new('Koha::REST::V1');
 
-  my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers", json => $oauth_provider_data );
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers", json => $oauth_provider_data );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $t->request_ok($tx)
-    ->status_is(201);
+    $t->request_ok($tx)->status_is(201);
 
-  my $provider = Koha::Auth::Identity::Providers->search({code => 'oauth_test'})->next;
-  is ($provider->code, 'oauth_test', 'Provider was created');
+    my $provider = Koha::Auth::Identity::Providers->search( { code => 'oauth_test' } )->next;
+    is( $provider->code, 'oauth_test', 'Provider was created' );
 
-  $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers" );
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $t->request_ok($tx)
-    ->json_has('/0/code', 'oauth_test');
+    $t->request_ok($tx)->json_has( '/0/code', 'oauth_test' );
 
-  my %modified_provider_data_hash = %{$oauth_provider_data};
-  my $modified_provider_data = \%modified_provider_data_hash;
-  $modified_provider_data->{code} = 'some_code';
+    my %modified_provider_data_hash = %{$oauth_provider_data};
+    my $modified_provider_data      = \%modified_provider_data_hash;
+    $modified_provider_data->{code} = 'some_code';
 
-  $tx = $t->ua->build_tx( PUT => "/api/v1/auth/identity_providers/".$provider->identity_provider_id, json => $modified_provider_data);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx = $t->ua->build_tx( PUT => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id, json => $modified_provider_data );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $t->request_ok($tx)
-    ->status_is(200);
+    $t->request_ok($tx)->status_is(200);
 
-  $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/".$provider->identity_provider_id);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $t->request_ok($tx)
-    ->json_has('/code', 'some_code');
+    $t->request_ok($tx)->json_has( '/code', 'some_code' );
 
-  $tx = $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/".$provider->identity_provider_id);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx = $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $t->request_ok($tx)
-    ->status_is(204);
-  # p $t->tx->res;
+    $t->request_ok($tx)->status_is(204);
 
-  $provider = Koha::Auth::Identity::Providers->search->next;
-  is ($provider, undef, 'All providers deleted');
+    $provider = Koha::Auth::Identity::Providers->search->next;
+    is( $provider, undef, 'All providers deleted' );
 
-  $schema->storage->txn_rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'domain endpoint tests' => sub {
-  plan tests => 12;
 
-  $schema->storage->txn_begin;
+    plan tests => 12;
 
-  Koha::Auth::Identity::Provider::Domains->delete;
-  Koha::Auth::Identity::Providers->delete;
+    $schema->storage->txn_begin;
 
-  my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
+    Koha::Auth::Identity::Provider::Domains->delete;
+    Koha::Auth::Identity::Providers->delete;
 
-  my $t = Test::Mojo->new('Koha::REST::V1');
+    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 1 } );
 
-  my $provider = $builder->build_object({class => 'Koha::Auth::Identity::Providers'});
+    my $t = Test::Mojo->new('Koha::REST::V1');
 
-  my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers/".$provider->identity_provider_id."/domains", json => $domain_not_matching );
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers' } );
 
-  $t->request_ok($tx)
-    ->status_is(201);
+    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains", json => $domain_not_matching );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  my $domain = Koha::Auth::Identity::Provider::Domains->search({domain => 'gmail.com'})->next;
-  is ($domain->domain, 'gmail.com', 'Provider was created');
+    $t->request_ok($tx)->status_is(201);
 
-  $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/".$provider->identity_provider_id."/domains" );
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    my $domain = Koha::Auth::Identity::Provider::Domains->search( { domain => 'gmail.com' } )->next;
+    is( $domain->domain, 'gmail.com', 'Provider was created' );
 
-  $t->request_ok($tx)
-    ->json_has('/0/domain', 'gmail.com');
+    $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  my %modified_domain_data_hash = %{$domain_not_matching};
-  my $modified_domain_data = \%modified_domain_data_hash;
-  $modified_domain_data->{domain} = 'some.domain.com';
+    $t->request_ok($tx)->json_has( '/0/domain', 'gmail.com' );
 
-  $tx = $t->ua->build_tx( PUT => "/api/v1/auth/identity_providers/".$provider->identity_provider_id."/domains/".$domain->identity_provider_domain_id, json => $modified_domain_data);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    my %modified_domain_data_hash = %{$domain_not_matching};
+    my $modified_domain_data      = \%modified_domain_data_hash;
+    $modified_domain_data->{domain} = 'some.domain.com';
 
-  $t->request_ok($tx)
-    ->status_is(200);
+    $tx = $t->ua->build_tx(
+        PUT  => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id,
+        json => $modified_domain_data
+    );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/".$provider->identity_provider_id."/domains/".$domain->identity_provider_domain_id);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200);
 
-  $t->request_ok($tx)
-    ->json_has('/domain', 'some.domain.com');
+    $tx = $t->ua->build_tx( GET => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $tx = $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/".$provider->identity_provider_id."/domains/".$domain->identity_provider_domain_id);
-  $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-  $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->json_has( '/domain', 'some.domain.com' );
 
-  $t->request_ok($tx)
-    ->status_is(204);
-  # p $t->tx->res;
+    $tx = $t->ua->build_tx( DELETE => "/api/v1/auth/identity_providers/" . $provider->identity_provider_id . "/domains/" . $domain->identity_provider_domain_id );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-  $domain = Koha::Auth::Identity::Provider::Domains->search->next;
-  is ($domain, undef, 'All domains deleted');
+    $t->request_ok($tx)->status_is(204);
 
-  $schema->storage->txn_rollback;
+    $domain = Koha::Auth::Identity::Provider::Domains->search->next;
+    is( $domain, undef, 'All domains deleted' );
+
+    $schema->storage->txn_rollback;
 };
 
 # subtest 'oauth login tests' => sub {
@@ -316,11 +307,8 @@ sub create_user_and_session {
     my $flags = ( $args->{authorized} ) ? 1 : 0;
 
     my $user = $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                flags => $flags
-            }
+        {   source => 'Borrower',
+            value  => { flags => $flags }
         }
     );
 
@@ -334,5 +322,3 @@ sub create_user_and_session {
 
     return ( $user->{borrowernumber}, $session->id );
 }
-
-1;
