@@ -30,7 +30,9 @@ use Koha::Patrons;
 
 my $input       = CGI->new;
 my $op          = $input->param('op') || 'list';
-my $tab         = $input->param('tab'),
+my $tab         = $input->param('tab');
+my $auto_refresh  = $input->param('auto_refresh');
+my $refresh_delay = $input->param('refresh_delay');
 my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -151,6 +153,8 @@ $template->param(
     messages => \@messages,
     op       => $op,
     tab      => $tab,
+    auto_refresh  => $auto_refresh,
+    refresh_delay => $refresh_delay,
     policy => Koha::CurbsidePickupPolicies->find({ branchcode => $branchcode }),
     curbside_pickups => Koha::CurbsidePickups->search(
         {

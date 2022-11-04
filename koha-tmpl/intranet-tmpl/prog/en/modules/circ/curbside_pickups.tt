@@ -125,6 +125,24 @@
                     </div>
                 [% END %]
 
+                <form method="post" class="refresh-form">
+                    <p>
+                        <input type="hidden" name="tab" id="current-tab" value="[% tab | html %]" />
+                        <button type="submit" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+
+                        <label>
+                            [% IF auto_refresh %]
+                                <input type="checkbox" id="auto_refresh" name="auto_refresh" checked="checked" />
+                            [% ELSE %]
+                                <input type="checkbox" id="auto_refresh" name="auto_refresh" />
+                            [% END %]
+                            Refresh automatically every <input type="text" inputmode="numeric" pattern="[0-9]*" id="refresh_delay" name="refresh_delay" value="[% refresh_delay || 60 | html %]" size="3" /> seconds.
+                        </label>
+
+                        <span id="refresh_info"></span>
+                    </p>
+                </form>
+
                 [% SET to_be_staged = curbside_pickups.filter_by_to_be_staged %]
                 [% SET staged_and_ready = curbside_pickups.filter_by_staged_and_ready %]
                 [% SET patron_outside = curbside_pickups.filter_by_patron_outside %]
@@ -174,12 +192,6 @@
                         [% ELSE %]
                         <div id="to-be-staged" role="tabpanel" class="tab-pane">
                         [% END %]
-                            <form method="post" class="form">
-                                <p>
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
-                                </p>
-                            </form>
-
                             [% IF to_be_staged.count %]
                                 <table class="table table-striped">
                                     <thead>
@@ -235,13 +247,6 @@
                         [% ELSE %]
                         <div id="staged-and-ready" role="tabpanel" class="tab-pane">
                         [% END %]
-                            <form method="post" class="form">
-                                <input type="hidden" name="tab" value="staged-and-ready"/>
-                                <p>
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
-                                </p>
-                            </form>
-
                             [% IF staged_and_ready.count %]
                                 <table class="table table-striped">
                                     <thead>
@@ -310,13 +315,6 @@
                         [% ELSE %]
                         <div id="patron-is-outside" role="tabpanel" class="tab-pane">
                         [% END %]
-                            <form method="post" class="form">
-                                <input type="hidden" name="tab" value="patron-is-outside"/>
-                                <p>
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
-                                </p>
-                            </form>
-
                             [% IF patron_outside.count %]
                                 <table class="table table-striped">
                                     <thead>
@@ -385,13 +383,6 @@
                         [% ELSE %]
                         <div id="delivered-today" role="tabpanel" class="tab-pane">
                         [% END %]
-                            <form method="post" class="form">
-                                <input type="hidden" name="tab" value="delivered-today"/>
-                                <p>
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
-                                </p>
-                            </form>
-
                             [% IF delivered_today.count %]
                                 <table class="table table-striped">
                                     <thead>
@@ -540,7 +531,6 @@
             slots_per_day[day].push(slot);
         });
 
-
         $(document).ready(function() {
 
             $('#schedule-pickup-tab').on('click', function() {
@@ -668,7 +658,59 @@
                 });
             }
 
+            $("#pickup-tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                $("#current-tab").val($(this).attr('href').substring(1)); // Remove #
+            });
+            $("#auto_refresh,#refresh_delay").on("change", function(){
+                set_interval_if_needed();
+            });
+
+            set_interval_if_needed();
+
         });
+
+        let refresh_interval_id = 0;
+        let countdown_interval_id = 0;
+        function set_interval(refresh_delay_ms){
+            clear_intervals();
+            let next_refresh = new Date();
+            next_refresh.setSeconds(next_refresh.getSeconds() + refresh_delay_ms / 1000);
+
+            countdown_interval_id = setInterval(function() {
+                const now = new Date().getTime();
+                const seconds = Math.floor(( next_refresh - now + 1 ) / 1000);
+                if ( seconds > 0 ) {
+                    $("#refresh_info").text(_("Refresh in %s seconds").format(seconds));
+                } else {
+                    $("#refresh_info").text(""); // In case something is going wrong
+                }
+            }, 1000);
+
+            setInterval(function() {
+                $(".refresh-form:visible").submit();
+            }, refresh_delay_ms);
+        }
+        function clear_intervals(){
+            if (refresh_interval_id) {
+                clearInterval(refresh_interval_id);
+                refresh_interval_id = 0;
+            }
+            if (countdown_interval_id) {
+                clearInterval(countdown_interval_id);
+                countdown_interval_id = 0;
+            }
+        }
+
+        function set_interval_if_needed(){
+            const refresh_delay = $("#refresh_delay").val();
+            const auto_refresh = $("#auto_refresh").is(":checked");
+
+            if (auto_refresh && refresh_delay){
+                set_interval(refresh_delay * 1000);
+            } else {
+                clear_intervals();
+            }
+        }
     </script>
 [% END %]
 
