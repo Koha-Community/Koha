@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 [%- USE raw -%]
 [%- USE Koha -%]
-
+[%- PROCESS 'html_helpers.inc' -%]
 [% IF ( opensearchdescription ) %]
     <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
         <ShortName>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Library catalog[% END %]</ShortName>
