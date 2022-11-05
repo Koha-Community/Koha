@@ -32,25 +32,27 @@
                         </div>
                     [% END %]
 
-                    <p>If this is your first time using the self checkout system, or if the system
-                    is not behaving as expected, you may want to refer to this guide to get
-                    yourself started.</p>
+                    <div id="selfcheckdefaulthelpmessage">
+                        <p>If this is your first time using the self checkout system, or if the system
+                        is not behaving as expected, you may want to refer to this guide to get
+                        yourself started.</p>
 
-                    <h2>Step one: Enter your user id[% IF ( SelfCheckoutByLogin ) %] and password[% END %]</h2>
+                        <h2>Step one: Enter your user id[% IF ( SelfCheckoutByLogin ) %] and password[% END %]</h2>
 
-                    <p>Enter your User ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %], and click the
-                    submit button (or press the enter key).</p>
+                        <p>Enter your User ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %], and click the
+                        submit button (or press the enter key).</p>
 
-                    <h2>Step two: Scan the barcode for each item, one at a time</h2>
+                        <h2>Step two: Scan the barcode for each item, one at a time</h2>
 
-                    <p>Scan each item and wait for the page to reload before scanning the next item.
-                    The checked-out item should appear in your checkouts list.
-                    The submit button only needs to be clicked if you enter the barcode manually.</p>
+                        <p>Scan each item and wait for the page to reload before scanning the next item.
+                        The checked-out item should appear in your checkouts list.
+                        The submit button only needs to be clicked if you enter the barcode manually.</p>
 
-                    <h2>Step three: Click the 'Finish' button</h2>
+                        <h2>Step three: Click the 'Finish' button</h2>
 
-                    <p>If you do not click the 'Finish' button, your session will automatically expire in
-                    [% SelfCheckTimeout | html %] seconds.</p>
+                        <p>If you do not click the 'Finish' button, your session will automatically expire in
+                        [% SelfCheckTimeout | html %] seconds.</p>
+                    </div>
 
                     <div class="button">
                         <a href="javascript:history.go(-1)">Return to the self-checkout</a>
