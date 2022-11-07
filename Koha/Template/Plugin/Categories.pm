@@ -25,12 +25,12 @@ use Koha::Patron::Categories;
 
 sub all {
     my ( $self, $params ) = @_;
-    return Koha::Patron::Categories->search($params);
+    return Koha::Patron::Categories->search($params, { order_by => [ 'description' ] } );
 }
 
 sub limited {
     my ( $self, $params ) = @_;
-    return Koha::Patron::Categories->search_with_library_limits($params);
+    return Koha::Patron::Categories->search_with_library_limits($params, { order_by => [ 'description' ] } );
 }
 
 sub GetName {
