@@ -812,7 +812,6 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         if ( add_filters ) {
             var table_dt = table.DataTable();
-            // table_dt.on('search', console.log);
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 if ( is_searchable ) {
