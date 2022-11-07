@@ -880,7 +880,7 @@
                                         [% END %]
                                     [% ELSE %]
                                         <div id="addcomment">
-                                            <a class="login-link loginModal-trigger" role="button" data-toggle="modal" data-return="true" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
+                                            <a class="login-link loginModal-trigger" role="button" data-toggle="modal" data-return="true" data-tab="comment" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
                                         </div>
                                     [% END # / IF loggedinusername %]
                                 </div> <!-- / #comments -->
@@ -1704,6 +1704,14 @@
             [%   CASE  -%]
                 showBsTab("bibliodescriptions", "holdings");
             [% END -%]
+
+            let urlParams = new URLSearchParams(window.location.search);
+            if ( urlParams.has('tab') ) {
+                let tab = urlParams.get('tab');
+                if ( tab == 'comment' ) {
+                    showBsTab("bibliodescriptions", "comments");
+                }
+            }
 
             [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
                 $(".l_Results").show();
