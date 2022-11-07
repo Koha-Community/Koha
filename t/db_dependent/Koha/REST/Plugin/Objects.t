@@ -673,7 +673,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        'api_av_mapping',
+        'api_strings_mapping',
         sub {
             my ($self, $params) = @_;
             use Koha::AuthorisedValues;
@@ -714,7 +714,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
         }
     );
 
-    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '+av_expand' } )
+    $t->get_ok( '/cities/' . $manuel->id => { 'x-koha-embed' => '+strings' } )
       ->status_is(200)->json_is( '/name' => 'Manuel' )
       ->json_has('/_strings')
       ->json_is( '/_strings/country/type'     => 'av' )
@@ -725,7 +725,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
       ->status_is(200)->json_is( '/name' => 'Manuel' )
       ->json_hasnt('/_strings');
 
-    $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-embed' => '+av_expand' } )
+    $t->get_ok( '/cities/' . $manuela->id => { 'x-koha-embed' => '+strings' } )
       ->status_is(200)->json_is( '/name' => 'Manuela' )
       ->json_has('/_strings')
       ->json_is( '/_strings/country/type'     => 'av' )
@@ -786,7 +786,7 @@ subtest 'objects.search helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        'api_av_mapping',
+        'api_strings_mapping',
         sub {
             my ($self, $params) = @_;
             use Koha::AuthorisedValues;
@@ -829,7 +829,7 @@ subtest 'objects.search helper with expanded authorised values' => sub {
     );
 
     $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
-          { 'x-koha-embed' => '+av_expand' } )->status_is(200)
+          { 'x-koha-embed' => '+strings' } )->status_is(200)
       ->json_has('/0')->json_has('/1')->json_hasnt('/2')
       ->json_is( '/0/name' => 'Manuel' )
       ->json_has('/0/_strings')

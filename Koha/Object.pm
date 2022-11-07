@@ -558,13 +558,13 @@ sub to_api {
     $params = defined $params ? {%$params} : {};
 
     # children should be able to handle without
-    my $embeds    = delete $params->{embed};
-    my $av_expand = delete $params->{av_expand};
+    my $embeds  = delete $params->{embed};
+    my $strings = delete $params->{strings};
 
     # coded values handling
     my $avs = {};
-    if ( $av_expand and $self->can('api_av_mapping') ) {
-        $avs = $self->api_av_mapping($params);
+    if ( $strings and $self->can('api_strings_mapping') ) {
+        $avs = $self->api_strings_mapping($params);
     }
 
     # Remove forbidden attributes if required (including their coded values)
@@ -573,7 +573,7 @@ sub to_api {
             delete $json_object->{$field} unless any { $_ eq $field } @{ $self->public_read_list };
         }
 
-        if ( $av_expand ) {
+        if ( $strings ) {
             foreach my $field (keys %{$avs}) {
                 delete $avs->{$field}
                     unless any { $_ eq $field } @{ $self->public_read_list };
@@ -606,7 +606,7 @@ sub to_api {
     }
 
     $json_object->{_strings} = $avs
-      if $av_expand;
+      if $strings;
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
@@ -620,8 +620,8 @@ sub to_api {
                 my $curr = $embed;
                 my $next = $embeds->{$curr}->{children};
 
-                $params->{av_expand} = 1
-                  if $embeds->{$embed}->{av_expand};
+                $params->{strings} = 1
+                  if $embeds->{$embed}->{strings};
 
                 my $children = $self->$curr;
 

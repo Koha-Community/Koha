@@ -242,8 +242,8 @@ Unwraps and stashes the x-koha-embed headers for use later query construction
             if ($embed_header) {
                 my $THE_embed = {};
                 foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                    if ( $embed_req eq '+av_expand' ) {    # special case
-                        $c->stash( 'koha.av_expand' => 1 );
+                    if ( $embed_req eq '+strings' ) {    # special case
+                        $c->stash( 'koha.strings' => 1 );
                     } else {
                         _merge_embed( _parse_embed($embed_req), $THE_embed );
                     }
@@ -368,9 +368,9 @@ sub _parse_embed {
             my $key = $+{relation} . "_count";
             $result->{$key} = { is_count => 1 };
         }
-        elsif ( $curr =~ m/^(?<relation>.*)\+av_expand/ ) {
+        elsif ( $curr =~ m/^(?<relation>.*)\+strings/ ) {
             my $key = $+{relation};
-            $result->{$key} = { av_expand => 1 };
+            $result->{$key} = { strings => 1 };
         }
         else {
             $result->{$curr} = {};

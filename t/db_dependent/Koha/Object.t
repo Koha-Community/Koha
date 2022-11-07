@@ -303,7 +303,7 @@ subtest "to_api() tests" => sub {
     is($biblio_api->{items}->[0]->{holds}->[0]->{hold_id}, $hold->reserve_id, 'Hold matches');
     is_deeply($biblio_api->{biblioitem}, $biblio->biblioitem->to_api, 'More than one root');
 
-    my $_str = {
+    my $_strings = {
         location => {
             category => 'ASD',
             str      => 'Estante alto',
@@ -311,18 +311,18 @@ subtest "to_api() tests" => sub {
         }
     };
 
-    # mock Koha::Item so it implements 'api_av_mapping'
+    # mock Koha::Item so it implements 'api_strings_mapping'
     my $item_mock = Test::MockModule->new('Koha::Item');
     $item_mock->mock(
-        'api_av_mapping',
+        'api_strings_mapping',
         sub {
-            return $_str;
+            return $_strings;
         }
     );
 
     my $hold_api = $hold->to_api(
         {
-            embed => { 'item' => { av_expand => 1 } }
+            embed => { 'item' => { strings => 1 } }
         }
     );
 
@@ -330,8 +330,8 @@ subtest "to_api() tests" => sub {
     is( $hold_api->{item}->{item_id}, $item->itemnumber, 'Object embedded correctly' );
     is_deeply(
         $hold_api->{item}->{_strings},
-        $_str,
-        '_str correctly added to nested embed'
+        $_strings,
+        '_strings correctly added to nested embed'
     );
 
     # biblio with no items
@@ -475,7 +475,7 @@ subtest "to_api() tests" => sub {
 
         my $city_mock = Test::MockModule->new('Koha::City');
         $city_mock->mock(
-            'api_av_mapping',
+            'api_strings_mapping',
             sub {
                 my ( $self, $params ) = @_;
 
@@ -508,11 +508,11 @@ subtest "to_api() tests" => sub {
             }
         );
 
-        my $mobj = $marseille->to_api( { av_expand => 1, public => 1 } );
-        my $cobj = $cordoba->to_api( { av_expand => 1, public => 0 } );
+        my $mobj = $marseille->to_api( { strings => 1, public => 1 } );
+        my $cobj = $cordoba->to_api( { strings => 1, public => 0 } );
 
-        ok( exists $mobj->{_strings}, '_str exists for Marseille' );
-        ok( exists $cobj->{_strings}, '_str exists for Córdoba' );
+        ok( exists $mobj->{_strings}, '_strings exists for Marseille' );
+        ok( exists $cobj->{_strings}, '_strings exists for Córdoba' );
 
         is_deeply(
             $mobj->{_strings}->{country},

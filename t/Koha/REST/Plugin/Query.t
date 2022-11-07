@@ -210,14 +210,14 @@ get '/stash_embed' => sub {
     my $c = shift;
 
     $c->stash_embed();
-    my $embed     = $c->stash('koha.embed');
-    my $av_expand = $c->stash('koha.av_expand');
+    my $embed   = $c->stash('koha.embed');
+    my $strings = $c->stash('koha.strings');
 
     $c->render(
         status => 200,
         json   => {
-            av_expand => $av_expand,
-            embed     => $embed,
+            strings => $strings,
+            embed   => $embed,
         }
     );
 };
@@ -452,19 +452,19 @@ subtest 'stash_embed() tests' => sub {
             patron    => {}
         });
 
-    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item+av_expand,patron+av_expand' } )
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item+strings,patron+strings' } )
       ->json_is( '/embed' => {
-            checkouts => { children => { item => { av_expand => 1 } } },
-            patron    => { av_expand => 1 }
+            checkouts => { children => { item => { strings => 1 } } },
+            patron    => { strings => 1 }
         })
-      ->json_is( '/av_expand' => undef );
+      ->json_is( '/strings' => undef );
 
-    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts+av_expand,checkouts.item,patron,+av_expand' } )
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts+strings,checkouts.item,patron,+strings' } )
       ->json_is( '/embed' => {
-            checkouts => { children => { item => { } }, av_expand => 1 },
+            checkouts => { children => { item => { } }, strings => 1 },
             patron    => { }
         })
-      ->json_is( '/av_expand' => 1 );
+      ->json_is( '/strings' => 1 );
 };
 
 subtest 'stash_overrides() tests' => sub {

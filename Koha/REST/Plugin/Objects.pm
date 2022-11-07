@@ -53,8 +53,8 @@ the requested object. It passes through any embeds if specified.
             my $attributes = {};
 
             # Look for embeds
-            my $embed     = $c->stash('koha.embed');
-            my $av_expand = $c->stash('koha.av_expand');
+            my $embed   = $c->stash('koha.embed');
+            my $strings = $c->stash('koha.strings');
 
             # Generate prefetches for embedded stuff
             $c->dbic_merge_prefetch(
@@ -68,7 +68,7 @@ the requested object. It passes through any embeds if specified.
 
             return unless $object;
 
-            return $object->to_api({ embed => $embed, av_expand => $av_expand });
+            return $object->to_api({ embed => $embed, strings => $strings });
         }
     );
 
@@ -99,8 +99,8 @@ shouldn't be called twice in it.
             # Privileged reques?
             my $is_public = $c->stash('is_public');
             # Look for embeds
-            my $embed     = $c->stash('koha.embed');
-            my $av_expand = $c->stash('koha.av_expand');
+            my $embed   = $c->stash('koha.embed');
+            my $strings = $c->stash('koha.strings');
 
             # Merge sorting into query attributes
             $c->dbic_merge_sorting(
@@ -205,7 +205,7 @@ shouldn't be called twice in it.
                 }
             );
 
-            return $objects->to_api({ embed => $embed, public => $is_public, av_expand => $av_expand });
+            return $objects->to_api({ embed => $embed, public => $is_public, strings => $strings });
         }
     );
 }
