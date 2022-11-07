@@ -1779,36 +1779,45 @@ Note that permanent location is a code, and location may be an authval.
                 bundle_form_active = item_id;
             });
 
-            $("#addToBundleForm").submit(function(event) {
-
-                  /* stop form from submitting normally */
-                  event.preventDefault();
-
-                  /* get the action attribute from the <form action=""> element */
-                  var $form = $(this),
-                  url = $form.attr('action');
-
+            function addToBundle (url, data) {
                   /* Send the data using post with external_id */
                   var posting = $.post({
                       url: url,
-                      data: JSON.stringify({ external_id: $('#external_id').val()}),
+                      data: JSON.stringify(data),
                       contentType: "application/json; charset=utf-8",
                       dataType: "json"
                   });
 
+                  const barcode = data.external_id;
+
                   /* Report the results */
                   posting.done(function(data) {
-                      var barcode = $('#external_id').val();
                       $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">'+_("Success: Added '%s'").format(barcode)+'</div>');
                       $('#external_id').val('').focus();
                       bundle_changed = 1;
                   });
                   posting.fail(function(data) {
-                      var barcode = $('#external_id').val();
                       if ( data.status === 409 ) {
                           var response = data.responseJSON;
                           if ( response.key === "PRIMARY" ) {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
+                          } else if (response.key === 'checked_out') {
+                              const button = $('<button type="button">')
+                                .addClass('btn btn-xs')
+                                .text(__('Check in and add to bundle'))
+                                .on('click', function () {
+                                    addToBundle(url, { external_id: barcode, force_checkin: true });
+                                });
+                              $('#addResult')
+                                .empty()
+                                .attr('class', 'alert alert-warning')
+                                .append(__x('Warning: Item {barcode} is checked out', { barcode }))
+                                .append(' ', button);
+                          } else if (response.key === 'failed_checkin') {
+                              $('#addResult')
+                                .empty()
+                                .attr('class', 'alert alert-danger')
+                                .append(__x('Failure: Item {barcode} cannot be checked in', { barcode }))
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                           }
@@ -1826,6 +1835,16 @@ Note that permanent location is a code, and location may be an authval.
                       }
                       $('#external_id').val('').focus();
                   });
+            }
+
+            $("#addToBundleForm").submit(function(event) {
+                  /* stop form from submitting normally */
+                  event.preventDefault();
+
+                  const url = this.action;
+                  const data = { external_id: this.elements.external_id.value };
+
+                  addToBundle(url, data);
             });
 
             $("#addToBundleModal").on("hidden.bs.modal", function(e){

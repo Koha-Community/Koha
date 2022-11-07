@@ -213,11 +213,16 @@ subtest 'bundle_host tests' => sub {
 };
 
 subtest 'add_to_bundle tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'BundleNotLoanValue', 1 );
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    t::lib::Mocks::mock_userenv({
+        branchcode => $library->branchcode
+    });
 
     my $host_item = $builder->build_sample_item();
     my $bundle_item1 = $builder->build_sample_item();
@@ -241,6 +246,26 @@ subtest 'add_to_bundle tests' => sub {
     throws_ok { $bundle_item2->add_to_bundle($host_item) }
     'Koha::Exceptions::Item::Bundle::IsBundle',
       'Exception thrown if you try to add a bundle host to a bundle item';
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    C4::Circulation::AddIssue( $patron->unblessed, $bundle_item2->barcode );
+    throws_ok { $host_item->add_to_bundle($bundle_item2) }
+    'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut',
+      'Exception thrown if you try to add a checked out item';
+
+    $bundle_item2->withdrawn(1)->store;
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
+    throws_ok { $host_item->add_to_bundle( $bundle_item2, { force_checkin => 1 } ) }
+    'Koha::Exceptions::Checkin::FailedCheckin',
+      'Exception thrown if you try to add a checked out item using
+      "force_checkin" and the return is not possible';
+
+    $bundle_item2->withdrawn(0)->store;
+    lives_ok { $host_item->add_to_bundle( $bundle_item2, { force_checkin => 1 } ) }
+    'No exception if you try to add a checked out item using "force_checkin" and the return is possible';
+
+    $bundle_item2->discard_changes;
+    ok( !$bundle_item2->checkout, 'Item is not checked out after being added to a bundle' );
 
     $schema->storage->txn_rollback;
 };

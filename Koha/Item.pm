@@ -1707,7 +1707,9 @@ Adds the bundle_item passed to this item
 =cut
 
 sub add_to_bundle {
-    my ( $self, $bundle_item ) = @_;
+    my ( $self, $bundle_item, $options ) = @_;
+
+    $options //= {};
 
     Koha::Exceptions::Item::Bundle::IsBundle->throw()
       if ( $self->itemnumber eq $bundle_item->itemnumber
@@ -1721,6 +1723,19 @@ sub add_to_bundle {
     try {
         $schema->txn_do(
             sub {
+                my $checkout = $bundle_item->checkout;
+                if ($checkout) {
+                    unless ($options->{force_checkin}) {
+                        Koha::Exceptions::Item::Bundle::ItemIsCheckedOut->throw();
+                    }
+
+                    my $branchcode = C4::Context->userenv->{'branch'};
+                    my ($success) = C4::Circulation::AddReturn($bundle_item->barcode, $branchcode);
+                    unless ($success) {
+                        Koha::Exceptions::Checkin::FailedCheckin->throw();
+                    }
+                }
+
                 $self->_result->add_to_item_bundles_hosts(
                     { item => $bundle_item->itemnumber } );
 
@@ -1772,7 +1787,7 @@ sub add_to_bundle {
             $_->rethrow();
         }
         else {
-            $_;
+            $_->rethrow();
         }
     };
 }

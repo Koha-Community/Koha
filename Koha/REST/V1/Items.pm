@@ -214,7 +214,8 @@ sub add_to_bundle {
     }
 
     return try {
-        my $link = $item->add_to_bundle($bundle_item);
+        my $force_checkin = $c->validation->param('body')->{'force_checkin'};
+        my $link = $item->add_to_bundle($bundle_item, { force_checkin => $force_checkin });
         return $c->render(
             status  => 201,
             openapi => $bundle_item
@@ -237,8 +238,23 @@ sub add_to_bundle {
                     error => 'Bundles cannot be nested'
                 }
             );
-        }
-        else {
+        } elsif (ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut') {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error => 'Item is checked out',
+                    key   => 'checked_out'
+                }
+            );
+        } elsif (ref($_) eq 'Koha::Exceptions::Checkin::FailedCheckin') {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error => 'Item cannot be checked in',
+                    key   => 'failed_checkin'
+                }
+            );
+        } else {
             $c->unhandled_exception($_);
         }
     };
