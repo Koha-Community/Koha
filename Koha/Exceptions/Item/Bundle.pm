@@ -20,14 +20,17 @@ use Modern::Perl;
 use Koha::Exception;
 
 use Exception::Class (
-
     'Koha::Exceptions::Item::Bundle' => {
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Item::Bundle::IsBundle' => {
         isa         => 'Koha::Exceptions::Item::Bundle',
         description => "A bundle cannot be added to a bundle",
-    }
+    },
+    'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' => {
+        isa         => 'Koha::Exceptions::Item::Bundle',
+        description => 'Someone tried to add a checked out item to a bundle',
+    },
 );
 
 =head1 NAME
@@ -43,6 +46,10 @@ Generic Item::Bundle exception
 =head2 Koha::Exceptions::Item::Bundle::IsBundle
 
 Exception to be used when attempting to add one bundle into another.
+
+=head2 Koha::Exceptions::Item::Bundle::ItemIsCheckedOut
+
+Exception to be used when attempting to add a checked out item to a bundle.
 
 =cut
 
