@@ -292,7 +292,7 @@ sub AddBiblio {
             # update MARC subfield that stores biblioitems.cn_sort
             _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
 
-            if (!$disable_autolink && C4::Context->preference('BiblioAddsAuthorities')) {
+            if (!$disable_autolink && C4::Context->preference('AutoLinkBiblios')) {
                 BiblioAutoLink( $record, $frameworkcode );
             }
 

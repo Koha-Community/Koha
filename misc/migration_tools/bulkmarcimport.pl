@@ -647,7 +647,7 @@ RECORD: foreach my $record (@{$marc_records}) {
             $schema->txn_begin;
             if ($indexer) {
                 $indexer->update_index(\@search_engine_record_ids, \@search_engine_records);
-                if (C4::Context->preference('BiblioAddsAuthorities')) {
+                if (C4::Context->preference('AutoLinkBiblios')) {
                     foreach my $record (@search_engine_records) {
                         BiblioAutoLink($record, $framework);
                     }
