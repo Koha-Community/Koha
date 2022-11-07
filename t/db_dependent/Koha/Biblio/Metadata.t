@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::Exception;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -35,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'record() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -60,8 +61,11 @@ subtest 'record() tests' => sub {
         }
     );
 
-    throws_ok { $bad_data->record; }
-    'Koha::Exceptions::Metadata::Invalid', 'Exception thrown on bad record';
+    warning_like
+       { throws_ok { $bad_data->record; }
+        'Koha::Exceptions::Metadata::Invalid', 'Exception thrown on bad record'; }
+        qr/parser error : Start tag expected, '<' not found/,
+        'Warning thrown excplicitly';
 
     my $exception = $@;
     is( $exception->id,     $bad_data->id, 'id passed correctly to exception' );
