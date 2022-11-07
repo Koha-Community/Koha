@@ -172,7 +172,8 @@ sub _embed_items {
             my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
             push @item_fields, $item_marc->field($itemtag);
         }
-        $record->insert_fields_ordered(@item_fields);
+        $record->insert_fields_ordered( reverse @item_fields );
+            # insert_fields_ordered with the reverse keeps 952s in right order
 
     }
     else {
