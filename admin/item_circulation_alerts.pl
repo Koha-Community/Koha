@@ -41,7 +41,7 @@ sub show {
             template_name   => "admin/item_circulation_alerts.tt",
             query           => $input,
             type            => "intranet",
-            flagsrequired   => { parameters => 'item_circ_alerts' },
+            flagsrequired   => { parameters => 'manage_item_circ_alerts' },
             debug           => defined($input->param('debug')),
         }
     );
