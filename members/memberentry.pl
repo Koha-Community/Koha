@@ -659,7 +659,8 @@ my $patron_categories = Koha::Patron::Categories->search_with_library_limits(
 my $no_categories = ! $patron_categories->count;
 my $categories = {};
 my @patron_categories = $patron_categories->as_list;
-unless ( $patron_categories->find( $category->id ) ){
+# When adding a guarantor we don't have a category yet, and only want to choose from the eligible categories
+unless ( !$category || $patron_categories->find( $category->id ) ){
     $template->param( limited_category => 1 );
     push @patron_categories, $category;
 }
