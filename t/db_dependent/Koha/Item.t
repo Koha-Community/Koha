@@ -1947,8 +1947,8 @@ subtest 'Recalls tests' => sub {
     # Patron2 has Item1 checked out. Patron1 has placed a biblio-level recall on Biblio1, so check if Item1 can fulfill Patron1's recall.
 
     Koha::CirculationRules->set_rules({
-        branchcode => undef,
-        categorycode => undef,
+        branchcode => $branchcode,
+        categorycode => $patron1->categorycode,
         itemtype => $item1->effective_itemtype,
         rules => {
             recalls_allowed => 0,
@@ -1959,8 +1959,8 @@ subtest 'Recalls tests' => sub {
     is( $item1->can_be_waiting_recall, 0, "Recalls not allowed for this itemtype" );
 
     Koha::CirculationRules->set_rules({
-        branchcode => undef,
-        categorycode => undef,
+        branchcode => $branchcode,
+        categorycode => $patron1->categorycode,
         itemtype => $item1->effective_itemtype,
         rules => {
             recalls_allowed => 1,
