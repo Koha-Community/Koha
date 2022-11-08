@@ -950,6 +950,35 @@ sub checkauth {
             if ($session) {
                 $session->delete();
                 $session->flush;
+                $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
+                C4::Context::_unset_userenv($sessionID);
+                $sessionID = undef;
+                undef $userid; # IMPORTANT: this assures us a new session in code below
+            } elsif (!$logout) {
+
+                $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
+                    -name     => 'CGISESSID',
+                    -value    => $session->id,
+                    -HttpOnly => 1,
+                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                    -sameSite => 'Lax',
+                ));
+
+                $flags = haspermission( $userid, $flagsrequired );
+                unless ( $flags ) {
+                    $auth_state = 'failed';
+                    $info{'nopermission'} = 1;
+                }
+            }
+        } elsif ( !$logout ) {
+            if ( $return eq 'expired' ) {
+                $info{timed_out} = 1;
+            } elsif ( $return eq 'restricted' ) {
+                $info{oldip}        = $more_info->{old_ip};
+                $info{newip}        = $more_info->{new_ip};
+                $info{different_ip} = 1;
+            } elsif ( $return eq 'password_expired' ) {
+                $info{password_has_expired} = 1;
             }
             C4::Context->_unset_userenv($sessionID);
 
