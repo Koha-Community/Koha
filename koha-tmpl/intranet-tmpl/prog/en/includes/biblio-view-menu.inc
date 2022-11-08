@@ -35,8 +35,6 @@
     [% END %]
 
     [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&amp;biblionumber=[% biblio_object_id | url  %]">Subscriptions ([% subscriptionsnumber | html %])</a></li>[% END %]
-</ul>
-<ul>
 [% IF ( issuehistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]
 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio_object_id | url  %]" >Checkout history</a></li>
 [% IF ( CAN_user_tools_view_system_logs ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=[% biblio_object_id | url  %]&amp;object_type=biblio">Modification log</a> </li>[% END %]
