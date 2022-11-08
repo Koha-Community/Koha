@@ -362,9 +362,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 identity_provider_domains
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 16:29:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SKWF2QpqQtXoujwurKFQhA
+Type: has_many
+
+Related object: L<Koha::Schema::Result::IdentityProviderDomain>
+
+=cut
+
+__PACKAGE__->has_many(
+  "identity_provider_domains",
+  "Koha::Schema::Result::IdentityProviderDomain",
+  { "foreign.default_category_id" => "self.categorycode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-08 17:35:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B89OgAY/KnJbQaHpu5Xdfg
 
 sub koha_object_class {
     'Koha::Patron::Category';

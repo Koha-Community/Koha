@@ -677,6 +677,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 identity_provider_domains
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::IdentityProviderDomain>
+
+=cut
+
+__PACKAGE__->has_many(
+  "identity_provider_domains",
+  "Koha::Schema::Result::IdentityProviderDomain",
+  { "foreign.default_library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 illrequests
 
 Type: has_many
@@ -903,8 +918,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-16 13:09:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4nMDSKcOjnGsjUQkkyZtwg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-08 17:35:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QPqXuEigMeIBb9NKMSkrNw
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
