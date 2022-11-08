@@ -2,27 +2,29 @@
 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
 [% USE AuthorisedValues %]
 <table class="holds_table">
-    <tr>
-        <th><input type="checkbox" class="select_hold_all"/></th>
-        <th>Priority</th>
-        [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+    <thead>
+        <tr>
+            <th><input type="checkbox" class="select_hold_all"/></th>
+            <th>Priority</th>
+            [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                <th>&nbsp;</th>
+            [% END %]
+            <th>Patron</th>
+            <th>Notes</th>
+            <th>Date</th>
+            <th>Expiration</th>
+            <th>Pickup library</th>
+            <th>Details</th>
+            [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                <th>
+                    <i class="fa fa-lg fa-rotate-90 fa-fast-forward" title="Toggle set to lowest priority"></i>
+                </th>
+            [% END %]
             <th>&nbsp;</th>
-        [% END %]
-        <th>Patron</th>
-        <th>Notes</th>
-        <th>Date</th>
-        <th>Expiration</th>
-        <th>Pickup library</th>
-        <th>Details</th>
-        [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th>
-                <i class="fa fa-lg fa-rotate-90 fa-fast-forward" title="Toggle set to lowest priority"></i>
-            </th>
-        [% END %]
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>Print hold/transfer slip</th>
-    </tr>
+            <th>&nbsp;</th>
+            <th>Print hold/transfer slip</th>
+        </tr>
+    </thead>
     [%- SET first_priority = 0 -%]
     [%- SET found_holds = 0 -%]
     [%- SET last_priority  = holds.last.priority -%]
