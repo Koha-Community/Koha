@@ -1,8 +1,8 @@
 use Modern::Perl;
 
 return {
-    bug_number => "BUG_NUMBER",
-    description => "Some tables for ERM",
+    bug_number => "32030",
+    description => "Add an ERM module",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
