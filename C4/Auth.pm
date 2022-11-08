@@ -906,6 +906,7 @@ sub checkauth {
                 $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
                 C4::Context::_unset_userenv($sessionID);
                 $sessionID = undef;
+                undef $userid; # IMPORTANT: this assures us a new session in code below
             } elsif (!$logout) {
 
                 $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
