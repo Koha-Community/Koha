@@ -69,32 +69,6 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
-
-        unless ( TableExists('erm_user_roles') ) {
-            $dbh->do(q{
-                CREATE TABLE `erm_user_roles` (
-                    `agreement_id` INT(11) NULL COMMENT 'link to the agreement',
-                    `license_id` INT(11) NULL COMMENT 'link to the license',
-                    `user_id` INT(11) NOT NULL COMMENT 'link to the user',
-                    `role` VARCHAR(80) NOT NULL COMMENT 'role of the user',
-                    CONSTRAINT `erm_user_roles_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `erm_user_roles_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `erm_user_roles_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            });
-        }
-        $dbh->do(q{
-            INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
-            VALUES
-                ('ERM_USER_ROLES', 1)
-        });
-        $dbh->do(q{
-            INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
-            VALUES
-                ('ERM_USER_ROLES', 'librarian', 'ERM librarian'),
-                ('ERM_USER_ROLES', 'subject_specialist', 'Subject specialist')
-        });
-
         unless ( TableExists('erm_licenses') ) {
             $dbh->do(q{
                 CREATE TABLE `erm_licenses` (
@@ -154,6 +128,31 @@ return {
                 ('ERM_AGREEMENT_LICENSE_STATUS', 'history', 'Historic'),
                 ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Filing cabinet'),
                 ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard');
+        });
+
+        unless ( TableExists('erm_user_roles') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_user_roles` (
+                    `agreement_id` INT(11) NULL COMMENT 'link to the agreement',
+                    `license_id` INT(11) NULL COMMENT 'link to the license',
+                    `user_id` INT(11) NOT NULL COMMENT 'link to the user',
+                    `role` VARCHAR(80) NOT NULL COMMENT 'role of the user',
+                    CONSTRAINT `erm_user_roles_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_user_roles_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_user_roles_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+            VALUES
+                ('ERM_USER_ROLES', 1)
+        });
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
+            VALUES
+                ('ERM_USER_ROLES', 'librarian', 'ERM librarian'),
+                ('ERM_USER_ROLES', 'subject_specialist', 'Subject specialist')
         });
 
         unless ( TableExists('erm_agreement_relationships') ) {
