@@ -1,5 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
+[% USE Categories %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -87,6 +89,7 @@
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
             <input type="hidden" name="op" value="add" />
             <fieldset class="rows">
+                <legend id="identity_provider_basic">Basic configuration</legend>
                 <ol>
                     <li>
                         <label for="code" class="required">Code: </label>
@@ -116,10 +119,11 @@
             </fieldset>
 
             <fieldset class="rows">
+                <legend id="identity_provider_advanced">Advanced configuration</legend>
                 <ol>
                     <li>
                         <label for="config" class="required json">Configuration: </label>
-                        <textarea name="config" id="config" class="required"></textarea>
+                        <textarea name="config" id="config" class="required" cols="75" rows="10"></textarea>
                         <span class="required">Required</span>
                         <div class="hint">Provider's main configuration. <button class="more btn btn-ligth" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-config" style="display: none">
@@ -132,7 +136,7 @@
                     </li>
                     <li>
                         <label for="mapping" class="required json">Mapping: </label>
-                        <textarea name="mapping" id="mapping" class="required"></textarea>
+                        <textarea name="mapping" id="mapping" class="required" cols="75" rows="10"></textarea>
                         <span class="required">Required</span>
                         <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-ligth" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-mapping" style="display: none">
@@ -162,6 +166,69 @@
                     </li>
                 </ol>
             </fieldset>
+
+            <fieldset class="rows">
+                <legend id="identity_provider_domain">Domain configuration</legend>
+                <ol>
+                    <li>
+                        <label for="domain" class="required">Domain: </label>
+                        <input type="text" name="domain" id="domain" class="required" size="60" />
+                        <span class="required">Required</span>
+                        <div class="hint">Use &ast; for any domain. You can add new domains later on the dedicated admin page.</div>
+                    </li>
+                    <li>
+                        <label for="default_library_id">Default library: </label>
+                        <select id="default_library_id" name="default_library_id" class="mandatory">
+                            [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
+                        </select>
+                        <span class="required">Required</span>
+                        <div class="hint">Use this library for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="default_category_id">Default category: </label>
+                        [% SET categories = Categories.all() %]
+                        <select name="default_category_id" id="default_category_id" class="mandatory">
+                            [% FOREACH category IN categories %]
+                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                        <div class="hint">Use this category for the patron on auto register</div>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow OPAC: </label>
+                        <select name="allow_opac" id="allow_opac">
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        </select>
+                        <div class="hint">Allow OPAC access to users from this domain to login with this identity provider.</div>
+                    </li>
+                    <li>
+                        <label for="allow_opac">Allow staff: </label>
+                        <select name="allow_staff" id="allow_staff">
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        </select>
+                        <div class="hint">Allow staff access to users from this domain to login with this identity provider.</div>
+                    </li>
+                    <li>
+                        <label for="auto_register">Auto register: </label>
+                        <select name="auto_register" id="auto_register">
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        </select>
+                        <div class="hint">Allow users to auto register on login.</div>
+                    </li>
+                    <li>
+                        <label for="update_on_auth">Update on login: </label>
+                        <select name="update_on_auth" id="update_on_auth">
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        </select>
+                        <div class="hint">Update user data on login.</div>
+                </ol>
+            </fieldset>
+
             <fieldset class="action">
                 <input type="submit" value="Submit" />
                 <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl">Cancel</a>

@@ -26,6 +26,7 @@ use Try::Tiny qw( catch try );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
+use Koha::Database;
 use Koha::Auth::Identity::Providers;
 
 my $input         = CGI->new;
@@ -51,33 +52,52 @@ my @messages;
 
 if ( !$domain_ops && $op eq 'add' ) {
 
+    # IdP configuration params
     my $code        = $input->param('code');
     my $config      = $input->param('config');
     my $description = $input->param('description');
     my $icon_url    = $input->param('icon_url');
     my $mapping     = $input->param('mapping');
-    my $matchpoint  = $input->param('matchpoint'),
+    my $matchpoint  = $input->param('matchpoint');
     my $protocol    = $input->param('protocol');
+    # Domain configuration params
+    my $allow_opac          = $input->param('allow_opac') // 0;
+    my $allow_staff         = $input->param('allow_staff') // 0;
+    my $auto_register       = $input->param('auto_register') // 0;
+    my $default_category_id = $input->param('default_category_id');
+    my $default_library_id  = $input->param('default_library_id');
+    my $domain              = $input->param('domain');
+    my $update_on_auth      = $input->param('update_on_$update_on_auth');
 
     try {
-        my $provider = Koha::Auth::Identity::Provider->new(
-            {   code        => $code,
-                config      => $config,
-                description => $description,
-                icon_url    => $icon_url,
-                mapping     => $mapping,
-                matchpoint  => $matchpoint,
-                protocol    => $protocol,
-            }
-        )->store;
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $provider = Koha::Auth::Identity::Provider->new(
+                    {   code        => $code,
+                        config      => $config,
+                        description => $description,
+                        icon_url    => $icon_url,
+                        mapping     => $mapping,
+                        matchpoint  => $matchpoint,
+                        protocol    => $protocol,
+                    }
+                )->store;
 
-        Koha::Auth::Identity::Provider::Domain->new(
-            {
-                identity_provider_id => $provider->identity_provider_id,
-            }
-        )->store;
+                Koha::Auth::Identity::Provider::Domain->new(
+                    {   identity_provider_id => $provider->identity_provider_id,
+                        allow_opac           => $allow_opac,
+                        allow_staff          => $allow_staff,
+                        auto_register        => $auto_register,
+                        default_category_id  => $default_category_id,
+                        default_library_id   => $default_library_id,
+                        domain               => $domain,
+                        update_on_auth       => $update_on_auth,
+                    }
+                )->store;
 
-        push @messages, { type => 'message', code => 'success_on_insert' };
+                push @messages, { type => 'message', code => 'success_on_insert' };
+            }
+        );
     }
     catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
