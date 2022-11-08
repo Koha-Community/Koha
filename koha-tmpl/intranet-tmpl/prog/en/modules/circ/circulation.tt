@@ -9,6 +9,7 @@
 [% USE ItemTypes %]
 [% USE Price %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% Asset.css("lib/jquery/plugins/rowGroup/stylesheets/rowGroup.dataTables.min.css") | $raw %]
@@ -773,7 +774,17 @@
 
                                         [% IF ( issue ) %]
                                             <div class="lastchecked">
-                                                <p><strong>Checked out: </strong>[% issue.item.biblio.title | html %] ([% issue.item.barcode | html %]). Due on [% issue.date_due | $KohaDates as_due_date => 1 %]</p>
+                                                <p>
+                                                    <strong>Checked out: </strong>
+                                                    [% issue.item.biblio.title | html %] ([% issue.item.barcode | html %]).
+
+                                                    [% IF issue.item.is_bundle %]
+                                                        [% SET bundle_items_count = issue.item.bundle_items.count %]
+                                                        [% tnx('Bundle of {count} item', 'Bundle of {count} items', bundle_items_count, { count = bundle_items_count }) | html %].
+                                                    [% END %]
+
+                                                    Due on [% issue.date_due | $KohaDates as_due_date => 1 %]
+                                                </p>
                                             </div>
                                         [% END %]
                                     </form> <!-- /#mainform -->
