@@ -32,6 +32,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
@@ -509,4 +510,3 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
