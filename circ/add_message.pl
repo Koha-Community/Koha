@@ -35,20 +35,27 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $message_id       = $input->param('message_id');
 my $borrowernumber   = $input->param('borrowernumber');
 my $branchcode       = $input->param('branchcode');
 my $message_type     = $input->param('message_type');
 my $borrower_message = $input->param('borrower_message');
 my $batch            = $input->param('batch');
 
-Koha::Patron::Message->new(
-    {
-        borrowernumber => $borrowernumber,
-        branchcode     => $branchcode,
-        message_type   => $message_type,
-        message        => $borrower_message,
-    }
-)->store;
+if ($message_id) {
+    my $message = Koha::Patron::Messages->find($message_id);
+    $message->update( { message => $borrower_message } ) if $message;
+}
+else {
+    Koha::Patron::Message->new(
+        {
+            borrowernumber => $borrowernumber,
+            branchcode     => $branchcode,
+            message_type   => $message_type,
+            message        => $borrower_message,
+        }
+    )->store;
+}
 
 my $url = $input->referer;
 if ( $url ) {

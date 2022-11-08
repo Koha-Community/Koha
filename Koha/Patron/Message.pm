@@ -53,8 +53,13 @@ sub store {
         $self->manager_id( $userenv ? $userenv->{number} : undef );
     }
 
-    C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
-        if C4::Context->preference("BorrowersLog");
+    if ( C4::Context->preference("BorrowersLog") ) {
+        if ( $self->in_storage ) {
+            C4::Log::logaction( "MEMBERS", "MODCIRCMESSAGE", $self->borrowernumber, $self->message )
+        } else {
+            C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
+        }
+    }
 
     return $self->SUPER::store($self);
 }

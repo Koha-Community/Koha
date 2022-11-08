@@ -314,9 +314,11 @@
                     </span>
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                         [% IF moremember %]
-                        <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash"></i> Delete</a>
+                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa fa-edit"></i> Edit</a>
+                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash"></i> Delete</a>
                         [% ELSE %]
-                        <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa fa-edit"></i> Edit</a>
+                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
                         [% END %]
                     [% END %]
                 </li>
@@ -324,4 +326,45 @@
         </ul>
         <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
     </div> <!-- /#messages -->
+
+    [% FOREACH pm IN patron_messages %]
+        <div id="edit_message_form_[% pm.message_id | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="#edit_message_form_[% patron_message.message_id | html %]" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+                        <input type="hidden" name="message_id" value="[% pm.message_id | html %]"/>
+                        <div class="modal-header">
+                            <h3>Edit message</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message_type">Message is for:</label>
+                                <select name="message_type" id="message_type" disabled>
+                                    [% IF pm.message_type == "L" %]
+                                        <option value="L" selected="selected">Staff - Internal note</option>
+                                    [% ELSE %]
+                                        <option value="L">Staff - Internal note</option>
+                                    [% END %]
+
+                                    [% IF pm.message_type == "B" %]
+                                        <option value="B" selected="selected">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
+                                    [% ELSE %]
+                                        <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
+                                    [% END %]
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" >[% pm.message | html %]</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                            <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    [% END %]
+
 [% END # /IF patron_messages %]
