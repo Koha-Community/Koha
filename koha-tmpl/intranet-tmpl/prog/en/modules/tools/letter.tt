@@ -500,6 +500,8 @@
                                             [% ELSE %]
                                                 <fieldset class="rows mtt">
                                             [% END %]
+                                                <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
+                                                <input type="hidden" name="lang" value="[% lang | html %]" />
                                                 <ol>
                                                     [% IF ( letter.tt_error ) %]
                                                         <li class="template_toolkit_error">
@@ -514,8 +516,6 @@
                                                         </li>
                                                     [% END %]
                                                     <li>
-                                                        <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
-                                                        <input type="hidden" name="lang" value="[% lang | html %]" />
                                                         <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
                                                         [% IF letter.is_html %]
                                                             <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
