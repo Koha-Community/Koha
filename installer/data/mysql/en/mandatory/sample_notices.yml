@@ -52,12 +52,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket.reporter %],<br>"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%],<br>"
             - "<br>"
-            - "Thankyou for your report concerning [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 %].<br>"
+            - "Thankyou for your report concerning [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%].<br>"
             - "<br>"
             - "You reported: <br>"
-            - "[% ticket.body %]<br>"
+            - "[%- ticket.body -%]<br>"
             - "<br>"
             - "Thankyou"
 
@@ -70,12 +70,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],<br>"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter -%],<br>"
             - "<br>"
-            - "The library has now marked your concern with [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %] as resolved.<br>"
+            - "The library has now marked your concern with [%- INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 -%] as resolved.<br>"
             - "<br>"
             - "The following comment was left: <br>"
-            - "[% ticket_update.message %]<br>"
+            - "[%- ticket_update.message -%]<br>"
             - "<br>"
             - "Thankyou"
 
@@ -88,12 +88,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter %],<br>"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => ticket_update.ticket.reporter -%],<br>"
             - "<br>"
-            - "The library has added an update to the concern you reported against [% INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 %].<br>"
+            - "The library has added an update to the concern you reported against [%- INCLUDE 'biblio-title.inc' biblio=ticket_update.ticket.biblio link = 0 -%].<br>"
             - "<br>"
             - "The following comment was left: <br>"
-            - "[% ticket_update.message %]<br>"
+            - "[%- ticket_update.message -%]<br>"
             - "<br>"
             - "Thankyou"
 
@@ -106,12 +106,13 @@ tables:
           message_transport_type: email
           lang: default
           content:
+            - "[%- USE Koha -%]"
             - "Dear cataloger,<br>"
-            - "[% INCLUDE 'patron-title.inc' patron => ticket.reporter %] reported the following concern with [% INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 %]<br>"
+            - "[%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%] reported the following concern with [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 -%]<br>"
             - "<br>"
-            - "[% ticket.body %]<br>"
+            - "[%- ticket.body -%]<br>"
             - "<br>"
-            - "You can mark this concern as resolved from the concern management <a href='[% Koha.Preference('IntranetBaseURL') %]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>."
+            - "You can mark this concern as resolved from the concern management <a href='[%- Koha.Preference('IntranetBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>."
 
         - module: circulation
           code: ACCOUNT_CREDIT
