@@ -428,8 +428,10 @@ if ($search_query) {
 # back to the page we triggered the login from
 my $return = $query->param('return');
 if ( $return ) {
+    my $uri = C4::Context->preference('OPACBaseURL');
+    $uri .= $return;
     print $query->redirect(
-        -uri    => $return,
+        -uri    => $uri,
         -cookie => $cookie,
     );
 }

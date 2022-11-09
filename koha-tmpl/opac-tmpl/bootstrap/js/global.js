@@ -228,7 +228,7 @@ $(document).ready(function(){
         var button = $(this);
         var context = button.data('return');
         if ( context ) {
-            $('#modalAuth').append('<input type="hidden" name="return" value="'+window.location+'" />');
+            $('#modalAuth').append('<input type="hidden" name="return" value="'+window.location.pathname+window.location.search+'" />');
         }
         $("#loginModal").modal("show");
     });
