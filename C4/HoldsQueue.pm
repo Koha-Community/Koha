@@ -25,9 +25,10 @@ use warnings;
 use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
+use Koha::HoldsQueueItems;
 use Koha::Items;
-use Koha::Patrons;
 use Koha::Libraries;
+use Koha::Patrons;
 
 use List::Util qw( shuffle );
 use List::MoreUtils qw( any );

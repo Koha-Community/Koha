@@ -220,6 +220,16 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RdIrLi+vbzj3ab/UP7e9pw
 
+__PACKAGE__->add_columns(
+    '+item_level_request' => { is_boolean => 1 }
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::HoldsQueueItem';
+}
+
+sub koha_objects_class {
+    'Koha::HoldsQueueItems';
+}
+
 1;
