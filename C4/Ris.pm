@@ -831,7 +831,7 @@ sub get_keywords {
 
     ## loop over all 6XX fields
     foreach my $kwfield (@keywords) {
-        if ($kwfield != undef) {
+        if( defined $kwfield ) {
             ## authornames get special treatment
             if ($fieldname eq "600") {
                 my $val = normalize_author($kwfield->subfield('a'), $kwfield->subfield('b'), $kwfield->subfield('c'), $kwfield->indicator('1'));
