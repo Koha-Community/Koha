@@ -399,6 +399,9 @@ my $target_map = {
   'gulpfile.js'                 => 'NONE',
   'package.json'                => 'NONE',
   'yarn.lock'                   => 'NONE',
+  'cypress.json'                => 'NONE',
+  'tsconfig.json'               => 'NONE',
+  'webpack.config.js'           => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
