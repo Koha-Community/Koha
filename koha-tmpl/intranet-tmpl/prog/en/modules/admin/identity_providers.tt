@@ -244,6 +244,7 @@
             <input type="hidden" name="op" value="edit_save" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider.identity_provider_id | html -%]" />
             <fieldset class="rows">
+                <legend id="identity_provider_basic">Basic configuration</legend>
                 <ol>
                     <li>
                         <label for="code" class="required">Code: </label>
@@ -282,6 +283,7 @@
             </fieldset>
 
             <fieldset class="rows">
+                <legend id="identity_provider_advanced">Advanced configuration</legend>
                 <ol>
                     <li>
                         <label for="config" class="required json">Configuration: </label>
@@ -313,7 +315,7 @@
                         </div>
                     </li>
                     <li>
-                        <label for="matchpoint">matchpoint: </label>
+                        <label for="matchpoint">Matchpoint: </label>
                         <select name="matchpoint" id="matchpoint">
                             [%- IF identity_provider.matchpoint == 'email'      -%]
                                 <option value="email" selected="selected">Email</option>
