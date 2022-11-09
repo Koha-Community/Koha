@@ -17,20 +17,6 @@ package Koha::Exceptions::XSLT;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-=head1 NAME
-
-Koha::Exceptions::XSLT;
-
-=head1 SYNOPSIS
-
-Koha::Exceptions::XSLT::MissingFilename->throw;
-
-=head1 DESCRIPTION
-
-Defines a few exceptions for Koha::XSLT:: modules
-
-=cut
-
 use Modern::Perl;
 use Koha::Exception;
 use Exception::Class (
@@ -46,5 +32,29 @@ use Exception::Class (
         description => 'Fetching xslt file failed',
     },
 );
+
+=head1 NAME
+
+Koha::Exceptions::XSLT - Base class for XSLT exceptions
+
+=head1 DESCRIPTION
+
+Defines a few exceptions for Koha::XSLT:: modules
+
+=head1 Exceptions
+
+=head2 Koha::Exceptions::XSLT
+
+Generic XSLT exception.
+
+=head2 Koha::Exceptions::XSLT::MissingFilename
+
+Missing filename exception.
+
+=head2 Koha::Exceptions::XSLT::FetchFailed
+
+Failed to fetch the XSLT.
+
+=cut
 
 1;
