@@ -15,53 +15,61 @@
 
 <h1>Call number browser</h1>
 
-<div>
     <form id="cn_browser" method="get" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
-        <label for="searchcn">Search call number:</label>
-        <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
-        <input id="cn_browser_submit" type="submit" value="Search" />
-        <input name="plugin_name" type="hidden" value="cn_browser.pl"/>
-        <input name="popup" type="hidden" value="[% popup | html %]"/>
-        </br>
-        <label for="cn_source">Call number classification scheme:</label>
-        <select name="cn_source" form="cn_browser">
-            [% FOREACH class_source IN class_sources %]
-                [% IF class_source.cn_source == cn_source %]
-                    <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %]</option>
-                [% ELSE %]
-                    <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
-                [% END %]
-            [% END %]
-        </select>
+        <fieldset class="brief">
+            <ol>
+            <li>
+                <label for="searchcn">Search call number:</label>
+                <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
+                <input name="plugin_name" type="hidden" value="cn_browser.pl"/>
+                <input name="popup" type="hidden" value="[% popup | html %]"/>
+            </li>
+            <li>
+                <label for="cn_source">Call number classification scheme:</label>
+                <select name="cn_source" form="cn_browser">
+                    [% FOREACH class_source IN class_sources %]
+                        [% IF class_source.cn_source == cn_source %]
+                            <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %]</option>
+                        [% ELSE %]
+                            <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+            </li>
+            </ol>
+            <fieldset class="action">
+                <input id="cn_browser_submit" type="submit" value="Search" />
+            </fieldset>
+        </fieldset>
     </form>
-</div>
-<br />
 
-<table id="cn_browser_table">
-    <thead><tr>
-        <th>Call number</th>
-        <th>Title</th>
-        <th>Library</th>
-        <th>Collection</th>
-    </tr></thead>
-    <tbody>
-[% FOREACH cn_loo IN cn_loop %]
-    <tr>
-    <td style="background:[% cn_loo.background | html %];">[% cn_loo.itemcallnumber | html %]</td>
-    <td style="background:[% cn_loo.background | html %];">
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | uri %]">
-            [% cn_loo.title | html %] [% cn_loo.subtitle | html %] [% cn_loo.subtitle2 | html %]
-            [% IF ( cn_loo.author ) %]
-                <span>by</span> [% cn_loo.author | html %]
-            [% END %]
-            [% IF ( cn_loo.barcode ) %] ([% cn_loo.barcode | html %])[% END %]
-        </a>
-    </td>
-    <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
-    <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
-    </tr>
-[% END %]
-    </tbody>
-</table>
+<div class="page-section">
+    <table id="cn_browser_table">
+        <thead><tr>
+            <th>Call number</th>
+            <th>Title</th>
+            <th>Library</th>
+            <th>Collection</th>
+        </tr></thead>
+        <tbody>
+    [% FOREACH cn_loo IN cn_loop %]
+        <tr>
+        <td style="background:[% cn_loo.background | html %];">[% cn_loo.itemcallnumber | html %]</td>
+        <td style="background:[% cn_loo.background | html %];">
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | uri %]">
+                [% cn_loo.title | html %] [% cn_loo.subtitle | html %] [% cn_loo.subtitle2 | html %]
+                [% IF ( cn_loo.author ) %]
+                    <span>by</span> [% cn_loo.author | html %]
+                [% END %]
+                [% IF ( cn_loo.barcode ) %] ([% cn_loo.barcode | html %])[% END %]
+            </a>
+        </td>
+        <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
+        <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
+        </tr>
+    [% END %]
+        </tbody>
+    </table>
+</div> <!-- /.page-section -->
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
