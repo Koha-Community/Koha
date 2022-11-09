@@ -114,7 +114,7 @@
 <p><strong>Invoice number:</strong> [% invoice | html %] <strong>Shipment date:</strong> [% shipmentdate | $KohaDates %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
-    <div id="acqui_receive_search">
+    <div id="acqui_receive_search" class="page-section">
         <h3>Pending orders</h3>
         <table id="pending_orders" class="table table-bordered table-striped">
             <thead>
@@ -144,7 +144,7 @@
     </p>
 [% END %]
 
-<div id="acqui_receive_receivelist">
+<div id="acqui_receive_receivelist" class="page-section">
     <h3>Already received</h3>
 
    [% IF ( loop_received ) %]
