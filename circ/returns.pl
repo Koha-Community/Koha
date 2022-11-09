@@ -433,7 +433,7 @@ if ($barcode) {
             $verify_item->itemlost(0);
 
             # Update last_seen
-            $verify_item->datelastseen( dt_from_string()->ymd() );
+            $verify_item->datelastseen( dt_from_string() );
 
             # Update last_borrowed if actual checkin
             $verify_item->datelastborrowed( dt_from_string()->ymd() ) if $issue;
