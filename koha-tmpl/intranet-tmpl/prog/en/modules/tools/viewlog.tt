@@ -323,97 +323,99 @@
                             <a href="#" id="select_none" class="btn btn-link disabled"><i class="fa fa-remove"></i> Check none</a>
                             <button class="btn btn-link disabled compare_link"><i class="fa fa-columns"></i> Compare selected</button>
                         </div>
-                        <table id="logst">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Librarian</th>
-                                    <th>Module</th>
-                                    <th>Action</th>
-                                    <th>Object</th>
-                                    <th>Info</th>
-                                    <th>Interface</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            [% FOREACH loopro IN looprow %]
-                                <tr>
-                                    <td data-order="[% loopro.timestamp | html %]">[% loopro.timestamp | $KohaDates with_hours=1 %]</td>
-                                    <td>
-                                        [% IF loopro.librarian %]
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.librarian.borrowernumber | uri %]" title="display detail for this librarian."> [% IF ( loopro.librarian.firstname ) || ( loopro.librarian.surname ) %][% loopro.librarian.firstname | html %] [% loopro.librarian.surname | html %] ([% loopro.librarian.borrowernumber | html %]) [% ELSE %][% loopro.librarian.borrowernumber | html %][% END %]</a>
-                                        [% ELSE %]
-                                            [% loopro.user | html %]
-                                        [% END %]
-                                    </td>
-                                    <td>[% PROCESS translate_log_module module=loopro.module %]</td>
-                                    <td>[% PROCESS translate_log_action action=loopro.action %]</td>
-                                    <td>
-                                        [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
-                                            [% IF loopro.patron %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]<span>Member</span> [% loopro.object | html %][% END %][% END %] </a>
+                        <div class="page-section">
+                            <table id="logst">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Librarian</th>
+                                        <th>Module</th>
+                                        <th>Action</th>
+                                        <th>Object</th>
+                                        <th>Info</th>
+                                        <th>Interface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                [% FOREACH loopro IN looprow %]
+                                    <tr>
+                                        <td data-order="[% loopro.timestamp | html %]">[% loopro.timestamp | $KohaDates with_hours=1 %]</td>
+                                        <td>
+                                            [% IF loopro.librarian %]
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.librarian.borrowernumber | uri %]" title="display detail for this librarian."> [% IF ( loopro.librarian.firstname ) || ( loopro.librarian.surname ) %][% loopro.librarian.firstname | html %] [% loopro.librarian.surname | html %] ([% loopro.librarian.borrowernumber | html %]) [% ELSE %][% loopro.librarian.borrowernumber | html %][% END %]</a>
+                                            [% ELSE %]
+                                                [% loopro.user | html %]
+                                            [% END %]
+                                        </td>
+                                        <td>[% PROCESS translate_log_module module=loopro.module %]</td>
+                                        <td>[% PROCESS translate_log_action action=loopro.action %]</td>
+                                        <td>
+                                            [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
+                                                [% IF loopro.patron %]
+                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]<span>Member</span> [% loopro.object | html %][% END %][% END %] </a>
+                                                [% ELSE %]
+                                                    [% loopro.object | html %]
+                                                [% END %]
+                                            [% ELSIF ( loopro.module == 'CATALOGUING' ) %]
+                                                [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
+                                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.object | uri %]">Item [% loopro.object | html %]</a> from
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]" title="Display detail for this biblio">Biblio [% loopro.biblionumber | html %]</a>
+                                                [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | uri %]" title="Display detail for this biblio">Biblio [% loopro.object | html %]</a>
+                                                [% ELSE %]
+                                                    [% loopro.object | html %]
+                                                [% END %]
+                                            [% ELSIF ( loopro.module == 'SERIAL' ) %]
+                                                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object | uri %]">Subscription [% loopro.object | html %] </a>
+                                            [% ELSIF ( loopro.module == 'AUTHORITIES' ) %]
+                                                <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object | uri %]" title="Display detail for this authority">Authority [% loopro.object | html %]</a>
+                                            [% ELSIF ( loopro.module == 'NOTICES' ) %]
+                                                [% IF ( loopro.notice ) %]
+                                                    <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=[% loopro.notice.branchcode | uri %]&module=[% loopro.notice.module | uri %]&code=[% loopro.notice.code | uri %]#lang_[% loopro.notice.lang | uri %]">Notice [% loopro.notice.title | html %] ([% loopro.notice.code | html %])</a>
+                                                [% ELSE %]
+                                                    [% loopro.object | html %]
+                                                [% END %]
+                                            [% ELSIF ( loopro.module == 'RECALLS' ) %]
+                                                [% IF loopro.recall.item_level %]
+                                                    Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
+                                                [% ELSE %]
+                                                    Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
+                                                [% END %]
+                                            [% ELSIF ( loopro.module == 'ACQUISITIONS' && loopro.action == 'ACQUISITION ORDER' && loopro.object ) %]
+                                                [% IF ( CAN_user_acquisition_order_manage ) %]
+                                                    Basket <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loopro.object | uri %]">[% loopro.object | html %]</a>
+                                                [% ELSE %]
+                                                    Basket [% loopro.object | html %]
+                                                [% END %]
                                             [% ELSE %]
                                                 [% loopro.object | html %]
                                             [% END %]
-                                        [% ELSIF ( loopro.module == 'CATALOGUING' ) %]
-                                            [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
-                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.object | uri %]">Item [% loopro.object | html %]</a> from
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]" title="Display detail for this biblio">Biblio [% loopro.biblionumber | html %]</a>
-                                            [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | uri %]" title="Display detail for this biblio">Biblio [% loopro.object | html %]</a>
+                                        </td>
+                                        <td>
+                                            [% IF ( loopro.module == 'CIRCULATION' && loopro.object_found ) %]
+                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.info | uri %]" title="Display detail for this item">Item [% loopro.barcode | html %]</a>
+                                            [% ELSIF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" || loopro.module == "NEWS" %]
+                                                <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
+                                                <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
+                                                    <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN loopro.info.split(' \| ') %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
+                                                </div>
+                                            [% ELSIF loopro.module == "NOTICES" %]
+                                                <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
+                                                <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
+                                                    <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% IF loopro.notice %][% loopro.notice.title | html %][% ELSE %][% loopro.object | html %][% END %]" class="compare" /> Compare</label>
+                                                </div>
                                             [% ELSE %]
-                                                [% loopro.object | html %]
+                                                <div class="loginfo" id="loginfo[% loopro.action_id | html %]">
+                                                    [% loopro.info | html %]
+                                                </div>
                                             [% END %]
-                                        [% ELSIF ( loopro.module == 'SERIAL' ) %]
-                                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object | uri %]">Subscription [% loopro.object | html %] </a>
-                                        [% ELSIF ( loopro.module == 'AUTHORITIES' ) %]
-                                            <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object | uri %]" title="Display detail for this authority">Authority [% loopro.object | html %]</a>
-                                        [% ELSIF ( loopro.module == 'NOTICES' ) %]
-                                            [% IF ( loopro.notice ) %]
-                                                <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=[% loopro.notice.branchcode | uri %]&module=[% loopro.notice.module | uri %]&code=[% loopro.notice.code | uri %]#lang_[% loopro.notice.lang | uri %]">Notice [% loopro.notice.title | html %] ([% loopro.notice.code | html %])</a>
-                                            [% ELSE %]
-                                                [% loopro.object | html %]
-                                            [% END %]
-                                        [% ELSIF ( loopro.module == 'RECALLS' ) %]
-                                            [% IF loopro.recall.item_level %]
-                                                Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
-                                            [% ELSE %]
-                                                Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
-                                            [% END %]
-                                        [% ELSIF ( loopro.module == 'ACQUISITIONS' && loopro.action == 'ACQUISITION ORDER' && loopro.object ) %]
-                                            [% IF ( CAN_user_acquisition_order_manage ) %]
-                                                Basket <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loopro.object | uri %]">[% loopro.object | html %]</a>
-                                            [% ELSE %]
-                                                Basket [% loopro.object | html %]
-                                            [% END %]
-                                        [% ELSE %]
-                                            [% loopro.object | html %]
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% IF ( loopro.module == 'CIRCULATION' && loopro.object_found ) %]
-                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.info | uri %]" title="Display detail for this item">Item [% loopro.barcode | html %]</a>
-                                        [% ELSIF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" || loopro.module == "NEWS" %]
-                                            <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
-                                            <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
-                                                <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN loopro.info.split(' \| ') %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
-                                            </div>
-                                        [% ELSIF loopro.module == "NOTICES" %]
-                                            <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
-                                            <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
-                                                <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% IF loopro.notice %][% loopro.notice.title | html %][% ELSE %][% loopro.object | html %][% END %]" class="compare" /> Compare</label>
-                                            </div>
-                                        [% ELSE %]
-                                            <div class="loginfo" id="loginfo[% loopro.action_id | html %]">
-                                                [% loopro.info | html %]
-                                            </div>
-                                        [% END %]
-                                    </td>
-                                    <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
-                                </tr>
-                            [% END %]
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
+                                    </tr>
+                                [% END %]
+                                </tbody>
+                            </table>
+                        </div> <!-- /.page-section -->
                     [% ELSE %]
                         <div class="dialog alert">
                             No log found
