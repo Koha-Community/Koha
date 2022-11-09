@@ -79,7 +79,7 @@
 
 [% IF ( count ) %]
 <p> [% count | html %] shipments</p>
-<div id="resultlist">
+<div id="resultlist" class="page-section">
 <!-- Search Results Table -->
 
 <table class="small" id="parcelst">
@@ -191,11 +191,9 @@
         </li>
 		</ol>
     </fieldset>
-            <fieldset class="rows">
-                [% IF available_additional_fields %]
-                    [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
-                [% END %]
-            </fieldset>
+            [% IF available_additional_fields %]
+                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+            [% END %]
             <fieldset class="action"><input type="submit" class="btn btn-default" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
         </form>
     </div>
