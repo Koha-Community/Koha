@@ -285,7 +285,7 @@
                 <ol>
                     <li>
                         <label for="config" class="required json">Configuration: </label>
-                        <textarea name="config" id="config" class="required">[%- identity_provider.config | html -%]</textarea>
+                        <textarea name="config" id="config" class="required" cols="75" rows="10">[%- identity_provider.config | html -%]</textarea>
                         <span class="required">Required</span>
                         <div class="hint">Provider's main configuration. <button class="more btn btn-ligth" data-target="config"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-config" style="display: none">
@@ -298,7 +298,7 @@
                     </li>
                     <li>
                         <label for="mapping" class="required json">Mapping: </label>
-                        <textarea name="mapping" id="mapping" class="required">[%- identity_provider.mapping | html -%]</textarea>
+                        <textarea name="mapping" id="mapping" class="required" cols="75" rows="10">[%- identity_provider.mapping | html -%]</textarea>
                         <span class="required">Required</span>
                         <div class="hint">Map provider's result to Koha patron's fields. <button class="more btn btn-ligth" data-target="mapping"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-mapping" style="display: none">
