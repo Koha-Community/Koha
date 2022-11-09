@@ -159,14 +159,14 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                </div>
 
                <h1>Cash registers</h1>
-               <h3>Cash registers for <select id="branch_filter" name="branch_filter">
-                       <option value=""></option>
-                       [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
-                   </select>
-               </h3>
-
-               [% IF cash_registers.count %]
                <div class="page-section">
+                   <h2>Cash registers for <select id="branch_filter" name="branch_filter">
+                           <option value=""></option>
+                           [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                       </select>
+                   </h2>
+
+                   [% IF cash_registers.count %]
                    <table id="table_cash_registers">
                        <thead>
                            <th>Name</th>
@@ -205,10 +205,10 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                        [% END %]
                        </tbody>
                    </table>
-               </div><!-- /.page-section -->
-               [% ELSE %]
-               <div class="dialog message">There are no cash registers defined. <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form">Start adding cash registers</a>.</div>
-               [% END # /cash_register.count %]
+                   [% ELSE %]
+                   <div class="dialog message">There are no cash registers defined. <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form">Start adding cash registers</a>.</div>
+                   [% END # /cash_register.count %]
+               </div>
                [% END # /op == 'list' %]
            </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

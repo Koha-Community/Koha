@@ -292,10 +292,12 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
 [% END %]
 [% IF ( available_attribute_types ) %]
     [% FOREACH attribute IN available_attribute_types %]
-    [% IF attribute.class %]
-        <h4>[% attribute.lib | html %]</h4>
-    [% END %]
     <div class="page-section">
+    [% IF attribute.class %]
+        <h2>[% attribute.lib | html %]</h2>
+    [% ELSE %]
+        <h2>Unclassified types</h2>
+    [% END %]
         <table class="patron_attributes_types" id="patron_attr[% attribute.class | html %]">
           <thead>
             <tr>
