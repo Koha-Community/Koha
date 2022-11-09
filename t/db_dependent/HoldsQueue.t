@@ -163,13 +163,13 @@ $dbh->do("DELETE FROM items WHERE holdingbranch = '$borrower_branchcode'");
 # Frst branch from StaticHoldsQueueWeight
 test_queue ('take from lowest cost branch', 0, $borrower_branchcode, $other_branches[0]);
 test_queue ('take from lowest cost branch', 1, $borrower_branchcode, $least_cost_branch_code);
-my $queue = C4::HoldsQueue::GetHoldsQueueItems({ branchlmit => $least_cost_branch_code}) || [];
-my $queue_item = $queue->[0];
+my $queue = C4::HoldsQueue::GetHoldsQueueItems({ branchlimit => $least_cost_branch_code}) || [];
+my $queue_item = $queue->next;
 ok( $queue_item
- && $queue_item->{pickbranch} eq $borrower_branchcode
- && $queue_item->{holdingbranch} eq $least_cost_branch_code, "GetHoldsQueueItems" )
-  or diag( "Expected item for pick $borrower_branchcode, hold $least_cost_branch_code, got ".Dumper($queue_item) );
-ok( exists($queue_item->{itype}), 'item type included in queued items list (bug 5825)' );
+ && $queue_item->pickbranch eq $borrower_branchcode
+ && $queue_item->item->holdingbranch eq $least_cost_branch_code, "GetHoldsQueueItems" )
+  or diag( "Expected item for pick $borrower_branchcode, hold $least_cost_branch_code, got ".Dumper($queue_item->unblessed) );
+ok( $queue_item->item->effective_itemtype, 'item type included in queued items list (bug 5825)' );
 
 ok(
     C4::HoldsQueue::least_cost_branch( 'B', [ 'A', 'B', 'C' ] ) eq 'B',
@@ -1944,25 +1944,25 @@ subtest "GetHoldsQueueItems" => sub {
      " );
 
     my $queue_items = GetHoldsQueueItems();
-    is( scalar @$queue_items, $count + 3, 'Three items added to queue' );
+    is( $queue_items->count, $count + 3, 'Three items added to queue' );
 
     $queue_items = GetHoldsQueueItems( { itemtypeslimit => $item_1->itype } );
-    is( scalar @$queue_items,
+    is( $queue_items->count,
         3, 'Three items of same itemtype found when itemtypeslimit passed' );
 
     $queue_items = GetHoldsQueueItems(
         { itemtypeslimit => $item_1->itype, ccodeslimit => $item_2->ccode } );
-    is( scalar @$queue_items,
+    is( $queue_items->count,
         2, 'Two items of same collection found when ccodeslimit passed' );
 
-    @$queue_items = GetHoldsQueueItems(
+    $queue_items = GetHoldsQueueItems(
         {
             itemtypeslimit => $item_1->itype,
             ccodeslimit    => $item_2->ccode,
             locationslimit => $item_3->location
         }
     );
-    is( scalar @$queue_items,
+    is( scalar $queue_items->count,
         1, 'One item of shleving location found when locationslimit passed' );
 
     $schema->storage->txn_rollback;

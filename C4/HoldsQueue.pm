@@ -25,7 +25,7 @@ use warnings;
 use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
-use Koha::HoldsQueueItems;
+use Koha::Hold::HoldsQueueItems;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -126,52 +126,42 @@ sub GetHoldsQueueItems {
     my $params = shift;
     my $dbh   = C4::Context->dbh;
 
-    my @bind_params = ();
-    my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.itype, biblioitems.itemtype, items.location,
-                         items.enumchron, items.cn_sort, biblioitems.publishercode,
-                         biblio.copyrightdate, biblio.subtitle, biblio.medium,
-                         biblio.part_number, biblio.part_name,
-                         biblioitems.publicationyear, biblioitems.pages, biblioitems.size,
-                         biblioitems.isbn, biblioitems.editionstatement, items.copynumber,
-                         item_groups.item_group_id, item_groups.description AS item_group_description
-                  FROM tmp_holdsqueue
-                       JOIN biblio      USING (biblionumber)
-                  LEFT JOIN biblioitems USING (biblionumber)
-                  LEFT JOIN items       USING (  itemnumber)
-                  LEFT JOIN item_group_items ON ( items.itemnumber =  item_group_items.item_id )
-                  LEFT JOIN item_groups ON ( item_group_items.item_group_id = item_groups.item_group_id )
-                  WHERE 1=1
-                /;
-    if ($params->{branchlimit}) {
-        $query .="AND tmp_holdsqueue.holdingbranch = ? ";
-        push @bind_params, $params->{branchlimit};
-    }
-    if( $params->{itemtypeslimit} ) {
-        $query .=" AND items.itype = ? ";
-        push @bind_params, $params->{itemtypeslimit};
-    }
-    if( $params->{ccodeslimit} ) {
-        $query .=" AND items.ccode = ? ";
-        push @bind_params, $params->{ccodeslimit};
-    }
-    if( $params->{locationslimit} ) {
-        $query .=" AND items.location = ? ";
-        push @bind_params, $params->{locationslimit};
-    }
-    $query .= " ORDER BY ccode, location, cn_sort, author, title, pickbranch, reservedate";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind_params);
-    my $items = [];
-    while ( my $row = $sth->fetchrow_hashref ){
-        # return the bib-level or item-level itype per syspref
-        if (!C4::Context->preference('item-level_itypes')) {
-            $row->{itype} = $row->{itemtype};
-        }
-        delete $row->{itemtype};
+    my $search_params;
+    $search_params->{'me.holdingbranch'} = $params->{branchlimit} if $params->{branchlimit};
+    $search_params->{'itype'} = $params->{itemtypeslimit} if $params->{itemtypeslimit};
+    $search_params->{'ccode'} = $params->{ccodeslimit} if $params->{ccodeslimit};
+    $search_params->{'location'} = $params->{locationslimit} if $params->{locationslimit};
 
-        push @$items, $row;
-    }
-    return $items;
+    my $results = Koha::Hold::HoldsQueueItems->search(
+        $search_params,
+        {
+            join => [
+                'borrower',
+                'biblio',
+                'biblioitem',
+                {
+                    'item' => {
+                        'item_group_item' => 'item_group'
+                    }
+                },
+            ],
+            prefetch => [
+                'biblio',
+                'biblioitem',
+                {
+                    'item' => {
+                        'item_group_item' => 'item_group'
+                    }
+                }
+            ],
+            order_by => [
+                'ccode',        'location',   'item.cn_sort', 'author',
+                'biblio.title', 'pickbranch', 'reservedate'
+            ],
+        }
+    );
+
+    return $results;
 }
 
 =head2 CreateQueue

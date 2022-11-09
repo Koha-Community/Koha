@@ -19,6 +19,10 @@ use Modern::Perl;
 
 use Koha::Database;
 
+use Koha::Items;
+use Koha::Biblios;
+use Koha::Patrons;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -26,6 +30,41 @@ use base qw(Koha::Object);
 Koha::Hold::HoldsQueueItem - Koha hold cancellation request Object class
 
 =head1 API
+
+=head2 Class methods
+
+=head3 patron
+
+=cut
+
+sub patron {
+    my ( $self ) = @_;
+    my $rs = $self->_result->borrowernumber;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic( $rs );
+}
+
+=head3 biblio
+
+=cut
+
+sub biblio {
+    my ( $self ) = @_;
+    my $rs = $self->_result->biblionumber;
+    return unless $rs;
+    return Koha::Biblio->_new_from_dbic( $rs );
+}
+
+=head3 item
+
+=cut
+
+sub item {
+    my ( $self ) = @_;
+    my $rs = $self->_result->itemnumber;
+    return unless $rs;
+    return Koha::Item->_new_from_dbic( $rs );
+}
 
 =head2 Internal methods
 

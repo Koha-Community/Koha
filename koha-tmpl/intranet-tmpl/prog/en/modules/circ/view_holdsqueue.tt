@@ -156,40 +156,40 @@
                     <tr>
                         <td class="hq-title">
                             <p>
-                                [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
+                                [% INCLUDE 'biblio-title.inc' biblio=itemsloo.biblio link = 1 %]
                             </p>
                             <p>
                                 <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
-                                <div class="hq-author">[% itemsloo.author | html %]</div>
-                                [% IF ( itemsloo.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.editionstatement | html %]</div>[% END %]
+                                <div class="hq-author">[% itemsloo.biblio.author | html %]</div>
+                                [% IF ( itemsloo.biblio.biblioitem.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.biblio.biblioitem.editionstatement | html %]</div>[% END %]
                                 <div class="hq-pubdata">
-                                    [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode | html %][% END %]
+                                    [% IF ( itemsloo.biblio.biblioitem.publishercode ) %][% itemsloo.biblio.biblioitem.publishercode | html %][% END %]
 
-                                    [% IF ( itemsloo.publicationyear ) %]
-                                        , [% itemsloo.publicationyear | html %]
-                                    [% ELSIF ( itemsloo.copyrightdate ) %]
-                                        , [% itemsloo.copyrightdate | html %]
+                                    [% IF ( itemsloo.biblio.biblioitem.publicationyear ) %]
+                                        , [% itemsloo.biblio.biblioitem.publicationyear | html %]
+                                    [% ELSIF ( itemsloo.biblio.copyrightdate ) %]
+                                        , [% itemsloo.biblio.copyrightdate | html %]
                                     [% END %]
 
-                                    [% IF ( itemsloo.pages ) %]: [% itemsloo.pages | html %] [% END %]
+                                    [% IF ( itemsloo.biblio.biblioitem.pages ) %]: [% itemsloo.biblio.biblioitem.pages | html %] [% END %]
 
-                                    [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') | html %][% END %]
+                                    [% IF ( itemsloo.biblio.biblioitem.size ) %][% itemsloo.biblio.biblioitem.size | html %][% END %]
 
-                                    [% IF ( itemsloo.isbn ) %]<span>ISBN: [% itemsloo.isbn | html %]</span>[% END %]
+                                    [% IF ( itemsloo.biblio.biblioitem.isbn ) %]<span>ISBN: [% itemsloo.biblio.biblioitem.isbn | html %]</span>[% END %]
                                 </div>
                             </p>
                         </td>
                         <td class="hq-holdingbranch">[% Branches.GetName( itemsloo.holdingbranch ) | html %]</td>
-                        <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.ccode ) | html %]</td>
-                        <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
-                        <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
-                        <td class="hq-copynumber">[% itemsloo.copynumber | html %]</td>
-                        <td class="hq-enumchron">[% itemsloo.enumchron | html %]</td>
+                        <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.item.ccode ) | html %]</td>
+                        <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.item.effective_itemtype ) | html %]</td>
+                        <td class="hq-callnumber">[% IF ( itemsloo.item.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.item.location ) | html %]</em> [% END %][% itemsloo.item.itemcallnumber | html %]</td>
+                        <td class="hq-copynumber">[% itemsloo.item.copynumber | html %]</td>
+                        <td class="hq-enumchron">[% itemsloo.item.enumchron | html %]</td>
                         <td class="hq-barcode">
                             [% IF ( itemsloo.item_level_request ) %]
                                 <em>Only item:</em> <strong>[% itemsloo.barcode | html %]</strong>
-                            [% ELSIF itemsloo.item_group_id %]
-                                <strong>[% itemsloo.barcode | html %]</strong> <em>or any item from item group <strong>[% itemsloo.item_group_description | html %]</strong></em>
+                            [% ELSIF itemsloo.item.item_group %]
+                                <strong>[% itemsloo.barcode | html %]</strong> <em>or any item from item group <strong>[% itemsloo.item.item_group.description | html %]</strong></em>
                             [% ELSE %]
                                 <strong>[% itemsloo.barcode | html %]</strong> <em>or any available</em>
                             [% END %]
