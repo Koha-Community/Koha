@@ -67,7 +67,7 @@ if ( !$domain_ops && $op eq 'add' ) {
     my $default_category_id = $input->param('default_category_id');
     my $default_library_id  = $input->param('default_library_id');
     my $domain              = $input->param('domain');
-    my $update_on_auth      = $input->param('update_on_$update_on_auth');
+    my $update_on_auth      = $input->param('update_on_auth');
 
     try {
         Koha::Database->new->schema->txn_do(
