@@ -175,6 +175,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_parameters_manage_column_config'                  => 1,
         'CAN_user_parameters_manage_curbside_pickups'               => 1,
         'CAN_user_parameters_manage_didyoumean'                     => 1,
+        'CAN_user_parameters_manage_identity_providers'             => 1,
         'CAN_user_parameters_manage_item_circ_alerts'               => 1,
         'CAN_user_parameters_manage_item_search_fields'             => 1,
         'CAN_user_parameters_manage_itemtypes'                      => 1,
