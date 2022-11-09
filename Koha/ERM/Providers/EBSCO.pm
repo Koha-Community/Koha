@@ -223,7 +223,6 @@ sub build_query {
 
     return $url unless $params && %$params;
     while ( my ( $attr, $value ) = each %$params ) {
-        my $their_attr;
         if ( $attr eq 'name' ) {
             $url .= '&search=' . $value;
         }

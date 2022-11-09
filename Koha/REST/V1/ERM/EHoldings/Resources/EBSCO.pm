@@ -76,7 +76,6 @@ sub list {
 
         my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
 
-        my ( $search, $content_type, $selection_type );
         my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
         my $searchfield = 'titlename';
 
