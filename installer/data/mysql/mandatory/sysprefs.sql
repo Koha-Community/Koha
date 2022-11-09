@@ -222,7 +222,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnableItemGroupHolds','0','','Enable item groups holds feature','YesNo'),
 ('EnhancedMessagingPreferences','1','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
-('ERMModule', '0', NULL, 'Enable the E-Resource management module', 'YesNo'),
+('ERMModule', '0', NULL, 'Enable the e-resource management module', 'YesNo'),
 ('ERMProviders', 'local', 'local|ebsco', 'Set the providers for the ERM module', 'Choice'),
 ('ERMProviderEbscoApiKey', '', '', 'API key for EBSCO', 'free'),
 ('ERMProviderEbscoCustomerID', '', '', 'Customer ID for EBSCO', 'free'),

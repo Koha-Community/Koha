@@ -30,7 +30,7 @@ const breadcrumbs = {
         path: "/cgi-bin/koha/mainpage.pl",
     },
     erm_home: {
-        text: "E-Resource management", // $t("E-Resource management")
+        text: "E-resource management", // $t("E-resource management")
         path: "/cgi-bin/koha/erm/erm.pl",
     },
     agreements: {

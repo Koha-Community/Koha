@@ -14,7 +14,7 @@
                     <aside>
                         <div id="navmenu">
                             <div id="navmenulist">
-                                <h5>{{ $__("E-Resource management") }}</h5>
+                                <h5>{{ $__("E-resource management") }}</h5>
                                 <ul>
                                     <li>
                                         <router-link
@@ -112,7 +112,7 @@
     <div v-else>
         {{
             $__(
-                "The E-Resource management module is disabled, turn on 'ERMModule' to use it"
+                "The e-resource management module is disabled, turn on 'ERMModule' to use it"
             )
         }}
     </div>

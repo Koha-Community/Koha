@@ -9,7 +9,7 @@ return {
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
-            VALUES ('ERMModule', '0', NULL, 'Enable the E-Resource management module', 'YesNo');
+            VALUES ('ERMModule', '0', NULL, 'Enable the e-resource management module', 'YesNo');
         });
 
         say $out "Added new system preference 'ERMModule'";
