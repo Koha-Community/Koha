@@ -58,7 +58,6 @@ Protocol provider speaks
 =head2 config
 
   data_type: 'longtext'
-  default_value: ''{}''
   is_nullable: 0
 
 Configuration of the provider in JSON format
@@ -66,7 +65,6 @@ Configuration of the provider in JSON format
 =head2 mapping
 
   data_type: 'longtext'
-  default_value: ''{}''
   is_nullable: 0
 
 Configuration to map provider data to Koha user
@@ -103,9 +101,9 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "config",
-  { data_type => "longtext", default_value => "'{}'", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 0 },
   "mapping",
-  { data_type => "longtext", default_value => "'{}'", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 0 },
   "matchpoint",
   {
     data_type => "enum",
@@ -160,8 +158,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-20 15:27:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jmqAwH7/6QvawJ73/0rkQg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-10 13:01:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xSD/bRC3hJCF+nP/EYwn3Q
 
 __PACKAGE__->has_many(
   "domains",
