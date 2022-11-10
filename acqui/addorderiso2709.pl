@@ -291,9 +291,10 @@ if ($op eq ""){
                     # remove uncertainprice flag if we have found a price in the MARC record
                     $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
 
-                    my $order = Koha::Acquisition::Order->new( \%orderinfo )->store;
+                    my $order = Koha::Acquisition::Order->new( \%orderinfo );
                     $order->populate_with_prices_for_ordering();
                     $order->populate_with_prices_for_receiving();
+                    $order->store;
                     $order->add_item( $_ ) for @{ $budget_hash->{$budget_id}->{itemnumbers} };
                 }
             }
