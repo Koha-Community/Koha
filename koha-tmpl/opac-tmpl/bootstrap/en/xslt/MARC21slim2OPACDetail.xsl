@@ -1061,14 +1061,6 @@
         <!--  787 Other Relationship Entry  -->
         <xsl:if test="marc:datafield[@tag=787]">
         <span class="results_summary other_relationship_entry"><span class="label">Other related works: </span>
-        <xsl:for-each select="marc:datafield[@tag=580]">
-            <span class="linking_complexity_note">
-                <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">a</xsl:with-param>
-                </xsl:call-template>
-                <xsl:text> </xsl:text>
-            </span>
-        </xsl:for-each>
         <xsl:for-each select="marc:datafield[@tag=787]">
             <span class="other_relationship_entry">
                 <xsl:variable name="f787">
