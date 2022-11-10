@@ -274,12 +274,10 @@ if ($op eq ""){
                         $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                         $price = Koha::Number::Price->new($price)->unformat;
                         $orderinfo{tax_rate} = $bookseller->tax_rate;
-                        my $c = $c_discount ? $c_discount : $bookseller->discount;
-                        $orderinfo{discount} = $c;
-                        if ( $c ) {
-                            $orderinfo{ecost} = $price * ( 1 - $c / 100 );
-                            $orderinfo{rrp}   = $price;
-                        }
+                        my $order_discount = $c_discount ? $c_discount : $bookseller->discount;
+                        $orderinfo{discount} = $order_discount;
+                        $orderinfo{rrp}   = $price;
+                        $orderinfo{ecost} = $order_discount ? $price * ( 1 - $order_discount / 100 ) : $price;
                         $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                         $orderinfo{unitprice} = $orderinfo{ecost};
                         $orderinfo{total} = $orderinfo{ecost} * $infos->{quantity};
@@ -332,12 +330,10 @@ if ($op eq ""){
                 $c_price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                 $c_price = Koha::Number::Price->new($c_price)->unformat;
                 $orderinfo{tax_rate} = $bookseller->tax_rate;
-                my $c = $c_discount ? $c_discount : $bookseller->discount;
-                $orderinfo{discount} = $c;
-                if ( $c ) {
-                    $orderinfo{ecost} = $c_price * ( 1 - $c / 100 );
-                    $orderinfo{rrp}   = $c_price;
-                }
+                my $order_discount = $c_discount ? $c_discount : $bookseller->discount;
+                $orderinfo{discount} = $order_discount;
+                $orderinfo{rrp}   = $c_price;
+                $orderinfo{ecost} = $order_discount ? $c_price * ( 1 - $order_discount / 100 ) : $c_price;
                 $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                 $orderinfo{unitprice} = $orderinfo{ecost};
                 $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
