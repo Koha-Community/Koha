@@ -47,9 +47,9 @@
 
 [% SET show_patron_column = Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
 
-<div class="searchresults">
+<div class="searchresults page-section">
     [% IF checkouts %]
-        <h4>Checked out [% checkouts.size | html %] times</h4>
+        <h2>Checked out [% checkouts.size | html %] times</h2>
         <table id="table_issues">
             <thead><tr>
             [% IF show_patron_column %]
