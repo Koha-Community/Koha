@@ -393,7 +393,7 @@ function addToList () {
 /* this function open a popup to search on z3950 server.  */
 function PopupZ3950() {
     if( strQuery ){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=" + biblionumber + strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?" + strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     }
 }
 
