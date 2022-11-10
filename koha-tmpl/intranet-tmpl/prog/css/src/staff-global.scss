@@ -3064,6 +3064,23 @@ button,
             border-left: 1px solid darken( saturate( $btn-primary, 15 ), 15 );
         }
     }
+
+    &.btn-danger {
+        background-color: #CC3333;
+        border-color: #9B2323;
+        color: #fff;
+    }
+
+    &.btn-danger:hover {
+        color: #fff;
+        background-color: #c82333;
+        border-color: #a81c29;
+    }
+
+    &.btn-danger:not( :disabled ):not( .disabled ).active,
+    &.btn-danger:not( :disabled ):not( .disabled ):active {
+        box-shadow: inset 0 0 0 1px #a81c29;
+    }
 }
 
 #merge-patrons {
