@@ -2990,9 +2990,9 @@ DROP TABLE IF EXISTS `erm_eholdings_packages_agreements`;
 CREATE TABLE `erm_eholdings_packages_agreements` (
     `package_id` INT(11) NOT NULL COMMENT 'link to the package',
     `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
-    UNIQUE KEY `erm_eholdings_packages_agreements_uniq` (`package_id`, `agreement_id`),
     CONSTRAINT `erm_eholdings_packages_agreements_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `erm_eholdings_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `erm_eholdings_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(`package_id`, `agreement_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
