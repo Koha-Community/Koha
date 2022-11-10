@@ -130,10 +130,10 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RkK5cQWFEmcrDioAfjOVWQ
 
 sub koha_object_class {
-    'Koha::ERM::Agreement::UserRole';
+    'Koha::ERM::UserRole';
 }
 sub koha_objects_class {
-    'Koha::ERM::Agreement::UserRoles';
+    'Koha::ERM::UserRoles';
 }
 
 1;
