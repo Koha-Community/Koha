@@ -52,7 +52,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-
+		[% INCLUDE 'cat-toolbar.inc' %]
                 <h1>
                     [% IF ( unknownbiblionumber ) %]
                         Unknown record
@@ -61,20 +61,19 @@
                     [% END %]
                 </h1>
 
-[% IF ( unknownbiblionumber ) %]
-    <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
-[% ELSE %]
+                [% IF ( unknownbiblionumber ) %]
+                    <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
+                [% ELSE %]
 
-	[% INCLUDE 'cat-toolbar.inc' %]
-    [% IF ( ocoins ) %]
-    <!-- COinS / OpenURL -->
-    <span class="Z3988" title="[% ocoins | html %]"></span>
-    [% END %]
-	  <div id="catalogue_ISBDdetail">
-          [% ISBD | $raw %]
-	  </div>
-[% END %]
+                    [% IF ( ocoins ) %]
+                    <!-- COinS / OpenURL -->
+                    <span class="Z3988" title="[% ocoins | html %]"></span>
+                    [% END %]
 
+                    <div id="catalogue_ISBDdetail" class="page-section">
+                        [% ISBD | $raw %]
+			</div>
+                [% END %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -83,7 +82,7 @@
                 [% INCLUDE 'biblio-view-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
