@@ -1462,6 +1462,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 item_editor_templates
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemEditorTemplate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "item_editor_templates",
+  "Koha::Schema::Result::ItemEditorTemplate",
+  { "foreign.patron_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 items_last_borrowers
 
 Type: has_many
@@ -2043,8 +2058,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-01 07:44:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aezs6MyXhwra3gEHhXjAmg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-10 17:43:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5hh2lGCcKclyTnY7KNPkvg
 
 __PACKAGE__->has_many(
   "extended_attributes",

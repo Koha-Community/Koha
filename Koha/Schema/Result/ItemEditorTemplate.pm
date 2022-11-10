@@ -31,7 +31,7 @@ __PACKAGE__->table("item_editor_templates");
 
 id for the template
 
-=head2 borrowernumber
+=head2 patron_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -66,7 +66,7 @@ json encoded template data
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "borrowernumber",
+  "patron_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "name",
   { data_type => "mediumtext", is_nullable => 0 },
@@ -90,7 +90,7 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 borrowernumber
+=head2 patron
 
 Type: belongs_to
 
@@ -99,9 +99,9 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "borrowernumber",
+  "patron",
   "Koha::Schema::Result::Borrower",
-  { borrowernumber => "borrowernumber" },
+  { borrowernumber => "patron_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -111,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-28 16:49:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7JIe4z78F9oMOAnAZdqmtA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-10 17:43:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9W+tUIeeQnoitoQZ6d0wQg
 
 __PACKAGE__->add_columns(
     '+is_shared' => { is_boolean => 1 },
