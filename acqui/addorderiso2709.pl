@@ -275,12 +275,10 @@ if ($op eq ""){
                         $price = Koha::Number::Price->new($price)->unformat;
                         $orderinfo{tax_rate_on_ordering} = $bookseller->tax_rate;
                         $orderinfo{tax_rate_on_receiving} = $bookseller->tax_rate;
-                        my $c = $c_discount ? $c_discount : $bookseller->discount;
-                        $orderinfo{discount} = $c;
-                        if ( $c ) {
-                            $orderinfo{ecost} = $price * ( 1 - $c / 100 );
-                            $orderinfo{rrp}   = $price;
-                        }
+                        my $order_discount = $c_discount ? $c_discount : $bookseller->discount;
+                        $orderinfo{discount} = $order_discount;
+                        $orderinfo{rrp} = $price;
+                        $orderinfo{ecost} = $order_discount ? $price * ( 1 - $order_discount / 100 ) : $price;
                         $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                         $orderinfo{unitprice} = $orderinfo{ecost};
                     } else {
@@ -325,12 +323,10 @@ if ($op eq ""){
                 $c_price = Koha::Number::Price->new($c_price)->unformat;
                 $orderinfo{tax_rate_on_ordering} = $bookseller->tax_rate;
                 $orderinfo{tax_rate_on_receiving} = $bookseller->tax_rate;
-                my $c = $c_discount ? $c_discount : $bookseller->discount;
-                $orderinfo{discount} = $c;
-                if ( $c ) {
-                    $orderinfo{ecost} = $c_price * ( 1 - $c / 100 );
-                    $orderinfo{rrp}   = $c_price;
-                }
+                my $order_discount = $c_discount ? $c_discount : $bookseller->discount;
+                $orderinfo{discount} = $order_discount;
+                $orderinfo{rrp}   = $c_price;
+                $orderinfo{ecost} = $order_discount ? $c_price * ( 1 - $order_discount / 100 ) : $c_price;
                 $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                 $orderinfo{unitprice} = $orderinfo{ecost};
             } else {
