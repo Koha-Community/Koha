@@ -8,6 +8,33 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %] &rsaquo; Basket [% basketno | html %] &rsaquo; Acquisitions &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style>
+        #itemfieldset label,
+        #itemfieldset span.label {
+            flex-basis: 25%;
+            font-weight: 700;
+            margin-right: 1rem;
+            text-align: right;
+            width: 9rem;
+            font-size: 100%;
+            width: 25%;
+        }
+
+        #itemfieldset .input_marceditor {
+            flex-basis: 50%;
+        }
+
+        #itemfieldset .input_marceditor.flatpickr-input {
+            width: 50%;
+        }
+
+        #itemfieldset  .subfield_line {
+            display: flex;
+            flex-basis: 100%;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="acq_neworderempty" class="acq">
