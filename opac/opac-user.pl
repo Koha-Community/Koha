@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use URI;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Koha qw(
@@ -428,12 +429,19 @@ if ($search_query) {
 # back to the page we triggered the login from
 my $return = $query->param('return');
 if ( $return ) {
-    my $uri = C4::Context->preference('OPACBaseURL');
-    $uri .= $return;
-    print $query->redirect(
-        -uri    => $uri,
-        -cookie => $cookie,
-    );
+    my $uri_syspref = C4::Context->preference('OPACBaseURL');
+    if ( $uri_syspref ){
+        my $uri = URI->new($uri_syspref);
+        if ( $uri->isa('URI::http') && $uri->host() ){
+            my $return_uri = URI->new($return);
+            $return_uri->scheme( $uri->scheme() );
+            $return_uri->authority( $uri->authority() );
+            print $query->redirect(
+                -uri    => "$return_uri",
+                -cookie => $cookie,
+            );
+        }
+    }
 }
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
