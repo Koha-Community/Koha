@@ -205,21 +205,21 @@ if ($op eq ""){
         $import_record->import_biblio->matched_biblionumber($biblionumber)->store;
 
         # Add items from MarcItemFieldsToOrder
-        my @homebranches = $input->multi_param('homebranch_' . $biblio_count);
+        my @homebranches = $input->multi_param('homebranch_' . $import_record->import_record_id);
         my $count = scalar @homebranches;
-        my @holdingbranches = $input->multi_param('holdingbranch_' . $biblio_count);
-        my @itypes = $input->multi_param('itype_' . $biblio_count);
-        my @nonpublic_notes = $input->multi_param('nonpublic_note_' . $biblio_count);
-        my @public_notes = $input->multi_param('public_note_' . $biblio_count);
-        my @locs = $input->multi_param('loc_' . $biblio_count);
-        my @ccodes = $input->multi_param('ccode_' . $biblio_count);
-        my @notforloans = $input->multi_param('notforloan_' . $biblio_count);
-        my @uris = $input->multi_param('uri_' . $biblio_count);
-        my @copynos = $input->multi_param('copyno_' . $biblio_count);
-        my @budget_codes = $input->multi_param('budget_code_' . $biblio_count);
-        my @itemprices = $input->multi_param('itemprice_' . $biblio_count);
-        my @replacementprices = $input->multi_param('replacementprice_' . $biblio_count);
-        my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $biblio_count);
+        my @holdingbranches = $input->multi_param('holdingbranch_' . $import_record->import_record_id);
+        my @itypes = $input->multi_param('itype_' . $import_record->import_record_id);
+        my @nonpublic_notes = $input->multi_param('nonpublic_note_' . $import_record->import_record_id);
+        my @public_notes = $input->multi_param('public_note_' . $import_record->import_record_id);
+        my @locs = $input->multi_param('loc_' . $import_record->import_record_id);
+        my @ccodes = $input->multi_param('ccode_' . $import_record->import_record_id);
+        my @notforloans = $input->multi_param('notforloan_' . $import_record->import_record_id);
+        my @uris = $input->multi_param('uri_' . $import_record->import_record_id);
+        my @copynos = $input->multi_param('copyno_' . $import_record->import_record_id);
+        my @budget_codes = $input->multi_param('budget_code_' . $import_record->import_record_id);
+        my @itemprices = $input->multi_param('itemprice_' . $import_record->import_record_id);
+        my @replacementprices = $input->multi_param('replacementprice_' . $import_record->import_record_id);
+        my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $import_record->import_record_id);
         my $itemcreation = 0;
 
         my @itemnumbers;
