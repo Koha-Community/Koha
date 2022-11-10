@@ -99,10 +99,10 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3nCckFzWVD8oZCG6eoljxw
 
 sub koha_object_class {
-    'Koha::ERM::Package::Agreement';
+    'Koha::ERM::EHoldings::Package::Agreement';
 }
 sub koha_objects_class {
-    'Koha::ERM::Package::Agreements';
+    'Koha::ERM::EHoldings::Package::Agreements';
 }
 
 1;
