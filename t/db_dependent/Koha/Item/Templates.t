@@ -58,28 +58,28 @@ subtest 'get_available' => sub {
 
     my $owner_template = Koha::Item::Template->new(
         {
-            borrowernumber => $patron_1->id,
-            name           => 'My template',
-            contents       => { location => 'test' },
-            is_shared      => 0,
+            patron_id => $patron_1->id,
+            name      => 'My template',
+            contents  => { location => 'test' },
+            is_shared => 0,
         }
     )->store();
 
     my $shared_template = Koha::Item::Template->new(
         {
-            borrowernumber => $patron_2->id,
-            name           => 'My template',
-            contents       => { location => 'test' },
-            is_shared      => 1,
+            patron_id => $patron_2->id,
+            name      => 'My template',
+            contents  => { location => 'test' },
+            is_shared => 1,
         }
     )->store();
 
     my $unshared_template = Koha::Item::Template->new(
         {
-            borrowernumber => $patron_2->id,
-            name           => 'My template',
-            contents       => { location => 'test' },
-            is_shared      => 0,
+            patron_id => $patron_2->id,
+            name      => 'My template',
+            contents  => { location => 'test' },
+            is_shared => 0,
         }
     )->store();
 

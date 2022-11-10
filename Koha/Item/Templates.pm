@@ -38,24 +38,24 @@ representing templates owned by the user or shared to the user respectivetly.
 =cut
 
 sub get_available {
-    my ( $class, $borrowernumber ) = @_;
+    my ( $class, $patron_id ) = @_;
 
     my $params = {
         order_by => 'name',
-        columns  => [ 'id', 'borrowernumber', 'name', 'is_shared' ],
+        columns  => [ 'id', 'patron_id', 'name', 'is_shared' ],
     };
 
     return {
         owned => Koha::Item::Templates->search(
             {
-                borrowernumber => $borrowernumber
+                patron_id => $patron_id
             },
             $params
         ),
         shared => Koha::Item::Templates->search(
             {
-                borrowernumber => { "!=" => $borrowernumber },
-                is_shared      => 1
+                patron_id => { "!=" => $patron_id },
+                is_shared => 1
             },
             $params
         ),

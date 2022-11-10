@@ -186,7 +186,7 @@ my $use_template_for_session = $input->param('use_template_for_session') || $inp
 my $template_id = $input->param('template_id') || $input->cookie('ItemEditorSessionTemplateId');
 if ( $delete_template_submit ) {
     my $t = Koha::Item::Templates->find($template_id);
-    $t->delete if $t && ( $t->borrowernumber eq $loggedinuser || haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } ) );
+    $t->delete if $t && ( $t->patron_id eq $loggedinuser || haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } ) );
     $template_id = undef;
     $use_template_for_session = undef;
 }
@@ -283,7 +283,7 @@ if ($op eq "additem") {
                     contents       => $item->unblessed,
                 }
             ) if $template && (
-                $template->borrowernumber eq $loggedinuser
+                $template->patron_id eq $loggedinuser
                 ||
                 haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } )
             );
@@ -291,10 +291,10 @@ if ($op eq "additem") {
         else {
             my $template = Koha::Item::Template->new(
                 {
-                    name           => $template_name,
-                    borrowernumber => $loggedinuser,
-                    is_shared      => $template_is_shared ? 1 : 0,
-                    contents       => $item->unblessed,
+                    name      => $template_name,
+                    patron_id => $loggedinuser,
+                    is_shared => $template_is_shared ? 1 : 0,
+                    contents  => $item->unblessed,
                 }
             )->store();
         }
