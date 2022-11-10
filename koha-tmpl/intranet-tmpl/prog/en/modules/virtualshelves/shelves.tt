@@ -245,6 +245,8 @@
             [% IF op == 'view' %]
                 <h1>Contents of <em>[% shelf.shelfname | html %]</em></h1>
                 [% IF itemsloop %]
+                    [% SET contents = shelf.get_contents %]
+                    [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
                     <div class="pages">[% pagination_bar | $raw %]</div>
                     <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
                         <input type="hidden" name="op" value="remove_biblios" />
