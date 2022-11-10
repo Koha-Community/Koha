@@ -516,9 +516,13 @@
                 <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | $KohaDates %]"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
-            <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
+            <li>
+                <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
+            </li>
+            <li>
                 <label for="sort1">Statistic 1: </label>
                 <input id="sort1" type="text" id="sort1" size="20" name="sort1" value="[% sort1 | html %]" />
+            </li>
             <li>
                 <label for="sort2">Statistic 2: </label>
                 <input id="sort2" type="text" id="sort2" size="20" name="sort2" value="[% sort2 | html %]" />
