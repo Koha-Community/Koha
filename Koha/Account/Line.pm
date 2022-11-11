@@ -28,6 +28,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Account;
 use Koha::Items;
+use Koha::Patron::Debarments;
 
 use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 
@@ -698,6 +699,8 @@ sub apply {
             last if $available_credit == 0;
         }
     });
+
+    Koha::Patron::Debarments::del_restrictions_after_payment({ borrowernumber => $self->borrowernumber });
 
     return $self;
 }
