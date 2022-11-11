@@ -17,7 +17,8 @@ package Koha::Item::Template;
 
 use Modern::Perl;
 
-use JSON qw( encode_json decode_json );
+use Encode qw(encode_utf8);
+use JSON   qw(encode_json decode_json);
 
 use base qw(Koha::Object);
 
@@ -27,7 +28,7 @@ Koha::Item::Template - Koha Item Template Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 store
 
@@ -55,10 +56,12 @@ Returns a deserilized perl structure of the JSON formatted contents
 sub decoded_contents {
     my ($self) = @_;
 
-    return decode_json( $self->contents ) if $self->contents;
+    return decode_json( encode_utf8($self->contents) ) if $self->contents;
 }
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
