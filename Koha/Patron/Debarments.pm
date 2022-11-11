@@ -287,23 +287,23 @@ sub del_restrictions_after_payment {
     my ($params) = @_;
 
     my $borrowernumber = $params->{'borrowernumber'};
-    return unless ( $borrowernumber );
+    return unless ($borrowernumber);
 
-    my $patron_restrictions = GetDebarments( { borrowernumber => $borrowernumber } );
-    return unless ( $patron_restrictions );
+    my $patron = Koha::Patrons->find($borrowernumber);
+    return unless ($patron);
 
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    return unless ( $patron );
+    my $restrictions = $patron->restrictions;
+    return unless ( $restrictions->count );
 
-    my $lines = Koha::Account::Lines->search({ borrowernumber  => $borrowernumber });
+    my $lines =
+      Koha::Account::Lines->search( { borrowernumber => $borrowernumber } );
     my $total_due = $lines->total_outstanding;
 
-    foreach my $patron_restriction (@{ $patron_restrictions }){
-        my $restriction = Koha::Patron::Restriction::Types->find({
-            code => $patron_restriction->{type}
-        });
-        if($restriction->lift_after_payment && $total_due <= $restriction->fee_limit){
-            DelDebarment($patron_restriction->{'borrower_debarment_id'});
+    while ( my $restriction = $restrictions->next ) {
+        if (   $restriction->type->lift_after_payment
+            && $total_due <= $restriction->type->fee_limit )
+        {
+            DelDebarment( $restriction->borrower_debarment_id );
         }
     }
 }

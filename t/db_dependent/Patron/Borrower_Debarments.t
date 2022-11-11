@@ -252,21 +252,21 @@ $builder->build(
     }
 );
 
-my $borrowernumber4 = Koha::Patron->new(
+my $patron4 = Koha::Patron->new(
     {
         firstname    => 'First',
         surname      => 'Sur',
         categorycode => $patron_category->{categorycode},
         branchcode   => $library->{branchcode},
     }
-)->store->borrowernumber;
+)->store;
 
-my $account = Koha::Account->new({ patron_id => $borrowernumber4 });
+my $account = $patron4->account;
 my $line1 = $account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
 
 Koha::Patron::Debarments::AddDebarment(
     {
-        borrowernumber => $borrowernumber4,
+        borrowernumber => $patron4->borrowernumber,
         expiration     => '9999-06-10',
         type           => 'TEST',
         comment        => 'Test delete'
@@ -275,23 +275,22 @@ Koha::Patron::Debarments::AddDebarment(
 
 Koha::Patron::Debarments::AddDebarment(
     {
-        borrowernumber => $borrowernumber4,
+        borrowernumber => $patron4->borrowernumber,
         expiration     => '9999-10-10',
         type           => 'TEST2',
         comment        => 'Test delete again',
     }
 );
 
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
+$restrictions = $patron4->restrictions;
 
-is( @$debarments, 2, "GetDebarments returns 2 debarments before payment" );
-
-$account->pay({amount => 5});
-
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
-is( @$debarments, 1, "GetDebarments returns 1 debarment after paying half of the fee" );
-is( @$debarments[0]->{type}, "TEST2", "Debarment left has type value 'TEST2'" );
+is( $restrictions->count, 2, "->restrictions returns 2 restrictions before payment" );
 
 $account->pay({amount => 5});
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
-is( @$debarments, 0, "GetDebarments returns 0 debarments after paying all fees" );
+$restrictions = $patron4->restrictions;
+is( $restrictions->count, 1, "->restrictions returns 1 restriction after paying half of the fee" );
+is( $restrictions->next->type->code, "TEST2", "Restriction left has type value 'TEST2'" );
+
+$account->pay({amount => 5});
+$restrictions = $patron4->restrictions;
+is( $restrictions->count, 0, "->restrictions returns 0 restrictions after paying all fees" );
