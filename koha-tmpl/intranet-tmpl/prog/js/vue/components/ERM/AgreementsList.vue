@@ -115,11 +115,13 @@ export default {
             this.$emit("close")
         },
         filter_table: async function () {
-            let new_route = build_url(
-                "/cgi-bin/koha/erm/agreements",
-                this.filters
-            )
-            this.$router.push(new_route)
+            if (this.before_route_entered) {
+                let new_route = build_url(
+                    "/cgi-bin/koha/erm/agreements",
+                    this.filters
+                )
+                this.$router.push(new_route)
+            }
             if (this.filters.by_expired) {
                 if (!this.filters.max_expiration_date)
                     this.filters.max_expiration_date = new Date()
