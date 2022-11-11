@@ -65,7 +65,7 @@ sub login {
         $uri = '/cgi-bin/koha/mainpage.pl';
     }
 
-    unless ( $provider_config ) {
+    unless ( $provider_config && $provider_config->{authorize_url} ) {
         my $error = "No configuration found for your provider";
         return $c->redirect_to($uri."?auth_error=$error");
     }
@@ -99,7 +99,7 @@ sub login {
                     );
                 }
 
-                my ( $status, $cookie, $session_id ) = $c->auth->session($patron);
+                my $session_id = $c->auth->session({ patron => $patron, interface => $interface, provider => $provider });
 
                 $c->cookie( CGISESSID => $session_id, { path => "/" } );
 

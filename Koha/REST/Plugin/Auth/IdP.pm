@@ -81,24 +81,15 @@ Generates a new session.
 
     $app->helper(
         'auth.session' => sub {
-            my ( $c, $patron ) = @_;
-            my $userid     = $patron->userid;
-            my $cardnumber = $patron->cardnumber;
-            my $cgi        = CGI->new;
+            my ( $c, $params ) = @_;
+            my $patron      = $params->{patron};
+            my $interface   = $params->{interface};
+            my $provider    = $params->{provider};
 
-            $cgi->param( userid            => $userid );
-            $cgi->param( cardnumber        => $cardnumber );
-            $cgi->param( auth_client_login => 1 );
+            my $session = C4::Auth::create_basic_session({ patron => $patron, interface => $interface });
+            $session->param('idp_code', $provider);
 
-            my ( $status, $cookie, $session_id ) = C4::Auth::check_api_auth($cgi);
-
-            Koha::Exceptions::UnderMaintenance->throw( code => 503 )
-              if $status eq "maintenance";
-
-            Koha::Exceptions::Auth::CannotCreateSession->throw( code => 500 )
-              unless $status eq "ok";
-
-            return ( $status, $cookie, $session_id );
+            return $session->id;
         }
     );
 }

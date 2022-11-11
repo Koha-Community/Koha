@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -831,6 +831,28 @@ subtest 'Userenv clearing in check_cookie_auth' => sub {
     ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );
     is( $auth_status, 'expired', 'Should be expired already' );
     is( C4::Context->userenv, undef, 'Environment should be cleared again' );
+};
+
+subtest 'create_basic_session tests' => sub {
+    plan tests => 12;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $interface = 'opac';
+
+    my $session = C4::Auth::create_basic_session({ patron => $patron, interface => $interface });
+
+    isnt($session->id, undef, 'A new sessionID was created');
+    is( $session->param('number'), $patron->borrowernumber, 'Session parameter number matches' );
+    is( $session->param('id'), $patron->userid, 'Session parameter id matches' );
+    is( $session->param('cardnumber'), $patron->cardnumber, 'Session parameter cardnumber matches' );
+    is( $session->param('firstname'), $patron->firstname, 'Session parameter firstname matches' );
+    is( $session->param('surname'), $patron->surname, 'Session parameter surname matches' );
+    is( $session->param('branch'), $patron->branchcode, 'Session parameter branch matches' );
+    is( $session->param('branchname'), $patron->library->branchname, 'Session parameter branchname matches' );
+    is( $session->param('flags'), $patron->flags, 'Session parameter flags matches' );
+    is( $session->param('emailaddress'), $patron->email, 'Session parameter emailaddress matches' );
+    is( $session->param('ip'), $session->remote_addr(), 'Session parameter ip matches' );
+    is( $session->param('interface'), $interface, 'Session parameter interface matches' );
 };
 
 $schema->storage->txn_rollback;

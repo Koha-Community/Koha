@@ -74,7 +74,7 @@ BEGIN {
     @EXPORT_OK = qw(
       checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
       get_all_subpermissions get_user_subpermissions track_login_daily in_iprange
-      get_template_and_user haspermission
+      get_template_and_user haspermission create_basic_session
     );
 
     $ldap      = C4::Context->config('useldapserver') || 0;
@@ -1561,7 +1561,6 @@ sub check_api_auth {
         # new login
         my $userid   = $query->param('userid');
         my $password = $query->param('password');
-        my $auth_client_login = $query->param('auth_client_login');
         my ( $return, $cardnumber, $cas_ticket );
 
         # Proxy CAS auth
@@ -1571,9 +1570,6 @@ sub check_api_auth {
             # In case of a CAS authentication, we use the ticket instead of the password
             my $PT = $query->param('PT');
             ( $return, $cardnumber, $userid, $cas_ticket ) = check_api_auth_cas( $PT, $query );    # EXTERNAL AUTH
-        } elsif ( $auth_client_login && ( $userid || $query->param('cardnumber') ) ) {
-            $cardnumber = $query->param('cardnumber');
-            $return = 1;
         } else {
 
             # User / password auth
@@ -1868,6 +1864,37 @@ sub get_session {
         $session = CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
         # no need to flush here
     }
+    return $session;
+}
+
+=head2 create_basic_session
+
+my $session = create_basic_session({ patron => $patron, interface => $interface });
+
+Creates a session and adds all basic parameters for a session to work
+
+=cut
+
+sub create_basic_session {
+    my $params    = shift;
+    my $patron    = $params->{patron};
+    my $interface = $params->{interface};
+
+    my $session = get_session("");
+
+    $session->param( 'number',       $patron->borrowernumber );
+    $session->param( 'id',           $patron->userid );
+    $session->param( 'cardnumber',   $patron->cardnumber );
+    $session->param( 'firstname',    $patron->firstname );
+    $session->param( 'surname',      $patron->surname );
+    $session->param( 'branch',       $patron->branchcode );
+    $session->param( 'branchname',   $patron->library->branchname );
+    $session->param( 'flags',        $patron->flags );
+    $session->param( 'emailaddress', $patron->email );
+    $session->param( 'ip',           $session->remote_addr() );
+    $session->param( 'lasttime',     time() );
+    $session->param( 'interface',    $interface);
+
     return $session;
 }
 
