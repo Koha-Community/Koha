@@ -24,7 +24,9 @@
                 :value="$__('Filter')"
             />
         </fieldset>
-        <table v-if="agreements.length" :id="table_id"></table>
+        <div v-if="agreements.length" class="page-section">
+            <table :id="table_id"></table>
+        </div>
         <div v-else-if="initialized" class="dialog message">
             {{ $__("There are no agreements defined") }}
         </div>

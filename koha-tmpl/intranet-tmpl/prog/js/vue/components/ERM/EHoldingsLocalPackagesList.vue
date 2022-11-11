@@ -3,7 +3,11 @@
         <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else-if="packages" id="packages_list">
             <Toolbar />
-            <div v-if="packages.length" id="package_list_result">
+            <div
+                v-if="packages.length"
+                id="package_list_result"
+                class="page-section"
+            >
                 <table :id="table_id"></table>
             </div>
             <div v-else-if="initialized" class="dialog message">

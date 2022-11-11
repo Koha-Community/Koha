@@ -2,7 +2,9 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else-if="licenses" id="licenses_list">
         <Toolbar />
-        <table v-if="licenses.length" :id="table_id"></table>
+        <div v-if="licenses.length" class="page-section">
+            <table :id="table_id"></table>
+        </div>
         <div v-else-if="initialized" class="dialog message">
             {{ $__("There are no licenses defined") }}
         </div>

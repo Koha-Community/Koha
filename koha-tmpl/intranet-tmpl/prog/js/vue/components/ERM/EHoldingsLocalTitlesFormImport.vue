@@ -6,7 +6,7 @@
             {{ $__("see job #%s").format(job_id) }}
         </router-link>
     </div>
-    <div id="package_list">
+    <fieldset id="package_list" class="rows">
         {{ $__("To the following local package") }}:
         <v-select
             v-model="package_id"
@@ -16,8 +16,8 @@
             :clearable="false"
         >
         </v-select>
-    </div>
-    <div id="import_list_result">
+    </fieldset>
+    <div id="import_list_result" class="page-section">
         <table :id="table_id"></table>
     </div>
 </template>

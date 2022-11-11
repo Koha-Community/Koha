@@ -58,7 +58,7 @@
                     }}</router-link
                 >
             </div>
-            <div id="title_list_result">
+            <div id="title_list_result" class="page-section">
                 <table :id="table_id"></table>
             </div>
         </div>
