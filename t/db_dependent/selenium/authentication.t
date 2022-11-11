@@ -23,7 +23,7 @@
 #Note: If you are testing this on kohadevbox with selenium installed in kohadevbox then you need to set the staffClientBaseURL to localhost:8080 and the OPACBaseURL to localhost:80
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -35,7 +35,7 @@ my @data_to_cleanup;
 
 SKIP: {
     eval { require Selenium::Remote::Driver; };
-    skip "Selenium::Remote::Driver is needed for selenium tests.", 2 if $@;
+    skip "Selenium::Remote::Driver is needed for selenium tests.", 3 if $@;
 
     my $builder  = t::lib::TestBuilder->new;
     my $s        = t::lib::Selenium->new;
@@ -150,6 +150,30 @@ SKIP: {
         $driver->find_element('//div[@id="login"]'); # logged out
 
         push @data_to_cleanup, $patron, $patron->category, $patron->library;
+    };
+
+    subtest 'Regressions' => sub {
+
+        plan tests => 2;
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+
+        my $patron_1 = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 }});
+        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+        my $password = 'password';
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron_1->set_password({ password => $password });
+        $patron_2->set_password({ password => $password });
+
+        $driver->get($mainpage . q|?logout.x=1|);
+        $s->auth( $patron_2->userid, $password );
+        like( $driver->get_title, qr(Access denied), 'Patron without permissions should not be able to login' );
+
+        $s->auth( $patron_1->userid, $password );
+        like( $driver->get_title(), qr(Koha staff interface), 'Patron with permissions should be able to login' );
+
+        push @data_to_cleanup, $patron_1, $patron_1->category, $patron_1->library;
+        push @data_to_cleanup, $patron_2, $patron_2->category, $patron_2->library;
     };
 
     $driver->quit();
