@@ -373,7 +373,8 @@
                                         </div>
                                     [% END %]
 
-                                    <table id="suggestt" class="table table-bordered table-striped">
+                                    [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 || loggedinusername %]
+                                    <table id="suggestt" class="table table-bordered tabled">
                                         <caption class="sr-only">Your purchase suggestions<caption>
                                         <thead>
                                             <tr>
@@ -456,6 +457,7 @@
                                             [% END # / FOREACH suggestions %]
                                         </tbody>
                                     </table>
+                                    [% END %]
 
                                     [% IF ( loggedinusername && can_delete_suggestion ) %]
                                         <fieldset class="action">
