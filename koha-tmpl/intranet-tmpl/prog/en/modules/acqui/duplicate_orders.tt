@@ -313,7 +313,6 @@ Acquisitions &rsaquo; Koha
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("js/autocomplete/patrons.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% Asset.js("js/funds_sorts.js") | $raw %]
     <script>
@@ -335,12 +334,34 @@ Acquisitions &rsaquo; Koha
             });
 
             [% IF op == 'search' OR op == 'select' %]
-                patron_autocomplete({
-                    patron_container: $("#basket_creators"),
-                    input_autocomplete: $("#find_patron"),
-                    patron_input_name: 'created_by',
-                    field_to_retrieve: 'borrowernumber'
+                function AddPatron( patron_name, value, container, input_name ) {
+                    div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
+                    $(container).append( div );
+
+                    $(container).parent().show( 800 );
+                }
+                function RemovePatron( cardnumber, container ) {
+                    $( '#borrower_' + cardnumber ).remove();
+
+                    if ( ! $(container).html() ) {
+                        $(container).parent("fieldset").hide( 800 );
+                    }
+                }
+                patron_autocomplete($("#find_patron"), {
+                    'on-select-callback': function( event, ui ) {
+                        var field = ui.item.borrowernumber;
+                        AddPatron( ui.item.firstname + " " + ( ui.item.middle_name || "" ) + " " + ui.item.surname, field, $("#basket_creators"), 'created_by' );
+                        $("#find_patron").val('').focus();
+                        return false;
+                    }
                 });
+                $("body").on("click",".removePatron",function(e){
+                    e.preventDefault();
+                    var divid = $(this).parent().attr("id");
+                    var cardnumber = divid.replace("borrower_","");
+                    RemovePatron(cardnumber, $("#basket_creators"));
+                });
+
             [% END %]
 
             $("#show_orders_filters, #hide_orders_filters").on('click', function(e) {
