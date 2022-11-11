@@ -48,9 +48,7 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<erm_eholdings_packages_agreements_uniq>
+=head1 PRIMARY KEY
 
 =over 4
 
@@ -62,10 +60,7 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->add_unique_constraint(
-  "erm_eholdings_packages_agreements_uniq",
-  ["package_id", "agreement_id"],
-);
+__PACKAGE__->set_primary_key("package_id", "agreement_id");
 
 =head1 RELATIONS
 
@@ -100,8 +95,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-20 08:58:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OfIIIupuz76wN2HDac5fng
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-11 11:52:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3nCckFzWVD8oZCG6eoljxw
 
 sub koha_object_class {
     'Koha::ERM::Package::Agreement';

@@ -187,9 +187,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 agreements
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-19 09:25:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KbZxONSm/pxXvUFi3PuZiQ
+Type: many_to_many
+
+Composing rels: L</erm_eholdings_packages_agreements> -> agreement
+
+=cut
+
+__PACKAGE__->many_to_many("agreements", "erm_eholdings_packages_agreements", "agreement");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-11 11:52:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3YA6xOwdLHDLoZnQJNk8eQ
 
 sub koha_object_class {
     'Koha::ERM::EHoldings::Package';

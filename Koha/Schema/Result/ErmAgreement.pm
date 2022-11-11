@@ -256,9 +256,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 packages
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-01 07:44:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rdLbabpHCgb4l88Gmgst+g
+Type: many_to_many
+
+Composing rels: L</erm_eholdings_packages_agreements> -> package
+
+=cut
+
+__PACKAGE__->many_to_many("packages", "erm_eholdings_packages_agreements", "package");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-11 11:52:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N93LnvdKirtuV6BSrTGzVg
 
 __PACKAGE__->add_columns(
     '+is_perpetual' => { is_boolean => 1 }
