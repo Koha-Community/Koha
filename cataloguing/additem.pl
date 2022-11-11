@@ -50,7 +50,6 @@ use MARC::File::XML;
 use MIME::Base64 qw( decode_base64url encode_base64url );
 use Storable qw( freeze thaw );
 use URI::Escape qw( uri_escape_utf8 );
-use URI::Escape qw( uri_escape_utf8 );
 
 our $dbh = C4::Context->dbh;
 
