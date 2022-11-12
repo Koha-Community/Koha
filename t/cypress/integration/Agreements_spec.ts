@@ -117,9 +117,18 @@ function get_licenses_to_relate() {
 }
 
 describe("Agreement CRUD operations", () => {
+    before(() => {
+        cy.fetch_initial_ERM_sys_pref_value();
+    });
+
     beforeEach(() => {
         cy.login("koha", "koha");
         cy.title().should("eq", "Koha staff interface");
+        cy.set_ERM_sys_pref_value(true);
+    });
+
+    after(() => {
+        cy.reset_initial_ERM_sys_pref_value();
     });
 
     it("List agreements", () => {
