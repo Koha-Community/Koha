@@ -311,7 +311,7 @@
 
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
 
-                            [% IF suggestions.size > 0 OR title_filter %]
+                            [% IF (Koha.Preference( 'OPACViewOthersSuggestions' ) || loggedinusername) && (suggestions.size > 0 OR title_filter) %]
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
                                     <div class="form-row">
@@ -321,7 +321,7 @@
                                         <div class="col-auto my-1">
                                             <input type="text" name="title_filter" id="title_filter" value="[% title_filter | html %]" size="30" class="form-control form-control-sm" />
                                         </div>
-                                        [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
+                                        [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
                                             [% IF loggedinusername %]
                                                 <div class="col-auto my-1">
                                                     <label class="sr-only" for="suggested_by_anyone">Suggested by:</label>
