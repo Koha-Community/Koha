@@ -58,43 +58,5 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
-
-        if (C4::Context->preference('GoogleOpenIDConnect')) {
-            # Print useful stuff here
-            say $out "Setting google provider";
-            $dbh->do(q{
-                INSERT INTO `identity_providers` (name, protocol, config, mapping), auto_register, registration_config, interface)
-                SELECT  'google' as name,
-                        'OIDC' as protocol,
-                        JSON_OBJECT("key", k.value, "secret", s.value, "well_known_url", "https://accounts.google.com/.well-known/openid-configuration", "scope", "openid email profile") as config,
-                        JSON_OBJECT("email", "email", "firstname", "given_name", "surname", "family_name", "_key", "email") as mapping
-                FROM
-                    (SELECT value FROM `systempreferences` where variable = 'GoogleOAuth2ClientID') k
-                JOIN
-                    (SELECT value FROM `systempreferences` where variable = 'GoogleOAuth2ClientSecret') s
-            });
-
-            $dbh->do(q{
-                INSERT INTO `identity_provider_domains` (identity_provider_id, domain, auto_register, update_on_auth, default_library_id, default_category_id, allow_opac, allow_staff)
-                        p.id as provider_id,
-                        d.value as domain,
-                        r.value as auto_register,
-                        0 as update_on_auth,
-                        b.value as default_branch,
-                        c.value as default_category,
-                        1 as allow_opac,
-                        0 as allow_interface
-                FROM
-                    (SELECT id FROM `identity_provider` WHERE name = 'google') p
-                JOIN
-                    (SELECT CASE WHEN value = '' OR value IS NULL THEN NULL ELSE value END as value FROM `systempreferences` where variable = 'GoogleOpenIDConnectDomain') d
-                JOIN
-                    (SELECT CASE WHEN value = '' OR value IS NULL THEN '0' ELSE value END as value FROM `systempreferences` where variable = 'GoogleOpenIDConnectAutoRegister') r
-                JOIN
-                    (SELECT CASE WHEN value = '' OR value IS NULL THEN NULL ELSE value END as value FROM `systempreferences` where variable = 'GoogleOpenIDConnectDefaultCategory') c
-                JOIN
-                    (SELECT CASE WHEN value = '' OR value IS NULL THEN NULL ELSE value END as value FROM `systempreferences` where variable = 'GoogleOpenIDConnectDefaultBranch') b
-            });
-        }
     },
 };
