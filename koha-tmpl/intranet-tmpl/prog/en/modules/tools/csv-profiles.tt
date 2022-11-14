@@ -296,6 +296,7 @@
     <h1>CSV profiles</h1>
 
     [% IF csv_profiles %]
+    <div class="page-section">
         <table id="table_csv_profiles">
             <thead>
                 <th>CSV profile ID</th>
@@ -325,6 +326,7 @@
                 [% END %]
             </tbody>
         </table>
+    </div>
     [% ELSE %]
         There is no CSV profile defined. <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form">Create a new CSV profile</a>.
     [% END %]
