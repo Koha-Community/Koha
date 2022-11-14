@@ -89,9 +89,9 @@
                                         <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items</a>
                                     [% END %]
                                 </li>
-                            </ol>
-                        </div>
-                    </div>
+                            </ol> <!-- /.bibliodetails -->
+                        </div> <!-- /.rows -->
+                    </div> <!-- /.listgroup -->
 
                     [% IF ONLY_ONE || updated_exclude_from_local_holds_priority.defined %]
                         <hr />
@@ -150,9 +150,9 @@
                                     [% IF ITEM_DAT.materials %]
                                         <li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %]</li>
                                     [% END %]
-                                </ol>
-                            </div>
-                        </div>
+                                </ol> <!-- /.bibliodetails -->
+                            </div> <!-- /.rows -->
+                        </div> <!-- /.listgroup -->
 
                         <div class="listgroup">
                             <h4>
@@ -314,9 +314,9 @@
                                             <li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %]</li>
                                         [% END %]
                                     [% END %]
-                               </ol>
-                            </div>
-                        </div>
+                               </ol> <!-- /.bibliodetails -->
+                            </div> <!-- /.rows -->
+                        </div> <!-- /.listgroup -->
 
                         <div class="listgroup">
                             <h4>Priority</h4>
@@ -341,9 +341,9 @@
                                             <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                         </form>
                                     </li>
-                                </ol>
-                            </div>
-                        </div>
+                                </ol> <!-- /.bibliodetails -->
+                            </div> <!-- /.rows -->
+                        </div> <!-- /.listgroup -->
 
                         <div class="listgroup">
                             <h4>History</h4>
@@ -466,11 +466,11 @@
                                             [% ITEM_DAT.itemnotes_nonpublic | html %]
                                         [% END %]
                                     </li>
-                                </ol>
-                            </div>
-                        </div>
-                    [% END %]
-                </div>
+                                </ol> <!-- /.bibliodetails -->
+                            </div> <!-- /.rows -->
+                        </div> <!-- /.listgroup -->
+                    [% END # /FOREACH ITEM_DAT %]
+                </div> <!-- /#catalogue_detail_biblio -->
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
