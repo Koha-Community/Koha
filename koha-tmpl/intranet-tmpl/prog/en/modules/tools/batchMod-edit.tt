@@ -75,7 +75,6 @@
           </div>
         [% END %]
 
-
         [% IF ( barcode_not_unique ) %]
             <div class="dialog alert">
                 <strong>Error saving item</strong>: Barcode must be unique.
@@ -90,18 +89,18 @@
         [% IF ( notfoundbarcodes.size ) %]
             <div class="dialog alert">
                 <p>Warning, the following barcodes were not found:</p>
+                <br/>
+                <table style="margin:auto;">
+                    <thead>
+                        <tr><th>Barcodes not found</th></tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH notfoundbarcode IN notfoundbarcodes %]
+                            <tr><td>[% notfoundbarcode |html %]</td></td>
+                        [% END %]
+                    </tbody>
+                </table>
             </div>
-
-            <table style="margin:auto;">
-                <thead>
-                    <tr><th>Barcodes not found</th></tr>
-                </thead>
-                <tbody>
-                    [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-                        <tr><td>[% notfoundbarcode |html %]</td></td>
-                    [% END %]
-                </tbody>
-            </table>
 
             [% IF ( item_loop ) %]
                 [% UNLESS ( too_many_items_display ) %]
@@ -113,18 +112,18 @@
         [% IF ( notfounditemnumbers.size ) %]
             <div class="dialog alert">
                 <p>Warning, the following itemnumbers were not found:</p>
+                <br/>
+                <table style="margin:auto;">
+                    <thead>
+                        <tr><th>Itemnumbers not found</th></tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH notfounditemnumber IN notfounditemnumbers %]
+                            <tr><td>[% notfounditemnumber |html %]</td></td>
+                        [% END %]
+                    </tbody>
+                </table>
             </div>
-
-            <table style="margin:auto;">
-                <thead>
-                    <tr><th>Itemnumbers not found</th></tr>
-                </thead>
-                <tbody>
-                    [% FOREACH notfounditemnumber IN notfounditemnumbers %]
-                        <tr><td>[% notfounditemnumber |html %]</td></td>
-                    [% END %]
-                </tbody>
-            </table>
             [% IF ( item_loop ) %]
                 [% UNLESS ( too_many_items_display ) %]
                     <h4>The following itemnumbers were found: </h4>

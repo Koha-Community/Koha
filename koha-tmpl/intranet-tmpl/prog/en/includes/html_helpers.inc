@@ -209,12 +209,12 @@
 [% END %]
 
 [% BLOCK items_table_batchmod %]
-
+<div class="page-section">
     [% IF display_columns_selection %][%# Needs js/pages/batchMod.js %]
         [% IF checkboxes_edit OR checkboxes_delete %]
-            <div id="toolbar">
+            <fieldset class="action">
                 <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
-            </div>
+            </fieldset>
         [% END %]
 
         <div id="cataloguing_additem_itemlist">
@@ -339,5 +339,5 @@
             [% END # /FOREACH items %]
         </tbody>
     </table> <!-- /#itemst -->
-
+</div>
 [% END %]
