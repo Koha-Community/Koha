@@ -38,7 +38,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -106,6 +106,49 @@ subtest 'checkauth() tests' => sub {
         $cgi->mock( 'request_method', sub { return 'GET' } );
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
         is( $userid, undef, 'If librarian user is used and password with GET, they should not be logged in' );
+    };
+
+    subtest 'While still logged in, relogin with another user' => sub {
+        plan tests => 4;
+        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => {} });
+        my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => {} });
+        # Create 'former' session
+        my $session = C4::Auth::get_session();
+        $session->param( 'number',       $patron->id );
+        $session->param( 'id',           $patron->userid );
+        $session->param( 'ip',           '1.2.3.4' );
+        $session->param( 'lasttime',     time() );
+        $session->param( 'interface',    'opac' );
+        $session->flush;
+        my $sessionID = $session->id;
+        C4::Context->_new_userenv($sessionID);
+
+        my ( $return ) = C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
+        is( $return, 'ok', 'Former session in shape now' );
+
+        my $mock1 = Test::MockModule->new('C4::Auth')->mock( 'safe_exit', sub {} );
+        my $mock2 = Test::MockModule->new('CGI')     ->mock( 'request_method', 'POST' )
+                                                     ->mock( 'cookie', sub { return $sessionID; } ); # oversimplified..
+        my $cgi = CGI->new;
+        my $password = 'Incr3d1blyZtr@ng93$';
+        $patron2->set_password({ password => $password });
+        $cgi->param( -name => 'userid',             -value => $patron2->userid );
+        $cgi->param( -name => 'password',           -value => $password );
+        $cgi->param( -name => 'koha_login_context', -value => 1 );
+        my @return;
+        {
+            local *STDOUT;
+            local %ENV;
+            $ENV{REMOTE_ADDR} = '1.2.3.4';
+            my $stdout;
+            open STDOUT, '>', \$stdout;
+            @return = C4::Auth::checkauth( $cgi, 0, {} );
+            close STDOUT;
+        }
+        # Note: We can test return values from checkauth here since we mocked the safe_exit after the Redirect 303
+        is( $return[0], $patron2->userid, 'Login of patron2 approved' );
+        isnt( $return[2], $sessionID, 'Did not return previous session ID' );
+        ok( $return[2], 'New session ID not empty' );
     };
 
     C4::Context->_new_userenv; # For next tests
