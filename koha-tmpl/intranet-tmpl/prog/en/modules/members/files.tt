@@ -49,29 +49,31 @@
                 [% END %]
 
                 [% IF ( files ) %]
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Uploaded</th>
-                            [% IF CAN_user_borrowers_edit_borrowers %]<th>&nbsp;</th>[% END %]
-                        </tr>
-                    </thead>
+                    <div class="page-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Uploaded</th>
+                                    [% IF CAN_user_borrowers_edit_borrowers %]<th>&nbsp;</th>[% END %]
+                                </tr>
+                            </thead>
 
-                    <tbody>
-                        [% FOREACH f IN files %]
-                            <tr>
-                                 <td><a href="?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
-                                 <td>[% f.file_type | html %]</td>
-                                 <td>[% f.file_description | html %]</td>
-                                 <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% patron.borrowernumber | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table>
+                            <tbody>
+                                [% FOREACH f IN files %]
+                                    <tr>
+                                        <td><a href="?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
+                                        <td>[% f.file_type | html %]</td>
+                                        <td>[% f.file_description | html %]</td>
+                                        <td>[% f.date_uploaded | $KohaDates %]</td>
+                                        [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% patron.borrowernumber | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
                 [% ELSE %]
                 <div class="dialog message">
                     <p>This patron has no files attached.</p>

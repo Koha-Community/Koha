@@ -56,53 +56,55 @@
 
             <h1>Statistics for [% INCLUDE 'patron-title.inc' %]</h1>
             [% IF ( datas.size ) %]
-                <table id="statistics">
-                <thead>
-                    <tr>
-                      [% FOREACH cn IN column_names %]
-                          <th>
-                            [% SWITCH cn %]
-                            [% CASE 'itype' %]
-                                <span>Item type</span>
-                            [% CASE 'ccode' %]
-                                <span>Collection</span>
-                            [% CASE 'location' %]
-                                <span>Shelving location</span>
-                            [% CASE 'homebranch' %]
-                                <span>Home library</span>
-                            [% CASE 'holdingbranch' %]
-                                <span>Holding library</span>
-                            [% CASE %]
-                                <span>[% cn | html %]</span>
-                            [% END %]
-                          </th>
-                      [% END %]
-                      <th>Total checkouts as of yesterday</th>
-                      <th>Today's checkouts</th>
-                      <th>Today's checkins</th>
-                      <th>Total checkouts</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    [% FOREACH r IN datas %]
+                <div class="page-section">
+                    <table id="statistics">
+                    <thead>
                         <tr>
-                            [% FOREACH c IN r %]
-                                <td>[% c | html %]</td>
-                            [% END %]
+                        [% FOREACH cn IN column_names %]
+                            <th>
+                                [% SWITCH cn %]
+                                [% CASE 'itype' %]
+                                    <span>Item type</span>
+                                [% CASE 'ccode' %]
+                                    <span>Collection</span>
+                                [% CASE 'location' %]
+                                    <span>Shelving location</span>
+                                [% CASE 'homebranch' %]
+                                    <span>Home library</span>
+                                [% CASE 'holdingbranch' %]
+                                    <span>Holding library</span>
+                                [% CASE %]
+                                    <span>[% cn | html %]</span>
+                                [% END %]
+                            </th>
+                        [% END %]
+                        <th>Total checkouts as of yesterday</th>
+                        <th>Today's checkouts</th>
+                        <th>Today's checkins</th>
+                        <th>Total checkouts</th>
                         </tr>
-                    [% END %]
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="[% column_names.size | html %]">TOTAL</td>
-                        <td>[% count_total_precedent_state | html %]</td>
-                        <td>[% count_total_issues | html %]</td>
-                        <td>[% count_total_issues_returned | html %]</td>
-                        <td>[% count_total_actual_state | html %]</td>
-                    </tr>
-                </tfoot>
-                </table>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH r IN datas %]
+                            <tr>
+                                [% FOREACH c IN r %]
+                                    <td>[% c | html %]</td>
+                                [% END %]
+                            </tr>
+                        [% END %]
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="[% column_names.size | html %]">TOTAL</td>
+                            <td>[% count_total_precedent_state | html %]</td>
+                            <td>[% count_total_issues | html %]</td>
+                            <td>[% count_total_issues_returned | html %]</td>
+                            <td>[% count_total_actual_state | html %]</td>
+                        </tr>
+                    </tfoot>
+                    </table>
+                </div> <!-- /.page-section -->
             [% ELSE %]
                 <div class="dialog message">There are no statistics for this patron.</div>
             [% END %]

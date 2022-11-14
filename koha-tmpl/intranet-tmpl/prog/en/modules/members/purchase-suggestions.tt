@@ -46,72 +46,74 @@
                 </div>
 
                 [% IF suggestions.size %]
-                  <table id="suggestions">
-                    <thead>
-                        <tr>
-                          <th>Summary</th>
-                          <th>Note</th>
-                          <th>Managed by</th>
-                          <th>Managed on</th>
-                          <th>Suggested on</th>
-                          <th>Status</th>
-                        </tr>
-                    </thead>
+                    <div class="page-section">
+                        <table id="suggestions">
+                            <thead>
+                                <tr>
+                                <th>Summary</th>
+                                <th>Note</th>
+                                <th>Managed by</th>
+                                <th>Managed on</th>
+                                <th>Suggested on</th>
+                                <th>Status</th>
+                                </tr>
+                            </thead>
 
-                    <tbody>
-                        [% FOREACH s IN suggestions %]
-                            <tr>
-                                <td>
-                                    <p>
-                                        <strong>
-                                            [% IF ( CAN_user_catalogue ) %]
-                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show">[% s.title | html %]</a>
-                                            [% ELSE %]
-                                                [% s.title | html %]
+                            <tbody>
+                                [% FOREACH s IN suggestions %]
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                <strong>
+                                                    [% IF ( CAN_user_catalogue ) %]
+                                                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show">[% s.title | html %]</a>
+                                                    [% ELSE %]
+                                                        [% s.title | html %]
+                                                    [% END %]
+                                                </strong>
+                                            </p>
+                                            <p>
+                                                [% IF ( s.author ) %][% s.author | html %],[% END %]
+                                                [% IF ( s.copyrightdate ) %] - [% s.copyrightdate | html %],[% END %]
+                                                [% IF ( s.publishercode ) %] - [% s.publishercode | html %][% END %]
+                                                [% IF ( s.place ) %]([% s.place | html %])[% END %]
+                                                [% IF ( s.collectiontitle ) %] , [% s.collectiontitle | html %][% END %]
+                                                [% IF ( s.itemtype ) %] - [% s.itemtype | html %][% END %]
+                                            </p>
+                                        </td>
+                                        <td>[% s.note | html %]
+                                        <td>
+                                            [% INCLUDE 'patron-title.inc' patron => s.manager %]
+                                        </td>
+                                        <td data-order="[% s.manageddate | html %]">
+                                            [% s.manageddate | $KohaDates %]
+                                        </td>
+                                        <td data-order="[% s.suggesteddate | html %]">
+                                            [% s.suggesteddate | $KohaDates %]
+                                        </td>
+                                        <td>
+                                            [% SWITCH s.STATUS %]
+                                            [% CASE "ASKED" %]<span>Requested</span>
+                                            [% CASE "CHECKED" %]<span>Checked by the library</span>
+                                            [% CASE "ACCEPTED" %]<span>Accepted by the library</span>
+                                            [% CASE "ORDERED" %]<span>Ordered by the library</span>
+                                            [% CASE "REJECTED" %]<span>Suggestion declined<span>
+                                            [% CASE "AVAILABLE" %]<span>Available in the library</span>
+                                            [% CASE %]
+                                                [% SET status_description = AuthorisedValues.GetByCode('SUGGEST_STATUS', s.STATUS) %]
+                                                [% IF status_description %]
+                                                    [% status_description | html %]
+                                                [% ELSE %]
+                                                    <span>Unknown</span>
+                                                [% END %]
                                             [% END %]
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        [% IF ( s.author ) %][% s.author | html %],[% END %]
-                                        [% IF ( s.copyrightdate ) %] - [% s.copyrightdate | html %],[% END %]
-                                        [% IF ( s.publishercode ) %] - [% s.publishercode | html %][% END %]
-                                        [% IF ( s.place ) %]([% s.place | html %])[% END %]
-                                        [% IF ( s.collectiontitle ) %] , [% s.collectiontitle | html %][% END %]
-                                        [% IF ( s.itemtype ) %] - [% s.itemtype | html %][% END %]
-                                    </p>
-                                </td>
-                                <td>[% s.note | html %]
-                                <td>
-                                    [% INCLUDE 'patron-title.inc' patron => s.manager %]
-                                </td>
-                                <td data-order="[% s.manageddate | html %]">
-                                    [% s.manageddate | $KohaDates %]
-                                </td>
-                                <td data-order="[% s.suggesteddate | html %]">
-                                    [% s.suggesteddate | $KohaDates %]
-                                </td>
-                                <td>
-                                    [% SWITCH s.STATUS %]
-                                    [% CASE "ASKED" %]<span>Requested</span>
-                                    [% CASE "CHECKED" %]<span>Checked by the library</span>
-                                    [% CASE "ACCEPTED" %]<span>Accepted by the library</span>
-                                    [% CASE "ORDERED" %]<span>Ordered by the library</span>
-                                    [% CASE "REJECTED" %]<span>Suggestion declined<span>
-                                    [% CASE "AVAILABLE" %]<span>Available in the library</span>
-                                    [% CASE %]
-                                        [% SET status_description = AuthorisedValues.GetByCode('SUGGEST_STATUS', s.STATUS) %]
-                                        [% IF status_description %]
-                                            [% status_description | html %]
-                                        [% ELSE %]
-                                            <span>Unknown</span>
-                                        [% END %]
-                                    [% END %]
-                                    [% IF s.reason %]([% s.reason | html %])[% END %]
-                                </td>
-                            </tr>
-                        [% END %]
-                    </tbody>
-                  </table>
+                                            [% IF s.reason %]([% s.reason | html %])[% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                </div> <!-- /.page-section -->
                 [% ELSE %]
                     <div class="dialog message">
                         <p>This patron has not submitted any purchase suggestions</p>
