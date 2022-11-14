@@ -43,12 +43,25 @@
 <h1>Comments</h1>
 
 <!-- The manual invoice and credit buttons -->
-<div class="statictabs">
-<ul>
-    [% IF ( status ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a></li>
-    [% IF ( status ) %]<li>[% ELSE %]<li class="active">[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a></li>
-</ul>
-<div class="tabs-container">
+<div class="toptabs">
+    <ul class="nav nav-tabs" role="tablist">
+        [% IF ( status ) %]
+            <li role="presentation" class="active">
+        [% ELSE %]
+            <li role="presentation">
+        [% END %]
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+        </li>
+        [% IF ( status ) %]
+            <li role="presentation">
+        [% ELSE %]
+            <li role="presentation" class="active">
+        [% END %]
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
+        </li>
+    </ul> <!-- /.nav.nav-tabs -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active">
 
 [% IF ( reviews ) %]
 <table id="commentst">
@@ -88,8 +101,9 @@
 [% ELSE %]
 [% IF ( status ) %]<p><strong>No comments have been approved.</strong></p>[% ELSE %]<p><strong>No comments to moderate.</strong></p>[% END %]
 [% END %]
-</div>
-</div>
+        </div> <!-- /.tab-pane -->
+    </div> <!-- /.tab-content -->
+</div> <!-- /.toptabs -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

@@ -46,17 +46,25 @@
             <h1>Manual invoice</h1>
 
             <!-- The manual invoice and credit buttons -->
-            <div class="statictabs">
-                <ul>
-                    <li class="transactions"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
-                    <li class="makepayment"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
-                    <li class="active manualinvoice"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
+            <div class="toptabs">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="transactions">
+                        <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
+                    </li>
+                    <li role="presentation" class="makepayment">
+                        <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
+                    </li>
+                    <li role="presentation" class="manualinvoice active">
+                        <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+                    </li>
                     [% IF CAN_user_updatecharges_manual_credit %]
-                    <li class="manualcredit"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
+                        <li role="presentation" class="manualcredit">
+                            <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+                        </li>
                     [% END %]
-                </ul>
-                <div class="tabs-container">
-
+                </ul> <!-- /.nav.nav-tabs -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active">
                 [% IF error == 'itemnumber' %]
                     <div id="error_message" class="dialog alert">
                         Error: Invalid barcode entered, please try again
@@ -102,8 +110,9 @@
                     </fieldset>
                 </form>
 
-                </div>
-            </div>
+                    </div> <!-- /.tab-pane -->
+                </div> <!-- /.tab-content -->
+            </div> <!-- /.toptabs -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

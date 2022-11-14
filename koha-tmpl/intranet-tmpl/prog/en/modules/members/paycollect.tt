@@ -97,22 +97,23 @@
 [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
 <!-- The manual invoice and credit buttons -->
-<div class="statictabs">
-<ul>
-    <li>
-    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a>
-    </li>
-    <li class="active">
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a>
-    </li>
-    <li>
-    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a>
-    </li>
-    <li>
-    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a>
-    </li>
-</ul>
-<div class="tabs-container">
+<div class="toptabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="transactions">
+            <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
+        </li>
+        <li role="presentation" class="makepayment active">
+            <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
+        </li>
+        <li role="presentation">
+            <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+        </li>
+        <li role="presentation">
+            <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+        </li>
+    </ul> <!-- /.nav.nav-tabs -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active">
 [% IF ( error_over ) %]
     <div id="error_message" class="dialog alert">
     You must pay a value less than or equal to [% total_due | $Price %].
@@ -370,7 +371,9 @@
     </form>
     [% END %]
 [% END %]
-</div></div>
+        </div> <!-- /.tab-pane -->
+    </div> <!-- /.tab-content -->
+</div> <!-- /.toptabs -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
