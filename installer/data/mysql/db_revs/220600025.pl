@@ -11,7 +11,7 @@ return {
             ('ExpireReservesAutoFill','0',NULL,'Automatically fill the next hold with a automatically canceled expired waiting hold.','YesNo'),
             ('ExpireReservesAutoFillEmail','', NULL,'. Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply-to address','Free');
         });
-        say $out "Added ExpireReservesAutoFill system preferences";
+        say $out "Added new system preference 'ExpireReservesAutoFill'";
 
         $dbh->do(q{
         INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
@@ -24,6 +24,7 @@ Author: <<biblio.author>>
 Item: <<items.itemcallnumber>>
 Pickup location: <<branches.branchname>>', 'email');
         });
-        say $out "Added HOLD_CHANGED notice";
+
+        say $out "Added new letter 'HOLD_CHANGED' (email)";
     },
 };

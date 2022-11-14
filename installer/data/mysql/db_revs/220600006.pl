@@ -13,7 +13,7 @@ return {
                 COMMENT "patron/borrower's middle name"
                 AFTER firstname
             });
-            say $out "Added middle name column to borrowers table";
+            say $out "Added column 'borrowers.middle_name'";
         }
         if( !column_exists( 'deletedborrowers', 'middle_name' ) ) {
             $dbh->do(q{
@@ -22,7 +22,7 @@ return {
                 COMMENT "patron/borrower's middle name"
                 AFTER firstname
             });
-            say $out "Added middle name column to deletedborrowers table";
+            say $out "Added column 'deletedborrowers.middle_name'";
         }
         if( !column_exists( 'borrower_modifications', 'middle_name' ) ) {
             $dbh->do(q{
@@ -31,7 +31,7 @@ return {
                 COMMENT "patron/borrower's middle name"
                 AFTER firstname
             });
-            say $out "Added middle name column to borrower_modifications table";
+            say $out "Added column 'borrower_modifications.middle_name'";
         }
 
         my ($default_patron_search_fields) = $dbh->selectrow_array( q{

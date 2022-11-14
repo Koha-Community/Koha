@@ -13,10 +13,14 @@ return {
             "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nWe want to notify you that your password has been changed. If you did not change it yourself (or requested that change), please contact library staff.\r\n\r\nYour library.", 'email');
         });
 
+        say $out "Added new letter 'PASSWORD_CHANGE' (email)";
+
         # Add systempreference
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
             VALUES ('NotifyPasswordChange','0','','Notify patrons whenever their password is changed.','YesNo')
         });
+
+        say $out "Added new system preference 'NotifyPasswordChange'";
     },
 };

@@ -14,6 +14,8 @@ return {
                     COMMENT 'JSON-serialized context information for the job'
                     AFTER `data`
             });
+
+            say $out "Added column 'background_jobs.context'";
         }
     },
 };

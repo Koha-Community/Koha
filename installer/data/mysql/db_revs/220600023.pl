@@ -16,6 +16,8 @@ return {
                 PRIMARY KEY (`hold_cancellation_request_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'hold_cancellation_requests'";
         }
 
         my ($count) = $dbh->selectrow_array(q{

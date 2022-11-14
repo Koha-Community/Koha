@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "28854",
-    description => "Add new unique index to return claims",
+    description => "Add new 'item_issue' unique index to return claims",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -11,7 +11,6 @@ return {
                 ALTER TABLE return_claims
                 ADD UNIQUE KEY item_issue (`itemnumber`,`issue_id`)
             });
-            say $out "item_issue index added to return_claims";
         }
     },
 };

@@ -13,6 +13,6 @@ return {
             WHERE variable = "OpacHiddenItemsExceptions"
         });
         # Print useful stuff here
-        say $out "Settings for OpacHiddenItemsExceptions have been updated";
+        say $out "Updated system preference 'OpacHiddenItemsExceptions'";
     },
 };

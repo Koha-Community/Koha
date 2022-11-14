@@ -19,7 +19,8 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             });
         }
-        say $out "item_bundles table added";
+
+        say $out "Added new table 'item_bundles'";
 
         my ($lost_val) = $dbh->selectrow_array( "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'LOST'", {} );
         $lost_val++;
@@ -43,7 +44,9 @@ return {
               ( 'BundleLostValue', $lost_val, '', 'Sets the LOST AV value that represents "Missing from bundle" as a lost value', 'Free' ),
               ( 'BundleNotLoanValue', $nfl_val, '', 'Sets the NOT_LOAN AV value that represents "Added to bundle" as a not for loan value', 'Free')
         });
-        say $out "System preferences added and set";
+
+        say $out "Added new system preference 'BundleLostValue'";
+        say $out "Added new system preference 'BundleNotLoanValue'";
 
         if( index_exists( 'return_claims', 'issue_id' ) ) {
             $dbh->do(q{

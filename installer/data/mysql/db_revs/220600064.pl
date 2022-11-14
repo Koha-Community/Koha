@@ -12,13 +12,13 @@ return {
             VALUES ('OPACAllowUserToChangeBranch','','Pending, In-Transit, Suspended','Allow users to change the library to pick up a hold for these statuses:','multiple');
         });
 
+        say $out "Added new system preference 'OPACAllowUserToChangeBranch'";
+
         $dbh->do(q{
             UPDATE systempreferences
             SET value=(SELECT CASE WHEN value=1 THEN 'intransit' ELSE '' END FROM systempreferences WHERE variable='OPACInTransitHoldPickupLocationChange')
             WHERE variable='OPACAllowUserToChangeBranch'
         });
-
-        say $out "Added new system preference 'OPACAllowUserToChangeBranch'";
 
         $dbh->do(q{
             DELETE FROM systempreferences

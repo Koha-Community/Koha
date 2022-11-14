@@ -12,6 +12,6 @@ return {
             'Used to autogenerate a Control Number: biblionumber will be as biblionumber; OFF will leave it as is','Choice');
         });
 
-        say $out "Added system preference autoControlNumber";
+        say $out "Added new system preference 'autoControlNumber'";
     },
 };

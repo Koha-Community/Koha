@@ -1,7 +1,7 @@
 use Modern::Perl;
 return {
     bug_number => "10950",
-    description => "Add pronouns to borrowers table",
+    description => "Add preferred pronoun field to patron record",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -12,7 +12,7 @@ return {
                 COMMENT "patron/borrower's pronouns"
                 AFTER initials
             });
-            say $out "Added pronouns column to borrowers table";
+            say $out "Added column 'borrowers.pronouns'";
         }
         if( !column_exists( 'deletedborrowers', 'pronouns' ) ) {
             $dbh->do(q{
@@ -21,7 +21,7 @@ return {
                 COMMENT "patron/borrower's pronouns"
                 AFTER initials
             });
-            say $out "Added pronouns column to deletedborrowers table";
+            say $out "Added column 'deletedborrowers.pronouns'";
         }
         if( !column_exists( 'borrower_modifications', 'pronouns' ) ) {
             $dbh->do(q{
@@ -30,7 +30,7 @@ return {
                 COMMENT "patron/borrower's pronouns"
                 AFTER initials
             });
-            say $out "Added pronouns column to borrower_modifications table";
+            say $out "Added column 'borrower_modifications.pronouns'";
         }
     },
 }

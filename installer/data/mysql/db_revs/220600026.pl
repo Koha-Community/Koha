@@ -12,6 +12,7 @@ return {
                 ADD COLUMN script varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the name of the cron script that caused this change'
                 AFTER interface
             });
+            say $out "Added column 'action_logs.script'";
         }
     },
 };

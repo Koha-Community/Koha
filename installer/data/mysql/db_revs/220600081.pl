@@ -15,7 +15,7 @@ return {
             ( 3, 'manage_identity_providers', 'Manage authentication providers')
         });
 
-        say $out "manage_identity_providers permission added";
+        say $out "Added new permission 'manage_identity_providers'";
 
         unless (TableExists('identity_providers')) {
             $dbh->do(q{
@@ -33,6 +33,8 @@ return {
                 KEY `protocol` (`protocol`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'identity_providers'";
         }
 
         unless (TableExists('identity_provider_domains')) {
@@ -57,6 +59,8 @@ return {
                     CONSTRAINT `identity_provider_domain_ibfk_3` FOREIGN KEY (`default_category_id`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'identity_provider_domains'";
         }
     },
 };

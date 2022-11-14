@@ -14,8 +14,9 @@ return {
             ('RequireChoosingExistingAuthority',?,NULL,'Require selecting existing authority entry in controlled fields during cataloging.','YesNo'),
             ('AutoLinkBiblios',?,NULL,'If enabled, link biblio to authorities on creation and edit','YesNo')
         },undef,($biblio_adds_authorities eq '1' ? '0' : '1', $biblio_adds_authorities));
-        say $out "Added RequireChoosingExistingAuthority and AutoLinkBiblios";
+        say $out "Added new system preference 'RequireChoosingExistingAuthority'";
+        say $out "Added new system preference 'AutoLinkBiblios'";
         $dbh->do(q{DELETE FROM systempreferences WHERE variable="BiblioAddsAuthorities";});
-        say $out "BiblioAddsAuthorities removed";
+        say $out "Removed system preference 'BiblioAddsAuthorities'";
     },
 };

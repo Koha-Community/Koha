@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "29792",
-    description => "Add AutomaticConfirmTransfer system preference",
+    description => "Fix transfers created from 'wrong transfer' checkin are not sent if modal dismissed",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -10,7 +10,7 @@ return {
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('AutomaticConfirmTransfer','0',NULL,'Defines whether transfers should be automatically confirmed at checkin if modal dismissed','YesNo')
         });
-        # Print useful stuff here
-        say $out "AutomaticConfirmTransfer system preference added";
+
+        say $out "Added new system preference 'AutomaticConfirmTransfer'";
     },
 };

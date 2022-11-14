@@ -5,7 +5,7 @@ return {
     description => "Ability to allow guarantor relationship for all patron category types",
     up => sub {
         my ($args) = @_;
-        my ($dbh) = @$args{qw(dbh)};
+        my ($dbh,$out) = @$args{qw(dbh out)};
 
         unless ( column_exists( 'categories', 'can_be_guarantee' ) ) {
             $dbh->do(q{
@@ -13,6 +13,7 @@ return {
                     ADD COLUMN `can_be_guarantee` tinyint(1) NOT NULL default 0 COMMENT 'if patrons of this category can be guarantees'
                     AFTER `checkprevcheckout`
             });
+            say $out "Added column 'categories.can_be_guarantee'";
         }
 
         $dbh->do(q{

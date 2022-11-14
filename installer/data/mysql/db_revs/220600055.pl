@@ -10,6 +10,6 @@ return {
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES ('UseOCLCEncodingLevels','0',NULL,'If enabled, include OCLC encoding levels in leader value builder dropdown for position 17.','YesNo')
         });
-        say $out "Added UseOCLCEncodingLevels system preference";
+        say $out "Added new system preference 'UseOCLCEncodingLevels'";
     },
 };

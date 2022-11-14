@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "17170",
-    description => "Add permission for creating saved search filters",
+    description => "Add saved search filters feature",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -10,7 +10,9 @@ return {
             INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
             (3, 'manage_search_filters', 'Manage custom search filters');
         });
-        say $out "Added manage_search_filters permission";
+
+        say $out "Added new permission 'manage_search_filters'";
+
         unless( TableExists( 'search_filters' ) ){
             $dbh->do(q{
                 CREATE TABLE `search_filters` (
@@ -23,14 +25,13 @@ return {
                 PRIMARY KEY (`search_filter_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
-            say $out "Added search_filters table";
-        } else {
-            say $out "search_filters table already created";
+            say $out "Added new table 'search_filters'";
         }
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('SavedSearchFilters', '0', NULL, 'Allow staff with permission to create/edit custom search filters', 'YesNo')
         });
-        say $out "Added SavedSearchFilters system preference";
+
+        say $out "Added new system preference 'SavedSearchFilters'";
     },
 }

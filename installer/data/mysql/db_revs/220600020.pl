@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "31086",
-    description => "Do not allow null values in branchcodes for reserves",
+    description => "Do not allow NULL values in branchcodes for reserves",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};

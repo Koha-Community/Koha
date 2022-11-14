@@ -13,7 +13,7 @@ return {
                 ADD CONSTRAINT letter_fk FOREIGN KEY (letter_id) REFERENCES letter(id) ON DELETE SET NULL ON UPDATE CASCADE
             });
 
-            say $out "Added 'letter_id' column to 'message_queue' table";
+            say $out "Added column 'message_queue.letter_id'";
         }
     },
 };

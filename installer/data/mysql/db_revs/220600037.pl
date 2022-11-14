@@ -18,7 +18,7 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
 
-            say $out "Added restriction_types table";
+            say $out "Added new table 'restriction_types'";
         }
 
         $dbh->do(q{
@@ -44,9 +44,9 @@ return {
         }
 
         $dbh->do(q{ INSERT IGNORE INTO permissions (module_bit, code, description) VALUES ( 3, 'manage_patron_restrictions', 'Manage patron restrictions')});
-        say $out "Added manage_patron_restrictions permission";
+        say $out "Added new permission 'manage_patron_restrictions'";
 
         $dbh->do(q{INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('PatronRestrictionTypes', '0', 'If enabled, it is possible to specify the "type" of patron restriction being applied.', '', 'YesNo');});
-        say $out "Added PatronRestrictionTypes preference";
+        say $out "Added new system preference 'PatronRestrictionTypes'";
     },
 };

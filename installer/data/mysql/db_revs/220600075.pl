@@ -8,6 +8,5 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         $dbh->do(q{ALTER TABLE `tmp_holdsqueue` ADD `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP AFTER item_level_request});
-        say $out "";
     },
 };

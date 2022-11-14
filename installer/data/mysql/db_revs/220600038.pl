@@ -12,6 +12,9 @@ return {
             (10, 'manual_invoice', 'Add manual invoices to a patron account')
         });
 
+        say $out "Added new permission 'manual_credit'";
+        say $out "Added new permission 'manual_invoice'";
+
         $dbh->do(q{
             INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
             SELECT borrowernumber, 10, 'manual_credit' FROM user_permissions WHERE code = 'remaining_permissions'

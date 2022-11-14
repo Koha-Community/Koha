@@ -6,7 +6,7 @@ return {
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
-        if( !column_exists( 'suggestions', 'staff_note' ) ) {
+        if ( !column_exists( 'suggestions', 'staff_note' ) ) {
             $dbh->do(q{
                     ALTER TABLE suggestions
                     ADD COLUMN staff_note longtext NULL DEFAULT NULL
@@ -14,7 +14,7 @@ return {
                     AFTER note
             });
         }
-        # Print useful stuff here
-        say $out "Add staff_note column to suggestions table";
+
+        say $out "Added column 'suggestions.staff_note'";
     },
 };

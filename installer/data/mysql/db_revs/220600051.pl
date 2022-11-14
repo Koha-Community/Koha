@@ -12,6 +12,7 @@ return {
                 ALTER TABLE statistics
                     ADD COLUMN categorycode varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'foreign key from the borrowers table, links transaction to a specific borrower category'
             });
+            say $out "Added column 'statistics.categorycode'";
         }
     },
 };

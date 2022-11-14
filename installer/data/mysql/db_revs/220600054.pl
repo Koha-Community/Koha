@@ -8,6 +8,7 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('EmailPatronRegistrations', '0', '0|EmailAddressForPatronRegistrations|BranchEmailAddress|KohaAdminEmailAddress', 'Choose email address that new patron registrations will be sent to: ', 'Choice'), ('EmailAddressForPatronRegistrations', '', '', ' If you choose EmailAddressForPatronRegistrations you have to enter a valid email address: ', 'free') });
+        say $out "Added new system preference 'EmailPatronRegistrations'";
 
         $dbh->do(q{INSERT IGNORE INTO letter (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES ( 'members', 'OPAC_REG', '', 'New OPAC self-registration submitted', 1, 'New OPAC self-registration',
             '<h3>New OPAC self-registration</h3>
@@ -25,5 +26,7 @@ return {
             [% IF borrower.categorycode %]<li>Patron category: [% borrower.categorycode %]</li>[% END %]
             </ul>
             </p>', 'email', 'default') });
+
+        say $out "Added new letter 'OPAC_REG' (email)";
     },
 };

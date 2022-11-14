@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "30650",
-    description => "Curbside pickup tables",
+    description => "Add Curbside pickup feature",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -50,6 +50,8 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
             );
+
+            say $out "Added new table 'curbside_pickup_policy'";
         }
 
         unless ( TableExists('curbside_pickup_opening_slots') ) {
@@ -66,6 +68,9 @@ return {
                     FOREIGN KEY (curbside_pickup_policy_id) REFERENCES curbside_pickup_policy(id) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'curbside_pickup_opening_slots'";
+
             my $existing_slots = $dbh->selectall_arrayref(q{SELECT * FROM curbside_pickup_policy}, { Slice => {} });
             my $insert_sth = $dbh->prepare(q{INSERT INTO curbside_pickup_opening_slots ( curbside_pickup_policy_id, day, start_hour, start_minute, end_hour, end_minute ) VALUES (?, ?, ?, ?, ?, ?)});
             for my $slot ( @$existing_slots ) {
@@ -141,6 +146,8 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             }
             );
+
+            say $out "Added new table 'curbside_pickups'";
         }
         unless ( TableExists('curbside_pickup_issues') ) {
             $dbh->do(
@@ -155,6 +162,8 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
+
+            say $out "Added new table 'curbside_pickup_issues'";
         }
         $dbh->do(
             q{
@@ -162,28 +171,39 @@ return {
             }
         );
 
+        say $out "Added new letter 'NEW_CURBSIDE_PICKUP' (email)";
+
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type` )
             VALUES
             ('CurbsidePickup', '0', NULL, 'Enable curbside pickup', 'YesNo')
         });
 
+        say $out "Added new system preference 'CurbsidePickup'";
+
         $dbh->do(qq{
             INSERT IGNORE permissions (module_bit, code, description)
             VALUES
             (1, 'manage_curbside_pickups', 'Manage curbside pickups (circulation)')
         });
+
+        say $out "Added new permission 'manage_curbside_pickups' (circulation)";
+
         $dbh->do(qq{
             INSERT IGNORE permissions (module_bit, code, description)
             VALUES
             (3, 'manage_curbside_pickups', 'Manage curbside pickups (admin)')
         });
 
+        say $out "Added new permission 'manage_curbside_pickups' (admin)";
+
         unless ( column_exists('curbside_pickup_policy', 'enable_waiting_holds_only') ) {
             $dbh->do(q{
                 ALTER table curbside_pickup_policy
                 ADD COLUMN enable_waiting_holds_only TINYINT(1) NOT NULL DEFAULT 0 AFTER enabled
             });
+
+            say $out "Added column 'curbside_pickup_policy.enable_waiting_holds_only'";
         }
     }
   }

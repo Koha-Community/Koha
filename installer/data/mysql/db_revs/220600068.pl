@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "30588",
-    description => "Add an 'enforce' option for TwoFactorAuthentication",
+    description => "Add an 'enforce' option for 'TwoFactorAuthentication' system preference",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -13,5 +13,7 @@ return {
                 type="Choice"
             WHERE variable="TwoFactorAuthentication"
         });
+
+        say $out "Updated system preference 'TwoFactorAuthentication'";
     },
 };

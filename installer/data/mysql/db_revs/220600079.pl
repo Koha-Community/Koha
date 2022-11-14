@@ -12,10 +12,14 @@ return {
             VALUES ('ERMModule', '0', NULL, 'Enable the E-Resource management module', 'YesNo');
         });
 
+        say $out "Added new system preference 'ERMModule'";
+
         $dbh->do(q{
             INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton)
             VALUES (28, 'erm', 'Manage electronic resources', 0)
         });
+
+        say $out "Added new permission 'erm'";
 
         unless ( TableExists('erm_agreements') ) {
             $dbh->do(q{
@@ -33,6 +37,8 @@ return {
                     PRIMARY KEY(`agreement_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_agreements'";
         }
 
         $dbh->do(q{
@@ -68,6 +74,8 @@ return {
                     PRIMARY KEY(`agreement_period_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_agreement_periods'";
         }
         unless ( TableExists('erm_licenses') ) {
             $dbh->do(q{
@@ -84,6 +92,8 @@ return {
                     PRIMARY KEY(`license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_licenses'";
         }
         unless ( TableExists('erm_agreement_licenses') ) {
             $dbh->do(q{
@@ -101,6 +111,8 @@ return {
                     UNIQUE KEY `erm_agreement_licenses_uniq` (`agreement_id`, `license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_agreement_licenses'";
         }
         $dbh->do(q{
             INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
@@ -142,6 +154,8 @@ return {
                     CONSTRAINT `erm_user_roles_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_user_roles'";
         }
         $dbh->do(q{
             INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
@@ -167,6 +181,8 @@ return {
                     PRIMARY KEY(`agreement_id`, `related_agreement_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_agreement_relationships'";
         }
 
         unless ( TableExists('erm_documents') ) {
@@ -188,6 +204,8 @@ return {
                     PRIMARY KEY(`document_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_documents'";
         }
 
         unless ( TableExists('erm_eholdings_packages') ) {
@@ -206,6 +224,8 @@ return {
                     PRIMARY KEY(`package_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_eholdings_packages'";
         }
 
         unless ( TableExists('erm_eholdings_packages_agreements') ) {
@@ -218,6 +238,8 @@ return {
                     CONSTRAINT `erm_eholdings_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_eholdings_packages_agreements'";
         }
 
         unless ( TableExists('erm_eholdings_titles') ) {
@@ -254,6 +276,8 @@ return {
                     PRIMARY KEY(`title_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_eholdings_titles'";
         }
         unless ( TableExists('erm_eholdings_resources') ) {
             $dbh->do(q{
@@ -272,6 +296,8 @@ return {
                     PRIMARY KEY(`resource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'erm_eholdings_resources'";
         }
 
         unless ( column_exists('aqbooksellers', 'external_id') ) {
@@ -280,6 +306,8 @@ return {
                 ADD COLUMN `external_id` VARCHAR(255) DEFAULT NULL
                 AFTER `deliverytime`
             });
+
+            say $out "Added column 'aqbooksellers.external_id'";
         }
 
         $dbh->do(q{
@@ -325,6 +353,9 @@ return {
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
             VALUES ('ERMProviders', 'local', 'local|ebsco', 'Set the providers for the ERM module', 'multiple');
         });
+
+        say $out "Added new system preference 'ERMProviders'";
+
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
             VALUES
@@ -332,6 +363,7 @@ return {
             ('ERMProviderEbscoApiKey', '', '', 'API key for EBSCO', 'free');
         });
 
-
+        say $out "Added new system preference 'ERMProviderEbscoCustomerID'";
+        say $out "Added new system preference 'ERMProviderEbscoApiKey'";
     }
 };

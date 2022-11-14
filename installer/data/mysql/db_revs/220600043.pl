@@ -8,6 +8,7 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
         $dbh->do(q{INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
 ('UseLocationAsAQInSIP', '0', '', 'Use permanent_location instead of homebranch for AQ in SIP response', 'YesNo')});
-        say $out "Syspref UseLocationAsAQInSIP has been added";
+
+        say $out "Added new system preference 'UseLocationAsAQInSIP'";
     },
 }

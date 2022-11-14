@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "28787",
-    description => "Add new letter 2FA_OTP_TOKEN",
+    description => "Send a notice with the TOTP token",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
@@ -11,5 +11,6 @@ return {
             ('members', '2FA_OTP_TOKEN', '', 'two-authentication step token', 0, 'Two-authentication step token', 'Dear [% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])\r\n\r\nYour authentication token is [% otp_token %]. \r\nIt is valid one minute.', 'email')
         });
 
+        say $out "Added new letter '2FA_OTP_TOKEN' (email)";
     },
 };

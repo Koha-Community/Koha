@@ -16,5 +16,7 @@ return {
                         END
             WHERE variable='OPACSuggestionAutoFill';
         });
+
+        say $out "Updated system preference 'OPACSuggestionAutoFill'";
     },
 };

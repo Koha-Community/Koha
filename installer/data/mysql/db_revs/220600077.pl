@@ -112,6 +112,7 @@ END_CONTENT
            INSERT IGNORE INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
            VALUES ( 'members', 'ACCOUNTS_SUMMARY', '', 'Account balance slip', 1, 'Account summary for [% borrower.firstname %] [% borrower.surname %]', "$slip_content", 'print', 'default' )
         });
-        say $out "Notice added";
+
+        say $out "Added new letter 'ACCOUNTS_SUMMARY' (print)";
     },
 };

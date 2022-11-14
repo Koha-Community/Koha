@@ -12,10 +12,14 @@ return {
             ('EnableItemGroups','0','','Enable the item groups feature','YesNo');
         });
 
+        say $out "Added new system preference 'EnableItemGroups'";
+
         $dbh->do(q{
             INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
             ( 9, 'manage_item_groups', 'Create, update and delete item groups, add or remove items from a item groups');
         });
+
+        say $out "Added new permission 'manage_item_groups'";
 
         unless ( TableExists('item_groups') ) {
             $dbh->do(q{
@@ -30,6 +34,8 @@ return {
                     CONSTRAINT `item_groups_ibfk_1` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'item_groups'";
         }
 
         unless ( TableExists('item_group_items') ) {
@@ -44,6 +50,8 @@ return {
                     CONSTRAINT `item_group_items_gifk_1` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            say $out "Added new table 'item_group_items'";
         }
     },
 }
