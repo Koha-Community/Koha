@@ -11,12 +11,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
-        #instructors {
-            float: left;
-        }
-        .instructor_line {
-            padding: 0 .1em;
-        }
         .biblio-level-info {
             background-color: #f3f3f3;
             border-radius:5px;
@@ -81,7 +75,7 @@
 
             <div class="page-section">
 
-                <div class="rows">
+                <fieldset class="rows">
                 <ol>
                     <li><span class="label">Course name</span> [% course.course_name | html %]</li>
                     <li><span class="label">[% tp('Semester', 'Term') | html %]</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>
@@ -103,7 +97,7 @@
                     <li><span class="label">Student count</span> [% course.students_count | html %]</li>
                     <li><span class="label">Status</span> [% IF course.enabled == 'yes' %]Active[% ELSE %]Inactive[% END %]</li>
                 </ol>
-                </div>
+                </fieldset>
             </div> <!-- /.page-section -->
 
             [% IF course_reserves %]
