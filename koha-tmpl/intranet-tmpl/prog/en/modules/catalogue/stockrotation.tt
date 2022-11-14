@@ -44,119 +44,120 @@
     [% IF no_op_set %]
         <h1 class="title">Stock rotation details for [% INCLUDE 'biblio-title.inc' %]</h1>
         [% IF rotas.count > 0 && items.size > 0 %]
-
-            <table class="items_table dataTable no-footer" role="grid">
-                <thead>
-                    <tr>
-                        <th>Barcode</th>
-                        <th>Call number</th>
-                        <th>Rota</th>
-                        <th>Rota status</th>
-                        <th>In transit</th>
-                        <th>Stages &amp; duration in days<br>(current stage highlighted)</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH item IN items %]
+            <div class="page-section">
+                <table class="items_table dataTable no-footer" role="grid">
+                    <thead>
                         <tr>
-                            <td>[% item.bib_item.barcode | html %]</td>
-                            <td>[% item.bib_item.itemcallnumber | html %]</td>
-                            <td>
-                                [% item.rota.title | html %]
-                            </td>
-                            <td>
-                                [% IF item.rota %]
-                                    [% IF !item.rota.active %]
-                                        <span class="highlighted-row">
-                                    [% END %]
-                                        [% IF item.rota.active %]
-                                            <span>Active</span>
-                                        [% ELSE %]
-                                            <span>Inactive</span>
+                            <th>Barcode</th>
+                            <th>Call number</th>
+                            <th>Rota</th>
+                            <th>Rota status</th>
+                            <th>In transit</th>
+                            <th>Stages &amp; duration in days<br>(current stage highlighted)</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH item IN items %]
+                            <tr>
+                                <td>[% item.bib_item.barcode | html %]</td>
+                                <td>[% item.bib_item.itemcallnumber | html %]</td>
+                                <td>
+                                    [% item.rota.title | html %]
+                                </td>
+                                <td>
+                                    [% IF item.rota %]
+                                        [% IF !item.rota.active %]
+                                            <span class="highlighted-row">
                                         [% END %]
-                                    [% IF !item.rota.active %]
+                                            [% IF item.rota.active %]
+                                                <span>Active</span>
+                                            [% ELSE %]
+                                                <span>Inactive</span>
+                                            [% END %]
+                                        [% IF !item.rota.active %]
+                                            </span>
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF item.bib_item.get_transfer %]
+                                        <span>Yes</span>
+                                    [% ELSE %]
+                                        <span>No</span>
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% FOREACH this_stage IN item.stages %]
+                                        [% IF this_stage.stage_id == item.stockrotationitem.stage.stage_id %]
+                                            <span class="stage highlight_stage">
+                                        [% ELSE %]
+                                            <span class="stage">
+                                        [% END %]
+                                        [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
+                                        </span>
+                                        &raquo;
+                                    [% END %]
+                                    [% IF item.stages.size > 0 %]
+                                        <span class="stage">
+                                            [% IF item.rota.cyclical %]
+                                                START
+                                            [% ELSE %]
+                                                END
+                                            [% END %]
                                         </span>
                                     [% END %]
-                                [% END %]
-                            </td>
-                            <td>
-                                [% IF item.bib_item.get_transfer %]
-                                    <span>Yes</span>
-                                [% ELSE %]
-                                    <span>No</span>
-                                [% END %]
-                            </td>
-                            <td>
-                                [% FOREACH this_stage IN item.stages %]
-                                    [% IF this_stage.stage_id == item.stockrotationitem.stage.stage_id %]
-                                        <span class="stage highlight_stage">
-                                    [% ELSE %]
-                                        <span class="stage">
-                                    [% END %]
-                                    [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
-                                    </span>
-                                    &raquo;
-                                [% END %]
-                                [% IF item.stages.size > 0 %]
-                                    <span class="stage">
-                                        [% IF item.rota.cyclical %]
-                                            START
+                                </td>
+                                <td class="actions">
+                                    [% IF item.stockrotationitem %]
+                                        [% in_transit = item.bib_item.get_transfer %]
+                                        [% IF !in_transit && item.stages.size > 1 %]
+                                            <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                         [% ELSE %]
-                                            END
+                                            <a class="btn btn-default btn-xs" disabled>
                                         [% END %]
-                                    </span>
-                                [% END %]
-                            </td>
-                            <td class="actions">
-                                [% IF item.stockrotationitem %]
-                                    [% in_transit = item.bib_item.get_transfer %]
-                                    [% IF !in_transit && item.stages.size > 1 %]
-                                        <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
-                                    [% ELSE %]
-                                        <a class="btn btn-default btn-xs" disabled>
-                                    [% END %]
-                                        <i class="fa fa-arrow-right"></i>
-                                        Move to next stage
-                                    </a>
-                                    [% IF !in_transit %]
-                                        <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
-                                    [% ELSE %]
-                                        <a class="btn btn-default btn-xs" disabled>
-                                    [% END %]
-                                        <i class="fa fa-fire"></i>
-                                        [% IF item.stockrotationitem.indemand %]
-                                            Remove "In demand"
+                                            <i class="fa fa-arrow-right"></i>
+                                            Move to next stage
+                                        </a>
+                                        [% IF !in_transit %]
+                                            <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                         [% ELSE %]
-                                            Add "In demand"
+                                            <a class="btn btn-default btn-xs" disabled>
                                         [% END %]
-                                    </a>
-                                    [% IF !in_transit %]
-                                        <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
-                                    [% ELSE %]
-                                        <a class="btn btn-default btn-xs" disabled>
-                                    [% END %]
-                                        <i class="fa fa-trash"></i>
-                                        Remove from rota
-                                    </a>
-                                [% ELSE %]
-                                    <form class="rota_select_form" method="post" enctype="multipart/form-data">
-                                        <select class="item_select_rota" name="rota_id">
-                                            [% FOREACH rota IN rotas %]
-                                                <option value="[% rota.rota_id | uri %]">[% rota.title | html %]</option>
+                                            <i class="fa fa-fire"></i>
+                                            [% IF item.stockrotationitem.indemand %]
+                                                Remove "In demand"
+                                            [% ELSE %]
+                                                Add "In demand"
                                             [% END %]
-                                        </select>
-                                        <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-plus"></i> Add to rota</button>
-                                        <input type="hidden" name="op" value="add_item_to_rota" />
-                                        <input type="hidden" name="item_id" value="[% item.bib_item.id | uri %]" />
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber | uri %]" />
-                                    </form>
-                                [% END %]
-                            </td>
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                                        </a>
+                                        [% IF !in_transit %]
+                                            <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
+                                        [% ELSE %]
+                                            <a class="btn btn-default btn-xs" disabled>
+                                        [% END %]
+                                            <i class="fa fa-trash"></i>
+                                            Remove from rota
+                                        </a>
+                                    [% ELSE %]
+                                        <form class="rota_select_form" method="post" enctype="multipart/form-data">
+                                            <select class="item_select_rota" name="rota_id">
+                                                [% FOREACH rota IN rotas %]
+                                                    <option value="[% rota.rota_id | uri %]">[% rota.title | html %]</option>
+                                                [% END %]
+                                            </select>
+                                            <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-plus"></i> Add to rota</button>
+                                            <input type="hidden" name="op" value="add_item_to_rota" />
+                                            <input type="hidden" name="item_id" value="[% item.bib_item.id | uri %]" />
+                                            <input type="hidden" name="biblionumber" value="[% biblionumber | uri %]" />
+                                        </form>
+                                    [% END %]
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div> <!-- /.page-section -->
         [% END %]
         [% IF !items || items.size == 0 %]
             <h1>No physical items for this record</h1>
