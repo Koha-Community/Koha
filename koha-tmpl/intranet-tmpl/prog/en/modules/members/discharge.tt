@@ -62,30 +62,34 @@
     [% IF patron.holds.count %]
         <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
     [% END %]
-    <form method="post">
-        <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
-        <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
-    </form>
+    <div class="btn-toolbar">
+        <form method="post">
+            <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
+            <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
+        </form>
+    </div>
 [% END %]
 
 [% IF validated_discharges %]
-    <h2>Already validated discharges</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Requested</th>
-                <th>Validated</th>
-            </tr>
-        </thead>
-        <tbody>
-            [% FOR d IN validated_discharges %]
+    <div class="page-section">
+        <h2>Already validated discharges</h2>
+        <table>
+            <thead>
                 <tr>
-                    <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
-                    <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                    <th>Requested</th>
+                    <th>Validated</th>
                 </tr>
-            [% END %]
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                [% FOR d IN validated_discharges %]
+                    <tr>
+                        <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
+                        <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </div>
 [% END %]
 
             </main>
