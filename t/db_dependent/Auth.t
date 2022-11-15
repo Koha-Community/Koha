@@ -834,12 +834,11 @@ subtest 'Userenv clearing in check_cookie_auth' => sub {
 };
 
 subtest 'create_basic_session tests' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $interface = 'opac';
 
-    my $session = C4::Auth::create_basic_session({ patron => $patron, interface => $interface });
+    my $session = C4::Auth::create_basic_session({ patron => $patron, interface => 'opac' });
 
     isnt($session->id, undef, 'A new sessionID was created');
     is( $session->param('number'), $patron->borrowernumber, 'Session parameter number matches' );
@@ -852,7 +851,10 @@ subtest 'create_basic_session tests' => sub {
     is( $session->param('flags'), $patron->flags, 'Session parameter flags matches' );
     is( $session->param('emailaddress'), $patron->email, 'Session parameter emailaddress matches' );
     is( $session->param('ip'), $session->remote_addr(), 'Session parameter ip matches' );
-    is( $session->param('interface'), $interface, 'Session parameter interface matches' );
+    is( $session->param('interface'), 'opac', 'Session parameter interface matches' );
+
+    $session = C4::Auth::create_basic_session({ patron => $patron, interface => 'staff' });
+    is( $session->param('interface'), 'intranet', 'Staff interface gets converted to intranet' );
 };
 
 $schema->storage->txn_rollback;

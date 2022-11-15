@@ -1880,6 +1880,8 @@ sub create_basic_session {
     my $patron    = $params->{patron};
     my $interface = $params->{interface};
 
+    $interface = 'intranet' if $interface eq 'staff';
+
     my $session = get_session("");
 
     $session->param( 'number',       $patron->borrowernumber );
