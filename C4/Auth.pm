@@ -1166,6 +1166,11 @@ sub checkauth {
                     $loggedin = 1;
                 }
                 else {
+                    $auth_state = 'failed';
+                    # FIXME We could add $return = 0; or even delete the session?
+                    # Currently return == 1 and we will fill session info later on,
+                    # although we do present an authorization failure. (Yes, the
+                    # authentication was actually correct.)
                     $info{'nopermission'} = 1;
                     C4::Context->_unset_userenv($sessionID);
                 }
