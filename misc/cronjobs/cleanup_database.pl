@@ -52,7 +52,7 @@ use Koha::Patron::Debarments qw( DelDebarment );
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS] [--bg-jobs DAYS [--bg-type TYPE] ]
+Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS] [--bg-days DAYS [--bg-type TYPE] ]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -199,7 +199,7 @@ GetOptions(
     'cards'             => \$cards,
     'return-claims'     => \$return_claims,
     'bg-type:s'        => \@background_types,
-    'bg-jobs:i'         => \$background_days,
+    'bg-days:i'         => \$background_days,
 ) || usage(1);
 
 # Use default values
