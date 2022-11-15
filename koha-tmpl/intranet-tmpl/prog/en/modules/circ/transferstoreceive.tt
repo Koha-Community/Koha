@@ -51,6 +51,7 @@
         <div id="resultlist">
         [% FOREACH branchesloo IN branchesloop %]
             [% IF ( branchesloo.branchcode ) %]
+                <div class="page-section">
             <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
             <caption>Coming from [% branchesloo.branchname | html %]</caption>
             <thead><tr>
@@ -97,6 +98,7 @@
                 </tr>
             [% END %]</tbody>
             </table>
+            </div> <!-- /.page-section -->
             [% END %]
         [% END %]
         </div>

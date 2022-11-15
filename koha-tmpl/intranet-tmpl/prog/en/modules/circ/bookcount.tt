@@ -50,38 +50,43 @@
 [% INCLUDE 'blocking_errors.inc' %]
 
 <h3>Barcode [% barcode | html %]</h3>
-<table>
-        <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>
+<div class="page-section">
+    <table>
+            <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>
 
-        <tr><td>[% Branches.GetName( homebranch ) | html %]</td>
-            <td>[% Branches.GetName( holdingbranch ) | html %]</td>
-            <td>[% IF ( lastdate ) %][% lastdate | $KohaDates %][% ELSE %]Item has no transfer record[% END %]</td>
-            <td>[% count | html %]</td>
-        </tr>
-</table>
-<table>
-    <tr>
-        <th>Library</th>
-        <th>No. of times checked out</th>
-        <th>Last seen</th>
-    </tr>
-    [% FOREACH library IN libraries %]
-    [% IF library.selected %]
-        <tr class="mybranch">
-    [% ELSE %]
+            <tr><td>[% Branches.GetName( homebranch ) | html %]</td>
+                <td>[% Branches.GetName( holdingbranch ) | html %]</td>
+                <td>[% IF ( lastdate ) %][% lastdate | $KohaDates %][% ELSE %]Item has no transfer record[% END %]</td>
+                <td>[% count | html %]</td>
+            </tr>
+    </table>
+</div> <!-- /.page-section -->
+
+<div class="page-section">
+    <table>
         <tr>
-    [% END %]
-            <td>[% library.branchname | html %]</td>
-            <td>[% library.issues | html %]</td>
-            <td>[% IF library.seen %]
-                    [% library.seen | $KohaDates  with_hours => 1 %]
-                [% ELSE %]
-                    <span>Never</span>
-                [% END %]
-            </td>
+            <th>Library</th>
+            <th>No. of times checked out</th>
+            <th>Last seen</th>
         </tr>
-    [% END %]
-</table>
+        [% FOREACH library IN libraries %]
+        [% IF library.selected %]
+            <tr class="mybranch">
+        [% ELSE %]
+            <tr>
+        [% END %]
+                <td>[% library.branchname | html %]</td>
+                <td>[% library.issues | html %]</td>
+                <td>[% IF library.seen %]
+                        [% library.seen | $KohaDates  with_hours => 1 %]
+                    [% ELSE %]
+                        <span>Never</span>
+                    [% END %]
+                </td>
+            </tr>
+        [% END %]
+    </table>
+</div> <!-- /.page-section -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

@@ -49,40 +49,42 @@
 </form>
 
     [% IF ( overduesloop ) %]
-        <table style="width:100%;">
-        <tr>
-            <th>Date due</th>
-            <th>Title</th>
-            <th>Patron</th>
-            <th>Location</th>
-        </tr>
-            [% FOREACH overduesloo IN overduesloop %]
+        <div class="page-section">
+            <table style="width:100%;">
                 <tr>
-                    <td>
-                        [% overduesloo.date_due | html %]
-                    </td>
-                    <td>
-                        [% INCLUDE 'biblio-title.inc' biblio=overduesloo link = 1 %] [% IF ( overduesloo.author ) %] by [% overduesloo.author | html %][% END %]
-
-                            <br />Barcode : [% overduesloo.barcode | html %]
-                    </td>
-                    <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber | uri %]">[% overduesloo.borrowersurname | html %], [% overduesloo.borrowerfirstname | html %]</a>
-                        <br />[% overduesloo.cardnumber | html %]
-                        <br />[% overduesloo.borrowerphone | html %]<br />
-                    [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail | uri %]?subject=Overdue: [% overduesloo.title | uri %]">
-                    [% overduesloo.borroweremail | html %]</a>[% END %]
-                    </td>
-                    <td>[% Branches.GetName( overduesloo.homebranch ) | html %] [% overduesloo.itemcallnumber | html %]
-                    </td>
+                    <th>Date due</th>
+                    <th>Title</th>
+                    <th>Patron</th>
+                    <th>Location</th>
                 </tr>
-            [% END %]
-        </table>
+                [% FOREACH overduesloo IN overduesloop %]
+                    <tr>
+                        <td>
+                            [% overduesloo.date_due | html %]
+                        </td>
+                        <td>
+                            [% INCLUDE 'biblio-title.inc' biblio=overduesloo link = 1 %] [% IF ( overduesloo.author ) %] by [% overduesloo.author | html %][% END %]
+
+                                <br />Barcode : [% overduesloo.barcode | html %]
+                        </td>
+                        <td>
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber | uri %]">[% overduesloo.borrowersurname | html %], [% overduesloo.borrowerfirstname | html %]</a>
+                            <br />[% overduesloo.cardnumber | html %]
+                            <br />[% overduesloo.borrowerphone | html %]<br />
+                        [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail | uri %]?subject=Overdue: [% overduesloo.title | uri %]">
+                        [% overduesloo.borroweremail | html %]</a>[% END %]
+                        </td>
+                        <td>[% Branches.GetName( overduesloo.homebranch ) | html %] [% overduesloo.itemcallnumber | html %]
+                        </td>
+                    </tr>
+                [% END %]
+            </table>
+        </div> <!-- /.page-section -->
     [% ELSE %]
         <div class="dialog message">There are no overdues for today[% IF ( location ) %] at the selected location[% END %].</div>
     [% END %]
     [% IF ( todayoverduesloop ) %]
-        <div id="branch_odues_today_odues">
+        <div id="branch_odues_today_odues" class="page-section">
             <table style="width:100%;">
 			<caption>Today's notifications</caption>
             <tr>

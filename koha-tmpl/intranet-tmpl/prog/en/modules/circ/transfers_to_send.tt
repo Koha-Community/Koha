@@ -51,45 +51,47 @@
                         <div id="resultlist">
                             [% FOREACH library IN libraries %]
                                 [% IF ( library.branchcode ) %]
-                                <table style="width: 100%" id="transferst[% library.branchcode | html %]">
-                                    <caption>Sending to [% library.branchname | html %]</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Date of request</th>
-                                            <th class="anti-the">Title</th>
-                                            <th>Reason</th>
-                                            <th>On loan</th>
-                                            <th>Home library</th>
-                                            <th>Call number</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH transfer IN library.inbound_transfers %]
-                                            [% UNLESS transfer.datesent %]
-                                            <tr>
-                                                <td data-order="[% transfer.daterequested | html %]">
-                                                    [% transfer.daterequested | $KohaDates %]
-                                                </td>
-                                                <td>
-                                                    [% INCLUDE 'biblio-title.inc' biblio = transfer.item.biblio link = 1 %][% IF ( transfer.item.biblio.author ) %] by [% transfer.item.biblio.author | html %][% END %]
-                                                    [% IF ( transfer.item.effective_itemtype ) %] (<b>[% ItemTypes.GetDescription( transfer.item.effective_itemtype ) | html %]</b>)[% END %]
-                                                    <br />Barcode: [% transfer.item.barcode | html %]
-                                                </td>
-                                                <td><p>[% PROCESS transfer_reason transfer=transfer %]</p></td>
-                                                <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]On shelf[% END %]</td>
-                                                <td>[% Branches.GetName( transfer.item.homebranch ) | html %]</td>
-                                                <td>[% transfer.item.itemcallnumber | html %]</td>
-                                                <td class="actions">
-                                                    [% IF transfer.reason == 'StockrotationAdvance' %]
-                                                    <a href="/cgi-bin/koha/catalogue/stockrotation.pl?op=toggle_in_demand&stage_id=4&item_id=[% transfer.itemnumber | uri %]&biblionumber=[% transfer.item.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-fire"></i> Mark "In demand"</a>
+                                    <div class="page-section">
+                                        <table style="width: 100%" id="transferst[% library.branchcode | html %]">
+                                            <caption>Sending to [% library.branchname | html %]</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date of request</th>
+                                                    <th class="anti-the">Title</th>
+                                                    <th>Reason</th>
+                                                    <th>On loan</th>
+                                                    <th>Home library</th>
+                                                    <th>Call number</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                [% FOREACH transfer IN library.inbound_transfers %]
+                                                    [% UNLESS transfer.datesent %]
+                                                    <tr>
+                                                        <td data-order="[% transfer.daterequested | html %]">
+                                                            [% transfer.daterequested | $KohaDates %]
+                                                        </td>
+                                                        <td>
+                                                            [% INCLUDE 'biblio-title.inc' biblio = transfer.item.biblio link = 1 %][% IF ( transfer.item.biblio.author ) %] by [% transfer.item.biblio.author | html %][% END %]
+                                                            [% IF ( transfer.item.effective_itemtype ) %] (<b>[% ItemTypes.GetDescription( transfer.item.effective_itemtype ) | html %]</b>)[% END %]
+                                                            <br />Barcode: [% transfer.item.barcode | html %]
+                                                        </td>
+                                                        <td><p>[% PROCESS transfer_reason transfer=transfer %]</p></td>
+                                                        <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]On shelf[% END %]</td>
+                                                        <td>[% Branches.GetName( transfer.item.homebranch ) | html %]</td>
+                                                        <td>[% transfer.item.itemcallnumber | html %]</td>
+                                                        <td class="actions">
+                                                            [% IF transfer.reason == 'StockrotationAdvance' %]
+                                                            <a href="/cgi-bin/koha/catalogue/stockrotation.pl?op=toggle_in_demand&stage_id=4&item_id=[% transfer.itemnumber | uri %]&biblionumber=[% transfer.item.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-fire"></i> Mark "In demand"</a>
+                                                            [% END %]
+                                                        </td>
+                                                    </tr>
                                                     [% END %]
-                                                </td>
-                                            </tr>
-                                            [% END %]
-                                        [% END %]
-                                    </tbody>
-                                </table>
+                                                [% END %]
+                                            </tbody>
+                                        </table>
+                                    </div> <!-- /.page-section -->
                                 [% END %]
                             [% END %]
                         </div>
