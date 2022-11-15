@@ -93,6 +93,8 @@ if ($fileID) {
         overlay_action             => $overlay_action,
         nomatch_action             => $nomatch_action,
         item_action                => $item_action,
+        basket_id                  => $basketno,
+        vendor_id                  => $booksellerid,
     };
     try {
         my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue( $params );
