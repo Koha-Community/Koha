@@ -73,7 +73,7 @@ $(document).ready(function() {
 
         if (0 < CheckMandatorySubfields(this.form)) {
             // Open the item tab
-            $('#tabs').tabs('option', 'active', 1);
+            $('.nav-tabs .items_info').tab('show');
 
             alert(__('Some required item subfields are not set'));
             return false;
