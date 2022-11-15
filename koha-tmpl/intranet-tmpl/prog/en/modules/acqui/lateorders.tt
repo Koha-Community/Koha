@@ -308,7 +308,7 @@
                     <h4 class="modal-title" id="dateEditorLabel">Estimated delivery date</h4>
                 </div>
                 <div class="modal-body">
-                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | $KohaDates %]"/>
+                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
                 <input type="hidden" name="op" value="save" />
