@@ -147,8 +147,9 @@
          <input type="hidden" name="op" value="[% op | html %]" />
          <p>This will delete [% IF ( too_many_items_display ) %]all the[% ELSE %]the selected[% END %] items.</p>
          <input type="hidden" name="del" value="1" />
+         <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
+
          <fieldset class="action">
-        <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
         [% IF too_many_items_display %]
             <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Delete ALL submitted items" />
         [% ELSE %]
