@@ -599,7 +599,7 @@
                             <td data-order="[% books_loo.estimated_delivery_date | html %]" class="actions">
                                 [% books_loo.estimated_delivery_date | $KohaDates %]
                                 [% IF CAN_user_acquisition_order_manage %]
-                                <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]" id="delivery_date_[% books_loo.ordernumber | html %]" data-delivery_date="[% books_loo.estimated_delivery_date | $KohaDates %]">
+                                <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]" id="delivery_date_[% books_loo.ordernumber | html %]" data-delivery_date="[% books_loo.estimated_delivery_date | html %]">
                                     <i class="fa fa-pencil"></i> Edit
                                 </a>
                             </td>
@@ -1059,10 +1059,11 @@
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
                 var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
-                var date_text = $( "#delivery_date_" + ordernumber ).data("delivery_date");
+                var delivery_date = $( "#delivery_date_" + ordernumber ).data("delivery_date");
+                const estimated_delivery_date = document.querySelector("#estimated_delivery_date")._flatpickr;
+                estimated_delivery_date.setDate( delivery_date );
                 $("#dateEditor .modal-title").text(modalTitle);
                 $("#date_ordernumber").val(ordernumber);
-                $("#estimated_delivery_date").val(date_text);
                 $("#dateEditor").modal("show");
             });
 
