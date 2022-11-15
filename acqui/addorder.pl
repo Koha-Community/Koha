@@ -258,6 +258,7 @@ my $orderinfo = {
     sort1                => scalar $input->param('sort1'),
     sort2                => scalar $input->param('sort2'),
     subscriptionid       => scalar $input->param('subscriptionid'),
+    estimated_delivery_date => scalar $input->param('estimated_delivery_date'),
 };
 
 $orderinfo->{uncertainprice} ||= 0;
@@ -335,7 +336,6 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     }
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
-    $orderinfo->{estimated_delivery_date} = $orderinfo->{estimated_delivery_date} ? dt_from_string($orderinfo->{estimated_delivery_date}) : undef;
 
     my $order;
     my $log_action_name;
