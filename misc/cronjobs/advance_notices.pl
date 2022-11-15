@@ -306,7 +306,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => {
                                           'items.content' => $title,
-                                          issue           => $item_info,
+                                          checkout        => $item_info,
                                       },
                                       message_transport_type => $transport,
                                     } )
@@ -355,7 +355,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => {
                                           'items.content' => $title,
-                                          issue           => $item_info,
+                                          checkout        => $item_info,
                                       },
                                       message_transport_type => $transport,
                                     } )
@@ -595,10 +595,10 @@ sub send_digests {
         });
         my $titles = "";
         my @itemnumbers;
-        my @issues;
+        my @checkouts;
         while ( my $item_info = $next_item_info->()) {
             push @itemnumbers, $item_info->{itemnumber};
-            push( @issues, $item_info );
+            push( @checkouts, $item_info );
             $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
         }
 
@@ -608,11 +608,11 @@ sub send_digests {
                 {
                     letter_code    => $params->{letter_code},
                     borrowernumber => $borrowernumber,
-                    issues         => \@issues,
+                    checkouts      => \@checkouts,
                     substitute     => {
                         count           => $count,
                         'items.content' => $titles,
-                        issues          => \@issues,
+                        checkouts       => \@checkouts,
                         %branch_info
                     },
                     itemnumbers    => \@itemnumbers,
