@@ -349,7 +349,7 @@
           });
 
           $("#record_ids_selection").on("submit", function(e){
-            var tab = $(this).find('.ui-tabs-active:first a').attr('href');
+            var tab = $(this).find('#batch_del_form:active:first a').attr('href');
             if ( tab == '#uploadfile_tab' ) {
                 $("#shelf_number").empty('');
                 $("#recordnumber_list").val('');
