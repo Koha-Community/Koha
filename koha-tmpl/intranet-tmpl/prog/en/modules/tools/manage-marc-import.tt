@@ -383,6 +383,7 @@
                     [% END # /IF batch_lis %]
 
                     [% IF import_batch_id && !did_clean %]
+                    <div class="page-section">
                         <table id="records-table">
                             <thead>
                                 <tr>
@@ -396,6 +397,7 @@
                                 </tr>
                             </thead>
                         </table>
+                    </div>
 
                         <div id="marcPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
                             <div class="modal-dialog modal-wide">
