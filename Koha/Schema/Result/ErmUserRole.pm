@@ -23,6 +23,14 @@ __PACKAGE__->table("erm_user_roles");
 
 =head1 ACCESSORS
 
+=head2 user_role_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
+primary key
+
 =head2 agreement_id
 
   data_type: 'integer'
@@ -58,6 +66,8 @@ role of the user
 =cut
 
 __PACKAGE__->add_columns(
+  "user_role_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "agreement_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "license_id",
@@ -67,6 +77,18 @@ __PACKAGE__->add_columns(
   "role",
   { data_type => "varchar", is_nullable => 0, size => 80 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</user_role_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("user_role_id");
 
 =head1 RELATIONS
 
@@ -126,8 +148,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-01 07:44:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RkK5cQWFEmcrDioAfjOVWQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-16 12:23:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HbkogqUuTLQCaUY1VrT6Hw
 
 sub koha_object_class {
     'Koha::ERM::UserRole';
