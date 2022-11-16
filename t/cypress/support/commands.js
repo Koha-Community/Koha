@@ -59,5 +59,6 @@ Cypress.Commands.add('fetch_initial_ERM_sys_pref_value', () => {
 })
 
 Cypress.Commands.add('reset_initial_ERM_sys_pref_value', () => {
+    cy.login("koha", "koha");
     cy.set_ERM_sys_pref_value(Cypress.env("initial_ERM_Module_sys_pref_value"));
 })
