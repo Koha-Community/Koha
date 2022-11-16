@@ -88,8 +88,8 @@ $(document).ready(function () {
             $("#header_search a[href='#entire_record']").tab("show");
         }
     }
-
 });
+const template_path = "[% interface | html %]/[% theme | html %]";
 
 </script>
 <!-- / authorities_js.inc -->
