@@ -219,28 +219,37 @@ a.tagnum {
     width: 1em;
 }
 
-#cataloguing_additem_newitem .subfield_line {
+.item_edit_form .subfield_line {
+    align-items: flex-start;
     display: flex;
     flex-basis: 100%;
 }
 
-#cataloguing_additem_newitem fieldset.rows label,
-#cataloguing_additem_newitem fieldset.rows span.label {
+div.item_edit_form ol li label,
+div.item_edit_form ol li span.label {
     flex-basis: 25%;
     font-size: 100%;
     margin-right: 1rem;
 }
 
-#cataloguing_additem_newitem fieldset.rows li {
+div.item_edit_form ol li {
     padding-bottom: 3px;
 }
 
-#cataloguing_additem_newitem .input_marceditor {
+.item_edit_form .input_marceditor {
     flex-basis: 50%;
+    float: none;
 }
 
-#cataloguing_additem_newitem textarea.input_marceditor {
+.item_edit_form textarea.input_marceditor {
     width: 31em;
+}
+
+div.item_edit_form ol li label:first-child,
+fieldset.order_details ol li label:first-child,
+div.item_edit_form ol li .label:first-child,
+fieldset.order_details ol li .label:first-child {
+    flex-basis: 25%;
 }
 
 #cat_addbiblio .field_marceditor .flatpickr_wrapper {
