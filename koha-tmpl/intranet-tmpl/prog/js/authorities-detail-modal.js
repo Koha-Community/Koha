@@ -1,3 +1,4 @@
+/* global template_path */
 $(document).ready(function(){
     $(".authority_preview a").on("click", function(e){
         e.preventDefault();
@@ -17,6 +18,6 @@ $(document).ready(function(){
     });
     $("#authorityDetail").on("hidden.bs.modal", function(){
         $("#authorityDetail .modal-body, #authorityDetail .modal-title").html("");
-        $("#authorityDetail .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /></div>");
+        $("#authorityDetail .modal-body").html("<img src=\"" + template_path + "/img/spinner-small.gif\" alt=\"\" />");
     });
 });
