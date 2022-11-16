@@ -1,4 +1,4 @@
-function updateProgress(job_id) {
+function updateProgress(job_id, callback) {
     $.getJSON('/api/v1/jobs/' + job_id, function(job){
         let recheck = true;
 
@@ -19,6 +19,7 @@ function updateProgress(job_id) {
             $('#progress-bar-' + job_id).addClass("progress-bar-success");
             $('#progress-bar-' + job_id).attr('aria-valuenow', 100).css("width", "100%");
             recheck = false;
+            callback();
         } else if ( job.status == "failed" ) {
             $('#job-percent-' + job_id).text(0);
             $('#job-status-' + job_id).text(JOB_PROGRESS_FAILED);
@@ -28,7 +29,7 @@ function updateProgress(job_id) {
         }
 
         if ( recheck ) {
-            setTimeout(function(){updateProgress(job_id)}, 1 * 1000);
+            setTimeout(function(){updateProgress(job_id, callback)}, 1 * 1000);
         }
     });
 }

@@ -79,6 +79,7 @@
               <p>The job has been enqueued! It will be processed as soon as possible.</p>
                [% INCLUDE "job_progress.inc" job_id=job_id %]
               <p><a class="job_details" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
+              <div id="job_callback"></div>
             </div>
         [% ELSE %]
 <h1>Stage MARC records for import</h1>
@@ -105,8 +106,7 @@
 
     <div id="fileuploadpanel">
         <div id="fileuploadstatus" class="progress_panel">Upload progress:
-            <progress id="fileuploadprogress" max="100" value="0">
-            </progress>
+            <progress id="fileuploadprogress" max="100" value="0"></progress>
             <span class="fileuploadpercent">0</span>%
         </div>
         <div id="fileuploadfailed"></div>
@@ -428,7 +428,17 @@
                 })
             });
             [% IF job_enqueued %]
-                updateProgress([% job_id | html %]);
+                updateProgress([% job_id | html %], function(){
+                    $.getJSON('/api/v1/jobs/[% job_id | html %]', function(job){
+                        let import_batch_id = job.data.report.import_batch_id;
+                        $('<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=%s">%s</a></p>'.format(import_batch_id, _("View batch"))).appendTo("#job_callback");
+                        let basket_id = job.data.report.basket_id;
+                        let vendor_id = job.data.report.vendor_id;
+                        if ( basket_id && vendor_id ) {
+                            $('<p><a id="addtobasket" class="btn btn-default" href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=%s&basketno=%s&booksellerid=%s">%s</a></p>'.format(import_batch_id, basket_id, vendor_id, _("Add staged files to basket"))).appendTo("#job_callback");
+                        }
+                    });
+                });
             [% END %]
         });
 
