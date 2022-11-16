@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE Branches %]
 [% IF ( CAN_user_catalogue ) %]
     <div id="catalog_search" class="residentsearch">
@@ -13,7 +14,9 @@
                     <input type="text" name="q" id="search-form" size="20" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% END %]
 
-                <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                [% IF Koha.Preference('IntranetCatalogSearchPulldown') || Koha.Preference('IntranetAddMastheadLibraryPulldown') %]
+                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                [% END %]
             </span>
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 

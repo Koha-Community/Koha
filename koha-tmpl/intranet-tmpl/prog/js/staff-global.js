@@ -71,7 +71,6 @@ $(document).ready(function() {
 
     $('#header_search .form-extra-content-toggle').on('click', function () {
         const extraContent = $(this).closest('form').find('.form-extra-content');
-        console.log(extraContent);
         if (extraContent.is(':visible')) {
             extraContent.hide();
         } else {
