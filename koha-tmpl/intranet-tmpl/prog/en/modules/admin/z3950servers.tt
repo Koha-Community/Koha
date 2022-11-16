@@ -13,10 +13,10 @@
 
 <title>
     [% IF op == 'edit' %]
-        Modify [% PROCESS ServerType %] server [% server.servername | html %] &rsaquo; [% END %]
+        Modify [% PROCESS ServerType | remove("</*span>") %] server [% server.servername | html %] &rsaquo; [% END %]
 
     [% IF op ==  'add' %]
-        New [% PROCESS ServerType %] server &rsaquo; [% END %]
+        New [% PROCESS ServerType | remove("</*span>") %] server &rsaquo; [% END %]
 
     Z39.50/SRU servers &rsaquo; Administration &rsaquo; Koha
 </title>
