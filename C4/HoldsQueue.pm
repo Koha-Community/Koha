@@ -895,8 +895,21 @@ are allowed to be passed to avoid calculating them many times inside loops.
 
 sub update_queue_for_biblio {
     my ($args) = @_;
-
     my $biblio_id = $args->{biblio_id};
+    my $result;
+
+    # We need to empty the queue for this biblio unless CreateQueue has emptied the entire queue for rebuilding
+    if ( $args->{delete} ) {
+        my $dbh = C4::Context->dbh;
+
+        $dbh->do("DELETE FROM tmp_holdsqueue WHERE biblionumber=$biblio_id");
+        $dbh->do("DELETE FROM hold_fill_targets WHERE biblionumber=$biblio_id");
+    }
+
+    my $hold_requests   = GetPendingHoldRequestsForBib($biblio_id);
+    $result->{requests} = scalar( @{$hold_requests} );
+    # No need to check anything else if there are no holds to fill
+    return $result unless $result->{requests};
 
     my $branches_to_use = $args->{branches_to_use} // load_branches_to_pull_from( C4::Context->preference('UseTransportCostMatrix') );
     my $transport_cost_matrix;
@@ -908,20 +921,9 @@ sub update_queue_for_biblio {
         $transport_cost_matrix = $args->{transport_cost_matrix};
     }
 
-    if ( $args->{delete} ) {
-        my $dbh = C4::Context->dbh;
-
-        $dbh->do("DELETE FROM tmp_holdsqueue WHERE biblionumber=$biblio_id");
-        $dbh->do("DELETE FROM hold_fill_targets WHERE biblionumber=$biblio_id");
-    }
-
-    my $hold_requests   = GetPendingHoldRequestsForBib($biblio_id);
     my $available_items = GetItemsAvailableToFillHoldRequestsForBib( $biblio_id, $branches_to_use );
 
-    my $result = {
-        requests        => scalar( @{$hold_requests} ),
-        available_items => scalar( @{$available_items} ),
-    };
+    $result->{available_items}  = scalar( @{$available_items} );
 
     my $item_map = MapItemsToHoldRequests( $hold_requests, $available_items, $branches_to_use, $transport_cost_matrix );
     $result->{mapped_items} = scalar( keys %{$item_map} );
