@@ -199,52 +199,54 @@
 [% END %]
 
 [% BLOCK table_results %]
-    <table id="uploadresults">
-    <thead>
-    <tr>
-        <th>Filename</th>
-        <th>Size</th>
-        <th>Hashvalue</th>
-        <th>Date added</th>
-        <th>Category</th>
-        [% IF !plugin %]<th>Public</th>[% END %]
-        [% IF !plugin %]<th>Temporary</th>[% END %]
-        <th class="NoSort noExport">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    [% FOREACH record IN uploads %]
-    <tr>
-        <td>[% record.filename | html %]</td>
-        <td>[% record.filesize | html %]</td>
-        <td>[% record.hashvalue | html %]</td>
-        <td data-order="[% record.dtcreated | html %]">[% record.dtcreated | $KohaDates with_hours = 1 %]</td>
-        <td>
-            <a href="/cgi-bin/koha/tools/upload.pl?op=browse&browsecategory=[% record.uploadcategorycode | uri %]">[% AuthorisedValues.GetByCode( 'UPLOAD', record.uploadcategorycode ) | html %]</a>
-        </td>
-        [% IF !plugin %]
-            <td>
-                [% IF record.public %]
-                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
-                [% ELSE %]
-                    No
+    <div class="page-section">
+        <table id="uploadresults">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Hashvalue</th>
+                    <th>Date added</th>
+                    <th>Category</th>
+                    [% IF !plugin %]<th>Public</th>[% END %]
+                    [% IF !plugin %]<th>Temporary</th>[% END %]
+                    <th class="NoSort noExport">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH record IN uploads %]
+                    <tr>
+                        <td>[% record.filename | html %]</td>
+                        <td>[% record.filesize | html %]</td>
+                        <td>[% record.hashvalue | html %]</td>
+                        <td data-order="[% record.dtcreated | html %]">[% record.dtcreated | $KohaDates with_hours = 1 %]</td>
+                        <td>
+                            <a href="/cgi-bin/koha/tools/upload.pl?op=browse&browsecategory=[% record.uploadcategorycode | uri %]">[% AuthorisedValues.GetByCode( 'UPLOAD', record.uploadcategorycode ) | html %]</a>
+                        </td>
+                        [% IF !plugin %]
+                            <td>
+                                [% IF record.public %]
+                                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
+                                [% ELSE %]
+                                    No
+                                [% END %]
+                            </td>
+                            <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
+                        [% END %]
+                        <td class="actions">
+                            [% IF plugin %]
+                                <button class="btn btn-default btn-xs choose_entry" data-record-hashvalue="[% record.hashvalue | html %]"><i class="fa fa-plus"></i> Choose</button>
+                            [% END %]
+                            <button class="btn btn-default btn-xs download_entry" data-record-id="[% record.id | html %]"><i class="fa fa-download"></i> Download</button>
+                            [% IF record.owner == owner || CAN_user_tools_upload_manage %]
+                                <button class="btn btn-default btn-xs delete_entry" data-record-id="[% record.id | html %]"><i class="fa fa-trash"></i> Delete</button>
+                            [% END %]
+                        </td>
+                    </tr>
                 [% END %]
-            </td>
-            <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
-        [% END %]
-        <td class="actions">
-            [% IF plugin %]
-                <button class="btn btn-default btn-xs choose_entry" data-record-hashvalue="[% record.hashvalue | html %]"><i class="fa fa-plus"></i> Choose</button>
-            [% END %]
-            <button class="btn btn-default btn-xs download_entry" data-record-id="[% record.id | html %]"><i class="fa fa-download"></i> Download</button>
-            [% IF record.owner == owner || CAN_user_tools_upload_manage %]
-                <button class="btn btn-default btn-xs delete_entry" data-record-id="[% record.id | html %]"><i class="fa fa-trash"></i> Delete</button>
-            [% END %]
-        </td>
-   </tr>
-   [% END %]
-   </tbody>
-   </table>
+            </tbody>
+        </table>
+    </div> <!-- /.page-section -->
 [% END %]
 
 <style>

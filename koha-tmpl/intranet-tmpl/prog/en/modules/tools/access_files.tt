@@ -40,24 +40,26 @@
     <div class="dialog alert"><strong>Error: </strong>Files could not be found because the "access_dir" option was not set in "koha-conf.xml". Contact your system administrator to add this option.</div>
 [% ELSE %]
     [% IF ( files_loop ) %]
-        <table id="files">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Size (bytes)</th>
-                    <th>Date last modified</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH file IN files_loop %]
-                <tr>
-                    <td><a href="/cgi-bin/koha/tools/access_files.pl?id=[% file.id |url %]">[% file.name | html %]</a></td>
-                    <td align="right">[% file.size | html %]</td>
-                    <td data-order="[% file.date | html %]">[% file.date | $KohaDates %]</td>
-                </tr>
-                [% END %]
-            </tbody>
-        </table>
+        <div class="page-section">
+            <table id="files">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size (bytes)</th>
+                        <th>Date last modified</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH file IN files_loop %]
+                        <tr>
+                            <td><a href="/cgi-bin/koha/tools/access_files.pl?id=[% file.id |url %]">[% file.name | html %]</a></td>
+                            <td align="right">[% file.size | html %]</td>
+                            <td data-order="[% file.date | html %]">[% file.date | $KohaDates %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
     [% ELSE %]
         <div class="dialog message">No files found.</div>
     [% END %]

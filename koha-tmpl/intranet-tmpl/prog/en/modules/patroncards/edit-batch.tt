@@ -90,46 +90,48 @@
                             [% IF ( table_loop ) %]
                             <form name="items">
                                 <h2>Patrons in batch number [% batch_id | html %]</h2>
-                                <table id="batcht">
-                                    [% FOREACH table_loo IN table_loop %]
-                                        [% IF ( table_loo.header_fields ) %]
-                                            <thead>
+                                <div class="page-section">
+                                    <table id="batcht">
+                                        [% FOREACH table_loo IN table_loop %]
+                                            [% IF ( table_loo.header_fields ) %]
+                                                <thead>
+                                                    <tr>
+                                                        [% FOREACH header_field IN table_loo.header_fields %]
+                                                            [% SWITCH header_field.field_label -%]
+                                                                [% CASE "Summary" -%]
+                                                                    <th>Patron name</th>
+                                                                [% CASE "Borrower Number" %]
+                                                                    <th>Borrower number</th>
+                                                                [% CASE "Actions " %]
+                                                                    <th class="noExport">Actions</th>
+                                                                [% CASE "Select" -%]
+                                                                    <th>Select</th>
+                                                                [% CASE %]
+                                                                    <th>[% header_field.field_label | html %]</th>
+                                                            [% END -%]
+                                                        [% END %]
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                            [% ELSE %]
                                                 <tr>
-                                                    [% FOREACH header_field IN table_loo.header_fields %]
-                                                        [% SWITCH header_field.field_label -%]
-                                                            [% CASE "Summary" -%]
-                                                                <th>Patron name</th>
-                                                            [% CASE "Borrower Number" %]
-                                                                <th>Borrower number</th>
-                                                            [% CASE "Actions " %]
-                                                                <th class="noExport">Actions</th>
-                                                            [% CASE "Select" -%]
-                                                                <th>Select</th>
-                                                            [% CASE %]
-                                                                <th>[% header_field.field_label | html %]</th>
-                                                        [% END -%]
+                                                    [% FOREACH text_field IN table_loo.text_fields %]
+                                                        [% IF ( text_field.select_field ) %]
+                                                            <td>
+                                                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;label_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                                <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-share-square-o"></i> Export</a>
+                                                            </td>
+                                                            <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
+                                                        [% ELSE %]
+                                                            <td>[% text_field.field_value | html %]</td>
+                                                        [% END %]
                                                     [% END %]
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                        [% ELSE %]
-                                            <tr>
-                                                [% FOREACH text_field IN table_loo.text_fields %]
-                                                    [% IF ( text_field.select_field ) %]
-                                                        <td>
-                                                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;label_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
-                                                            <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-share-square-o"></i> Export</a>
-                                                        </td>
-                                                        <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
-                                                    [% ELSE %]
-                                                        <td>[% text_field.field_value | html %]</td>
-                                                    [% END %]
-                                                [% END %]
-                                            </tr>
+                                            [% END %]
                                         [% END %]
-                                    [% END %]
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </form>
                             [% ELSE %]
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">

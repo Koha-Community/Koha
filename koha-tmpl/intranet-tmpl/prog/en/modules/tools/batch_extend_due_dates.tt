@@ -127,40 +127,42 @@
                     [% ELSIF view == 'list' %]
                         [% IF checkouts.count %]
                             <form action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" method="post" id="process">
-                                <div class="btn-toolbar selections-toolbar">
-                                    <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
-                                    | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
-                                </div>
-                                <table id="checkouts">
-                                    <thead>
-                                        <tr>
-                                            <th>&nbsp;</th>
-                                            <th>Due date</th>
-                                            <th>Title</th>
-                                            <th>Item type</th>
-                                            <th>Home library</th>
-                                            <th>Checked out on</th>
-                                            <th>Checked out from</th>
-                                            <th>New due date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOR checkout IN checkouts %]
+                                <div class="page-section">
+                                    <div class="btn-toolbar selections-toolbar">
+                                        <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
+                                        | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
+                                    </div>
+                                    <table id="checkouts">
+                                        <thead>
                                             <tr>
-                                                <td><input type="checkbox" name="issue_id" value="[% checkout.issue_id | html %]" /></td>
-                                                <td>[% checkout.date_due | $KohaDates as_due_date => 1 %]</td>
-                                                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout.item.biblio.biblionumber | uri %]">[% checkout.item.biblio.title | html %]</a></td>
-                                                <td>[% ItemTypes.GetDescription( checkout.item.effective_itemtype ) | html %]</td>
-                                                <td>[% checkout.item.home_branch.branchname | html %]</td>
-                                                <td>[% checkout.issuedate | $KohaDates %]</td>
-                                                <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
-                                                <td>
-                                                    [% new_due_dates.shift | $KohaDates as_due_date => 1 %]
-                                                </td>
+                                                <th>&nbsp;</th>
+                                                <th>Due date</th>
+                                                <th>Title</th>
+                                                <th>Item type</th>
+                                                <th>Home library</th>
+                                                <th>Checked out on</th>
+                                                <th>Checked out from</th>
+                                                <th>New due date</th>
                                             </tr>
-                                        [% END %]
-                                    </tbody>
-                                </table> <!-- /#checkouts -->
+                                        </thead>
+                                        <tbody>
+                                            [% FOR checkout IN checkouts %]
+                                                <tr>
+                                                    <td><input type="checkbox" name="issue_id" value="[% checkout.issue_id | html %]" /></td>
+                                                    <td>[% checkout.date_due | $KohaDates as_due_date => 1 %]</td>
+                                                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout.item.biblio.biblionumber | uri %]">[% checkout.item.biblio.title | html %]</a></td>
+                                                    <td>[% ItemTypes.GetDescription( checkout.item.effective_itemtype ) | html %]</td>
+                                                    <td>[% checkout.item.home_branch.branchname | html %]</td>
+                                                    <td>[% checkout.issuedate | $KohaDates %]</td>
+                                                    <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
+                                                    <td>
+                                                        [% new_due_dates.shift | $KohaDates as_due_date => 1 %]
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        </tbody>
+                                    </table> <!-- /#checkouts -->
+                                </div> <!-- /.page-section -->
                                 <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected checkouts!</div>
                                 <fieldset class="action">
                                     <input type="hidden" name="op" value="modify" />

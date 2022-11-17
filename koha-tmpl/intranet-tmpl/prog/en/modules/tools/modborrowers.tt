@@ -161,20 +161,22 @@
                             <div class="dialog alert"><p>Warning, the following card numbers were not found:</p></div>
                         [% END %]
 
-                        <table style="margin:auto;">
-                            <thead>
-                                [% IF ( useborrowernumbers ) -%]
-                                    <tr><th>Borrowernumbers not found</th></tr>
-                                [% ELSE -%]
-                                    <tr><th>Card numbers not found</th></tr>
-                                [% END %]
-                            </thead>
-                            <tbody>
-                                [% FOREACH notfoundcardnumber IN notfoundcardnumbers %]
-                                    <tr><td>[% notfoundcardnumber.cardnumber | html %]</td></tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                        <div class="page-section">
+                            <table style="margin:auto;">
+                                <thead>
+                                    [% IF ( useborrowernumbers ) -%]
+                                        <tr><th>Borrowernumbers not found</th></tr>
+                                    [% ELSE -%]
+                                        <tr><th>Card numbers not found</th></tr>
+                                    [% END %]
+                                </thead>
+                                <tbody>
+                                    [% FOREACH notfoundcardnumber IN notfoundcardnumbers %]
+                                        <tr><td>[% notfoundcardnumber.cardnumber | html %]</td></tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div> <!-- /.page-section -->
                     [% END %]
 
                     [% IF ( op == 'show_results' ) %]
@@ -205,7 +207,7 @@
                         [% END %]
                     [% END %]
                         [% IF borrowers %]
-                            <div id="cataloguing_additem_itemlist">
+                            <div id="cataloguing_additem_itemlist" class="page-section">
                                 <div style="overflow:auto">
                                     <table id="borrowerst">
                                         <thead>

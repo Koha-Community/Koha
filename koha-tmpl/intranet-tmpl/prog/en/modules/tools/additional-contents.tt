@@ -340,124 +340,126 @@
     </span>
 
     [% IF additional_contents.count %]
-        <form id="del_form" method="post" action="/cgi-bin/koha/tools/additional-contents.pl">
-            <table id="table_additional_contents">
-                <thead>
-                    <tr>
-                        <th class="NoSort">&nbsp;</th>
-                        <th>Location</th>
-                        <th>Library</th>
-                        <th>Number</th>
-                        <th>Publication date</th>
-                        <th>Expiration date</th>
-                        <th class="anti-the">Title</th>
-                        <th>Author</th>
-                        [% IF category == 'pages' %]
-                            <th>Page URL</th>
-                            <th class="anti-the">Page</th>
-                        [% ELSE %]
-                            <th class="anti-the">News</th>
-                        [% END %]
-                        <th class="NoSort noExport">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH c IN additional_contents%]
-                        [% IF ( c.is_expired ) %]<tr class="expired">[% ELSE %]<tr>[% END %]
-                        <td>
-                            <input type="checkbox" name="ids" value="[% c.idnew | html %]" />
-                        </td>
-                        <td>
-                            [% IF c.category == 'news' || c.category == 'pages' %]
-                                [% IF c.location == 'staff_and_opac' %]<span>All</span>
-                                [% ELSIF c.location == 'staff_only' %]<span>Librarian interface</span>
-                                [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
-                                [% ELSIF c.location == 'slip' %]<span>Slip</span>
-                                [% ELSE %]<span>Unknown ('[% location | html %]')</span>
-                                [% END %]
+        <div class="page-section">
+            <form id="del_form" method="post" action="/cgi-bin/koha/tools/additional-contents.pl">
+                <table id="table_additional_contents">
+                    <thead>
+                        <tr>
+                            <th class="NoSort">&nbsp;</th>
+                            <th>Location</th>
+                            <th>Library</th>
+                            <th>Number</th>
+                            <th>Publication date</th>
+                            <th>Expiration date</th>
+                            <th class="anti-the">Title</th>
+                            <th>Author</th>
+                            [% IF category == 'pages' %]
+                                <th>Page URL</th>
+                                <th class="anti-the">Page</th>
                             [% ELSE %]
-                                [% c.location | html %]
+                                <th class="anti-the">News</th>
                             [% END %]
-                        </td>
-                        <td>
-                            [% IF ( c.branchcode == "" ) -%]
-                            All libraries
-                            [% ELSE %][% c.library.branchname | html %]
-                            [% END %]
-                        </td>
-                        <td>[% c.number | html %]</td>
-                        <td data-order="[% c.published_on | html %]">[% c.published_on | $KohaDates %]</td>
-                        <td data-order="[% c.expirationdate | html %]">[% c.expirationdate | $KohaDates %] [% IF ( c.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
-                        <td>[% c.title | html %]</td>
-                        <td>[% IF ( c.author) %][% INCLUDE 'patron-title.inc' patron=c.author %][% END %]</td>
-                        [% IF category == 'pages' %]
-                            <td class="actions">
-                                [% IF c.location == 'opac_only' OR c.location == 'staff_and_opac' %]
-                                    <strong>OPAC</strong>:
-                                    <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | url %]" title="View on OPAC">Default</a>
-                                    OR
-                                    <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?code=[% c.code | url %]" title="View on OPAC">Current language</a>
-                                [% END %]
-                                [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
-                                    [% IF c.location == 'staff_and_opac' %]<br/>[% END %]
-                                    <strong>Librarian interface</strong>:
-                                    <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | url %]" title="View on librarian interface">Default</a>
-                                    OR
-                                    <a href="/cgi-bin/koha/tools/page.pl?code=[% c.code | url %]" title="View on librarian interface">Current language</a>
+                            <th class="NoSort noExport">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH c IN additional_contents%]
+                            [% IF ( c.is_expired ) %]<tr class="expired">[% ELSE %]<tr>[% END %]
+                            <td>
+                                <input type="checkbox" name="ids" value="[% c.idnew | html %]" />
+                            </td>
+                            <td>
+                                [% IF c.category == 'news' || c.category == 'pages' %]
+                                    [% IF c.location == 'staff_and_opac' %]<span>All</span>
+                                    [% ELSIF c.location == 'staff_only' %]<span>Librarian interface</span>
+                                    [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
+                                    [% ELSIF c.location == 'slip' %]<span>Slip</span>
+                                    [% ELSE %]<span>Unknown ('[% location | html %]')</span>
+                                    [% END %]
+                                [% ELSE %]
+                                    [% c.location | html %]
                                 [% END %]
                             </td>
-                        [% END %]
-                        <td>
-                            <div class="btn-group">
-                                <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
-                            </div>
-                            <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content modal-lg">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Preview of: "[% c.title | html %]"</h5>
+                            <td>
+                                [% IF ( c.branchcode == "" ) -%]
+                                All libraries
+                                [% ELSE %][% c.library.branchname | html %]
+                                [% END %]
+                            </td>
+                            <td>[% c.number | html %]</td>
+                            <td data-order="[% c.published_on | html %]">[% c.published_on | $KohaDates %]</td>
+                            <td data-order="[% c.expirationdate | html %]">[% c.expirationdate | $KohaDates %] [% IF ( c.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
+                            <td>[% c.title | html %]</td>
+                            <td>[% IF ( c.author) %][% INCLUDE 'patron-title.inc' patron=c.author %][% END %]</td>
+                            [% IF category == 'pages' %]
+                                <td class="actions">
+                                    [% IF c.location == 'opac_only' OR c.location == 'staff_and_opac' %]
+                                        <strong>OPAC</strong>:
+                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.idnew | url %]" title="View on OPAC">Default</a>
+                                        OR
+                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?code=[% c.code | url %]" title="View on OPAC">Current language</a>
+                                    [% END %]
+                                    [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
+                                        [% IF c.location == 'staff_and_opac' %]<br/>[% END %]
+                                        <strong>Librarian interface</strong>:
+                                        <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | url %]" title="View on librarian interface">Default</a>
+                                        OR
+                                        <a href="/cgi-bin/koha/tools/page.pl?code=[% c.code | url %]" title="View on librarian interface">Current language</a>
+                                    [% END %]
+                                </td>
+                            [% END %]
+                            <td>
+                                <div class="btn-group">
+                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
+                                </div>
+                                <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content modal-lg">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Preview of: "[% c.title | html %]"</h5>
+                                            </div>
+                                        <div class="modal-body">
+                                            [% c.content | $raw %]
                                         </div>
-                                    <div class="modal-body">
-                                        [% c.content | $raw %]
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="actions">
-                            <div class="btn-group dropup">
-                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        [% IF ( wysiwyg ) %]
-                                            <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa fa-pencil"></i> Edit with text editor</a>
-                                        [% ELSE %]
-                                            <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil"></i> Edit with WYSIWYG editor</a>
-                                        [% END %]
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <a href="#" class="delete_news btn btn-default btn-xs" data-idnew="[% c.idnew | html %]"><i class="fa fa-trash"></i> Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="category" value="[% category | html %]" />
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Delete selected" /></fieldset>
-        </form>
-        <form action="/cgi-bin/koha/tools/additional-contents.pl" method="post" id="delete_single">
-            <input type="hidden" id="del_op" name="op" value="delete_confirmed" />
-            <input type="hidden" id="del_category" name="category" value="[% category | html %]" />
-            <input type="hidden" id="del_ids" name="ids" />
-        </form>
+                            </td>
+                            <td class="actions">
+                                <div class="btn-group dropup">
+                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            [% IF ( wysiwyg ) %]
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa fa-pencil"></i> Edit with text editor</a>
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil"></i> Edit with WYSIWYG editor</a>
+                                            [% END %]
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="#" class="delete_news btn btn-default btn-xs" data-idnew="[% c.idnew | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="category" value="[% category | html %]" />
+                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Delete selected" /></fieldset>
+            </form>
+            <form action="/cgi-bin/koha/tools/additional-contents.pl" method="post" id="delete_single">
+                <input type="hidden" id="del_op" name="op" value="delete_confirmed" />
+                <input type="hidden" id="del_category" name="category" value="[% category | html %]" />
+                <input type="hidden" id="del_ids" name="ids" />
+            </form>
+        </div> <!-- /.page-section -->
     [% ELSE %]
         <div class="dialog message">There are no additional contents.</div>
     [% END %]
