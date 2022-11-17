@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
 
 use Koha::Database;
 
@@ -31,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 use_ok("Koha::Item::Templates");
 
 subtest 'get_available' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -78,10 +79,12 @@ subtest 'get_available' => sub {
         {
             patron_id => $patron_2->id,
             name      => 'My template',
-            contents  => { location => 'test' },
+            contents  => { location => 'test🙂' },
             is_shared => 0,
         }
-    )->store();
+    )->store;
+    $unshared_template->discard_changes; # refresh
+    is( $unshared_template->decoded_contents->{location}, 'test🙂', 'Tested encoding/decoding' );
 
     my $templates = Koha::Item::Templates->get_available( $patron_1->id );
     is( $templates->{owned}->count, 1, "Got back one owned template" );

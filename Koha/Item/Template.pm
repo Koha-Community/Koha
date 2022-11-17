@@ -17,8 +17,7 @@ package Koha::Item::Template;
 
 use Modern::Perl;
 
-use Encode qw(encode_utf8);
-use JSON   qw(encode_json decode_json);
+use JSON;
 
 use base qw(Koha::Object);
 
