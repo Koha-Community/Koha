@@ -273,7 +273,7 @@
                     </div> <!-- /#addStageModal -->
 
                     [% IF existing_stages.size > 0 %]
-                        <div id="manage_stages">
+                        <div id="manage_stages" class="page-section">
                             <div id="manage_stages_help">
                                 Stages can be re-ordered by using the <i class="drag_handle fa fa-lg fa-bars"></i>handle to drag and drop them to their new position
                             </div>
@@ -442,76 +442,78 @@
                     </div> <!-- /#addItemsModal -->
 
                     [% IF sritems.count > 0 %]
-                        <table id="stock_rotation_manage_items" class="items_table" role="grid">
-                            <thead>
-                                <tr>
-                                    <th>Barcode</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Call number</th>
-                                    <th class="NoSearch">In transit</th>
-                                    <th class="NoSort noExport">Stages &amp; duration in days<br>(current stage highlighted)</th>
-                                    <th class="NoSort noExport">&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH sritem IN sritems %]
+                        <div class="page-section">
+                            <table id="stock_rotation_manage_items" class="items_table" role="grid">
+                                <thead>
                                     <tr>
-                                        <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% sritem.id | uri %]&amp;biblionumber=[% sritem.item.biblio.id | uri %]#item[% sritem.id | uri %]">[% sritem.item.barcode | html %]</a></td>
-                                        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% sritem.item.biblio.id | uri %]">[% sritem.item.biblio.title | html %]</a></td>
-                                        <td>[% sritem.item.biblio.author | html %]</td>
-                                        <td>[% sritem.item.itemcallnumber | html %]</td>
-                                        <td>[% sritem.item.get_transfer ? 'Yes' : 'No' | html %]</td>
-                                        <td>
-                                            [% FOREACH this_stage IN stages %]
-                                                [% IF this_stage.stage_id == sritem.stage.stage_id %]
-                                                    <span class="stage highlight_stage">
-                                                [% ELSE %]
-                                                    <span class="stage">
-                                                [% END %]
-                                                [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
-                                                </span>
-                                                &raquo;
-                                            [% END %]
-                                            [% IF stages.size > 0 %]
-                                                <span class="stage">[% rota.cyclical ? 'START' : 'END' | html %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td class="actions">
-                                            [% in_transit = sritem.item.get_transfer %]
-                                            [% IF !in_transit && stages.size > 1 %]
-                                                <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]">
-                                            [% ELSE %]
-                                                <a class="btn btn-default btn-xs" disabled>
-                                            [% END %]
-                                                <i class="fa fa-arrow-right"></i>
-                                                Move to next stage
-                                            </a>
-                                            [% IF !in_transit %]
-                                                <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
-                                            [% ELSE %]
-                                                <a class="btn btn-default btn-xs" disabled>
-                                            [% END %]
-                                                <i class="fa fa-fire"></i>
-                                                [% IF sritem.indemand %]
-                                                <span>Remove &quot;In demand&quot;</span>
-                                                [% ELSE %]
-                                                <span>Add &quot;In demand&quot;</span>
-                                                [% END %]
-                                            </a>
-                                            [% IF !in_transit %]
-                                                <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
-                                            [% ELSE %]
-                                                <a class="btn btn-default btn-xs" disabled>
-                                            [% END %]
-                                                <i class="fa fa-trash"></i>
-                                                Remove from rota
-                                            </a>
-                                        </td>
+                                        <th>Barcode</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Call number</th>
+                                        <th class="NoSearch">In transit</th>
+                                        <th class="NoSort noExport">Stages &amp; duration in days<br>(current stage highlighted)</th>
+                                        <th class="NoSort noExport">&nbsp;</th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH sritem IN sritems %]
+                                        <tr>
+                                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% sritem.id | uri %]&amp;biblionumber=[% sritem.item.biblio.id | uri %]#item[% sritem.id | uri %]">[% sritem.item.barcode | html %]</a></td>
+                                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% sritem.item.biblio.id | uri %]">[% sritem.item.biblio.title | html %]</a></td>
+                                            <td>[% sritem.item.biblio.author | html %]</td>
+                                            <td>[% sritem.item.itemcallnumber | html %]</td>
+                                            <td>[% sritem.item.get_transfer ? 'Yes' : 'No' | html %]</td>
+                                            <td>
+                                                [% FOREACH this_stage IN stages %]
+                                                    [% IF this_stage.stage_id == sritem.stage.stage_id %]
+                                                        <span class="stage highlight_stage">
+                                                    [% ELSE %]
+                                                        <span class="stage">
+                                                    [% END %]
+                                                    [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
+                                                    </span>
+                                                    &raquo;
+                                                [% END %]
+                                                [% IF stages.size > 0 %]
+                                                    <span class="stage">[% rota.cyclical ? 'START' : 'END' | html %]</span>
+                                                [% END %]
+                                            </td>
+                                            <td class="actions">
+                                                [% in_transit = sritem.item.get_transfer %]
+                                                [% IF !in_transit && stages.size > 1 %]
+                                                    <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]">
+                                                [% ELSE %]
+                                                    <a class="btn btn-default btn-xs" disabled>
+                                                [% END %]
+                                                    <i class="fa fa-arrow-right"></i>
+                                                    Move to next stage
+                                                </a>
+                                                [% IF !in_transit %]
+                                                    <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
+                                                [% ELSE %]
+                                                    <a class="btn btn-default btn-xs" disabled>
+                                                [% END %]
+                                                    <i class="fa fa-fire"></i>
+                                                    [% IF sritem.indemand %]
+                                                    <span>Remove &quot;In demand&quot;</span>
+                                                    [% ELSE %]
+                                                    <span>Add &quot;In demand&quot;</span>
+                                                    [% END %]
+                                                </a>
+                                                [% IF !in_transit %]
+                                                    <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
+                                                [% ELSE %]
+                                                    <a class="btn btn-default btn-xs" disabled>
+                                                [% END %]
+                                                    <i class="fa fa-trash"></i>
+                                                    Remove from rota
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div> <!-- /.page-section -->
                     [% ELSE %]
 
                         <div class="dialog message">
@@ -525,11 +527,9 @@
 
                 [% ELSIF op == 'add_items_to_rota' %]
 
-                    <div class="dialog message">
-                        <h1>Add items to rota report</h1>
-                    </div>
+                    <h1>Add items to rota report</h1>
 
-                    <div>
+                    <div class="page-section">
                         [% IF barcode_status.ok.size > 0 %]
                             <h4>Items added to rota:</h4>
                             <ul>
@@ -563,6 +563,7 @@
                             </ul>
                         [% END %]
                     </div>
+
                     [% IF barcode_status.on_other.size > 0 %]
                         <form id="add_rota_item_form" method="post" enctype="multipart/form-data">
                             <fieldset>
