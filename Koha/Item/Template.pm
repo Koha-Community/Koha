@@ -41,7 +41,7 @@ sub store {
     my ($self) = @_;
 
     if ( ref( $self->contents ) eq 'HASH' ) {
-        $self->contents( encode_json( $self->contents ) );
+        $self->contents( $self->_json->encode( $self->contents ) );
     }
 
     $self = $self->SUPER::store;
@@ -56,10 +56,19 @@ Returns a deserilized perl structure of the JSON formatted contents
 sub decoded_contents {
     my ($self) = @_;
 
-    return decode_json( encode_utf8($self->contents) ) if $self->contents;
+    return $self->_json->decode($self->contents) if $self->contents;
 }
 
 =head2 Internal methods
+
+=head3 _json
+
+=cut
+
+sub _json {
+    my $self = shift;
+    $self->{_json} //= JSON->new; # Keep utf8 off !
+}
 
 =head3 _type
 
