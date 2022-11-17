@@ -38,7 +38,8 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Patrons->search->delete;
+    Koha::Patrons->search->update( { flags => 0 } );
+    $schema->resultset('UserPermission')->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -50,8 +51,6 @@ subtest 'list() tests' => sub {
     my $password = 'thePassword123';
     $librarian->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $librarian->userid;
-
-
 
     ## Authorized user tests
     # One erm_user created, should get returned
@@ -85,6 +84,7 @@ subtest 'list() tests' => sub {
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
+
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/erm/users")->status_is(403);
 
