@@ -415,8 +415,7 @@ elsif ($op eq "add-branch-cat") {
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
     $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $max_holds = $input->param('max_holds');
-    $max_holds =~ s/\s//g;
-    $max_holds = undef if $max_holds !~ /^\d+/;
+    $max_holds = strip_non_numeric($max_holds);
 
     if ($branch eq "*") {
         if ($categorycode eq "*") {
