@@ -16,6 +16,7 @@ package Koha::BackgroundJob;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode qw();
 use JSON;
 use Carp qw( croak );
 use Net::Stomp;
@@ -137,7 +138,8 @@ sub enqueue {
         # Also, here we just want the Koha instance's name, but it's not in the config...
         # Picking a random id (memcached_namespace) from the config
         my $namespace = C4::Context->config('memcached_namespace');
-        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_queue), body => $json_args } )
+        my $encoded_args = Encode::encode_utf8( $json_args ); # FIXME We should better leave this to Net::Stomp?
+        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_queue), body => $encoded_args } )
           or Koha::Exceptions::Exception->throw('Job has not been enqueued');
     } catch {
         $self->status('failed')->store;
