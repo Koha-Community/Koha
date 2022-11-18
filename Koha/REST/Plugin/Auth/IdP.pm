@@ -23,9 +23,9 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Koha::Exceptions;
 use Koha::Exceptions::Auth;
-use Koha::Patron;
+use Koha::Patrons;
 
-use C4::Auth;
+use C4::Auth qw(create_basic_session);
 
 use CGI;
 
