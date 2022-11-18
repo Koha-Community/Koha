@@ -30,40 +30,41 @@ use Mojolicious::Lite;
 plugin 'Koha::REST::Plugin::Auth::IdP';
 
 post '/register_user' => sub {
-  my $c = shift;
-  my $params = $c->req->json;
-  try {
-    my $domain = Koha::Auth::Identity::Provider::Domains->find($params->{domain_id});
-    my $patron = $c->auth->register({
-      data => $params->{data},
-      domain => $domain,
-      interface => $params->{interface}
-    });
-    $c->render(status => 200, json => $patron->to_api);
-  } catch {
-    if ( ref($_) eq 'Koha::Exceptions::Auth::Unauthorized' ) {
-      $c->render(status => 401, json => {message => 'unauthorized'});
-    } else {
-      $c->render(status => 500, json => {message => 'other error'});
+    my $c      = shift;
+    my $params = $c->req->json;
+    try {
+        my $domain = Koha::Auth::Identity::Provider::Domains->find( $params->{domain_id} );
+        my $patron = $c->auth->register(
+            {   data      => $params->{data},
+                domain    => $domain,
+                interface => $params->{interface}
+            }
+        );
+        $c->render( status => 200, json => $patron->to_api );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::Auth::Unauthorized' ) {
+            $c->render( status => 401, json => { message => 'unauthorized' } );
+        } else {
+            $c->render( status => 500, json => { message => 'other error' } );
+        }
     }
-  }
 };
 
 post '/start_session' => sub {
-  my $c = shift;
-  my $userid = my $params = $c->req->json->{userid};
+    my $c      = shift;
+    my $userid = my $params = $c->req->json->{userid};
 
-  try {
-    my $patron = Koha::Patrons->search({userid => $userid});
-    my ($status, $cookie, $session_id) = $c->auth->session($patron->next);
-    $c->render(status => 200, json => {status => $status});
-  } catch {
-    if ( ref($_) eq 'Koha::Exceptions::Auth::CannotCreateSession' ) {
-      $c->render(status => 401, json => {message => 'unauthorized'});
-    } else {
-      $c->render(status => 500, json => {message => 'other error'});
+    try {
+        my $patron = Koha::Patrons->search( { userid => $userid } );
+        my ( $status, $cookie, $session_id ) = $c->auth->session({ patron => $patron->next, interface => 'opac' });
+        $c->render( status => 200, json => { status => $status } );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::Auth::CannotCreateSession' ) {
+            $c->render( status => 401, json => { message => 'unauthorized' } );
+        } else {
+            $c->render( status => 500, json => { message => 'other error' } );
+        }
     }
-  }
 };
 
 use Test::More tests => 2;
@@ -81,53 +82,50 @@ my $builder = t::lib::TestBuilder->new;
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 subtest 'auth.register helper' => sub {
-  plan tests => 6;
+    plan tests => 6;
 
-  $schema->storage->txn_begin;
+    $schema->storage->txn_begin;
 
-  # Remove existing patrons
-  Koha::Patrons->delete;
-  my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
-  my $domain_with_register  = $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain1.com', auto_register => 1 } } );
-  my $domain_without_register  = $builder->build_object( { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain2.com', auto_register => 0 } } );
-  my $library = $builder->build_object({ class => 'Koha::Libraries'});
-  my $category = $builder->build_object( {class => 'Koha::Patron::Categories'});
-  my $user_data = {
-    firstname => 'test',
-    surname => 'test',
-    userid => 'id1',
-    branchcode => $library->branchcode,
-    categorycode => $category->categorycode
-  };
+    # Remove existing patrons
+    Koha::Patrons->delete;
+    my $provider             = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
+    my $domain_with_register = $builder->build_object(
+        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain1.com', auto_register => 1 } } );
+    my $domain_without_register = $builder->build_object(
+        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain2.com', auto_register => 0 } } );
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $category  = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $user_data = {
+        firstname    => 'test',
+        surname      => 'test',
+        userid       => 'id1',
+        branchcode   => $library->branchcode,
+        categorycode => $category->categorycode
+    };
 
-  my $t = Test::Mojo->new;
+    my $t = Test::Mojo->new;
 
-  $t->post_ok('/register_user' => json => {data => $user_data, domain_id => $domain_with_register->identity_provider_domain_id, interface => 'opac'})
-    ->status_is(200)
-    ->json_has('/firstname', 'test');
+    $t->post_ok( '/register_user' => json => { data => $user_data, domain_id => $domain_with_register->identity_provider_domain_id, interface => 'opac' } )->status_is(200)
+      ->json_has( '/firstname', 'test' );
 
-  $t->post_ok('/register_user' => json => {data => $user_data, domain_id => $domain_without_register->identity_provider_domain_id, interface => 'opac'})
-    ->status_is(401)
-    ->json_has('/message', 'unauthorized');
-  $schema->storage->txn_rollback;
+    $t->post_ok( '/register_user' => json => { data => $user_data, domain_id => $domain_without_register->identity_provider_domain_id, interface => 'opac' } )->status_is(401)
+      ->json_has( '/message', 'unauthorized' );
+    $schema->storage->txn_rollback;
 };
 
 subtest 'auth.session helper' => sub {
-  plan tests => 3;
+    plan tests => 3;
 
-  $schema->storage->txn_begin;
+    $schema->storage->txn_begin;
 
-  # Remove existing patrons
-  Koha::Patrons->delete;
-  my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    # Remove existing patrons
+    Koha::Patrons->delete;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
+    my $t = Test::Mojo->new;
+    $t->post_ok( '/start_session' => json => { userid => $patron->userid } )->status_is(200)->json_has( '/status', 'ok' );
 
-  my $t = Test::Mojo->new;
-  $t->post_ok('/start_session' => json => {userid => $patron->userid})
-    ->status_is(200)
-    ->json_has('/status', 'ok');
-
-  $schema->storage->txn_rollback;
+    $schema->storage->txn_rollback;
 };
 
 1;
