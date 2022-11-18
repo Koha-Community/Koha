@@ -5638,7 +5638,14 @@ subtest "GetSoonestRenewDate tests" => sub {
             rule_value   => '7',
         }
     );
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                autorenew_checkouts => 1,
+            }
+        }
+    );
     my $item = $builder->build_sample_item();
     my $issue = AddIssue( $patron->unblessed, $item->barcode);
     my $datedue = dt_from_string( $issue->date_due() );
