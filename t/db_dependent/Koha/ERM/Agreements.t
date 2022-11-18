@@ -104,7 +104,7 @@ subtest 'user_role' => sub {
     my $retrieved_user_roles = $agreement->user_roles;
     is( ref($retrieved_user_roles), 'Koha::ERM::UserRoles' );
     $retrieved_user_roles =
-      [ map { delete $_->{agreement_id}; $_ }
+      [ map { delete $_->{agreement_id}; delete $_->{user_role_id}; $_ }
           @{ $retrieved_user_roles->unblessed } ];
     is_deeply( $retrieved_user_roles, $user_roles );
     $agreement->user_roles( [] );
