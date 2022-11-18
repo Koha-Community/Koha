@@ -61,6 +61,9 @@ function patron_autocomplete(node, options) {
                 return on_select_callback(event, ui);
             }
         },
+        focus: function( event, ui ) {
+            event.preventDefault(); // Don't replace the text field
+        },
     })
     .data( "ui-autocomplete" )
     ._renderItem = function( ul, item ) {
