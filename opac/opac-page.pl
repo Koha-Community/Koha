@@ -45,7 +45,7 @@ if (C4::Context->userenv) {
 if( $page_id ) {
     $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['opac_only', 'staff_and_opac'], branchcode => [ $homebranch, undef ] });
 } elsif( $code ) {
-    my $lang = $query->param('language') || $query->cookie('KohaOpacLanguage');
+    my $lang = $query->param('language') || $query->cookie('KohaOpacLanguage') || $template->lang;
     # In the next query we make sure that the 'default' records come after the regular languages
     $page = Koha::AdditionalContents->search({ code => $code, lang => ['default', $lang], location => ['opac_only', 'staff_and_opac'], branchcode => [ $homebranch, undef ] }, { order_by => { -desc => \[ 'CASE WHEN lang="default" THEN "" ELSE lang END' ]}} );
 }
