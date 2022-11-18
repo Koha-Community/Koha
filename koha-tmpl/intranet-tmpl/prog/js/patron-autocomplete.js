@@ -45,8 +45,10 @@ function patron_autocomplete(node, options) {
                 success: function(data) {
                     return response(data);
                 },
-                error: function() {
-                    alert( _("An error occurred. Check the logs") );
+                error: function(e) {
+                    if ( e.state() != 'rejected' ) {
+                        alert( _("An error occurred. Check the logs") );
+                    }
                     return response();
                 }
             });
