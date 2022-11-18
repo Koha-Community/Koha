@@ -108,11 +108,10 @@ sub add {
 
                 my $class = Koha::Auth::Identity::Provider::protocol_to_class_mapping->{$protocol};
 
-                my $provider = $class->new_from_api( $body );
-                $provider->store;
-
-                $provider->set_config( $config );
-                $provider->set_mapping( $mapping );
+                my $provider = $class->new_from_api( $body )
+                                     ->set_config( $config )
+                                     ->set_mapping( $mapping )
+                                     ->store;
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $provider->identity_provider_id );
                 return $c->render(
@@ -173,9 +172,10 @@ sub update {
 
                 $provider = $provider->set_from_api( $body )->upgrade_class;
 
-                $provider->set_config( $config );
-                $provider->set_mapping( $mapping );
-                # set_config and set_mapping already called store()
+                $provider->set_config( $config )
+                         ->set_mapping( $mapping )
+                         ->store;
+
                 $provider->discard_changes;
 
                 return $c->render(

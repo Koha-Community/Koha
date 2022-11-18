@@ -107,7 +107,7 @@ sub set_config {
 
     try {
         my $encoded_config = encode_json($config);
-        $self->config($encoded_config)->store;
+        $self->config($encoded_config);
     } catch {
         Koha::Exceptions::Object::BadValue->throw("Error serializing data into JSON: $_");
     };
@@ -147,7 +147,7 @@ sub set_mapping {
 
     try {
         my $encoded_mapping = encode_json( $mapping );
-        $self->mapping( $encoded_mapping )->store;
+        $self->mapping( $encoded_mapping );
     }
     catch {
         Koha::Exceptions::Object::BadValue->throw("Error serializing data into JSON: $_");
