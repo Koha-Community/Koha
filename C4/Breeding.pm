@@ -36,7 +36,7 @@ our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(BreedingSearch Z3950Search Z3950SearchAuth);
+    @EXPORT_OK = qw(BreedingSearch ImportBreedingAuth Z3950Search Z3950SearchAuth);
 }
 
 =head1 NAME
