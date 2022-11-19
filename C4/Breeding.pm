@@ -27,7 +27,7 @@ use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use MARC::File::USMARC;
 use MARC::Field;
 use C4::ImportBatch qw( GetZ3950BatchId AddBiblioToBatch AddAuthToBatch );
-use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
+use C4::AuthoritiesMarc qw( GuessAuthTypeCode GetAuthorizedHeading );
 use C4::Languages;
 use Koha::Database;
 use Koha::XSLT::Base;
@@ -593,7 +593,7 @@ sub Z3950SearchAuth {
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
                             next if ( not defined $heading_authtype_code ) ;
 
-                            $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
+                            $heading = GetAuthorizedHeading({ record => $marcrecord });
 
                             my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], $encoding[$k], $heading );
                             my %row_data;
