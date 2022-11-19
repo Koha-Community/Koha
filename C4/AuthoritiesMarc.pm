@@ -53,6 +53,7 @@ BEGIN {
       DelAuthority
       GetAuthority
       GetAuthorityXML
+      GetAuthorizedHeading
 
       SearchAuthorities
 
