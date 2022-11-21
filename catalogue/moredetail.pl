@@ -235,6 +235,15 @@ foreach my $item (@items){
                 $item_info->{'nomod'}=1;
         }
     }
+
+    $item_info->{old_issues} = Koha::Old::Checkouts->search(
+        { itemnumber => $item->itemnumber },
+        {
+            order_by => { '-desc' => 'returndate' },
+            limit    => 3
+        }
+    );
+
     push @item_data, $item_info;
 }
 
