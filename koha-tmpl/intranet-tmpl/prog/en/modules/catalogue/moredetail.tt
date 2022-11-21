@@ -406,22 +406,15 @@
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% ITEM_DAT.object.last_returned_by.cardnumber | html %]</a>
                                             </li>
                                         [% END %]
-                                        [% IF ( ITEM_DAT.card0 ) %]
+                                        [% FOR i IN ITEM_DAT.old_issues %]
+                                            [% SET b = i.patron %]
                                             <li>
-                                                <span class="label">Last borrower:</span>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower0 | uri %]">[% ITEM_DAT.card0 | html %]</a>&nbsp;
-                                            </li>
-                                        [% END %]
-                                        [% IF ( ITEM_DAT.card1 ) %]
-                                            <li>
-                                                <span class="label">Previous borrower:</span>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 | uri %]">[% ITEM_DAT.card1 | html %]</a>&nbsp;
-                                            </li>
-                                        [% END %]
-                                        [% IF ( ITEM_DAT.card2 ) %]
-                                            <li>
-                                                <span class="label">Previous borrower:</span>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 | uri %]">[% ITEM_DAT.card2 | html %]</a>&nbsp;
+                                                [% IF loop.first %]
+                                                    <span class="label">Last borrower:</span>
+                                                [% ELSE %]
+                                                    <span class="label">Previous borrower:</span>
+                                                [% END %]
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% b.borrowernumber | uri %]">[% b.cardnumber | html %]</a>&nbsp;
                                             </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.paidfor ) %]
