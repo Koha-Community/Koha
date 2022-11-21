@@ -93,9 +93,9 @@
 
                 [%# display the search results %]
 
-
+            <div class="page-section">
                 [% IF ( total ) %]
-                    <h1>Records found in the catalog</h1>
+                    <h2>Records found in the catalog</h2>
                     <div>
                         [% total | html %] result(s) found in catalog,
                         <a href="#searchresult-breeding">[% breeding_count | html %] result(s) found in reservoir</a>
@@ -202,10 +202,11 @@
                         [% END %]
                     [% END %]
                 [% END # /IF total %]
+            </div>
 
                 [% IF ( query ) %]
-                    <hr />
-                    <div id="searchresult-breeding">
+
+                    <div id="searchresult-breeding" class="page-section">
                         <h2>Records found in the reservoir</h2>
                         [% IF ( breeding_loop ) %]
                             <table id="reservoir-table">
