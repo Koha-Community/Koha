@@ -2000,9 +2000,9 @@ li {
 }
 
 #patron_search_selected {
-    background-color: #F9FEFF;
-    border: 1px solid #B9D8D9;
-    border-color: #A2CBCC #CEE0E3 #CEE0E3 #A2CBCC;
+    background-color: lighten( $background-color-primary, 60 );
+    border: 1px solid $background-color-primary;
+    border-color: lighten( $background-color-primary, 30 ) lighten( $background-color-primary, 50 ) lighten( $background-color-primary, 50 ) lighten( $background-color-primary, 30 );
     border-radius: 3px;
     color: #333;
     display: inline-block;
@@ -2358,15 +2358,15 @@ td.bundle {
 
     a,
     span {
-        background-color: #E4ECF5;
-        border: 1px solid #A4BEDD;
+        background-color: lighten( $background-color-secondary, 50 );
+        border: 1px solid lighten( $background-color-secondary, 15 );
         border-radius: 4px;
         font-weight: bold;
         padding: .1em .4em;
         text-decoration: none;
 
         &:hover {
-            background-color: #EBEFF7;
+            background-color: lighten( $background-color-secondary, 40 )
         }
     }
 }
@@ -2811,7 +2811,7 @@ fieldset > .toptabs {
     margin-bottom: 1em;
 
     a {
-        color: #069;
+        color: $green-text-color;
         font-weight: normal;
         text-decoration: underline;
 
@@ -2819,7 +2819,7 @@ fieldset > .toptabs {
             &.jstree-hovered {
                 background: transparent none;
                 box-shadow: none;
-                color: #005580;
+                color: darken( $green-text-color, 5 );
             }
 
             &.jstree-clicked {
@@ -2999,14 +2999,6 @@ button,
     }
 }
 
-#merge-patrons {
-    padding: 0 25px;
-}
-
-#patronlist-menu {
-    padding: 0 25px;
-}
-
 .btn-xs,
 .btn-group-xs > .btn {
     font-size: 10.5px;
@@ -3120,12 +3112,6 @@ button,
             }
         }
     }
-}
-
-.loggedout {
-    color: #004D99;
-    font-weight: bold;
-    padding: .4em .2em;
 }
 
 .navbar-fixed-bottom {
@@ -4146,7 +4132,7 @@ input.renew {
         cursor: pointer;
 
         &:hover {
-            color: #004d99;
+            color: $green-text-color;
         }
     }
 }

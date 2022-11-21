@@ -209,10 +209,7 @@
 
             [% ELSE %]
             <li class="loggedout">
-                <span>
-                    <a href="/cgi-bin/koha/mainpage.pl" id="login">Log in</a>
-                    <span class="separator">|</span>
-                </span>
+                <a href="/cgi-bin/koha/mainpage.pl" id="login">Log in</a>
             </li>
             [% END %]
         </ul>

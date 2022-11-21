@@ -440,16 +440,17 @@ tbody {
 
         .paginate_button {
             border-radius: 4px;
-            color: #004D99 !important;
+            color: $green-text-color !important;
             padding-bottom: 0;
             padding-top: 0;
 
             &:hover,
             &:active {
-                background: #FFC none;
+                background: transparent none;
                 border: 1px solid transparent;
                 box-shadow: none;
-                color: #222BAC !important;
+                color: darken( $green-text-color, 5 ) !important;
+                text-decoration: underline !important;
             }
 
             &.current {
