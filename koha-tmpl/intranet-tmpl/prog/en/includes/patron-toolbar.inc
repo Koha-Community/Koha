@@ -1,7 +1,7 @@
 [% INCLUDE 'blocking_errors.inc' %]
 [% USE Categories %]
 [% USE Koha %]
-[% SET categories = Categories.limited %]
+[% SET categories = Categories.all %]
 
 [% UNLESS ( no_add ) %]
 <div id="toolbar" class="btn-toolbar">
