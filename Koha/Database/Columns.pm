@@ -38,6 +38,8 @@ to descriptions, for several tables. Currently
 
 =over
 
+=item aqorders
+
 =item biblio
 
 =item biblioitems
@@ -50,7 +52,7 @@ to descriptions, for several tables. Currently
 
 =item subscription
 
-=item suggestion
+=item suggestions
 
 =back
 
