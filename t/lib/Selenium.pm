@@ -208,6 +208,24 @@ sub wait_for_ajax {
     }
 }
 
+sub get_next_alert_text {
+    my ( $self ) = @_;
+
+    my $alert_text;
+    my $max_retries = $self->max_retries;
+    my $i;
+    $self->remove_error_handler;
+    while ( not $alert_text ) {
+        $alert_text = eval { $self->driver->get_alert_text };
+        $self->driver->pause(1000) unless $alert_text;
+
+        die "Cannot wait more for next alert (get_next_alert)"
+          if $max_retries <= ++$i;
+    }
+    $self->add_error_handler;
+    return $alert_text;
+}
+
 sub show_all_entries {
     my ( $self, $xpath_selector ) = @_;
 
