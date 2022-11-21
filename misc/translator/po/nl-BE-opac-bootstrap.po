@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-10-14 09:40-0300\n"
+"POT-Creation-Date: 2022-11-15 21:12-0300\n"
 "PO-Revision-Date: 2020-12-07 15:01+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -262,14 +262,14 @@ msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'biblio_exists' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:67
 #, c-format
 msgid "%s %s A similar document already exists: "
 msgstr "%s %s Een document met deze naam bestaat al: "
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
 #, c-format
 msgid "%s %s Did you mean: "
 msgstr "%s %s Bedoelde u: "
@@ -379,7 +379,7 @@ msgstr ""
 #. %9$s:  CASE 
 #. %10$s:  m.code | html 
 #. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:286
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:288
 #, c-format
 msgid ""
 "%s %s The suggestion has not been added. You have reached your limit for "
@@ -557,6 +557,14 @@ msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s en %s "
 #, c-format
 msgid "%s (Record no. %s)"
 msgstr "%s (Bestand nr. %s)"
+
+#. For the first occurrence,
+#. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
+#, fuzzy, c-format
+msgid "%s (default)"
+msgstr "Standaard"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -747,7 +755,7 @@ msgid "%s If you have any questions, please contact the "
 msgstr "Als dit een fout is, neem dan contact op met de bibliotheek."
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s internet gebruikers kritieken"
@@ -913,7 +921,7 @@ msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
 msgstr "%s Wachtend %s Verwerking %s Voltooid %s Geannuleerd %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:460
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:452
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Professionele beoordelingen"
@@ -924,7 +932,7 @@ msgstr "%s Professionele beoordelingen"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:274
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:276
 #, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
@@ -933,7 +941,7 @@ msgstr ""
 "%s Aankoopsuggesties %s %s Mijn aankoopsuggestie %s Aankoopsuggesties %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
 #, c-format
 msgid "%s Quotations"
 msgstr "%s Citaten"
@@ -1035,7 +1043,7 @@ msgid "%s This record has no items. %s "
 msgstr "%s Dit record heeft geen items. %s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:463
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:455
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Video uittreksels"
@@ -1596,7 +1604,7 @@ msgstr "%sBibliotheek%sBibliotheken%s"
 #. %10$s:  IF ( suggestions_loo.reason ) 
 #. %11$s:  suggestions_loo.reason | html 
 #. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:431
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
@@ -2244,7 +2252,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:446
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (op %s beoordelingen)"
@@ -2320,7 +2328,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Deel van de titel"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:523
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s stemmen)"
@@ -2577,7 +2585,7 @@ msgid "(Voided)"
 msgstr "(Geledigd)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:257
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:284
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
 #, c-format
 msgid "(done)"
@@ -2625,7 +2633,7 @@ msgstr "(verwante opzoekingen: %s%s%s)"
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:126
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:118
 #, fuzzy, c-format
 msgid "(related searches:%s %s%s)."
 msgstr "(verwante opzoekingen: %s%s%s)"
@@ -2638,8 +2646,8 @@ msgstr "(verwante opzoekingen: %s%s%s)"
 msgid "(remove)"
 msgstr "(verwijder)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:208
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:210
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:223
 #, c-format
 msgid "-- Choose --"
 msgstr "-- Kies --"
@@ -2658,7 +2666,7 @@ msgstr "-- geen -- "
 #. %1$s:  CASE 
 #. %2$s:  m.code | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:70
 #, c-format
 msgid ""
 ". Click on \"Confirm your suggestion\" to ignore this message. %s %s %s "
@@ -2862,7 +2870,7 @@ msgstr "Verwervingsdatum: van oud naar nieuw"
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:256
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:291
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:283
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
 msgid "Add"
@@ -2936,7 +2944,7 @@ msgstr "Voeg toe aan je mandje"
 msgid "Add to your list &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s catalogus"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:236
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:228
 #, c-format
 msgid "Add to..."
 msgstr "Toevoegen aan:"
@@ -3248,7 +3256,7 @@ msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Weet u zeker dat u de geselecteerde tag(s) wilt verwijderen?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Weet u zeker dat u deze suggestie wilt verwijderen?"
 
@@ -3259,7 +3267,7 @@ msgid "Are you sure you want to delete this list?"
 msgstr "Weet u zeker dat u deze lijst wilt verwijderen?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "Weet u zeker dat u deze suggestie wilt verwijderen?"
 
@@ -3466,8 +3474,8 @@ msgstr "Auteur(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:93
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #, c-format
 msgid "Author:"
 msgstr "Auteur:"
@@ -3895,7 +3903,7 @@ msgstr "Plaatsingsnummer: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:636
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:267
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
@@ -3988,7 +3996,7 @@ msgstr "Je pasnummer moet exact %s tekens lang zijn."
 msgid "Card number:"
 msgstr "Kaartnummer:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:230
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:32
 #, c-format
 msgid "Cart"
@@ -4215,10 +4223,10 @@ msgid "Clear"
 msgstr "Ruim op"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:217
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:252
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:338
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 #, c-format
 msgid "Clear all"
 msgstr "Ruim alles op"
@@ -4372,8 +4380,8 @@ msgstr "Verzameling"
 msgid "Collection library:"
 msgstr "Ophaalbibliotheek:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:143
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:147
 #, c-format
 msgid "Collection title:"
 msgstr "Verzameling titel:"
@@ -4494,7 +4502,7 @@ msgid "Confirm primary email:"
 msgstr "Belangrijkste e-mail bevestigen:"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:260
 msgid "Confirm your suggestion"
 msgstr "Bevestig uw suggestie"
 
@@ -4584,14 +4592,14 @@ msgstr "Copyright datum (nieuwste naar oudste)"
 msgid "Copyright date (oldest to newest)"
 msgstr "Copyright datum (oudste naar nieuwste)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:110
 #, c-format
 msgid "Copyright date:"
 msgstr "Copyright datum:"
 
 #. DIV
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:104
 msgid "Copyright or publication year, for example: 2016"
 msgstr "Copyright of jaar van publicatie, bijvoorbeeld: 2016"
 
@@ -4665,8 +4673,8 @@ msgid "Courses &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s catalogus"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:429
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:431
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:475
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:303
@@ -4928,13 +4936,13 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:361
 #, c-format
 msgid "Delete"
 msgstr "Verwijder"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:448
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:454
 msgid "Delete selected"
 msgstr "Keuze verwijderen"
 
@@ -5330,7 +5338,7 @@ msgstr "Inschrijven voor "
 msgid "Enrollment"
 msgstr "Inschrijven "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:59
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:61
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "Voeg een nieuwe aankoopsuggestie toe"
@@ -5439,7 +5447,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:40
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:65
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:147
 #, c-format
 msgid "Error:"
 msgstr "Fout:"
@@ -5926,8 +5934,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:206
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:326
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:332
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:282
 #, c-format
@@ -6080,7 +6088,7 @@ msgstr "Volgend beschikbaar item"
 msgid "Hide window"
 msgstr "Verberg venster"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:207
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
 #, c-format
 msgid "Highlight"
@@ -6628,7 +6636,7 @@ msgstr "Instructeurs:"
 msgid "Interlibrary loan item availability"
 msgstr "Interbibliothecair leen item beschikbaarheid"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:572
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
 #, c-format
 msgid "Interlibrary loan request"
 msgstr "Interbibliothecair leenverzoek"
@@ -6787,8 +6795,8 @@ msgid "Item type"
 msgstr "Item type"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:162
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:177
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:181
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:338
 #, c-format
 msgid "Item type:"
@@ -7047,16 +7055,8 @@ msgstr "Bibliotheekkaartnummer:"
 msgid "Library catalog"
 msgstr "Bibliotheekcatalogus"
 
-#. For the first occurrence,
-#. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:192
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:194
-#, c-format
-msgid "Library default: %s"
-msgstr "Strandaardbibliotheek: %s"
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:189
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:195
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:197
 #, c-format
 msgid "Library:"
 msgstr "Bibliotheek:"
@@ -7142,7 +7142,7 @@ msgstr "Lijst(en) waarin dit item voorkomt: "
 msgid "Lists"
 msgstr "Lijsten"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:491
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:483
 #, c-format
 msgid "Lists:"
 msgstr "Lijsten:"
@@ -7434,13 +7434,13 @@ msgstr "Hoofdadres"
 msgid "Main contact method:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:566
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:568
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:558
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
 #, c-format
 msgid "Make a "
 msgstr "Maak een "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:572
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
 #, c-format
 msgid "Make an "
 msgstr "Maak een "
@@ -7455,12 +7455,12 @@ msgstr "Betaal"
 msgid "Male:"
 msgstr "Mannelijk:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:376
 #, c-format
 msgid "Managed by"
 msgstr "Beheerd door"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:423
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:429
 #, c-format
 msgid "Managed by:"
 msgstr "Beheerd door:"
@@ -7476,7 +7476,7 @@ msgstr "Mrt"
 msgid "March"
 msgstr "Maart"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:505
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
 #, c-format
 msgid "Match:"
 msgstr "Overeenkomst:"
@@ -7687,8 +7687,8 @@ msgstr "Nieuwe lijst"
 msgid "New password:"
 msgstr "Nieuw wachtwoord:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:342
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:478
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:484
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Nieuwe aankoopsuggestie"
@@ -7706,7 +7706,7 @@ msgid "New tag(s), separated by a comma:"
 msgstr "Nieuwe tag(s), gescheiden door een komma:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:289
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:281
 #, c-format
 msgid "New tag:"
 msgstr "Nieuwe tag:"
@@ -7797,13 +7797,13 @@ msgstr "Geen uitleningen"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:383
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:384
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:392
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:400
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:413
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:408
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:420
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:429
@@ -7968,12 +7968,12 @@ msgid "No, do not delete"
 msgstr "Neen, niet verwijderen"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "No, do not delete suggestion"
 msgstr "Neen, verwijder deze suggestie niet"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "No, do not delete suggestions"
 msgstr "Neen, verwijder deze suggesties niet"
 
@@ -8035,7 +8035,7 @@ msgstr "Toon normaal"
 msgid "Not checked in %s"
 msgstr "Niet ingeleverd in %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:561
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:553
 #, c-format
 msgid "Not finding what you're looking for? "
 msgstr "Vindt u niet wat u zoekt? "
@@ -8064,13 +8064,13 @@ msgstr "Niet uitgegeven"
 msgid "Not on hold"
 msgstr "Niet gereserveerd"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr "Niet gevonden wat u zocht? Kijk naar "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:727
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:368
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:374
 #, c-format
 msgid "Note"
 msgstr "Nota"
@@ -8080,7 +8080,7 @@ msgstr "Nota"
 msgid "Note:"
 msgstr "Notitie:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:414
 #, c-format
 msgid "Note: "
 msgstr "Nota: "
@@ -8179,8 +8179,8 @@ msgstr "Nota's"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:217
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:150
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:237
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:243
 #, c-format
 msgid "Notes:"
 msgstr "Nota's:"
@@ -8297,8 +8297,8 @@ msgstr "Besteld"
 msgid "On-site checkouts"
 msgstr "Uitleningen ter plekke"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:340
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:482
 #, c-format
 msgid ""
 "Once the library has processed those suggestions you will be able to place "
@@ -8325,7 +8325,7 @@ msgstr "Online middelen:"
 msgid "Only %s results are shown: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:64
 #, c-format
 msgid ""
 "Only certain fields (marked in red) are required, but the more information "
@@ -8467,7 +8467,7 @@ msgstr "Te laat "
 msgid "Owner only"
 msgstr "Alleen eigenaar"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:549
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:541
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:764
 #, c-format
 msgid "Pages"
@@ -8690,7 +8690,7 @@ msgstr "Plaats aanvraag voor artikel %s"
 msgid "Place hold"
 msgstr "Plaats reservering"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:277
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:269
 #, fuzzy, c-format
 msgid "Place hold "
 msgstr "Plaats reservering"
@@ -8938,7 +8938,7 @@ msgstr "Vul je kaartnummer in:"
 msgid "Please fill in at least one field."
 msgstr "Sluit dit venster."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:61
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:63
 #, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
@@ -9286,7 +9286,7 @@ msgid "Public lists"
 msgstr "Publieke lijsten"
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:254
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:246
 msgid "Public lists:"
 msgstr "Publieke lijsten:"
 
@@ -9300,8 +9300,8 @@ msgstr "Uitgavedatum:"
 msgid "Publication date range"
 msgstr "Uitgavedatum bereik"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:153
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #, c-format
 msgid "Publication place:"
 msgstr "Plaats van uitgave:"
@@ -9358,19 +9358,20 @@ msgstr "Uitgever"
 msgid "Publisher location"
 msgstr "Plaats van uitgave"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:131
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:135
 #, c-format
 msgid "Publisher:"
 msgstr "Uitgever:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:33
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:342
 #, c-format
 msgid "Purchase suggestions"
 msgstr "Aankoopsuggesties"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:169
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:171
 #, c-format
 msgid "Quantity:"
 msgstr "Hoeveelheid:"
@@ -9415,8 +9416,8 @@ msgstr "Herhaal je nieuwe wachtwoord:"
 msgid "Really fuzzy "
 msgstr "Erg vaag"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:206
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:219
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:221
 #, c-format
 msgid "Reason for suggestion: "
 msgstr "Reden voor de suggestie: "
@@ -9840,18 +9841,18 @@ msgstr "Verzoek ID"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:93
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:167
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:193
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:217
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:169
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:181
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:195
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:219
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:241
 #, c-format
 msgid "Required"
 msgstr "Verplicht"
@@ -9863,7 +9864,7 @@ msgstr "Lijst opnieuw ordenen"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:58
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:303
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:120
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:172
@@ -9887,7 +9888,7 @@ msgstr "Resultaten %s tot %s van %s"
 msgid "Results of search for '%s'"
 msgstr "Zoekresultaten voor '%s'"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:180
 #, c-format
 msgid "Results per page: "
 msgstr "Resultaten per pagina: "
@@ -9940,7 +9941,7 @@ msgid "Return to the catalog home page."
 msgstr "Keer terug naar startpagina van de catalogus."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:78
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:149
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:141
 #, c-format
 msgid "Return to the last advanced search"
 msgstr "Keer terug naar laatste 'uitgebreid zoeken'-opdracht"
@@ -10055,7 +10056,7 @@ msgstr "Zaterdag"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:271
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:263
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #, c-format
 msgid "Save"
@@ -10186,7 +10187,7 @@ msgstr "Zoek naar werken van deze auteur"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:33
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:307
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
 #, c-format
 msgid "Search for:"
 msgstr "Zoek naar:"
@@ -10301,8 +10302,8 @@ msgstr "sectie:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:125
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:129
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:407
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:418
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:446
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:456
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:152
@@ -10345,10 +10346,10 @@ msgstr "Kies een specifiek exemplaar:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:214
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:251
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:335
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 #, c-format
 msgid "Select all"
 msgstr "Alles kiezen"
@@ -10359,9 +10360,9 @@ msgid "Select none"
 msgstr "Kies geen"
 
 #. INPUT type=checkbox name=biblionumber
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:316
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:319
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:323
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:308
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:311
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:315
 msgid "Select search result: %s"
 msgstr "Kies zoekresultaat: %s"
 
@@ -10371,8 +10372,8 @@ msgstr "Kies zoekresultaat: %s"
 msgid "Select searches to: "
 msgstr "Selecteer zoekopdrachten om: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:353
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 #, c-format
 msgid "Select suggestions to: "
 msgstr "Kies suggesties om: "
@@ -10382,14 +10383,14 @@ msgstr "Kies suggesties om: "
 msgid "Select the item(s) to search"
 msgstr "Kies item(s) om mee te zoeken"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:231
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:223
 #, fuzzy, c-format
 msgid "Select titles to:"
 msgstr "Kies items om: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:341
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:599
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:342
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #, c-format
@@ -10926,14 +10927,14 @@ msgstr "Sorry, u kan uw wachtwoord niet online wijzigen."
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Sorry, je sessie is verlopen. Meldt je opnieuw aan."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:165
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:157
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #, c-format
 msgid "Sort"
 msgstr "Sorteer"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:182
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:174
 #, c-format
 msgid "Sort by:"
 msgstr "Sorteer op:"
@@ -10964,8 +10965,8 @@ msgstr "Gespecialiseerd"
 msgid "Standard number"
 msgstr "Standaardnummer"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:117
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:119
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 #, c-format
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Standaardnummer (ISBN, ISSN of andere):"
@@ -10993,7 +10994,7 @@ msgstr "Statistieken"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:371
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:377
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:768
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
@@ -11002,7 +11003,7 @@ msgid "Status"
 msgstr "Status"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:201
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:431
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, c-format
 msgid "Status:"
@@ -11136,8 +11137,8 @@ msgid "Submit update request"
 msgstr "Voer je bijwerkingsverzoek in"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:262
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:264
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:267
 msgid "Submit your suggestion"
 msgstr "Stuur uw suggestie in"
 
@@ -11172,8 +11173,8 @@ msgstr "Abonneer u op deze lijst"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:121
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:135
@@ -11239,34 +11240,34 @@ msgstr "Sudoc"
 msgid "Suggest for purchase"
 msgstr "Aankoopsuggestie"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:319
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:322
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:325
 #, fuzzy, c-format
 msgid "Suggested by anyone"
 msgstr "Voorgesteld op"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:315
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:321
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:324
 #, fuzzy, c-format
 msgid "Suggested by me"
 msgstr "Voorgesteld door:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:318
 #, c-format
 msgid "Suggested by:"
 msgstr "Voorgesteld door:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:375
 #, c-format
 msgid "Suggested for"
 msgstr "Voorgesteld voor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:415
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:421
 #, c-format
 msgid "Suggested for:"
 msgstr "Voorgesteld voor:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:373
 #, c-format
 msgid "Suggested on"
 msgstr "Voorgesteld op"
@@ -11276,7 +11277,7 @@ msgstr "Voorgesteld op"
 msgid "Suggestions"
 msgstr "Suggesties"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:372
 #, c-format
 msgid "Summary"
 msgstr "Samenvatting"
@@ -11373,7 +11374,7 @@ msgid "Table of contents:"
 msgstr "Verrijkte inhoud: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:67
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:283
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:351
 #, c-format
 msgid "Tag"
@@ -11395,7 +11396,7 @@ msgid "Tag status here."
 msgstr "Tag status hier."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:294
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:286
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
 #, c-format
 msgid "Tag status here. "
@@ -11433,7 +11434,7 @@ msgstr "Tags toegevoegd: "
 msgid "Tags from this library:"
 msgstr "Tags van deze bibliotheek:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:477
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:485
 #, c-format
 msgid "Tags:"
@@ -11714,7 +11715,7 @@ msgstr "De handelingsresultaten worden voor iedere ingevoerde barcode getoond."
 msgid "The password has been changed for user \"%s\"."
 msgstr "Het wachtwoord werd gewijzigd voor deze gebruiker: \"%s\""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:302
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:304
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr "De gekozen suggesties zijn verwijderd."
@@ -11778,13 +11779,13 @@ msgstr "Er zijn geen opmerkingen voor deze titel."
 msgid "There are no items that can be placed on hold."
 msgstr "Geen van deze items kan gereserveerd worden."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:464
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:461
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:470
 #, fuzzy, c-format
 msgid "There are no pending purchase suggestions matching your search."
 msgstr "Er zijn geen aankoopsuggesties die behandeld moeten worden."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:465
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "Er zijn geen aankoopsuggesties die behandeld moeten worden."
@@ -12108,8 +12109,8 @@ msgstr "Nota's bij de titel ( %s )"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
 #, c-format
 msgid "Title:"
@@ -12303,7 +12304,7 @@ msgstr "Niet beschikbaar (verloren of vermist)"
 msgid "Unavailable issues"
 msgstr "Niet beschikbare nummers"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:214
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
 #, c-format
 msgid "Unhighlight"
@@ -12450,7 +12451,7 @@ msgstr "Toon"
 msgid "View all"
 msgstr "Toon alles"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:463
 #, c-format
 msgid "View all suggestions"
 msgstr "Alle suggesties zien"
@@ -12610,14 +12611,14 @@ msgid "With selected searches: "
 msgstr "Met geselecteerde zoekopdrachten: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "With selected suggestions: "
 msgstr "Met gekozen suggesties: "
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:341
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:599
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 msgid "With selected titles: "
 msgstr "Met gekozen titels: "
@@ -12689,12 +12690,12 @@ msgid "Yes, delete"
 msgstr "Ja, verwijder"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "Yes, delete suggestion"
 msgstr "Ja, verwijder suggestie"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:499
 msgid "Yes, delete suggestions"
 msgstr "Ja, verwijder suggesties"
 
@@ -12759,7 +12760,7 @@ msgstr ""
 msgid "You are not allowed to call this page directly"
 msgstr "U heeft geen toestemming om deze pagina rechtstreeks te benaderen"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:475
 #, c-format
 msgid "You are not authorized to see pending purchase suggestions."
 msgstr ""
@@ -12835,8 +12836,8 @@ msgstr ""
 "U heeft nog geleende items. Breng deze alstublieft terug voor u een "
 "kwijtschelding aanvraagt."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:54
 #, c-format
 msgid "You cannot place any more suggestions"
 msgstr "U kunt niet meer suggesties indienen"
@@ -12947,11 +12948,6 @@ msgstr "U heeft een krediet van:"
 msgid "You have already requested this title."
 msgstr "U heeft deze titel reeds aangevraagd."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, c-format
-msgid "You have checked out too many items and can't check out any more."
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
 #, c-format
 msgid "You have no article requests currently."
@@ -12962,12 +12958,12 @@ msgstr "U heeft momenteel geen artikelen in aanvraag."
 msgid "You have no fines or charges"
 msgstr "U heeft geen boetes of kosten"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:472
 #, c-format
 msgid "You have no pending purchase suggestions."
 msgstr "Er zijn geen wachtende aankoopsuggesties."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:463
 #, c-format
 msgid "You have no pending purchase suggestions. "
 msgstr "U heeft geen wachtende aankoopsuggesties. "
@@ -12986,15 +12982,20 @@ msgstr ""
 msgid "You have nothing checked out"
 msgstr "U heeft nog niets ontleend"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
+#, fuzzy, c-format
+msgid "You have reached the maximum limit of items checked out."
+msgstr "U heeft dit item het maximale toegelaten aantal keren verlengd."
+
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:340
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:346
 #, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s)."
 msgstr "U heeft de toegestane limiet voor het aantal suggesties bereikt (%s)."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:53
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:55
 #, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s). "
@@ -13005,7 +13006,7 @@ msgstr ""
 "de bibliotheek uw aanvragen heeft verwerkt, kunt u nieuwe nieuwe suggesties "
 "indienen."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:482
 #, c-format
 msgid "You have reached your limit for suggestions you can place at this time."
 msgstr "U heeft de toegestane limiet voor het aantal suggesties bereikt."
@@ -13062,9 +13063,9 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  Koha.Preference('MaxTotalSuggestions') | html 
 #. %2$s:  Koha.Preference('NumberOfSuggestionDays') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:338
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:344
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:480
 #, c-format
 msgid "You may only add up to %s suggestions in %s days."
 msgstr "U mag slechts %s suggesties in %s dagen plaatsen."
@@ -13081,7 +13082,7 @@ msgstr "U moet aangemeld zijn om tags toe te voegen."
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:599
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
 msgid "You must be logged in to create or add to lists"
 msgstr "U moet aangemeld zijn om lijsten te maken of er iets aan toe te voegen"
 
@@ -13432,7 +13433,7 @@ msgid "Your lists"
 msgstr "Je lijsten"
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:242
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
 msgid "Your lists:"
 msgstr "Je lijsten:"
 
@@ -13552,9 +13553,8 @@ msgstr "%s%s%sKoha online%s catalogus"
 msgid "Your privacy rules have been updated."
 msgstr "Je privacy-instellingen zijn bijgewerkt."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:362
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:368
 #, c-format
 msgid "Your purchase suggestions"
 msgstr "Je aankoopsuggesties"
@@ -13627,7 +13627,7 @@ msgid "Your search history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s catalogus"
 
 #. %1$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:111
 #, fuzzy, c-format
 msgid "Your search returned %s results. "
 msgstr "De zoekterm levert %s resultaten op."
@@ -13679,12 +13679,12 @@ msgstr ""
 msgid "ZIP/Postal code:"
 msgstr "Postcode:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:266
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:258
 #, fuzzy, c-format
 msgid "[ More lists ]"
 msgstr "Meer lijsten"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:268
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:260
 #, c-format
 msgid "[ New list ]"
 msgstr "[ Nieuwe lijst ]"
@@ -13746,7 +13746,7 @@ msgid "bib_id"
 msgstr "bib_id"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:345
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:337
 msgid "bonus"
 msgstr "bonus"
 
@@ -14017,7 +14017,7 @@ msgstr "lijst van systeemgebonden recordsymbool"
 msgid "log in using a different account"
 msgstr "log in met een ander account"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:248
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:250
 #, c-format
 msgid "negcap "
 msgstr "negcap "
@@ -14077,8 +14077,8 @@ msgstr "primaire e-mailadres"
 msgid "privacy policy"
 msgstr "privacybeleid"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:566
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:568
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:558
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
 #, c-format
 msgid "purchase suggestion"
 msgstr "aankoopsuggestie"
@@ -14221,7 +14221,7 @@ msgstr "start met"
 msgid "subjects "
 msgstr "onderwerpen "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
 #, c-format
 msgid "suggestions"
 msgstr "Suggestie"
@@ -14994,6 +14994,9 @@ msgstr "×"
 
 #~ msgid "Koha - RSS"
 #~ msgstr "Koha - RSS"
+
+#~ msgid "Library default: %s"
+#~ msgstr "Strandaardbibliotheek: %s"
 
 #~ msgid "List"
 #~ msgstr "Lijst"
