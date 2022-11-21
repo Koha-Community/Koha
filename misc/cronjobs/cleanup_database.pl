@@ -113,6 +113,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --jobs-days DAYS        Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
+   --reports DAYS          Purge reports data saved more than DAYS days ago.
 USAGE
     exit $_[0];
 }
@@ -156,6 +157,7 @@ my @log_modules;
 my @preserve_logs;
 my $jobs_days;
 my @jobs_types;
+my $reports;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -200,6 +202,7 @@ GetOptions(
     'return-claims'     => \$return_claims,
     'jobs-type:s'       => \@jobs_types,
     'jobs-days:i'       => \$jobs_days,
+    'reports:i'           => \$reports,
 ) || usage(1);
 
 # Use default values
@@ -252,6 +255,7 @@ unless ( $sessions
     || $cards
     || $return_claims
     || $jobs_days
+    || $reports
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -713,6 +717,14 @@ if ($jobs_days) {
     }
 }
 
+if ($reports) {
+    if ( $confirm ) {
+        PurgeSavedReports($reports);
+    } if ( $verbose ) {
+        say "Purging reports data saved more than $reports days ago.\n";
+    }
+}
+
 cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);
@@ -851,3 +863,12 @@ sub DeleteSpecialHolidays {
     print "Removed $count unique holidays\n" if $verbose;
 }
 
+sub PurgeSavedReports {
+    my ( $reports ) = @_;
+
+    my $sth = $dbh->prepare(q{
+            DELETE FROM saved_reports
+            WHERE date(date_run) < DATE_SUB(CURDATE(),INTERVAL ? DAY );
+        });
+    $sth->execute( $reports );
+}
