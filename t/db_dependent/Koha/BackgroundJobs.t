@@ -146,6 +146,7 @@ subtest 'search_limited' => sub {
 subtest 'purge' => sub {
     plan tests => 9;
     $schema->storage->txn_begin;
+    my $cnt_finished = Koha::BackgroundJobs->search({ status => 'finished' })->count;
 
     my $recent_date = dt_from_string;
     my $old_date = dt_from_string->subtract({ days => 3 });
@@ -161,7 +162,7 @@ subtest 'purge' => sub {
     is( Koha::BackgroundJobs->purge($params), 1, 'Only the old finished type1 job would be purged' );
 
     $params->{'job_types'} = ['all'];
-    is( Koha::BackgroundJobs->purge($params), 2, 'All finished old jobs would be purged with job_types = all' );
+    is( Koha::BackgroundJobs->purge($params), $cnt_finished + 2, 'All finished old jobs would be purged with job_types = all' );
 
     my $rs = Koha::BackgroundJobs->search(
         {
@@ -182,7 +183,7 @@ subtest 'purge' => sub {
     is( $rs->count, 3, '3 jobs still left in queue');
 
     $params->{'job_types'} = ['all'];
-    is( Koha::BackgroundJobs->purge($params), 1, 'The remaining old finished jobs is purged' );
+    is( Koha::BackgroundJobs->purge($params), $cnt_finished + 1, 'The remaining old finished jobs is purged' );
         $rs = Koha::BackgroundJobs->search(
         {
             id => [ $job_recent_t1_new->id, $job_recent_t2_fin->id, $job_old_t1_fin->id, $job_old_t2_fin->id ]
