@@ -86,19 +86,33 @@ subtest 'auth.register helper' => sub {
 
     $schema->storage->txn_begin;
 
-    # Remove existing patrons
-    Koha::Patrons->delete;
-    my $provider             = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
+    # generate a random patron
+    my $patron_to_delete = $builder->build_object({ class => 'Koha::Patrons' });
+    my $userid = $patron_to_delete->userid;
+    # delete patron
+    $patron_to_delete->delete;
+
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
+
     my $domain_with_register = $builder->build_object(
-        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain1.com', auto_register => 1 } } );
+        {   class => 'Koha::Auth::Identity::Provider::Domains',
+            value => { identity_provider_id => $provider->id, domain => 'domain1.com', auto_register => 1 }
+        }
+    );
+
     my $domain_without_register = $builder->build_object(
-        { class => 'Koha::Auth::Identity::Provider::Domains', value => { identity_provider_id => $provider->id, domain => 'domain2.com', auto_register => 0 } } );
+        {   class => 'Koha::Auth::Identity::Provider::Domains',
+            value => { identity_provider_id => $provider->id, domain => 'domain2.com', auto_register => 0 }
+        }
+    );
+
     my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $category  = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+
     my $user_data = {
         firstname    => 'test',
         surname      => 'test',
-        userid       => 'id1',
+        userid       => $userid,
         branchcode   => $library->branchcode,
         categorycode => $category->categorycode
     };
@@ -110,6 +124,7 @@ subtest 'auth.register helper' => sub {
 
     $t->post_ok( '/register_user' => json => { data => $user_data, domain_id => $domain_without_register->identity_provider_domain_id, interface => 'opac' } )->status_is(401)
       ->json_has( '/message', 'unauthorized' );
+
     $schema->storage->txn_rollback;
 };
 
@@ -118,8 +133,6 @@ subtest 'auth.session helper' => sub {
 
     $schema->storage->txn_begin;
 
-    # Remove existing patrons
-    Koha::Patrons->delete;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $t = Test::Mojo->new;
