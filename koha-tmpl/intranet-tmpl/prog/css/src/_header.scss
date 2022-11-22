@@ -85,6 +85,7 @@ a.navbar-toggle {
             border: 0;
             border-bottom-width: 0;
             padding-bottom: 0;
+            list-style-type: none;
             margin: 0;
 
             a {
@@ -191,7 +192,8 @@ a.navbar-toggle {
         }
     }
 
-    input[type="submit"], button[type="submit"] {
+    input[type="submit"],
+    button[type="submit"] {
         height: 31px;
         background-color: $background-color-secondary;
         color: white;
@@ -199,7 +201,13 @@ a.navbar-toggle {
         text-shadow: unset;
         border-radius: 0 16px 16px 0;
         margin-left: -16px;
-        padding-left: calc(16px + .5em);
+        margin-right: 1em;
+        padding-left: calc( 16px + .7em );
+        padding-right: .9em;
+
+        &:hover {
+            background-color: lighten( $background-color-secondary, 5 );
+        }
     }
 
     input[type="button"], button {
