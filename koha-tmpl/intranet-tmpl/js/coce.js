@@ -20,7 +20,7 @@ KOHA.coce = {
             var id = $(this).attr("class"); // id=isbn
             if (id !== '') { ids.push(id); }
         });
-        if (ids.length == 0) return;
+        if (ids.length == 0) { this.done = 1; return; }
         ids = ids.join(',');
         var coceURL = host + '/cover?id=' + ids + '&provider=' + provider;
         $.ajax({
@@ -44,7 +44,9 @@ KOHA.coce = {
                     });
                 }
             },
-
+        }).then(function(){
+            // Cannot access 'this' from here
+            KOHA.coce.done = 1;
         });
     }
 
