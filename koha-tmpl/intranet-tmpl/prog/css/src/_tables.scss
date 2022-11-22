@@ -566,11 +566,12 @@ div,
 a {
     &.dt-button {
         background: transparent none;
-        border: 0;
+        border: 1px solid transparent;
+        border-radius: 4px;
         color: #000;
         font-size: 1em;
         line-height: 1.7em;
-        margin: 3px 3px 0;
+        margin: 0 3px 0;
         padding: 0 .5em;
 
         &::before {
@@ -579,9 +580,13 @@ a {
 
         &.disabled {
             background: transparent none;
-            border: 0;
+            border: 1px solid transparent;
             color: #999;
             cursor: default;
+
+            &:focus {
+                border: 1px solid #ADADAD;
+            }
 
             a,
             span {
@@ -589,32 +594,32 @@ a {
             }
         }
 
-        &:active,
-        &:focus {
+        &:active:not( .disabled ),
+        &:focus:not( .disabled ) {
             background: transparent none;
-            border: 0;
+            border: 1px solid #ADADAD;
             box-shadow: none;
             text-shadow: none;
 
             &:not( .disabled ):hover:not( .disabled ) {
-                background: transparent none;
+                background: #EEE none;
+                border: 1px solid transparent;
                 box-shadow: none;
             }
         }
 
         &:hover {
             background: transparent none;
-            border: 0;
+            border: 1px solid transparent;
 
             &:not( .disabled ) {
-                background: transparent none;
-                border: 0;
+                background: #EEE none;
             }
         }
 
         &.active:not( .disabled ):hover:not( .disabled ) {
-            background: transparent none;
-            box-shadow: none;
+            background: #EEE none;
+            border: 1px solid transparent;
         }
     }
 }
