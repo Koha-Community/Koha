@@ -208,6 +208,26 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
 
             return $result[0];
         },
+        materialTypeMapping: {
+            a: 'BKS',
+            c: 'MU',
+            d: 'MU',
+            e: 'MPS',
+            f: 'MPS',
+            g: 'VM',
+            i: 'MU',
+            j: 'MU',
+            k: 'VM',
+            m: 'CF',
+            o: 'VM',
+            p: 'MX',
+            r: 'VM',
+            s: 'CR',
+            t: 'BKS',
+        },
+        getMaterial: function () {
+            return this.materialTypeMapping[this.text.substring(0, 1)];
+        },
         postCreate: function( node, mark ) {
             this.createFromXML( 'marc21/xml/006' );
         }
