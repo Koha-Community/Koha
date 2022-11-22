@@ -53,7 +53,7 @@ var dataTablesDefaults = {
     "fixedHeader": true,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
-        var state =  $("#" + tableId ).DataTable().state();
+        var state =  settings.oLoadedState;
         state && toggledClearFilter(state.search.search, tableId);
         // When the DataTables search function is triggered,
         // enable or disable the "Clear filter" button based on
