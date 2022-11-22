@@ -44,9 +44,10 @@ KOHA.coce = {
                     });
                 }
             },
-
+        }).then(function(){
+            // Cannot access 'this' from here
+            KOHA.coce.done = 1;
         });
-        this.done = 1;
     }
 
 };
