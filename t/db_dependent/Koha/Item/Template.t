@@ -50,18 +50,8 @@ subtest 'Serializing and deserializing contents' => sub {
         }
     )->store();
 
-    my $encoded_data;
-    foreach my $key ( keys %{$data} ) {
-        $encoded_data->{$key} = Encode::encode('UTF-8', $data->{$key});
-    }
-
-    is( $template->contents, JSON->new->utf8->encode($data), 'Contents serialized correctly' );
-
-    is_deeply(
-        $template->decoded_contents,
-        $encoded_data,
-        'Contents deserialized and UTF-8 encoded correctly'
-    );
+    is( $template->contents, JSON->new->encode($data), 'Contents serialized correctly' );
+    is_deeply( $template->decoded_contents, $data, 'Contents deserialized correctly' );
 
     $schema->storage->txn_rollback;
 };
