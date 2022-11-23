@@ -27,8 +27,8 @@ use constant DEFAULT_MESSAGES_PURGEDAYS           => 365;
 use constant DEFAULT_SEARCHHISTORY_PURGEDAYS      => 30;
 use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
-use constant DEFAULT_BGJOBS_PURGEDAYS             => 1;
-use constant DEFAULT_BGJOBS_PURGETYPES            => qw{ update_elastic_index };
+use constant DEFAULT_JOBS_PURGEDAYS               => 1;
+use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
 
 use Koha::Script -cron;
 use C4::Context;
@@ -110,8 +110,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --cards DAY             Purge card creator batches last added to more than DAYS days ago.
    --return-claims         Purge all resolved return claims older than the number of days specified in
                            the system preference CleanUpDatabaseReturnClaims.
-   --bg-days DAYS          Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
-   --bg-type TYPES         What type of background job to purge. Defaults to "update_elastic_index" if omitted
+   --jobs-days DAYS        Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
+   --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
 USAGE
     exit $_[0];
@@ -154,8 +154,8 @@ my $labels;
 my $cards;
 my @log_modules;
 my @preserve_logs;
-my $background_days;
-my @background_types;
+my $jobs_days;
+my @jobs_types;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -198,8 +198,8 @@ GetOptions(
     'labels'            => \$labels,
     'cards'             => \$cards,
     'return-claims'     => \$return_claims,
-    'bg-type:s'        => \@background_types,
-    'bg-days:i'         => \$background_days,
+    'jobs-type:s'       => \@jobs_types,
+    'jobs-days:i'       => \$jobs_days,
 ) || usage(1);
 
 # Use default values
@@ -212,8 +212,8 @@ $pSearchhistory    = DEFAULT_SEARCHHISTORY_PURGEDAYS      if defined($pSearchhis
 $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
 $pDebarments       = DEFAULT_DEBARMENTS_PURGEDAYS         if defined($pDebarments)       && $pDebarments == 0;
 $pMessages         = DEFAULT_MESSAGES_PURGEDAYS           if defined($pMessages)         && $pMessages == 0;
-$background_days   = DEFAULT_BGJOBS_PURGEDAYS             if defined($background_days)   && $background_days == 0;
-@background_types  = (DEFAULT_BGJOBS_PURGETYPES)          if $background_days            && @background_types == 0;
+$jobs_days         = DEFAULT_JOBS_PURGEDAYS               if defined($jobs_days)         && $jobs_days == 0;
+@jobs_types        = (DEFAULT_JOBS_PURGETYPES)            if $jobs_days                  && @jobs_types == 0;
 
 if ($help) {
     usage(0);
@@ -251,7 +251,7 @@ unless ( $sessions
     || $labels
     || $cards
     || $return_claims
-    || $background_days
+    || $jobs_days
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -688,17 +688,28 @@ if ($cards) {
     }
 }
 
-if ($background_days) {
-    print "Purging background jobs more than $background_days days ago.\n" if $verbose;
-    my $params = { job_types => \@background_types ,
-                   days      => $background_days,
-                   confirm   => $confirm,
-                };
-    my $count = Koha::BackgroundJobs->purge( $params );
+if ($jobs_days) {
+    print "Purging background jobs more than $jobs_days days ago.\n"
+      if $verbose;
+    my $jobs = Koha::BackgroundJobs->search(
+        {
+            status => 'finished',
+            ( $jobs_types[0] eq 'all' ? () : ( type => \@jobs_types ) )
+        }
+    )->filter_by_last_update(
+        {
+            timestamp_column_name => 'ended_on',
+            days => $jobs_days,
+        }
+    );
+    my $count = $jobs->count;
+    $jobs->delete if $confirm;
     if ($verbose) {
         say $confirm
-          ? sprintf "Done with purging %d background jobs of type(s): %s added more than %d days ago.\n", $count, join(',', @background_types), $background_days
-          : sprintf "%d background jobs of type(s): %s added more than %d days ago would have been purged.", $count, join(',', @background_types), $background_days;
+          ? sprintf "Done with purging %d background jobs of type(s): %s added more than %d days ago.\n",
+          $count, join( ',', @jobs_types ), $jobs_days
+          : sprintf "%d background jobs of type(s): %s added more than %d days ago would have been purged.",
+          $count, join( ',', @jobs_types ), $jobs_days;
     }
 }
 
