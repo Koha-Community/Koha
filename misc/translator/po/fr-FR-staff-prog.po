@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-10-18 08:47-0300\n"
-"PO-Revision-Date: 2022-10-17 02:01+0000\n"
-"Last-Translator: Victor Grousset/tuxayo <victor.grousset@biblibre.com>\n"
+"POT-Creation-Date: 2022-11-16 20:34-0300\n"
+"PO-Revision-Date: 2022-11-14 11:37+0000\n"
+"Last-Translator: msaby <mathieu.saby@univ-rennes2.fr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fr/22.05/fr-FR-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1665972099.353990\n"
+"X-POOTLE-MTIME: 1668425864.332624\n"
 
 #. %1$s:  END 
 #. %2$s:  data.created_on | $KohaDates 
@@ -109,27 +109,6 @@ msgstr "Nombre d'usagers"
 #, c-format
 msgid "%% matches any number of characters"
 msgstr "%% remplace un nombre indéfini de caractères"
-
-#. %1$s: # You can then pass a list of filters 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:18
-#, c-format
-msgid "%%] %s [%%# - branch: "
-msgstr "%%] %s [%%# - branch: "
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:20
-#, c-format
-msgid "%%] [%%# - category: "
-msgstr "%%] [%%# - catégorie : "
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:21
-#, c-format
-msgid "%%] [%%# - search_field: "
-msgstr "%%] [%%# - search_field: "
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:22
-#, c-format
-msgid "%%] [%%# - search_type: "
-msgstr "%%] [%%# - search_type: "
 
 #. %1$s: - USE raw -
 #. %2$s: - USE Koha -
@@ -460,16 +439,16 @@ msgstr ""
 #. %14$s:  END 
 #. %15$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s Modify category '%s' %s New category %s &rsaquo; %s %s %s Cannot "
 "delete: category %s in use %s Confirm deletion of category '%s' %s &rsaquo; "
 "%s Patron categories &rsaquo; Administration &rsaquo; Koha %s"
 msgstr ""
-"%s%sModifier la catégorie '%s'%sNouvelle catégorie%s%s %s%sImpossible de "
-"supprimer : catégorie %s utilisée%sConfirmer la suppression de la catégorie "
-"'%s'%s%s &rsaquo; Catégories d'adhérents &rsaquo; Administration &rsaquo; "
-"Koha "
+"%s %s %s Modifier la catégorie '%s' %s Nouvelle catégorie %s &rsaquo; %s %s "
+"%s Suppression impossible : catégorie %s utilisée %s Confirmer la "
+"suppression de la catégorie '%s' %s &rsaquo; %s Catégories d'adhérents "
+"&rsaquo; Administration &rsaquo; Koha %s"
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( use_heading_flags_p ) 
@@ -768,6 +747,13 @@ msgstr "%s %s (%s affichés) %s "
 #, c-format
 msgid "%s %s (%s) %s Default MARC framework %s "
 msgstr "%s %s (%s) %s Grille MARC par défaut %s "
+
+#. %1$s:  END 
+#. %2$s:  Koha.Preference('numSearchResults') | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:303
+#, fuzzy, c-format
+msgid "%s %s (default) "
+msgstr "%s (par défaut)"
 
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  IF ( opadd ) 
@@ -1248,13 +1234,6 @@ msgstr "%s %s Vous recherchiez %s"
 msgid "%s %s [%% SET pref_MARCOverlayRules_link = '"
 msgstr "%s %s [%% SET pref_MARCOverlayRules_link = '"
 
-#. %1$s:  END 
-#. %2$s: # Display a complex patron search form 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:14
-#, c-format
-msgid "%s %s [%%# - Search: "
-msgstr "%s %s [%%# - Recherche : "
-
 #. %1$s:  IF ( hardduedate ) 
 #. %2$s:  IF ( hardduedatecompare == '-1' ) 
 #. %3$s:  hardduedate | $KohaDates 
@@ -1612,16 +1591,16 @@ msgstr "%s %sIl n'y a pas de valeur définie pour cette table%s %s %s %s "
 #. %1$s:  IF Koha.Preference('marcflavour') == 'MARC21' 
 #. %2$s:  PROCESS selectoptionopen value='a' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:146
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sa - Earlier heading"
-msgstr "%sa - Entête précédente"
+msgstr "%s %sa - Entête précédente"
 
 #. %1$s:  ELSIF Koha.Preference('marcflavour') == 'UNIMARC' 
 #. %2$s:  PROCESS selectoptionopen value='a' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:157
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sa = earlier name"
-msgstr "%sa - Entête précédente"
+msgstr "%s %sa = entête précédente"
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=reser link = 1 
 #. %2$s:  IF ( reser.author ) 
@@ -1846,7 +1825,7 @@ msgid "%s (inactive)"
 msgstr "%s (inactif)"
 
 #. %1$s:  riloo.duedate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1079
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1082
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (retards)"
@@ -2050,14 +2029,14 @@ msgstr ""
 "pourront tout de même être traités) %s %s %s %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:15
 #, c-format
 msgid "%s Add items only if matching bib was found"
 msgstr ""
 "%s Ajouter les exemplaires uniquement si une notice concordante a été trouvée"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:21
 #, c-format
 msgid "%s Add items only if no matching bib was found"
 msgstr ""
@@ -2118,7 +2097,7 @@ msgid "%s All libraries %s%s %s "
 msgstr "%s Tous les sites %s%s %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:9
 #, c-format
 msgid "%s Always add items"
 msgstr "%s Toujours ajouter les exemplaires"
@@ -2434,11 +2413,10 @@ msgstr ""
 #. %1$s:  IF op == 'view' 
 #. %2$s:  job.id | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:49
-#, c-format
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:7
+#, fuzzy, c-format
 msgid ""
-"%s Details of job #%s &rsaquo; %s Background jobs &rsaquo; Administration "
-"&rsaquo; Koha "
+"%s Details of job #%s &rsaquo; %s Jobs &rsaquo; Administration &rsaquo; Koha "
 msgstr ""
 "%s Détails de la tâche de fond #%s &rsaquo; %s Tâches de fond &rsaquo; "
 "Administration &rsaquo; Koha "
@@ -2615,6 +2593,12 @@ msgstr "%s Du groupe de réservation local "
 msgid "%s Funds for '%s' %s All funds %s "
 msgstr "%s Postes budgétaires pour '%s' %s Tous les postes budgétaires %s "
 
+#. %1$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1300
+#, fuzzy, c-format
+msgid "%s Gone no address: "
+msgstr "Parti sans laisser d'adresse"
+
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:235
 #, c-format
@@ -2659,7 +2643,7 @@ msgid "%s Ignore incoming record (its items may still be processed)"
 msgstr "%s Ignorer la notice entrante (ses exemplaires pourront être traités)"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:33
 #, c-format
 msgid "%s Ignore items"
 msgstr "%s Ignorer les exemplaires"
@@ -2728,18 +2712,17 @@ msgstr "%s Exemplaire en attente à "
 msgid "%s Last value: %s Begins with: %s "
 msgstr "%s Dernière valeur&nbsp;: %s Commence par&nbsp;: %s"
 
-#. %1$s:  END 
-#. %2$s:  Koha.Preference('numSearchResults') | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:303
-#, c-format
-msgid "%s Library default: %s "
-msgstr "%s Site par défaut : %s "
-
 #. %1$s:  ELSE 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:124
 #, c-format
 msgid "%s Location: "
 msgstr "%s Localisation: "
+
+#. %1$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1335
+#, fuzzy, c-format
+msgid "%s Lost card: "
+msgstr "Carte perdue"
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
@@ -3010,8 +2993,10 @@ msgstr "%s Nouveau cours %s "
 msgid "%s News %s HTML customizations %s "
 msgstr "%s Annonces %s Personnalisations HTML %s "
 
+#. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1352
 #, c-format
 msgid "%s No "
 msgstr "%s Aucun "
@@ -3086,10 +3071,9 @@ msgid "%s No inactive budgets %s "
 msgstr "%s Pas de budget inactif %s "
 
 #. %1$s:  IF item_action_ignore AND num_items == 0 
-#. %2$s:  ELSE 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:1
-#, c-format
-msgid "%s No items were found during staging %s "
+#, fuzzy, c-format
+msgid "%s No items were found during staging "
 msgstr "%s Aucun exemplaire n'a été trouvé durant le chargement %s "
 
 #. %1$s:  ELSE 
@@ -3156,7 +3140,7 @@ msgstr "%s Aucun "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1144
 #, c-format
 msgid "%s Not checked out %s "
 msgstr "%s Pas en prêt %s "
@@ -3341,7 +3325,7 @@ msgid "%s Replace existing record with incoming record"
 msgstr "%s Remplacer la notice existante par la notice entrante"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:27
 #, c-format
 msgid "%s Replace items if matching bib was found (only for existing items)"
 msgstr ""
@@ -3354,7 +3338,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  d.comment | $raw 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1345
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1386
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:67
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
@@ -3917,8 +3901,10 @@ msgstr ""
 "%s Annuler un paiement pour %s %s Encaisser une amende pour %s %s &rsaquo; "
 "Adhérents &rsaquo; Koha "
 
+#. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1306
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1344
 #, c-format
 msgid "%s Yes "
 msgstr "%s Oui "
@@ -5606,15 +5592,6 @@ msgstr ""
 "\"Coût total\"%s\"Date d'entrée\"%s\"Date de réception\"%s\"Note interne\"%s"
 "\"Note fournisseur\"%s "
 
-#. %1$s:  IF ( flagloo.key == 'gonenoaddress' ) 
-#. %2$s:  END 
-#. %3$s:  IF ( flagloo.key == 'lost' ) 
-#. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1297
-#, c-format
-msgid "%sGone no address:%s %sLost card:%s "
-msgstr "%sParti sans laisser d'adresse :%s %sCarte perdue :%s "
-
 #. %1$s:  IF category.hidelostitems 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -6101,9 +6078,9 @@ msgstr "%sb - Entête suivante"
 
 #. %1$s:  PROCESS selectoptionopen value='b' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:159
-#, fuzzy, c-format
+#, c-format
 msgid "%sb = later name"
-msgstr "%s Autre nom&nbsp;: "
+msgstr "%sb = nom ultérieur"
 
 #. %1$s:  IF ( result_se.author ) 
 #. %2$s:  result_se.author | html 
@@ -6131,7 +6108,7 @@ msgstr "%spar %s%s [%s], %s%s %s%s%s %s%s%s, %s%s%s%s%s, "
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:160
 #, c-format
 msgid "%sc = official name"
-msgstr ""
+msgstr "%sc = nom officiel"
 
 #. %1$s:  PROCESS selectoptionopen value='d' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:149
@@ -6143,13 +6120,13 @@ msgstr "%sd - Acronyme"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #, c-format
 msgid "%sd = acronym / initial / abbreviation"
-msgstr ""
+msgstr "%sd = acronyme / initiale / abréviation"
 
 #. %1$s:  PROCESS selectoptionopen value='e' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:162
 #, c-format
 msgid "%se = pseudonym"
-msgstr ""
+msgstr "%se = pseudonyme"
 
 #. %1$s:  PROCESS selectoptionopen value='f' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:150
@@ -6159,9 +6136,9 @@ msgstr "%sf - oeuvre musicale"
 
 #. %1$s:  PROCESS selectoptionopen value='f' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:163
-#, fuzzy, c-format
+#, c-format
 msgid "%sf = real name"
-msgstr "%s Prénom : "
+msgstr "%sf = nom réel"
 
 #. %1$s:  PROCESS selectoptionopen value='g' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:151
@@ -6171,9 +6148,9 @@ msgstr "%sg - Terme générique"
 
 #. %1$s:  PROCESS selectoptionopen value='g' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:164
-#, fuzzy, c-format
+#, c-format
 msgid "%sg = broader term or name"
-msgstr "%sg - Terme générique"
+msgstr "%sg = terme ou nom plus large"
 
 #. %1$s:  PROCESS selectoptionopen value='h' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:152
@@ -6183,9 +6160,9 @@ msgstr "%sh - Terme spécifique"
 
 #. %1$s:  PROCESS selectoptionopen value='h' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:165
-#, fuzzy, c-format
+#, c-format
 msgid "%sh = narrower term or name"
-msgstr "%sh - Terme spécifique"
+msgstr "%sh = nom ou terme plus restrictif"
 
 #. %1$s:  PROCESS selectoptionopen value='i' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:153
@@ -6197,31 +6174,31 @@ msgstr "%si - Expression d'instruction de renvoi dans la sous-zone $i"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:166
 #, c-format
 msgid "%si = name in religion"
-msgstr ""
+msgstr "%si = nom en religion"
 
 #. %1$s:  PROCESS selectoptionopen value='j' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:167
 #, c-format
 msgid "%sj = married name"
-msgstr ""
+msgstr "%sj = nom d'épouse"
 
 #. %1$s:  PROCESS selectoptionopen value='k' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:168
 #, c-format
 msgid "%sk = name before marriage"
-msgstr ""
+msgstr "%sk = nom de jeune fille"
 
 #. %1$s:  PROCESS selectoptionopen value='l' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:169
 #, c-format
 msgid "%sl = shared pseudonym"
-msgstr ""
+msgstr "%sl = pseudonyme partagé"
 
 #. %1$s:  PROCESS selectoptionopen value='m' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:170
-#, fuzzy, c-format
+#, c-format
 msgid "%sm = secular name"
-msgstr "%s Identifiant&nbsp;: "
+msgstr "%sm = nom séculier"
 
 #. %1$s:  PROCESS selectoptionopen value='n' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:154
@@ -6233,13 +6210,13 @@ msgstr "%sn - Non applicable"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:171
 #, c-format
 msgid "%sn = different rule form of a name"
-msgstr ""
+msgstr "%sn = différente forme de règle d'un nom"
 
 #. %1$s:  PROCESS selectoptionopen value='o' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:172
 #, c-format
 msgid "%so = attributed name / conventional title of a work"
-msgstr ""
+msgstr "%so = nom attribué / titre conventionnel d'une œuvre"
 
 #. %1$s:  PROCESS selectoptionopen value='r' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:155
@@ -6255,15 +6232,15 @@ msgstr "%st - Collectivité mère immédiate"
 
 #. %1$s:  PROCESS selectoptionopen value='x' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:173
-#, fuzzy, c-format
+#, c-format
 msgid "%sx = not applicable"
-msgstr "%sn - Non applicable"
+msgstr "%sx = non applicable"
 
 #. %1$s:  PROCESS selectoptionopen value='z' 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:174
 #, c-format
 msgid "%sz = other"
-msgstr ""
+msgstr "%sz = autre"
 
 #. %1$s:  IF currency.active 
 #. %2$s:  END 
@@ -6616,7 +6593,7 @@ msgstr ""
 "cochée."
 
 #. %1$s:  dropboxdate | $KohaDates with_hours => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:990
 #, c-format
 msgid "( Effective checkin date is %s )"
 msgstr "(La date de retour effective est fixée au %s)"
@@ -8300,7 +8277,7 @@ msgid "Acquisition order"
 msgstr "Bon de commande"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:110
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:117
 #, c-format
 msgid "Acquisition parameters"
 msgstr "Paramètres acquisitions"
@@ -8437,7 +8414,7 @@ msgstr "Action s'il n'y a pas de concordance : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:170
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:559
@@ -8491,7 +8468,6 @@ msgstr "Action s'il n'y a pas de concordance : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:336
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:207
@@ -8500,6 +8476,7 @@ msgstr "Action s'il n'y a pas de concordance : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -8507,8 +8484,8 @@ msgstr "Action s'il n'y a pas de concordance : "
 msgid "Actions"
 msgstr "Actions"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:319
@@ -8751,7 +8728,7 @@ msgstr "Ajouter un nouveau champ"
 msgid "Add a new item"
 msgstr "Ajouter un nouvel exemplaire"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:286
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:290
 #, c-format
 msgid "Add a new message"
 msgstr "Ajouter un message"
@@ -9032,8 +9009,8 @@ msgstr "Ajouter un type de document "
 msgid "Add item(s)"
 msgstr "Ajouter exemplaire(s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:455
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:455
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:12
 #, c-format
 msgid "Add items"
@@ -9092,8 +9069,8 @@ msgstr "Ajoutez des exemplaires : scannez les codes à barres"
 msgid "Add library "
 msgstr "Ajouter un site "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1374
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1377
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1415
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1418
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:60
 #, c-format
@@ -9638,7 +9615,7 @@ msgid "Additional SRU options: "
 msgstr "Options SRU supplémentaires"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1442
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1483
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:299
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:323
@@ -9670,7 +9647,7 @@ msgstr "Contenus additionnels (%sAnnonces%sPersonnalisations HTML%s)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:4
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:164
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:163
 #, c-format
 msgid "Additional fields"
 msgstr "Sous-champs supplémentaires"
@@ -9692,7 +9669,7 @@ msgid "Additional options"
 msgstr "Options supplémentaires"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:136
 #, c-format
 msgid "Additional parameters"
 msgstr "Paramètres divers"
@@ -9807,8 +9784,8 @@ msgstr "Ajustements plus frais de port : %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
@@ -10917,7 +10894,7 @@ msgstr "Une erreur s'est produite!"
 msgid "An error has occurred. "
 msgstr "Une erreur s'est produite. "
 
-#. %1$s:  IF ( error_delitem ) 
+#. %1$s:  IF error_order_already_cancelled 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:63
 #, c-format
 msgid "An error has occurred. %s "
@@ -12486,7 +12463,7 @@ msgid "Are you sure you want to uninstall the plugin %s?"
 msgstr "Voulez-vous vraiment désinstaller le plugin %s ?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 msgid "Are you sure you want to void this credit?"
 msgstr "Voulez-vous vraiment annuler ce crédit ?"
 
@@ -12735,7 +12712,7 @@ msgstr "Attributs :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:152
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:151
 #, c-format
 msgid "Audio alerts"
 msgstr "Alertes sonores"
@@ -12812,7 +12789,7 @@ msgstr "Authname"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:273
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1059
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1062
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:29
@@ -12824,11 +12801,11 @@ msgstr "Authname"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:284
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:334
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-availability-table.inc:7
@@ -13172,7 +13149,7 @@ msgstr "Type d'autorité&nbsp;: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:86
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:93
 #, c-format
 msgid "Authority types"
 msgstr "Types d'autorités"
@@ -13589,16 +13566,6 @@ msgstr "Backend"
 msgid "Background color"
 msgstr "Couleur du fond"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
-#, c-format
-msgid "Background jobs"
-msgstr "Tâches en arrière-plan"
-
 #: koha-tmpl/intranet-tmpl/prog/en/includes/delimiter_text.inc:6
 #, c-format
 msgid "Backslash separated text (.csv)"
@@ -13644,7 +13611,7 @@ msgstr "Bar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1060
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1063
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:109
@@ -14160,23 +14127,23 @@ msgstr "ID du lot"
 msgid "Batch add reserves"
 msgstr "Ajouter des réserves de cours par lot"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:33
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch authority record deletion"
 msgstr "Suppression de notices autorité par lot"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:31
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch authority record modification"
 msgstr "Modification de notices autorité par lots"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:27
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch bibliographic record modification"
 msgstr "Modification de notices bibliographiques par lots"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:29
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch bibliographic record record deletion"
 msgstr "Suppression de notices bibliographiques par lots"
 
@@ -14269,8 +14236,8 @@ msgstr "Prolongation des dates de retour par lot"
 msgid "Batch extend due dates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Prolongation des dates de retour par lot &rsaquo; Outils &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:39
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch hold cancellation"
 msgstr "Annulation de réservations par lots"
 
@@ -14320,13 +14287,13 @@ msgstr "Modification d'exemplaires par lots "
 msgid "Batch item modification &rsaquo; Tools &rsaquo; Koha"
 msgstr "Modification d'exemplaires par lots &rsaquo; Outils &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:37
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch item record deletion"
 msgstr "Suppression d'exemplaires par lots"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:35
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Batch item record modification"
 msgstr "Modification d'exemplaires par lots"
 
@@ -14864,12 +14831,12 @@ msgstr "Body"
 msgid "Bold"
 msgstr "Gras"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1034
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1037
 #, c-format
 msgid "Book drop mode"
 msgstr "Mode 'Boîte de retour'"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:990
 #, c-format
 msgid "Book drop mode. "
 msgstr "Mode « Boîte de retour »"
@@ -14990,11 +14957,6 @@ msgstr "Site"
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:254
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:37
@@ -15024,6 +14986,11 @@ msgstr "Site"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:14
@@ -15036,7 +15003,7 @@ msgstr "Site"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
@@ -15229,7 +15196,6 @@ msgstr "Site"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
@@ -15262,6 +15228,7 @@ msgstr "Site"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
 msgstr "Fil d'Ariane"
@@ -15429,7 +15396,7 @@ msgstr "Prix budgété : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:30
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:123
 #, c-format
 msgid "Budgets"
 msgstr "Budgets"
@@ -15787,7 +15754,7 @@ msgstr "Cote"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1064
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1067
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:82
@@ -15808,11 +15775,11 @@ msgstr "Cote"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:424
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:26
@@ -16047,10 +16014,6 @@ msgid "Can't scan the code?"
 msgstr "Impossible de scanner le code ?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:164
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:326
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:328
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:149
@@ -16076,6 +16039,10 @@ msgstr "Impossible de scanner le code ?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:326
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -16090,7 +16057,7 @@ msgstr "Impossible de scanner le code ?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:103
@@ -16177,7 +16144,7 @@ msgstr "Impossible de scanner le code ?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:268
@@ -16209,13 +16176,6 @@ msgstr "Impossible de scanner le code ?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:913
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:377
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:382
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:479
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:57
@@ -16249,6 +16209,13 @@ msgstr "Impossible de scanner le code ?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:377
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:382
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:479
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:68
@@ -16340,7 +16307,7 @@ msgstr "Annuler le filtre"
 msgid "Cancel hold"
 msgstr "Annuler réservation"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:561
 #, c-format
 msgid "Cancel hold (X) "
 msgstr "Annuler la réservation (X) "
@@ -16510,7 +16477,7 @@ msgstr "Annulation demandée"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:453
@@ -16840,7 +16807,7 @@ msgstr "Lots de cartes"
 msgid "Card height:"
 msgstr "Hauteur de la carte :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:215
@@ -17157,7 +17124,7 @@ msgstr "Cassette audio"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:85
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:24
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:50
 #, c-format
@@ -17775,8 +17742,8 @@ msgstr "Vérifier les prêts précédents :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:942
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:945
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:957
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/includes/adv-search.inc:40
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-search.inc:30
@@ -18165,7 +18132,7 @@ msgid "Checked out: "
 msgstr "Prêté : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1053
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1056
 #, c-format
 msgid "Checked-in items"
 msgstr "Documents retournés"
@@ -18206,7 +18173,7 @@ msgstr "Message de retour : "
 msgid "Checkin on"
 msgstr "Retour"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:965
 #, c-format
 msgid "Checkin settings"
 msgstr "Paramètres de retour"
@@ -18412,7 +18379,7 @@ msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr ""
 "Les prets sont BLOQUES parce que l'adhérent a un ou des documents en retard."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1138
 #, c-format
 msgid "Checkouts:"
 msgstr "Prêts :"
@@ -18451,9 +18418,9 @@ msgstr "Chocolat.js"
 msgid "Choice"
 msgstr "Choice"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:225
@@ -18669,7 +18636,7 @@ msgstr "Sélecteur"
 msgid "Chooser:"
 msgstr "Sélecteur :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1404
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1445
 #, c-format
 msgid "Chooser: "
 msgstr "Sélecteur : "
@@ -19106,6 +19073,7 @@ msgstr "Classification"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:96
 #, c-format
 msgid "Classification configuration"
 msgstr "Configuration de la classification"
@@ -19141,7 +19109,6 @@ msgstr "Source de classification mise à jour avec succès."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:344
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2405
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:89
 #, c-format
 msgid "Classification sources"
 msgstr "Sources de classification"
@@ -19189,7 +19156,7 @@ msgstr "Lot d'import n° %s nettoyé"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1484
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1525
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:354
@@ -19198,11 +19165,11 @@ msgstr "Lot d'import n° %s nettoyé"
 msgid "Clear"
 msgstr "Effacer"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
@@ -19222,7 +19189,6 @@ msgstr "Effacer"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:129
@@ -19233,6 +19199,7 @@ msgstr "Effacer"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:337
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:214
 #, c-format
@@ -19252,7 +19219,7 @@ msgstr ""
 "Voulez-vous vraiment supprimer du réservoir toutes les notices téléchargées "
 "dans ce lot ? Cette opération est irréversible."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1386
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1427
 #: koha-tmpl/intranet-tmpl/prog/en/includes/calendar.inc:33
 #, c-format
 msgid "Clear date"
@@ -19550,7 +19517,6 @@ msgstr "Échec de la copie des règles de circulation et d'amendes !"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:555
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:561
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:131
@@ -19562,6 +19528,7 @@ msgstr "Échec de la copie des règles de circulation et d'amendes !"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:462
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authority-detail-modal.inc:6
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authority-detail-modal.inc:13
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
@@ -19698,7 +19665,7 @@ msgstr ""
 "Ajouter des adhérents &rsaquo; Clubs d'adhérents &rsaquo; Outils &rsaquo; "
 "Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:42
 #, c-format
 msgid "Club enrollments for "
 msgstr "Inscriptions dans le club "
@@ -19848,10 +19815,10 @@ msgstr "Replié"
 msgid "Collect payment"
 msgstr "Percevoir le paiement"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:238
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:337
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:25
@@ -19861,7 +19828,7 @@ msgstr "Percevoir le paiement"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:552
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1068
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1071
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:112
@@ -20082,7 +20049,7 @@ msgstr "Texte séparé par une virgule (.csv)"
 msgid "Command-line"
 msgstr "Ligne de commande"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1374
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:10
 #, c-format
 msgid "Comment"
@@ -20108,7 +20075,7 @@ msgid "Comment:"
 msgstr "Commentaire&nbsp;:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
 msgid "Comment: "
@@ -20530,12 +20497,12 @@ msgid "Confirm deletion of this vendor ?"
 msgstr "Confirmer la suppression de ce fournisseur ?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:549
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:727
 #, c-format
 msgid "Confirm hold (Y) "
 msgstr "Confirmer la réservation (Y) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:717
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:720
 #, c-format
 msgid "Confirm hold and transfer (Y) "
 msgstr "Confirmer la réservation et transférer (Y) "
@@ -20557,13 +20524,13 @@ msgstr "Confirmer le nouveau mot de passe&nbsp;:"
 msgid "Confirm password: "
 msgstr "Confirmer le mot de passe : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:825
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:918
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:921
 #, c-format
 msgid "Confirm recall "
 msgstr "Confirmer le rappel"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:821
 #, c-format
 msgid "Confirm recall and transfer "
 msgstr "Confirmer le rappel et transférer "
@@ -22009,7 +21976,7 @@ msgstr "Devises et taux de change"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:114
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:120
 #, c-format
 msgid "Currencies and exchange rates"
 msgstr "Devises et taux de change"
@@ -22079,6 +22046,11 @@ msgstr "Prêts actuellement autorisés"
 #, c-format
 msgid "Current checkouts allowed: "
 msgstr "Prêts actuellement autorisés : "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
+#, fuzzy, c-format
+msgid "Current jobs only"
+msgstr "Session en cours"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:335
@@ -22561,7 +22533,7 @@ msgstr "Date"
 msgid "Date accessioned"
 msgstr "Date d'acquisition"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1065
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1068
 #, c-format
 msgid "Date acquired"
 msgstr "Date d'acquisition"
@@ -22571,10 +22543,10 @@ msgstr "Date d'acquisition"
 msgid "Date acquired (item)"
 msgstr "Date d'acquisition (exemplaire)"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:425
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:23
 #, c-format
 msgid "Date added"
@@ -23355,8 +23327,6 @@ msgstr ""
 "partir duquel une action doit être déclenchée. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:366
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:73
@@ -23364,6 +23334,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:21
@@ -23472,7 +23444,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:281
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:282
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:284
 #: koha-tmpl/intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:15
 #, c-format
 msgid "Delete"
@@ -24044,7 +24017,7 @@ msgid "Deliverer"
 msgstr "Livreur"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1420
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1461
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:276
 #, c-format
 msgid "Deliverer:"
@@ -24422,14 +24395,14 @@ msgstr "Site de destination&nbsp;: "
 msgid "Destination record"
 msgstr "Notice de destination"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
 #, c-format
 msgid "Detailed messages: "
 msgstr "Messages détaillés : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:140
@@ -24524,8 +24497,8 @@ msgstr "Détails des frais"
 
 #. For the first occurrence,
 #. %1$s:  job.id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:37
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:69
 #, c-format
 msgid "Details of job #%s"
 msgstr "Détails de la tâche #%s"
@@ -24615,7 +24588,7 @@ msgstr "Vouliez-vous dire&nbsp;: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/didyoumean.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:146
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:145
 #, c-format
 msgid "Did you mean?"
 msgstr "Vouliez-vous dire ?"
@@ -25268,7 +25241,7 @@ msgstr "A rendre le %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1057
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1060
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:69
@@ -25509,7 +25482,7 @@ msgstr "EAN&nbsp;: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:129
 #, c-format
 msgid "EDI accounts"
 msgstr "Comptes EDI"
@@ -25643,10 +25616,10 @@ msgid "Earliest recall date"
 msgstr "Première date de rappel"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:37
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:409
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:219
@@ -25981,8 +25954,8 @@ msgid "Edit item #%s%s / Barcode %s%s"
 msgstr "Modifier l'exemplaire n°%s%s / Code à barres %s%s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:548
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
@@ -26537,12 +26510,12 @@ msgstr "Limite de plage de dates "
 msgid "End of interval"
 msgstr "Fin de l'intervalle"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:136
 #, c-format
 msgid "Ended"
 msgstr "Terminé"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:94
 #, c-format
 msgid "Ended: "
 msgstr "Terminé : "
@@ -26754,7 +26727,7 @@ msgstr "Entrez le code à barres de l'exemplaire ou un mot clé&nbsp;:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:658
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:945
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:948
 #, c-format
 msgid "Enter item barcode:"
 msgstr "Entrez le code à barres de l'exemplaire&nbsp;:"
@@ -27320,7 +27293,7 @@ msgid "Expected on"
 msgstr "Attendu le"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:910
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1334
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1375
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:756
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:16
@@ -27365,7 +27338,7 @@ msgstr "Date d'expiration : %s"
 msgid "Expiration:"
 msgstr "Expiration&nbsp;:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1384
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
 #, c-format
 msgid "Expiration: "
 msgstr "Expiration&nbsp;: "
@@ -27774,11 +27747,12 @@ msgstr "Ordre des facettes"
 msgid "Facetable"
 msgstr "Facettable"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:19
+#. For the first occurrence,
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
-#, c-format
 msgid "Failed"
 msgstr "Échec"
 
@@ -28431,7 +28405,7 @@ msgid "Filter on:"
 msgstr "Filtre sur&nbsp;:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 msgid "Filter paid transactions"
 msgstr "Filtre sur les transactions payées"
 
@@ -28574,12 +28548,12 @@ msgstr "Amende (période de grâce)"
 msgid "Fines"
 msgstr "Amendes"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:979
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:982
 #, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr "Amendes non appliquées lors d'une annulation de réservation."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:971
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:974
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Les amendes pour les documents retournés sont annulées."
@@ -28601,8 +28575,8 @@ msgstr "Finir l'inscription"
 msgid "Finish receiving"
 msgstr "Finir la réception"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:13
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Finished"
 msgstr "Terminé"
 
@@ -28935,7 +28909,7 @@ msgstr "Oublier %s"
 msgid "Forget %s %s (%s)"
 msgstr "Ignorer %s %s (%s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1044
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1047
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr "Frais levés en cas de réservation expirée"
@@ -28945,7 +28919,7 @@ msgstr "Frais levés en cas de réservation expirée"
 msgid "Forgive fines on return:"
 msgstr "Effacer les amendes au retour : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1024
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1027
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "Effacer les amendes"
@@ -29460,7 +29434,7 @@ msgstr "Poste budgétaire&nbsp;: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:120
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:126
 #, c-format
 msgid "Funds"
 msgstr "Postes budgétaires"
@@ -30392,7 +30366,7 @@ msgstr "Réservation"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:521
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:695
 #, c-format
 msgid "Hold at"
 msgstr "Réservation à"
@@ -30446,7 +30420,7 @@ msgstr "Réservation pour&nbsp;:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:509
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:494
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:657
 #, c-format
 msgid "Hold for:"
 msgstr "Réservation pour&nbsp;:"
@@ -30468,7 +30442,7 @@ msgstr "Réservation trouvée pour %s"
 msgid "Hold found for (%s), please transfer"
 msgstr "Réservation trouvée pour (%s), merci de transférer"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:641
 #, c-format
 msgid "Hold found: "
 msgstr "Réservation trouvée&nbsp;: "
@@ -30640,13 +30614,13 @@ msgstr "Exemplaires :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:375
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:249
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:28
 #, c-format
@@ -30789,8 +30763,8 @@ msgstr "File des réservations pour la notice "
 msgid "Holds queue successfully updated. "
 msgstr "La file des réservations en attente a été mise à jour avec succès. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:43
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Holds queue update"
 msgstr "Mise à jour de la file des réservations"
 
@@ -30918,11 +30892,6 @@ msgstr "Période de fermeture répétée chaque année"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:14
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:40
@@ -30952,6 +30921,11 @@ msgstr "Période de fermeture répétée chaque année"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:14
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:22
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:17
@@ -30964,7 +30938,7 @@ msgstr "Période de fermeture répétée chaque année"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
@@ -31165,7 +31139,6 @@ msgstr "Période de fermeture répétée chaque année"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
@@ -31198,6 +31171,7 @@ msgstr "Période de fermeture répétée chaque année"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -31221,7 +31195,7 @@ msgstr "Sites de rattachement"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1061
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1064
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:114
@@ -31386,7 +31360,7 @@ msgid "Housebound details for %s"
 msgstr "Détails du public empêché pour %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #, c-format
@@ -31592,9 +31566,9 @@ msgstr "ISBD"
 msgid "ISBD details "
 msgstr "Détails ISBD "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
@@ -32231,13 +32205,14 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:833
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:925
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:928
 #, c-format
 msgid "Ignore "
 msgstr "Ignorer "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:557
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:735
 #, c-format
 msgid "Ignore (I) "
 msgstr "Ignorer (I) "
@@ -32577,6 +32552,12 @@ msgid ""
 msgstr ""
 "Importer la grille de catalogage %s (champs et sous-champs) depuis une "
 "feuille de calcul (.csv ou .ods)"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Import MARC records"
+msgstr "Traitement des notices Marc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:347
 #, c-format
@@ -32940,7 +32921,7 @@ msgstr "Augmenter"
 msgid "Increase indent"
 msgstr "Augmenter le retrait"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1397
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:40
 #, c-format
 msgid "Indefinite"
@@ -33323,7 +33304,7 @@ msgstr "Enseignants"
 msgid "Instructors:"
 msgstr "Enseignants&nbsp;:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:61
 #, c-format
 msgid "Insufficient permission to see this job."
 msgstr "Permissions insuffisantes pour voir cette tâche."
@@ -34450,7 +34431,7 @@ msgstr "Champ de recherche sur les exemplaires&nbsp;: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_field.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:98
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:108
 #, c-format
 msgid "Item search fields"
 msgstr "Champs de recherche sur les exemplaires"
@@ -34502,10 +34483,10 @@ msgstr "Champ de l'exemplaire"
 msgid "Item tags cannot currently be saved"
 msgstr "Les champs d'exemplaires ne peuvent pas être actuellement sauvegardés"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
@@ -34523,7 +34504,7 @@ msgstr "Les champs d'exemplaires ne peuvent pas être actuellement sauvegardés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:200
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1067
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1070
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:111
@@ -34549,9 +34530,9 @@ msgstr "Les champs d'exemplaires ne peuvent pas être actuellement sauvegardés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1011
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1013
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #, c-format
@@ -34764,8 +34745,8 @@ msgid "Itemnumbers not found"
 msgstr "Numéros d'exemplaire non trouvés"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:133
@@ -34989,12 +34970,12 @@ msgstr "Jenkins maintainers :"
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:130
 #, c-format
 msgid "Job ID"
 msgstr "Identifiant de tâche"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:75
 #, c-format
 msgid "Job ID: "
 msgstr "Identifiant de tâche : "
@@ -35006,6 +34987,16 @@ msgstr "Identifiant de tâche : "
 #, c-format
 msgid "Job progress: "
 msgstr "Avancement de la tâche&nbsp;: "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:115
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:80
+#, c-format
+msgid "Jobs"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:81
 #, c-format
@@ -35103,7 +35094,7 @@ msgid "Keyboard layout "
 msgstr "Disposition du clavier "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:167
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:166
 #, c-format
 msgid "Keyboard shortcuts"
 msgstr "Raccourcis clavier"
@@ -35329,7 +35320,7 @@ msgstr "Équipe Koha"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:82
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:89
 #, c-format
 msgid "Koha to MARC mapping"
 msgstr "Liens Koha => MARC"
@@ -35378,8 +35369,8 @@ msgstr "Cote LC :"
 msgid "LC call number: "
 msgstr "Cote LC : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #, c-format
@@ -36108,7 +36099,7 @@ msgstr "Site (code)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:40
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:124
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:130
 #, c-format
 msgid "Library EANs"
 msgstr "EAN de la bibliothèque"
@@ -36765,11 +36756,11 @@ msgstr "Mainteneur de CD en ligne"
 msgid "Loading"
 msgstr "Chargement"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:308
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:233
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1037
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:151
@@ -36796,7 +36787,7 @@ msgstr "Chargement des données..."
 msgid "Loading emoticons..."
 msgstr "Chargement des émoticônes..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1545
 #, c-format
 msgid "Loading new messaging defaults "
 msgstr "Chargement de nouveaux paramètres de notifications par défaut"
@@ -37004,7 +36995,7 @@ msgstr "Localisations"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:301
 #, c-format
 msgid "Lock budget: "
-msgstr "Clore le budget: "
+msgstr "Verrouiller le budget : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:493
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:506
@@ -37288,25 +37279,24 @@ msgstr "MADS (XML)"
 msgid "MALMARC"
 msgstr "MALMARC"
 
-#. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:73
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:74
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:12
 #, c-format
 msgid "MARC"
@@ -37362,13 +37352,13 @@ msgid "MARC View"
 msgstr "Vue MARC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:164
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:88
 #, c-format
 msgid "MARC bibliographic framework"
 msgstr "Grilles de catalogage MARC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:92
 #, c-format
 msgid "MARC bibliographic framework test"
 msgstr "Validation grilles de catalogage"
@@ -37471,11 +37461,6 @@ msgstr "Modèles de transformation MARC &rsaquo; Outils &rsaquo; Koha"
 msgid "MARC organization code"
 msgstr "code MARC de l'établissement"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:104
-#, c-format
-msgid "MARC overlay rules"
-msgstr "Règles de fusion MARC"
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:30
 #, c-format
 msgid "MARC overlay rules "
@@ -37486,10 +37471,10 @@ msgstr "Règles de fusion MARC "
 msgid "MARC overlay rules &rsaquo; Koha &rsaquo; Administration"
 msgstr "Règles de fusion MARC &rsaquo; Koha &rsaquo; Administration"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1034
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:233
@@ -38058,11 +38043,6 @@ msgstr "Gérer les alertes sonores "
 msgid "Manage authorized value categories and authorized values "
 msgstr "Gérer les valeurs autorisées et leur catégories"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:152
-#, c-format
-msgid "Manage background jobs"
-msgstr "Gérer les tâches de fond"
-
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:272
 #, c-format
 msgid "Manage background jobs "
@@ -38217,6 +38197,11 @@ msgstr "Gérer les exemplaires "
 msgid "Manage items assigned to "
 msgstr "Gérer les exemplaires assignés à "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:152
+#, fuzzy, c-format
+msgid "Manage jobs"
+msgstr "Gérer "
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:267
 #, c-format
 msgid "Manage keyboard shortcuts for the advanced cataloging editor "
@@ -38285,7 +38270,6 @@ msgid "Manage patrons fines and fees"
 msgstr "Gérer les amendes et les charges des adhérents"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:132
 #, c-format
 msgid "Manage plugins"
 msgstr "Gérer les plugins"
@@ -38313,6 +38297,12 @@ msgstr "Gérer les règles de concordance"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 msgid "Manage request"
+msgstr "Gérer la requête"
+
+#. %1$s:  request.id_prefix _ request.illrequest_id | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:40
+#, fuzzy, c-format
+msgid "Manage request %s "
 msgstr "Gérer la requête"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:97
@@ -38991,10 +38981,10 @@ msgstr "Mentor :"
 msgid "Menu "
 msgstr "Menu "
 
-#. INPUT type=submit name=merge
+#. INPUT type=submit
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/virtualshelves/merge/selection.tt:1
 #, c-format
@@ -40167,7 +40157,7 @@ msgstr "NW7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
@@ -40293,8 +40283,8 @@ msgstr "Nom&nbsp;:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -40403,12 +40393,12 @@ msgstr "N'expire jamais"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:832
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:313
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1486
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1527
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:480
@@ -41146,8 +41136,8 @@ msgid "Newsletter editor:"
 msgstr "Éditeur de newsletter :"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:193
@@ -41265,7 +41255,8 @@ msgstr "Nicholas Rosasco (Rédacteur de la documentation)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:586
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:484
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
@@ -41307,10 +41298,10 @@ msgstr "Non"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:983
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:992
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1410
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1424
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1451
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1456
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1465
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1470
 #, c-format
 msgid "No "
 msgstr "Non "
@@ -41332,7 +41323,7 @@ msgstr ""
 "Non (Si vous ne contrôlez pas les exemplaires pendant l'import vous ne "
 "pourrez pas changer cette option ensuite) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:605
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:608
 #, c-format
 msgid "No (N)"
 msgstr "Non (N)"
@@ -41500,7 +41491,7 @@ msgstr "Aucune notice bibliographique avec le biblionumber %s n'a été trouvée
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patroncards-errors.inc:13
 #, c-format
 msgid "No cards created (empty batch or list?) "
-msgstr "Aucune carté créée (liste ou lot vide&nbsp;?) "
+msgstr "Aucune carte créée (liste ou lot vide&nbsp;?) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:700
 #, c-format
@@ -41609,7 +41600,7 @@ msgid "No date of birth stored."
 msgstr "Pas de date de naissance enregistrée."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1199
 msgid "No date selected"
 msgstr "Pas de date sélectionnée"
 
@@ -42733,7 +42724,7 @@ msgid "Not available"
 msgstr "Indisponible"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1084
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1087
 #, c-format
 msgid "Not checked out"
 msgstr "Non prêté"
@@ -42854,7 +42845,7 @@ msgstr "Non défini "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:740
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:80
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1070
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1073
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -43016,10 +43007,10 @@ msgstr ""
 msgid "Note: one of the two following fields must be equal to 1"
 msgstr "Note : un des deux champs suivants doit être égal à 1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
@@ -43064,9 +43055,9 @@ msgid "Notes/Comments"
 msgstr "Notes"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:650
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:763
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:864
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:867
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:226
@@ -43540,7 +43531,7 @@ msgstr "Sets OAI"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:105
 #, c-format
 msgid "OAI sets configuration"
 msgstr "Configuration des Sets OAI"
@@ -43566,7 +43557,7 @@ msgstr "OAI-DC"
 msgid "OFF"
 msgstr "Inactif"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:253
@@ -43613,7 +43604,7 @@ msgid "OK"
 msgstr "OK"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:459
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:610
 #, c-format
 msgid "OK (Y)"
 msgstr "OK (Y)"
@@ -43952,16 +43943,16 @@ msgstr "Date de retour de la réservation :"
 #. %1$s:  Branches.GetName( itemloo.ExpectedAtLibrary ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:752
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:757
-#, fuzzy, c-format
+#, c-format
 msgid "On hold expected at %s"
-msgstr "%s Réservation attendue à "
+msgstr "Réservation attendue à %s"
 
 #. %1$s:  Branches.GetName( itemloo.ExpectedAtLibrary ) | html 
 #. %2$s:  itemloo.reservedate | $KohaDates 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:755
-#, fuzzy, c-format
+#, c-format
 msgid "On hold expected at %s since %s"
-msgstr "%s Réservation attendue à "
+msgstr "Réservation attendue à %s depuis %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:56
 #, c-format
@@ -43971,9 +43962,9 @@ msgstr "Réservé pour"
 #. %1$s:  INCLUDE 'patron-title.inc' patron=itemloo.ReservedFor 
 #. %2$s:  Branches.GetName( itemloo.ExpectedAtLibrary ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:750
-#, fuzzy, c-format
+#, c-format
 msgid "On hold for %s expected at %s since"
-msgstr "%s Réservation attendue à "
+msgstr "Réservation pour %s attendue à %s depuis"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/renew_strings.inc:21
 #, c-format
@@ -44149,6 +44140,11 @@ msgstr ""
 msgid "Only available on the staff interface: "
 msgstr "Seulement disponible dans l'interface professionnelle : "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:124
+#, c-format
+msgid "Only include jobs started in the last hour"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:161
 #, c-format
 msgid "Only item"
@@ -44209,7 +44205,7 @@ msgid ""
 "results"
 msgstr ""
 "Seuls les superbibliothécaires ou les bibliothécaires ayant des droits sur "
-"le module acquisition (ou au moins la permission bugdet_modify si les "
+"le module acquisition (ou au moins la permission budget_modify si les "
 "permissions fines sont activées) apparaissent dans la liste des résultats"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:115
@@ -44670,12 +44666,12 @@ msgstr "Commandes permanentes&nbsp;:"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:54
 #, c-format
 msgid "Orders by fund"
-msgstr "Commandes par bugdet"
+msgstr "Commandes par budget"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:33
 #, c-format
 msgid "Orders by fund "
-msgstr "Commandes par bugdet "
+msgstr "Commandes par budget "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:7
 #, c-format
@@ -45534,7 +45530,7 @@ msgstr "Brevet"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:271
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1069
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1072
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:40
@@ -46097,9 +46093,9 @@ msgstr "Photo(s) de(s) adhérent(s) téléchargée(s) avec quelques erreurs"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:510
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:896
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:685
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:899
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Adhérent bloqué"
@@ -46114,7 +46110,7 @@ msgstr "L'adhérent est un adulte"
 msgid "Patron is currently restricted"
 msgstr "L'adhérent est actuellement suspendu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1370
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1411
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:4
 #, c-format
 msgid "Patron is currently unrestricted."
@@ -46186,7 +46182,7 @@ msgid "Patron lists &rsaquo; Tools &rsaquo; Koha"
 msgstr "Listes d'adhérents &rsaquo; Outils &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1502
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:334
 #, c-format
 msgid "Patron messaging preferences"
@@ -46306,7 +46302,7 @@ msgid "Patron request"
 msgstr "Demandes des adhérents"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1368
 #, c-format
 msgid "Patron restrictions"
 msgstr "L'adhérent est suspendu"
@@ -46406,9 +46402,9 @@ msgstr "L'adresse de l'adhérent semble erronée "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:514
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:686
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:799
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:900
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:689
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:903
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr "L'adresse de l'adhérent semble erronée"
@@ -47760,7 +47756,7 @@ msgstr ""
 msgid "Please enter no more than {0} characters."
 msgstr "Merci de ne pas saisir plus de {0} caractères."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1553
 #, c-format
 msgid ""
 "Please enter numbers only. Prefix the number with + or 00 if including the "
@@ -47903,7 +47899,7 @@ msgstr "Merci de renvoyer le document à : %s"
 #. %3$s:  ELSE 
 #. %4$s:  Branches.GetName( returnbranch ) | html 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:580
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:583
 #, c-format
 msgid "Please return this item to %s%s%s%s%s "
 msgstr "Merci de renvoyer ce document à %s%s%s%s%s "
@@ -48139,7 +48135,8 @@ msgstr "Plugin : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:130
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Plugins"
@@ -48667,7 +48664,7 @@ msgstr "Imprimer le numéro de carte comme un code à barres : "
 msgid "Print card number as text under barcode: "
 msgstr "Imprimer le numéro de carte comme texte sous le code à barres : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:30
 #, c-format
 msgid "Print checkin slip"
@@ -48751,7 +48748,7 @@ msgstr "Imprimer ticket"
 msgid "Print slip "
 msgstr "Imprimer un ticket "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:611
 #, c-format
 msgid "Print slip (P)"
 msgstr "Imprimer un ticket (P)"
@@ -48761,24 +48758,24 @@ msgstr "Imprimer un ticket (P)"
 msgid "Print slip and clear screen"
 msgstr "Imprimer un ticket et effacer l’écran"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:828
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:924
 #, c-format
 msgid "Print slip and confirm "
 msgstr "Imprimer un ticket et confirmer "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:554
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:730
 #, c-format
 msgid "Print slip and confirm (P) "
 msgstr "Imprimer un ticket et confirmer (P) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:824
 #, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Imprimer un ticket, transférer et confirmer "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:723
 #, c-format
 msgid "Print slip, transfer, and confirm (P) "
 msgstr "Imprimer un ticket, transférer et confirmer (P) "
@@ -49076,12 +49073,12 @@ msgstr "Profils"
 msgid "Programmed texts"
 msgstr "Textes de programmes"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
 #, c-format
 msgid "Progress"
 msgstr "Avancement de la tâche&nbsp;: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:80
 #, c-format
 msgid "Progress: "
 msgstr "Avancement de la tâche&nbsp;: "
@@ -49120,10 +49117,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:365
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:19
 #, c-format
 msgid "Public"
@@ -49400,7 +49397,7 @@ msgstr "Éditeur: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:234
 #, c-format
 msgid "Publisher: %s %s, %s %s %s %s %s %s "
-msgstr "Éditeur: %s %s, %s %s %s %s %s %s "
+msgstr "Éditeur : %s %s, %s %s %s %s %s %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:233
@@ -49539,7 +49536,7 @@ msgstr "Quantité reçue&nbsp;: "
 msgid "Quantity: "
 msgstr "Quantité&nbsp;: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:134
 #, c-format
 msgid "Queued"
 msgstr "Mis en file d'attente"
@@ -49549,12 +49546,12 @@ msgstr "Mis en file d'attente"
 msgid "Queued request"
 msgstr "Requête en attente"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:86
 #, c-format
 msgid "Queued: "
 msgstr "Mis en file d'attente : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1537
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1578
 #, c-format
 msgid "Quick add"
 msgstr "Ajout rapide"
@@ -49784,7 +49781,7 @@ msgstr "Motifs pour lesquels une demande d'article peut avoir été annulée"
 msgid "Reasons why an order might have been cancelled"
 msgstr "Motifs pour lesquels une commande peut être annulée"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:808
 #, c-format
 msgid "Recall at"
 msgstr "Rappel le"
@@ -49795,12 +49792,12 @@ msgstr "Rappel le"
 msgid "Recall due date interval (day)"
 msgstr "Intervalle de dates de rappel (jour)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:853
 #, c-format
 msgid "Recall found (item is already waiting): "
 msgstr "Rappel trouvé (document déjà mis en attente) : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:752
 #, c-format
 msgid "Recall found: "
 msgstr "Rappel trouvé : "
@@ -49817,8 +49814,8 @@ msgstr "Amende maximale pour retard de rappel"
 msgid "Recall pickup period (day)"
 msgstr "Période de retrait de rappel (jour)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:767
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:868
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:770
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:871
 #, c-format
 msgid "Recall placed by:"
 msgstr "Rappel placé par :"
@@ -50211,7 +50208,7 @@ msgstr "Règle de concordance&nbsp;:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:92
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:99
 #, c-format
 msgid "Record matching rules"
 msgstr "Règles de concordance"
@@ -50238,6 +50235,7 @@ msgid "Record only"
 msgstr "Notice uniquement"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:102
 #, c-format
 msgid "Record overlay rules"
 msgstr "Règles de fusion de notices"
@@ -50286,7 +50284,7 @@ msgstr "Type de notice : "
 msgid "Record-level item type"
 msgstr "Type de document de niveau bibliographique"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1066
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1069
 #, c-format
 msgid "Record-level itemtype"
 msgstr "Type de document au niveau bibliographique"
@@ -50672,7 +50670,7 @@ msgstr "Mémoriser pour cette session&nbsp;:"
 msgid "Remember memcached needs to be started before Plack."
 msgstr "N'oubliez pas que Memcache doit être redémarré avant Plack."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1012
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1015
 #, c-format
 msgid "Remember return date for next check in"
 msgstr "Mémoriser la date pour le prochain retour"
@@ -50747,9 +50745,11 @@ msgstr "Image distante"
 msgid "Remote image:"
 msgstr "Image distante&nbsp;:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
+#. For the first occurrence,
+#. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:495
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
@@ -50950,7 +50950,7 @@ msgstr "Enlever cette règle"
 msgid "Remove: "
 msgstr "Supprimer : "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1378
 #, c-format
 msgid "Remove?"
 msgstr "Supprimer?"
@@ -51419,7 +51419,7 @@ msgstr "Sous-groupe de rapports&nbsp;:"
 msgid "Report:"
 msgstr "Rapport&nbsp;:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:97
 #, c-format
 msgid "Report: "
 msgstr "Rapport : "
@@ -51604,7 +51604,6 @@ msgstr "Adresse de courriel valide requise&nbsp;:"
 msgid "Require.js JS module system"
 msgstr "Require.js JS module system"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:268
@@ -51617,6 +51616,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:760
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:200
@@ -51736,7 +51736,9 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1273
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1488
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1360
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1529
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
@@ -51781,7 +51783,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:169
@@ -51798,6 +51799,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:253
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:345
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:22
@@ -52347,7 +52349,7 @@ msgstr "Retour au panier"
 msgid "Return to the basket without making a new order."
 msgstr "Retour au panier sans enregistrer une nouvelle ligne de commande."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:108
 #, c-format
 msgid "Return to the job list"
 msgstr "Retourner à la liste des tâches"
@@ -52410,6 +52412,12 @@ msgstr "Annuler le statut en cours"
 #, c-format
 msgid "Revert hold transfer status"
 msgstr "Annuler le statut en transfert de la réservation"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Revert import MARC records"
+msgstr "Import des notices terminé"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/recalls.inc:112
 #, c-format
@@ -52747,7 +52755,7 @@ msgid "Run tool"
 msgstr "Lancer l'outil"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, c-format
 msgid "Running"
 msgstr "en cours d'exécution"
@@ -52833,7 +52841,7 @@ msgstr "Numéro d'alerte SMS&nbsp;:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:155
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:154
 #, c-format
 msgid "SMS cellular providers"
 msgstr "Fournisseurs de SMS"
@@ -52848,7 +52856,7 @@ msgstr "Fournisseurs de SMS "
 msgid "SMS cellular providers &rsaquo; Administration &rsaquo; Koha"
 msgstr "Fournisseurs de SMS &rsaquo; Administration &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1551
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:342
 #, c-format
 msgid "SMS number:"
@@ -52859,7 +52867,7 @@ msgstr "Numéro SMS&nbsp;:"
 msgid "SMS provider"
 msgstr "Fournisseur SMS"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1557
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:347
 #, c-format
 msgid "SMS provider:"
@@ -52879,7 +52887,7 @@ msgstr "Serveur SMTP : "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:143
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:142
 #, c-format
 msgid "SMTP servers"
 msgstr "Serveurs SMTP"
@@ -53009,8 +53017,7 @@ msgstr "Samedi"
 msgid "Saturdays"
 msgstr "Samedis"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:316
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:830
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:318
@@ -53023,6 +53030,8 @@ msgstr "Samedis"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:316
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -53087,11 +53096,6 @@ msgstr "Samedis"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:643
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:199
@@ -53105,6 +53109,11 @@ msgstr "Samedis"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:571
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:481
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:139
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:37
@@ -53268,7 +53277,7 @@ msgstr "Enregistrer votre rapport personnalisé"
 msgid "Saved"
 msgstr "Enregistré"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:994
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:997
 #, c-format
 msgid "Saved check-in date: "
 msgstr "Date de retour sauvegardée : "
@@ -53603,7 +53612,7 @@ msgstr "Moteur de recherche"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:101
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:111
 #, c-format
 msgid "Search engine configuration (Elasticsearch)"
 msgstr "Configuration du moteur de recherche (Elasticsearch)"
@@ -54497,11 +54506,11 @@ msgstr "Sélectionnez un modèle à appliquer&nbsp;: "
 msgid "Select a time"
 msgstr "Sélectionnez un horaire"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
@@ -54527,7 +54536,6 @@ msgstr "Sélectionnez un horaire"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:128
@@ -54538,6 +54546,7 @@ msgstr "Sélectionnez un horaire"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:337
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:214
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -55124,12 +55133,12 @@ msgstr "Numéro du périodique&nbsp;:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:133
 #, c-format
 msgid "Serial receipt creates an item record."
-msgstr "Le bulletinage créée des exemplaires."
+msgstr "Le bulletinage crée des exemplaires."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:135
 #, c-format
 msgid "Serial receipt does not create an item record."
-msgstr "Le bulletinage ne créée pas d'exemplaires."
+msgstr "Le bulletinage ne crée pas d'exemplaires."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:165
 #, c-format
@@ -55596,7 +55605,7 @@ msgid "Share content (subscriptions, reports) with the Koha community"
 msgstr "Partager du contenu (abonnements, rapports) avec la communauté Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:160
 #, c-format
 msgid "Share content with Mana KB"
 msgstr "Partager du contenu avec Mana-KB"
@@ -55636,7 +55645,7 @@ msgstr ""
 "Partagez l'abonnement avec d'autres bibliothèques. Votre adresse mail sera "
 "associée à votre partage."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:158
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:157
 #, c-format
 msgid "Share usage statistics"
 msgstr "Partager vos statistiques d'utilisation"
@@ -55697,7 +55706,7 @@ msgstr "Numéro de contrôle topographique"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1063
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1066
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:226
@@ -55962,7 +55971,7 @@ msgid "Show all suggestions"
 msgstr "Afficher toutes les suggestions"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 msgid "Show all transactions"
 msgstr "Afficher toutes les transactions"
 
@@ -56171,7 +56180,7 @@ msgid "Show tags"
 msgstr "Afficher les champs"
 
 #. BUTTON
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:941
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:944
 msgid "Show the last checkin message"
 msgstr "Voir le dernier message de retour"
 
@@ -56671,7 +56680,7 @@ msgid "Specify how the holiday should repeat."
 msgstr "Spécifier comment les fermetures doivent se répéter."
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1002
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1005
 #, c-format
 msgid "Specify return date %s: "
 msgstr "Préciser une date de retour %s : "
@@ -56988,6 +56997,12 @@ msgstr "Gestion des notices téléchargées"
 msgid "Staged MARC record management"
 msgstr "Gestion des notices téléchargées"
 
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Staged MARC records for import"
+msgstr "Télécharger des notices dans le réservoir"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:130
 #, c-format
 msgid "Staged:"
@@ -57127,13 +57142,13 @@ msgstr "Rechercher"
 msgid "Start using Koha"
 msgstr "Commencer à utiliser Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, c-format
 msgid "Started"
 msgstr "Démarré"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:90
 #, c-format
 msgid "Started: "
 msgstr "Démarré : "
@@ -57259,7 +57274,7 @@ msgstr "Assistant statistiques"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:342
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:785
@@ -57296,7 +57311,6 @@ msgstr "Assistant statistiques"
 msgid "Status"
 msgstr "Statut"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:189
 #, c-format
 msgid "Status "
@@ -57329,7 +57343,7 @@ msgstr "Statut inconnu"
 msgid "Status:"
 msgstr "Statut:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:77
 #, c-format
 msgid "Status: "
 msgstr "Statut : "
@@ -58257,8 +58271,6 @@ msgstr "Rechercher suggestions :"
 msgid "Sum"
 msgstr "Somme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:74
@@ -58266,6 +58278,8 @@ msgstr "Somme"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:49
@@ -58758,7 +58772,7 @@ msgstr "Propriétés du tableau"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:149
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:148
 #, c-format
 msgid "Table settings"
 msgstr "Configuration des tableaux"
@@ -59631,6 +59645,11 @@ msgstr "La monnaie à rendre est de "
 msgid "The change will be applied immediately."
 msgstr "La modification sera prise en compte immédiatement."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:40
+#, fuzzy, c-format
+msgid "The club you requested does not exist."
+msgstr "La notice que vous demandez n'existe pas (%s)."
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:311
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:377
 #, c-format
@@ -60178,6 +60197,11 @@ msgstr "La notification a été ajoutée à la file avec succès."
 msgid "The number of days (%s) must be a number between 0 and 999."
 msgstr "Le nombre de jours (%s) doit être compris entre 0 et 999."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:68
+#, fuzzy, c-format
+msgid "The order could not be found."
+msgstr "Le code à barres %s est inconnu"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:78
 #, c-format
 msgid ""
@@ -60193,6 +60217,11 @@ msgid "The order has been canceled, although the record has not been deleted."
 msgstr "La commande a été annulée, bien que la notice n'ait pas été supprimée."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:66
+#, fuzzy, c-format
+msgid "The order has been cancelled already."
+msgstr "La commande a été annulée avec succès."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:71
 #, c-format
 msgid ""
 "The order has been cancelled, although one or more items could not have been "
@@ -60201,7 +60230,7 @@ msgstr ""
 "La commande a été annulée, bien qu'un ou plusieurs exemplaires n'aient pas "
 "pu être supprimés."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:74
 #, c-format
 msgid "The order has been cancelled, although the record has not been deleted."
 msgstr "La commande a été annulée, bien que la notice n'ait pas été supprimée."
@@ -60731,12 +60760,6 @@ msgstr "Il n'y a pas de contenu supplémentaire."
 #, c-format
 msgid "There are no authorized values defined for %s"
 msgstr "Il n'y a pas de valeur autorisée pour %s"
-
-# comment traduire background jobs : taches de fond, travaux d'arrière plan, t
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:198
-#, c-format
-msgid "There are no background jobs yet. "
-msgstr "Il n'y a pas encore de tâches de fond. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:205
 #, c-format
@@ -62193,11 +62216,11 @@ msgstr "TinyMCE WYSIWYG editor"
 msgid "TinyMCE WYSIWYG editor v5.9.2 "
 msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:279
@@ -62225,7 +62248,7 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1058
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1061
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
@@ -62261,9 +62284,6 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:46
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:349
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:136
@@ -62275,6 +62295,9 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:444
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
@@ -63333,7 +63356,7 @@ msgstr "Le transfert n'est pas autorisé pour&nbsp;: "
 msgid "Transfer items"
 msgstr "Exemplaires transférés"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:594
 #, c-format
 msgid "Transfer now? "
 msgstr "Transférer maintenant&nbsp;? "
@@ -63353,16 +63376,16 @@ msgstr "Transférer la commande &rsaquo; Acquisitions &rsaquo; Koha"
 msgid "Transfer order to this basket?"
 msgstr "Transférer la commande vers ce panier&nbsp;?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1062
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1065
 #, c-format
 msgid "Transfer to"
 msgstr "Transférer à"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:519
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:690
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:803
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:693
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:806
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:907
 #, c-format
 msgid "Transfer to:"
 msgstr "Transférer à&nbsp;:"
@@ -63605,18 +63628,18 @@ msgstr "Code d'authentification à deux facteurs :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:449
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1332
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:402
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
@@ -63632,7 +63655,7 @@ msgstr "Type"
 msgid "Type:"
 msgstr "Type&nbsp;:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:24
 #, c-format
@@ -64066,7 +64089,7 @@ msgid "Université de St Etienne, France"
 msgstr "Université de St Etienne, France"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:630
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:245
@@ -64120,9 +64143,8 @@ msgstr "Erreur inconnue."
 msgid "Unknown filter"
 msgstr "Filtre inconnu"
 
-#. %1$s:  job_type | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:44
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Unknown job type '%s'"
 msgstr "Type de job inconnu '%s'"
 
@@ -64309,8 +64331,8 @@ msgstr "Mettre à jour"
 msgid "Update "
 msgstr "Mettre à jour"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:41
-#, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 msgid "Update Elasticsearch index"
 msgstr "Mettre à jour les index Elasticsearch"
 
@@ -65607,7 +65629,7 @@ msgstr "Flux vidéo non disponible."
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:403
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -65846,8 +65868,8 @@ msgstr ""
 "actuelle"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:153
-#, c-format
-msgid "View, manage and cancel background jobs."
+#, fuzzy, c-format
+msgid "View, manage and cancel jobs."
 msgstr "Visualiser, gérer et annuler les tâches de fond."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:145
@@ -65931,7 +65953,7 @@ msgstr "ATTENTION&nbsp;:"
 msgid "WELCOME notice is used"
 msgstr "La notification WELCOME est utilisée"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:906
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:909
 #, c-format
 msgid "Wait for pickup at"
 msgstr "Réservation en attente de retrait à"
@@ -65976,9 +65998,9 @@ msgstr "Mis de coté le"
 #. %2$s:  Branches.GetName( itemloo.ExpectedAtLibrary ) | html 
 #. %3$s:  itemloo.waitingdate | $KohaDates 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:743
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting for %s at %s since %s"
-msgstr "En attente à %s depuis le %s"
+msgstr "En attente pour %s à %s depuis le %s"
 
 #. %1$s:  resultsloo.onholdcount | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:158
@@ -66065,7 +66087,7 @@ msgstr "Attention! Le montant total de la commande dépasse le budget alloué."
 #, c-format
 msgid "Warning! You will exceed %s%% of your fund."
 msgstr ""
-"Attention&nbsp;! Vous dépasserez %s%% le montant de votre poste budgétaire."
+"Attention&nbsp;! Vous dépasserez %s%% du montant de votre poste budgétaire."
 
 #. %1$s:  expenditure | html 
 #. %2$s:  IF (currency) 
@@ -66808,7 +66830,8 @@ msgstr "Jaune"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:584
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:587
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:482
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
@@ -66861,10 +66884,10 @@ msgstr "Oui"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:979
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:988
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1408
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1413
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1449
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1463
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1468
 #, c-format
 msgid "Yes "
 msgstr "Oui "
@@ -66875,7 +66898,7 @@ msgstr "Oui "
 msgid "Yes %s "
 msgstr "Oui %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:603
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:606
 #, c-format
 msgid "Yes (Y)"
 msgstr "Oui"
@@ -66998,7 +67021,7 @@ msgstr "Oui, supprimer cette zone"
 msgid "Yes, edit existing items"
 msgstr "Oui, modifier les exemplaires existants"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:607
 #, c-format
 msgid "Yes, print slip"
 msgstr "Oui, imprimer le reçu"
@@ -68195,7 +68218,7 @@ msgstr "Serveur Z39.50/SRU mis à jour (%s)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:140
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:139
 #, c-format
 msgid "Z39.50/SRU servers"
 msgstr "Serveurs Z39.50/SRU"
@@ -71602,6 +71625,18 @@ msgstr ""
 "Kouider Bounama, Sham Bajaa, Ghofran Alshami, Chrestian Aboud, Fatema Salem "
 "et Duaa Bazzazi. "
 
+#~ msgid "%%] %s [%%# - branch: "
+#~ msgstr "%%] %s [%%# - branch: "
+
+#~ msgid "%%] [%%# - category: "
+#~ msgstr "%%] [%%# - catégorie : "
+
+#~ msgid "%%] [%%# - search_field: "
+#~ msgstr "%%] [%%# - search_field: "
+
+#~ msgid "%%] [%%# - search_type: "
+#~ msgstr "%%] [%%# - search_type: "
+
 #~ msgid "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 #~ msgstr "%s %s %s %s %s %s %s : %s %s %s %s ISBN : %s %s "
 
@@ -71686,6 +71721,9 @@ msgstr ""
 #~ "valeur par défaut (Rembourser les frais d'exemplaire perdu et appliquer "
 #~ "une nouvelle amende pour retard) %s Utiliser la valeur par défaut "
 #~ "(Conserver les frais d'exemplaire perdu) %s "
+
+#~ msgid "%s %s [%%# - Search: "
+#~ msgstr "%s %s [%%# - Recherche : "
 
 #~ msgid "%s %s days %s There is no age for this rule. %s "
 #~ msgstr "%s %s jours %s Il n'y a pas d'âge pour cette règle. %s "
@@ -71902,6 +71940,9 @@ msgstr ""
 #~ "exemplaire est normalement exclu du prêt %s(%s)%s. %s %s Prêter quand "
 #~ "même ? %s "
 
+#~ msgid "%s Library default: %s "
+#~ msgstr "%s Site par défaut : %s "
+
 #~ msgid "%s Modify %s New %s Authority type "
 #~ msgstr "%s Modifier %s Nouveau %s Type d'autorité "
 
@@ -72116,6 +72157,9 @@ msgstr ""
 #~ msgid "%sForever%s %sDefault%s %sNever%s "
 #~ msgstr "%sToujours%s %sDéfaut%s %sJamais%s "
 
+#~ msgid "%sGone no address:%s %sLost card:%s "
+#~ msgstr "%sParti sans laisser d'adresse :%s %sCarte perdue :%s "
+
 #~ msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 #~ msgstr "%sType de document %sCollection %sLocalisation %sAutre chose %s "
 
@@ -72168,6 +72212,9 @@ msgstr ""
 #~ msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #~ msgstr "Auteurs(s)&nbsp;: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 
+#~ msgid "Background jobs"
+#~ msgstr "Tâches en arrière-plan"
+
 #~ msgid "Batch edit"
 #~ msgstr "Modification par lots"
 
@@ -72213,6 +72260,12 @@ msgstr ""
 
 #~ msgid "Lost reserve"
 #~ msgstr "Réserve perdue"
+
+#~ msgid "MARC overlay rules"
+#~ msgstr "Règles de fusion MARC"
+
+#~ msgid "Manage background jobs"
+#~ msgstr "Gérer les tâches de fond"
 
 #~ msgid "Microsecond"
 #~ msgstr "Microseconde"
@@ -72279,6 +72332,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Onglet:%s | $%s %s %s%s%s%s, répétable%s%s, Obligatoire%s%s, Voir%s%s%s, "
 #~ "%s%s%s, %s%s%s, %s%s "
+
+# comment traduire background jobs : taches de fond, travaux d'arrière plan, t
+#~ msgid "There are no background jobs yet. "
+#~ msgstr "Il n'y a pas encore de tâches de fond. "
 
 #~ msgid "Time"
 #~ msgstr "Heure"

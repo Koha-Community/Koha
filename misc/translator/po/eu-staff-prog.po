@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-10-18 08:45-0300\n"
+"POT-Creation-Date: 2022-11-16 20:31-0300\n"
 "PO-Revision-Date: 2022-05-01 09:14-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: eu\n"
@@ -106,27 +106,6 @@ msgstr "Agregar usuarios"
 #, c-format
 msgid "%% matches any number of characters"
 msgstr "%% edozein karaktere-kopururekin bat dator"
-
-#. %1$s: # You can then pass a list of filters 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:18
-#, c-format
-msgid "%%] %s [%%# - branch: "
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:20
-#, fuzzy, c-format
-msgid "%%] [%%# - category: "
-msgstr "Mostrar categoría: "
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:21
-#, fuzzy, c-format
-msgid "%%] [%%# - search_field: "
-msgstr "Itemak bilatzeko eremuentzat laguntza"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:22
-#, c-format
-msgid "%%] [%%# - search_type: "
-msgstr ""
 
 #. %1$s: - USE raw -
 #. %2$s: - USE Koha -
@@ -752,6 +731,13 @@ msgstr "%s %s %s %s %s "
 msgid "%s %s (%s) %s Default MARC framework %s "
 msgstr "%s%s (%s)%sMARC lan-orri lehenetsia%s"
 
+#. %1$s:  END 
+#. %2$s:  Koha.Preference('numSearchResults') | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:303
+#, fuzzy, c-format
+msgid "%s %s (default) "
+msgstr "%s %s (lehenetsia)"
+
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  IF ( opadd ) 
 #. %3$s:  ELSIF ( opduplicate ) 
@@ -1196,13 +1182,6 @@ msgstr "%s %s Bilaketa hemendik izan da %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:53
 #, c-format
 msgid "%s %s [%% SET pref_MARCOverlayRules_link = '"
-msgstr ""
-
-#. %1$s:  END 
-#. %2$s: # Display a complex patron search form 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:14
-#, c-format
-msgid "%s %s [%%# - Search: "
 msgstr ""
 
 #. %1$s:  IF ( hardduedate ) 
@@ -1789,7 +1768,7 @@ msgid "%s (inactive)"
 msgstr "%s (ez aktibo)"
 
 #. %1$s:  riloo.duedate | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1079
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1082
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (atzeratuta)"
@@ -1984,7 +1963,7 @@ msgstr ""
 "interesgarria (bere itemak oraindik prozesatuak izan daitezke) %s %s %s %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:15
 #, c-format
 msgid "%s Add items only if matching bib was found"
 msgstr ""
@@ -1992,7 +1971,7 @@ msgstr ""
 "aurkitzen bada"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:21
 #, c-format
 msgid "%s Add items only if no matching bib was found"
 msgstr ""
@@ -2053,7 +2032,7 @@ msgid "%s All libraries %s%s %s "
 msgstr "%s Liburutegi guztiak %s%s %s"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:9
 #, c-format
 msgid "%s Always add items"
 msgstr "%s Gehitu itemak beti"
@@ -2353,11 +2332,10 @@ msgstr ""
 #. %1$s:  IF op == 'view' 
 #. %2$s:  job.id | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:7
 #, fuzzy, c-format
 msgid ""
-"%s Details of job #%s &rsaquo; %s Background jobs &rsaquo; Administration "
-"&rsaquo; Koha "
+"%s Details of job #%s &rsaquo; %s Jobs &rsaquo; Administration &rsaquo; Koha "
 msgstr ""
 "Koha &rsaquo; Administrazioa &rsaquo; Aurrekontuak &rsaquo; Funtsak &rsaquo; "
 "Honen planifikazioa%s nork %s"
@@ -2528,6 +2506,12 @@ msgstr ""
 msgid "%s Funds for '%s' %s All funds %s "
 msgstr "%s Funtsak honetarako '%s' %s Funtsa guztiak %s "
 
+#. %1$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1300
+#, fuzzy, c-format
+msgid "%s Gone no address: "
+msgstr "helbiderik gabe joan da"
+
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:235
 #, fuzzy, c-format
@@ -2574,7 +2558,7 @@ msgstr ""
 "%s Ezikusi hartzeko erregistroa (haren elementuak prozesatu daiteke oraindik)"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:33
 #, c-format
 msgid "%s Ignore items"
 msgstr "%s Ezikusi elementuak"
@@ -2641,18 +2625,17 @@ msgstr "%s %s %s Itema zain "
 msgid "%s Last value: %s Begins with: %s "
 msgstr "%s Azken balioa %s Honekin hasten da: %s "
 
-#. %1$s:  END 
-#. %2$s:  Koha.Preference('numSearchResults') | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:303
-#, fuzzy, c-format
-msgid "%s Library default: %s "
-msgstr "Liburutegi kodea: "
-
 #. %1$s:  ELSE 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:124
 #, fuzzy, c-format
 msgid "%s Location: "
 msgstr "Kokalekua:"
+
+#. %1$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1335
+#, fuzzy, c-format
+msgid "%s Lost card: "
+msgstr "Galdutako txartela"
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
@@ -2906,8 +2889,10 @@ msgstr "%s Nuevo curso / materia %s "
 msgid "%s News %s HTML customizations %s "
 msgstr "%s No slimitación %s "
 
+#. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1352
 #, fuzzy, c-format
 msgid "%s No "
 msgstr "%s Bat ere ez "
@@ -2982,10 +2967,9 @@ msgid "%s No inactive budgets %s "
 msgstr "%s No activo nuevo presupuesto %s "
 
 #. %1$s:  IF item_action_ignore AND num_items == 0 
-#. %2$s:  ELSE 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:1
 #, fuzzy, c-format
-msgid "%s No items were found during staging %s "
+msgid "%s No items were found during staging "
 msgstr "%s elementu erregistro aurkitu eta prestatu d(ir)a"
 
 #. %1$s:  ELSE 
@@ -3052,7 +3036,7 @@ msgstr "%s Bat ere ez "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1144
 #, fuzzy, c-format
 msgid "%s Not checked out %s "
 msgstr "%s%s %s %sEz dago mailegatuta %s "
@@ -3233,7 +3217,7 @@ msgid "%s Replace existing record with incoming record"
 msgstr "%s Ordeztu existitzen den erregistro bat hartzeko erregistro batekin"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:27
 #, c-format
 msgid "%s Replace items if matching bib was found (only for existing items)"
 msgstr ""
@@ -3246,7 +3230,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  d.comment | $raw 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1345
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1386
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:67
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
@@ -3790,8 +3774,10 @@ msgid ""
 "Patrons &rsaquo; Koha "
 msgstr "Koha &rsaquo; Socios &rsaquo; Recaudar pago de multas para %s %s"
 
+#. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1306
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1344
 #, fuzzy, c-format
 msgid "%s Yes "
 msgstr "%s Bai%s, "
@@ -5452,15 +5438,6 @@ msgid ""
 "note\"%s\"Vendor note\"%s "
 msgstr ""
 
-#. %1$s:  IF ( flagloo.key == 'gonenoaddress' ) 
-#. %2$s:  END 
-#. %3$s:  IF ( flagloo.key == 'lost' ) 
-#. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1297
-#, c-format
-msgid "%sGone no address:%s %sLost card:%s "
-msgstr "%sHelbide gabe desagertua:%s %sErabiltzaile-txartel galdua:%s "
-
 #. %1$s:  IF category.hidelostitems 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -6446,7 +6423,7 @@ msgstr ""
 "administratzailearekin, dituzun aukeren inguruan)."
 
 #. %1$s:  dropboxdate | $KohaDates with_hours => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:990
 #, fuzzy, c-format
 msgid "( Effective checkin date is %s )"
 msgstr "Buzoi modua. (Itzulpen data %s da)."
@@ -8098,7 +8075,7 @@ msgid "Acquisition order"
 msgstr "Eskuratze data"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:110
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:117
 #, c-format
 msgid "Acquisition parameters"
 msgstr "Eskuratze parametroak"
@@ -8235,7 +8212,7 @@ msgstr "Ekintza bat etortzerik aurkitzen ez bada:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:170
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:559
@@ -8550,7 +8527,7 @@ msgstr "Gehitu eremu berri bat"
 msgid "Add a new item"
 msgstr "Gehitu eremu berri bat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:286
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:290
 #, c-format
 msgid "Add a new message"
 msgstr "Gehitu mezu berri bat"
@@ -8891,8 +8868,8 @@ msgstr "Añadir ítems: escanear código de barras"
 msgid "Add library "
 msgstr "Cualquier biblioteca"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1374
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1377
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1415
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1418
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:60
 #, c-format
@@ -9435,7 +9412,7 @@ msgid "Additional SRU options: "
 msgstr "SRU aukera gehigarriak:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1442
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1483
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:299
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:323
@@ -9467,7 +9444,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:4
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:164
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:163
 #, fuzzy, c-format
 msgid "Additional fields"
 msgstr "Azpieremu gehigarriak (XML)"
@@ -9489,7 +9466,7 @@ msgid "Additional options"
 msgstr "SRU aukera gehigarriak:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:136
 #, c-format
 msgid "Additional parameters"
 msgstr "Parametro gehigarriak"
@@ -9604,8 +9581,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
@@ -10700,7 +10677,7 @@ msgstr "Ha ocurrido un error!"
 msgid "An error has occurred. "
 msgstr "Akats bat gertatu da. %s "
 
-#. %1$s:  IF ( error_delitem ) 
+#. %1$s:  IF error_order_already_cancelled 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:63
 #, c-format
 msgid "An error has occurred. %s "
@@ -12212,7 +12189,7 @@ msgid "Are you sure you want to uninstall the plugin %s?"
 msgstr "Ziur al zaude zerrenda hau ezabatu nahi duzula %s?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 #, fuzzy
 msgid "Are you sure you want to void this credit?"
 msgstr "Ziur al zaude hori egin nahi duzula?"
@@ -12462,7 +12439,7 @@ msgstr "Atributo:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:152
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:151
 #, c-format
 msgid "Audio alerts"
 msgstr "Audio alerts"
@@ -12539,7 +12516,7 @@ msgstr "Autoritatea"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:273
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1059
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1062
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:29
@@ -12899,7 +12876,7 @@ msgstr "Autoritate mota:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:86
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:93
 #, c-format
 msgid "Authority types"
 msgstr "Autoritate motak"
@@ -13313,16 +13290,6 @@ msgstr "Aurrekoa"
 msgid "Background color"
 msgstr "kolore bat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
-#, fuzzy, c-format
-msgid "Background jobs"
-msgstr "Saski taldea honentzat: "
-
 #: koha-tmpl/intranet-tmpl/prog/en/includes/delimiter_text.inc:6
 #, fuzzy, c-format
 msgid "Backslash separated text (.csv)"
@@ -13366,7 +13333,7 @@ msgstr "Mapa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1060
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1063
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:109
@@ -13879,23 +13846,27 @@ msgstr "ID lotea"
 msgid "Batch add reserves"
 msgstr "Gehitu erreserbak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:33
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch authority record deletion"
 msgstr "Erregistro loteak ezabatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:31
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch authority record modification"
 msgstr "Batch erregistroal eraldatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:27
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch bibliographic record modification"
 msgstr "Batch erregistroal eraldatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:29
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch bibliographic record record deletion"
 msgstr "Erregistro loteak ezabatu"
 
@@ -13987,8 +13958,9 @@ msgstr "Itzultze data aldagaitza"
 msgid "Batch extend due dates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Tresnak &rsaquo; Berriak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:39
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch hold cancellation"
 msgstr "Erregistro loteak ezabatu"
 
@@ -14038,13 +14010,15 @@ msgstr "Elementuak sortaka aldatzea"
 msgid "Batch item modification &rsaquo; Tools &rsaquo; Koha"
 msgstr "Elementuak sortaka aldatzearen emaitzak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:37
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch item record deletion"
 msgstr "Erregistro loteak ezabatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:35
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Batch item record modification"
 msgstr "Batch erregistroal eraldatu"
 
@@ -14580,12 +14554,12 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1034
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1037
 #, c-format
 msgid "Book drop mode"
 msgstr "Buzoi modua"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:990
 #, fuzzy, c-format
 msgid "Book drop mode. "
 msgstr "Buzoi modua"
@@ -14757,7 +14731,7 @@ msgstr "Liburutegia"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
@@ -15149,7 +15123,7 @@ msgstr "Aurrekontu barneko kostua: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:30
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:123
 #, c-format
 msgid "Budgets"
 msgstr "Aurrekontuak"
@@ -15510,7 +15484,7 @@ msgstr "Katalogo zenbakia"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1064
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1067
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:82
@@ -15807,7 +15781,7 @@ msgstr "No se puede cancelar recibo"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:103
@@ -15894,7 +15868,7 @@ msgstr "No se puede cancelar recibo"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-password.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:268
@@ -16060,7 +16034,7 @@ msgstr "Ezeztatuta"
 msgid "Cancel hold"
 msgstr "Ezeztatu erreserba"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:561
 #, fuzzy, c-format
 msgid "Cancel hold (X) "
 msgstr "Ezeztatu erreserba"
@@ -16233,7 +16207,7 @@ msgstr "Bertan behera uzteko arrazoia: %s %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:836
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:453
@@ -16565,7 +16539,7 @@ msgstr "Txartel loteak"
 msgid "Card height:"
 msgstr "Txartel garaiera:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:215
@@ -16882,7 +16856,7 @@ msgstr "Grabazio-kasetea"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:85
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:24
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:50
 #, c-format
@@ -17497,8 +17471,8 @@ msgstr "Aurreko maileguak"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:942
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:945
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:957
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/includes/adv-search.inc:40
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-search.inc:30
@@ -17884,7 +17858,7 @@ msgid "Checked out: "
 msgstr "Maileguan hartuta "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1053
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1056
 #, c-format
 msgid "Checked-in items"
 msgstr "Itzulitako elementuak"
@@ -17925,7 +17899,7 @@ msgstr "Itzultze-mezua"
 msgid "Checkin on"
 msgstr "Noiz itzulia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:965
 #, fuzzy, c-format
 msgid "Checkin settings"
 msgstr "Noiz itzulia"
@@ -18133,7 +18107,7 @@ msgstr "Los préstamos estan BLOQUEADOS porque el socio tiene items con retraso"
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Los préstamos estan BLOQUEADOS porque el socio tiene items con retraso"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1138
 #, fuzzy, c-format
 msgid "Checkouts:"
 msgstr "Maileguak "
@@ -18384,7 +18358,7 @@ msgstr "Aukeratu"
 msgid "Chooser:"
 msgstr "Aukeratu:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1404
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1445
 #, fuzzy, c-format
 msgid "Chooser: "
 msgstr "Aukeratu:"
@@ -18820,6 +18794,7 @@ msgstr "Sailkapena"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:96
 #, fuzzy, c-format
 msgid "Classification configuration"
 msgstr "Sailkapen iturriak"
@@ -18855,7 +18830,6 @@ msgstr "Sailkapenaren iturri kodea:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:344
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2405
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:89
 #, c-format
 msgid "Classification sources"
 msgstr "Sailkapen iturriak"
@@ -18903,7 +18877,7 @@ msgstr "Inportatze sorta garbitu da #%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1484
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1525
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:354
@@ -18966,7 +18940,7 @@ msgstr ""
 "¿Borrar todos los registros de depósito efectuado en este lote? Esto no "
 "puede deshacerse."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1386
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1427
 #: koha-tmpl/intranet-tmpl/prog/en/includes/calendar.inc:33
 #, c-format
 msgid "Clear date"
@@ -19411,7 +19385,7 @@ msgid "Club enrollments &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha"
 msgstr ""
 "Koha &rsaquo; Zirkulazioa &rsaquo; Erreserbak &rsaquo; Berretsi erreserbak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:42
 #, fuzzy, c-format
 msgid "Club enrollments for "
 msgstr "Izen-ematea:"
@@ -19578,7 +19552,7 @@ msgstr "Egin ordainketa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:552
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1068
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1071
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:112
@@ -19802,7 +19776,7 @@ msgstr "Tabuladore bidez bereizitako testua"
 msgid "Command-line"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1374
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:10
 #, c-format
 msgid "Comment"
@@ -19828,7 +19802,7 @@ msgid "Comment:"
 msgstr "Iruzkina:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
 msgid "Comment: "
@@ -20246,12 +20220,12 @@ msgid "Confirm deletion of this vendor ?"
 msgstr "Berretsi hornitzaile hau ezabatzea?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:549
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:724
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:727
 #, fuzzy, c-format
 msgid "Confirm hold (Y) "
 msgstr "Berretsi erreserba"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:717
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:720
 #, fuzzy, c-format
 msgid "Confirm hold and transfer (Y) "
 msgstr "Maileguak baieztatu"
@@ -20271,13 +20245,13 @@ msgstr "Confirmar nueva contraseña: "
 msgid "Confirm password: "
 msgstr "Pasahitza baieztatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:825
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:918
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:921
 #, fuzzy, c-format
 msgid "Confirm recall "
 msgstr "Berretsi erreserba"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:821
 #, fuzzy, c-format
 msgid "Confirm recall and transfer "
 msgstr "Berretsi inprimagailua ezabatzea"
@@ -21727,7 +21701,7 @@ msgstr "Monetak eta kanbio-tasak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:114
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:120
 #, c-format
 msgid "Currencies and exchange rates"
 msgstr "Monetak eta kanbio-tasak"
@@ -21797,6 +21771,11 @@ msgstr "Une honetan onartzen diren maileguak"
 #, fuzzy, c-format
 msgid "Current checkouts allowed: "
 msgstr "Une honetan onartzen diren maileguak"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
+#, fuzzy, c-format
+msgid "Current jobs only"
+msgstr "Uneko saioa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:335
@@ -22287,7 +22266,7 @@ msgstr "Data"
 msgid "Date accessioned"
 msgstr "Jasotze-data"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1065
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1068
 #, c-format
 msgid "Date acquired"
 msgstr "Jasotze-data"
@@ -23192,7 +23171,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:281
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:282
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:284
 #: koha-tmpl/intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:15
 #, c-format
 msgid "Delete"
@@ -23767,7 +23747,7 @@ msgid "Deliverer"
 msgstr "Entregatze-lekua"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1420
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1461
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:276
 #, fuzzy, c-format
 msgid "Deliverer:"
@@ -24137,7 +24117,7 @@ msgstr "Helburu-liburutegia:"
 msgid "Destination record"
 msgstr "Helburu-erregistroa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
 #, fuzzy, c-format
 msgid "Detailed messages: "
 msgstr "Fecha detallada"
@@ -24240,8 +24220,8 @@ msgstr "%s -ren maileguak"
 
 #. For the first occurrence,
 #. %1$s:  job.id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:37
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:69
 #, fuzzy, c-format
 msgid "Details of job #%s"
 msgstr "%s -ren maileguak"
@@ -24329,7 +24309,7 @@ msgstr "Hau esan nahi zenuen?:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/didyoumean.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:146
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:145
 #, c-format
 msgid "Did you mean?"
 msgstr "Hau da esan nahi duzuna?:"
@@ -24991,7 +24971,7 @@ msgstr "Itzulketak %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1057
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1060
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:69
@@ -25228,7 +25208,7 @@ msgstr "EAN: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:123
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:129
 #, c-format
 msgid "EDI accounts"
 msgstr "EDI kontuak"
@@ -26250,12 +26230,12 @@ msgstr "Dataren azken maila"
 msgid "End of interval"
 msgstr "Tartearen amaiera"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:136
 #, fuzzy, c-format
 msgid "Ended"
 msgstr "Kudeatzailea"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:94
 #, fuzzy, c-format
 msgid "Ended: "
 msgstr "Eguneraketa:"
@@ -26465,7 +26445,7 @@ msgstr "Sartu itemaren barra-kodea edo hitz-gakoa:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:658
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:945
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:948
 #, c-format
 msgid "Enter item barcode:"
 msgstr "Idatzi elementuaren barra kodea:"
@@ -27030,7 +27010,7 @@ msgid "Expected on"
 msgstr "Noiz espero da"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:910
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1334
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1375
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:756
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:16
@@ -27075,7 +27055,7 @@ msgstr "Epemuga-data: %s"
 msgid "Expiration:"
 msgstr "Iraungipena:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1384
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
 #, c-format
 msgid "Expiration: "
 msgstr "Iraungitze data:"
@@ -27493,11 +27473,12 @@ msgstr "Berandututako eskaerak"
 msgid "Facetable"
 msgstr "Facetado"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:19
+#. For the first occurrence,
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
-#, c-format
 msgid "Failed"
 msgstr "Huts egin"
 
@@ -28152,7 +28133,7 @@ msgid "Filter on:"
 msgstr "Noiz iragazi:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 msgid "Filter paid transactions"
 msgstr "Iragaziordaindutako trantsakzioak"
 
@@ -28300,12 +28281,12 @@ msgstr "Graziazko aldia isunentzat"
 msgid "Fines"
 msgstr "Isunak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:979
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:982
 #, fuzzy, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:971
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:974
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Itzulitako elementuengatiko isunak barkatzen dira."
@@ -28327,8 +28308,9 @@ msgstr "Bukatu jasotze prozesua"
 msgid "Finish receiving"
 msgstr "Bukatu jasotze prozesua"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:13
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Finished"
 msgstr "Bukatu"
 
@@ -28663,7 +28645,7 @@ msgstr "Olvida %s %s (%s)"
 msgid "Forget %s %s (%s)"
 msgstr "Olvida %s %s (%s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1044
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1047
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
@@ -28673,7 +28655,7 @@ msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
 msgid "Forgive fines on return:"
 msgstr "Barkatu isunak itzultzerakoan"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1024
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1027
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "Barkatu atzerapenapenagatiko karguak"
@@ -29187,7 +29169,7 @@ msgstr "Funtsa: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:120
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:126
 #, c-format
 msgid "Funds"
 msgstr "Funtsak"
@@ -30130,7 +30112,7 @@ msgstr "Erreserbatua"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:521
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:695
 #, c-format
 msgid "Hold at"
 msgstr "Erreserbatu hemen"
@@ -30184,7 +30166,7 @@ msgstr "Noren erreserba:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:509
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:494
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:657
 #, c-format
 msgid "Hold for:"
 msgstr "Noren erreserba:"
@@ -30206,7 +30188,7 @@ msgstr "%s Erreserba bat aurkitu da, honentzat: %s("
 msgid "Hold found for (%s), please transfer"
 msgstr "Honentzako erreserba aurkitu da: (%s), mesedez, transferitu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:641
 #, c-format
 msgid "Hold found: "
 msgstr "Erreserba aurkituta: "
@@ -30523,8 +30505,9 @@ msgstr "Erreserba ilara"
 msgid "Holds queue successfully updated. "
 msgstr "Eremua arrakastaz eguneratu da: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:43
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Holds queue update"
 msgstr "Erreserba ilara"
 
@@ -30696,7 +30679,7 @@ msgstr "Feriados de repetición anual en un rango"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
@@ -30953,7 +30936,7 @@ msgstr "Jatorri-liburutegia"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1061
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1064
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:114
@@ -31120,7 +31103,7 @@ msgid "Housebound details for %s"
 msgstr "%s -ren maileguak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #, c-format
@@ -31916,13 +31899,14 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ezikusi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:833
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:925
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:928
 #, fuzzy, c-format
 msgid "Ignore "
 msgstr "Ezikusi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:557
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:735
 #, fuzzy, c-format
 msgid "Ignore (I) "
 msgstr "Ezikusi"
@@ -32270,6 +32254,12 @@ msgid ""
 msgstr ""
 "Inportatu %s txantiloiaren egitura (eremuak eta azpieremuak) kalkulu-orriko "
 "fitxategi batetik (.csv, .xml, .ods)"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Import MARC records"
+msgstr "Kudeatu prestatutako MARC erregistroak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:347
 #, c-format
@@ -32622,7 +32612,7 @@ msgstr ""
 msgid "Increase indent"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1397
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:40
 #, c-format
 msgid "Indefinite"
@@ -33034,7 +33024,7 @@ msgstr "Instruktoreak"
 msgid "Instructors:"
 msgstr "Instruktoreak: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:61
 #, fuzzy, c-format
 msgid "Insufficient permission to see this job."
 msgstr "Ez duzu nahikoa pribilegiorik."
@@ -34157,7 +34147,7 @@ msgstr "Eremuen bilaketa pertsonalizatua"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_field.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:98
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:108
 #, fuzzy, c-format
 msgid "Item search fields"
 msgstr "Eremuen bilaketa pertsonalizatua"
@@ -34229,7 +34219,7 @@ msgstr "Item etiketak ezin dira gorde"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:200
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1067
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1070
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:111
@@ -34689,12 +34679,12 @@ msgstr "Argitalpenen eguneraketak:"
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:130
 #, c-format
 msgid "Job ID"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:75
 #, fuzzy, c-format
 msgid "Job ID: "
 msgstr "Profila:"
@@ -34706,6 +34696,16 @@ msgstr "Profila:"
 #, c-format
 msgid "Job progress: "
 msgstr "Lanaren garapena:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:115
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:78
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:80
+#, c-format
+msgid "Jobs"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:81
 #, c-format
@@ -34804,7 +34804,7 @@ msgid "Keyboard layout "
 msgstr "Laster-teklak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:167
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:166
 #, fuzzy, c-format
 msgid "Keyboard shortcuts"
 msgstr "Laster-teklak"
@@ -35028,7 +35028,7 @@ msgstr "Equipo Koha"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:82
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:89
 #, c-format
 msgid "Koha to MARC mapping"
 msgstr "Koha - MARC mapaketa"
@@ -35802,7 +35802,7 @@ msgstr "Liburutegi kodea: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-menu.inc:40
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:124
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:130
 #, c-format
 msgid "Library EANs"
 msgstr "EANs liburutegia"
@@ -36485,7 +36485,7 @@ msgstr "Datuak kargatzen..."
 msgid "Loading emoticons..."
 msgstr "Datuak kargatzen..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1545
 #, c-format
 msgid "Loading new messaging defaults "
 msgstr ""
@@ -37051,13 +37051,13 @@ msgid "MARC View"
 msgstr "MARC bista"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:164
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:88
 #, c-format
 msgid "MARC bibliographic framework"
 msgstr "MARC lan orri bibliografikoa"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:92
 #, c-format
 msgid "MARC bibliographic framework test"
 msgstr "Verificación de hoja de trabajo bibliográfica MARC"
@@ -37159,11 +37159,6 @@ msgstr "MARC modifikazio txantiloiak"
 #, fuzzy, c-format
 msgid "MARC organization code"
 msgstr "Transliterazio kodea"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:104
-#, fuzzy, c-format
-msgid "MARC overlay rules"
-msgstr "otras reglas"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:30
 #, fuzzy, c-format
@@ -37723,11 +37718,6 @@ msgstr "Audio alerts"
 msgid "Manage authorized value categories and authorized values "
 msgstr "Definitu horientzako kategoriak eta balio baimenduak."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:152
-#, fuzzy, c-format
-msgid "Manage background jobs"
-msgstr "Kudeatu prestatutako erregistroak"
-
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:272
 #, fuzzy, c-format
 msgid "Manage background jobs "
@@ -37878,6 +37868,11 @@ msgstr "Analizar ítems"
 msgid "Manage items assigned to "
 msgstr "Elementua prozesatzeko aukera aldatu"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:152
+#, fuzzy, c-format
+msgid "Manage jobs"
+msgstr "Kudeatzailea"
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:267
 #, c-format
 msgid "Manage keyboard shortcuts for the advanced cataloging editor "
@@ -37944,7 +37939,6 @@ msgid "Manage patrons fines and fees"
 msgstr "Gestionar socios. multas y deudas"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:132
 #, c-format
 msgid "Manage plugins"
 msgstr "Kudeatzeko plugin-ak"
@@ -37973,6 +37967,12 @@ msgstr "Erregistroen bat etortze arau berria"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
 msgid "Manage request"
+msgstr "Kudeatu aldizkapenak"
+
+#. %1$s:  request.id_prefix _ request.illrequest_id | html 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:40
+#, fuzzy, c-format
+msgid "Manage request %s "
 msgstr "Kudeatu aldizkapenak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:97
@@ -39843,7 +39843,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
@@ -40074,12 +40074,12 @@ msgstr "Pasahitza"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:832
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:313
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1486
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1527
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:480
@@ -40937,7 +40937,8 @@ msgstr "Nicholas Rosasco (dokumentazio konpiladorea)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:586
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:484
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
@@ -40979,10 +40980,10 @@ msgstr "Ez"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:983
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:992
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1410
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1424
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1451
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1456
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1465
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1470
 #, c-format
 msgid "No "
 msgstr "Ez"
@@ -41002,7 +41003,7 @@ msgid ""
 "option later) "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:605
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:608
 #, c-format
 msgid "No (N)"
 msgstr ""
@@ -41280,7 +41281,7 @@ msgid "No date of birth stored."
 msgstr "%s Jaiotze data:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1199
 #, fuzzy
 msgid "No date selected"
 msgstr "Ez da itemik aurkitu"
@@ -42397,7 +42398,7 @@ msgid "Not available"
 msgstr "Ez eskuragarria"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1084
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1087
 #, fuzzy, c-format
 msgid "Not checked out"
 msgstr "Ez dago mailegatuta."
@@ -42518,7 +42519,7 @@ msgstr "Nuevo lote"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:740
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:80
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1070
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1073
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -42713,9 +42714,9 @@ msgid "Notes/Comments"
 msgstr "Oharrak/Iruzkinak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:650
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:763
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:864
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:867
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:226
@@ -43180,7 +43181,7 @@ msgstr "Lotes OAI"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:105
 #, c-format
 msgid "OAI sets configuration"
 msgstr "OAI konfigurazioa"
@@ -43206,7 +43207,7 @@ msgstr "OAI-DC"
 msgid "OFF"
 msgstr "ITZALITA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:253
@@ -43253,7 +43254,7 @@ msgid "OK"
 msgstr "Onartu"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:459
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:610
 #, c-format
 msgid "OK (Y)"
 msgstr ""
@@ -43771,6 +43772,11 @@ msgstr "Bakarrik PNG, GIF, JPEG eta XPM formatuak onartzen dira."
 #, fuzzy, c-format
 msgid "Only available on the staff interface: "
 msgstr "Erreferentziarako kopiak: "
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:124
+#, c-format
+msgid "Only include jobs started in the last hour"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:161
 #, fuzzy, c-format
@@ -45158,7 +45164,7 @@ msgstr "Patente-dokumentua"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:271
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1069
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1072
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:40
@@ -45722,9 +45728,9 @@ msgstr "Imagen(es) de socio cargadas con algunos errores"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:510
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:682
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:896
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:685
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:899
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Bazkidea BLOKEATU egin da"
@@ -45740,7 +45746,7 @@ msgstr "Bazkideak eta zirkulazioa"
 msgid "Patron is currently restricted"
 msgstr "Bazkideak ez dauka murrizketarik."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1370
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1411
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:4
 #, c-format
 msgid "Patron is currently unrestricted."
@@ -45812,7 +45818,7 @@ msgid "Patron lists &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Tresnak &rsaquo; Berriak"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1502
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:334
 #, c-format
 msgid "Patron messaging preferences"
@@ -45932,7 +45938,7 @@ msgid "Patron request"
 msgstr "Atributos de socios "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1368
 #, c-format
 msgid "Patron restrictions"
 msgstr "Erabiltzailearen murrizketak"
@@ -46030,9 +46036,9 @@ msgstr "Bazkidearen helbidea zalantzazkoa da"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:514
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:686
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:799
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:900
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:689
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:903
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr "Bazkidearen helbidea zalantzazkoa da"
@@ -47383,7 +47389,7 @@ msgstr ""
 msgid "Please enter no more than {0} characters."
 msgstr "Por favor, no introduzca más de {0} caracteres."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1512
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1553
 #, c-format
 msgid ""
 "Please enter numbers only. Prefix the number with + or 00 if including the "
@@ -47528,7 +47534,7 @@ msgstr "Mesedez, itzuli elementua jatorri-liburutegira: %s"
 #. %3$s:  ELSE 
 #. %4$s:  Branches.GetName( returnbranch ) | html 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:580
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:583
 #, fuzzy, c-format
 msgid "Please return this item to %s%s%s%s%s "
 msgstr "Mesedez, itzuli elementua jatorri-liburutegira: %s"
@@ -47776,7 +47782,8 @@ msgstr "Plugin-a:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:130
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Plugins"
@@ -48307,7 +48314,7 @@ msgstr "O listar los números de tarjeta uno por uno"
 msgid "Print card number as text under barcode: "
 msgstr "O listar los números de tarjeta uno por uno"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:30
 #, fuzzy, c-format
 msgid "Print checkin slip"
@@ -48391,7 +48398,7 @@ msgstr "Inprimatu egiaztagiria"
 msgid "Print slip "
 msgstr "Inprimatu egiaztagiria"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:611
 #, fuzzy, c-format
 msgid "Print slip (P)"
 msgstr "Inprimatu egiaztagiria"
@@ -48402,24 +48409,24 @@ msgstr "Inprimatu egiaztagiria"
 msgid "Print slip and clear screen"
 msgstr "Inprimatu egiaztagiria eta egiaztatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:828
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:924
 #, fuzzy, c-format
 msgid "Print slip and confirm "
 msgstr "Inprimatu egiaztagiria"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:554
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:730
 #, fuzzy, c-format
 msgid "Print slip and confirm (P) "
 msgstr "Inprimatu egiaztagiria eta egiaztatu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:824
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Imprimir recibo, transferir, y confirmar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:723
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm (P) "
 msgstr "Imprimir recibo, transferir, y confirmar"
@@ -48721,12 +48728,12 @@ msgstr "Profilak"
 msgid "Programmed texts"
 msgstr "Programatutako testuak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
 #, fuzzy, c-format
 msgid "Progress"
 msgstr "Lanaren garapena:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:80
 #, fuzzy, c-format
 msgid "Progress: "
 msgstr "Lanaren garapena:"
@@ -49182,7 +49189,7 @@ msgstr "Jasotako kopurua:"
 msgid "Quantity: "
 msgstr "Kopurua:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:134
 #, fuzzy, c-format
 msgid "Queued"
 msgstr "Ilara"
@@ -49193,12 +49200,12 @@ msgstr "Ilara"
 msgid "Queued request"
 msgstr "Bidali gaurkotze eskaera"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:86
 #, fuzzy, c-format
 msgid "Queued: "
 msgstr "Ilara"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1537
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1578
 #, c-format
 msgid "Quick add"
 msgstr ""
@@ -49432,7 +49439,7 @@ msgstr ""
 msgid "Reasons why an order might have been cancelled"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:808
 #, fuzzy, c-format
 msgid "Recall at"
 msgstr "RecallItem "
@@ -49443,12 +49450,12 @@ msgstr "RecallItem "
 msgid "Recall due date interval (day)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:853
 #, fuzzy, c-format
 msgid "Recall found (item is already waiting): "
 msgstr "Reserva encontrada (el ítem está en espera): "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:752
 #, fuzzy, c-format
 msgid "Recall found: "
 msgstr "Erreserba aurkituta: "
@@ -49465,8 +49472,8 @@ msgstr "Vencimiento de las multas (suma total)"
 msgid "Recall pickup period (day)"
 msgstr "Nork erreserbatuta:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:767
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:868
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:770
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:871
 #, fuzzy, c-format
 msgid "Recall placed by:"
 msgstr "Nork erreserbatuta:"
@@ -49858,7 +49865,7 @@ msgstr "Erregistroen bat etortze araua:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:92
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:99
 #, c-format
 msgid "Record matching rules"
 msgstr "Erregistroen bat etortze arauak"
@@ -49885,6 +49892,7 @@ msgid "Record only"
 msgstr "Erregistro mota"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:102
 #, fuzzy, c-format
 msgid "Record overlay rules"
 msgstr "Erregistroen bat etortze arauak"
@@ -49935,7 +49943,7 @@ msgstr "Tipo de registro: "
 msgid "Record-level item type"
 msgstr "Maila bibliografikoa item mota"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1066
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1069
 #, fuzzy, c-format
 msgid "Record-level itemtype"
 msgstr "Maila bibliografikoa item mota"
@@ -50319,7 +50327,7 @@ msgstr "Gogorarazi saio honetan:"
 msgid "Remember memcached needs to be started before Plack."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1012
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1015
 #, fuzzy, c-format
 msgid "Remember return date for next check in"
 msgstr "Gogoratu hurrengo mailegurako:"
@@ -50590,7 +50598,7 @@ msgstr "Partekatua kendu"
 msgid "Remove: "
 msgstr "Eliminar"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1378
 #, fuzzy, c-format
 msgid "Remove?"
 msgstr "Ezabatu"
@@ -51057,7 +51065,7 @@ msgstr "Informe de subgrupo:"
 msgid "Report:"
 msgstr "Txostena:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:97
 #, fuzzy, c-format
 msgid "Report: "
 msgstr "Txostena:"
@@ -51376,7 +51384,9 @@ msgstr "Nahitaezko modulua falta da"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1273
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1488
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1360
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1529
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
@@ -51985,7 +51995,7 @@ msgstr "Itzuli orri nagusira"
 msgid "Return to the basket without making a new order."
 msgstr "Itzuli saskira eskara berri bat egin gabe."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:150
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:108
 #, fuzzy, c-format
 msgid "Return to the job list"
 msgstr "Zure zerrendetara itzuli "
@@ -52048,6 +52058,12 @@ msgstr "Revertir el estado de espera"
 #, fuzzy, c-format
 msgid "Revert hold transfer status"
 msgstr "Revertir el estado de espera"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Revert import MARC records"
+msgstr "Erregistroen inportazioa bukatuta"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/recalls.inc:112
 #, fuzzy, c-format
@@ -52387,7 +52403,7 @@ msgid "Run tool"
 msgstr "Eejecutar la herramienta"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, fuzzy, c-format
 msgid "Running"
 msgstr "Iraupen denbora"
@@ -52473,7 +52489,7 @@ msgstr "SMS-zenbakia:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:38
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:155
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:154
 #, fuzzy, c-format
 msgid "SMS cellular providers"
 msgstr "Agregar un proveedor telefonía móvil SMS"
@@ -52488,7 +52504,7 @@ msgstr "Agregar un proveedor telefonía móvil SMS"
 msgid "SMS cellular providers &rsaquo; Administration &rsaquo; Koha"
 msgstr "Audio alertak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1510
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1551
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:342
 #, c-format
 msgid "SMS number:"
@@ -52499,7 +52515,7 @@ msgstr "SMS-zenbakia:"
 msgid "SMS provider"
 msgstr "SMS hornitzailea:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1557
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:347
 #, c-format
 msgid "SMS provider:"
@@ -52519,7 +52535,7 @@ msgstr "Zerbitzaria"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:143
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:142
 #, fuzzy, c-format
 msgid "SMTP servers"
 msgstr "Zerbitzaria"
@@ -52911,7 +52927,7 @@ msgstr "Guardar su informe personalizado"
 msgid "Saved"
 msgstr "Gorde"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:994
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:997
 #, fuzzy, c-format
 msgid "Saved check-in date: "
 msgstr "Itema berritu"
@@ -53250,7 +53266,7 @@ msgstr "Bilatu indizean:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:101
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:111
 #, fuzzy, c-format
 msgid "Search engine configuration (Elasticsearch)"
 msgstr "Bilaketaren konfigurazioa"
@@ -55246,7 +55262,7 @@ msgid "Share content (subscriptions, reports) with the Koha community"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:160
 #, c-format
 msgid "Share content with Mana KB"
 msgstr ""
@@ -55285,7 +55301,7 @@ msgid ""
 "associated to your sharing."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:158
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:157
 #, fuzzy, c-format
 msgid "Share usage statistics"
 msgstr "Katalogo estatistikak"
@@ -55346,7 +55362,7 @@ msgstr "Hasierako txartel zenbakia"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1063
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1066
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_stats.tt:226
@@ -55612,7 +55628,7 @@ msgid "Show all suggestions"
 msgstr "Desde una sugerencia"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:330
 #, fuzzy
 msgid "Show all transactions"
 msgstr "Erakutsi saski guztiak"
@@ -55826,7 +55842,7 @@ msgid "Show tags"
 msgstr "Erakutsi zerrendak"
 
 #. BUTTON
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:941
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:944
 #, fuzzy
 msgid "Show the last checkin message"
 msgstr "Itzulpenen mezua"
@@ -56325,7 +56341,7 @@ msgid "Specify how the holiday should repeat."
 msgstr "Zehaztu jai eguna errepikatzeko modua."
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1002
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1005
 #, c-format
 msgid "Specify return date %s: "
 msgstr "Zehaztu itzultze data %s: "
@@ -56640,6 +56656,12 @@ msgstr "Prestatutako MARC kudeaketa"
 msgid "Staged MARC record management"
 msgstr "Prestatutako MARC erregistroen kudeaketa"
 
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
+msgid "Staged MARC records for import"
+msgstr "Prestatu MARC erregistroak inportatzeko"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:130
 #, c-format
 msgid "Staged:"
@@ -56779,13 +56801,13 @@ msgstr "Hasi bilaketa"
 msgid "Start using Koha"
 msgstr "Honela hasi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, fuzzy, c-format
 msgid "Started"
 msgstr "Hasiera data"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:90
 #, fuzzy, c-format
 msgid "Started: "
 msgstr "Hasiera data:"
@@ -56911,7 +56933,7 @@ msgstr "Estatistikak egiteko laguntzailea"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:342
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:785
@@ -56948,7 +56970,6 @@ msgstr "Estatistikak egiteko laguntzailea"
 msgid "Status"
 msgstr "Statusa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:189
 #, c-format
 msgid "Status "
@@ -56981,7 +57002,7 @@ msgstr "Datos desconocidos"
 msgid "Status:"
 msgstr "Egoera:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:77
 #, fuzzy, c-format
 msgid "Status: "
 msgstr "Egoera:"
@@ -58403,7 +58424,7 @@ msgstr "Aldagaiaren aukerak:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:149
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:148
 #, fuzzy, c-format
 msgid "Table settings"
 msgstr "Datu basearen ezarpenak:"
@@ -59223,6 +59244,11 @@ msgstr ""
 msgid "The change will be applied immediately."
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:40
+#, fuzzy, c-format
+msgid "The club you requested does not exist."
+msgstr "Eskatu duzun erregistroa ez da existitzen (%s)."
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:311
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:377
 #, c-format
@@ -59725,6 +59751,11 @@ msgstr "Eskaera ongi ezeztatu da."
 msgid "The number of days (%s) must be a number between 0 and 999."
 msgstr "Egun kopurua (%s) 0 eta 999 arteko zenbaki bat izan behar da."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:68
+#, fuzzy, c-format
+msgid "The order could not be found."
+msgstr "%s barra kodea ez da aurkitu."
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:78
 #, c-format
 msgid ""
@@ -59740,13 +59771,18 @@ msgstr "Eskaera ezeztatu da, baina ezin izan da erregistroa ezabatu."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:66
 #, fuzzy, c-format
+msgid "The order has been cancelled already."
+msgstr "Eskaera ongi ezeztatu da."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:71
+#, fuzzy, c-format
 msgid ""
 "The order has been cancelled, although one or more items could not have been "
 "deleted."
 msgstr ""
 "Eskaera ezeztatu da, baina ezin izan da elementu bat edo gehiago ezabatu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:74
 #, fuzzy, c-format
 msgid "The order has been cancelled, although the record has not been deleted."
 msgstr "Eskaera ezeztatu da, baina ezin izan da erregistroa ezabatu."
@@ -60246,11 +60282,6 @@ msgstr "No hay noticias."
 #, c-format
 msgid "There are no authorized values defined for %s"
 msgstr "Ez dago balio baimendurik definituta honentzat %s"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:198
-#, fuzzy, c-format
-msgid "There are no background jobs yet. "
-msgstr "Ez dago EDI konturik"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:205
 #, fuzzy, c-format
@@ -61647,7 +61678,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1058
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1061
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
@@ -62739,7 +62770,7 @@ msgstr "Transferentziak"
 msgid "Transfer items"
 msgstr "Transferitutako elementuak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:594
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Hona transferitu:"
@@ -62760,16 +62791,16 @@ msgstr "Koha &rsaquo; Adquisiciones &rsaquo; Factura"
 msgid "Transfer order to this basket?"
 msgstr "Agregar pedido a la cesta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1062
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1065
 #, fuzzy, c-format
 msgid "Transfer to"
 msgstr "Hona transferitu:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:519
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:690
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:803
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:693
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:806
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:907
 #, c-format
 msgid "Transfer to:"
 msgstr "Hona transferitu:"
@@ -63015,12 +63046,12 @@ msgstr "Código alfabético de dos caracteres"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:449
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:541
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1332
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:280
@@ -63042,7 +63073,7 @@ msgstr "Mota"
 msgid "Type:"
 msgstr "Mota:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:24
 #, c-format
@@ -63485,7 +63516,7 @@ msgid "Université de St Etienne, France"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:630
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1518
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:245
@@ -63537,9 +63568,9 @@ msgstr "Ezezaguna"
 msgid "Unknown filter"
 msgstr "Ezezaguna"
 
-#. %1$s:  job_type | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:44
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Unknown job type '%s'"
 msgstr "Tipo de plugin desconocido"
 
@@ -63727,8 +63758,9 @@ msgstr "Eguneratu"
 msgid "Update "
 msgstr "Eguneratu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:41
-#, fuzzy, c-format
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#, fuzzy
 msgid "Update Elasticsearch index"
 msgstr "Saskia bilatu"
 
@@ -65020,7 +65052,7 @@ msgstr "indizea ez dago eskuragarri"
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:403
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -65254,7 +65286,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:153
 #, fuzzy, c-format
-msgid "View, manage and cancel background jobs."
+msgid "View, manage and cancel jobs."
 msgstr "Aldatu saski taldea"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:145
@@ -65339,7 +65371,7 @@ msgstr "ABISUA:"
 msgid "WELCOME notice is used"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:906
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:909
 #, c-format
 msgid "Wait for pickup at"
 msgstr ""
@@ -66202,7 +66234,8 @@ msgstr "Baimendu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:584
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:587
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:482
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
@@ -66255,10 +66288,10 @@ msgstr "Bai"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:979
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:988
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1408
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1413
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1449
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1463
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1468
 #, c-format
 msgid "Yes "
 msgstr "Bai"
@@ -66269,7 +66302,7 @@ msgstr "Bai"
 msgid "Yes %s "
 msgstr "Bai"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:603
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:606
 #, fuzzy, c-format
 msgid "Yes (Y)"
 msgstr "Bai"
@@ -66392,7 +66425,7 @@ msgstr "Sí, eliminar este subcampo "
 msgid "Yes, edit existing items"
 msgstr "Bai: ikusi existitzen diren elementuak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:607
 #, fuzzy, c-format
 msgid "Yes, print slip"
 msgstr "Inprimatu egiaztagiria"
@@ -67539,7 +67572,7 @@ msgstr "Bilatu Z39.50/SRU zerbitzariak"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:140
+#: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:139
 #, fuzzy, c-format
 msgid "Z39.50/SRU servers"
 msgstr "Bilatu Z39.50/SRU zerbitzariak"
@@ -70373,8 +70406,8 @@ msgstr ""
 
 #. META http-equiv=Content-Type
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/showorder.tt:3
-#: koha-tmpl/intranet-tmpl/prog/en/modules/batch/print-notices.tt:5
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:3
+#: koha-tmpl/intranet-tmpl/prog/en/modules/batch/print-notices.tt:5
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/printslip.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/printfeercpt.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/printinvoice.tt:10
@@ -70921,6 +70954,14 @@ msgstr ""
 #~ msgstr "\", \"dt_count\": \"%s item(s)\", \"dt_owner\": \""
 
 #, fuzzy
+#~ msgid "%%] [%%# - category: "
+#~ msgstr "Mostrar categoría: "
+
+#, fuzzy
+#~ msgid "%%] [%%# - search_field: "
+#~ msgstr "Itemak bilatzeko eremuentzat laguntza"
+
+#, fuzzy
 #~ msgid "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 #~ msgstr "Egilea(k): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s"
 
@@ -71278,6 +71319,10 @@ msgstr ""
 #~ "orokorrean mailegurako %s(%s)%s. %s %s Mailegatu nolanahi ere? %s "
 
 #, fuzzy
+#~ msgid "%s Library default: %s "
+#~ msgstr "Liburutegi kodea: "
+
+#, fuzzy
 #~ msgid "%s Modify %s New %s Authority type "
 #~ msgstr "%s Aldatu autoritate mota %s Autoritate mota berria %s"
 
@@ -71461,6 +71506,9 @@ msgstr ""
 #~ msgid "%sForever%s %sDefault%s %sNever%s "
 #~ msgstr "%sBeti%s %sModu lehenetsian%s %sInoiz ez%s "
 
+#~ msgid "%sGone no address:%s %sLost card:%s "
+#~ msgstr "%sHelbide gabe desagertua:%s %sErabiltzaile-txartel galdua:%s "
+
 #, fuzzy
 #~ msgid ""
 #~ "%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in "
@@ -71528,6 +71576,10 @@ msgstr ""
 
 #~ msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #~ msgstr "Egilea(k): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s"
+
+#, fuzzy
+#~ msgid "Background jobs"
+#~ msgstr "Saski taldea honentzat: "
 
 #, fuzzy
 #~ msgid "Batch edit"
@@ -71606,6 +71658,14 @@ msgstr ""
 #~ msgstr "Ikastaroen erreserbak"
 
 #, fuzzy
+#~ msgid "MARC overlay rules"
+#~ msgstr "otras reglas"
+
+#, fuzzy
+#~ msgid "Manage background jobs"
+#~ msgstr "Kudeatu prestatutako erregistroak"
+
+#, fuzzy
 #~ msgid "Microsecond"
 #~ msgstr "Microdiapositiva"
 
@@ -71677,6 +71737,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Fitxa:%s | $%s %s %s%s%s%s, errepikagarria%s%s, nahitaezkoa%s%s, ikusi %s"
 #~ "%s%s, %s%s%s, %s%s%s, %s%s "
+
+#, fuzzy
+#~ msgid "There are no background jobs yet. "
+#~ msgstr "Ez dago EDI konturik"
 
 #, fuzzy
 #~ msgid "This page will redirect in 10 seconds. "
