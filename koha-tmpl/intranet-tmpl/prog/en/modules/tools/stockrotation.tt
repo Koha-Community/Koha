@@ -479,10 +479,12 @@
                                             </td>
                                             <td class="actions">
                                                 [% in_transit = sritem.item.get_transfer %]
-                                                [% IF !in_transit && stages.size > 1 %]
+                                                [% IF stages.size < 2 %]
+                                                    <a class="btn btn-default btn-xs" title="Rota has a single stage, advancing will have no effect" disabled>
+                                                [% ELSIF !in_transit %]
                                                     <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]">
                                                 [% ELSE %]
-                                                    <a class="btn btn-default btn-xs" disabled>
+                                                    <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]" title="Item is in transit, it will be directed to new stage when checked in">
                                                 [% END %]
                                                     <i class="fa fa-arrow-right"></i>
                                                     Move to next stage
