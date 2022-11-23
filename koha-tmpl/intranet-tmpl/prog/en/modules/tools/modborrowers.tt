@@ -368,14 +368,16 @@
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
                                             <li class="attributes">
-                                                <label style="width:auto;">Patron attribute:
-                                                    <select name="patron_attributes">
-                                                        <option value=""></option>
-                                                        [% FOREACH pac IN patron_attributes_codes %]
-                                                            <option value="[% pac.attribute_code | html %]" data-type="[% pac.type | html %]" data-category="[% pac.category_lib | html %]">[% pac.attribute_lib | html %]</option>
-                                                        [% END %]
-                                                    </select>
+                                                <label style="width:auto;">
+                                                    <span>Patron Attribute:</span>
                                                 </label>
+                                                <select name="patron_attributes">
+                                                    <option value=""></option>
+                                                    [% FOREACH pac IN patron_attributes_codes %]
+                                                        <option value="[% pac.attribute_code | html %]" data-type="[% pac.type | html %]" data-category="[% pac.category_lib | html %]">[% pac.attribute_lib | html %]</option>
+                                                    [% END %]
+                                                </select>
+
                                                 <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
                                                 <span class="patron_attributes_value"><input type"hidden" name="patron_attributes_value" /></span>
                                                 <a href="#" class="add_attributes" title="Add an attribute"><i class="fa fa-fw fa-plus"></i> New</a>
@@ -543,7 +545,8 @@
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.del_attributes").length == 0 ) {
-                $(li_clone).append('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash"></i> ' + _("Delete") + '</a>');
+                var add_attributes = $(li_clone).find("a.add_attributes")
+                $(add_attributes).after('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash"></i> ' + _("Delete") + '</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
