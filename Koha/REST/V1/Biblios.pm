@@ -68,12 +68,13 @@ sub get {
         }
         else {
             my $record = $biblio->metadata->record;
+            my $marcflavour = C4::Context->preference("marcflavour");
 
             $c->respond_to(
                 marcxml => {
                     status => 200,
                     format => 'marcxml',
-                    text   => $record->as_xml_record
+                    text   => $record->as_xml_record($marcflavour),
                 },
                 mij => {
                     status => 200,
@@ -204,7 +205,7 @@ sub get_public {
             marcxml => {
                 status => 200,
                 format => 'marcxml',
-                text   => $record->as_xml_record
+                text   => $record->as_xml_record($marcflavour),
             },
             mij => {
                 status => 200,
