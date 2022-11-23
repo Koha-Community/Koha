@@ -34,7 +34,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list_patron_attributes() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -67,6 +67,30 @@ subtest 'list_patron_attributes() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/extended_attributes')
       ->status_is( 404 )
       ->json_is( '/error' => 'Patron not found' );
+
+    subtest 'nullable value' => sub {
+        # FIXME This is not correct, we should remove the NULLABLE clause at the DBMS level
+        # This test will need to be adjusted on bug 32331
+        plan tests => 3;
+
+        my $user = $builder->build_object({class => 'Koha::Patrons'});
+
+        $builder->build_object(
+            {
+                class => 'Koha::Patron::Attributes',
+                value => { borrowernumber => $user->id, attribute => undef }
+            }
+        );
+
+        $t->get_ok( "//$userid:$password@/api/v1/patrons/"
+              . $user->id
+              . '/extended_attributes' )->status_is( 200, 'SWAGGER3.2.2' )
+          ->json_is(
+            '' => $user->extended_attributes->to_api,
+            'Extended attributes retrieved correctly'
+          );
+
+    };
 
     $schema->storage->txn_rollback;
 };
