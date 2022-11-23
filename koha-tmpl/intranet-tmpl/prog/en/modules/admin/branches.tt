@@ -97,20 +97,6 @@ Libraries &rsaquo; Administration &rsaquo; Koha
             [% ELSIF m.data.items_count %]
                 <span>([% m.data.items_count | html %] items).</span>
             [% END %]
-        [% CASE 'error_on_update_category' %]
-            <span>An error occurred when updating this library category. Perhaps it already exists.</span>
-        [% CASE 'error_on_insert_category' %]
-            <span>An error occurred when adding this library category. The categorycode might already exist.</span>
-        [% CASE 'error_on_delete_category' %]
-            <span>An error occurred when deleting this library category. Check the logs.</span>
-        [% CASE 'success_on_update_category' %]
-            <span>Library category updated successfully.</span>
-        [% CASE 'success_on_insert_category' %]
-            <span>Library category added successfully.</span>
-        [% CASE 'success_on_delete_category' %]
-            <span>Library category deleted successfully.</span>
-        [% CASE 'cannot_delete_category' %]
-            <span>This library category cannot be deleted. [% m.data.libraries_count | html %] libraries are still using it.</span>
         [% CASE %]
             <span>[% m.code | html %]</span>
         [% END %]
