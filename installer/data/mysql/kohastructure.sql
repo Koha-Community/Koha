@@ -989,7 +989,10 @@ CREATE TABLE `background_jobs` (
   `enqueued_on` datetime DEFAULT NULL,
   `started_on` datetime DEFAULT NULL,
   `ended_on` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `queue` (`queue`),
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
