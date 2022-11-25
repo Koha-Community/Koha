@@ -552,14 +552,14 @@ subtest 'extended_attributes' => sub {
         my $attribute_type_1 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { unique => 1 }
+                value => { unique_id => 1 }
             }
         );
 
         my $attribute_type_2 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { unique => 0 }
+                value => { unique_id => 0 }
             }
         );
 
