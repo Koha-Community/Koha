@@ -602,7 +602,8 @@ sub _gen_default_values {
             pickup_location => 0,
         },
         Reserve => {
-            non_priority => 0,
+            non_priority  => 0,
+            item_group_id => undef,
         },
         Itemtype => {
             rentalcharge => 0,
