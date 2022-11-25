@@ -455,7 +455,6 @@ subtest 'purgeSelfRegistration' => sub {
             value => {
                 borrowernumber    => $self_reg->borrowernumber,
                 amountoutstanding => 5,
-                acocunttype       => undef
             }
         }
     );
