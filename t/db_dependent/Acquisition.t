@@ -716,7 +716,6 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
     my $order_vendor = $builder->build({ source => 'Aqbookseller',value => { listincgst => 0, listprice => $order_currency->{currency}, invoiceprice => $order_currency->{currency} } });
     my $orderinfo ={
         basketno => $order_basket->{basketno},
-        booksellerid => $order_vendor->{id},
         rrp => 19.99,
         replacementprice => undef,
         quantity => 1,
