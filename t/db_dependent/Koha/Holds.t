@@ -650,7 +650,6 @@ subtest 'Test Koha::Hold::item_group' => sub {
     my $item_group = $builder->build_object(
         {
             class => 'Koha::Biblio::ItemGroups',
-            value => { biblionumber => $item->biblionumber }
         }
     );
     my $reserve_id = AddReserve(
