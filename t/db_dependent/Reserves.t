@@ -1463,7 +1463,7 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
     my $itemtype = $builder->build_object(
         {
             class => 'Koha::ItemTypes',
-            value => { itemtype => $item_type, notloan => 0 }
+            value => { itemtype => $item_type }
         }
     );
     ok(
