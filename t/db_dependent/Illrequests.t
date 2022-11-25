@@ -1193,10 +1193,7 @@ subtest 'Checking out' => sub {
     });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
     my $biblio = $builder->build_sample_biblio();
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { category_type => 'x' }
-    });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $request = $builder->build_object({
         class => 'Koha::Illrequests',
         value => {
@@ -1316,10 +1313,7 @@ subtest 'Checking out with custom due date' => sub {
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { category_type => 'x' }
-    });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $biblio = $builder->build_sample_biblio();
     my $itemtype_loanable = $builder->build_object({
         class => 'Koha::ItemTypes',
