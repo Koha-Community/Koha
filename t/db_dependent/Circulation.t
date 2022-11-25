@@ -5767,7 +5767,6 @@ subtest "CanBookBeIssued + needsconfirmation message" => sub {
         priority => 1,
         found => undef,
         suspend => 0,
-        item_group_id => $item->item_group
     }});
 
     my ( $error, $needsconfirmation, $alerts, $messages );
