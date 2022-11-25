@@ -154,8 +154,9 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
 "admin.pref#UsageStatsLibraryType# <br><strong>గమనిక:</strong> ఈ విలువ ఉంటే "
 "ఎటువంటి ప్రభావం ఉండదు <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -195,6 +196,15 @@ msgid ""
 msgstr ""
 "accounting.pref#UseCashRegisters#  చెల్లింపులను ట్రాక్ చేయడానికి అకౌంటింగ్ సిస్టమ్‌తో నగదు "
 "రిజిస్టర్‌లు."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -405,6 +415,18 @@ msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "చేయండి"
 
 # Acquisitions > Policy
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+"acquisitions.pref#EmailPurchaseSuggestions# మీరు ఎంచుకుంటే <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
+"\">సూచనల కోసం ఇమెయిల్ చిరునామా</a> మీరు చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయాలి:"
+
+# Acquisitions > Policy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
 "purchase suggestions will be sent to: "
@@ -417,21 +439,12 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "acquisitions.pref#EmailPurchaseSuggestions# ఇమెయిల్ చిరునామాకోసంసూచనలు"
 
 # Acquisitions > Policy
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-"acquisitions.pref#EmailPurchaseSuggestions# మీరు ఎంచుకుంటే <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">సూచనల కోసం ఇమెయిల్ చిరునామా</a> మీరు చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయాలి:"
-
-# Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "acquisitions.pref#EmailPurchaseSuggestions# కోహాఅడ్మిన్ఇమెయిల్ చిరునామా"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "acquisitions.pref#EmailPurchaseSuggestions# శాఖ యొక్క ఇమెయిల్ చిరునామా"
 
 # Acquisitions > Policy
@@ -488,6 +501,11 @@ msgstr ""
 "acquisitions.pref#MarcItemFieldsToOrder# మీరు ఈ క్రింది ఫీల్డ్‌లను ఉపయోగించవచ్చు: "
 "హోమ్‌బ్రాంచ్, హోల్డింగ్‌బ్రాంచ్, ఐటైప్, నాన్‌పబ్లిక్_నోట్, పబ్లిక్_నోట్, లోక్, కోకోడ్, నోట్‌ఫోర్లోన్, యూరి, కాపీనో, ధర, "
 "రీప్లేస్‌మెంట్ ప్రైస్ మరియు ఐటెమ్‌కాల్నంబర్. ప్రత్యేక ఫీల్డ్‌లు: పరిమాణం మరియు బడ్జెట్_కోడ్"
+
+# Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "acquisitions.pref#OrderPdfFormat# ఇంగ్లీష్ 2-పేజీ"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2199,17 +2217,19 @@ msgid ""
 msgstr "CAS సర్వర్ కోహా యొక్క సంస్కరణ దీనికి కనెక్ట్ అవుతుంది: "
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
 msgstr "లేదు"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "కేటలాగ్‌లో ఐటెమ్‌టైప్ చిహ్నాలను చూపించు: "
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "లేదు"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "అవును"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "కేటలాగ్‌లో ఐటెమ్‌టైప్ చిహ్నాలను చూపించు: "
 
 # Administration > Login options
 msgid ""
@@ -2251,12 +2271,14 @@ msgid "authorities.pref Linker"
 msgstr "authorities.pref లింకర్"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "ప్రదర్శన"
 
 # Authorities > General
 msgid ""
@@ -2356,11 +2378,13 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "రికార్డులను సవరించేటప్పుడు,"
 
 # Authorities > General
+#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 "authorities.pref#AutoCreateAuthorities# తప్పిపోయిన అధికార రికార్డులు (<a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
@@ -2374,25 +2398,31 @@ msgstr "ఉత్పత్తి చేయవద్దు"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "ఉత్పత్తి"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "రికార్డులను సవరించేటప్పుడు,"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "చేయు"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "అనుమతిస్తాయి"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "చేయ వద్దు"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "అనుమతించవద్దు"
-
-# Authorities > General
+# Circulation > Checkin policy
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-"ఇప్పటికే ఉన్న అధికారులను సూచించకుండా, అవసరమైతే స్వయంచాలకంగా కొత్త అధికార రికార్డులను సృష్టించడం."
+"circulation.pref#StoreLastBorrower# ఒక వస్తువును తిరిగి ఇచ్చే చివరి పోషకుడు. ఈ సెట్టింగ్ "
+"స్వతంత్రంగా ఉంటుంది <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> సిస్టమ్ ప్రాధాన్యతలు."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2403,9 +2433,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "వద్దు"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 "కేటలాగింగ్ మాడ్యూల్‌లో రికార్డులను సేవ్ చేసేటప్పుడు గతంలో లింక్ చేయబడిన శీర్షికలను స్వయంచాలకంగా రీలింక్ "
 "చేయండి."
@@ -2414,10 +2447,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "opac.pref#OPACPrivacy# వారి చెక్అవుట్ చరిత్ర కోసం వారి స్వంత గోప్యతా సెట్టింగ్‌లను ఎంచుకోవడానికి "
@@ -2430,10 +2463,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "opac.pref#OPACPrivacy# వారి చెక్అవుట్ చరిత్ర కోసం వారి స్వంత గోప్యతా సెట్టింగ్‌లను ఎంచుకోవడానికి "
@@ -2512,6 +2545,29 @@ msgstr ""
 "క్రింది వచనాన్ని ఉపయోగించండి. తేదీని చేర్చవద్దు (స్థానం 00-05):"
 
 # Authorities > General
+#, fuzzy
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "రికార్డులను సవరించేటప్పుడు,"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "ఉత్పత్తి చేయవద్దు"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "ఉత్పత్తి"
+
+# Authorities > General
 msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
@@ -2563,12 +2619,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr "cataloguing.pref వెన్నెముక లేబుల్స్"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "ప్రదర్శన"
 
 # Cataloging > Display
 msgid ""
@@ -2658,6 +2716,33 @@ msgstr ""
 "అంశాలు లేని రికార్డుల కోసం హోల్డింగ్స్ సమాచారం వలె (ఇది చూడటానికి బహుళ ఉప ఫీల్డ్‌లను కలిగి ఉంటుంది, "
 "ఉదాహరణకు<code>852abhi</code>852 ఉప ఫీల్డ్‌లలో a, b, h, మరియు i లో కనిపిస్తుంది), ఉప "
 "ఫీల్డ్‌లను వేరుచేస్తుంది"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"Z39.50 ఉపయోగించి రికార్డును దిగుమతి చేసేటప్పుడు సరైన రచయిత ట్యాగ్‌లకు ట్యాగ్‌లు (కామాలతో వేరు చేయబడతాయి)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -2794,12 +2879,14 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "ఫైల్ పేరులో."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "ప్రదర్శన"
 
 # Cataloging > Interface
 msgid ""
@@ -3189,6 +3276,11 @@ msgid ""
 "first tab contains items whose"
 msgstr "అంశాలు రెండు ట్యాబ్‌లలో ప్రదర్శించబడతాయి, ఇక్కడ మొదటి ట్యాబ్‌లో అంశాలు ఉంటాయి"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "చేయు"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3196,6 +3288,12 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr "అప్రమేయంగా, సిబ్బంది ఇంటర్‌ఫేస్‌లో శోధన ఫలితాలను క్రమబద్ధీకరించండి"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3208,10 +3306,55 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "చేయు"
+
 # Cataloging > Display
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "కింది వాటిని స్టాఫ్ ఇంటర్ఫేస్ ISBD టెంప్లేట్‌గా ఉపయోగించండి:"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "చేయు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "చేయు"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3232,6 +3375,11 @@ msgstr "ప్రదర్శించవద్దు"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "catalogying.pref రికార్డ్ నిర్మాణం"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "చేయు"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3268,12 +3416,14 @@ msgid ""
 msgstr "శీఘ్రంగా ముద్రించిన వెన్నెముక లేబుల్‌లో క్రింది ఫీల్డ్‌లను చేర్చండి:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "ప్రదర్శన"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3362,6 +3512,13 @@ msgid ""
 msgstr "అంశాలను ప్రిఫిల్ చేసేటప్పుడు ఉపయోగించాల్సిన ఉప ఫీల్డ్‌ల జాబితాను నిర్వచించండి (ఖాళీతో వేరుచేయబడింది):"
 
 # Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr "అంశాలను ప్రిఫిల్ చేసేటప్పుడు ఉపయోగించాల్సిన ఉప ఫీల్డ్‌ల జాబితాను నిర్వచించండి (ఖాళీతో వేరుచేయబడింది):"
+
+# Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr "భాషను ఉపయోగించండి (ISO 690-2)"
 
@@ -3397,13 +3554,31 @@ msgstr ""
 "బిబ్లియోగ్రాఫిక్ రికార్డులను అనుసంధానించడానికి రికార్డ్ కంట్రోల్ నంబర్ ($w సబ్ ఫీల్డ్స్) మరియు కంట్రోల్ నంబర్ "
 "(001)."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "ప్రదర్శన"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+msgstr "cataloguing.pref ప్రదర్శన"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "వేరు చేయవద్దు"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "ప్రదర్శించవద్దు"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "ప్రదర్శన"
 
 # Cataloging > Interface
 msgid ""
@@ -3438,11 +3613,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "స్వయంచాలకంగా ఉత్పత్తి చేయబడదు."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "ఉపయోగించవద్దు"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr "చేయు"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr "స్వయంచాలకంగా ఉత్పత్తి చేయబడదు."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "ప్రదర్శించవద్దు"
 
 # Cataloging > Display
@@ -3450,6 +3637,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr "మార్క్ వీక్షణలలో మార్క్ ట్యాగ్ సంఖ్యలు, సబ్ ఫీల్డ్ సంకేతాలు మరియు సూచికలు."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "ప్రదర్శన"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3558,6 +3750,11 @@ msgstr "circulation.pref చెక్అవుట్ విధానం"
 msgid "circulation.pref Course reserves"
 msgstr "circulation.pref కోర్సు నిల్వలు"
 
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "circulation.pref హౌస్బౌండ్ మాడ్యూల్"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "circulation.pref జరిమానా విధానం"
@@ -3577,6 +3774,16 @@ msgstr "circulation.pref ఇంటర్ఫేస్"
 # Circulation > Interlibrary loans
 msgid "circulation.pref Interlibrary loans"
 msgstr "circulation.pref ఇంటర్ లైబ్రరీ రుణాలు"
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "circulation.pref ఇంటర్ఫేస్"
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "circulation.pref తిరిగి దావాలు"
 
 # Circulation > Return claims
 #, fuzzy
@@ -4248,6 +4455,23 @@ msgid ""
 msgstr "పుస్తకానికి బదులుగా పోషక బార్‌కోడ్ స్కాన్ చేసినప్పుడు మరొక పోషకుడికి స్వయంచాలక దారి మళ్లింపు."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "చేయు"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "లేదు"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr "వస్తువులను తనిఖీ చేసినప్పుడు స్వయంచాలకంగా వారి ఇంటి లైబ్రరీకి బదిలీ చేయండి."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "చేయు"
 
@@ -4306,6 +4530,32 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr "ఉపసంహరించబడిన వస్తువులను తిరిగి ఇవ్వడం."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr "'తిరిగి వచ్చిన దావాలను' సూచించడానికి."
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr "'తిరిగి వచ్చిన దావాలను' సూచించడానికి."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4431,6 +4681,34 @@ msgstr "పోషకుడు నుండి వచ్చిన లైబ్ర
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "మీరు లాగిన్ అయిన లైబ్రరీ."
 
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr "లైబ్రరీ వద్ద అంశం నుండి లేదా లైబ్రరీ నుండి తనిఖీ చేయబడింది."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "అంశం నుండి లైబ్రరీ."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "అంశం నుండి లైబ్రరీ."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "అంశం నుండి లైబ్రరీ."
+
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
 msgstr "సక్రియం"
@@ -4481,7 +4759,10 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr "కోల్పోయిన రుసుమును వసూలు చేయవద్దు"
 
 # Circulation > Return claims
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+#, fuzzy
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr "లాస్ట్ అధీకృత విలువను ఉపయోగించండి"
 
 # Circulation > Return claims
@@ -4580,6 +4861,21 @@ msgstr "సంచితం చేయవద్దు"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "పరిమితి కాలాలు."
 
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "డిసేబుల్"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "ప్రారంభించు"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "హౌస్బౌండ్ మాడ్యూల్."
+
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
 msgstr "సెట్ చేయవద్దు"
@@ -4614,6 +4910,32 @@ msgstr "మాసాలు"
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "సంవత్సరాలు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "లైబ్రరీని కలిగి ఉంది"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "అంశం హోల్డింగ్ లైబ్రరీ."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "మాసాలు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "లైబ్రరీని కలిగి ఉంది"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4721,17 +5043,30 @@ msgstr ""
 "ఉపయోగిస్తున్నప్పుడు, దేనితోనైనా సరిపోయే కోల్పోయిన విలువలతో అంశాలను దాటవేయండి"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "చూపించవద్దు"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "ప్రదర్శించు"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "ప్రదర్శించు"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr "ప్రసరణ తెరపై స్క్రీన్ నుండి ప్రస్తుత పోషకుడిని క్లియర్ చేయడానికి ఒక బటన్."
 
 # Circulation > Holds policy
@@ -4749,6 +5084,39 @@ msgid ""
 msgstr "ఉంచే సామర్థ్యం శోధన ఫలితాల నుండి బహుళ బిబ్లియోగ్రాఫిక్ రికార్డులను కలిగి ఉంటుంది"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "ప్రారంభించవద్దు"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "ప్రారంభించు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr "ఉంచే సామర్థ్యం శోధన ఫలితాల నుండి బహుళ బిబ్లియోగ్రాఫిక్ రికార్డులను కలిగి ఉంటుంది"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "ప్రారంభించవద్దు"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "ప్రారంభించు"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
+msgstr ""
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr "క్యాలెండర్‌ను విస్మరించండి"
 
@@ -4762,23 +5130,64 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "హోల్డ్ యొక్క గరిష్ట పికప్ ఆలస్యం కోసం కాలాన్ని లెక్కించేటప్పుడు."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+"<br><strong>గమనిక:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/holds/"
+"auto_unsuspend_holds.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని "
+"అడగండి."
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "అనుమతించు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "అనుమతించు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "అనుమతించవద్దు"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "అనుమతించవద్దు"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "అనుమతించవద్దు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr "అనుమతించవద్దు"
+
+# Circulation > Holds policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# పేర్కొన్న వ్యవధిలో అవి ఎంపిక చేయకపోతే "
 "స్వయంచాలకంగా గడువు తీరిపోతుంది <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -5110,10 +5519,12 @@ msgid ""
 msgstr "లైబ్రరీ చిరునామా లేనప్పుడు సిబ్బందికి ILL నోటీసులు పంపాల్సిన ఫాల్‌బ్యాక్ ఇమెయిల్ చిరునామా:"
 
 # Circulation > Interlibrary loans
+#, fuzzy
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 "(| తో వేరు చేయబడింది). ఖాళీగా ఉంటే, అన్ని ILL అభ్యర్థనలు ప్రదర్శించబడతాయి. అభ్యర్థన సంకేతాలు "
 "ILLSTATUS అధీకృత విలువ వర్గంలో చూడవచ్చు."
@@ -5454,6 +5865,28 @@ msgstr ""
 "ప్రారంభించబడాలి)."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr "పట్టు సాధించడానికి లైబ్రరీని ఎంచుకునే వినియోగదారు."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "అనుమతించవద్దు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "అనుమతించు"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "అనుమతించు"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "అనుమతించు"
 
@@ -5515,9 +5948,28 @@ msgstr ""
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"circulation.pref#StoreLastBorrower# ఒక వస్తువును తిరిగి ఇచ్చే చివరి పోషకుడు. ఈ సెట్టింగ్ "
+"స్వతంత్రంగా ఉంటుంది <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> and <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> సిస్టమ్ ప్రాధాన్యతలు."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "అనుమతించవద్దు"
 
 # Circulation > Article requests
@@ -5535,12 +5987,10 @@ msgstr "అంశం రకాన్ని పట్టుకోండి"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "అంశం రకాన్ని పట్టుకోండి"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "అంశం రకాన్ని పట్టుకోండి"
 
 # Circulation > Article requests
 #, fuzzy
@@ -5602,6 +6052,33 @@ msgid ""
 msgstr "మీరిన నోటీసుల కోసం వ్యవధిని పని చేస్తున్నప్పుడు."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "బ్లాక్"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "మీరిన నోటీసుల కోసం వ్యవధిని పని చేస్తున్నప్పుడు."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "క్యాలెండర్ ఉపయోగించండి"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "క్యాలెండర్ ఉపయోగించండి"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "అంశం హోమ్ లైబ్రరీ"
+
+# Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
 msgstr "నిర్ధారణ కోసం అడగండి"
 
@@ -5659,6 +6136,23 @@ msgid ""
 "circulation.pref#PatronAutoComplete# to guess the patron being entered while "
 "typing a patron search for circulation or patron search."
 msgstr "ప్రసరణ లేదా పోషక శోధన కోసం పోషక శోధనను టైప్ చేసేటప్పుడు పోషకుడు ప్రవేశించడాన్ని ఊహించడం."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "అనుమతించు"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "అనుమతించవద్దు"
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "పరిమితి కాలాలు."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6029,7 +6523,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6595,6 +7089,13 @@ msgstr ""
 "a>)"
 
 # Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr "ప్రతి జత విలువలు ప్రత్యేక పంక్తిలో ఉండాలి."
+
+# Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
 "be on a separate line."
@@ -6686,6 +7187,26 @@ msgstr "వాడు"
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "కోర్సు నిల్వలు."
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "ఉపయోగించు"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "హోమ్ లైబ్రరీ"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "నిర్ధారణ అవసరం"
 
 # Circulation > Course reserves
 #, fuzzy
@@ -6970,9 +7491,12 @@ msgid ""
 "prefix style"
 msgstr "టి-ఉపసర్గ శైలి నుండి మొదటి సంఖ్యను తొలగించండి"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "స్కాన్ చేసిన అంశం బార్‌కోడ్‌లు."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7359,12 +7883,8 @@ msgstr "కవర్లను పొందడానికి క్రింద�
 
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "ప్రదర్శన"
-
-# Enhanced content > Local or remote cover images
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "ప్రదర్శించవద్దు"
 
 # Enhanced Content > Local or remote cover images
@@ -7381,6 +7901,11 @@ msgid ""
 msgstr ""
 "లేదా మీరు పేర్కొనడానికి కింది వాక్యనిర్మాణాన్ని ఉపయోగించవచ్చు field$subfield విలువ: {field"
 "$subfield}. ఉదాహరణకి {024$a}."
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "చూపించు"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7622,12 +8147,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "ట్యాబ్‌లలో."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "ప్రదర్శన"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "ప్రదర్శించవద్దు"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "చూపించు"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7778,12 +8305,14 @@ msgid ""
 msgstr "ఒపాక్‌లోని అంశం యొక్క ఇతర సంచికలు."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "ప్రదర్శన"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "ప్రదర్శించవద్దు"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "చూపించు"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8246,8 +8775,58 @@ msgstr ""
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
 "\">OPACFRBRizeEditions</a> ఆన్‌లో ఉంది). ఇది లైబ్రరీల కోసం లైబ్రరీ థింగ్ నుండి వేరు."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "serials.pref"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "circulation.pref ఇంటర్ఫేస్"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "డిసేబుల్"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "ప్రారంభించు"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "ప్రారంభించు"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "i18n_l10n.pref"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "i18n_l10n.pref"
 
 # I18N/L10N
@@ -8436,6 +9015,11 @@ msgid "local_use.pref"
 msgstr "local_use.pref"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "local_use.pref"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "ఇంకా ఏమీ నిర్వచించబడలేదు."
 
@@ -8558,15 +9142,11 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "లేదు"
 
 # Logging > Debugging
+#, fuzzy
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
-msgstr ""
-"logs.pref#DumpSearchQueryTemplate# శోధన ప్రశ్నను టెంప్లేట్ పరామితిగా డంప్ చేయండి <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars"
-"\">DumpTemplateVars</a>[ఇంటర్ఫేస్] కనిపిస్తుంది.."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
+msgstr "అన్ని ఇంటర్‌ఫేస్ టూల్‌కిట్ వేరియబుల్స్‌ను స్టాఫ్ ఇంటర్‌ఫేస్ కోసం HTML సోర్స్‌లో వ్యాఖ్యానించండి."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -8782,6 +9362,11 @@ msgid "opac.pref Shelf browser"
 msgstr "opac.pref షెల్ఫ్ బ్రౌజర్"
 
 # OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "అనుమతించు"
+
+# OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "అనుమతించు"
 
@@ -8843,6 +9428,29 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr "అనామక పోషకుడిగా (అనామక సూచనలు మరియు చెక్అవుట్ చరిత్ర కోసం)."
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+" <br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
+"default one</li><li>Put a path to define a xslt file</li><li>బాహ్య నిర్దిష్ట కోసం "
+"ఒక URL ఉంచండి stylesheet.</li></ul>{langcode} ప్రస్తుత ఇంటర్ఫేస్ భాషతో భర్తీ చేయబడుతుంది"
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr "XSLT స్టైల్షీట్ ఉపయోగించి స్టాఫ్ ఇంటర్ఫేస్లో ఫలితాలను ప్రదర్శించండి: "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -8939,6 +9547,48 @@ msgstr ""
 "XSLT MARC21 ఫలితాలు మరియు OPAC లోని వివరాల పేజీలలోని ఫార్మాట్, ప్రేక్షకులు మరియు మెటీరియల్ రకం "
 "చిహ్నాలు మరియు వివరణలు."
 
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+"acquisitions.pref#EmailPurchaseSuggestions# మీరు ఎంచుకుంటే <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
+"\">సూచనల కోసం ఇమెయిల్ చిరునామా</a> మీరు చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయాలి:"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr ""
+"acquisitions.pref#EmailPurchaseSuggestions# క్రొత్త కొనుగోలు సూచనలు దీనికి పంపబడే "
+"ఇమెయిల్ చిరునామాను ఎంచుకోండి: "
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "acquisitions.pref#EmailPurchaseSuggestions# ఇమెయిల్ చిరునామాకోసంసూచనలు"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "acquisitions.pref#EmailPurchaseSuggestions# కోహాఅడ్మిన్ఇమెయిల్ చిరునామా"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "acquisitions.pref#EmailPurchaseSuggestions# శాఖ యొక్క ఇమెయిల్ చిరునామా"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "అనుమతించు"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "ఉంచవద్దు"
@@ -8984,18 +9634,49 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "అనుమతించు"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "ప్రదర్శన"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail "
 "pages."
 msgstr "ఒపాక్ వివరాల పేజీలలో సముపార్జన వివరాలు."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "అనుమతించు"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "అనుమతించవద్దు"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr "ఒపాక్‌లోని అంశం వివరాల పేజీలలో ఒక వస్తువును కలిగి ఉన్న పోషకుడి పేరు."
 
 # OPAC > Appearance
 msgid ""
@@ -9254,12 +9935,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "ప్లే"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "ప్రదర్శన"
 
 # OPAC > Features
 msgid ""
@@ -9368,12 +10051,17 @@ msgstr "హోమ్ లైబ్రరీ"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch"
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgstr "ప్రస్తుత స్తలం"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch only"
 msgstr "హోమ్ లైబ్రరీ"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr "ప్రస్తుత స్తలం"
 
 # OPAC > Appearance
@@ -9383,10 +10071,11 @@ msgid ""
 msgstr "ఒపాక్ శోధన ఫలితాల్లో ఈ క్రింది HTML ను కోణాల క్రింద చేర్చండి:"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br />గమనిక: ప్లేస్‌హోల్డర్లు {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, "
 "{ISSN} మరియు {AUTHOR} ప్రదర్శిత రికార్డ్ నుండి సమాచారంతో భర్తీ చేయబడతాయి."
@@ -9618,11 +10307,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -9647,11 +10333,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -9679,7 +10362,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
@@ -9810,7 +10493,7 @@ msgstr "ఉపరకాలు"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>ప్రస్తుతం మద్దతు ఉన్న విలువలు</em>: ఐటెమ్ రకాలు (<strong>ఐటెమ్‌టైప్స్</strong>), కలెక్షన్ "
 "కోడ్స్ (<strong>ccode</strong>) మరియు షెల్వింగ్ లొకేషన్ (<strong>loc</strong>)."
@@ -10010,10 +10693,11 @@ msgstr ""
 "target=\"_blank\"> కోహా వికీ </a> లో డాక్యుమెంట్ చేయబడింది."
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "opac.pref#OpacHiddenItemsExceptions# వేరుచేసిన పోషక వర్గాల జాబితా |, అది దాచబడిన అంశాలను "
 "చూడగలదు <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10232,12 +10916,14 @@ msgid ""
 msgstr "ఈ వివరణ సెర్చ్ ఇంజన్ ఫలితాల్లో చూపబడుతుంది (160 అక్షరాలు)."
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "ప్రదర్శన"
 
 # OPAC > Features
 msgid ""
@@ -10246,16 +10932,19 @@ msgid ""
 msgstr "OPAC లోని వార్తల కోసం లైబ్రరీ ఎంపిక జాబితా."
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# No"
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
 msgstr "లేదు"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "కేటలాగ్‌లో ఐటెమ్‌టైప్ చిహ్నాలను చూపించు: "
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "లేదు"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "అవును"
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "కేటలాగ్‌లో ఐటెమ్‌టైప్ చిహ్నాలను చూపించు: "
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10695,12 +11384,14 @@ msgid ""
 msgstr "ఖాళీగా ఉంటే, అన్ని లైబ్రరీలు జాబితా చేయబడతాయి."
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "ప్రదర్శన మరియు ప్రీఫిల్"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "ప్రదర్శించవద్దు మరియు పూరించవద్దు"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "ప్రదర్శించవద్దు మరియు పూరించవద్దు"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "ప్రదర్శన మరియు ప్రీఫిల్"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10877,8 +11568,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "యూజర్పేరు"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "దాచు"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "చూపించు"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11025,15 +11717,33 @@ msgid ""
 msgstr "ఓపక్‌లోని వారి ఖాతాలకు లాగిన్ అవ్వడానికి పోషకులు."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "అనుమతించు"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "అనుమతించవద్దు"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "అనుమతించు"
+
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"admin.pref#GoogleOAuth2ClientSecret# దీనితో పాటు <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, ప్రారంభిస్తుంది <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr "ఒపాక్పై కొనుగోలు సూచనలు చేయడానికి పోషకులు."
 
 # Patrons
@@ -11431,9 +12141,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 "ఖాళీగా ఉంటే కోహా \"ఇంటిపేరు, మొదటి పేరు, ఇతర పేర్లు, కార్డ్ నంబర్, యూజరిడ్\" గా డిఫాల్ట్ అవుతుంది. ఈ "
 "ప్రాధాన్యతకు జోడించిన అదనపు ఫీల్డ్‌లు పోషక శోధన పేజీలోని డ్రాప్‌డౌన్ మెనులో శోధన ఎంపికలుగా చేర్చబడతాయి."
@@ -11462,11 +12172,12 @@ msgstr "ప్రారంభించవద్దు"
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "ప్రారంభించు"
 
-# Patrons > Security > EnableExpiredPasswordReset
+# Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr ""
+msgstr "అక్షరాలు పొడవు."
 
 # Patrons > Security
 #, fuzzy
@@ -11631,6 +12342,41 @@ msgstr "అమలుపరచబడిన"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr "అనుమతి"
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -11693,6 +12439,23 @@ msgstr "పోషకుడు గడువు ముగియబోతున్�
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "రోజుల ముందు."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "అనుమతించవద్దు"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "అనుమతించు"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr "అక్షరాలు పొడవు."
 
 # Patrons > Patron forms
 msgid ""
@@ -12097,6 +12860,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "సిబ్బంది మరియు పోషకులకు బలమైన పాస్‌వర్డ్"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12397,7 +13167,7 @@ msgstr "అధునాతన శోధన డ్రాప్-డౌన్లో
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>ప్రస్తుతం మద్దతు ఉన్న విలువలు</em>: ఐటెమ్ రకాలు (<strong>ఐటెమ్‌టైప్స్</strong>), కలెక్షన్ "
 "కోడ్స్ (<strong>ccode</strong>) మరియు షెల్వింగ్ లొకేషన్ (<strong>loc</strong>)."
@@ -12429,12 +13199,14 @@ msgstr ""
 "level_itypes</a> సిస్టమ్ ప్రాధాన్యత బిబ్లియోగ్రాఫిక్ సెట్ చేయబడింది."
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "ప్రదర్శన"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "ప్రదర్శించవద్దు"
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "ప్రదర్శించవద్దు"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "ప్రదర్శన"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12511,9 +13283,10 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "కోణాల పొడవును కత్తిరించండి"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr "అక్షరాలు, ఒపాక్/స్టాఫ్ ఇంటర్‌ఫేస్‌లో."
 
 # Searching > Results display
@@ -12732,6 +13505,15 @@ msgid ""
 "OPAC search results."
 msgstr "ఒపాక్లో ప్రతి పేజీకి ఫలితాలు."
 
+# Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"XSLT స్టైల్‌షీట్‌లకు అంశం MARC ట్యాగ్‌లను అందుబాటులో ఉండేలా చేయండి. డిఫాల్ట్ \"చేయవద్దు\", అంశాలు "
+"ఇతర పద్ధతులను ఉపయోగించి ప్రదర్శించబడతాయి."
+
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr "చేయండి"
@@ -12741,9 +13523,11 @@ msgid "searching.pref#PassItemMarcToXSLT# Don't"
 msgstr "వద్దు"
 
 # Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 "XSLT స్టైల్‌షీట్‌లకు అంశం MARC ట్యాగ్‌లను అందుబాటులో ఉండేలా చేయండి. డిఫాల్ట్ \"చేయవద్దు\", అంశాలు "
 "ఇతర పద్ధతులను ఉపయోగించి ప్రదర్శించబడతాయి."
@@ -12848,6 +13632,55 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr "ఔచిత్యం ద్వారా శోధన ఫలితాల ర్యాంకింగ్ (జీబ్రా అవసరం)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "ఉంచవద్దు"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "ఉంచండి"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "చేర్చవద్దు"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "చేర్చవద్దు"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "పని చేయకుండా చేయు"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "ప్రారంభించు"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -12880,6 +13713,27 @@ msgstr "ISBN యొక్క అన్ని వైవిధ్యాలపై."
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr "వెతకండి"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "ISBN సూచికలో శోధిస్తున్నప్పుడు,"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr "శోధించవద్దు"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "ISBN యొక్క అన్ని వైవిధ్యాలపై."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "వెతకండి"
 
 # Searching > Results display
@@ -13083,6 +13937,11 @@ msgstr "సిబ్బంది ఇంటర్‌ఫేస్ శోధన ఫ
 # Serials
 msgid "serials.pref"
 msgstr "serials.pref"
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "searching.pref లక్షణాలు"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13351,6 +14210,23 @@ msgid ""
 msgstr "అంశాలను తనిఖీ చేసిన లేదా వివరాల పేజీలలో లేదా \"ప్లేస్ హోల్డ్\" స్క్రీన్‌లో ఉంచిన పోషకుల పేర్లు."
 
 # Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "చూపించవద్దు"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "చూపించు"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr "ఒక లైబ్రరీ ఒపాక్ మాస్ట్‌హెడ్‌లో పుల్‌డౌన్ మెనుని ఎంచుకోండి."
+
+# Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
 msgstr "చూపించవద్దు"
 
@@ -13505,9 +14381,14 @@ msgstr "staff_interface.pref ప్రామాణీకరణ"
 
 # Administration > CAS authentication
 #, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "staff_interface.pref ప్రామాణీకరణ"
+
+# Administration > CAS authentication
+#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
+"(2FA) for staff members."
 msgstr "లాగిన్ ప్రామాణీకరణ కోసం CAS ని ఉపయోగించండి: "
 
 # Staff interface > Options
@@ -13525,17 +14406,15 @@ msgid ""
 msgstr "కొన్ని HTML సిస్టమ్ ప్రాధాన్యతలను సవరించేటప్పుడు WYSIWYG ఎడిటర్."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -13560,11 +14439,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13583,6 +14459,7 @@ msgid ""
 msgstr "XSLT స్టైల్షీట్ ఉపయోగించి స్టాఫ్ ఇంటర్ఫేస్లో జాబితాలను ప్రదర్శించండి: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13592,7 +14469,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
@@ -14225,10 +15102,10 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "ప్రారంభించు"
 
 # Web services > REST API
+#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 "REST API కోసం OAuth2 క్లయింట్ ఆధారాలు మంజూరు చేస్తాయి. నెట్ అవసరం :: OAuth2 :: "
 "AuthorizationServer ఇన్‌స్టాల్ చేయబడింది. [ప్రయోగాత్మకం]"
@@ -14278,3 +15155,68 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "నివేదికల వెబ్ సేవ ద్వారా అభ్యర్థించిన నివేదిక యొక్క వరుసలు."
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "అవును"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "రికార్డులను సవరించేటప్పుడు,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "అనుమతిస్తాయి"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "అనుమతించవద్దు"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ "ఇప్పటికే ఉన్న అధికారులను సూచించకుండా, అవసరమైతే స్వయంచాలకంగా కొత్త అధికార రికార్డులను సృష్టించడం."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "స్కాన్ చేసిన అంశం బార్‌కోడ్‌లు."
+
+# Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "ప్రదర్శన"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "ప్రదర్శన"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "ప్రదర్శన"
+
+# Logging > Debugging
+#~ msgid ""
+#~ "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
+#~ "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] "
+#~ "to be visible."
+#~ msgstr ""
+#~ "logs.pref#DumpSearchQueryTemplate# శోధన ప్రశ్నను టెంప్లేట్ పరామితిగా డంప్ చేయండి <a "
+#~ "href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[ఇంటర్ఫేస్] "
+#~ "కనిపిస్తుంది.."
+
+# OPAC > Appearance
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "అవును"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "దాచు"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "అనుమతించవద్దు"

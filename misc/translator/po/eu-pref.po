@@ -150,8 +150,9 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
 
 # Accounting > Policy > RequirePaymentType
@@ -180,6 +181,15 @@ msgstr ""
 msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
+msgstr ""
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
 msgstr ""
 
 # Circulation > Course reserves
@@ -392,6 +402,17 @@ msgstr "acquisitions.pref Araua"
 msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "acquisitions.pref Imprimatzen"
 
+# Authorities > General
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+"galdu diren autoritate erregistroak (BiblioAddsAuthorities \"baimendu\" "
+"bezala egon behar dute konfiguratuak)."
+
 # Acquisitions > Policy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
@@ -402,20 +423,14 @@ msgstr ""
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr ""
 
-# Acquisitions > Policy > EmailPurchaseSuggestions
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
-msgstr ""
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
+msgstr "Ez"
 
 # Acquisitions > Policy
 #, fuzzy
@@ -465,6 +480,11 @@ msgid ""
 "notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special "
 "fields: quantity and budget_code"
 msgstr ""
+
+# Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "Ingelesa 2-orri"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2150,18 +2170,19 @@ msgid ""
 msgstr "CAS autentifikazio zerbitzaria hemen aurkitu daiteke"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
 msgstr "Erakutsi"
 
 # Administration > Interface options
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "elementu moten ikonoak katalogoan."
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Erakutsi"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Erakutsi"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "elementu moten ikonoak katalogoan."
 
 # Administration > Login options
 msgid ""
@@ -2205,12 +2226,14 @@ msgid "authorities.pref Linker"
 msgstr "Loturakoa"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Ez bistaratu"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Bistaratu"
 
 # Authorities > General
 msgid ""
@@ -2297,8 +2320,9 @@ msgstr "Erregistroak editatzean,"
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 "galdu diren autoritate erregistroak (BiblioAddsAuthorities \"baimendu\" "
 "bezala egon behar dute konfiguratuak)."
@@ -2312,26 +2336,28 @@ msgstr "ez sortu"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "sortu"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "Erregistroak editatzean,"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "Bai"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "Ez"
 
 # Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "utzi"
-
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "ez utzi"
-
-# Authorities > General
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-"Autoritate erregistro berriak sortu behar izanez gero, dagoeneko sortuta "
-"dauden autoritateetara erreferentzia egin beharrean"
+"galdu diren autoritate erregistroak (BiblioAddsAuthorities \"baimendu\" "
+"bezala egon behar dute konfiguratuak)."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2343,9 +2369,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Ez"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 "Aurretik autoritate-erregistroetara lotuak izan diren goiburuak berriz lotu."
 
@@ -2353,10 +2382,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "galdu diren autoritate erregistroak (BiblioAddsAuthorities \"baimendu\" "
@@ -2366,10 +2395,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "galdu diren autoritate erregistroak (BiblioAddsAuthorities \"baimendu\" "
@@ -2457,6 +2486,29 @@ msgstr ""
 # Authorities > General
 #, fuzzy
 msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "Erregistroak editatzean,"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "ez sortu"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "sortu"
+
+# Authorities > General
+#, fuzzy
+msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
@@ -2512,12 +2564,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Bizkar-etiketak"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Ez bistaratu"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Bistaratu"
 
 # OPAC > Features
 #, fuzzy
@@ -2610,6 +2664,34 @@ msgstr ""
 "bilaketarako hainbat azpieremu izan ditzake, adibidez <code>852abhi</code>-"
 "rekin a, b, h, e eta i. 852 azpieremuetan bilatuko du), eta azpieremuak "
 "honela egongo dira banatuta:"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"(koma batez bereiziak) egileak egile eremu egokietan, erregistro bat "
+"inportatzean Z39.50 erabiliz."
 
 # Cataloging > Display
 #, fuzzy
@@ -2751,12 +2833,13 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "Hustu modu lehenetsian eng.-ra"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Bistaratu"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
 msgstr "Bistaratu"
 
 # Cataloging > Interface
@@ -3161,6 +3244,11 @@ msgstr ""
 "elementuen bisualizazioa bi atazetan erakusten da, eta lehenengo atazak zera "
 "dauka"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "Ez"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3168,6 +3256,13 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results Display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr ""
+"Modu lehenetsian, honela ordenatu langileen interfazeko bilaketa emaitzak"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3180,9 +3275,54 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "Ez"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "Ez"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "Ez"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3203,6 +3343,11 @@ msgstr "Bistaratu"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "Interfazea"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "Ez"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3239,12 +3384,14 @@ msgid ""
 msgstr "Gehitu hurrengo eremuak inprimatze azkarreko bizkar-etiketan:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Ez bistaratu"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Bistaratu"
 
 # Cataloging > Spine Labels
 #, fuzzy
@@ -3346,6 +3493,15 @@ msgstr ""
 "Azpieremuen zerrenda bat sefinitu elementuak aurretik bete behar direnean "
 "erabiltzeko (hutsune bidez banatu)"
 
+# Cataloging > Record Structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr ""
+"Azpieremuen zerrenda bat sefinitu elementuak aurretik bete behar direnean "
+"erabiltzeko (hutsune bidez banatu)"
+
 # Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr "Erabili (ISO 690-2) hizkuntza"
@@ -3385,13 +3541,31 @@ msgstr ""
 "erregistroaren kontrol zenbakia ($w azpieremuak) eta kontrol zenbakia (001) "
 "bibliografia erregistroak estekatzeko."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Erakutsi"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+msgstr "Bistaratu"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "Ez banatu"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Ez erakutsi"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Erakutsi"
 
 # Cataloging > Interface
 msgid ""
@@ -3429,11 +3603,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "ez dira automatikoki sortzen."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "Ez erabili"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr "Ez"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr "ez dira automatikoki sortzen."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Ez bistaratu"
 
 # Cataloging > Display
@@ -3442,6 +3628,11 @@ msgid ""
 "in MARC views."
 msgstr ""
 "MARC etiketa zenbakiak, azpieremu kodeak eta adierazleak MARC bistetan."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Bistaratu"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3550,6 +3741,11 @@ msgstr "Mailegu-politika"
 msgid "circulation.pref Course reserves"
 msgstr "Ikastaroen erreserbak"
 
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "Erreserba-politika"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "Isun-politika"
@@ -3571,6 +3767,16 @@ msgstr "Interfazea"
 #, fuzzy
 msgid "circulation.pref Interlibrary loans"
 msgstr "Interfazea"
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "Interfazea"
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "Mailegu-politika"
 
 # Circulation
 #, fuzzy
@@ -4287,6 +4493,25 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Bai"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Ez"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"Igorri automatikoki jatorri-liburutegiko elementuak horiek itzuli egin "
+"direnean."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "Bai"
 
@@ -4350,6 +4575,34 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr "erretiratuak izan diren elementuak itzuli"
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr ""
+"Kalkulatu eta eguneratu berandutze kargak artikulu bat itzultzen denean"
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr ""
+"Kalkulatu eta eguneratu berandutze kargak artikulu bat itzultzen denean"
 
 # Circulation > Checkin policy
 #, fuzzy
@@ -4477,6 +4730,35 @@ msgstr "bazkidearen liburutegikoak"
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "saioa hasi duzun liburutegikoak."
 
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr ""
+"elementuaren jatorrizko liburutegia edo maileguan atera zen liburutegia."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "liburuaren jatorrizko liburutegikoak"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "liburuaren jatorrizko liburutegikoak"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "liburuaren jatorrizko liburutegikoak"
+
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
 msgstr "Gaitu"
@@ -4537,7 +4819,9 @@ msgstr "Kargatu erreserba kostua"
 
 # Circulation > Checkout policy
 #, fuzzy
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr "Lehentasunez, elememntu batez GALDUA balorea"
 
 # Circulation > Checkin policy
@@ -4639,6 +4923,21 @@ msgstr "Ez utzi"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "mailegu-denbora jaitsiera"
 
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "Gaitu"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "Gaitu"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "Ez gaitu"
+
 # Circulation > Fines Policy
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
@@ -4683,6 +4982,32 @@ msgstr "Ez erabili"
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "Erabili"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "alearen liburutegia"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "Ez diru-itzuli"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "Ez erabili"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "alearen liburutegia"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4791,17 +5116,30 @@ msgid ""
 msgstr "elementu bat berandutu denean "
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "Ez erakutsi"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "Erakutsi"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "Erakutsi"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr "botoi bat uneko bazkidea zirkulazio pantailako pantailatik garbitzeko."
 
 # Circulation > Holds policy
@@ -4816,6 +5154,39 @@ msgstr "Gaitu"
 msgid ""
 "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on "
 "multiple bibliographic records from the search results"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "Desgaitu"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "Gaitu"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr "bazkideak elementuaren erreserba egin dezakeen ikusteko."
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "Ez gaitu"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "Gaitu"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
 msgstr ""
 
 # Circulation > Holds policy
@@ -4835,24 +5206,63 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "graziazko epea atzeratutako ale batentzat isuna kalkulatzean."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "Utzi"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "Utzi"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "Ez utzi"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Ez utzi"
 
-# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "Ez utzi"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr "Ez utzi"
+
+# Circulation > Checkout Policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
+"langileei elementuak eskuz baliogabetzen eta noissuescharge baino isun "
+"kopuru handiagoa duten bazkideei elementuak maileguan hartzen."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5201,7 +5611,8 @@ msgstr ""
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 
 # Circulation > Interlibrary loans
@@ -5555,6 +5966,28 @@ msgstr ""
 "ez bada. (AllowHoldDateInFuture gaitu beharra dago ere)."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr "bazkideari aukeratu erreserba gauzatzeko liburutegia"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "Ez utzi"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "Utzi"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "Utzi"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "Utzi"
 
@@ -5615,7 +6048,23 @@ msgstr ""
 
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"bazkideei erreserba bat egiten, hura aurrerago arte itxaronzerrendan sartuko "
+"ez bada. (AllowHoldDateInFuture gaitu beharra dago ere)."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Ez utzi"
 
 # Circulation > Article requests
@@ -5633,12 +6082,10 @@ msgstr "ireki"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "ireki"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "ireki"
 
 # Circulation > Article requests
 #, fuzzy
@@ -5707,6 +6154,33 @@ msgid ""
 msgstr "atzerapen oharren denbora kalkulatzean"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "Blokeatu"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "atzerapen oharren denbora kalkulatzean"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "Egutegia erabili"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "Egutegia erabili"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "elementuaren jatorri-liburutegia"
+
+# Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
 msgstr "Eskatu berrespena"
 
@@ -5773,6 +6247,23 @@ msgid ""
 msgstr ""
 "idazten ari den bazkidea nor den asmatzen, zirkulazio pantailan bazkide "
 "bilaketa idazten den bitartean."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "Utzi"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "Ez utzi"
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "mailegu-denbora jaitsiera"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6155,7 +6646,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6732,6 +7223,13 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr "Balio pare bakoitza lerro separatu batean egon behar du."
+
+# Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
 "be on a separate line."
@@ -6824,6 +7322,26 @@ msgstr "Erabili"
 #, fuzzy
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "ikastaroetarako erreserbak"
+
+# Circulation > Course reserves
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "Erabili"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "jatorri-liburutegia"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "baieztapena eskatzen du"
 
 # Circulation > Course reserves
 #, fuzzy
@@ -7127,9 +7645,12 @@ msgid ""
 "prefix style"
 msgstr "Kendu T aurrezenbaki estiloko lehenengo zenbakia"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "eskaneatutako elementuen barra kodeak."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7559,12 +8080,7 @@ msgstr "Erabili ondorengo hornitzailea azalak eskuratzeko"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Bistaratu"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Ez bistaratu"
 
 # Enhanced Content > Local or remote cover images
@@ -7579,6 +8095,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Erakutsi"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7843,12 +8364,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "fitxetan."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Bistaratu"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Ez bistaratu"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Erakutsi"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -8009,12 +8532,14 @@ msgid ""
 msgstr "elementu baten beste edizioak OPACen."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Bistaratu"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Ez bistaratu"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Erakutsi"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8503,8 +9028,58 @@ msgstr ""
 "OPACFRBRizeEditions gaituta dagoenean). Hori liburutegientzako Library "
 "Thingetik bereizita dago."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "serials.pref"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "Interfazea"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "Gaitu"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "Gaitu"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "Gaitu"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "i18n_l10n.pref"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "i18n_l10n.pref"
 
 # I18N/L10N
@@ -8703,6 +9278,11 @@ msgid "local_use.pref"
 msgstr "local_use.pref"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "local_use.pref"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "Oraindik definitu gabe."
 
@@ -8839,13 +9419,14 @@ msgstr "Bai"
 msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Ez"
 
-# Logging > Debugging > DumpSearchQueryTemplate
+# Logging > Debugging
+#, fuzzy
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
+"Template Toolkit bariableen bolkatu guztia HTML kodeko iruzkin batera OPAC-"
+"erako."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9080,6 +9661,11 @@ msgid "opac.pref Shelf browser"
 msgstr "Apal arakatzailea"
 
 # OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "Utzi"
+
+# OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "Utzi"
 
@@ -9147,6 +9733,33 @@ msgid ""
 "suggestions and checkout history)."
 msgstr ""
 "bazkide anonimo gisa (proposamen anonimo eta irakurtze-historiarentzat)"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para el "
+"valor predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
+"li><li>ingrese una URL para una hoja de estilo específica</li></"
+"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
+
+# Staff Client > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+"Bistaratu emaitzak langile-interfazean XSLT estilo-orria erabiliz hemen:"
 
 # OPAC > Appearance
 #, fuzzy
@@ -9230,6 +9843,42 @@ msgid ""
 "icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
+# OPAC > Self registration and modification > EmailPatronRegistrations
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr "Ez eskatu"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "Eskatu"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "Eskatu"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "Eskatu"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "Utzi"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "Ez gorde"
@@ -9276,18 +9925,51 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "Utzi"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Ez bistaratu"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Bistaratu"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail "
 "pages."
 msgstr "erosketa detaileak OPAC detaile-orrietan."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "Utzi"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "Ez utzi"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr ""
+"elementu bat maileguan hartu duen bazkidearen izena OPACeko elementuen "
+"xehetasun orrietan."
 
 # OPAC > Appearance
 msgid ""
@@ -9568,12 +10250,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Utzi"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Bistaratu"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Ez bistaratu"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Bistaratu"
 
 # OPAC > Features
 msgid ""
@@ -9678,12 +10362,17 @@ msgstr "jatorri-liburutegia"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch"
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgstr "egungo kokalekua"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch only"
 msgstr "jatorri-liburutegia"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr "egungo kokalekua"
 
 # OPAC > Appearance
@@ -9693,10 +10382,11 @@ msgid ""
 msgstr "Gehitu ondorengo HTMLa OPAC eko bilaketa emaitzen fazetapean:"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br />Oharra: Posizioko markadoreak {BIBLIONUMBER}, {CONTROLNUMBER}, "
 "{TITLE}, {ISBN}, {ISSN} eta {AUTHOR} erakutsitako erregistroen informazioaz "
@@ -9943,11 +10633,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTDetailsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
@@ -9970,11 +10657,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTResultsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
@@ -10000,7 +10684,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -10147,7 +10831,7 @@ msgstr "Erakutsi bilaketa aukerak"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "Gaur onartzen diren baloreak</em>: Elementu motak (<strong>itemtypes</"
 "strong>), Bilduma kodeak (<strong>ccode</strong>) eta Apalategiko kokapena "
@@ -10360,12 +11044,14 @@ msgstr ""
 "dokumentatuak daude <a href=\"http://wiki.koha-community.org/wiki/"
 "OpacHiddenItems\" target=\"_blank\">Koha-ko wiki orrian</a>."
 
-# OPAC > Policy > OpacHiddenItemsExceptions
+# OPAC > Appearance
+#, fuzzy
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
+"Erakutsi hurrengo HTMLa OPACeko orrialde nagusian, bereizitako zutabe batean:"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10582,12 +11268,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "goialdean"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Ez bistaratu"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Ez bistaratu"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "goialdean"
 
 # OPAC > Features
 #, fuzzy
@@ -10598,18 +11286,18 @@ msgstr "liburutegia hautatzeko goitibehera menua OPAC goiburuan."
 
 # Administration > Interface options
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
 msgstr "Erakutsi"
 
 # Administration > Interface options
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Erakutsi"
+
+# Administration > Interface options
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr "elementu moten ikonoak katalogoan."
-
-# Administration > Interface options
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Erakutsi"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11039,12 +11727,13 @@ msgid ""
 msgstr "Eskatu"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr "Ez utzi"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr "Ez utzi"
 
 # OPAC > Self registration and modification
@@ -11232,8 +11921,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "erabiltzailea"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "izkutatu"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "erakutsi"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11392,15 +12082,31 @@ msgid ""
 msgstr "bazkideei beren kontuetara sartzeko saioa hasten OPACen."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "Utzi"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "Ez utzi"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "Utzi"
+
+# Enhanced Content > Library Thing
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"ThingISBN zerbitzua lan baten beste edizioak erakusteko (FRBRizeEditions edo "
+"OPACFRBRizeEditions gaituta dagoenean). Hori liburutegientzako Library "
+"Thingetik bereizita dago."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr "bazkideei erosketa proposamenak egiten OPACen."
 
 # Patrons
@@ -11793,9 +12499,9 @@ msgstr ""
 # Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 
 # Patrons > General
@@ -11824,11 +12530,12 @@ msgstr "Ez gaitu"
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Gaitu"
 
-# Patrons > Security > EnableExpiredPasswordReset
+# Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr ""
+msgstr "karaktere izan behar dituzte."
 
 # Patrons > Security
 #, fuzzy
@@ -11984,6 +12691,41 @@ msgstr "Bidali"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # Patrons > General > LockExpiredDelay
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -12044,6 +12786,23 @@ msgstr ""
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "egun lehenago."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "Ez utzi"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "Utzi"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr "karaktere izan behar dituzte."
 
 # Patrons > Patron forms
 #, fuzzy
@@ -12455,6 +13214,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "Saioa hasteko langile eta bazkideen pasahitzek, gutxienez, "
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -12753,7 +13519,7 @@ msgstr "Mugatu hizkuntzen zerrenda bilaketa aurreratuko zerrenda-zabalgarrian"
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "Gaur onartzen diren baloreak</em>: Elementu motak (<strong>itemtypes</"
 "strong>), Bilduma kodeak (<strong>ccode</strong>) eta Apalategiko kokapena "
@@ -12785,15 +13551,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Emaitzak bistaratzea"
-
 # Searching > Features
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr "Ez saiatu"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Emaitzak bistaratzea"
 
 # OPAC > Features
 #, fuzzy
@@ -12871,9 +13637,10 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "Trunkatu fazeten luzera"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr "karakteretara, OPAC/langileen interfazean."
 
 # Searching > Results display
@@ -13113,6 +13880,12 @@ msgid ""
 "OPAC search results."
 msgstr "emaitza orri bakoitzeko OPACen."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search Form
 #, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -13125,8 +13898,9 @@ msgstr "Ez gorde"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -13233,6 +14007,55 @@ msgstr ""
 "bilaketa emaitzen sailkapena garrantziaren arabera (HORRETARAKO ZEBRA BEHAR "
 "DA)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "Ez gorde"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "Gorde"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "Ez gehitu"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "Ez gehitu"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "Desgaitu"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "Gaitu"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -13270,6 +14093,27 @@ msgstr "ISBN aurkibidean aurkitzean"
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr "bilatu"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "ISBN aurkibidean aurkitzean"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr "ez bilatu"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "ISBN aurkibidean aurkitzean"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "bilatu"
 
 # Searching > Results display
@@ -13487,6 +14331,11 @@ msgstr "emaitza orri bakoitzeko langileen interfazean."
 # Serials
 msgid "serials.pref"
 msgstr "serials.pref"
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "Ezaugarriak"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13778,6 +14627,23 @@ msgstr ""
 
 # Staff Client > Options
 #, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "Ez erakutsi"
+
+# Staff Client > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "Erakutsi"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr "liburutegia hautatzeko goitibehera menua OPAC goiburuan."
+
+# Staff Client > Options
+#, fuzzy
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
 msgstr "Ez erakutsi"
 
@@ -13952,9 +14818,14 @@ msgstr "Erabili"
 
 # Administration > CAS authentication
 #, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "Erabili"
+
+# Administration > CAS authentication
+#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
+"(2FA) for staff members."
 msgstr "CAS saioa hasteko autentifikazioarentzat."
 
 # Staff Client > Options
@@ -13974,19 +14845,24 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr "WYSIWYG editorea zenbait HTML sistemako lehentasunak editatzerakoan."
 
-# Staff interface > Appearance > XSLTDetailsDisplay
+# Staff Client > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" para el valor "
+"predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
+"li><li>ingrese una URL para una hoja de estilo específica</li></"
+"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14003,11 +14879,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTResultsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
@@ -14025,7 +14898,8 @@ msgid ""
 msgstr ""
 "Bistaratu emaitzak langile-interfazean XSLT estilo-orria erabiliz hemen:"
 
-# Staff interface > Appearance > XSLTResultsDisplay
+# Staff Client > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14035,9 +14909,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
+"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" para el valor "
+"predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
+"li><li>ingrese una URL para una hoja de estilo específica</li></"
+"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14702,11 +15583,10 @@ msgstr "Desgaitu"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Gaitu"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14759,3 +15639,58 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "Txosten baten lerroak informeen web-zerbitzu bidez eskatua"
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Erakutsi"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "Erregistroak editatzean,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "utzi"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "ez utzi"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ "Autoritate erregistro berriak sortu behar izanez gero, dagoeneko sortuta "
+#~ "dauden autoritateetara erreferentzia egin beharrean"
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "eskaneatutako elementuen barra kodeak."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Bistaratu"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Bistaratu"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Bistaratu"
+
+# Administration > Interface options
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Erakutsi"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "izkutatu"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "Ez utzi"

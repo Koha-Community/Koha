@@ -149,8 +149,9 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
 
 # Accounting > Policy > RequirePaymentType
@@ -179,6 +180,15 @@ msgstr ""
 msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
+msgstr ""
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
 msgstr ""
 
 # Circulation > Course reserves
@@ -397,6 +407,17 @@ msgstr " Chính sách"
 msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr " Máy in"
 
+# Authorities > General
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+" các biểu ghi nhất quán bị thiết (thông số BiblioAddsAuthorities phải được "
+"thiết lập là \"Cho phép\")."
+
 # Acquisitions > Policy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
@@ -407,20 +428,13 @@ msgstr ""
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr ""
 
-# Acquisitions > Policy > EmailPurchaseSuggestions
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr ""
 
-# Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
-msgstr ""
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
+msgstr "Patron's Purchase Suggestions"
 
 #, fuzzy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
@@ -475,6 +489,11 @@ msgid ""
 "notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special "
 "fields: quantity and budget_code"
 msgstr ""
+
+# Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr " English 2-page"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2111,19 +2130,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr " Cho phép"
 
 # Staff Client > Appearance
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
 msgstr " cho giao diện nhân viên của Koha."
-
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
 
 # Administration > Login options
 msgid ""
@@ -2166,12 +2186,14 @@ msgid "authorities.pref Linker"
 msgstr " Liên kết"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr " Không hiển thị"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr " Hiển thị"
 
 # Authorities > General
 msgid ""
@@ -2260,8 +2282,9 @@ msgstr " Khi chỉnh sửa biểu ghi,"
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 " các biểu ghi nhất quán bị thiết (thông số BiblioAddsAuthorities phải được "
 "thiết lập là \"Cho phép\")."
@@ -2275,26 +2298,28 @@ msgstr " không tạo ra"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr " tạo ra"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr " Khi chỉnh sửa biểu ghi,"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr " Tự động"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr " Không tự động"
 
 # Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr " cho phép"
-
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr " không cho phép"
-
-# Authorities > General
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-" tự động tạo ra các biểu ghi nhất quán mới nếu cần thiết, thay vì sử dụng "
-"các biểu ghi nhất quán hiện tại."
+" các biểu ghi nhất quán bị thiết (thông số BiblioAddsAuthorities phải được "
+"thiết lập là \"Cho phép\")."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2306,9 +2331,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr " Không tự động"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 " liên kết lại các đề mục đã được liên kết trước đó khi bạn lưu lại biểu ghi "
 "trong phân hệ biên mục."
@@ -2317,10 +2345,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 " các biểu ghi nhất quán bị thiết (thông số BiblioAddsAuthorities phải được "
@@ -2330,10 +2358,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 " các biểu ghi nhất quán bị thiết (thông số BiblioAddsAuthorities phải được "
@@ -2422,6 +2450,29 @@ msgstr ""
 # Authorities > General
 #, fuzzy
 msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr " Khi chỉnh sửa biểu ghi,"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr " không tạo ra"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr " tạo ra"
+
+# Authorities > General
+#, fuzzy
+msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
@@ -2475,12 +2526,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr " Nhãn gáy"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Display
 #, fuzzy
@@ -2579,6 +2632,34 @@ msgstr ""
 "như là thông tin sở hữu cho biểu ghi không có tài liệu (Bạn có thể nhập "
 "nhiều trường con, ví dụ <code>852abhi</code> sẽ xem xét trường con a, b, h "
 "và i của trường 852), với các trường con cách nhau bằng "
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+" (phân cách bởi dấu phẩy) tới trường tác giả chính xác khi Nhập biểu ghi qua "
+"giao thức Z39.50."
 
 # Cataloging > Display
 #, fuzzy
@@ -2714,13 +2795,14 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "  (Nếu để trống giá trị mặc định sẽ là eng)"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr " Không hiển thị"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Interface
 #, fuzzy
@@ -3117,6 +3199,11 @@ msgstr ""
 " việc hiển thị các tài liệu của biểu ghi trong hai thẻ, thẻ đầu tiên chứa "
 "các tài liệu của"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr " tự động"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3124,6 +3211,13 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results Display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr ""
+" Theo mặc định, sắp xếp kết quả tìm kiếm trong giao diện nhân viên theo"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3136,9 +3230,54 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr " tự động"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr " tự động"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr " tự động"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3159,6 +3298,11 @@ msgstr " Không hiển thị"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr " Thông số giao diện"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr " tự động"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3195,12 +3339,14 @@ msgid ""
 msgstr " Bao gồm các trường thông tin sau đây trên một nhãn gáy được in nhanh:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Spine Labels
 #, fuzzy
@@ -3288,6 +3434,15 @@ msgstr ""
 " Xác định danh sách các trường con được giữ lại giá trị khi tạo mới tài liệu "
 "(phân cách bằng dấu cách)"
 
+# Cataloging > Record Structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr ""
+" Xác định danh sách các trường con được giữ lại giá trị khi tạo mới tài liệu "
+"(phân cách bằng dấu cách)"
+
 # Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr " Sử dụng ngôn ngữ (ISO 690-2)"
@@ -3328,13 +3483,31 @@ msgstr ""
 " số điều khiển biểu ghi (trường con $w) và số điều khiển (trường 001) cho "
 "việc liên kết các biểu ghi thư mục."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr " Hiển thị"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+msgstr " Thông số hiển thị"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr " Không tách biệt"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr " Không hiển thị"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Interface
 msgid ""
@@ -3372,11 +3545,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr " không tự động sinh ra."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr " Không sử dụng"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr " tự động"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr " không tự động sinh ra."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr " Không hiển thị"
 
 # Cataloging > Display
@@ -3384,6 +3569,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr " số trường MARC, mã trường con và các chỉ số trong hiển thị MARC."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3493,6 +3683,11 @@ msgstr " Chính sách ghi mượn"
 msgid "circulation.pref Course reserves"
 msgstr " Mô đun Course Reserves"
 
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr " Chính sách đặt mượn"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr " Chính sách tiền phạt"
@@ -3515,6 +3710,16 @@ msgstr " Thông số giao diện"
 #, fuzzy
 msgid "circulation.pref Interlibrary loans"
 msgstr " Thông số giao diện"
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr " Thông số giao diện"
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr " Chính sách ghi trả"
 
 # Circulation
 #, fuzzy
@@ -4244,6 +4449,25 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr " Tự động"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr " Không tự động"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+" chuyển các tài liệu tới thư viên quản lý khi tài liệu được ghi trả tại các "
+"thư viện khác."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr " Tự động"
 
@@ -4313,6 +4537,36 @@ msgid ""
 "been withdrawn."
 msgstr ""
 " việc bạn đọc ghi trả các tài liệu được đánh dấu là loại bỏ khỏi lưu thông."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr ""
+" tính toán và cập nhật các khoản tiền phạt quá hạn khi một tài liệu được ghi "
+"trả."
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr ""
+" tính toán và cập nhật các khoản tiền phạt quá hạn khi một tài liệu được ghi "
+"trả."
 
 # Circulation > Checkin policy
 #, fuzzy
@@ -4445,6 +4699,34 @@ msgstr " thư viện quản lý bạn đọc."
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr " thư viện bạn đang đăng nhập."
 
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr " thư viện quản lý tài liệu và thư viện ghi mượn tài liệu."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr " thư viện quản lý tài liệu."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr " thư viện quản lý tài liệu."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr " thư viện quản lý tài liệu."
+
 # Circulation > Interface
 #, fuzzy
 msgid "circulation.pref#CircSidebar# Activate"
@@ -4506,7 +4788,9 @@ msgstr " Không phạt tiền"
 
 # Circulation > Interface
 #, fuzzy
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr " Hiển thị"
 
 # Circulation > Checkin policy
@@ -4611,6 +4895,21 @@ msgstr " Không cho phép"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr " việc giảm thời gian ghi mượn tài liệu đi"
 
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr " Kích hoạt"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr " Kích hoạt"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr " ngày hiện tại."
+
 # Circulation > Checkout policy
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
@@ -4655,6 +4954,32 @@ msgstr " Không tự động"
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr " Không kích hoạt"
+
+# Cataloging > Display
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr " thư viện sở hữu"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr " thư viện quản lý tài liệu"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr " Không tự động"
+
+# Cataloging > Display
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr " thư viện sở hữu"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4748,17 +5073,30 @@ msgid ""
 msgstr ""
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr " Không hiển thị"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr " Hiển thị"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr " Hiển thị"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr " một nút để xóa bạn đọc hiện tại từ giao diện phân hệ lưu thông."
 
 # Circulation > Holds policy
@@ -4779,6 +5117,40 @@ msgstr ""
 
 # Circulation > Holds policy
 #, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr " Không kích hoạt"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr " Kích hoạt"
+
+# Circulation > Holds Policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr ""
+" việc cho phép bạn đọc đặt mượn nhiều biểu ghi thư mục từ kết quả tìm kiếm"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr " Không kích hoạt"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr " Kích hoạt"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr " Không cho phép"
 
@@ -4796,24 +5168,64 @@ msgstr ""
 " khoảng thời gian ân hạn khi tính toán khoản tiền phạt quá hạn của một tài "
 "liệu."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr " Cho phép"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr " Cho phép"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr " Không cho phép"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr " Không cho phép"
 
-# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr " Không cho phép"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr " Không cho phép"
+
+# Circulation > Holds Policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
+" Nếu sử dụng ExpireReservesMaxPickUpDelay, khoản phí bạn đọc phải trả cho "
+"thư viện nếu bạn đọc không đến nhận tài liệu đặt mượn trong thời gian quy "
+"định là"
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5171,7 +5583,8 @@ msgstr ""
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 
 # Circulation > Interlibrary loans
@@ -5538,6 +5951,28 @@ msgstr ""
 "(Thông số AllowHoldDateInFuture phải được kích hoạt)."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr " bạn đọc lựa chọn thư viện nhận tài liệu đặt mượn."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr " Không cho phép"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr " Cho phép"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr " Cho phép"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr " Cho phép"
 
@@ -5599,7 +6034,23 @@ msgstr ""
 
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+" bạn đọc yêu cầu đặt mượn vào một ngày trong tương lại trên giao diện OPAC. "
+"(Thông số AllowHoldDateInFuture phải được kích hoạt)."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr " Không cho phép"
 
 # Circulation > Holds policy
@@ -5617,12 +6068,10 @@ msgstr " Chính sách đặt mượn"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr " Chính sách đặt mượn"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr " Chính sách đặt mượn"
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5695,6 +6144,34 @@ msgstr ""
 " chức năng ghi mượn của bạn đọc có số tiền phạt vượt quá giá trị cho phép"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr " Khóa"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr ""
+" chức năng ghi mượn của bạn đọc có số tiền phạt vượt quá giá trị cho phép"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr " trực tiếp."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr " trực tiếp."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr " thư viện quản lý tài liệu"
+
+# Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
 msgstr " Yêu cầu xác nhận"
 
@@ -5765,6 +6242,23 @@ msgid ""
 msgstr ""
 " các tài khoản bạn đọc phù hợp với từ khóa tìm kiếm bạn đọc mà cán bộ thư "
 "viện nhập vào trên giao diện phân hệ lưu thông."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr " Cho phép"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr " Không cho phép"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr " việc giảm thời gian ghi mượn tài liệu đi"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6164,7 +6658,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6748,6 +7242,12 @@ msgid ""
 "a>)"
 msgstr ""
 
+# Circulation > Checkin policy > UpdateNotForLoanStatusOnCheckin
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr ""
+
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
@@ -6843,6 +7343,25 @@ msgstr " Sử dụng"
 #, fuzzy
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr " mô đun Course Reserves của Koha."
+
+# Circulation > Course reserves
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr " Sử dụng"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr " thư viện quản lý tài liệu"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr " yêu cầu xác nhận"
 
 # Circulation > Course reserves
 #, fuzzy
@@ -7149,9 +7668,12 @@ msgid ""
 "prefix style"
 msgstr " Loại bỏ số đầu tiên từ kiểu Tprefix"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr " mã đăng ký cá biệt tài liệu được quét lại."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7581,12 +8103,7 @@ msgstr " Sử dụng mã khách hàng"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr " Không hiển thị"
 
 # Enhanced Content > Local or remote cover images
@@ -7603,6 +8120,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7874,12 +8396,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr " trong các thẻ."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr " Không hiển thị"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -8048,12 +8572,14 @@ msgid ""
 msgstr " các bản sao khác của một tài liệu trên giao diện OPAC."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr " Không hiển thị"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8562,8 +9088,58 @@ msgstr ""
 "(khi FRBRizeEditions hoặc OPACFRBRizeEditions hoạt động). Điều này tách biệt "
 "từ Library Thing tới thư viện."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "ấn phẩm định kỳ"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr " Thông số giao diện"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr " Không tính toán"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr " Kích hoạt"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr " Kích hoạt"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "nội dung nâng cao"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "nội dung nâng cao"
 
 # I18N/L10N
@@ -8765,6 +9341,11 @@ msgid "local_use.pref"
 msgstr "sử dụng nội bộ"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "sử dụng nội bộ"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr ""
 
@@ -8908,10 +9489,8 @@ msgstr " Không thực hiện"
 
 # Logging > Debugging > DumpSearchQueryTemplate
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
 
 # Logging > Debugging
@@ -9150,6 +9729,11 @@ msgstr " Tự đăng ký"
 msgid "opac.pref Shelf browser"
 msgstr " Tìm kiếm theo giá sách"
 
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr " Cho phép"
+
 # OPAC > Self registration and modification
 #, fuzzy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -9216,6 +9800,33 @@ msgid ""
 msgstr ""
 " như là bạn đọc mặc định (cho các đề xuất mua vô danh và lịch sử ghi mượn "
 "tài liệu)"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"opac.pref#OPACXSLTDetailsDisplay# <br />Các tùy chọn:<ul><li><a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"\">Để rỗng</a> có nghĩa là \"không có xslt\"</li><li>Nhâp \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"default\">mặc định</a>\" để sử dụng thiết lập mặc định</li><li>đặt đường "
+"dẫn tới một tập tin xslt</li><li>đặt một URL cho một stylesheet bên ngoài.</"
+"li></ul>{langcode} sẽ được thay bằng ngôn ngữ giao diện hiện tại"
+
+# Staff Client > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+" Hiển thị kết quả tìm kiếm trong giao diện nhân viên theo kiểu mẫu XSLT tại: "
 
 # OPAC > Appearance
 #, fuzzy
@@ -9306,6 +9917,42 @@ msgstr ""
 " định dạng và biểu tượng kiểu tài liệu trong các trang hiển thị kết quả tìm "
 "kiếm và hiển thị chi tiết tài liệu trong OPAC theo kiểu XSLT MARC21."
 
+# OPAC > Self registration and modification > EmailPatronRegistrations
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+
+# OPAC > Self Registration
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr " bạn đọc tự đăng ký xác thực tài khoản qua thư điện tử."
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr " Bắt buộc"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr " Bắt buộc"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr " Bắt buộc"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr " Cho phép"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr " Không lưu lại"
@@ -9354,13 +10001,13 @@ msgstr " Cho phép"
 
 # Cataloging > Display
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr " Hiển thị"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Display
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr " Không hiển thị"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Display
 #, fuzzy
@@ -9370,6 +10017,37 @@ msgid ""
 msgstr ""
 " thông tin chi tiết của việc bổ sung tài liệu trên trang hiển thị chi tiết "
 "biểu ghi."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr " Không cho phép"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr ""
+" tên bạn đọc ghi mượn tài liệu trên trang hiển thị chi tiết tài liệu trong "
+"OPAC."
 
 # OPAC > Appearance
 msgid ""
@@ -9652,12 +10330,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr " Cho phép"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr " Không hiển thị"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr " Hiển thị"
 
 # OPAC > Features
 msgid ""
@@ -9765,12 +10445,17 @@ msgstr " Hiển thị"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch"
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
 msgstr " Bao gồm"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgstr " Bao gồm"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr " Bao gồm"
 
 # OPAC > Appearance
@@ -9781,10 +10466,11 @@ msgstr ""
 " Bao gồm các HTML sau đây bên dưới các thông số trong kết quả tìm kiếm OPAC:"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 " <br />Chú ý: Các thông số {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, "
 "{ISSN} và {AUTHOR} sẽ được thay thế bằng thông tin của biểu ghi hiện tại."
@@ -10035,11 +10721,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Các tùy chọn:<ul><li><a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10062,11 +10745,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Các tùy chọn:<ul><li><a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10093,7 +10773,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Các tùy chọn:<ul><li><a href=\"#\" "
@@ -10240,7 +10920,7 @@ msgstr " ."
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 " <em>Các giá trị hiện tại được Koha hỗ trợ</em>: Kiểu tài liệu "
 "(<strong>itemtypes</strong>), Mã bộ sưu tập (<strong>ccode</strong>) và kho "
@@ -10451,9 +11131,9 @@ msgstr ""
 
 # OPAC > Policy > OpacHiddenItemsExceptions
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 
 # OPAC > Appearance
@@ -10681,15 +11361,15 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr " Không kích hoạt"
-
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr " Không hiển thị"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr " Không kích hoạt"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10702,18 +11382,18 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr " Cho phép"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr " trên OPAC."
-
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr " Sử dụng kiểu dao diện"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11132,12 +11812,12 @@ msgstr " Bắt buộc"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr " Không cho phép"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr " Không cho phép"
 
 # OPAC > Self registration and modification
@@ -11319,8 +11999,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr " tên đăng nhập"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr " Ẩn"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr " Hiển thị"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11477,15 +12158,31 @@ msgid ""
 msgstr " bạn đọc đăng nhập vào giao diện OPAC."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr " Cho phép"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr " Không cho phép"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr " Cho phép"
+
+# Enhanced Content > Library Thing
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"  dịch vụ ThingISBN để hiển thị các bản sao khác của một nhan đề tài liệu "
+"(khi FRBRizeEditions hoặc OPACFRBRizeEditions hoạt động). Điều này tách biệt "
+"từ Library Thing tới thư viện."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr " bạn đọc gửi đề xuất mua tới thư viện trên OPAC."
 
 # Patrons
@@ -11872,9 +12569,9 @@ msgstr ""
 # Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 
 # Patrons > General
@@ -11901,11 +12598,12 @@ msgstr " Không kích hoạt"
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr " Kích hoạt"
 
-# Patrons > Security > EnableExpiredPasswordReset
+# Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr ""
+msgstr " ký tự."
 
 # Patrons > Security
 #, fuzzy
@@ -12063,6 +12761,41 @@ msgstr " Gửi"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # Patrons > General > LockExpiredDelay
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -12124,6 +12857,23 @@ msgstr ""
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr " ngày."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr " Không cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr " Cho phép"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr " ký tự."
 
 # Patrons > Patron forms
 msgid ""
@@ -12538,6 +13288,13 @@ msgstr ""
 " Mật khẩu đăng nhập cho cán bộ thư viện và bạn đọc phải có chiều dài tối "
 "thiểu là"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -12842,7 +13599,7 @@ msgstr ""
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 " <em>Các giá trị hiện tại được Koha hỗ trợ</em>: Kiểu tài liệu "
 "(<strong>itemtypes</strong>), Mã bộ sưu tập (<strong>ccode</strong>) và kho "
@@ -12875,15 +13632,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr " Hiển thị kết quả tìm kiếm"
-
 # Searching > Features
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr " Không tìm kiếm"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr " Hiển thị kết quả tìm kiếm"
 
 # OPAC > Features
 #, fuzzy
@@ -12965,9 +13722,10 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr " Loại bỏ"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr ""
 " ký tự cuối của các thông số, trong giao diện OPAC và giao diện nhân viên."
 
@@ -13208,6 +13966,12 @@ msgid ""
 "OPAC search results."
 msgstr " kết quả tìm kiếm trên mỗi trang Hiển thị trong giao diện OPAC."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search Form
 #, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -13220,8 +13984,9 @@ msgstr " Không lưu giữ"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -13327,6 +14092,55 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr " việc xếp hạng kết quả tìm kiếm theo mức độ liên quan (YÊU CẦU ZEBRA)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr " Không lưu giữ"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr " Lưu giữ"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr " Không bao gồm"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr " Không bao gồm"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr " Không kích hoạt"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr " Kích hoạt"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -13364,6 +14178,27 @@ msgstr " lịch sử ghi mượn của bạn đọc trên giao diện nhân viê
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr " hiển thị"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr " lịch sử ghi mượn của bạn đọc trên giao diện nhân viên."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr " không hiển thị"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr " lịch sử ghi mượn của bạn đọc trên giao diện nhân viên."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr " hiển thị"
 
 # Searching > Results display
@@ -13583,6 +14418,11 @@ msgstr " kết quả tìm kiếm trên mỗi trang hiển thị trong giao diệ
 # Serials
 msgid "serials.pref"
 msgstr "ấn phẩm định kỳ"
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr " Chức năng"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13884,6 +14724,25 @@ msgstr ""
 
 # Staff Client > Options
 #, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr " Không hiển thị"
+
+# Staff Client > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr " Hiển thị"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr ""
+" bạn đọc lựa chọn giới hạn tìm kiếm tài liệu theo thư viện trong công cụ tìm "
+"kiếm nhanh."
+
+# Staff Client > Options
+#, fuzzy
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
 msgstr " Không hiển thị"
 
@@ -14060,11 +14919,17 @@ msgstr " Không cho phép"
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr " Cho phép"
 
-# Staff interface > Authentication > TwoFactorAuthentication
+# Staff Client > Options
+#, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
-msgstr ""
+"(2FA) for staff members."
+msgstr " Không cho phép"
 
 # Staff Client > Options
 #, fuzzy
@@ -14088,12 +14953,9 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 " <br />Các tùy chọn:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTDetailsDisplay\" data-value=\"\">Để trống</a> có nghĩa là \"không có "
@@ -14111,18 +14973,23 @@ msgid ""
 msgstr ""
 " Hiển thị chi tiết tài liệu trên giao diện nhân viên theo kiểu mẫu XSLT tại: "
 
-# Staff interface > Appearance > XSLTListsDisplay
+# Staff Client > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
+" <br />Các tùy chọn:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"\">Để trống</a> có nghĩa là \"không có "
+"xslt\"</li><li>Nhập \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"Mặc định\">default</a>\" để sử dụng kiểu "
+"mẫu mặc định</li><li> Đặt đường dẫn tới tệp tin xslt</li><li>Đặt một URL cụ "
+"thể cho một kiểu mẫu bên ngoài</li></ul>{Mã ngôn ngữ} sẽ thay thế cho ngôn "
+"ngữ giao diện hiện tại"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14143,7 +15010,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 " <br />Các tùy chọn:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -14802,11 +15669,10 @@ msgstr " Không kích hoạt"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr " Kích hoạt"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14861,7 +15727,58 @@ msgid ""
 msgstr ""
 " hàng của một báo cáo được yêu cầu thông qua các báo cáo của dịch vụ Web."
 
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr " Khi chỉnh sửa biểu ghi,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr " cho phép"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr " không cho phép"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ " tự động tạo ra các biểu ghi nhất quán mới nếu cần thiết, thay vì sử dụng "
+#~ "các biểu ghi nhất quán hiện tại."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr " mã đăng ký cá biệt tài liệu được quét lại."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr " Hiển thị"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr " Hiển thị"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr " Hiển thị"
+
 # OPAC > Appearance
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr " Bao gồm"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr " Sử dụng kiểu dao diện"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr " Ẩn"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr " Không cho phép"

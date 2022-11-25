@@ -148,8 +148,9 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
 
 # Accounting > Policy > RequirePaymentType
@@ -178,6 +179,15 @@ msgstr ""
 msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
+msgstr ""
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
 msgstr ""
 
 # Circulation > Course reserves
@@ -386,6 +396,17 @@ msgstr "정책"
 msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "인쇄"
 
+# Authorities > General
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+"autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
+"\"allow\" for at dette skal have nogen virkning)."
+
 # Acquisitions > Policy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
@@ -396,20 +417,14 @@ msgstr ""
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr ""
 
-# Acquisitions > Policy > EmailPurchaseSuggestions
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
-msgstr ""
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
+msgstr "하지않다"
 
 # Acquisitions > Policy
 #, fuzzy
@@ -459,6 +474,11 @@ msgid ""
 "notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special "
 "fields: quantity and budget_code"
 msgstr ""
+
+# Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "영어 2-페이지"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2313,19 +2333,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "허용함"
+
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "허용함"
 
 # Staff Client > Appearance
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
 msgstr "직원 인터페이스의 테마."
-
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
 
 # Administration > Login options
 msgid ""
@@ -2369,12 +2390,14 @@ msgid "authorities.pref Linker"
 msgstr "authorities.pref Linker"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Vis"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Vis ikke"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Vis ikke"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Vis"
 
 # Authorities > General
 msgid ""
@@ -2463,8 +2486,9 @@ msgstr "Når poster redigeres,"
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 "autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
 "\"allow\" for at dette skal have nogen virkning)."
@@ -2478,26 +2502,28 @@ msgstr "opret ikke"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "opret"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "레코드를 편집할 때,"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "Udfør"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "Udfør ikke"
 
 # Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "허용함"
-
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "허용하지 않음"
-
-# Authorities > General
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-"at der automatisk oprettes nye autoritetsposter, hvis det er nødvendigt, "
-"frem for at referere til eksisterende autoriteter."
+"autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
+"\"allow\" for at dette skal have nogen virkning)."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2509,9 +2535,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Link ikke"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 "automatisk overskrifter, som tidligere er linket, når poster gemmes i "
 "katalogiseringsmodulet."
@@ -2520,10 +2549,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
@@ -2533,10 +2562,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
@@ -2625,6 +2654,29 @@ msgstr ""
 # Authorities > General
 #, fuzzy
 msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "Når poster redigeres,"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "opret ikke"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "opret"
+
+# Authorities > General
+#, fuzzy
+msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
@@ -2679,12 +2731,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr "인터페이스"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "표시함"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "표시하지 않음"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "표시하지 않음"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "표시함"
 
 # OPAC > Features
 #, fuzzy
@@ -2771,6 +2825,33 @@ msgstr ""
 "항목을 가지지 않은 레코드 소장 정보(이것은 여러개의 하위 필드 조사를 포함합니"
 "다; 예를 들어 <code>852abhi</code> 는 852 하위필드 a, b, h, and i를 조사합니"
 "다.), 하위필드는 구분됩니다"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"Z39.50을 사용하는 레코드를 가져올 때 올바른 저자 태그를 태그(콤마로 구분됨)"
 
 # Cataloging > Display
 #, fuzzy
@@ -2906,12 +2987,13 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "Tom giver som standard eng."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Vis"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
 msgstr "Vis"
 
 # Cataloging > Interface
@@ -3297,6 +3379,11 @@ msgid ""
 msgstr ""
 "eksemplarer vises i to faner, hvor første fane indeholder eksemplarer, hvis"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "하다"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3304,6 +3391,12 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr "기본값으로, OPAC에서의 검색 결과 정렬"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3316,9 +3409,54 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "하다"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "하다"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "하다"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3339,6 +3477,11 @@ msgstr "Vis"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "인터페이스"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "하다"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3377,12 +3520,14 @@ msgid ""
 msgstr "자동으로 인쇄 대화상자를 팝업."
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "표시"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "표시하지 않음"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "표시하지 않음"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "표시"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3478,6 +3623,15 @@ msgstr ""
 "Definer en liste med underfelter til brug ved forud fyldning af eksemplarer "
 "(adskilles med mellemrum)"
 
+# Cataloging > Record Structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr ""
+"Definer en liste med underfelter til brug ved forud fyldning af eksemplarer "
+"(adskilles med mellemrum)"
+
 # Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr "Brug sproget (ISO 690-2)"
@@ -3516,13 +3670,31 @@ msgid ""
 msgstr ""
 "레코드 제어 번호 (하위필드 $w) 와 서지 레코드와 링크된 제어번호 (001). "
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
 msgstr "표시"
 
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "Adskil ikke"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
+
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "표시하지 않음"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "표시"
 
 # Cataloging > Interface
 msgid ""
@@ -3560,11 +3732,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "자동적으로 만들어지지 않음."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "표시"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "사용하지 않음"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr "하다"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr "자동적으로 만들어지지 않음."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "표시하지 않음"
 
 # Cataloging > Display
@@ -3572,6 +3756,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr "MARC태그 번호, 하위필드 코드 그리고 MARC에서의 지시기호 보기."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "표시"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3679,6 +3868,11 @@ msgstr "대출 정책"
 msgid "circulation.pref Course reserves"
 msgstr "코스 예약"
 
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "예약 정책"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "벌금 정책"
@@ -3701,6 +3895,16 @@ msgstr "인터페이스"
 #, fuzzy
 msgid "circulation.pref Interlibrary loans"
 msgstr "인터페이스"
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "인터페이스"
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "Afleverings-politik"
 
 # Circulation > Interface
 #, fuzzy
@@ -4397,6 +4601,24 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "하다"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "하지 않음"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"overfør automatisk eksemplarer til deres hjemmebibliotek når de afleveres."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "하다"
 
@@ -4463,6 +4685,32 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr "returnerede eksemplarer, der er trukket tilbage."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr "forsinkelses-gebyrer, når et eksemplar afleveres."
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr "forsinkelses-gebyrer, når et eksemplar afleveres."
 
 # Circulation > Checkin policy
 #, fuzzy
@@ -4588,6 +4836,36 @@ msgstr "도서관 이용자는 으로부터."
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "로그인한 도서관에서."
 
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr ""
+"enten det bibliotek, som eksemplaret kommer fra eller det bibliotek, hvorfra "
+"det er udlånt."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "도서관 항목은 으로부터."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "도서관 항목은 으로부터."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "도서관 항목은 으로부터."
+
 # Circulation > Interface
 #, fuzzy
 msgid "circulation.pref#CircSidebar# Activate"
@@ -4649,7 +4927,9 @@ msgstr "요금을 청구하지 않음"
 
 # Circulation > Checkout policy
 #, fuzzy
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr "기본값으로, 항목을 분실 값으로 설정"
 
 # Circulation > Checkin policy
@@ -4747,6 +5027,21 @@ msgstr "Tillad ikke"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "reduktionen af udlånsperioden til"
 
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "사용하게 하지 않음"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "사용하게 함"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "현재 날짜."
+
 # Circulation > Holds policy
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
@@ -4788,6 +5083,32 @@ msgstr "주지 않음"
 #, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "줌"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "예약 도서관"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "항목의 지정 도서관"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "주지 않음"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "예약 도서관"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4893,17 +5214,30 @@ msgid ""
 msgstr "항목이 보다 더 많이 연체되었을 때"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "보여주지 않음"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "보이기"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "보이기"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr "대출 화면에서 현재 이용자를 제거하는 버튼."
 
 # Circulation > Holds policy
@@ -4918,6 +5252,39 @@ msgstr "사용하게 함"
 msgid ""
 "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on "
 "multiple bibliographic records from the search results"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "Aktiver ikke"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "사용하게 함"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr "이용자가 항목을 소장할 수 있다면 보기."
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "사용하게 하지 않음"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "사용하게 하다"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
 msgstr ""
 
 # Circulation > Holds policy
@@ -4937,24 +5304,61 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "nådeperioden, når der beregnes en bøde for et forsinket eksemplar."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "Tillad"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "Tillad"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "Tillad ikke"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Tillad ikke"
 
-# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "Tillad ikke"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr "Tillad ikke"
+
+# Circulation > Checkout Policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
-msgstr ""
+"system preference.</br>"
+msgstr "lånergebyrer ved sammentælling af gebyrer til noissuescharge."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5294,7 +5698,8 @@ msgstr ""
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 
 # Circulation > Interlibrary loans
@@ -5642,6 +6047,29 @@ msgid ""
 msgstr ""
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr ""
+"en bruger at vælge det bibliotek, hvor der skal afhentes reserveringer."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "허용하지 않음"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "허용함"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "허용함"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "허용함"
 
@@ -5702,9 +6130,25 @@ msgid ""
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 msgstr ""
 
+# Authorities > General
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"autoritetsposter, som mangler (BiblioAddsAuthorities skal være sat til "
+"\"allow\" for at dette skal have nogen virkning)."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "허용하지 않음"
 
 # Circulation > Holds policy
@@ -5722,12 +6166,10 @@ msgstr "예약 정책"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "예약 정책"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "예약 정책"
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5796,6 +6238,33 @@ msgid ""
 msgstr "일정표 무시"
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "막음"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "일정표 무시"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "일정표 무시"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "일정표 무시"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "항목의 지정 도서관"
+
+# Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
 msgstr "확인 요청"
 
@@ -5861,6 +6330,23 @@ msgid ""
 "circulation.pref#PatronAutoComplete# to guess the patron being entered while "
 "typing a patron search for circulation or patron search."
 msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "Tillad"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "Tillad ikke"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "reduktionen af udlånsperioden til"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6232,7 +6718,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6803,6 +7289,12 @@ msgid ""
 "a>)"
 msgstr ""
 
+# Circulation > Checkin policy > UpdateNotForLoanStatusOnCheckin
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr ""
+
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
@@ -6898,6 +7390,26 @@ msgstr "사용"
 #, fuzzy
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "코스 예약"
+
+# Circulation > Course reserves
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "사용"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "지정 도서관"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "kræv beskræftelse"
 
 # Circulation > Course reserves
 #, fuzzy
@@ -7199,9 +7711,12 @@ msgid ""
 "prefix style"
 msgstr "공간 제거"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "항목 바코드 스캔됨."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout Policy
 #, fuzzy
@@ -7623,12 +8138,7 @@ msgstr "고객 코드를 사용"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Vis"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Vis ikke"
 
 # Enhanced Content > Local or remote cover images
@@ -7643,6 +8153,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "보이기"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7907,12 +8422,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "탭에서."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Vis"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Vis ikke"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "보이기"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -8078,12 +8595,14 @@ msgid ""
 msgstr "OPAC의 항목의 다른 판."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Vis"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Vis ikke"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "보이기"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8567,9 +9086,58 @@ msgid ""
 "Libraries."
 msgstr ""
 
+#, fuzzy
+msgid "erm.pref"
+msgstr "연속간행물"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "인터페이스"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "사용하게 하지 않음"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "사용하게 함"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "사용하게 함"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
 msgstr ""
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
+msgstr "Formater tider i"
 
 # I18N/L10N
 #, fuzzy
@@ -8770,6 +9338,10 @@ msgstr "사용자들이 OPAC을 볼 수 있는 언어 변경."
 msgid "local_use.pref"
 msgstr "지역 사용 기본 설정"
 
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "지역 사용 기본 설정"
+
 # Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "아직 아무것도 정의되지 않음."
@@ -8910,10 +9482,8 @@ msgstr "하지 않음"
 
 # Logging > Debugging > DumpSearchQueryTemplate
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
 
 # Logging > Debugging
@@ -9157,6 +9727,11 @@ msgstr "Tillad ikke"
 msgid "opac.pref Shelf browser"
 msgstr "책장 브라우저창 닫기"
 
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "허용함"
+
 # OPAC > Self registration and modification
 #, fuzzy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -9220,6 +9795,32 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr "익명의 이용자 (익명의 제안과 읽은 이력)"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
+"\"</li><li>indtast<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv stien for at definere en xslt-fil</li><li>sæt en "
+"URL til et eksternt  specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interfacesprog"
+
+# Staff Client > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr "Vis resultater i intranetklienten med XSLT stylesheet på: "
 
 # OPAC > Appearance
 #, fuzzy
@@ -9303,6 +9904,42 @@ msgid ""
 "icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
+# OPAC > Self registration and modification > EmailPatronRegistrations
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr "Forlang ikke"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "Forlang"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "Forlang"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "Forlang"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "Tillad"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "유지하지 않음"
@@ -9350,18 +9987,49 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "허용함"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "표시"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "표시하지 않음"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "표시하지 않음"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "표시"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail "
 "pages."
 msgstr "OPAC 세부사항 페이지의 수서 세부사항."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "허용함"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "허용하지 않음"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr "OPAC의 세부사항 페이지에서 항목을 대출한 이용자의 이름."
 
 # OPAC > Appearance
 msgid ""
@@ -9643,12 +10311,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "허용함"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Vis"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Vis ikke"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Vis ikke"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Vis"
 
 # OPAC > Features
 msgid ""
@@ -9757,12 +10427,17 @@ msgstr "Vis"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch"
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
 msgstr "포함"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgstr "포함"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr "포함"
 
 # OPAC > Appearance
@@ -9772,10 +10447,11 @@ msgid ""
 msgstr "Medtag følgende HTML under facetterne i OPAC søgeresultater:"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br />Bemærk: Pladsholderne {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, "
 "{ISBN}, {ISSN} og {AUTHOR} erstattes med information fra den viste post."
@@ -10017,11 +10693,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTDetailsDisplay\" data-value=\"\">Lad være tom</a> for \"no xslt\"</"
@@ -10044,11 +10717,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
@@ -10075,7 +10745,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -10221,7 +10891,7 @@ msgstr "검색 옵션 보기"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Nuværende understøttede værdier</"
 "em>: Materialetyper (<strong>itemtypes</strong>), Samlingskoder "
@@ -10431,9 +11101,9 @@ msgstr ""
 
 # OPAC > Policy > OpacHiddenItemsExceptions
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 
 # OPAC > Appearance
@@ -10651,15 +11321,15 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "사용하게 하지 않음"
-
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr "표시하지 않음"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "사용하게 하지 않음"
 
 # OPAC > Policy
 #, fuzzy
@@ -10670,18 +11340,18 @@ msgstr "OPAC에서 자신들이 소유한 책을 갱신하는 이용자."
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "허용함"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr "허용함"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr "OPAC의 테마."
-
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "사용"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11099,12 +11769,12 @@ msgstr "Forlang"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr "Tillad ikke"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr "Tillad ikke"
 
 # OPAC > Self registration and modification
@@ -11285,8 +11955,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "brugernavn"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "Skjul"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr " Vis"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11441,15 +12112,30 @@ msgid ""
 msgstr "OPAC에서 자신들의 계정으로 로그인한 이용자."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "허용함"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "허용하지 않음"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "허용함"
+
+# OPAC > Privacy
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"이용자가 구매 제안을 할 때 로그인을 하지 않아도 됩니다. 제안은 "
+"AnonymousPatron 기본 설정과 연결되어 있습니다"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr "OPAC에서 구매 제안을 만드는 이용자."
 
 # Patrons > General
@@ -11832,9 +12518,9 @@ msgstr ""
 # Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 
 # Patrons > General
@@ -11862,11 +12548,12 @@ msgstr "사용하게 하지 않음"
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "사용하게 함"
 
-# Patrons > Security > EnableExpiredPasswordReset
+# Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr ""
+msgstr "긴 문자."
 
 # Patrons > Security
 #, fuzzy
@@ -12023,6 +12710,41 @@ msgstr "보내기"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # Patrons > General > LockExpiredDelay
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -12082,6 +12804,23 @@ msgstr "이용자가 만료를 하려고 하거나 만료 했을때 알림을 �
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "날짜 이전에."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "허용하지 않음"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "허용함"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr "긴 문자."
 
 # Patrons > Patron forms
 msgid ""
@@ -12488,6 +13227,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "직원과 이용자의 로그인 비밀번호는 반드시 적어도"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -12782,7 +13528,7 @@ msgstr "드롭-다운 고급 검색에서의 제한 언어 목록"
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Nuværende understøttede værdier</"
 "em>: Materialetyper (<strong>itemtypes</strong>), Samlingskoder "
@@ -12812,15 +13558,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "결과 표시"
-
 # Searching > Features
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr "시도하지 않음"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "결과 표시"
 
 # OPAC > Features
 #, fuzzy
@@ -12897,10 +13643,10 @@ msgstr "OPAC의 이용자 검색 이력."
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr ""
 
-# Searching > Results display
+# Searching > Results display > FacetLabelTruncationLength
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr ""
 
 # Searching > Results display
@@ -13134,6 +13880,12 @@ msgid ""
 "OPAC search results."
 msgstr "OPAC에서의 페이지당 결과."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search Form
 #, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -13146,8 +13898,9 @@ msgstr "유지하지 않음"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -13250,6 +14003,55 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr "적합성에의한 검색 결과 순위 (REQUIRES ZEBRA)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "유지하지 않음"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "유지"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "Medtag ikke"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "Medtag ikke"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "사용하게 하지 않음"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "사용하게 함"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -13288,6 +14090,27 @@ msgstr "ISBN 색인에서 검색할 때,"
 # Searching > Results display
 #, fuzzy
 msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr "brug ikke"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "ISBN 색인에서 검색할 때,"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr "brug ikke"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "ISBN 색인에서 검색할 때,"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "brug ikke"
 
 # Searching > Results display
@@ -13508,6 +14331,11 @@ msgstr "OPAC에서의 페이지당 결과."
 #, fuzzy
 msgid "serials.pref"
 msgstr "연속간행물"
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "기능"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13797,6 +14625,23 @@ msgstr ""
 
 # Staff Client > Options
 #, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "보여주지 않음"
+
+# Staff Client > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "보이기"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr "추가하지 않음"
+
+# Staff Client > Options
+#, fuzzy
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
 msgstr "보여주지 않음"
 
@@ -13964,11 +14809,17 @@ msgstr "허용하지 않음"
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr "사용하게 함"
 
-# Staff interface > Authentication > TwoFactorAuthentication
+# Staff Client > Options
+#, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "사용하게 함"
+
+# OPAC > Features
+#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
-msgstr ""
+"(2FA) for staff members."
+msgstr "허용하지 않음"
 
 # Staff Client > Options
 #, fuzzy
@@ -13985,19 +14836,24 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance > XSLTDetailsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">Lad være tom</a> for \"no xslt\"</"
+"li><li>indtast \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv en sti for at defnere en xslt-fil</li><li>giv en "
+"URL for et eksternt specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interface-sprog"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14006,18 +14862,23 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr "Vis detaljer i intranetklienten med XSLT stylesheet på: "
 
-# Staff interface > Appearance > XSLTListsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
+"\"</li><li>indtast<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv stien for at definere en xslt-fil</li><li>sæt en "
+"URL til et eksternt  specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interfacesprog"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14026,7 +14887,8 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr "Vis resultater i intranetklienten med XSLT stylesheet på: "
 
-# Staff interface > Appearance > XSLTResultsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14036,9 +14898,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
+"\"</li><li>indtast<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv stien for at definere en xslt-fil</li><li>sæt en "
+"URL til et eksternt  specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interfacesprog"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14684,11 +15553,10 @@ msgstr "Deaktiver"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Aktiver"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14742,7 +15610,58 @@ msgid ""
 "reports web service."
 msgstr "rækker i en rapport, som bestilles via rapport webtjenesten."
 
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "레코드를 편집할 때,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "허용함"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "허용하지 않음"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ "at der automatisk oprettes nye autoritetsposter, hvis det er nødvendigt, "
+#~ "frem for at referere til eksisterende autoriteter."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "항목 바코드 스캔됨."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Vis"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Vis"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Vis"
+
 # OPAC > Appearance
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr "포함"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "사용"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Skjul"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "허용하지 않음"

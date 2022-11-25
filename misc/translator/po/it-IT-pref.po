@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2022-05-16 21:16+0000\n"
+"PO-Revision-Date: 2022-11-14 20:08+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /it/22.05/it-IT-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1652735783.904610\n"
+"X-POOTLE-MTIME: 1668456529.127796\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -119,9 +119,8 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-" . (Richiede <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a>)"
+" . (Richiede <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#RequireCashRegister# When collecting a payment, "
@@ -152,13 +151,15 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
 "Questa preferenza non ha effetto quando la preferenza di sistema <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a> è abilitata o quando nessun tipo di pagamento è "
-"definito nella categoria PAYMENT_TYPE dei valori autorizzati."
+"definito nella categoria <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> dei valori autorizzati."
 
 # Accounting > Policy
 msgid ""
@@ -191,6 +192,20 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr " i registratori di cassa con i sistema dei pagamenti per tracciarli."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
+" <p class='text-danger'><strong>Attenzione:</strong> Abilitando questa "
+"configurazione renderà obbligatorio il campo 'register' per tutte le "
+"transazioni di tipo CASH. Questo include le transazioni SIP00, cosi devi "
+"controllare le tue configurazioni di SIP per definire un campo 'register' "
+"per il tuo macchinario SIP.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -396,6 +411,17 @@ msgstr "la localizzazione"
 
 # Acquisitions > Policy
 msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+" <br>Se scegli <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> devi indicare un indirizzo email valido:"
+
+# Acquisitions > Policy
+msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# Choose email address that new "
 "purchase suggestions will be sent to: "
 msgstr ""
@@ -406,21 +432,11 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-" Se scegli <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> devi indicare un indirizzo email valido:"
-
-# Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "indirizzo email della biblioteca"
 
 # Acquisitions > Policy
@@ -475,6 +491,10 @@ msgstr ""
 "Puoi usare i seguenti campi: homebranch, holdingbranch, itype, "
 "nonpublic_note, public_note, loc, ccode, notforloan, uri, copyno, price, "
 "replacementprice e itemcallnumber. Campi speciali: quantity e budget_code"
+
+# Acquisitions > Printing
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "Inglese 1-pagina"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2198,17 +2218,16 @@ msgid ""
 msgstr "Versione del server CAS a cui Koha si connetterà:"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr "No"
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "Non mostrare"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Mostra le icone dei tipi di copia nell'interfaccia dello staff: "
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Mostra"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Si"
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "le icone dei tipi di copia nell'interfaccia dello staff."
 
 # Administration > Login options
 msgid ""
@@ -2251,12 +2270,12 @@ msgid "authorities.pref Linker"
 msgstr "Linker"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Mostra"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Non mostrare"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Non mostrare"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Mostra"
 
 # Authorities > General
 msgid ""
@@ -2365,12 +2384,14 @@ msgstr "Quando operi sui records,"
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 "i records di authority che mancano (<a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=BiblioAddsAuthorities"
-"\">BiblioAddsAuthorities</a>deve essere su \"permetti\" per funzionare)."
+"preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> deve essere su \"non richiedere\" "
+"per funzionare)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2380,26 +2401,28 @@ msgstr "non generare"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "genera in automatico"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "Quando operi sui records bibliografici,"
+# Authorities > Linker
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "Attiva"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "permetti"
+# Authorities > Linker
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "Non"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "non permettere"
-
-# Authorities > General
+# Circulation > Checkin policy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-"di creare automaticamente nuovi records di authority se ncesessari invece di "
-"dover sempre collegarsi a records di authority già esistenti."
+" l'operazione di fare il link automatico alle intestazioni, quando si "
+"salvano i records nel modulo di catalogazione, obbedisce a <a href='/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</"
+"a> e a <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a>."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2412,39 +2435,45 @@ msgstr "Non"
 # Authorities > Linker
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"una ricostruzione automatica del link alle intestazioni che erano state "
-"precedentemente collegate salvando i records nel modulo catalogazione."
+" automaticamente rifa il link con le intestazioni che erano state "
+"precedentemente linkate quando si salvano i records nel modulo di "
+"catalogazione (richiede <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # OPAC > Privacy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Usa il seguente testo di default per il campo 667$a MARC21 dei record di "
-"authority (richiede <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
+"authority (deve non essere richiesto <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> e deve essere abilitato <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # OPAC > Privacy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Usa il seguente testo di default per il campo 670$a MARC21 dei record di "
-"authority (richiede <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
+"authority (deve non essere richiesto <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> e deve essere abilitato <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
@@ -2524,6 +2553,28 @@ msgstr ""
 
 # Authorities > General
 msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "Quando operi sui records,"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "non generare"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "genera in automatico"
+
+# Authorities > General
+msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
@@ -2576,12 +2627,12 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Etichette sul dorso"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Mostra"
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Non mostrare"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Non mostrare"
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Mostra"
 
 # Cataloging > Display
 msgid ""
@@ -2674,6 +2725,32 @@ msgstr ""
 "come informazione di copia per records che non hanno copie. Puoi inserire "
 "diversi sottocampi, per esempio puoi mettere <code>852abhi</code> e verranno "
 "usati i sottocampi a, b, h, e i di 852. I sottocampi saranno separati da"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr "per correggere i tag degli autori quando usi z39.50."
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -2813,12 +2890,12 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "nel nome del file."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Mostra"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "Non mostrare"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "Non mostrare"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Mostra"
 
 # Cataloging > Interface
 msgid ""
@@ -3223,6 +3300,10 @@ msgid ""
 "first tab contains items whose"
 msgstr "Le copie in due tab distinti, in cui il primo contine le copie della"
 
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr ","
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARC non è supportato"
@@ -3230,6 +3311,12 @@ msgstr "<br/> UNIMARC non è supportato"
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Un massimo di"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr "Di default i risultati delle ricerche nello staff sono ordinati per"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3242,9 +3329,45 @@ msgid ""
 msgstr ""
 "Mostra una lista di record subordinati, usando i collegamenti di tag 773, in"
 
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "ascendente."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "autore"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr " biblionumber"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "sia in intranet che in Opac"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "collocazione"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "data aggiunta"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "data di pubblicazione"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "discendente."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "da A a Z."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "da Z a A."
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3261,6 +3384,10 @@ msgstr "record saranno mostrati."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr " in intranet"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "titolo"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3297,12 +3424,12 @@ msgid ""
 msgstr "Includi questi campi nella stampa di etichette per il dorso:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Mostra"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Non mostrare"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Non mostrare"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Mostra"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3397,6 +3524,15 @@ msgstr ""
 "(separati da spazio)"
 
 # Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr ""
+"Definisci una lista di sottocampi da usare quando si precompilano le copie "
+"(separati da spazio)"
+
+# Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr "Usa il codice di lingua (ISO 690-2)"
 
@@ -3434,13 +3570,29 @@ msgstr ""
 "i numeri di controllo (sottocampi $w nei 7XX  e campo 001) per collegare tra "
 "loro i records bibliografici."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Mostra"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+msgstr "Display"
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "Non separare"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Non mostrare"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Mostra"
 
 # Cataloging > Interface
 msgid ""
@@ -3475,11 +3627,22 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "non sono creati automaticamente."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Mostra"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "Non usare"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr " biblionumber"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr "non sono creati automaticamente."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Non mostrare"
 
 # Cataloging > Display
@@ -3489,6 +3652,10 @@ msgid ""
 msgstr ""
 "nelle visualizzazioni MARC i numeri di tag, i codici di sottocampo e gli "
 "indicatori."
+
+# Cataloging > Display
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Mostra"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3596,6 +3763,11 @@ msgstr "Prestiti"
 msgid "circulation.pref Course reserves"
 msgstr "Testi per i corsi"
 
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "Prestito per procura"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "Politica multe"
@@ -3615,6 +3787,16 @@ msgstr "Interfaccia"
 # Circulation > Interlibrary loans
 msgid "circulation.pref Interlibrary loans"
 msgstr "Prestito interbibliotecario"
+
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "Interfaccia"
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "Solleciti"
 
 # Circulation > Return claims
 msgid "circulation.pref Recalls"
@@ -3933,8 +4115,8 @@ msgid ""
 "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an "
 "item with unfilled holds if other available items can fill that hold."
 msgstr ""
-"un utente a rinnovare un prestito su una copia con prenotazione se ci sono "
-"altre copie che possono soddisfare quella prenotazione."
+"a un utente di rinnovare un prestito su una copia con prenotazione se ci "
+"sono altre copie che possono soddisfare quella prenotazione."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -4312,6 +4494,25 @@ msgstr ""
 "utente invece di un libro."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Fai"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Non"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"Trasferisci automaticamente le copie alla loro 'home library' quando vengono "
+"restituite."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "Fai"
 
@@ -4373,6 +4574,32 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr "il rientro di copie che erano state scaricate (withdrawn)."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr "per rappresentare i reclami rientrati"
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr "per rappresentare i reclami rientrati"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4507,6 +4734,36 @@ msgstr "la biblioteca a cui appartiene l'utente."
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "la biblioteca a cui sei collegato."
 
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr ""
+"sia nella biblioteca che le possiede sia nella biblioteca in cui sono state "
+"prese in prestito."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "la biblioteca da cui proviene la copia."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "la biblioteca da cui proviene la copia."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "la biblioteca da cui proviene la copia."
+
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
 msgstr "Attiva"
@@ -4558,8 +4815,12 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr " non comminare multa per smarrimento"
 
 # Circulation > Return claims
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
-msgstr "Usa il valore autorizzato LOST"
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+"Usa il valore autorizzato <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=LOST\">LOST</a>"
 
 # Circulation > Return claims
 msgid ""
@@ -4656,6 +4917,21 @@ msgstr "Non cumulare"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "I periodi di blocco."
 
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "Disabilita"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "Abilita"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "il modulo prestiti per procura."
+
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
 msgstr "Non usare"
@@ -4690,6 +4966,30 @@ msgstr "mesi"
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr " anni"
+
+# Circulation > Holds policy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "."
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+"Quando si pone una prenotazione attraverso l'interfaccia staff il punto di "
+"prelievo di default è"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "la biblioteca che ha la copia"
+
+# Circulation > Fines Policy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "la biblioteca di cui è la copia"
+
+# Circulation > Holds policy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "la biblioteca in cui si è loggati"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4804,17 +5104,30 @@ msgstr ""
 "tra i seguenti valori della categoria LOST"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "Non mostrare"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "Mostra"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "Mostra"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr "un bottone per cancellare l'utente dalla schermata di circolazione."
 
 # Circulation > Holds policy
@@ -4834,6 +5147,41 @@ msgstr ""
 "ricerca"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "Non abilitare"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "Abilita"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr ""
+" la possibilità di prenotare più opere dalla pagina dei risultati di una "
+"ricerca"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "Non abilitare"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "Abilita"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
+msgstr ""
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr "Ignora il calendario"
 
@@ -4847,12 +5195,53 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "quando si calcola il periodo di massimo ritardo per il ritiro."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+"<br><strong>NOTE:</strong> Questa preferenza di sistema richiede il cronjob "
+"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Chiedi al system "
+"administrator di attivarlo.<br>"
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "Permetti"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "Permetti"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "Non permettere"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
+msgstr "Non permettere"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "Non permettere"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
 msgstr "Non permettere"
 
 # Circulation > Holds policy
@@ -4861,17 +5250,12 @@ msgid ""
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
-"le prenotazioni di scadere automaticamente se non sono state ritirate entro "
-"il termine specificato nella preferenza di sistema<a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
-"\">ReservesMaxPickUpDelay</a>. <br><strong>NOTE:</strong> Questa preferenza "
-"di sistema richiede il cronjob <code>misc/cronjobs/holds/"
-"cancel_expired_holds.pl</code>. Chiedi al tuo amministratore di sistema di "
-"attivarlo."
+"allle prenotazioni di scadere automaticamente se non sono state ritirate "
+"entro il termine specificato nella preferenza di sistema<a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
+"\">ReservesMaxPickUpDelay</a>.</br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -5214,10 +5598,12 @@ msgstr ""
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
-"(separate con |). Se vuoto, tutte le richieste ILL verranno visualizzate. I "
-"codici richiesti posso trovarsi nella lista di valori ILLSTATUS."
+" (separate con |). Se vuoto, tutte le richieste ILL verranno visualizzate. I "
+"codici richiesti posso trovarsi nella lista di valori <a href=\"/cgi-bin/"
+"koha/admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</a>."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -5572,6 +5958,28 @@ msgstr ""
 "op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a>."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr "all'utente di scegliere dove ritirare una prenotazione."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "Non permettere"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "Permetti"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "Permetti"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "Permetti"
 
@@ -5583,7 +5991,7 @@ msgstr "Non permettere"
 msgid ""
 "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library "
 "to pick up a hold from."
-msgstr "L'utente può scegliere dove ritirare una prenotazione."
+msgstr "all'utente di scegliere dove ritirare una prenotazione."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5634,37 +6042,48 @@ msgstr ""
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
-# Circulation > Holds policy
-#, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
-msgstr "Non permettere"
-
-# Circulation > Article requests
-#, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
-msgstr "Capitoli"
-
-# Circulation > Holds policy
-#, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
-msgstr "tipo di copia prenotata"
-
-# Circulation > Holds policy
-#, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
-msgstr "tipo di copia prenotata"
-
-# Circulation > Holds policy > OPACMandatoryHoldDates
+# Circulation > Checkin policy
 msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
 msgstr ""
+"<br><strong>NOTA:</strong> La data di inizio della prenotazione è presente e "
+"attiva quando anche le preferenze <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> e "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> sono attive."
+
+# Circulation > Holds policy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
+msgstr "Quando fai una prenotazione dall'Opac, metti"
 
 # Circulation > Article requests
-#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
+msgstr "entrambe le date"
+
+# Circulation > Holds policy
+msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
+msgstr "la data di fine prenotazione"
+
+# Circulation > Holds policy
+msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
+msgstr "la data di inizio prenotazione"
+
+# Circulation > Holds policy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "come obbligatoria."
+
+# Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
-msgstr "Capitoli"
+msgstr "nessuna data di prenotazione"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5719,6 +6138,33 @@ msgid ""
 "circulation.pref#OverdueNoticeCalendar# when working out the period for "
 "overdue notices."
 msgstr "quando calcoli i tempi per gli avvisi di ritardo."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "Blocca"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "quando calcoli i tempi per gli avvisi di ritardo."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "Usa il calendario"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "Usa il calendario"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "la biblioteca della copia"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -5782,6 +6228,23 @@ msgstr ""
 "schermata della circolazione."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "Permetti"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "Non permettere"
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "I periodi di blocco."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Includi fino a"
 
@@ -5808,23 +6271,19 @@ msgstr ""
 "nel tipo di copia)."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#RealTimeHoldsQueue# Disable"
 msgstr "Disabilita"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#RealTimeHoldsQueue# Enable"
 msgstr "Abilita"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#RealTimeHoldsQueue# updating the holds queue in real time."
-msgstr "Se la coda delle prenotazioni è spezzata, mostra allo staff"
+msgstr "aggiornando la coda delle prenotazione in tempo reale."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecallsMaxPickUpDelay# Mark a recall as problematic if it "
 "has been waiting to be picked up for"
@@ -5832,7 +6291,6 @@ msgstr ""
 "Segna una prenotazione come problematica se è rimasta in attesa per più di"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#RecallsMaxPickUpDelay# days."
 msgstr "giorni."
 
@@ -6028,7 +6486,7 @@ msgstr "la biblioteca dell'utente"
 msgid ""
 "circulation.pref#ReservesControlBranch# to see if the patron can place a "
 "hold on the item."
-msgstr "vedere se l'utente può prenotare la copia."
+msgstr "per vedere se l'utente può prenotare la copia."
 
 # Circulation > Holds policy
 msgid ""
@@ -6141,24 +6599,30 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'branchcode' is the location where "
 "the checkin is being performed (i.e. branch assigned to SIP user)<br/>"
 msgstr ""
+"- 'branchcode' è dove la restituzione viene fatta (i.e. il codice biblioteca "
+"assegnato all'utente SIP)<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'comparator' is the type of "
 "comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
 msgstr ""
+" - 'comparator' è il tipo di comparazione, i valori possibili sono: eq,<,<=,"
+">,>=,ne<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field value' is the value to "
 "compare against the value in the specified 'item field'<br/>"
 msgstr ""
+"- 'item field value' è il valore da confrontare con il valore specificato "
+"nel 'item field'<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field' is a database column in "
 "the items table<br/>"
-msgstr ""
+msgstr "- 'item field' è una colonna della tabella items nel database<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6166,14 +6630,21 @@ msgid ""
 "return value in the CL field of the SIP response for an item matching a "
 "rule<br/><br/>"
 msgstr ""
+" - 'sort bin number' è il valore di ritorno atteso nel campo CL della "
+"risposta SIP per una copia che corrisponde a una regola<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
+#, fuzzy
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
+" CPL:homebranch:ne:\\$holdingbranch:X - Risponderà sort bin 'X' per una "
+"copia rientrata a CPL quando la biblioteca che gestisce (holdingbranch) non "
+"è uguale alla biblioteca proprietaria (homebranch) (i.e. ogni vopia che fa "
+"riferimento a una biblioteca diversa da CPL).<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6181,15 +6652,18 @@ msgid ""
 "return sort bin 3 for an item with a callnumber less than 339.6 returned to "
 "CPL .<br/>"
 msgstr ""
+" CPL:itemcallnumber:<:339.6:3 - Risponderà sort bin 3 per una copia con "
+"collocazione minore di 339.6 che rientra a to CPL .<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:itype:eq:BOOK:1 - Will return sort "
 "bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
 msgstr ""
+" CPL:itype:eq:BOOK:1 - Rispondera sort bin 1 per una copia di tipo 'BOOK' "
+"che rientra a CPL.<br/>"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
 msgstr "Esempi:<br/>"
 
@@ -6199,6 +6673,9 @@ msgid ""
 "with a leading '\\$' and an item field name will use the value of that field "
 "in the item for comparison:<br/>"
 msgstr ""
+"NOTA: Specificando 'item_field_value' con una '\\$' iniziale e un nome di "
+"campo della copia verrà usato il valore di quel campo nella copia per la "
+"comparazione:<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6206,16 +6683,20 @@ msgid ""
 "'branchcode:item field:comparator:item field value:sort bin number', with "
 "one mapping per line.<br/>"
 msgstr ""
+"The configurazione deve essere nella forma 'branchcode:item field:comparator:"
+"item field value:sort bin number', con una configurazione per linea.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# Use the following mappings to determine "
 "the sort_bin of a returned item.<br/>"
 msgstr ""
+"Usa le seguenti configurazioni per determinare il sort_bin din copia che "
+"rientra.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid "circulation.pref#SIP2SortBinMapping# i.e. \\$holdingbranch<br/></br>"
-msgstr ""
+msgstr " i.e. \\$holdingbranch<br/></br>"
 
 # Circulation > Self check-out module
 msgid ""
@@ -6579,7 +7060,7 @@ msgstr "Trasferisci"
 msgid ""
 "circulation.pref#TransferWhenCancelAllWaitingHolds# items when cancelling "
 "all waiting holds."
-msgstr "le copie quando sono cancellate tutte le prenotazioni in attesa"
+msgstr "le copie quando sono cancellate tutte le prenotazioni in attesa."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#TransfersBlockCirc# Block"
@@ -6769,6 +7250,13 @@ msgstr ""
 "a>)"
 
 # Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr "Ogni paio di valri deve essere separato da una linea."
+
+# Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
 "be on a separate line."
@@ -6864,13 +7352,31 @@ msgstr "Usa"
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "la funzionalità 'Testi per i corsi'."
 
-# Circulation > Course reserves
+# Circulation > Interface
 #, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "Usa"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "biblioteca proprietaria"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "chiedi conferma"
+
+# Circulation > Course reserves
 msgid "circulation.pref#UseRecalls# Don't use"
 msgstr "Non usare"
 
 # Circulation > Course reserves
-#, fuzzy
 msgid "circulation.pref#UseRecalls# Use"
 msgstr "Usa"
 
@@ -6880,6 +7386,9 @@ msgid ""
 "bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
 "once enabled."
 msgstr ""
+"i richiami. Controlla di aver configurato le <a href=\"/cgi-bin/koha/admin/"
+"smart-rules.pl\">regole per la circolazione e le multe</a> per i richiami "
+"una volta che li hai abilitati."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -6972,7 +7481,7 @@ msgid ""
 "circulation.pref#canreservefromotherbranches# a user from one library to "
 "place a hold on an item from another library"
 msgstr ""
-"un utente di una biblioteca di fare prenotazioni su copie di altre "
+"a un utente di una biblioteca di fare prenotazioni su copie di altre "
 "biblioteche"
 
 # Circulation > Holds policy
@@ -7158,9 +7667,14 @@ msgid ""
 "prefix style"
 msgstr "Rimuovi i primo numero (formato T-prefix style)"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "i barcode letti via lettore di codice a barre"
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
+"per i barcode letti dalle copie. Attenzione che ogni spazio iniziale, finale "
+"o interno verrà rimosso prima di questo filtro."
 
 # Circulation > Checkout policy
 msgid ""
@@ -7559,12 +8073,7 @@ msgstr "Usa i seguenti fornitori per le copertine"
 
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Mostra"
-
-# Enhanced content > Local or remote cover images
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Non mostrare"
 
 # Enhanced content > Local or remote cover images
@@ -7580,6 +8089,10 @@ msgid ""
 msgstr ""
 "O puoi usare la seguente sintassi per specificare un campo$sottocampo: {field"
 "$subfield}. Per esempio {024$a}."
+
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Mostra"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7827,12 +8340,12 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "nei tabs."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Mostra"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Non mostrare"
+
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Mostra"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7983,12 +8496,12 @@ msgid ""
 msgstr "le altre edizioni di un'opera sull'Opac."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Mostra"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Non mostrare"
+
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Mostra"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8224,13 +8737,13 @@ msgid "enhanced_content.pref#SyndeticsCoverImages# Show"
 msgstr "Mostra"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsCoverImages# cover images from Syndetics on "
 "search results and item detail pages in the OPAC and the staff interface in a"
 msgstr ""
 "le immagini delle copertine da Syndetics nella pagina dei risultati delle "
-"ricerche nell'Opac a"
+"ricerche e nelle pagine di dettaglio sia per l'Opac sia per l'interfaccia "
+"staff"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# large"
@@ -8437,7 +8950,7 @@ msgstr "Mostra"
 msgid ""
 "enhanced_content.pref#TagsShowOnDetail# tags on item detail pages on the "
 "OPAC."
-msgstr "i tags nelle pagine di dettagli di copia nell'Opac."
+msgstr "tags nelle pagine di dettagli di copia nell'Opac."
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsShowOnList# Show"
@@ -8446,7 +8959,7 @@ msgstr "Mostra"
 # Enhanced content > Tagging
 msgid ""
 "enhanced_content.pref#TagsShowOnList# tags on search results on the OPAC."
-msgstr "i tags nei risultati della ricerca nell'Opac."
+msgstr "tags nei risultati della ricerca nell'Opac."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#ThingISBN# Don't use"
@@ -8471,8 +8984,58 @@ msgstr ""
 "op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> devono "
 "essere attivi). Da non confondere con Library Thing for Libraries."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "Risorse in cont."
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "Interfaccia"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "Disabilita"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "Abilita"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "Abilita"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "i18n_l10n"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "i18n_l10n"
 
 # I18N/L10N
@@ -8673,6 +9236,11 @@ msgid "local_use.pref"
 msgstr "Locale"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "Locale"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "Non ancora definito"
 
@@ -8796,15 +9364,13 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Non registrare"
 
 # Logging > Debugging
+#, fuzzy
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
-"la query di ricerca come parametro di template, richiede la visibilità di<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface]."
+"il dump di tutte le variabili di Template Toolkit in una commento HTML "
+"all'interno del sorgente delle pagine di intranet."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -8918,23 +9484,20 @@ msgid "logs.pref#NoticesLog# Log"
 msgstr "Registra"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Don't log"
-msgstr "Non loggare"
+msgstr "Non registrare"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Log"
-msgstr "Log"
+msgstr "Registra"
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#RecallsLog# any actions on recalls (create, cancel, expire, "
 "fulfill)."
 msgstr ""
-"qualunque azione sulla prenoatazioni (creare, annullare, sospendere, "
-"riprendere, ecc)."
+"qualunque azione sui richiami (creare, cancellare, scadere, cancellare, "
+"completare)."
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# Don't log"
@@ -9029,6 +9592,11 @@ msgid "opac.pref Shelf browser"
 msgstr "Scorrimento collocazioni"
 
 # OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "Permetti"
+
+# OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "Permetti"
 
@@ -9092,6 +9660,31 @@ msgid ""
 msgstr ""
 "come utente generico (per i suggerimenti anonimi di acquisto e per lo "
 "storico dei prestiti)."
+
+# Staff interface > Appearance
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Opzioni:<ul><li>Vuoto. Nessun XSLT usato (<strong>default</strong>)</"
+"li><li>Inserisci un path a un XSLT personalizzato.</li><li>Inserisci un URL "
+"a un XSLT esterno.</li></ul>Se hai XLT multipli per: <ul><li>differenti "
+"lingue: usa la variabile {langcode} - verrà convertita con la lingua "
+"utilizzata dalla sessione</li><li>tipi d'authority: usa la variabile "
+"{authtypecode} - essa verrà convertita con il codice del tipo d'authority"
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+"Visualizza i i risultati dell'authority nello staff client usando l'XSLT in: "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -9189,6 +9782,47 @@ msgstr ""
 "le icone per il formato, l'audience e il tipo di materiale nei risultati e "
 "nelle pagine di dettaglio dell'Opac."
 
+# Acquisitions > Policy
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+" <br>Se scegli <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> devi indicare un indirizzo email "
+"valido:"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr ""
+"Scegli l'indirizzo email a cui spedire le nuove richieste di acquisto: "
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "EmailAddressForSuggestions"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "KohaAdminEmailAddress"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "indirizzo email della biblioteca"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "Permetti"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "Non conservare"
@@ -9234,18 +9868,49 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "in"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Mostra"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Non mostrare"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Non mostrare"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Mostra"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail "
 "pages."
 msgstr "i dettagli dell'acquisizione nella pagina di dettaglio dell'Opac"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "Permetti"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "Non permettere"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr ""
+"il nome dell'utente che ha verificato una copia nelle pagine dei dettagli "
+"dell'Opac."
 
 # OPAC > Appearance
 msgid ""
@@ -9512,12 +10177,12 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Riproduci"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Mostra"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Non mostrare"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Non mostrare"
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Mostra"
 
 # OPAC > Features
 msgid ""
@@ -9633,11 +10298,18 @@ msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Mostra non più di"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgstr " substratus"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch only"
 msgstr "biblioteca"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr " substratus"
 
 # OPAC > Appearance
@@ -9649,10 +10321,11 @@ msgstr ""
 "dell'Opac"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br />Nota: I segnaposti {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, "
 "{ISSN} e {AUTHOR} sono sostituiti con le informazioni prese dal record "
@@ -9784,12 +10457,10 @@ msgstr ""
 "l'authority."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Disable"
 msgstr "Non abilitare"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Enable"
 msgstr "Abilita"
 
@@ -9798,6 +10469,8 @@ msgid ""
 "opac.pref#OPACSuggestionAutoFill# OPAC suggestions form automatically "
 "filling with data from Google Books API."
 msgstr ""
+"Sull'OPAC compila in automatico il form dei suggerimenti con i dati da "
+"Google Books API."
 
 # OPAC > Policy
 msgid ""
@@ -9898,19 +10571,13 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opzioni:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" per "
 "il foglio di stile di default</li><li>Indica un percorso per un foglio di "
-"stile sul server</li><li>Metti un URL per un xslt esterno.</li><li>NOTA: la "
-"preferenza di sistema <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> deve "
-"essere attiva se il tuo foglio di stile usa dati di copia</li></ul>Se hai "
+"stile sul server</li><li>Metti un URL per un xslt esterno.</li></ul>Se hai "
 "più fogli stile, uno per lingua, la stringa {langcode} verrà sostituita con "
 "il codice della lingua in uso."
 
@@ -9926,21 +10593,15 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opzioni:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" per "
 "l'xslt di default </li><li>Indica un percorso file per un foglio di stile "
-"sul server</li><li>Metti un URL per un xslt esterno.</li><li>NOTA: la "
-"preferenza di sistema<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> deve "
-"essere attiva se il tuo foglio di stile usa dati di copia</li></ul>Se hai "
-"più fogli stile, uno per lingua, la stringa {langcode} verrà sostituita con "
-"il codice della lingua in uso."
+"sul server</li><li>Metti un URL per un xslt esterno.</li></ul>Se hai più "
+"fogli stile, uno per lingua, la stringa {langcode} verrà sostituita con il "
+"codice della lingua in uso."
 
 # OPAC > Appearance
 msgid ""
@@ -9957,7 +10618,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opzioni:<ul><li>Metti \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -10087,18 +10748,16 @@ msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr "Sottotipi"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>I gli indici selezionabili sono</em>: Tipo di copia (<strong>itemtypes</"
 "strong>), Codici di collezione (<strong>ccode</strong>) e Codici di "
 "collocazione (<strong>loc</strong>)."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
@@ -10106,7 +10765,6 @@ msgstr ""
 "Mostra schede nell'OPAC e nell'interfaccia staff per limitare le ricerche su"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
@@ -10298,10 +10956,11 @@ msgstr ""
 "\">Koha wiki</a>."
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "Lista di categorie utente separate da \"|\", che potranno vedere le copie "
 "nascoste da <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10525,12 +11184,12 @@ msgstr ""
 "caratteri)."
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Mostra"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Non mostrare"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Non mostrare"
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Mostra"
 
 # OPAC > Features
 msgid ""
@@ -10539,16 +11198,16 @@ msgid ""
 msgstr "una selezione di biblioteche per le notizie in OPAC."
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# No"
-msgstr "No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "Non mostrare"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "Mostra le icone di tipo copia nell'OPAC:"
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Mostra"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Sì"
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr " le icone di tipo copia nell'OPAC:"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10808,7 +11467,6 @@ msgstr ""
 "nella schermata di auto-modifica dell'utente:"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfModificationMandatoryField# The following <a "
 "href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' "
@@ -10993,12 +11651,12 @@ msgid ""
 msgstr "Se vuoto, verranno elencate tutte le biblioteche."
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "Mostra e precompila"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Non mostrare e precompilare"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "Non mostrare e precompilare"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Mostra e precompila"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11184,7 +11842,7 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "lo username"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
 msgstr "Non mostrare"
 
 # OPAC > Features
@@ -11274,7 +11932,9 @@ msgstr "Non permettere"
 msgid ""
 "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on the "
 "OPAC."
-msgstr "agli utenti di conservare record in uno scaffale temporaneo nell'Opac."
+msgstr ""
+"agli utenti di usare il 'carrello' nell'OPAC. Il carrello è una lista "
+"temporanea."
 
 # OPAC > Appearance
 msgid "opac.pref#opaclayoutstylesheet# Use the CSS stylesheet"
@@ -11333,16 +11993,32 @@ msgid ""
 msgstr "agli utenti di accedere al loro account nell'Opac."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "Permetti"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "Non permettere"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "Permetti"
+
+# Patrons > Notices and notifications > PhoneNotification
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"Quando <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> è abilitato e <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> è disabilitato, queste categorie di utenti non sono "
+"abilitate a fare suggerimenti di acquisto:"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
-msgstr "agli utenti di fare suggerimenti di acquisto nell'Opac."
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
+msgstr " suggerimenti di acquisto nell'Opac.<br>"
 
 # Patrons
 msgid "patrons.pref"
@@ -11457,22 +12133,19 @@ msgstr ""
 msgid ""
 "patrons.pref#AutoEmailNewUser# <br><strong>NOTE:</strong> This uses the "
 "WELCOME notice."
-msgstr ""
+msgstr "<br><strong>NOTA:</strong> Questo usa l'avvisp WELCOME."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Don't send"
 msgstr "Non spedire"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Send"
 msgstr "Spedisci"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# an email to newly created patrons."
-msgstr "un'email ai nuovi utenti con i dettagli del loro account"
+msgstr " un'email ai nuovi utenti con i dettagli del loro account."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
@@ -11517,7 +12190,7 @@ msgstr "Manda avvisi automatici per i rinnovi: "
 # Patrons > Patron forms
 msgid ""
 "patrons.pref#AutoRenewalNotices# according to patron messaging preferences"
-msgstr " secondo le preferenze utente per la messaggistica"
+msgstr "secondo le preferenze utente per la messaggistica"
 
 # Circulation > Checkout policy
 msgid "patrons.pref#AutoRenewalNotices# never"
@@ -11749,9 +12422,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 "Se vuoto, Koha userà \"surname,firstname,othernames,cardnumber,userid\". "
 "Altri campi aggiunti a questa preferenza diverranno opzioni di ricerca nella "
@@ -11772,31 +12445,31 @@ msgid ""
 msgstr "i caricare filese arbitrari collegati ai record degli utenti."
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Don't enable"
 msgstr "Non attivare"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Attiva"
 
 # Patrons > Security > EnableExpiredPasswordReset
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
 msgstr ""
+"Se non autorizzi gli utenti gli utenti dovranno o usare la feature "
+"'Dimentica la tua password' o permettere allo staff"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# reset their password."
-msgstr "caratteri."
+msgstr " resetta le loro password"
 
 # Patrons > Security > EnableExpiredPasswordReset
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# the ability for patrons to directly "
 "reset their password when it is expired."
-msgstr ""
+msgstr " di resettare loro la password per gli utenti quando è scaduta."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11957,6 +12630,41 @@ msgstr "imposto"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr "permissivo"
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -12021,6 +12729,23 @@ msgstr "Mostra un avviso se l'utente sta scadendo oppure è scaduto"
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "giorni prima."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "Non permettere"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "Permetti"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr " resetta le loro password"
 
 # Patrons > Patron forms
 msgid ""
@@ -12429,6 +13154,17 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "una password robusta per staff e utenti"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+"<br><strong>NOTA:</strong> Molti fornitori di telefonia mobilie hanno "
+"deprecato il supporto a questa feature, non è consigliato usarla a meno che "
+"tu non abbia un gateway dedicato. Tendenzialmente significa un contratto ad "
+"hoc con un fornitore specifico."
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12732,18 +13468,16 @@ msgid ""
 msgstr "Limita le lingue presenti nel menu della ricerca avanzata ad"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>I gli indici selezionabili sono</em>: Tipo di copia (<strong>itemtypes</"
+"<em>Gli indici selezionabili sono</em>: Tipo di copia (<strong>itemtypes</"
 "strong>), Codici di collezione (<strong>ccode</strong>) e Codici di "
 "collocazione (<strong>loc</strong>)."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the staff interface "
 "advanced search for limiting searches on the"
@@ -12772,12 +13506,12 @@ msgstr ""
 "a> è messa a record bibliografico."
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Mostra"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Non mostrare"
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "Non mostrare"
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Mostra"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12855,9 +13589,10 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "Tronca le voci delle \"faccette\" a"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr "caratteri, nelle interfacce Opac e staff."
 
 # Searching > Results display
@@ -13086,6 +13821,13 @@ msgid ""
 "OPAC search results."
 msgstr "la tendina dei i risultati per pagina nell'OPAC."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+" <br/> Il default è 'Non', i dati di copia sono mostrati in altri modi."
+
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr "Passa"
@@ -13096,11 +13838,13 @@ msgstr "Non passare"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
-"rendi i tag MARC dei dati di copia disponibili ai fogli di stile XSLT. Il "
-"default è 'Non', i dati di copia sono mostrati in altri modi."
+" metti a disposizioni il campo dei dati di copia (MARC21 952, UNIMARC 995) "
+"ai fogli di stile XSLT per le pagine dei risultati di ricerca nell'Opac e "
+"nell'interfaccia staff"
 
 # Searching > Features
 msgid ""
@@ -13206,6 +13950,55 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr "il ranking delle ricerche per rilevanza (RICHIEDE ZEBRA)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "Non tenere"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "Tieni"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "Non includere"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "Non includere"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "Disabilita"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "Abilita"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -13245,11 +14038,30 @@ msgstr "cerca"
 
 # Searching > Results display
 #, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "Durante la ricerca per ISBN,"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr "non cercare"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "su tutte le varianti di ISBN."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
+msgstr "cerca"
+
+# Searching > Results display
 msgid "searching.pref#ShowHeadingUse# Don't show"
 msgstr "Non mostrare"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#ShowHeadingUse# Show"
 msgstr "Mostra"
 
@@ -13259,6 +14071,10 @@ msgid ""
 "established heading that conforms to descriptive cataloguing rules, and can "
 "therefore be used as a main/added entry, or subject, or series title."
 msgstr ""
+" quando un record di authority contiene un'intestazione che è conforma alle "
+"regole sulla descrizione che la biblioteca usa, e dunque può essere usata "
+"come intestazione principale/aggiunta. O come soggetto. O come titolo di "
+"serie."
 
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
@@ -13450,6 +14266,11 @@ msgstr "la tendina dei i risultati per pagina dello staff."
 # Serials
 msgid "serials.pref"
 msgstr "Risorse in cont."
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "Features"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13661,11 +14482,11 @@ msgstr ""
 "{authtypecode} sarà sostituito con il codice del tipo di authority"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# Display authority results "
 "in the staff interface using XSLT stylesheet at: "
-msgstr "Visualizza i i risultati nello staff client usando l'XSLT in: "
+msgstr ""
+"Visualizza i i risultati dell'authority nello staff client usando l'XSLT in: "
 
 # Staff interface > Appearance
 msgid ""
@@ -13727,6 +14548,24 @@ msgid ""
 msgstr ""
 "il nome degli utenti che hanno opere in prestito o prenotate nella pagina "
 "dei dettagli o delle prenotazioni."
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "Non mostrare"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "Mostra"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr ""
+"un menù a tendina nella testata dell'Opac per selezionare la biblioteca."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -13839,21 +14678,18 @@ msgid ""
 msgstr "la selezione delle copie nella pagina dettagliata del record."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Don't highlight"
 msgstr "Non evidenziare"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Highlight"
 msgstr "Evidenzia"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
-msgstr "Mostra il seguente codice HTML nella pagina di login dello staff"
+msgstr " le parole ricercate nei risultati di ricerca nell'interfaccia staff."
 
 # Staff interface > Appearance
 msgid ""
@@ -13879,21 +14715,24 @@ msgid ""
 msgstr "Mostra il seguente codice HTML nella pagina di login dello staff"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Don't enable"
 msgstr "Non abilitare"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
-msgstr "Autenticazione"
+msgstr "Abilita"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "Abilita"
 
 # Administration > CAS authentication
 #, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
-msgstr "CAS per autenticare il login:"
+"(2FA) for staff members."
+msgstr " l'autenticazione a due fattori (2FA)."
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -13915,22 +14754,16 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
-"<br />Opzioni:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
+" <br />Opzioni:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" per il "
 "foglio di stile di default</li><li>Indica un percorso per un xslt sul "
-"server</li><li>Metti un URL per un xslt esterno.</li><li>NOTA: la preferenza "
-"di sistema<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> deve "
-"essere attiva se il tuo foglio di stile usa dati di copia</li></ul>Se hai "
-"più fogli stile, uno per lingua, la stringa {langcode} verrà sostituita con "
-"il codice della lingua in uso."
+"server</li><li>Metti un URL per un xslt esterno.</li></ul>Se hai più fogli "
+"stile, uno per lingua, la stringa {langcode} verrà sostituita con il codice "
+"della lingua in uso."
 
 # Staff interface > Appearance
 msgid ""
@@ -13944,21 +14777,15 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Options:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" per l'xslt "
 "di default</li><li>Indica un percorso file per un xslt sul server</"
-"li><li>Metti un URL per un xslt esterno.</li><li>NOTA: la preferenza di "
-"sistema<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> deve "
-"essere attiva se il tuo foglio di stile usa dati di copia</li></ul>Se hai "
-"più fogli stile, uno per lingua, la stringa {langcode} verrà sostituita con "
-"il codice della lingua in uso."
+"li><li>Metti un URL per un xslt esterno.</li></ul>Se hai più fogli stile, "
+"uno per lingua, la stringa {langcode} verrà sostituita con il codice della "
+"lingua in uso."
 
 # Staff interface > Appearance
 msgid ""
@@ -13976,7 +14803,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 "<br />Opzioni:<ul><li>Inserisci \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -14018,7 +14845,9 @@ msgstr "Mostra"
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#intranetbookbag# the cart option in the staff interface."
-msgstr "l'opzione carrello nell'interfaccia dello staff."
+msgstr ""
+"l'opzione carrello nell'interfaccia dello staff. Il carrello è una lista "
+"temporanea."
 
 # Staff interface > Appearance
 msgid ""
@@ -14041,8 +14870,8 @@ msgstr ""
 "file system o un URL che inzi con <code>http://</code> (serve se vuoi usare "
 "un server remoto). Nota che se inserisci il semplice nome del file, dovrai "
 "inserire il file nella dir css di ogni tema attivo e in ogni lingua attiva. "
-"Se inserisci il path completo guarda che il path deve iniziare dalla HTTP "
-"document root settata per Koha."
+"Se inserisci il path completo, il suo path deve iniziare dalla HTTP document "
+"root impostata per Koha."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranetstylesheet# Use the CSS stylesheet"
@@ -14064,8 +14893,8 @@ msgstr ""
 "file system o un URL che inizi con <code>http://</code> (serve se vuoi usare "
 "un server remoto). Nota che se inserisci il semplice nome del file, dovrai "
 "inserire il file nella dir css di ogni tema attivo e in ogni lingua attiva. "
-"Se inserisci il path completo guarda che il path deve iniziare dalla HTTP "
-"document root settata per Koha."
+"Se inserisci il path completo, il suo path deve iniziare dalla HTTP document "
+"root impostata per Koha."
 
 # Staff interface > Options
 msgid "staff_interface.pref#showLastPatron# Don't show"
@@ -14553,7 +15382,7 @@ msgstr "non verrà mai svuotata o troncati (dati persistenti)"
 # Web services > OAI-PMH
 msgid ""
 "web_services.pref#OAI-PMH:DeletedRecord# will never have any data in it (no)"
-msgstr "non conterra mai dei dati (dati mai cancellati)"
+msgstr "non conterrà mai dei dati (dati mai cancellati)"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
@@ -14621,11 +15450,10 @@ msgstr "Attiva"
 # Web services > REST API
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
-"le credenziali OAuth2 per le REST API. Richiede installato Net::OAuth2::"
-"AuthorizationServer. [SPERIMENTALE]"
+" le credenziali OAuth2 per le REST API. Richiede installato Net::OAuth2::"
+"AuthorizationServer. "
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"
@@ -14675,3 +15503,68 @@ msgid ""
 "reports web service."
 msgstr ""
 "linee di un report se richiesto attraverso il web service per i reports."
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Si"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "Quando operi sui records bibliografici,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "permetti"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "non permettere"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ "di creare automaticamente nuovi records di authority se ncesessari invece "
+#~ "di dover sempre collegarsi a records di authority già esistenti."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "i barcode letti via lettore di codice a barre"
+
+# Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Mostra"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Mostra"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Mostra"
+
+# Logging > Debugging
+#~ msgid ""
+#~ "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
+#~ "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] "
+#~ "to be visible."
+#~ msgstr ""
+#~ "la query di ricerca come parametro di template, richiede la visibilità "
+#~ "di<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface]."
+
+# OPAC > Appearance
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Sì"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Non mostrare"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "Non permettere"

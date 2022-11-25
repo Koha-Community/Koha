@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-26 07:43+0000\n"
+"PO-Revision-Date: 2022-11-19 12:32+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /uk/22.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653551030.373016\n"
+"X-POOTLE-MTIME: 1668861139.671135\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -117,43 +117,35 @@ msgstr ""
 "під час здійснення платежу."
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# . (Requires <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-" функцію торгового пункту, що дозволяє проводити анонімні операції зі "
-"системою бухгалтерського обліку. (Вимагає „<a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=UseCashRegisters\">UseCashRegisters</"
-"a>“)"
+" (вимагає „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>“)."
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# When collecting a payment, "
-msgstr "Не використовувати"
+msgstr "При отриманні платежу "
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# always require a cash register"
-msgstr "Не використовувати"
+msgstr "завжди вимагати касовий апарат"
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# require a cash register only when the "
 "CASH payment type is selected"
-msgstr " касові апарати в системі обліку для відстеження платежів."
+msgstr "вимагати касовий апарат лише при вибраному типі оплати CASH (ГОТІВКА)"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Don't require"
-msgstr "Не виконувати"
+msgstr "Не вимагати"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Require"
-msgstr "Виконувати"
+msgstr "Вимагати"
 
 # Administration > Share anonymous usage statistics
 #, fuzzy
@@ -161,22 +153,21 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
-"<br><strong>Примітка</strong>: це значення не має впливу, якщо системний "
-"параметр „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UsageStats\">UsageStats</a>“ встановлено у значення "
-"„Ні“ (не ділитися статистикою)."
+"Цей параметр значення не має впливу, якщо системний параметр \"<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a>\" увімкнуто або якщо не визначено жодного типу "
+"платежів в категорії допустимих платежів „PAYMENT_TYPE“."
 
 # Accounting > Policy
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# staff to select a payment type when a "
 "payment is made."
 msgstr ""
-"автоматичне відображення діалогового вікна друку для квитанції про оплату "
-"під час здійснення платежу."
+"від бібліотечного персоналу вибирати тип платежу під час здійснення платежу."
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# Do"
@@ -201,6 +192,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr " касові апарати в системі обліку для відстеження платежів."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -363,18 +363,16 @@ msgid ""
 msgstr "Показувати грошові значення у наступному форматі "
 
 # Acquisitions
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Disable"
-msgstr "EDIFACT"
+msgstr "Вимкнути"
 
 # Acquisitions > EDIFACT > EDIFACT
 msgid "acquisitions.pref#EDIFACT# EDIFACT message exchange for acquisitions"
-msgstr ""
+msgstr "обмін повідомленнями EDIFACT для надходжень"
 
 # Acquisitions
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Enable"
-msgstr "EDIFACT"
+msgstr "Увімкнути"
 
 # Acquisitions > EDIFACT
 msgid ""
@@ -392,23 +390,33 @@ msgid "acquisitions.pref#EdifactInvoiceImport# Don't"
 msgstr "Не виконувати"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ#  in items."
-msgstr "Виконувати"
+msgstr " в примірниках."
 
 # Acquisitions > EDIFACT > EdifactLSQ
 msgid "acquisitions.pref#EdifactLSQ# Map sequence code (GIR:LSQ) field to "
-msgstr ""
+msgstr "Зіставляти поле коду послідовності (GIR:LSQ) зі "
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# collection"
-msgstr "Виконувати"
+msgstr "зібранням"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# location"
-msgstr "Виконувати"
+msgstr "розташуванням"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+"Якщо Ви вибрали „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggesitions</a>“, потрібно також ввести дійсну адресу "
+"електронної пошти: "
 
 # Acquisitions > Policy
 msgid ""
@@ -423,22 +431,12 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-"Якщо Ви вибрали „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggesitions</a>“, потрібно також ввести дійсну адресу "
-"електронної пошти: "
-
-# Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "електронна адреса підрозділу"
 
 # Acquisitions > Policy
@@ -495,6 +493,11 @@ msgstr ""
 "replacementprice та itemcallnumber. Спеціальні поля: quantity та budget_code."
 
 # Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "2 сторінки англійською мовою"
+
+# Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
 msgstr "2 сторінки англійською мовою"
 
@@ -528,11 +531,11 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Don't round"
-msgstr "Не округляти"
+msgstr "Не округлювати"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Round"
-msgstr "Округляти"
+msgstr "Округлювати"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# to nearest cent.<br>"
@@ -653,9 +656,10 @@ msgid ""
 "admin.pref#AddressForFailedOverdueNotices# Email address failed overdue "
 "notices are sent to: "
 msgstr ""
+"Повідомлення про невиконані сповіщення прострочень надсилатимуться на адресу "
+"електронної пошти: "
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# If left empty then it will "
 "fallback to the first defined address in the following list: Library "
@@ -664,11 +668,11 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
-"останнього користувача, який повернув примірник. Цей параметр не залежить "
-"від системних параметрів „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a>“ та „<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
+"Якщо залишити порожнім, вибиратиметься перша визначена адреса у наступному "
+"списку: бібліотечна ReplyTo, бібліотечна Email, „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ReplytoDefault\">ReplytoDefault</"
+"a>“ та „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a>“."
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -853,7 +857,6 @@ msgid ""
 msgstr ""
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -861,8 +864,9 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"вхід користувачам з використанням Google Open ID для автоматичної "
-"реєстрації. Вимагає <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"Разом з <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, задіює <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
@@ -870,7 +874,6 @@ msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Ідентифікатор клієнта Google OAuth2: "
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -878,8 +881,9 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"вхід користувачам з використанням Google Open ID для автоматичної "
-"реєстрації. Вимагає <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"Разом з <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"задіює <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
@@ -912,6 +916,14 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
+"Вам потрібно буде вибрати „OAuth2“ під час створення застосунку в хмарній "
+"консолі Google та встановити джерело веб-сайту на „вашу_url_ел_кат“, а URL-"
+"адресу перенаправлення на „вашу_url_ел_кат/cgi-bin/koha/svc/auth/"
+"googleopenidconnect“. Необхідно налаштувати „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>“ та „<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>“."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -933,15 +945,13 @@ msgstr ""
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"вхід користувачам з використанням Google Open ID для автоматичної "
-"реєстрації. Вимагає <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+" (вимагає „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>“)."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -952,15 +962,13 @@ msgstr ""
 "реєстрації користувача за ідентифікатором Google Open ID: "
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"вхід користувачам з використанням Google Open ID для автоматичної "
-"реєстрації. Вимагає <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+" (вимагає „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>“)."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -971,15 +979,14 @@ msgstr ""
 "користувача за ідентифікатором Google Open ID: "
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"вхід користувачам з використанням Google Open ID для автоматичної "
-"реєстрації. Вимагає <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+"Залиште поле порожнім для усіх доменів Google. Вимагає „<a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>“."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2221,17 +2228,16 @@ msgid ""
 msgstr ""
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr "ні"
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "Не показувати"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Показувати значки типу одиниці в бібліотечному інтерфейсі: "
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Показувати"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "так"
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr " значки типу одиниці в бібліотечному інтерфейсі."
 
 # Administration > Login options
 msgid ""
@@ -2278,12 +2284,12 @@ msgid "authorities.pref Linker"
 msgstr "Зв’язувач"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Відображати"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Не показувати"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Не відображати"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Показувати"
 
 # Authorities > General
 msgid ""
@@ -2300,6 +2306,9 @@ msgid ""
 "number or an asterisk (*), and some_value is a fixed value (one character)."
 "<br>"
 msgstr ""
+"Тут auth1 та auth2 посилаються на індикатори авторитетного запису, теґ — це "
+"номер бібліографічного поля або зірочка (*), а деяке_значення — фіксоване "
+"значення (один символ).<br>"
 
 # Authorities > General
 msgid ""
@@ -2308,22 +2317,27 @@ msgid ""
 "unimarc), tag, ind1:(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|"
 "some_value).<br>"
 msgstr ""
+"Рядки, що починаються з символу коментаря (#), пропускаються. Кожен рядок "
+"повинен мати вигляд: (marc21|unimarc), теґ, ind1:(auth1|auth2|"
+"деяке_значення), ind2:(auth1|auth2|тезаурус|деяке_значення).<br>"
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# The MARC21 option thesaurus "
 "refers to indicators controlled by authority field 008/11 and 040$f."
 msgstr ""
+"Тезаурус параметрів MARC21 стосується індикаторів, які контролюються "
+"авторитетним полем 008/11 та 040$f."
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# Use the following text to "
 "edit how authority records control indicators of attached bibliographic "
 "fields (and possibly subfield $2).<br>"
 msgstr ""
-"При зміні авторитетного запису, не оновлювати приєднані бібліографічні "
-"записи, якщо їх кількість перевищує"
+"Використовуйте наведений нижче текст, щоб відредагувати, як авторитетні "
+"записи настроюють індикатори долучених бібліографічних полів (і, можливо, "
+"підполя $2).<br>"
 
 # Authorities > General
 msgid ""
@@ -2384,11 +2398,13 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "При редагуванні записів, "
 
 # Authorities > General
+#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 " авторитетні записи, які відсутні (щоб з цього був хоча би який-небудь ефект "
 "також повинен бути встановлений параметр „<a href=\"/cgi-bin/koha/admin/"
@@ -2403,26 +2419,31 @@ msgstr "не створювати"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "створювати"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "При редагуванні записів "
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "Виконувати"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "задіяти"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "Не виконувати"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "не задіювати"
-
-# Authorities > General
+# Circulation > Checkin policy > StoreLastBorrower
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-" також автоматичне створення нових (за необхідності) авторитетних записів, "
-"замість того, щоб посилатися на вже існуючі авторитетні джерела."
+"останнього користувача, який повернув примірник. Цей параметр не залежить "
+"від системних параметрів „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a>“ та „<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2433,9 +2454,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Не виконувати"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 " автоматичне переприєднання заголовків (які раніше були приєднані) під час "
 "збереження записів у модулі каталогізації."
@@ -2444,33 +2468,35 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"користувачам вибирати власні налаштування конфіденційності для своєї історії "
-"видач. Це вимагає системних параметрів „<a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a>“ та „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
+"Використовуйте наступний текст як значення за умовчанням для поля 667$a "
+"авторитетних записів MARC21 (вимагає „<a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a>“ та "
+"„<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>“):"
 
 # OPAC > Privacy > OPACPrivacy
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"користувачам вибирати власні налаштування конфіденційності для своєї історії "
-"видач. Це вимагає системних параметрів „<a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a>“ та „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
+"Використовуйте наступний текст як значення за умовчанням для поля 670$a "
+"авторитетних записів MARC21 (вимагає „<a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a>“ та "
+"„<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>“):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2550,6 +2576,29 @@ msgstr ""
 "дату (позиції 00-05)."
 
 # Authorities > General
+#, fuzzy
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "При редагуванні записів, "
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "не створювати"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "створювати"
+
+# Authorities > General
 msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
@@ -2604,12 +2653,12 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Наклейки на корінці"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Показувати "
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Не показувати"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Не показувати "
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Показувати"
 
 # Cataloging > Display
 msgid ""
@@ -2638,7 +2687,7 @@ msgstr "Відображати МАРК-поля/підполя "
 msgid ""
 "cataloguing.pref#AggressiveMatchOnISBN# When matching on ISBN with the "
 "record import tool,"
-msgstr "При зіставленні з ISBN при використанні інструменту імпорту записів, "
+msgstr "Зіставляючи за ISBN при використанні інструменту імпорту записів, "
 
 # Cataloging > Importing
 msgid ""
@@ -2700,18 +2749,45 @@ msgstr ""
 " у якості інформації про наявність у фондах для записів, які не мають "
 "примірників (може бути вказано декілька підполів, наприклад <code>852abhi</"
 "code> (MARC21) чи <code>942chijtv</code> (UNIMARC)), а значення підполів "
-"будуть відокремлені один від одного цим "
+"будуть відокремлені один від одного цим значенням:"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+" (розділених комами) у правильні поля автора при імпорті запису з "
+"використанням Z39.50."
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr "(лише перегляд без XSLT)."
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions "
 "with "
-msgstr "(лише перегляд без XSLT)."
+msgstr "Відокремлювати головний запис та підвідділи за допомогою "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#BibtexExportAdditionalFields# <br/>"
@@ -2724,11 +2800,10 @@ msgid ""
 msgstr ""
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Include the following fields "
 "when exporting BibTeX:"
-msgstr "Включати наступні поля для швидкого друку наклейок на корінці:"
+msgstr "Під час експорту BibTeX додавати такі поля:"
 
 # Cataloging > Exporting
 msgid ""
@@ -2736,6 +2811,9 @@ msgid ""
 "subfields as targets for a repeating BibTex tag, use the following format: "
 "BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )."
 msgstr ""
+"Щоб указати кілька МАРК-тегів/підполів як цілі для повторюваного тегу "
+"BibTex, використовуйте такий формат: BT_ТЕҐ: [ТЕҐ2$ПІДПОЛЕ1, ТЕҐ2$ПІДПОЛЕ2] "
+"(наприклад, примітки: [501$a, 505$g] (MARC21) чи [300$a, 320$a] (UNIMARC))."
 
 # Cataloging > Exporting
 msgid ""
@@ -2743,6 +2821,8 @@ msgid ""
 "the BT_TAG to replace the bibtex record type with a field value of your "
 "choosing."
 msgstr ""
+"Використовуйте '@' (у лапках) як BT_ТЕҐ, щоб замінити тип bibtex-запису на "
+"значення поля за вашим вибором."
 
 # Cataloging > Exporting
 msgid ""
@@ -2796,7 +2876,7 @@ msgstr ""
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
-msgstr "  Пусте значення означатиме „eng“ (англійська)."
+msgstr ". Пусте значення означатиме „eng“ (англійська)."
 
 # Cataloging > Record Structure
 msgid ""
@@ -2829,12 +2909,12 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "в назві файлу."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Показувати "
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "Не показувати"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "Не показувати "
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Показувати"
 
 # Cataloging > Interface
 msgid ""
@@ -2949,8 +3029,8 @@ msgid ""
 "cataloguing.pref#MarcFieldDocURL# For example <tt>http://fielddoc.example."
 "com/?marc={MARC}&field={FIELD}&language={LANG}</tt>"
 msgstr ""
-"Наприклад, <tt> http://fielddoc.example.com/?marc={MARC}&field={FIELD}"
-"&language={LANG} </tt>, <tt>https://unimarc.org.ua/wiki/{FIELD}</tt>."
+"Наприклад, „<tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}"
+"&language={LANG}</tt>“, „<tt>https://unimarc.org.ua/wiki/{FIELD}</tt>“."
 
 # Cataloging > Display
 msgid ""
@@ -2958,7 +3038,8 @@ msgid ""
 "http://loc.gov (MARC21) or http://archive.ifla.org (UNIMARC) is used."
 msgstr ""
 "Якщо залишити порожнім, використовуватиметься документація по формату на "
-"http://loc.gov (MARC21) або http://archive.ifla.org (UNIMARC)."
+"„<tt>http://loc.gov</tt>“ (MARC21)<tt> або „<tt>http://archive.ifla.org</"
+"tt>“ (UNIMARC)."
 
 # Cataloging > Display
 msgid ""
@@ -2968,8 +3049,8 @@ msgid ""
 "or \"fi-FI\")."
 msgstr ""
 "Можливі наступні заміни: <tt>{MARC}</tt> (marc-різновид, напр. „MARC21“ чи "
-"„UNIMARC“), <tt>{FIELD}</tt> (номер поля, напр. „000“ чи „048“), <tt>{LANG}</"
-"tt> (користувацька мова, напр. „en“ чи „fi-FI“)."
+"„UNIMARC“), <tt>{FIELD}</tt> (номер поля, напр. „000“ чи „100“), <tt>{LANG}</"
+"tt> (користувацька мова, напр. „en“ чи „uk-UA“)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# Use"
@@ -2985,38 +3066,36 @@ msgid "cataloguing.pref#MarcFieldForCreatorId# ."
 msgstr "."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# . <br/><strong>NOTE:</strong> Use a "
 "dollar sign between field and subfield like 123$a."
-msgstr "та імʼя створювача запису у МАРК-підполі"
+msgstr ""
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# Store record's creator "
 "borrowernumber in MARC subfield"
-msgstr "та імʼя створювача запису у МАРК-підполі"
+msgstr "Зберігати номер „borrowernumber“ створювача бібзапису у МАРК-підполі"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# Store record's last modifier "
 "borrowernumber in MARC subfield"
-msgstr "та імʼя створювача запису у МАРК-підполі"
+msgstr ""
+"Зберігати номер „borrowernumber“ останнього редактора бібзапису у МАРК-"
+"підполі"
 
 # Cataloging > Record Structure
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# and record's creator name in MARC "
 "subfield"
-msgstr "та імʼя створювача запису у МАРК-підполі"
+msgstr "та імʼя створювача бібзапису у МАРК-підполі"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# and record's last modifier name in "
 "MARC subfield"
-msgstr "та імʼя створювача запису у МАРК-підполі"
+msgstr "та імʼя останнього редактора бібзапису у МАРК-підполі"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# .<br />For example: '001,245ab,600'"
@@ -3213,22 +3292,25 @@ msgid "cataloguing.pref#SeparateHoldings# home library"
 msgstr "джерельна бібліотека/підрозділ"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "cataloguing.pref#SeparateHoldings# is the logged in user's library. The "
 "second tab will contain all other items."
 msgstr ""
-", котра є бібліотекою/підрозділом реєстрації користувачів, які увійшли в "
+", котра є бібліотекою/підрозділом реєстрації користувача, який увійшов в "
 "систему. На другій вкладці будуть усі інші примірники."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "cataloguing.pref#SeparateHoldings# items display into two tabs, where the "
 "first tab contains items whose"
 msgstr ""
 "відображення примірників на дві вкладки, де перша вкладка містить примірники "
 "з"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "жодному з інтерфейсів"
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
@@ -3237,6 +3319,13 @@ msgstr " <br/> UNIMARC не підтримується."
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Буде відображено максимум"
+
+# Searching > Results Display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr ""
+"За умовчанням сортувати результати пошуку в інтерфейсі бібліотекаря за "
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3248,9 +3337,54 @@ msgid ""
 "linked via field 773, in"
 msgstr "Показувати перелік складових бібзаписів, зв’язаних через поле 773, у "
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "жодному з інтерфейсів"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "бібліотечному інтерфейсі та електронному каталозі"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "жодному з інтерфейсів"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3267,6 +3401,11 @@ msgstr "записів."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "бібліотечному інтерфейсі"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "жодному з інтерфейсів"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3301,12 +3440,12 @@ msgid ""
 msgstr "Включати наступні поля для швидкого друку наклейок на корінці:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Відображати "
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Не відображати"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Не відображати "
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Відображати"
 
 # Cataloging > Spine Labels
 msgid ""
@@ -3381,11 +3520,10 @@ msgid ""
 msgstr "MARC21: „952$a 952$b 952$c“"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Note that the FA "
 "framework is excluded from the permission."
-msgstr "Якщо системний параметр пустий, жодні поля не будуть обмежені."
+msgstr "Зауважте, що структура „FA“ виключена з привілею."
 
 # Cataloging > Record structure
 msgid ""
@@ -3397,6 +3535,16 @@ msgstr "UNIMARC: „995$f 995$h 995$j“"
 msgid ""
 "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to "
 "use when prefilling items (separated by space):"
+msgstr ""
+"Зазначення переліку підполів (розділені пробілом), що будуть "
+"використовуватися при попередньому заповнені примірників (розділені "
+"пробілом):"
+
+# Cataloging > Record Structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
 msgstr ""
 "Зазначення переліку підполів (розділені пробілом), що будуть "
 "використовуватися при попередньому заповнені примірників (розділені "
@@ -3440,13 +3588,29 @@ msgstr ""
 "контрольний номер запису (підполя $w) та контрольний номер (001) для зв’язку "
 "бібліографічних записів."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Показувати"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+msgstr "Відображення"
+
+# Cataloging > Record Structure
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "Не розділяти"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Не показувати"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Показувати"
 
 # Cataloging > Interface
 msgid ""
@@ -3460,7 +3624,7 @@ msgstr "Штрих-коди "
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
-msgstr " формуються послідовно — 1, 2, 3, …."
+msgstr " формуються послідовно — 1, 2, 3, …"
 
 # Cataloging > Record Structure
 msgid ""
@@ -3481,12 +3645,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr " не створюються автоматично. "
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Показувати "
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "Не використовувати"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr "жодному з інтерфейсів"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr " не створюються автоматично. "
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
-msgstr "Не показувати "
+msgid "cataloguing.pref#hide_marc# Don't show"
+msgstr "Не показувати"
 
 # Cataloging > Display
 msgid ""
@@ -3494,6 +3669,10 @@ msgid ""
 "in MARC views."
 msgstr ""
 "  номери МАРК-ознак, коди підполів та індикаторів у „Перегляді у МАРК“."
+
+# Cataloging > Display
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Показувати"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3603,6 +3782,11 @@ msgstr "Правила видачі"
 msgid "circulation.pref Course reserves"
 msgstr "Резервування курсів"
 
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "Модуль прикутих до дому"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "Правила штрафів"
@@ -3623,8 +3807,17 @@ msgstr "Інтерфейс"
 msgid "circulation.pref Interlibrary loans"
 msgstr "Міжбібліотечний абонемент"
 
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "Інтерфейс"
+
 # Circulation > Accounts
 #, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "Вимоги щодо повернення"
+
+# Circulation > Accounts
 msgid "circulation.pref Recalls"
 msgstr "Вимоги щодо повернення"
 
@@ -3811,7 +4004,8 @@ msgstr "Не дозволяти"
 msgid ""
 "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and "
 "filled by damaged items."
-msgstr " замовлення пошкоджених примірників."
+msgstr ""
+"запити на замовлення розміщувати та виконувати для пошкоджених примірників."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -3945,8 +4139,8 @@ msgid ""
 "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an "
 "item with unfilled holds if other available items can fill that hold."
 msgstr ""
-"користувачам продовжувати примірник з без замовлень, якщо інші доступні "
-"примірники містять замовлення."
+"користувачам продовжувати примірник без замовлення, якщо інші доступні "
+"примірники є замовлено."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -4332,6 +4526,25 @@ msgstr ""
 "перекриваються штрих-коди користувачів та книг."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Здійснювати"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Не проводити"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+" автоматичне переміщення примірників у їхню джерельну бібліотеку/підрозділ "
+"при їх поверненні."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "Здійснювати"
 
@@ -4392,6 +4605,32 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr " повернення вилучених/списаних примірників."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr " для ідентифікації „вимоги про повернення“."
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr " для ідентифікації „вимоги про повернення“."
 
 # Circulation > Interface
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4518,15 +4757,45 @@ msgstr "Використовувати календар та правила об
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
-msgstr "від бібліотеки, з якої є примірник."
+msgstr "від бібліотеки/підрозділу, з яких є примірник."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the patron is from."
-msgstr "від бібліотеки, з якої є користувач."
+msgstr "від бібліотеки/підрозділу, з яких є користувач."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library you are logged in at."
-msgstr "від бібліотеки, у якій Ви увійшли в систему."
+msgstr "від бібліотекипідрозділу, у яких Ви увійшли в систему."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr ""
+"або до бібліотеки/підрозділу, звідки цей примірник, або до бібліотеки/"
+"підрозділу, з яких його було видано"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "від бібліотеки/підрозділу, з яких є примірник."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "від бібліотеки/підрозділу, з яких є примірник."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "від бібліотеки/підрозділу, з яких є примірник."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
@@ -4578,7 +4847,10 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr "не стягувати пеню щодо втрати"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+#, fuzzy
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr "Використовувати допустиме значення „LOST“"
 
 # Circulation > Checkout policy
@@ -4678,6 +4950,21 @@ msgstr "Не накопичувати"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "терміни обмежень."
 
+# Circulation > Interlibrary Loans
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "Вимкнути"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "Задіяти"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "модуль прикутих до дому."
+
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
 msgstr "Не встановлювати"
@@ -4712,6 +4999,32 @@ msgstr "місяці"
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "роки"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "бібліотека/підрозділ тимч. зберігання / видачі"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "бібліотеці/підрозділі тимч. зберігання/видачі."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "місяці"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "бібліотека/підрозділ тимч. зберігання / видачі"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4770,7 +5083,7 @@ msgid ""
 "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an "
 "item to the LOST value 1 when it has been overdue for more than 30 days."
 msgstr ""
-"<br>Приклад: [1] [30] — встановлює примірнику значення „1 — Втрачено“, якщо "
+"<br>Приклад: [1] [30] — встановлює примірнику значення „1 — втрачено“, якщо "
 "його було прострочено більше 30 днів."
 
 # Acquisitions > Policy
@@ -4827,17 +5140,30 @@ msgstr ""
 "примірники з наступними значеннями станів втрати "
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "Не показувати"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "Показувати"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "Показувати"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr " кнопку для очищення поточного користувача на сторінці обігу."
 
 # Circulation > Holds policy
@@ -4857,6 +5183,41 @@ msgstr ""
 "результатів пошуку."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "Не задіювати"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "Задіяти"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr ""
+"можливість розміщення замовлень на декілька бібліографічних записів із "
+"результатів пошуку."
+
+# Circulation > Article Requests
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "Не дозволяти"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "Увімкнути"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
+msgstr ""
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr "Ігнорувати календар"
 
@@ -4870,23 +5231,64 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "під час розрахунку терміну максимальної затримки замовлення."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+"<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного "
+"сценарію <code>misc/cronjobs/auto_unsuspend_holds.pl</code>. Попросіть "
+"системного адміністратора запланувати його."
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "Дозволити"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "Дозволити"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "Не дозволяти"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Не дозволяти"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "Не дозволяти"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr "Не дозволяти"
+
 # Circulation > Holds Policy
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
 "замовленням автоматично закінчуватися, якщо вони не були вибрані протягом "
 "періоду часу, зазначеного в системному параметрі „<a href=\"/cgi-bin/koha/"
@@ -5130,7 +5532,7 @@ msgstr "типу одиниці замовлення"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# nothing"
-msgstr "нічого"
+msgstr "нічому"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# pickup library"
@@ -5183,7 +5585,7 @@ msgstr ""
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
-msgstr "Використовувати правила обігу і штрафи "
+msgstr "Використовувати правила для обігу і штрафів "
 
 # Circulation > Checkout Policy
 msgid ""
@@ -5231,10 +5633,12 @@ msgstr ""
 "надсилається у разі відсутності адреси бібліотеки: "
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
+#, fuzzy
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 "(відокремлювати через „|“). Якщо залишити пустим, відображатимуться всі "
 "запити МБА. Коди запитів можна знайти в категорії допустимого значення "
@@ -5259,7 +5663,7 @@ msgstr "Задіяти"
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr " модуль міжбібліотечного абонементу (головний перемикач)."
+msgstr " модуль міжбібліотечного абонементу МБА (головний перемикач)."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -5268,7 +5672,7 @@ msgid ""
 "the text displayed."
 msgstr ""
 "Додавання тексту увімкне етап оформлення авторських прав в створенні запиту. "
-"Текст, який ви введете, буде відображено."
+"Текст, який Ви введете, буде відображено."
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModuleUnmediated# Disable"
@@ -5400,11 +5804,11 @@ msgstr ", а потім список значень у дужках, розді�
 
 # Circulation > Interface
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
-msgstr "Не давати"
+msgstr "Не надавати"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Give"
-msgstr "Давати"
+msgstr "Надавати"
 
 # Circulation > Holds policy
 msgid "circulation.pref#LocalHoldsPriority# holding library"
@@ -5497,8 +5901,8 @@ msgid ""
 "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking "
 "out if the patron has guarantees owing in total more than"
 msgstr ""
-"Заборонити користувачу видачу, якщо заборгованість у користувача загалом "
-"більше ніж "
+"Заборонити користувачу видачу, якщо користувач є поручителем для осіб, "
+"загальна заборгованість яких у сумі є більша ніж"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5595,6 +5999,29 @@ msgstr ""
 "також повинен бути задіяний)."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr ""
+"користувачеві вибирати бібліотеку/підрозділ, щоб отримати з неї замовлення."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "Не дозволяти"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "Дозволити"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "Дозволити"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "Дозволити"
 
@@ -5606,7 +6033,8 @@ msgstr "Не дозволяти"
 msgid ""
 "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library "
 "to pick up a hold from."
-msgstr "користувачеві вибирати бібліотеку, щоб отримати з неї замовлення."
+msgstr ""
+"користувачеві вибирати бібліотеку/підрозділ, щоб отримати з неї замовлення."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5656,37 +6084,43 @@ msgstr ""
 "admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>“:"
 
+# Circulation > Checkin policy > StoreLastBorrower
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Не дозволяти"
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
-msgstr "Розділи"
+msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
-msgstr "типу одиниці замовлення"
+msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
-msgstr "типу одиниці замовлення"
+msgstr ""
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
+# Circulation > Holds policy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
 msgstr ""
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
-msgstr "Розділи"
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -5744,6 +6178,33 @@ msgid ""
 "circulation.pref#OverdueNoticeCalendar# when working out the period for "
 "overdue notices."
 msgstr "при обробці терміну сповіщень про прострочення."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "Блокувати"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "при обробці терміну сповіщень про прострочення."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "Використовувати календар"
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "Використовувати календар"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "джерельної бібліотеки/підрозділу примірника"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -5807,6 +6268,23 @@ msgstr ""
 "чи пошуку за користувачем."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "Дозволити"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "Не дозволяти"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "терміни обмежень."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Включати аж до"
 
@@ -5858,7 +6336,6 @@ msgid ""
 msgstr "Позначити замовлення як проблематичне, якщо воно очікує більше"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#RecallsMaxPickUpDelay# days."
 msgstr " (дні)."
 
@@ -6043,11 +6520,11 @@ msgstr "Перевіряти правила з"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
-msgstr " джерельну бібліотеку примірників "
+msgstr "джерельної бібліотеки/підрозділу примірника"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesControlBranch# patron's home library"
-msgstr " джерельну бібліотеку користувача "
+msgstr "бібліотеки/підрозділу реєстрації користувача"
 
 # Circulation > Holds Policy
 msgid ""
@@ -6187,7 +6664,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6206,7 +6683,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Stockrotation module
-#, fuzzy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
 msgstr "Приклади: <br/>"
 
@@ -6467,7 +6943,7 @@ msgid ""
 "pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 "<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного "
-"сценарію <code>misc/cronjobs/build_holds_queue.pl</code>. Попросіть "
+"сценарію „<code>misc/cronjobs/build_holds_queue.pl</code>“. Попросіть "
 "системного адміністратора запланувати його."
 
 # Circulation > Holds Policy
@@ -6598,7 +7074,7 @@ msgstr "Переміщувати"
 msgid ""
 "circulation.pref#TransferWhenCancelAllWaitingHolds# items when cancelling "
 "all waiting holds."
-msgstr "примірники при скасуванні всіх замовлень в очікуванні."
+msgstr "примірники при скасуванні усіх замовлень в очікуванні."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersBlockCirc# Block"
@@ -6790,6 +7266,13 @@ msgstr ""
 "\">CanMarkHoldsToPullAsLost</a>“)"
 
 # Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr "Кожна пара значень повинна бути в окремому рядку."
+
+# Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
 "be on a separate line."
@@ -6884,13 +7367,30 @@ msgstr "Використовувати"
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "резервування курсів."
 
-# Circulation > Course reserves
+# Circulation > Interface
 #, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "Використовувати"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "джерельна бібліотека"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "вимагати підтвердження"
+
+# Circulation > Course reserves
 msgid "circulation.pref#UseRecalls# Don't use"
 msgstr "Не використовувати"
 
 # Circulation > Course reserves
-#, fuzzy
 msgid "circulation.pref#UseRecalls# Use"
 msgstr "Використовувати"
 
@@ -6900,6 +7400,9 @@ msgid ""
 "bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
 "once enabled."
 msgstr ""
+"circulation.pref#UseRecalls# вимоги щодо повернення. Переконайтеся, що Ви "
+"налаштували <a href=\"/cgi-bin/koha/admin/smart-rules.pl\">правила обігу та "
+"штрафів</a> одразу після увімкнення вимог щодо повернення."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -6993,7 +7496,7 @@ msgid ""
 "place a hold on an item from another library"
 msgstr ""
 " користувачам з однієї бібліотеки розміщувати замовлення на примірники з "
-"іншої бібліотеки"
+"іншої бібліотеки."
 
 # Circulation > Holds policy
 msgid ""
@@ -7182,9 +7685,12 @@ msgid ""
 "prefix style"
 msgstr "Вилучити перше число зі стилю Т-префікса"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "відскановані штрих-коди примірників."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid ""
@@ -7199,15 +7705,16 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr " [% local_currency %] пені."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
-msgstr "Користувачі можуть мати лише до "
+msgstr "Користувачі можуть мати максимум"
 
 # Circulation > Holds policy > maxreserves
 msgid ""
 "circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
 "disable). Additional limits may apply based on circulation rules."
 msgstr ""
+"замовлень водночас (залиште поле порожнім або встановіть значення 0, щоб "
+"вимкнути). На основі правил обігу можуть застосовуватися додаткові обмеження."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -7373,7 +7880,7 @@ msgstr "RecordedBooks"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref Syndetics"
-msgstr "Syndetics.com"
+msgstr "Syndetics"
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref Tagging"
@@ -7561,7 +8068,7 @@ msgid ""
 "enhanced_content.pref#BakerTaylorUsername# Access Baker and Taylor using "
 "username"
 msgstr ""
-"Мати доступ до „<a href=\"http://www.btol.com/\">Бейкер & Тейлор</a>“, "
+"Доступ до „<a href=\"http://www.btol.com/\">Бейкер & Тейлор</a>“, "
 "використовуючи ім’я користувача "
 
 # Enhanced content > Baker and Taylor
@@ -7591,12 +8098,8 @@ msgid ""
 msgstr "Використовувати код клієнта "
 
 # Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Відображати"
-
-# Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
-msgstr "Не відображати"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
+msgstr "Не показувати"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7612,6 +8115,10 @@ msgid ""
 msgstr ""
 "Або ж Ви можете використовувати такий синтаксис, щоб вказати значення поле"
 "$підполе: {поле$підполе}. Наприклад, {024$a}."
+
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Показувати"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7666,7 +8173,7 @@ msgid ""
 "enhanced_content.pref#GoogleJackets# cover images from Google Books to "
 "search results and item detail pages on the OPAC."
 msgstr ""
-" обкладинки з „<a href=\"http://books.google.com.ua/\">Google Книги</a>“ в "
+" обкладинки з „<a href=\"https://books.google.com.ua/\">Google Книги</a>“ в "
 "результати пошуку та на сторінки подробиць запису у електронному каталозі."
 
 # Enhanced content > HTML5 media
@@ -7845,8 +8352,8 @@ msgid ""
 "enhanced_content.pref#LibraryThingForLibrariesID# Access Library Thing for "
 "Libraries using the customer ID"
 msgstr ""
-"Мати доступ до „<a href=\"http://www.librarything.com/forlibraries\">Library "
-"Thing для бібліотек</a>“,  використовуючи ідентифікатор клієнта "
+"Доступ до „<a href=\"http://www.librarything.com/forlibraries\">Library "
+"Thing для бібліотек</a>“ за допомогою ідентифікатора клієнта "
 
 # Enhanced Content > Library Thing
 msgid ""
@@ -7867,12 +8374,12 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "у вкладках"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Відображати"
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
+msgstr "Не показувати"
 
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
-msgstr "Не відображати"
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Показувати"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7982,31 +8489,27 @@ msgid "enhanced_content.pref#NovelistSelectView# ."
 msgstr "."
 
 # Enhanced content > HTML5 media
-#, fuzzy
 msgid ""
 "enhanced_content.pref#NovelistSelectView# Display Novelist Select content"
-msgstr "Відображати вміст Novelist Select у бібліотечному інтерфейсі"
+msgstr "Відображати вміст „Novelist Select“"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid "enhanced_content.pref#NovelistSelectView# above the holdings table"
-msgstr "над таблицею даних про наявність"
+msgstr "над таблицею наявності примірників"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid "enhanced_content.pref#NovelistSelectView# below the holdings table"
-msgstr "нижче таблиці даних про наявність"
+msgstr "під таблицею наявності примірників"
 
 # Enhanced Content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectView# in an OPAC tab"
 msgstr "у вкладці електронного каталогу"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid ""
 "enhanced_content.pref#NovelistSelectView# under the Save Record dropdown, on "
 "the right"
-msgstr "у вкладці електронного каталогу"
+msgstr "нижче спадного меню „Зберегти запис“, праворуч"
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#OPACAmazonCoverImages# Don't show"
@@ -8039,12 +8542,12 @@ msgid ""
 msgstr " інші видання одиниці у електронному каталозі."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Відображати"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
+msgstr "Не показувати"
 
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
-msgstr "Не відображати"
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Показувати"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8085,7 +8588,7 @@ msgstr ""
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibrarySearch# Don't show"
-msgstr "Не показувати "
+msgstr "Не показувати"
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibrarySearch# Show"
@@ -8117,7 +8620,7 @@ msgstr "Автентифікація за допомогою OverDrive Authname 
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#OverDriveCirculation# A password is"
-msgstr "Пароль є"
+msgstr "Пароль"
 
 # Enhanced Content > Coce Cover images cache
 msgid "enhanced_content.pref#OverDriveCirculation# Don't enable"
@@ -8128,55 +8631,51 @@ msgid "enhanced_content.pref#OverDriveCirculation# Enable"
 msgstr "Задіювати"
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# If you enable access you must "
 "have a SIP connection registered with"
-msgstr "Пароль є"
+msgstr ""
+"Якщо Ви задієте доступ, Ви повинні мати SIP-з’єднання, зареєстроване в "
 
 # Enhanced Content > Coce Cover images cache
-#, fuzzy
 msgid "enhanced_content.pref#OverDriveCirculation# Not required"
-msgstr "Не задіювати"
+msgstr "не вимагається"
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# OverDrive for patron "
 "authentication against Koha"
-msgstr "імʼя користувача"
+msgstr "OverDrive для автентифікації користувача замість в Коха."
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid "enhanced_content.pref#OverDriveCirculation# Overdrive uses the patron's"
-msgstr "імʼя користувача"
+msgstr "Overdrive використовує користувацькі "
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid "enhanced_content.pref#OverDriveCirculation# Required"
-msgstr "імʼя користувача"
+msgstr "вимагається"
 
 # Enhanced Content > Coce Cover images cache
 msgid "enhanced_content.pref#OverDriveCirculation# cardnumber"
-msgstr "номер квитка користувача"
+msgstr "номери квитків користувачів"
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# for user access to OverDrive. "
 "<br />"
-msgstr "імʼя користувача"
+msgstr "для доступу користувачів до OverDrive. <br />"
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#OverDriveCirculation# user name"
-msgstr "імʼя користувача"
+msgstr "логіни користувачів"
 
 # Enhanced Content > Baker and Taylor
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive "
 "circulation history, and circulate items.<br />"
-msgstr "Пароль є"
+msgstr ""
+"доступ користувачів до їхньої історії обігів на OverDrive та можливість "
+"обігу примірників.<br />"
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -8198,11 +8697,10 @@ msgid "enhanced_content.pref#OverDriveLibraryID# ."
 msgstr "."
 
 # Enhanced Content > Open Library
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive "
 "catalog of library #"
-msgstr "."
+msgstr ""
 
 # Enhanced Content > Open Library
 msgid "enhanced_content.pref#OverDriveWebsiteID# ."
@@ -8279,8 +8777,7 @@ msgstr "Використовувати код клієнта "
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsClientCode# to access Syndetics."
-msgstr ""
-" для доступу до <a href=\"http://www.bowker.com/syndetics/\">Syndetics</a>."
+msgstr " для доступу до Syndetics."
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# Don't show"
@@ -8541,8 +9038,58 @@ msgstr ""
 "op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a>“ "
 "увімкнено). Це окремо від Library Things для Бібліотек."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "Серіальні видання"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "Інтерфейс"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "Вимкнути"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "Задіяти"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "Задіяти"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "Інтернаціоналізація/локалізація"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "Інтернаціоналізація/локалізація"
 
 # I18N/L10N
@@ -8744,6 +9291,11 @@ msgid "local_use.pref"
 msgstr "Місцеве використання"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "Місцеве використання"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "Ще нічого не означено."
 
@@ -8866,15 +9418,13 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Не виводити"
 
 # Logging > Debugging
+#, fuzzy
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
-"дамп пошукового запиту як параметр шаблону, для видимості вимагає включення "
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[інтерфейс]."
+"дамп усіх змінних шаблонізатора „Template Toolkit“ як коментарі у HTML для "
+"бібліотечного інтерфейсу."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -8989,12 +9539,10 @@ msgid "logs.pref#NoticesLog# Log"
 msgstr "Записувати у журнал"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Don't log"
 msgstr "Не записувати у журнал"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Log"
 msgstr "Записувати у журнал"
 
@@ -9033,7 +9581,7 @@ msgstr "при створені/зміні чи вилучені звітів."
 
 # Logging > Logging
 msgid "logs.pref#ReturnLog# Don't log"
-msgstr "Не записувати у журнал "
+msgstr "Не записувати у журнал"
 
 # Logging > Logging
 msgid "logs.pref#ReturnLog# Log"
@@ -9045,7 +9593,7 @@ msgstr " при поверненні примірників."
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
-msgstr "Не записувати у журнал "
+msgstr "Не записувати у журнал"
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# Log"
@@ -9098,6 +9646,11 @@ msgstr "Самореєстрація та зміни"
 # OPAC > Shelf browser
 msgid "opac.pref Shelf browser"
 msgstr "Оглядач полиці"
+
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "Дозволити"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -9154,7 +9707,7 @@ msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
-msgstr "Використовувати системний номер користувача "
+msgstr "Використовувати системний номер користувача (borrowernumber)"
 
 # OPAC > Privacy
 msgid ""
@@ -9163,6 +9716,31 @@ msgid ""
 msgstr ""
 " для анонімного користувача (для анонімних пропозицій на придбання та "
 "історії видач)."
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Опції:<ul><li>введіть шлях для визначення xslt-файлу</li><li>додайте "
+"URL-адресу зовнішньої таблиці стилів.</li></ul>{langcode} буде замінено "
+"поточною мовою інтерфейсу, а {authtypecode} буде замінено кодом типу "
+"авторитетного джерела"
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+"Відображати результати пошуку серед авторитетних джерел в інтерфейсі "
+"бібліотекаря за допомогою таблиці XSLT-стилів за адресою: "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -9210,14 +9788,14 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a>"
 msgstr ""
-"<br/><a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpenURLResolverURL\">OpenURLResolverURL</a>, <a href="
+"<br/>„<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLResolverURL\">OpenURLResolverURL</a>“, „<a href="
 "\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACShowOpenURL"
-"\">OPACShowOpenURL</a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACOpenURLItemTypes\">OPACOpenURLItemTypes</a>, <a "
+"\">OPACShowOpenURL</a>“, „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACOpenURLItemTypes\">OPACOpenURLItemTypes</a>“, „<a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLText"
-"\">OpenURLText</a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpenURLImageLocation\">OpenURLImageLocation</a>"
+"\">OpenURLText</a>“, „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLImageLocation\">OpenURLImageLocation</a>“"
 
 # OPAC > Appearance
 msgid ""
@@ -9258,6 +9836,49 @@ msgstr ""
 "значки та описи формату, цільової аудиторії і типу одиниць у виводі XSLT "
 "MARC21 на сторінках результатів пошуку і подробиць в електронному каталозі."
 
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+"Якщо Ви вибрали „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggesitions</a>“, потрібно також ввести дійсну адресу "
+"електронної пошти: "
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr ""
+"Виберіть адресу електронної пошти, на яку надсилатимуться нові пропозиції "
+"про придбання: "
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "EmailAddressForSuggestions"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "KohaAdminEmailAddress"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "електронна адреса підрозділу"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "Дозволити"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "Не зберігати"
@@ -9272,7 +9893,7 @@ msgstr " історію пошуків користувача в електро�
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
-msgstr "Показувати "
+msgstr "Показувати"
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# as the name of the library on the OPAC."
@@ -9303,12 +9924,12 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr ") на протязі стількох днів: "
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Показувати"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Не показувати"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Не показувати"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Показувати"
 
 # OPAC > Features
 msgid ""
@@ -9317,6 +9938,37 @@ msgid ""
 msgstr ""
 " інформацію про надходження на сторінці подробиць бібліографічного запису в "
 "електронному каталозі."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "Дозволити"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "Не дозволяти"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# Staff Client > Options
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr ""
+"ім’я користувача, який випозичає примірник на сторінках подробиць про "
+"примірники в електронному каталозі."
 
 # OPAC > Appearance
 msgid ""
@@ -9363,37 +10015,36 @@ msgstr ""
 "електронному каталозі."
 
 # OPAC > Policy > OPACFineNoRenewalsIncludeCredits
-#, fuzzy
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
 "option must be turned on."
 msgstr ""
-"непогашені/незастосовані кредити під час застосування правила „<a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
-"\">OPACFineNoRenewals</a>“ до користувачів."
+"Примітка: необхідно увімкнути відповідний параметр „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a>“."
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an "
 "image on: "
-msgstr ""
+msgstr "Відображати URI-посилання з підполя 856^u як зображення: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# both detail and result pages"
-msgstr ""
+msgstr "на сторінці подробиць про бібзапис та на сторінці результатів пошуку"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "на сторінці подробиць про бібзапис"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
 msgstr ""
+"ні на сторінці подробиць про бібзапис, ні на сторінці результатів пошуку"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "на сторінці результатів пошуку"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -9480,11 +10131,11 @@ msgstr "Перший стовпчик таблиці"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# Holding library"
-msgstr "Бібліотека тимч. зберігання/видачі"
+msgstr "Бібліотека тимч. зберігання / видачі"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# Home library"
-msgstr "Джерельна бібліотека"
+msgstr "Джерельна бібліотека/підрозділ"
 
 # OPAC > Appearance
 msgid ""
@@ -9535,6 +10186,8 @@ msgid ""
 "opac.pref#OPACNoResultsFound# <br />Note: You can insert placeholders "
 "{QUERY_KW} that will be replaced with the keywords of the query."
 msgstr ""
+"<br />Примітка: Ви можете вставити заповнювачі {QUERY_KW}, які буде замінено "
+"ключовими словами запиту."
 
 # OPAC > Appearance
 msgid ""
@@ -9586,17 +10239,16 @@ msgstr ""
 "музичні написи на сторінках подробиць про бібзаписи в електронному каталозі."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACPlayMusicalInscripts# Play"
-msgstr "Показувати"
+msgstr ""
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Показувати"
-
-# OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
 msgstr "Не показувати"
+
+# OPAC > Features
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Показувати"
 
 # OPAC > Features
 msgid ""
@@ -9606,7 +10258,7 @@ msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# Allow"
-msgstr "Дозволяти"
+msgstr "Дозволити"
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# Don't allow"
@@ -9696,23 +10348,26 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
-msgstr "джерельної бібліотеки"
+msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
-msgstr "джерельної бібліотеки"
+msgstr ""
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch"
-msgstr "джерельної бібліотеки"
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgstr "поточної бібліотеки"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgstr "поточної бібліотеки"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr "поточної бібліотеки"
 
 # OPAC > Appearance
@@ -9724,10 +10379,11 @@ msgstr ""
 "електронному каталозі: "
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br />Примітка: позначки-заповнювачі {BIBLIONUMBER}, {CONTROLNUMBER}, "
 "{TITLE}, {ISBN}, {ISSN} та {AUTHOR} будуть замінені на інформацію з "
@@ -9953,6 +10609,8 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+"для зареєстрованого користувача зведення щодо видач, прострочень, замовлень "
+"та стягнень на початковій сторінці електронного каталогу."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -9976,14 +10634,11 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
 "виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10007,17 +10662,14 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
-"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
-"системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">\" для виводу за "
+"умовчанням</li><li>ввести шлях для визначення xslt-файлу</li><li>ввести URL-"
+"адресу для зовнішньої таблиці стилів.</li><li>Примітка: системний параметр "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
 "задіяний, якщо у Вашій таблиці стилів використовуються дані з примірникових "
 "полів</li></ul>Якщо у Вас є декілька таблиць стилів для різних мов, "
@@ -10041,11 +10693,11 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
 "виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -10179,20 +10831,19 @@ msgstr "Підтипи"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>На даний час підтримуються значення</em>: типи одиниць "
 "(<strong>itemtypes</strong>), види зібрань (<strong>ccode</strong>) та "
 "загальне розташування полиці (<strong>loc</strong>)."
 
 # Searching > Search Form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
 msgstr ""
-"Показувати вкладки в детальнішому пошуку електронного каталогу та інтерфейсу "
-"бібліотекаря для обмеження пошуку за категоріями "
+"Показувати вкладки в детальнішому пошуку електронного каталогу для обмеження "
+"пошуку за"
 
 # Searching > Search form
 #, fuzzy
@@ -10200,8 +10851,8 @@ msgid ""
 "opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
 msgstr ""
-" (значення відокремлювати „|“). Вкладки з’являтимуться у зазначеному порядку."
-"<br/>"
+" (значення відокремлювати \"|\"). Вкладки з’являтимуться у зазначеному "
+"порядку.<br/>"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
@@ -10273,7 +10924,7 @@ msgstr "Увімкнути"
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "інтерфейс для перегляду усіх фондів (лише для Elasticsearch)."
 
 # OPAC > Features
 msgid ""
@@ -10376,7 +11027,7 @@ msgid ""
 "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete "
 "URL, starting with <code>http://</code>.)"
 msgstr ""
-" на <a href=\"http://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для "
+" на <a href=\"https://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для "
 "електронного каталогу (має бути повною URL-адресою, що починається з "
 "<code>http://</code>)."
 
@@ -10393,10 +11044,11 @@ msgstr ""
 "\">Koha вікі</a>."
 
 # OPAC > Policy > OpacHiddenItemsExceptions
+#, fuzzy
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "Перелік категорій користувачів, розділених символом „|“, які можуть бачити "
 "записи, приховані відповідно „<a href='/cgi-bin/koha/admin/preferences.pl?"
@@ -10591,15 +11243,11 @@ msgid ""
 msgstr ""
 
 # OPAC > OpenURL > OpenURLText
-#, fuzzy
 msgid ""
 "opac.pref#OpacMaintenanceNotice# Show the following HTML when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
 msgstr ""
-"Текст посилань OpenURL (або заголовок зображення, якщо <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
-"\">OpenURLImageLocation</a> визначено):"
 
 # OPAC > Features
 #, fuzzy
@@ -10619,13 +11267,13 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Показувати"
-
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr "Не показувати"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Показувати"
 
 # OPAC > Appearance
 msgid ""
@@ -10636,16 +11284,17 @@ msgstr ""
 "каталозі."
 
 # Administration > Interface options
-msgid "opac.pref#OpacNoItemTypeImages# No"
-msgstr "ні"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "Показувати піктограми типів одиниць в електронному каталозі: "
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "Не показувати"
 
 # Administration > Interface options
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "так"
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Показувати"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "Показувати піктограми типів одиниць в електронному каталозі: "
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10676,18 +11325,20 @@ msgid ""
 "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires "
 "authentication before accessing the OPAC. "
 msgstr ""
+"електронний каталог Коха як загальнодоступний. Приватний електронний вимагає "
+"автентифікації перед доступом до електронного каталогу."
 
 # OPAC > Policy > OPACFineNoRenewalsIncludeCredits
-#, fuzzy
 msgid ""
 "opac.pref#OpacPublic# Note: This does not affect the public API, see the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RESTPublicAnonymousRequests"
 "\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
-"непогашені/незастосовані кредити під час застосування правила „<a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
-"\">OPACFineNoRenewals</a>“ до користувачів."
+"Примітка: це не впливає на загальнодоступний API, перегляньте „<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RESTPublicAnonymousRequests"
+"\">RESTPublicAnonymousRequests</a>“ для керування API."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -10792,16 +11443,14 @@ msgid "opac.pref#OpacShowRecentComments# Show"
 msgstr "Показувати"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OpacShowRecentComments# a link to recent comments in the OPAC "
 "masthead."
-msgstr "користувачам коментувати записи на примірники в електронному каталозі."
+msgstr ""
 
 # OPAC > Advanced search options
-#, fuzzy
 msgid "opac.pref#OpacStarRatings# Show star-ratings on"
-msgstr "Показувати параметри пошуку: "
+msgstr ""
 
 # OPAC > Advanced search options
 #, fuzzy
@@ -10888,12 +11537,12 @@ msgid "opac.pref#OpenURLImageLocation# Location of image for OpenURL links:"
 msgstr "Розташування зображення для посилань OpenURL:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLResolverURL# Complete URL of OpenURL resolver (starting "
 "with <code>http://</code> or <code>https://</code>):"
 msgstr ""
-"<br />Має бути повною URL-адресою, що починається з <code>http://</code> чи "
+"Повна URL-адреса розв’язувача OpenURL (починається з <code>http://</code> "
+"або <code>https://</code>):"
 
 # OPAC > OpenURL > OpenURLText
 msgid ""
@@ -11108,12 +11757,13 @@ msgid ""
 msgstr "Якщо порожньо, відображатимуться усі підрозділи/бібліотеки."
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "Відображати та попередньо заповнювати"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Не відображати та попередньо не заповнювати"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "Не відображати та попередньо не заповнювати"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Показувати та попередньо заповнювати"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11302,8 +11952,8 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "імʼя користувача (логін)"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "Приховувати"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "Не показувати"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11454,15 +12104,32 @@ msgid ""
 msgstr "користувачам входити у свої облікові записи в електронному каталозі."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "Дозволити"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "Не дозволяти"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "Дозволити"
+
+# Administration > Google OpenID Connect
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"Разом з <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"задіює <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr "користувачам вносити пропозиції на придбання в електронному каталозі."
 
 # Patrons
@@ -11728,6 +12395,11 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
+"Якщо номер квитка користувача (<code>cardnumber</code>) включено до переліку "
+"„<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a>“, "
+"мінімальна довжина, якщо тут не вказано, за умовчанням дорівнює одиниці. "
+"Максимальна довжина не може перевищувати розмір поля бази даних 32."
 
 # Patrons > Patron forms
 msgid ""
@@ -11862,13 +12534,16 @@ msgid ""
 "default fields to be used during a patron search using the \"standard\" "
 "option:"
 msgstr ""
+"Розділений комами перелік, що визначає поля за умовчанням, які будуть "
+"використовуватися під час пошуку користувачів при використанні поля пошуку "
+"„стандартно“:"
 
 # Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 
 # Patrons > General
@@ -11888,31 +12563,33 @@ msgstr ""
 "запису користувача."
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Don't enable"
 msgstr "Не задіювати"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Задіяти"
 
 # Patrons > Security > EnableExpiredPasswordReset
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
 msgstr ""
+"Якщо не задіяно, користувачі повинні використовувати функцію „Забули свій "
+"пароль“ або звертатися до персоналу"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#EnableExpiredPasswordReset# reset their password."
-msgstr " символів."
+msgstr "щоб скинути всій пароль."
 
 # Patrons > Security > EnableExpiredPasswordReset
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# the ability for patrons to directly "
 "reset their password when it is expired."
 msgstr ""
+"можливість користувачам безпосередньо скидати свій пароль, коли він "
+"прострочений."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12022,20 +12699,19 @@ msgstr ""
 "електронна адреса користувача не визначена."
 
 # Patrons > Norwegian patron database
-#, fuzzy
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
-msgstr "категорія користувача"
+msgstr "Здійснювати"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#FeeOnChangePatronCategory# Don't"
-msgstr "Не дозволяти"
+msgstr "Не здійснювати"
 
 # Patrons > General
 msgid ""
 "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron changes "
 "to a category with an enrollment fee."
 msgstr ""
+"стягнення оплати, коли користувач змінює категорію з платою за реєстрацію."
 
 # Patrons > Privacy
 msgid ""
@@ -12076,25 +12752,60 @@ msgstr "заставляти"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr "допустимо"
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
-"<br><strong>Примітка: </strong> Для цього системного параметра необхідне "
-"виконання сценарію <code>misc/cronjobs/cleanup_database.pl</code> у "
+"<br><strong>Примітка: </strong> для цього системного параметра необхідне "
+"виконання сценарію „<code>misc/cronjobs/cleanup_database.pl</code>“ у "
 "періодичних завданнях (cronjob). Попросіть системного адміністратора "
 "запланувати його."
 
 # Patrons > General > LockExpiredDelay
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
-msgstr ""
+msgstr "Блокувати користувачів зі завершеним терміном реєстрації після"
 
 # Patrons > General > LockExpiredDelay
 msgid ""
 "patrons.pref#LockExpiredDelay# days. Leave empty to disable this behavior."
-msgstr ""
+msgstr "днів. Залиште пустим, щоб вимкнути таку поведінку."
 
 # Patrons > General
 msgid ""
@@ -12146,6 +12857,23 @@ msgstr ""
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "поточну дату"
 
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "Не дозволяти"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "Дозволити"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr "щоб скинути всій пароль."
+
 # Patrons > Patron forms
 msgid ""
 "patrons.pref#PatronDuplicateMatchingAddFields# The following <a href='http://"
@@ -12164,14 +12892,13 @@ msgstr ""
 "нового користувача."
 
 # Patrons > Patron forms
-#, fuzzy
 msgid ""
 "patrons.pref#PatronQuickAddFields# The following <a href='http://schema.koha-"
 "community.org/__VERSION__/tables/borrowers.html' target='blank'>database "
 "columns</a>:"
 msgstr ""
 "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/"
-"borrowers.html' target='blank'>стовпці бази даних</a>: "
+"borrowers.html' target='blank'> стовпці бази даних</a>: "
 
 # Patrons > Patron forms
 msgid ""
@@ -12180,6 +12907,10 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
+"будуть додані до форми швидкого додавання користувача під час реєстрації "
+"нового користувача. Відображатимуться лише обов’язкові поля та поля, вказані "
+"тут. Якщо доступно, також буде показана форма додавання поручителя, тоді "
+"окремі поля у цій формі ігноруватимуться."
 
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
@@ -12190,7 +12921,6 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
 msgstr " на сторінку в інтерфейсі бібліотекаря."
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# <br/><i class=\"fa fa-exclamation-triangle"
 "\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -12199,11 +12929,11 @@ msgid ""
 "op=search&searchfield=TalkingTechItivaPhoneNotification"
 "\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
-"останнього користувача, який повернув примірник. Цей параметр не залежить "
-"від системних параметрів „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a>“ та „<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Якщо „<a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a>“ увімкнено, „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a>“ має бути вимкнено."
 
 # Patrons > Privacy
 msgid "patrons.pref#PhoneNotification# Disable"
@@ -12218,6 +12948,8 @@ msgid ""
 "patrons.pref#PhoneNotification# patron phone notifications generation. A "
 "plugin will be required to process the phone notifications."
 msgstr ""
+"генерацію сповіщень на телефон користувача. Для обробки телефонних сповіщень "
+"потрібен додаток."
 
 # Patrons > Patron forms
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address"
@@ -12387,8 +13119,9 @@ msgid ""
 "make sure that this page is not blocked.)"
 msgstr ""
 "щоб послатися на Ваші локальні правила конфіденційності в повідомленнях про "
-"конфіденційність та захист даних (якщо Ви застосовуєте правила GDPR, "
-"переконайтесь, що ця сторінка не заблокована)."
+"конфіденційність та захист даних (якщо Ви застосовуєте правила GDPR "
+"(Загальний регламент захисту даних), переконайтесь, що ця сторінка не "
+"заблокована)."
 
 # Patrons > General
 msgid ""
@@ -12553,6 +13286,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "надійний пароль для персоналу та відвідувачів"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > General
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12567,26 +13307,26 @@ msgstr "Використовувати драйвер „SMS::Send::"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
-msgstr "“ для відсилання SMS-повідомлень."
+msgstr "\" для відсилання SMS-повідомлень."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# . Override from address with"
-msgstr ""
+msgstr ". Перевизначення адреси відправника"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#SMSSendUsername# Define a username/login"
-msgstr "“ для відсилання SMS-повідомлень."
+msgstr "Встановлення імені користувача (логін)"
 
 # Patrons > Norwegian patron database
-#, fuzzy
 msgid "patrons.pref#SMSSendUsername# and a password"
-msgstr " та пароль"
+msgstr "та пароля"
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendUsername# for emails sent using \"Email\" send driver."
 msgstr ""
+"для електронних листів, надісланих за допомогою драйвера надсилання "
+"„електронна пошта“."
 
 # Patrons > General
 msgid ""
@@ -12594,7 +13334,6 @@ msgid ""
 msgstr "Якщо пусто, за умовчанням є значення: location|itype|ccode"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#StatisticsFields# Show the following fields from the items "
 "database table as columns on the statistics tab on the patron record: "
@@ -12603,7 +13342,6 @@ msgstr ""
 "на вкладці статистики в записі про користувача: "
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "patrons.pref#TalkingTechItivaPhoneNotification# <br/><i class=\"fa fa-"
 "exclamation-triangle\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -12612,19 +13350,18 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PhoneNotification"
 "\">PhoneNotification</a> should be disabled."
 msgstr ""
-"останнього користувача, який повернув примірник. Цей параметр не залежить "
-"від системних параметрів „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a>“ та „<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Якщо „<a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a>“ увімкнено, „<a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a>“ має бути вимкнено."
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr "Вимкнути"
 
 # Circulation > Stock rotation module
-#, fuzzy
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr "Увімкнути"
 
@@ -12634,30 +13371,32 @@ msgid ""
 "using Talking Tech i-tiva (overdues, predues and holds notices currently "
 "supported)."
 msgstr ""
+"телефонні сповіщення користувачів за допомогою служби „Talking Tech i-"
+"tiva“ (наразі підтримуються сповіщення про прострочення, замовлення та "
+"попередження про терміни)."
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#TrackLastPatronActivity# Do"
-msgstr "Перевіряти"
+msgstr "Відстежувати"
 
 # Patrons > General
-#, fuzzy
 msgid "patrons.pref#TrackLastPatronActivity# Don't"
-msgstr "Не задіювати"
+msgstr "Не відстежувати"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
 "logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
 "out the borrowers.lastseen will update with the current date and time."
 msgstr ""
-"Щоразу, коли користувач підключатимиться, значення „borrowers.lastseen“ буде "
-"оновлено поточним часом."
+"Перший раз кожного дня, коли користувач вперше входить в електронний "
+"каталог, підключається до Koha через SIP чи ILS-DI або здійснюється видача "
+"примірника, значення „borrowers.lastseen“ буде оновлено поточними датою і "
+"часом."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
-msgstr ""
+msgstr "останню активність користувача."
 
 # Patrons > Privacy
 msgid ""
@@ -12686,12 +13425,10 @@ msgid ""
 msgstr ""
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#UseEmailReceipts# Don't send"
 msgstr "Не надсилати"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#UseEmailReceipts# Send"
 msgstr "Надсилати"
 
@@ -12699,7 +13436,7 @@ msgstr "Надсилати"
 msgid ""
 "patrons.pref#UseEmailReceipts# email receipts to patrons for payments and "
 "writeoffs."
-msgstr ""
+msgstr "користувачам електронною поштою квитанції про оплати та списання."
 
 # Patrons > Patron forms
 msgid ""
@@ -12737,12 +13474,12 @@ msgstr ""
 "26345000012941, тоді це поле автоматично міститиме 26345000012942)."
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#borrowerRelationship# (input multiple choices separated by |). "
 "Leave empty to deactivate."
 msgstr ""
-"(введіть кілька варіантів, розділених „|“). Для деактивації залиште порожнім."
+"(введіть кілька варіантів, розділених вертикальною рискою „|“). Для "
+"деактивації залиште порожнім."
 
 # Patrons > Patron relationships
 msgid ""
@@ -12759,15 +13496,14 @@ msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "Не дозволяти"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#intranetreadinghistory# staff to access a patron's checkout and "
 "hold history (checkout history is still stored, regardless of staff being "
 "allowed access or not)."
 msgstr ""
 "працівникам бібліотеки мати доступ до історії видач та замовлень користувача "
-"(історія читання все ще зберігається, незалежно від того, працівникам надано "
-"доступ чи ні)."
+"(історія читання все ще зберігається, незалежно від того, надано доступ "
+"працівникам чи ні)."
 
 # Patrons > General
 msgid ""
@@ -12790,12 +13526,12 @@ msgid "patrons.pref#patronimages# Don't allow"
 msgstr "Не дозволяти"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#patronimages# images to be uploaded and shown for patrons on "
 "the staff interface."
 msgstr ""
-"вивантажувати і відображати світлини користувачів у бібліотечному інтерфейсі."
+"вивантажувати та відображати зображення користувачів у бібліотечному "
+"інтерфейсі."
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# Do"
@@ -12831,7 +13567,7 @@ msgstr "Пошуки"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref Did you mean/spell checking"
-msgstr "Ви мали на увазі / перевірку правопису"
+msgstr "Ви мали на увазі / перевірка орфографії"
 
 # Searching > Features
 msgid "searching.pref Features"
@@ -12870,20 +13606,19 @@ msgstr "Обмежити мови, перелічені в спадному ме
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>На даний час підтримуються значення</em>: типи одиниць "
 "(<strong>itemtypes</strong>), види зібрань (<strong>ccode</strong>) та "
 "загальне розташування полиці (<strong>loc</strong>)."
 
 # Searching > Search Form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the staff interface "
 "advanced search for limiting searches on the"
 msgstr ""
-"Показувати вкладки в детальнішому пошуку електронного каталогу та інтерфейсу "
-"бібліотекаря для обмеження пошуку за категоріями "
+"Показувати вкладки в детальнішому пошуку інтерфейсу бібліотекаря для "
+"обмеження пошуку за "
 
 # Searching > Search form
 msgid ""
@@ -12907,32 +13642,29 @@ msgstr ""
 "koha/admin/preferences.pl?op=search&searchfield=item-level_itypes\">item-"
 "level_itypes</a>“ встановлено на бібліографічний запис."
 
-# Searching > Results Display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Відображати"
-
 # Searching > Features
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "Не відображати"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Не показувати"
+
+# Searching > Results Display
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Показувати"
 
 # OPAC > Features
-#, fuzzy
 msgid "searching.pref#BrowseResultSelection# Disable"
 msgstr "Вимкнути"
 
 # OPAC > Features
-#, fuzzy
 msgid "searching.pref#BrowseResultSelection# Enable"
 msgstr "Увімкнути"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
-"перегляд та гортання результатів пошуку на сторінці подробиць про запис у "
-"електронному каталозі."
+"перегляд та гортання результатів пошуку на сторінці подробиць про бібзапис у "
+"інтерфейсі бібліотекаря."
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -12981,20 +13713,20 @@ msgid "searching.pref#EnableSearchHistory# Keep"
 msgstr "Зберігати"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
-msgstr " історію пошуків користувача в електронному каталозі."
+msgstr " історію пошуків користувача в інтерфейсі бібліотекаря."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "Обмежувати довжину граней пошуку до "
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr " символів, у електронному каталозі та інтерфейсі бібліотекаря."
 
 # Searching > Results display
@@ -13052,8 +13784,8 @@ msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
-"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання "
-"стандартним номером в інтерфейсі бібліотекаря."
+"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання та будь-"
+"яким стандартним номером в інтерфейсі бібліотекаря."
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -13063,16 +13795,15 @@ msgstr "використовувати"
 msgid ""
 "searching.pref#LibrisKey# Can be obtained at http://api.libris.kb.se/"
 "bibspell."
-msgstr ""
+msgstr "Можна отримати за адресою http://api.libris.kb.se/bibspell."
 
 # Searching > Did you mean/spell checking
-#, fuzzy
 msgid "searching.pref#LibrisKey# LIBRIS Spellchecking API key"
-msgstr "Ви мали на увазі / перевірку правопису"
+msgstr "Ключ API перевірки орфографії LIBRIS"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref#LibrisKey# Swedish service for spellchecking.<br/>"
-msgstr ""
+msgstr "Шведська служба перевірки орфографії.<br/>"
 
 # Enhanced Content > Adlibris
 #, fuzzy
@@ -13086,21 +13817,20 @@ msgid ""
 msgstr ""
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
-msgstr "Не зберігати"
+msgstr "Додавати"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't add"
-msgstr "Не зберігати"
+msgstr "Не додавати"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
-msgstr " історію пошуків користувача в електронному каталозі."
+msgstr ""
+"історію пошуку незареєстрованого користувача до історії пошуків користувача, "
+"що увійшов в систему наступним."
 
 # Searching > Results display
 msgid ""
@@ -13126,26 +13856,22 @@ msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
 msgstr ""
 
 # Searching > Search Form
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# By default,"
 msgstr "За умовчанням, "
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# don't use"
 msgstr "не використовувати"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
-"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання "
-"стандартним номером в інтерфейсі бібліотекаря."
+"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання та будь-"
+"яким стандартним номером в електронному каталозі."
 
 # Searching > Search form
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
 msgstr "використовувати"
 
@@ -13157,7 +13883,7 @@ msgstr ", "
 msgid ""
 "searching.pref#OPACdefaultSortField# By default, sort search results in the "
 "OPAC by"
-msgstr "За умовчанням сортувати результати пошуку в ЕК за"
+msgstr "За умовчанням сортувати результати пошуку в електронному каталозі за"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# ascending."
@@ -13204,46 +13930,48 @@ msgid "searching.pref#OPACdefaultSortField# total number of checkouts"
 msgstr "загальною кількістю видач"
 
 # Searching > Search form
-#, fuzzy
 msgid "searching.pref#OPACnumSearchResults# By default, show"
-msgstr "За умовчанням "
+msgstr "За умовчанням, показувати"
 
 # OPAC > Features
-#, fuzzy
 msgid "searching.pref#OPACnumSearchResults# results per page in the OPAC."
-msgstr " результатів пошуку у RSS-стрічку."
+msgstr "результатів пошуку на сторінку в електронному каталозі."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#OPACnumSearchResultsDropdown# Don't show"
 msgstr "Не показувати"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#OPACnumSearchResultsDropdown# Show"
 msgstr "Показувати"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
-msgstr " записів з результатів пошуку."
-
-# Searching > Search Form
-#, fuzzy
-msgid "searching.pref#PassItemMarcToXSLT# Do"
-msgstr "Пошукова форма"
-
-# Searching > Features
-#, fuzzy
-msgid "searching.pref#PassItemMarcToXSLT# Don't"
-msgstr "Не зберігати"
+msgstr ""
+"спадний список кількості бізаписів на сторінку в результатах пошуку "
+"електронного каталогу."
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
+# Searching > Search Form
+msgid "searching.pref#PassItemMarcToXSLT# Do"
+msgstr "Робити"
+
+# Searching > Features
+msgid "searching.pref#PassItemMarcToXSLT# Don't"
+msgstr "Не робити"
+
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -13281,7 +14009,6 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Намагатися "
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
@@ -13290,22 +14017,20 @@ msgid ""
 msgstr ""
 " добирати подібно написані слова у пошуку (наприклад, пошук за <cite>flang</"
 "cite> також буде відповідати <cite>flange</cite> та <cite>fang</cite>; "
-"потребує рушія Zebra)."
+"наразі це стосується лише пошуку з рушієм Zebra. Будь-який термін пошуку з "
+"Elasticsearch можна зробити нечітким, додавши ~ безпосередньо після терміна)."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
-msgstr "Не намагатися "
+msgstr "Не виконувати екранування"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#QueryRegexEscapeOptions# Escape"
-msgstr "Задіяти "
+msgstr "Виконувати екранування"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#QueryRegexEscapeOptions# Unescape escaped"
-msgstr "Задіяти "
+msgstr "Скасовувати екранування"
 
 # Searching > Features
 msgid ""
@@ -13316,6 +14041,12 @@ msgid ""
 "expressions \"\\/like this\\/\" while \"/this/\", \"or/this\" will be "
 "escaped and interpreted as regular strings. (Elasticsearch only.)"
 msgstr ""
+" регулярних виразів у рядках запиту. Якщо вибрано „Виконувати екранування“, "
+"випадки „/“ у термінах пошуку будуть автоматично екрановані, а регулярні "
+"вирази інтерпретуватимуться як звичайні рядки. Якщо вибрано «Скасовувати "
+"екранування“, це дозволить писати регулярні вирази „\\/як це\\/“, тоді як „/"
+"це/“, „або/це“ буде екрановано та інтерпретуватиметься як звичайні рядки "
+"(лише для Elasticsearch)."
 
 # Searching > Features
 msgid "searching.pref#QueryStemming# Don't try"
@@ -13350,27 +14081,76 @@ msgid ""
 msgstr ""
 " впорядкування результатів пошуку за значимістю (потребує рушія Zebra)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "Не зберігати"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "Зберігати"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "Не долучати"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "Не долучати"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "Вимкнути"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "Задіяти"
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
 "library or library group, limit by the item's"
 msgstr ""
+"Обмежуючи результати пошуку бібліотекою/підрозділом чи групою бібліотек/"
+"підрозділів, обмежтеся примірниками"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# holding library."
-msgstr "бібліотеки тимч. зберігання/видачі"
+msgstr "бібліотеки/підрозділу тимч. зберігання / видачі"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library and holding library."
 msgstr ""
-"як для джерельної бібліотеки так і для бібліотеки тимч. зберігання/видачі"
+"як джерельної бібліотеки/підрозділу так і бібліотеки/підрозділу тимч. "
+"зберігання / видачі"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library."
-msgstr "джерельної бібліотеки"
+msgstr "джерельної бібліотеки/підрозділу"
 
 # Searching > Results display
 msgid ""
@@ -13391,11 +14171,30 @@ msgstr " шукати "
 
 # Searching > Results display
 #, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "Під час пошуку за індексом ISBN, "
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr " не шукати "
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "за всіма варіантами ISBN."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
+msgstr " шукати "
+
+# Searching > Results display
 msgid "searching.pref#ShowHeadingUse# Don't show"
 msgstr "Не показувати"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#ShowHeadingUse# Show"
 msgstr "Показувати"
 
@@ -13407,28 +14206,26 @@ msgid ""
 msgstr ""
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
-msgstr "Не використовувати"
+msgstr "Не примушувати"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#TraceCompleteSubfields# Force"
-msgstr "ранжуванням"
+msgstr "Примушувати"
 
 # Searching > Features
 msgid ""
 "searching.pref#TraceCompleteSubfields# subject tracings in the OPAC and "
 "staff interface to search only for complete-subfield matches."
 msgstr ""
+"трасування тематик в електронному каталозі та інтерфейсі бібліотекаря при "
+"пошуку співпадіння лише за повним підполем."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
 msgstr "Не долучати"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#TraceSubjectSubdivisions# Include"
 msgstr "Долучати"
 
@@ -13437,6 +14234,8 @@ msgid ""
 "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated "
 "by clicking on subject tracings."
 msgstr ""
+"підрозділення для пошукових запитів, створених шляхом натискання на "
+"трасування тематик."
 
 # Searching > Results display
 msgid ""
@@ -13446,7 +14245,6 @@ msgstr ""
 "Використовуйте наступний текст як роздільник для граней за авторами у UNIMARC"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Don't use"
 msgstr "Не використовувати"
 
@@ -13455,9 +14253,10 @@ msgid ""
 "searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
 "subjects. The default is to use standard quotes (\"\")."
 msgstr ""
+"лапки в ICU-стилі ({}) під час трасування тематик. За умовчанням "
+"використовуються стандартні лапки (\"\")."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Use"
 msgstr "Використовувати"
 
@@ -13466,7 +14265,6 @@ msgid "searching.pref#defaultSortField# ,"
 msgstr ", "
 
 # Searching > Results Display
-#, fuzzy
 msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
@@ -13538,12 +14336,11 @@ msgstr ""
 "Застосовується до електронного каталогу та інтерфейсу бібліотекаря."
 
 # Searching > Search Form
-#, fuzzy
 msgid ""
 "searching.pref#expandedSearchOption# \"More options\" on the OPAC and staff "
 "interface advanced search pages."
 msgstr ""
-" „Більше параметрів“ на сторінках детальнішого пошуку в електронному "
+" „більше параметрів“ на сторінках детальнішого пошуку в електронному "
 "каталозі та бібліотечному інтерфейсі."
 
 # Searching > Search form
@@ -13563,11 +14360,10 @@ msgid "searching.pref#maxItemsInSearchResults# Show up to"
 msgstr "Показати до "
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#maxItemsInSearchResults# items per bibliographic record in "
 "the search results"
-msgstr " записів з результатів пошуку."
+msgstr " примірників на бібліографічний запис в результатах пошуку."
 
 # Searching > Results display
 msgid "searching.pref#maxRecordsForFacets# Build facets based on"
@@ -13578,36 +14374,38 @@ msgid "searching.pref#maxRecordsForFacets# records from the search results."
 msgstr " записів з результатів пошуку."
 
 # Searching > Search form
-#, fuzzy
 msgid "searching.pref#numSearchResults# By default, show"
-msgstr "За умовчанням "
+msgstr "За умовчанням, показувати"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "searching.pref#numSearchResults# results per page in the staff interface."
-msgstr " на сторінку в інтерфейсі бібліотекаря."
+msgstr " результатів пошуку на сторінку в інтерфейсі бібліотекаря."
 
 # Searching > Search form
-#, fuzzy
 msgid "searching.pref#numSearchResultsDropdown# Don't show"
-msgstr " не відображати "
+msgstr "Не показувати"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#numSearchResultsDropdown# Show"
-msgstr "Показати до "
+msgstr "Показувати"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#numSearchResultsDropdown# results per page dropdown on staff "
 "interface search results."
-msgstr " записів з результатів пошуку."
+msgstr ""
+"спадний список кількості бізаписів на сторінку в результатах пошуку "
+"інтерфейсу бібліотекаря. "
 
 # Serials
 msgid "serials.pref"
 msgstr "Серіальні видання"
+
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "Можливості"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -13624,7 +14422,6 @@ msgid "serials.pref#PreserveSerialNotes# Do"
 msgstr "Заповнювати"
 
 # Serials
-#, fuzzy
 msgid "serials.pref#PreserveSerialNotes# Don't"
 msgstr "Не заповнювати"
 
@@ -13668,7 +14465,6 @@ msgstr ""
 " замовлення на отримані серіальні видання, якщо вони є у списку скерування."
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#RoutingListNote# Include the following note on all routing "
 "lists:"
@@ -13692,20 +14488,18 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
 msgstr "Показувати "
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on "
 "the staff interface."
-msgstr " попередні випуски серіальних видань у бібліотечному інтерфейсі."
+msgstr " попередніх випусків серіальних видань у бібліотечному інтерфейсі."
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must "
 "not be rewritten when a subscription is duplicated (separated by pipe |)"
 msgstr ""
-"Перелік полів, які не потрібно переписувати, коли дублюється передплата "
-"(відокремлювати символом „|“): "
+"Перелік полів, які не потрібно переписувати, коли дублюється передплата ("
+"відокремлювати символом „|“): "
 
 # Serials
 msgid ""
@@ -13756,7 +14550,6 @@ msgid "serials.pref#opacSerialDefaultTab# Show"
 msgstr "Показувати"
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#opacSerialDefaultTab# as default tab for serials in OPAC. "
 "Please note that the serial collection tab is currently available only for "
@@ -13764,20 +14557,17 @@ msgid ""
 msgstr ""
 " як типову вкладку для серіальних видань в електронному каталозі. Зверніть "
 "увагу, що вкладка „Зібрання серіального видання“ наразі доступна лише для "
-"формату UNIMARC. "
+"формату UNIMARC."
 
 # Serials
-#, fuzzy
 msgid "serials.pref#opacSerialDefaultTab# holdings tab"
 msgstr "вкладку наявних примірників"
 
 # Serials
-#, fuzzy
 msgid "serials.pref#opacSerialDefaultTab# serial collection tab"
 msgstr "вкладку зібрання серіального видання"
 
 # Serials
-#, fuzzy
 msgid "serials.pref#opacSerialDefaultTab# subscriptions tab"
 msgstr "вкладку передплати"
 
@@ -13815,70 +14605,59 @@ msgstr ""
 "bin/koha/admin/audio_alerts.pl\">звуковими сповіщеннями</a>."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# <br />Options:<ul><li>Put "
 "a path to define a xslt file</li><li>Put an URL for an external specific "
 "stylesheet.</li></ul>{langcode} will be replaced with current interface "
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
-"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>{langcode} "
-"буде замінено поточною мовою інтерфейсу."
+"<br />Опції:<ul><li>введіть шлях для визначення xslt-файлу</li><li>додайте "
+"URL-адресу зовнішньої таблиці стилів.</li></ul>{langcode} буде замінено "
+"поточною мовою інтерфейсу, а {authtypecode} буде замінено кодом типу "
+"авторитетного джерела"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# Display authority results "
 "in the staff interface using XSLT stylesheet at: "
 msgstr ""
-"Відображати результати пошуку в інтерфейсі бібліотекаря за допомогою таблиці "
-"XSLT-стилів відповідно: "
+"Відображати результати пошуку серед авторитетних джерел в інтерфейсі "
+"бібліотекаря за допомогою таблиці XSLT-стилів за адресою: "
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#Display856uAsImage# . Note: The corresponding XSLT "
 "option must be turned on."
-msgstr ""
+msgstr ". Примітка: необхідно увімкнути відповідний XSLT-параметр."
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#Display856uAsImage# Both result and detail pages"
-msgstr "вибір примірників на сторінці подробиць про бібзапис."
+msgstr "на сторінці подробиць про бібзапис та на сторінці результатів пошуку"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#Display856uAsImage# Detail page only"
-msgstr "Не задіювати"
+msgstr "на сторінці подробиць про бібзапис"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#Display856uAsImage# Display the URI in the 856u field "
 "as an image on: "
-msgstr ""
-"Відображати списки в інтерфейсі бібліотекаря за допомогою таблиці XSLT-"
-"стилів відповідно: "
+msgstr "Відображати URI-посилання з підполя 856^u як зображення: "
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#Display856uAsImage# Neither detail or result pages"
-msgstr "вибір примірників на сторінці подробиць про бібзапис."
+msgstr ""
+"ні на сторінці подробиць про бібзапис, ні на сторінці результатів пошуку"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid "staff_interface.pref#Display856uAsImage# Result page"
-msgstr "Включати таблицю стилів за адресою"
+msgstr "на сторінці результатів пошуку"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#DisplayIconsXSLT# Don't show"
 msgstr "Не показувати"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#DisplayIconsXSLT# Show"
 msgstr "Показувати"
 
@@ -13893,23 +14672,38 @@ msgstr ""
 "MARC21 на сторінках результатів пошуку і подробиць в електронному каталозі."
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#HidePatronName# Don't show"
-msgstr "Не показувати "
+msgstr "Не показувати"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#HidePatronName# Show"
-msgstr "Показувати "
+msgstr "Показувати"
 
 # Staff Client > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
 " імена користувачів (які взяли на руки примірники або замовили) на сторінці "
-"подробиць чи у віконечку „Замовити“."
+"подробиць про бібзапис чи на сторінці „встановлення замовлення“."
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "Не показувати"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "Показувати"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr ""
+"випадаюче меню вибору бібліотеки на головній сторінці електронного каталогу."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -13920,23 +14714,20 @@ msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Show"
 msgstr "Показувати"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetCatalogSearchPulldown# a search field pulldown "
 "for 'Search the catalog' boxes."
-msgstr "Не показувати"
+msgstr "випадаюче меню з варіантами полів пошуку для рядку „Пошук у каталозі“."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetCirculationHomeHTML# Show the following HTML in "
 "its own div on the bottom of the home page of the circulation module:"
 msgstr ""
-"Показати наступний HTML-код у відповідній колонці на головній сторінці "
-"бібліотечного інтерфейсу: "
+"Показати наступний HTML-код у власному div-блоці внизу домашньої сторінки "
+"модуля обігу:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#IntranetFavicon# Use the image at"
 msgstr "Використовувати зображення за адресою "
 
@@ -13945,19 +14736,19 @@ msgid ""
 "staff_interface.pref#IntranetFavicon# for the staff interface's favicon. "
 "(This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
-" на <a href=\"http://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для "
+" на <a href=\"https://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для "
 "бібліотечного інтерфейсу (має бути повною URL-адресою, що починається з "
 "<code>http://</code>)."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetNav# Show the following HTML to the left of the "
 "More menu at the top of each page on the staff interface (should be a list "
 "of links or blank):"
 msgstr ""
-"Показати наступний HTML-код у відповідній колонці на головній сторінці "
-"бібліотечного інтерфейсу: "
+"Показувати наступний HTML-код ліворуч від меню „Більше“ у верхній частині "
+"кожної сторінки інтерфейсу бібліотекаря (має бути список посилань або бути "
+"порожнім):"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14081,20 +14872,23 @@ msgstr "Не задіювати"
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr "Автентифікація"
 
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "Автентифікація"
+
 # Administration > CAS authentication
 #, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
+"(2FA) for staff members."
 msgstr "Використовувати CAS для автентифікації входу: "
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
 msgstr "Не показувати"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Show"
 msgstr "Показувати"
 
@@ -14106,20 +14900,18 @@ msgstr ""
 " візуальний редактор під час редагування деяких HTML-параметрів системи."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
 "виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -14143,14 +14935,11 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
 "виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -14168,6 +14957,7 @@ msgstr ""
 "стилів відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14177,11 +14967,11 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
+"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
 "виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -14210,14 +15000,12 @@ msgid ""
 msgstr ""
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#intranetbookbag# Don't show"
-msgstr "Не показувати "
+msgstr "Не показувати"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#intranetbookbag# Show"
-msgstr "Показувати "
+msgstr "Показувати"
 
 # Staff Client > Options
 #, fuzzy
@@ -14276,14 +15064,12 @@ msgstr ""
 "локальний шлях починається з кореня вашого HTTP-документа."
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#showLastPatron# Don't show"
-msgstr "Не дозволяти"
+msgstr "Не показувати"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#showLastPatron# Show"
-msgstr "Дозволити"
+msgstr "Показувати"
 
 # Staff interface > Options
 #, fuzzy
@@ -14411,7 +15197,6 @@ msgid "tools.pref Upload"
 msgstr "Вивантаження"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# ."
 msgstr "."
 
@@ -14423,12 +15208,10 @@ msgid ""
 msgstr "За умовчанням редагувати новини за допомогою"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
 msgstr "наочного WYSIWYG-редактора (TinyMCE)"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
 msgstr "текстового редактора (CodeMirror)"
 
@@ -14444,6 +15227,10 @@ msgid ""
 "Possible candidates to include also are pipe char |, hyphen (precede with "
 "backslash), comma, semicolon, dot, etc."
 msgstr ""
+"для пакетного редагування примірників та інвентаризації.<br/>Примітка: "
+"вводьте \\r для повернення каретки, \\n для нового рядка та \\s для пробілу. "
+"Можливими кандидатами для включення також є вертикальна риска |, дефіс (з "
+"передуючою зворотньою косою рискою), кома, крапка з комою, крапка і т.п."
 
 # Tools > Patron cards
 msgid ""
@@ -14456,36 +15243,34 @@ msgid "tools.pref#ImageLimit# images."
 msgstr ""
 
 # Authorities > General
-#, fuzzy
 msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
-msgstr "Відображати"
+msgstr "Відображати до"
 
 # Tools > Batch item
 msgid ""
 "tools.pref#MaxItemsToDisplayForBatchDel# items in a single item deletion "
 "batch."
-msgstr ""
+msgstr "примірників в одному пакеті для вилучення примірників."
 
 # Authorities > General
-#, fuzzy
 msgid "tools.pref#MaxItemsToDisplayForBatchMod# Display up to"
-msgstr "Відображати"
+msgstr "Відображати до"
 
 # Tools > Batch item
 msgid ""
 "tools.pref#MaxItemsToDisplayForBatchMod# items in a single item modification "
 "batch."
-msgstr ""
+msgstr "примірників в одному пакеті для редагування примірників."
 
 # Tools > Batch item
 msgid "tools.pref#MaxItemsToProcessForBatchMod# Process up to"
-msgstr ""
+msgstr "Опрацьовувати до"
 
 # Tools > Batch item
 msgid ""
 "tools.pref#MaxItemsToProcessForBatchMod# items in a single item modification "
 "batch."
-msgstr ""
+msgstr "примірників в одному пакеті для редагування примірників."
 
 # Tools > News
 #, fuzzy
@@ -14494,25 +15279,22 @@ msgstr "."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# OPAC only"
-msgstr ""
+msgstr "лише для електронного каталогу"
 
 # Tools > Reports
-#, fuzzy
 msgid "tools.pref#NewsAuthorDisplay# Show the author for news items:"
-msgstr "За умовчанням редагувати новини за допомогою"
+msgstr "Показувати автора новин:"
 
-#, fuzzy
 msgid "tools.pref#NewsAuthorDisplay# both OPAC and staff interface"
-msgstr "Написання новин для електронного каталогу та інтерфейсу бібліотекарів"
+msgstr "для електронного каталогу та інтерфейсу бібліотекарів"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# not at all"
-msgstr ""
+msgstr "ніде не показувати"
 
 # OPAC > Features
-#, fuzzy
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr "бібліотечний інтерфейс"
+msgstr "лише для бібліотечного інтерфейсу"
 
 # Tools > Upload
 msgid ""
@@ -14712,25 +15494,21 @@ msgstr ""
 "бібліографічного запису"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# <br><strong>NOTE:</"
 "strong> This needs <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OAI-PMH:AutoUpdateSets\">OAI-PMH:AutoUpdateSets</a> "
 "syspref to be enabled."
 msgstr ""
-"<br><strong>Примітка</strong>: це значення не має впливу, якщо системний "
+"<br><strong>Примітка</strong>: для цього потрібно увімкнути системний "
 "параметр „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UsageStats\">UsageStats</a>“ встановлено у значення "
-"„Ні“ (не ділитися статистикою)."
+"op=search&searchfield=OAI-PMH:AutoUpdateSets\">OAI-PMH:AutoUpdateSets</a>“."
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Disable"
 msgstr "Вимкнути"
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Enable"
 msgstr "Увімкнути"
 
@@ -14739,6 +15517,8 @@ msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# embedding of item "
 "data when automatically updating OAI-PMH sets."
 msgstr ""
+"вбудовування примірникових даних під час автоматичного оновлення наборів OAI-"
+"PMH."
 
 # Web services > OAI-PMH > OAI-PMH:ConfFile
 msgid ""
@@ -14847,11 +15627,10 @@ msgstr "Вимкнути"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Увімкнути"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14905,3 +15684,67 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr " рядків у повідомленні, яке було запитане через службу веб-звітів."
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "так"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "При редагуванні записів "
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "задіяти"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "не задіювати"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ " також автоматичне створення нових (за необхідності) авторитетних "
+#~ "записів, замість того, щоб посилатися на вже існуючі авторитетні джерела."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "відскановані штрих-коди примірників."
+
+# Enhanced Content > Local Cover Images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Відображати"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Відображати"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Відображати"
+
+# Logging > Debugging
+#~ msgid ""
+#~ "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
+#~ "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] "
+#~ "to be visible."
+#~ msgstr ""
+#~ "дамп пошукового запиту як параметр шаблону, для видимості вимагає "
+#~ "включення <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[інтерфейс]."
+
+# Administration > Interface options
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "так"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Приховувати"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "Не дозволяти"

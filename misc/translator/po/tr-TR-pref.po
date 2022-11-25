@@ -4,14 +4,18 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2022-05-01 12:31-0300\n"
-"Language-Team: Koha Translation Team \n"
+"PO-Revision-Date: 2022-09-26 07:37+0000\n"
+"Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
+"Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /tr/22.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
+"X-POOTLE-MTIME: 1664177850.532516\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -112,42 +116,35 @@ msgstr ""
 "kutusu görüntüler."
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# . (Requires <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-"muhasebe sistemi ile anonim işlemlere izin veren satış noktası özelliği. (<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters gerektirir</a>)"
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# When collecting a payment, "
-msgstr "Kullanma"
+msgstr "Bir ödeme tahsil edilirken,"
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# always require a cash register"
-msgstr "Kullanma"
+msgstr "her zaman bir yazar kasa gerektirir"
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# require a cash register only when the "
 "CASH payment type is selected"
-msgstr "ödemeleri izlemek için muhasebe sistemi ile kasa."
+msgstr "sadece NAKİT ödeme türü seçildiğinde yazar kasa gerektirir"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Don't require"
-msgstr "Yapma"
+msgstr "Zorunlu kıl"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Require"
-msgstr "Yap"
+msgstr "Zorunlu kıl"
 
 # Administration > Share anonymous usage statistics
 #, fuzzy
@@ -155,21 +152,20 @@ msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> is enabled or "
-"when no payment types are defined in the PAYMENT_TYPE authorised value "
-"category."
+"when no payment types are defined in the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
+"value category."
 msgstr ""
-"<br><strong>NOT:</strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UsageStats\">UsageStats</a> sistem tercihi \"Hayır\" "
-"olarak ayarlanırsa (paylaşmayın) bu değerin hiçbir etkisi yoktur."
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> "
+"etkinleştirildiğinde veya PAYMENT_TYPE yetkili değer kategorisinde hiçbir "
+"ödeme türü tanımlanmadığında bu tercihin hiçbir etkisi yoktur."
 
 # Accounting > Policy
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# staff to select a payment type when a "
 "payment is made."
-msgstr ""
-"ödeme yaparken ödeme makbuzu için otomatik olarak bir yazdırma iletişim "
-"kutusu görüntüler."
+msgstr "personelin ödeme yapıldığında ödeme türünü seçmesi."
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# Do"
@@ -194,6 +190,19 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr "ödemeleri izlemek için muhasebe sistemi ile kasa."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
+"<p class='text-danger'><strong>Uyarı:</strong> Bu ayarın etkinleştirilmesi, "
+"kaydı tüm NAKİT türü işlemler için zorunlu bir alan haline getirecektir; "
+"Buna SIP00 işlemleri dahildir, bu nedenle lütfen SIP cihazınıza bir kayıt "
+"eşlemek için SIP yapılandırmalarınızın güncellendiğinden emin olun.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -354,18 +363,16 @@ msgid ""
 msgstr "Para birimini şu formatta görüntüle"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Disable"
-msgstr "EDIFACT"
+msgstr "Devre dışı bırak"
 
 # Acquisitions > EDIFACT > EDIFACT
 msgid "acquisitions.pref#EDIFACT# EDIFACT message exchange for acquisitions"
-msgstr ""
+msgstr "Sağlama için EDIFACT mesaj alışverişi"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Enable"
-msgstr "EDIFACT"
+msgstr "Etkinleştir"
 
 # Acquisitions > EDIFACT
 msgid ""
@@ -393,14 +400,25 @@ msgid "acquisitions.pref#EdifactLSQ# Map sequence code (GIR:LSQ) field to "
 msgstr ""
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# collection"
-msgstr "Yap"
+msgstr "koleksiyon"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# location"
-msgstr "Yap"
+msgstr "konum"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+msgstr ""
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions </a>tercihini seçerseniz geçerli bir e-posta "
+"adresi girmeniz gerekir:"
 
 # Acquisitions > Policy
 msgid ""
@@ -413,22 +431,12 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-msgid ""
-"acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
-msgstr ""
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions </a>tercihini seçerseniz geçerli bir e-posta "
-"adresi girmeniz gerekir:"
-
-# Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
+#, fuzzy
+msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "şubenin e-posta adresi"
 
 # Acquisitions > Policy
@@ -483,6 +491,11 @@ msgstr ""
 "Aşağıdaki alanları kullanabilirsiniz: homebranch, holdingbranch, itype, "
 "nonpublic_note, public_note, loc, ccode, notforloan, uri, copyno, price, "
 "replacementprice ve itemcallnumber. Özel Alanlar: quantity ve budget_code"
+
+# Acquisitions > Printing
+#, fuzzy
+msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+msgstr "İngilizce 2-sayfa"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -2205,17 +2218,16 @@ msgid ""
 msgstr "Koha'nın bağlanacağı CAS sunucusu sürümü:"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr "Hayır"
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "Görüntüleme"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Personel ara yüzünde materyal türü simgelerini göster:"
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Görüntüle"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Evet"
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "Personel arayüzünde materyal türü simgeleri."
 
 # Administration > Login options
 msgid ""
@@ -2262,12 +2274,12 @@ msgid "authorities.pref Linker"
 msgstr "Otorite bağlantıları"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Görüntüle"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Görüntüleme "
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Görüntüleme"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Görüntüle "
 
 # Authorities > General
 msgid ""
@@ -2372,11 +2384,13 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Kayıtları düzenlerken eksik otorite kayıtlarını"
 
 # Authorities > General
+#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
-"be set to \"allow\" for this to have any effect)."
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
+"this to have any effect)."
 msgstr ""
 "kayıp olan otorite kayıtları (bunun herhangi bir etkisi olması için <a href="
 "\"/cgi-bin/koha/admin/preferences.pl?"
@@ -2391,26 +2405,31 @@ msgstr "oluşturma"
 msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "oluştur"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
-msgstr "Kayıtları düzenlerken,"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Do"
+msgstr "Gerçekleştir"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "izin ver"
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#AutoLinkBiblios# Don't"
+msgstr "Gerçekleştirme"
 
-# Authorities > General
-msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
-msgstr "izin verme"
-
-# Authorities > General
+# Circulation > Checkin policy
+#, fuzzy
 msgid ""
-"authorities.pref#BiblioAddsAuthorities# them to automatically create new "
-"authority records if needed, rather than having to reference existing "
-"authorities."
+"authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+"when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> "
+"and <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+"record edits."
 msgstr ""
-"gerekirse bunları otomatik olarak yerine mevcut yapılar referans yerine, "
-"yeni otorite kayıtları oluşturmak için."
+"Materyali iade edecek olan en son kullanıcı. Bu ayar, <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
+"\">opacreadinghistory</a> ve <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> sistem "
+"tercihlerinden bağımsızdır."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2421,9 +2440,12 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Gerçekleştirme"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
-"have previously been linked when saving records in the cataloging module."
+"have previously been linked when saving records in the cataloging module "
+"(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 "Katalog modülünde kayıtları kaydederken önceden eşleştirilmiş başlıkları "
 "(headings) otomatik olarak yeniden eşleştir"
@@ -2432,33 +2454,33 @@ msgstr ""
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
-"default value for the 667$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 667$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"kullanıcıların ödünç alma geçmişleri için kendi gizlilik ayarları. Bu, <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> ve <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
-"\">AnonymousPatron</a> sistem tercihlerini gerektirir."
+"MARC21 yetki kayıtlarının 667$a alanı için varsayılan değer olarak aşağıdaki "
+"metni kullanın (<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> ve <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # OPAC > Privacy > OPACPrivacy
 #, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
-"default value for the 670$a field of MARC21 authority records (requires <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and "
-"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"default value for the 670$a field of MARC21 authority records (must not "
+"require <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"kullanıcıların ödünç alma geçmişleri için kendi gizlilik ayarları. Bu, <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> ve <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
-"\">AnonymousPatron</a> sistem tercihlerini gerektirir."
+"MARC21 yetki kayıtlarının 670$a alanı için varsayılan değer olarak aşağıdaki "
+"metni kullanın (<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> ve <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2534,6 +2556,29 @@ msgstr ""
 "ETMEYİN."
 
 # Authorities > General
+#, fuzzy
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+msgstr "Kayıtları düzenlerken eksik otorite kayıtlarını"
+
+# Authorities > General > RequireChoosingExistingAuthority
+msgid ""
+"authorities.pref#RequireChoosingExistingAuthority# catalogers to reference "
+"existing authorities. If set to don't, catalogers can manually enter "
+"uncontrolled terms into controlled fields"
+msgstr ""
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+msgstr "oluşturma"
+
+# Authorities > General
+#, fuzzy
+msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+msgstr "oluştur"
+
+# Authorities > General
 msgid ""
 "authorities.pref#UNIMARCAuthorityField100# Use the following text for the "
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
@@ -2587,12 +2632,12 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Sırt etiketleri"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Görüntüle"
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Görüntüleme"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Gösterme"
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Görüntüle "
 
 # Cataloging > Display
 msgid ""
@@ -2682,6 +2727,34 @@ msgstr ""
 "yeri için birden fazla alt alan içerebilir; örneğin <code>852abhi</code> 852 "
 "alt alanlarında a,b,h ve i olarak bakılabilir), yandaki işaret ile ayrılmış "
 "alt alanlarla birlikte"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"Z39.50. kullanarak bir kayıt aktarırken yazar etiketlerine kullanılan doğru "
+"etiketler (virgüllerle ayrılan)"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -2821,12 +2894,12 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "dosya adında."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Görüntüle"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "Görüntüleme"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "Gösterme"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Görüntüle "
 
 # Cataloging > Interface
 msgid ""
@@ -3230,6 +3303,11 @@ msgid ""
 msgstr ""
 "materyaller birinci sekmenin materyaller içerdiği iki sekmede gösterilir"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "hayır"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARC desteklenmiyor."
@@ -3238,20 +3316,74 @@ msgstr "<br/> UNIMARC desteklenmiyor."
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Maksimum bir"
 
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results by"
+msgstr ""
+"Varsayılan olarak, personel arayüzündeki arama sonuçlarını yandaki öğeye "
+"göre sıralayın"
+
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
 msgstr "OPAC"
 
 # Cataloging > Display
-#, fuzzy
 msgid ""
 "cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
 "linked via field 773, in"
-msgstr "hem personel arayüzü hem de OPAC"
+msgstr ""
+"773 alanı aracılığıyla bağlantılı olarak bileşen kayıtlarının bir listesini "
+"göster"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
+msgstr "hayır"
 
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "hem personel arayüzü hem de OPAC"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "hayır"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3268,6 +3400,11 @@ msgstr "kayıtlar görüntülenecektir."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "personel arayüzü"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "hayır"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3304,12 +3441,14 @@ msgid ""
 msgstr "Bu alanları hızlı sırt etiketinde kullan:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Görüntüle"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Gösterme"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Gösterme"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Görüntüle"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3402,6 +3541,15 @@ msgstr ""
 "tanımlayın (boşlukla ayrılmış): "
 
 # Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
+"will be prefilled."
+msgstr ""
+"Materyalleri önceden doldururken kullanılacak alt alanların bir listesini "
+"tanımlayın (boşlukla ayrılmış): "
+
+# Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
 msgstr "(ISO 690-2) dili kullanın"
 
@@ -3440,13 +3588,31 @@ msgstr ""
 "bibliyografik kayıtlar bağlantısı için kayıt kontrol numarası ($w alt "
 "alanları) ve kontrol numarası (001)."
 
-# Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
 msgstr "Görüntüle"
 
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+msgstr "Ayırma"
+
+# Cataloging > Record structure > UseOCLCEncodingLevels
+msgid ""
+"cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
+"encoding level in leader value builder for position 17."
+msgstr ""
+
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Görüntüleme"
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Görüntüle"
 
 # Cataloging > Interface
 msgid ""
@@ -3481,11 +3647,23 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "otomatik olarak oluşturulmadı."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Görüntüle"
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+msgstr "Kullanma"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+msgstr "hayır"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+msgstr "otomatik olarak oluşturulmadı."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Görüntüleme"
 
 # Cataloging > Display
@@ -3494,6 +3672,11 @@ msgid ""
 "in MARC views."
 msgstr ""
 "MARC etiket numaraları, alt alan kodları ve MARC görünümündeki göstergeler."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Görüntüle"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -3602,6 +3785,11 @@ msgstr "Ödünç verme politikası"
 msgid "circulation.pref Course reserves"
 msgstr "Ayrılmış ders materyalleri"
 
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref Curbside pickup module"
+msgstr "Housebound modülü"
+
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
 msgstr "Ceza Politikası"
@@ -3622,6 +3810,16 @@ msgstr "Arayüz"
 msgid "circulation.pref Interlibrary loans"
 msgstr "Kütüphanelerarası ödünç verme"
 
+# Circulation > Interface
+#, fuzzy
+msgid "circulation.pref Item bundles"
+msgstr "Arayüz"
+
+# Circulation > Return claims
+#, fuzzy
+msgid "circulation.pref Patron restrictions"
+msgstr "İade talepleri"
+
 # Circulation > Return claims
 #, fuzzy
 msgid "circulation.pref Recalls"
@@ -3632,9 +3830,8 @@ msgid "circulation.pref Return claims"
 msgstr "İade talepleri"
 
 # Circulation
-#, fuzzy
 msgid "circulation.pref SIP2"
-msgstr "Dolaşım"
+msgstr "SIP2"
 
 # Circulation > Self check-in module
 msgid "circulation.pref Self check-in module"
@@ -4012,14 +4209,12 @@ msgid ""
 msgstr "yalnızca materyalin ödünç alındığı kütüphanede."
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#AllowSetAutomaticRenewal# Allow"
 msgstr "İzin ver"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#AllowSetAutomaticRenewal# Don't allow"
-msgstr "İzin verme"
+msgstr "İzin verme "
 
 # Circulation > Interface
 #, fuzzy
@@ -4326,6 +4521,25 @@ msgstr ""
 "otomatik yönlendirme."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Gerçekleştir"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Gerçekleştirme"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"İade edildiklerinde materyalleri otomatik olarak ana kütüphanelerine "
+"transfer et."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "Gerçekleştir"
 
@@ -4386,6 +4600,32 @@ msgid ""
 "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have "
 "been withdrawn."
 msgstr "sistemden düşülmüş materyallerin iadesi."
+
+# Circulation > Item bundles > BundleLostValue
+msgid ""
+"circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
+"return."
+msgstr "'geri dönen talepleri' belirtmek için."
+
+# Circulation > Item bundles > BundleNotLoanValue
+msgid ""
+"circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
+"item is attached to bundle."
+msgstr "'geri dönen talepleri' belirtmek için."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4516,6 +4756,35 @@ msgstr "kütüphane kullanıcısının olduğu yer."
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "Oturum açtığınız kütüphane."
 
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
+"transferred or remains in the libray after checkin, use the circulation "
+"rules of"
+msgstr ""
+"materyalin ait olduğu kütüphanede veya materyalin ödünç alındığı kütüphanede."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is checked "
+"in at."
+msgstr "kütüphane materyalinin olduğu yer."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is currently "
+"held by."
+msgstr "kütüphane materyalinin olduğu yer."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#CircControlReturnsBranch# the library the item is owned by."
+msgstr "kütüphane materyalinin olduğu yer."
+
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
 msgstr "Etkinleştir"
@@ -4566,7 +4835,10 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr "kayıp materyal ücreti tahsil etme"
 
 # Circulation > Return claims
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+#, fuzzy
+msgid ""
+"circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
+"admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr "KAYIP yetkili değerini kullanın"
 
 # Circulation > Return claims
@@ -4666,6 +4938,21 @@ msgstr "Biriktirme"
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "Kısıtlama süreçlerine."
 
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Disable"
+msgstr "Devre dışı bırak"
+
+# Circulation > Self check-out module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# Enable"
+msgstr "Etkinleştir"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+msgstr "housebound modülü."
+
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
 msgstr "Ayarlamayın"
@@ -4700,6 +4987,32 @@ msgstr "ay"
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "yıl"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "ayırma kütüphanesi"
+
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff interface default the pickup location to the"
+msgstr ""
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
+msgstr "Materyali bulunduran kütüphane."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
+msgstr "ay"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "ayırma kütüphanesi"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4813,17 +5126,30 @@ msgstr ""
 "değerleri olan materyalleri atlayın"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Don't show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
 msgstr "Gösterme"
 
 # Circulation > Interface
-msgid "circulation.pref#DisplayClearScreenButton# Show"
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
+"screen buttons"
 msgstr "Göster"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
-"circulation.pref#DisplayClearScreenButton# a button to clear the current "
-"patron from the screen on the circulation screen."
+"circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
+"buttons"
+msgstr "Göster"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"circulation.pref#DisplayClearScreenButton# to clear the current patron from "
+"the screen on the circulation screen."
 msgstr "Dolaşım ekranında mevcut kullanıcıyı ekrandan silecek tuş."
 
 # Circulation > Holds policy
@@ -4841,6 +5167,39 @@ msgid ""
 msgstr "Arama sonuçlarından çok sayıda bibliyografik kaydı ayırtma imkanı"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+msgstr "Etkinleştirme"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "circulation.pref#EnableItemGroupHolds# Enable"
+msgstr "Etkinleştir"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+"groups."
+msgstr "Arama sonuçlarından çok sayıda bibliyografik kaydı ayırtma imkanı"
+
+# Circulation > Article requests
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Don't enable"
+msgstr "Etkinleştirme"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#EnableItemGroups# Enable"
+msgstr "Etkinleştir"
+
+# Circulation > Holds policy > EnableItemGroups
+msgid ""
+"circulation.pref#EnableItemGroups# the item groups feature to allow "
+"collecting groups of items on a record together."
+msgstr ""
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr "takvimi yok say"
 
@@ -4854,23 +5213,64 @@ msgid ""
 "period for a hold's max pickup delay."
 msgstr "rezervlerin maksimum alınma ertelenmesinin hesaplanmasında."
 
+# Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# . If no address is defined "
+"here, the email will be sent to the library's reply-to address."
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
+"These system preferences require the <code>misc/cronjobs/holds/"
+"cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
+"schedule it.<br>"
+msgstr ""
+"<br><strong>NOT:</strong> Bu sistem tercihi <code>misc/cronjobs/holds/"
+"auto_unsuspend_holds.pl</code> cronjob'u nu gerektirir. Sistem "
+"yöneticinizden ayarlamasını isteyin."
+
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "İzin ver"
 
 # Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+msgstr "İzin ver"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+msgstr "İzin verme"
+
+# Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "İzin verme"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+"the new hold filled with a canceled item to"
+msgstr "İzin verme"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
+"hold using the item."
+msgstr "İzin verme"
+
 # Circulation > Holds policy > ExpireReservesMaxPickUpDelay
+#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.<br><strong>NOTE:</strong> This system preference requires "
-"the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
-"your system administrator to schedule it."
+"system preference.</br>"
 msgstr ""
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
@@ -5218,10 +5618,12 @@ msgstr ""
 "yedek e-posta adresi:"
 
 # Circulation > Interlibrary loans
+#, fuzzy
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
 "empty, all ILL requests will be displayed. The request codes can be found in "
-"the ILLSTATUS authorized value category."
+"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> authorized value category."
 msgstr ""
 "(| ile ayrılmış). Boş bırakılırsa, tüm ILL istekleri görüntülenecektir. "
 "İstek kodları, ILLSTATUS otorite değeri kategorisinde bulunabilir. "
@@ -5583,6 +5985,29 @@ msgstr ""
 "etkinleştirilmiş olmalıdır)."
 
 # Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
+"library to pick up a hold for these statuses:"
+msgstr ""
+"Üzerine bir ayırma konan materyali alacağı kütüphaneyi seçen kullanıcı."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+msgstr "İzin verme"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+msgstr "İzin ver"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+msgstr "İzin ver"
+
+# Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
 msgstr "İzin ver"
 
@@ -5646,9 +6071,28 @@ msgstr ""
 "\">OPACHoldsIfAvailableAtPickup</a> sistem tercihinden etkilenmeyen "
 "kullanıcı kategorileri:"
 
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"Materyali iade edecek olan en son kullanıcı. Bu ayar, <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
+"\">opacreadinghistory</a> ve <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> sistem "
+"tercihlerinden bağımsızdır."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "İzin verme"
 
 # Circulation > Article requests
@@ -5666,12 +6110,10 @@ msgstr "hold item türü"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "hold item türü"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "hold item türü"
 
 # Circulation > Article requests
 #, fuzzy
@@ -5735,6 +6177,33 @@ msgid ""
 msgstr "Gecikme bildirimlerinin sürecini hazırlarken."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# ."
+msgstr "Engelle"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
+"the"
+msgstr "Gecikme bildirimlerinin sürecini hazırlarken."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+msgstr "Takvimi kullan"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+msgstr "Takvimi kullan"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OverdueNoticeFrom# item home library"
+msgstr "materyalin ana kütüphanesi"
+
+# Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
 msgstr "Onay için sor"
 
@@ -5795,6 +6264,23 @@ msgid ""
 msgstr ""
 "dolaşım ekranında veya kullanıcı aramada bir kullanıcının adını yazarken "
 "kullanıcıyı tahmin etmek için."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Allow"
+msgstr "İzin ver"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+msgstr "İzin verme"
+
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
+"be specified when applying manually."
+msgstr "Kısıtlama süreçlerine."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6084,12 +6570,13 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "engelle"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
 "interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
 "cronjob."
-msgstr "personel arayüzünden materyal sürelerinin uzatılması."
+msgstr ""
+"personel arayüzünden ve <code>misc/cronjobs/automatic_renewals.pl</code> "
+"cronjob aracılığıyla materyal sürelerinin uzatılması."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -6163,12 +6650,15 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field value' is the value to "
 "compare against the value in the specified 'item field'<br/>"
 msgstr ""
+"'materyal alanı değeri', belirtilen 'materyal alanındaki' değerle "
+"karşılaştırılacak değerdir<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field' is a database column in "
 "the items table<br/>"
 msgstr ""
+"'materyal alanı', materyaller tablosundaki bir veritabanı sütunudur<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6180,7 +6670,7 @@ msgstr ""
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
-"Wil return sort bin 'X' for an item returned to CPL where the holdingbranch "
+"Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
@@ -6199,7 +6689,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
 msgstr "Örnekler:<br/>"
 
@@ -6776,6 +7265,13 @@ msgstr ""
 "\">CanMarkHoldsToPullAsLost</a> sistem tercihini gerektirir)"
 
 # Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
+"only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+msgstr "Değerlerin her bir çifti ayrı bir satırda olmalıdır."
+
+# Circulation > Checkin policy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should "
 "be on a separate line."
@@ -6870,15 +7366,33 @@ msgstr "Kullanın"
 msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "ayrılmış ders materyalleri."
 
-# Circulation > Course reserves
+# Circulation > Interface
 #, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+msgstr "Kullanın"
+
+# Circulation > SIP2 > UseLocationAsAQInSIP
+msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
+msgstr ""
+
+# Circulation > Holds policy
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+msgstr "ana kütüphane"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+msgstr "onay gerektiren"
+
+# Circulation > Course reserves
 msgid "circulation.pref#UseRecalls# Don't use"
 msgstr "Kullanmayın"
 
 # Circulation > Course reserves
-#, fuzzy
 msgid "circulation.pref#UseRecalls# Use"
-msgstr "Kullanın"
+msgstr "Kullanın "
 
 # Circulation > Recalls > UseRecalls
 msgid ""
@@ -6886,6 +7400,9 @@ msgid ""
 "bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
 "once enabled."
 msgstr ""
+"geri çağırmalar. Etkinleştirildikten sonra geri çağırmalar için <a href=\"/"
+"cgi-bin/koha/admin/smart-rules.pl\">dolaşım ve ceza kurallarını</a> "
+"yapılandırdığınızdan emin olun."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -7165,9 +7682,14 @@ msgid ""
 "prefix style"
 msgstr "T-prefix stilinden ilk numarayı siliniz"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "taranan kayıt barkodları."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
+"taranan materyal barkodları Barkoddaki baştaki veya sondaki boşlukların bu "
+"filtreden önce kaldırıldığını unutmayın."
 
 # Circulation > Checkout policy
 msgid ""
@@ -7566,13 +8088,8 @@ msgstr "Kapakları getirmek için aşağıdaki sağlayıcıları kullanın"
 
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Görüntüle"
-
-# Enhanced content > Local or remote cover images
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
-msgstr "Görüntüleme"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
+msgstr "Görüntüleme "
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7587,6 +8104,10 @@ msgid ""
 msgstr ""
 "Veya bir alan$alt alan değeri belirtmek için aşağıdaki söz dizimini "
 "kullanabilirsiniz: {field$subfield}. Örneğin, {024$a}."
+
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Görüntüle"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7838,12 +8359,12 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "sekmelerde."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Görüntüle"
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
+msgstr "Görüntüleme "
 
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
-msgstr "Görüntüleme"
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Görüntüle"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7997,12 +8518,12 @@ msgid ""
 msgstr "Bir materyalin OPAC üzerindeki diğer baskıları."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Görüntüle"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
+msgstr "Görüntüleme "
 
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
-msgstr "Görüntüleme"
+# Enhanced content > Amazon
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Görüntüle"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8478,8 +8999,58 @@ msgstr ""
 "op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> devrede "
 "olduğunda). Bu, Library Thing for Libraries’den ayrıdır."
 
+# Serials
+#, fuzzy
+msgid "erm.pref"
+msgstr "Süreli Yayın"
+
+# Circulation > Interface
+#, fuzzy
+msgid "erm.pref Interface"
+msgstr "Arayüz"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Disable"
+msgstr "Devre dışı bırak"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# Enable"
+msgstr "Etkinleştir"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "erm.pref#ERMModule# the e-resource management module"
+msgstr "Etkinleştir"
+
+# E-Resource management > Interface > ERMProviderEbscoApiKey
+msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviderEbscoCustomerID
+msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# EBSCO"
+msgstr ""
+
+# E-Resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Local"
+msgstr ""
+
+# E-resource management > Interface > ERMProviders
+msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
+msgstr ""
+
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "I18N/L10N"
+
+# I18N/L10N
+#, fuzzy
+msgid "i18n_l10n.pref Global"
 msgstr "I18N/L10N"
 
 # I18N/L10N
@@ -8674,6 +9245,11 @@ msgid "local_use.pref"
 msgstr "Yerel Kullanım"
 
 # Local Use
+#, fuzzy
+msgid "local_use.pref Local use"
+msgstr "Yerel Kullanım"
+
+# Local Use
 msgid "local_use.pref## Nothing defined yet."
 msgstr "Henüz hiçbir şey tanımlanmamış."
 
@@ -8797,15 +9373,13 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Yapma"
 
 # Logging > Debugging
+#, fuzzy
 msgid ""
-"logs.pref#DumpSearchQueryTemplate# dump search query as a template "
-"parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
-"be visible."
+"logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
+"HTML source for the OPAC and staff interface."
 msgstr ""
-"arama sorgusunu şablon parametresi olarak döküm alın, <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars"
-"\">DumpTemplateVars</a>[interface] öğesinin görünür olmasını gerektirir."
+"personel arayüzü için HTML kaynağındaki bir yoruma tüm Şablon Araç Seti "
+"değişkenlerini döker."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -8920,23 +9494,20 @@ msgid "logs.pref#NoticesLog# Log"
 msgstr "Sistem günlüğüne kaydet"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Don't log"
-msgstr "Günlüğe kaydetme"
+msgstr "Sistem günlüğüne kaydetme"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#RecallsLog# Log"
-msgstr "Günlüğe kaydet"
+msgstr "Sistem günlüğüne kaydet"
 
 # Logging > Logging
-#, fuzzy
 msgid ""
 "logs.pref#RecallsLog# any actions on recalls (create, cancel, expire, "
 "fulfill)."
 msgstr ""
-"Ayırtılanlar üzerinde herhangi bir işlem (oluşturma, iptal etme, askıya "
-"alma, devam ettirme, vb.)."
+"geri çağırma üzerinde herhangi bir işlem (oluşturma, iptal etme, sona erme, "
+"yerine getirme)."
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# Don't log"
@@ -9031,6 +9602,11 @@ msgid "opac.pref Shelf browser"
 msgstr "Raf tarayıcı"
 
 # OPAC > Privacy
+#, fuzzy
+msgid "opac.pref Suggestions"
+msgstr "İzin ver"
+
+# OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "İzin ver"
 
@@ -9093,6 +9669,31 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr "Anonim Kullanıcı olarak (anonim öneriler ve okuma geçmişi için)."
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Seçenekler:<ul><li>Xslt dosyası tanımlamak için bir yol girin</"
+"li><li>Harici bir özel stil sayfası için bir URL girin.</li></ul>{langcode} "
+"değiştirilecek geçerli arayüz diliyle ve {authtypecode}, otorite türü "
+"koduyla değiştirilecektir"
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+"Personel arayüzünde XSLT stil sayfasını kullanarak sonuçları şu adreste "
+"görüntüleyin:"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -9190,6 +9791,47 @@ msgstr ""
 "OPAC’daki XSLT MARC 21 sonuçlarında format, kullanıcı kitlesi ve materyal "
 "türü ikonları ve detay sayfaları"
 
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
+"address: "
+msgstr ""
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions </a>tercihini seçerseniz geçerli bir e-posta "
+"adresi girmeniz gerekir:"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid ""
+"opac.pref#EmailPatronRegistrations# Choose email address that new patron "
+"self-registrations will be sent to: "
+msgstr "Yeni satın alma önerilerinin gönderileceği e-posta adresini seçin:"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+msgstr "EmailAddressForSuggestions"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+msgstr "KohaAdminEmailAddress"
+
+# Acquisitions > Policy
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# email address of library"
+msgstr "şubenin e-posta adresi"
+
+# OPAC > Self registration and modification
+#, fuzzy
+msgid "opac.pref#EmailPatronRegistrations# none"
+msgstr "İzin ver"
+
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
 msgstr "Tutma"
@@ -9235,18 +9877,48 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "in"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Görüntüle"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Görüntüleme "
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Görüntüleme"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Görüntüle "
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail "
 "pages."
 msgstr "OPAC ayrıntılar sayfalarında sağlama ayrıntıları."
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Display"
+msgstr "İzin ver"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+msgstr "İzin verme"
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
+"024$2 and 024$a."
+msgstr ""
+
+# OPAC > Features > OPACAuthorIdentifiers
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
+"orcid, scopus, loop, rid and viaf."
+msgstr ""
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
+"the detail pages in the OPAC."
+msgstr ""
+"OPAC'daki materyal ayrıntısı sayfasında materyal ödünç almış kullanıcının adı"
 
 # OPAC > Appearance
 msgid ""
@@ -9509,12 +10181,12 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Oynat"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Görüntüle"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Görüntüleme "
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Görüntüleme"
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Görüntüle "
 
 # OPAC > Features
 msgid ""
@@ -9603,6 +10275,8 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
 "search results, and show no more than"
 msgstr ""
+"(mevcut) OPAC XSLT arama sonuçlarındaki özgün materyaller, yandaki sayıdan "
+"fazlasını göstermeyin"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
@@ -9610,12 +10284,16 @@ msgid ""
 "like Checked out, Damaged, On Hold, but only when you group them by branch."
 "<br>"
 msgstr ""
+"(kullanılamaz) Ödünç verilmiş, Hasarlı, Ayırtılmış gibi kategoriler için "
+"özgün materyaller, ancak sadece bunları birimlere göre grupladığınızda.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by substatus, listing item counts only.)"
 msgstr ""
+"(NOT: Büyük konsorsiyumlar için, yalnızca materyal sayılarını listeleyerek, "
+"kullanılamayan materyalleri alt duruma göre gruplandırmanızı öneririz.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
@@ -9626,11 +10304,18 @@ msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Şu sayıdan daha fazla göstermeyin"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgstr "alt durum"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# branch only"
 msgstr "birim"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# substatus only"
 msgstr "alt durum"
 
 # OPAC > Appearance
@@ -9640,10 +10325,11 @@ msgid ""
 msgstr "OPAC arama sonuçlarında facets altında aşağıdaki HTML'yi ekleyin:"
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
-"{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
-"information from the displayed record."
+"{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
+"replaced with information from the displayed record."
 msgstr ""
 "<br /> Not: tutucuları {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, "
 "{ISSN} ve {AUTHOR} görüntülenen kayıt bilgileri ile değiştirilecektir."
@@ -9769,20 +10455,20 @@ msgid ""
 msgstr "OPAC otorite tarayıcısındaki kullanılmayan otoriteler."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Disable"
-msgstr "Devre dışı bırak"
+msgstr "Devre dışı bırak "
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Enable"
-msgstr "Etkinleştir"
+msgstr "Etkinleştir "
 
 # OPAC > Features > OPACSuggestionAutoFill
 msgid ""
 "opac.pref#OPACSuggestionAutoFill# OPAC suggestions form automatically "
 "filling with data from Google Books API."
 msgstr ""
+"OPAC öneri formu, Google Kitaplar API'sinden gelen verilerle otomatik olarak "
+"doldurulur."
 
 # OPAC > Policy
 msgid ""
@@ -9885,11 +10571,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
@@ -9914,11 +10597,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
@@ -9947,7 +10627,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -10080,7 +10760,7 @@ msgstr "Alt türler"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Mevcut desteklenen değerler</em>: Materyal türleri (<strong>itemtypes</"
 "strong>), Koleksiyon Kodları (<strong>ccode</strong>) ve Raf Yeri "
@@ -10289,10 +10969,11 @@ msgstr ""
 "\">Koha wiki</a> sayfasında bulabilirsiniz."
 
 # OPAC > Policy > OpacHiddenItemsExceptions
+#, fuzzy
 msgid ""
-"opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
-"|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
+"opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
+"items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a> tarafından "
@@ -10513,12 +11194,12 @@ msgid ""
 msgstr "Bu açıklama arama motoru sonuçlarında gösterilecektir (160 karakter)."
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Görüntüle"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Görüntüleme"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Görüntüleme"
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Görüntüle "
 
 # OPAC > Features
 msgid ""
@@ -10527,16 +11208,16 @@ msgid ""
 msgstr "OPAC'taki haberler için bir kütüphane seçim listesi."
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# No"
-msgstr "Hayır"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "Görüntüleme"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "OPAC'da materyal türü simgelerini göster:"
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Görüntüle"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Evet"
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "OPAC'da materyal türü simgeleri."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10986,12 +11667,12 @@ msgid ""
 msgstr "Boş ise, tüm kütüphaneler listelenir."
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "Görüntüle ve ön dolgu yap"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Görüntüleme ve ön dolgu yapma"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "Görüntüleme ve önceden doldurma yapma"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Görüntüle ve ön dolgu yap"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11173,8 +11854,8 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "kullanıcı adı"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "opac.pref#ShowReviewerPhoto# Gösterme"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "Görüntüleme"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11322,15 +12003,32 @@ msgid ""
 msgstr "hesaplarına OPAC’da giriş yapacak olan kullanıcılar."
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Allow"
+#, fuzzy
+msgid "opac.pref#suggestion# Disable"
 msgstr "İzin ver"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# Don't allow"
-msgstr "İzin verme"
+#, fuzzy
+msgid "opac.pref#suggestion# Enable"
+msgstr "İzin ver"
+
+# Patrons > Notices and notifications > PhoneNotification
+#, fuzzy
+msgid ""
+"opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> is disabled, following patron categories are not "
+"allowed to make purchase suggestions:"
+msgstr ""
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # OPAC > Features
-msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
+#, fuzzy
+msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
 msgstr "OPAC’da satın alma teklifi yapacak olan kullanıcılar."
 
 # Patrons
@@ -11739,9 +12437,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
-"\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
-"to this preference will be added as search options in the dropdown menu on "
-"the patron search page."
+"\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
+"fields added to this preference will be added as search options in the "
+"dropdown menu on the patron search page."
 msgstr ""
 "Boş Koha varsayılan olarak \"soyadı, adı, diğer adlar, kart numarası, "
 "kullanıcı kimliği\" olacaktır. Bu tercihe eklenen ek alanlar, kullanıcı "
@@ -11773,11 +12471,12 @@ msgstr "Etkinleştirme"
 msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Etkinleştir"
 
-# Patrons > Security > EnableExpiredPasswordReset
+# Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#EnableExpiredPasswordReset# If not enable patrons must either "
+"patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr ""
+msgstr "karakter uzunluğu."
 
 # Patrons > Security
 #, fuzzy
@@ -11948,6 +12647,41 @@ msgstr "Zorunlu"
 msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr "İsteğe bağlı"
 
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
+"patron deletion, use borrowernumber "
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# All public or shared lists of "
+"this patron are either deleted or transferred to a new owner according to "
+"your choice; other private lists (not shared) are deleted."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
+"owns public or shared lists,"
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# as new list owner, or leave "
+"this field empty in order to change owner to the active staff member who "
+"deletes the patron."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid ""
+"patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
+msgstr ""
+
+# Patrons > General > ListOwnershipUponPatronDeletion
+msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
+msgstr ""
+
 # OPAC > Self registration and modification
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
@@ -12015,6 +12749,23 @@ msgstr "Bir kullanıcının süresi dolmuş veya dolmak üzere ise bir uyarı g�
 # Patrons > Membership expiry
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "önceki günler."
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+msgstr "İzin verme"
+
+# OPAC > Features
+#, fuzzy
+msgid "patrons.pref#NotifyPasswordChange# Notify"
+msgstr "İzin ver"
+
+# Patrons > Security
+#, fuzzy
+msgid ""
+"patrons.pref#NotifyPasswordChange# patrons whenever their password is "
+"changed."
+msgstr "karakter uzunluğu."
 
 # Patrons > Patron forms
 msgid ""
@@ -12422,6 +13173,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "personel ve kullanıcılar için güçlü bir şifre"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12737,7 +13495,7 @@ msgstr "gelişmiş arama menüsünde listelenen dilleri buna göre sınırlayın
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Mevcut desteklenen değerler</em>: Materyal türleri (<strong>itemtypes</"
 "strong>), Koleksiyon Kodları (<strong>ccode</strong>) ve Raf Yeri "
@@ -12775,12 +13533,14 @@ msgstr ""
 "olmadığını da gösterir. "
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Görüntüle"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Görüntüleme"
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "Görüntüleme"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Görüntüle"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12858,9 +13618,10 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "facets uzunluğunu kırpacağınız oran"
 
 # Searching > Results display
+#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
-"interface."
+"interface (REQUIRES ZEBRA)."
 msgstr "OPAC/personel ara yüzündeki karakterler."
 
 # Searching > Results display
@@ -13086,6 +13847,16 @@ msgid ""
 "OPAC search results."
 msgstr "OPAC arama sonuçlarında sayfa başına açılır liste"
 
+# Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"materyal MARC etiketlerini XSLT stil sayfalarında kullanılabilir hale "
+"getirin. Varsayılan \"Gerçekleştirme\"dir, materyaller diğer yöntemler "
+"kullanılarak görüntülenir."
+
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr "Gerçekleştir"
@@ -13095,9 +13866,11 @@ msgid "searching.pref#PassItemMarcToXSLT# Don't"
 msgstr "Gerçekleştirme"
 
 # Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 "materyal MARC etiketlerini XSLT stil sayfalarında kullanılabilir hale "
 "getirin. Varsayılan \"Gerçekleştirme\"dir, materyaller diğer yöntemler "
@@ -13209,6 +13982,55 @@ msgid ""
 "(REQUIRES ZEBRA)."
 msgstr "arama sonuçlarının uygunluğa göre sıralanması (ZEBRA GEREKMEKTEDİR)."
 
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+msgstr "Saklamayın"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+msgstr "Saklayın"
+
+# Searching > Results display > RetainCatalogSearchTerms
+msgid ""
+"searching.pref#RetainCatalogSearchTerms# search terms between searches when "
+"searching from the 'search the catalog' tab in the staff interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+msgstr "Dahil etme"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+msgstr "Dahil etme"
+
+# Searching > Results display > RetainPatronsSearchTerms
+msgid ""
+"searching.pref#RetainPatronsSearchTerms# search terms between searches when "
+"searching from the 'checkout' and 'search patrons' tab in the staff "
+"interface header."
+msgstr ""
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Disable"
+msgstr "Devre dışı bırak"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#SavedSearchFilters# Enable"
+msgstr "Etkinleştir "
+
+# Searching > Features > SavedSearchFilters
+msgid ""
+"searching.pref#SavedSearchFilters# the option for staff with permission to "
+"create/edit custom saved search filters."
+msgstr ""
+
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
@@ -13244,6 +14066,27 @@ msgstr "tüm ISBN çeşitlerinde."
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr "arama yap"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
+msgstr "ISBN dizininde arama yaparken,"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# don't search"
+msgstr "arama yapma"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
+msgstr "tüm ISBN çeşitlerinde."
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "arama yap"
 
 # Searching > Results display
@@ -13456,6 +14299,11 @@ msgstr "personel arayüzü arama sonuçlarında açılan sayfa başına sonuçla
 msgid "serials.pref"
 msgstr "Süreli Yayın"
 
+# Searching > Features
+#, fuzzy
+msgid "serials.pref Features"
+msgstr "Özellikleri"
+
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
 msgstr "Göster"
@@ -13651,18 +14499,16 @@ msgstr ""
 "bin/koha/admin/audio_alerts.pl\">sesli uyarılar</a>."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# <br />Options:<ul><li>Put "
 "a path to define a xslt file</li><li>Put an URL for an external specific "
 "stylesheet.</li></ul>{langcode} will be replaced with current interface "
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
-"<br />Seçenekler:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">varsayılan</a>\" "
-"varsayılan için</li><li>Bir xslt dosyası tanımlamak için bir yol "
-"yerleştirin</li><li>Harici bir özel stil sayfası için bir URL yerleştirin.</"
-"li></ul>{langcode} geçerli arayüz dili ile değiştirilecektir"
+"<br />Seçenekler:<ul><li>Xslt dosyası tanımlamak için bir yol girin</"
+"li><li>Harici bir özel stil sayfası için bir URL girin.</li></ul>{langcode} "
+"değiştirilecek geçerli arayüz diliyle ve {authtypecode}, otorite türü "
+"koduyla değiştirilecektir"
 
 # Staff interface > Appearance
 #, fuzzy
@@ -13733,6 +14579,23 @@ msgid ""
 msgstr ""
 "Ayrıntı sayfalarında veya \"Ayırma Yap\" ekranında ödünç alınmış veya "
 "ayırtılmış materyalleri olan kullanıcıların adları."
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+msgstr "Gösterme"
+
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+msgstr "Göster"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
+"pulldown menu on the staff header search."
+msgstr "OPAC yönetiminde açılır menüden bir kütüphane seç."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -13894,11 +14757,16 @@ msgstr "Etkinleştirme"
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr "Kimlik doğrulama"
 
+# Staff interface > Options
+#, fuzzy
+msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
+msgstr "Kimlik doğrulama"
+
 # Administration > CAS authentication
 #, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
-"(2FA)."
+"(2FA) for staff members."
 msgstr "Oturum açma kimlik doğrulaması için CAS kullanın:"
 
 # Staff interface > Options
@@ -13916,17 +14784,15 @@ msgid ""
 msgstr "Belirli HTML sistem tercihlerini düzenlerken WYSIWYG editörü."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
@@ -13953,11 +14819,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the "
@@ -13978,6 +14841,7 @@ msgstr ""
 "görüntüleyin:"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13987,7 +14851,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 "<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -14638,10 +15502,10 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Etkinleştir"
 
 # Web services > REST API
+#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 "REST API'si için OAuth2 istemci kimlik bilgileri verilir. Net :: OAuth2 :: "
 "AuthorizationServer'ın yüklü olmasını gerektirir. [DENEYSEL]"
@@ -14694,3 +15558,68 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Evet"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
+#~ msgstr "Kayıtları düzenlerken,"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# allow"
+#~ msgstr "izin ver"
+
+# Authorities > General
+#~ msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
+#~ msgstr "izin verme"
+
+# Authorities > General
+#~ msgid ""
+#~ "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
+#~ "authority records if needed, rather than having to reference existing "
+#~ "authorities."
+#~ msgstr ""
+#~ "gerekirse bunları otomatik olarak yerine mevcut yapılar referans yerine, "
+#~ "yeni otorite kayıtları oluşturmak için."
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "taranan kayıt barkodları."
+
+# Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Görüntüle"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Görüntüle"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Görüntüle"
+
+# Logging > Debugging
+#~ msgid ""
+#~ "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
+#~ "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] "
+#~ "to be visible."
+#~ msgstr ""
+#~ "arama sorgusunu şablon parametresi olarak döküm alın, <a href=\"/cgi-bin/"
+#~ "koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars"
+#~ "\">DumpTemplateVars</a>[interface] öğesinin görünür olmasını gerektirir."
+
+# OPAC > Appearance
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Evet"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "opac.pref#ShowReviewerPhoto# Gösterme"
+
+# OPAC > Features
+#~ msgid "opac.pref#suggestion# Don't allow"
+#~ msgstr "İzin verme"

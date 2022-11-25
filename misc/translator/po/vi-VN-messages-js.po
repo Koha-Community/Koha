@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 20:43-0300\n"
+"POT-Creation-Date: 2022-11-16 10:45-0300\n"
 "PO-Revision-Date: 2022-05-01 12:47-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: vi\n"
@@ -17,6 +17,11 @@ msgstr ""
 #, fuzzy
 msgid " (current) "
 msgstr "Module current"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:592
+#, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -104,14 +109,9 @@ msgstr "%s tháng"
 msgid "%s months"
 msgstr "%s tháng"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:591
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:590
 #, javascript-format
 msgid "%s of %s renewals remaining"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
@@ -122,6 +122,11 @@ msgid ""
 msgstr ""
 "%s đơn hàng sử dụng biểu ghi này. Bạn phải có quyền quản trị đơn hàng mới có "
 "thể xóa biểu ghi này."
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:49
+#, javascript-format
+msgid "%s packages found locally"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
 #, fuzzy, javascript-format
@@ -165,6 +170,14 @@ msgstr "Mẫu thư với mã '%s' đã có rồi."
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "Mẫu thư với mã số '%s' đã có cho '%s'."
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
+msgid "A license is used several times"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:468
+msgid "A package is used several times"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:159
 #, javascript-format
 msgid "AJAX error (%s alert)"
@@ -185,7 +198,16 @@ msgstr "AJAX bị lỗi để từ chối từ khóa: %s"
 msgid "Access to camera denied."
 msgstr "Xác định truy cập"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:358
+msgid "Access type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:273
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:186
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:107
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:174
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:184
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
 msgid "Actions"
 msgstr "Thao tác"
 
@@ -210,6 +232,38 @@ msgstr "Tạo bản tài liệu"
 msgid "Add multiple items"
 msgstr "multiple forms"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:49
+msgid "Add new agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:103
+msgid "Add new document"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:97
+msgid "Add new license"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:64
+msgid "Add new period"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:79
+msgid "Add new related agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:13
+msgid "Add package to holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:13
+msgid "Add title to holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:88
+msgid "Add to another package"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:490
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:498
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:501
@@ -227,10 +281,48 @@ msgstr "Thêm vào giỏ tài liệu"
 msgid "Age"
 msgstr "Aug"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:14
+#, javascript-format
+msgid "Agreement %s"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:393
+msgid "Agreement created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:75
+msgid "Agreement deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:24
+msgid "Agreement name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:390
+msgid "Agreement updated"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:3
+msgid "Agreements"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:27
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:27
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:27
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:51
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:122
 msgid "All"
 msgstr "Tất cả"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:286
+msgid "An agreement is used as relationship several times"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:149
+msgid "An agreement is used several times"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:214
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:220
@@ -306,11 +398,17 @@ msgstr "Bạn chắc chắn muốn xóa ảnh bìa này?"
 msgid "Are you sure you want to delete this field?"
 msgstr "Bạn chắc chắn muốn xóa bản tài liệu này?"
 
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:35
+#, fuzzy
+msgid "Are you sure you want to delete this message? This cannot be undone."
+msgstr ""
+"Bạn chắc chắn muốn cập nhật bạn đọc ở phân lớp Trẻ em lên phân lớp Người lớn?"
+
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:50
 msgid "Are you sure you want to delete this record?"
 msgstr "Bạn có chắc chắn xóa biểu ghi này không?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
 #, fuzzy
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Bạn có chắc chắn xóa biểu ghi này không?"
@@ -362,7 +460,7 @@ msgstr "Bạn chắc chắn muốn loại bỏ những tài liệu này khỏi g
 msgid "Are you sure you want to remove this recall?"
 msgstr "Bạn có chắc chắn muốn loại bỏ giá sách ảo này?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:154
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:146
 msgid "Are you sure you want to renew this patron's registration?"
 msgstr "Bạn chắc chắn muốn gia hạn tài khoản cho bạn đọc này?"
 
@@ -391,7 +489,7 @@ msgstr "Bạn chắc chắn muốn xóa bản tài liệu này?"
 msgid "Are you sure you want to revert the waiting status of this recall?"
 msgstr "Bạn chắc chắn muốn loại bỏ từ khóa khỏi nhan đề này?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:139
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:131
 msgid ""
 "Are you sure you want to update this child to an Adult category? This cannot "
 "be undone."
@@ -419,26 +517,31 @@ msgstr "Aug"
 msgid "August"
 msgstr "Tháng 8"
 
-#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:9
+#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:12
 msgid "Authority"
 msgstr "Biểu ghi nhất quán"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:540
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 #, fuzzy
 msgid "Automatic renewal failed, account expired"
 msgstr "%s Thất bại khi tự động gia hạn, tài khoản của bạn đã quá hạn. "
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:533
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:532
 #, fuzzy
 msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr "%s Thất bại khi tự động gia hạn, tài khoản của bạn đã quá hạn. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:236
+#: koha-tmpl/opac-tmpl/bootstrap/js/ratings.js:42
+#, javascript-format
+msgid "Average rating: %s (%s votes)"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
 #, fuzzy
 msgid "Back to top"
 msgstr "Quay lại"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 #, fuzzy
 msgid "Bibliographic record does not exist!"
 msgstr "biểu ghi thư mục %s"
@@ -447,17 +550,21 @@ msgstr "biểu ghi thư mục %s"
 msgid "Both subfield values should be filled or empty."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:744
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "CSV"
 msgstr "CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:526
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:525
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:177
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:79
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:379
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:139
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:407
 msgid "Cancel"
 msgstr "Hủy bỏ"
 
@@ -470,7 +577,11 @@ msgstr "Hủy đặt mượn"
 msgid "Cancelled"
 msgstr "Hủy bỏ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:59
+msgid "Cannot import, no package selected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr ""
@@ -501,8 +612,8 @@ msgid "Check the box next to the alert you want to delete."
 msgstr ""
 "Check the box to the left of the titles you want to add to the new list"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:121
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 #, fuzzy
 msgid "Checked in"
 msgstr "Được ghi trả "
@@ -515,8 +626,8 @@ msgstr "Được ghi mượn cho đến:"
 msgid "Checkouts"
 msgstr "Ghi mượn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:625
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:627
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:624
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:626
 #, fuzzy
 msgid "Claim returned"
 msgstr "Khiếu nại đơn hàng"
@@ -529,14 +640,14 @@ msgstr "Xóa"
 msgid "Clear all"
 msgstr "Bỏ tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:397
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:401
 msgid "Clear date to suspend indefinitely"
 msgstr "Xóa ngày"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:774
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
 #, fuzzy
@@ -558,20 +669,56 @@ msgstr "Chọn vào đây để thu gọn phần này"
 msgid "Click to expand this section"
 msgstr "Chọn vào đây để mở rộng phần này"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:790
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:294
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Dialog.vue:11
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:108
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:238
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:99
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:251
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:139
+msgid "Close"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:83
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:234
+msgid "Closure reason"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
 msgid "Columns"
 msgstr "Cột"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:789
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
 #, fuzzy
 msgid "Columns settings"
 msgstr "Thiết lập mẫu in"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:144
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#, fuzzy
+msgid "Configure"
+msgstr "Xác nhận"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
 msgid "Confirm"
 msgstr "Xác nhận"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:231
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:68
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:154
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:48
+#, fuzzy
+msgid "Content type"
+msgstr "Kiểu tài liệu Koha"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:48
+msgid "Content type: "
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:119
+msgid "Contributors"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:28
 #, javascript-format
@@ -582,7 +729,7 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:752
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Copy"
 msgstr "Sao chép"
@@ -596,20 +743,55 @@ msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
 msgid "Could not access camera."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:130
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:103
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:84
+msgid "Coverage dates"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:121
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:134
+msgid "Coverage depth"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:168
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:61
+msgid "Created on"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:60
+msgid "Date of first serial issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:75
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:123
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:88
+msgid "Date of last issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:153
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:254
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:166
+msgid "Date the monograph is first published in print"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:264
+msgid "Date the monograph is first published online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:122
 #, fuzzy
 msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
 msgstr "Ngày sinh bạn phải khai báo theo định dạng 'DD/MM/YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:128
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
 msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
 msgstr "Ngày sinh bạn phải khai báo theo định dạng 'DD/MM/YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:124
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:116
 msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
 msgstr "Ngày sinh bạn phải khai báo theo định dạng 'MM/DD/YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:126
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:118
 msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
 msgstr "Ngày sinh bạn phải khai báo theo định dạng 'YYYY-MM-DD'"
 
@@ -625,8 +807,12 @@ msgstr "Dec"
 msgid "December"
 msgstr "Tháng 12"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:325
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:235
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:223
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:233
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1006
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Xóa"
@@ -635,15 +821,30 @@ msgstr "Xóa"
 msgid "Denied"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:15
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:214
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:132
+msgid "Description"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 #, fuzzy
 msgid "Directory is not writeable"
 msgstr "index is not available"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:97
+msgid "Documents"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:973
 #, fuzzy
 msgid "Double click to edit"
 msgstr "Click để chỉnh sửa"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:17
+msgid "E-resource management"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:10
 #, fuzzy
@@ -653,6 +854,10 @@ msgstr ""
 "%s %s Lỗi: Thông tin khai báo của bạn chứa giá trị không phù hợp, bạn vui "
 "lòng thực hiện lại. %s %s "
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:307
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:217
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:205
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:215
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:91
 msgid "Edit"
 msgstr "Chỉnh sửa"
@@ -662,7 +867,7 @@ msgstr "Chỉnh sửa"
 msgid "Edit action %s"
 msgstr "Ấn bản: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1017
 #, fuzzy
 msgid "Edit notes"
 msgstr "Bản tài liệu"
@@ -671,6 +876,22 @@ msgstr "Bản tài liệu"
 #, fuzzy, javascript-format
 msgid "Edit provider %s"
 msgstr "Chỉnh sửa %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:296
+msgid "Edition of the monograph"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:188
+msgid "Embargo information"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:33
+msgid "End date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:175
+msgid "Ended on"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 #, fuzzy
@@ -705,7 +926,7 @@ msgstr "Lỗi: Dữ liệu của bạn không được lưu lại"
 msgid "Every"
 msgstr "Every"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:736
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 #, fuzzy
 msgid "Excel"
@@ -716,12 +937,12 @@ msgstr "Trích dẫn"
 msgid "Expired"
 msgstr "Hết hạn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:805
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
 msgid "Export"
 msgstr "Xuất dữ liệu"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:804
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
 #, fuzzy
 msgid "Export or print"
@@ -739,6 +960,10 @@ msgstr "Feb"
 msgid "February"
 msgstr "Tháng 2"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:19
+msgid "File"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 #, fuzzy
 msgid "File already exists"
@@ -747,6 +972,12 @@ msgstr "Đã có trong CSDL"
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:179
 msgid "File name:"
 msgstr "Tên tệp tin:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:314
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:218
+#, javascript-format
+msgid "File size exceeds maximum allowed: %s MB"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:181
 #, fuzzy
@@ -758,11 +989,25 @@ msgstr "Tên tệp tin:"
 msgid "File type:"
 msgstr "Kiểu tệp tin"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:6
+msgid "Filter by expired"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:10
 msgid "First"
 msgstr "Lần 1"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:109
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:122
+msgid "First author"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:188
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:201
+msgid "First editor"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 #, fuzzy
 msgid "First publication date is not defined"
 msgstr "- Bạn chưa khai báo ngày bắt đầu phát hành ấn phẩm định kỳ"
@@ -775,7 +1020,7 @@ msgstr ""
 "Tần suất và chiều dài ấn phẩm định kỳ thường không phù hợp với nhau. Bạn nên "
 "nhập số kỳ đặt mua ấn phẩm định kỳ thay cho thời gian đặt mua ấn phẩm"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 #, fuzzy
 msgid "Frequency is not defined"
 msgstr "- Bạn chưa khai báo tần xuất phát hành"
@@ -814,6 +1059,11 @@ msgstr ""
 msgid "Holds"
 msgstr "Đặt mượn"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:239
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:148
+msgid "Identifier"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
 msgid "If the field is a control field, the subfield should be empty"
 msgstr ""
@@ -826,6 +1076,15 @@ msgstr ""
 "Nếu bạn muốn gửi khiếu nại các ấn phẩm chậm hoặc thiếu, bạn phải khai báo "
 "nhà cung cấp. Bạn chọn 'Đồng ý' để bỏ qua hoặc 'Hủy bỏ' để quay lại và khai "
 "báo thêm thông tin nhà cung cấp"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:138
+#, fuzzy
+msgid "Import"
+msgstr "Xuất dữ liệu"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:2
+msgid "Import from a list"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
@@ -843,26 +1102,39 @@ msgstr "Trong giỏ tài liệu"
 msgid "Internal Server Error, please reload the page"
 msgstr "Lỗi máy chủ, bạn vui lòng tải lại giao diện này"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:248
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:64
+msgid "Is perpetual"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:277
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:149
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:298
+#, fuzzy
+msgid "Is selected"
+msgstr "Bạn chưa lựa chọn tài liệu."
+
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:385
 #, fuzzy
 msgid "Item cannot be checked out. There are no available formats"
 msgstr "Tài liệu không thể ghi mượn."
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:302
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:306
 #, javascript-format
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Tài liệu đã không được bạn đọc nhận từ %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:300
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:304
 #, fuzzy, javascript-format
 msgid "Item is <strong>in transit</strong> from %s since %s"
 msgstr "Đang chuyển từ thư viện %s tới thư viện %s từ ngày %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:290
 msgid "Item is <strong>waiting here</strong>"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:295
 msgid "Item is <strong>waiting</strong>"
 msgstr ""
 
@@ -900,7 +1172,59 @@ msgstr "Tháng 6"
 msgid "Last"
 msgstr "Trước"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:90
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:20
+msgid "License"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:275
+msgid "License created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:76
+msgid "License deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:139
+msgid "License info"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:23
+#, fuzzy
+msgid "License name"
+msgstr "Tên tệp tin:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:272
+#, fuzzy
+msgid "License updated"
+msgstr "Tài liệu đã có"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:144
+msgid "Licenses"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:97
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:113
 msgid "Loading"
 msgstr "Đang tải"
@@ -916,9 +1240,15 @@ msgstr "Danh sách các báo cáo được lưu lại"
 msgid "Loading..."
 msgstr "Đang tải..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:274
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:272
 msgid "Loading... you may continue scanning."
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:37
+#, fuzzy
+msgid "Local bibliographic record"
+msgstr "Bạn phải tìm kiếm hoặc tạo một biểu ghi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:79
 #, fuzzy
@@ -961,7 +1291,7 @@ msgstr "Mon"
 msgid "Monday"
 msgstr "Thứ 2"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:491
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:492
 msgid "Must be renewed at the library"
 msgstr ""
 
@@ -971,9 +1301,37 @@ msgid ""
 "copied"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:191
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:149
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:196
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:103
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:119
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlePackagesList.vue:42
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:92
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:108
+msgid "Name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:7
+msgid "New agreement"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:344
 msgid "New budget-parent is beneath budget"
 msgstr "Tạo quỹ lớn trong một nguồn quỹ"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:7
+msgid "New license"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:7
+msgid "New package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:7
+msgid "New title"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:93
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:95
@@ -986,7 +1344,12 @@ msgstr "Tiếp tục"
 msgid "Next available %s item"
 msgstr "Nhan đề này không có bản tài liệu đính kèm."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:282
+#, fuzzy, javascript-format
+msgid "Next available item group <strong>%s</strong> item"
+msgstr "Nhan đề này không có bản tài liệu đính kèm."
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 #, fuzzy
 msgid "Next issue publication date is not defined"
 msgstr "- Bạn chưa khai báo ngày phát hành kỳ ấn phẩm tiếp theo"
@@ -1008,7 +1371,7 @@ msgid "No cover image available"
 msgstr "Không có ảnh bìa"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:533
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:545
 msgid "No data available in table"
 msgstr "Không có dữ liệu hiển thị trong bảng"
 
@@ -1048,7 +1411,7 @@ msgctxt "Bibliographic record"
 msgid "No item was selected"
 msgstr "Không có tài liệu nào được chọn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:686
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:685
 #, fuzzy
 msgid "No itemtype"
 msgstr "Kiểu tài liệu Koha"
@@ -1057,7 +1420,7 @@ msgstr "Kiểu tài liệu Koha"
 msgid "No matching records found"
 msgstr "Không tìm thấy biểu ghi phù hợp"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:512
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:511
 #, fuzzy, javascript-format
 msgid "No renewal before %s"
 msgstr "Không thể gia hạn trước"
@@ -1066,30 +1429,53 @@ msgstr "Không thể gia hạn trước"
 msgid "No results found"
 msgstr "Không tìm thấy kết quả phù hợp"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 #, fuzzy
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "Ấn phẩm định kỳ này liên quan tới nhà cung cấp khác"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:505
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:30
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:25
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:25
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:29
+msgid "No, do not delete"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:504
 #, fuzzy
 msgid "Not allowed: overdue"
 msgstr "%s Không được phép"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:498
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:497
 #, fuzzy
 msgid "Not allowed: patron restricted"
 msgstr "Bạn đọc bị KHÓA THẺ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:484
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:485
 #, fuzzy
 msgid "Not renewable"
 msgstr "%s Không thể gia hạn"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:26
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:29
+#, fuzzy
+msgid "Not selected"
+msgstr "Bạn chưa lựa chọn tài liệu."
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:64
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:150
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:90
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:177
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:209
+msgid "Notes"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:342
@@ -1111,15 +1497,50 @@ msgstr "Nov"
 msgid "November"
 msgstr "Tháng 11"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:691
 #, fuzzy
 msgid "Number of checkouts by item type"
 msgstr "Số lần cho mượn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:98
+msgid "Number of first issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:55
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:88
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:68
+msgid "Number of first volume available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 #, fuzzy
 msgid "Number of items to add"
 msgstr "Số lượng ĐKCB đã thêm"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:95
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:159
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:108
+#, fuzzy
+msgid "Number of last issue available online"
+msgstr "Không có dữ liệu hiển thị trong bảng"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:132
+msgid "Number of last volume available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:175
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:289
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:188
+msgid "Number of volume for monograph"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:143
 msgid "Oct"
@@ -1129,27 +1550,90 @@ msgstr "Oct"
 msgid "October"
 msgstr "Tháng 10"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:477
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:608
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:478
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:607
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
 msgid "On hold"
 msgstr "Đặt mượn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:368
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:366
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:771
 #, fuzzy
 msgid "On-site checkout"
 msgstr "Hủy bỏ ghi mượn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:66
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:35
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:47
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:48
+msgid "Online-format identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:295
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:302
+msgid "Only one controlling license is allowed"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:127
 #, fuzzy
 msgid "OverDrive account page"
 msgstr "trong bộ sưu tập OverDrive"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:21
+msgid "Package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:93
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:74
+msgid "Package content type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:183
+msgid "Package created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:72
+msgid "Package deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:4
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:13
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:24
+msgid "Package name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:172
+msgid "Package updated"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:3
+msgid "Packages"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 #, fuzzy
 msgid "Patron note"
 msgstr "Patron notices"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:87
+msgid "Period end"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:89
+#, fuzzy
+msgid "Period note"
+msgstr "Patron notices"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:83
+msgid "Periods"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:64
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:70
+msgid "Physical location"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:81
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:362
@@ -1158,8 +1642,8 @@ msgid "Place hold"
 msgstr "Đặt mượn"
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:21
-#: koha-tmpl/intranet-tmpl/prog/js/categories.js:88
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:91
+#: koha-tmpl/intranet-tmpl/prog/js/categories.js:94
 msgid "Please choose an enrollment period in months OR by date."
 msgstr ""
 
@@ -1168,7 +1652,7 @@ msgstr ""
 msgid "Please choose at least one external target"
 msgstr "Bạn vui lòng lựa chọn một thao tác"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "Vui lòng chọn 'Kiểm tra cách đánh số' trước khi lưu ấn phẩm định kỳ."
 
@@ -1186,7 +1670,7 @@ msgstr "Hãy nhập ít nhất {0} kí tự."
 msgid "Please enter %s or more characters"
 msgstr "Hãy nhập nhiều hơn {0} kí tự."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Vui lòng nhập tên cho mẫu đánh số này"
 
@@ -1195,7 +1679,7 @@ msgstr "Vui lòng nhập tên cho mẫu đánh số này"
 msgid "Please enter a valid date (should match %s)."
 msgstr "Hãy nhập đúng giá trị ngày (ISO)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1241,23 +1725,53 @@ msgstr ""
 msgid "Previous"
 msgstr "Sau"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:293
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:673
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:672
 msgid "Previous checkouts"
 msgstr "Ghi mượn trước đây"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:760
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
 msgid "Print"
 msgstr "Bản in"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:36
+msgid "Print-format identifier"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
 msgid "Processing..."
 msgstr "Đang xử lý..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:470
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:606
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:77
+msgid "Proxy"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:4
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:18
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:23
+msgid "Publication title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:159
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:54
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:225
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:67
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:35
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:230
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:134
+msgid "Publication type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:216
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:133
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:146
+msgid "Publisher name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:471
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:605
 #, fuzzy
 msgid "Recalled"
 msgstr "RecallItem "
@@ -1271,43 +1785,122 @@ msgstr "Từ chối"
 msgid "Rejected"
 msgstr "Bị từ chối"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:20
+msgid "Related agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:191
+msgid "Related agreements"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:42
+msgid "Relationship"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:26
 #, fuzzy
 msgid "Remove all items"
 msgstr "Loại bỏ tài liệu được chọn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:13
+msgid "Remove from this package"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
 #, fuzzy
 msgid "Remove item"
 msgstr "Loại bỏ "
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:22
+msgid "Remove package from holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:71
 msgid "Remove restriction?"
 msgstr "Hủy hạn chế?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:14
+msgid "Remove this document"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:14
+#, fuzzy
+msgid "Remove this license"
+msgstr "Loại bỏ tài liệu được chọn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:14
+#, fuzzy
+msgid "Remove this period"
+msgstr "Loại bỏ "
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:14
+#, fuzzy
+msgid "Remove this relationship"
+msgstr "Hủy hạn chế?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:13
+#, fuzzy
+msgid "Remove this user"
+msgstr "Loại bỏ "
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:22
+msgid "Remove title from holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:188
 #, fuzzy
 msgid "Renew failed:"
 msgstr "Gia hạn tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:556
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:555
 msgid "Renewal denied by syspref"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:187
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:259
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:69
+msgid "Renewal priority"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 #, fuzzy
 msgid "Renewed, due:"
 msgstr "Được gia hạn "
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:60
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:60
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:78
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:22
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:31
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:76
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:100
+msgid "Required"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1009
 msgid "Resolve"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:31
+msgid "Resource identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:9
+msgid "Resource information"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
 msgid "Results"
 msgstr "Kết quả"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -1315,6 +1908,11 @@ msgstr ""
 #, fuzzy
 msgid "Resume"
 msgstr "Kết quả"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:120
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:74
+msgid "Role"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Root directory for uploads not defined"
@@ -1337,13 +1935,13 @@ msgstr "Lưu toàn bộ %s thông số "
 msgid "Saving..."
 msgstr "Đang lưu lại..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:519
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:547
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:518
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:546
 #, fuzzy
 msgid "Scheduled for automatic renewal"
 msgstr "%s ( %s ) đã được lên lịch tự động gia hạn. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:236
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
 msgid "Scroll to the top of the page"
 msgstr ""
 
@@ -1355,7 +1953,7 @@ msgstr ""
 msgid "Search:"
 msgstr "Tìm kiếm:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr ""
 
@@ -1363,6 +1961,11 @@ msgstr ""
 #, fuzzy
 msgid "Searching…"
 msgstr "TÌM KIẾM"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:359
+#, fuzzy
+msgid "Select"
+msgstr "Chọn tất cả"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
 msgid "Select all"
@@ -1373,6 +1976,23 @@ msgstr "Chọn tất cả"
 msgid "Select all pending"
 msgstr "Chọn tất cả"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:28
+#, fuzzy
+msgid "Select user"
+msgstr "Chọn tất cả"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:44
+#, fuzzy
+msgid "Selected"
+msgstr "Bị từ chối"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:22
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:25
+#, fuzzy
+msgid "Selection status"
+msgstr "Chọn tất cả"
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:143
 msgid "Sep"
 msgstr "Sep"
@@ -1381,20 +2001,20 @@ msgstr "Sep"
 msgid "September"
 msgstr "Tháng 9"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1080
 #, fuzzy
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Hiển thị tất cả"
 msgstr[1] "Hiển thị tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1085
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 #, fuzzy
 msgid "Show Mana results"
 msgstr "Hiển thị tài liệu chủ"
@@ -1418,12 +2038,29 @@ msgstr "%s Không tìm thấy kết quả phù hợp %s "
 msgid "Some budgets are not defined in item records"
 msgstr "Không tạo tài liệu đính kèm biểu ghi thư mục khi nhận ÂPĐK."
 
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:78
+msgid "Some required item subfields are not set"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:502
+#, fuzzy
+msgid "Something went wrong when loading the table."
+msgstr "Phát hiện lỗi! Bạn không thể tạo mẫu đánh số ÂPĐK."
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:496
+#, fuzzy, javascript-format
+msgid ""
+"Something went wrong when loading the table.\n"
+"%s: %s. \n"
+"%s"
+msgstr "Phát hiện lỗi! Bạn không thể tạo mẫu đánh số ÂPĐK."
+
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:634
 #, fuzzy
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Phát hiện lỗi! Bạn không thể tạo mẫu đánh số ÂPĐK."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Phát hiện lỗi! Bạn không thể tạo mẫu đánh số ÂPĐK."
 
@@ -1431,7 +2068,28 @@ msgstr "Phát hiện lỗi! Bạn không thể tạo mẫu đánh số ÂPĐK."
 msgid "Sorry, nothing found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:20
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:105
+msgid "Start date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:166
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:61
+msgid "Started on"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:42
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:220
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:46
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:148
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:81
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:152
+msgid "Status"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 #, fuzzy
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Ngày kết thúc:"
@@ -1445,18 +2103,27 @@ msgid "Sunday"
 msgstr "Chủ nhật"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:261
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:402
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:406
 msgid "Suspend"
 msgstr "Tạm dừng"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:388
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:392
 #, fuzzy
 msgid "Suspend hold on"
 msgstr "Tạm dừng tất cả"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "Tạm dừng đến ngày:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
+#, fuzzy
+msgid "Table settings"
+msgstr "Thiết lập mẫu in"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
+msgid "Template name is required."
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Temporary directory for uploads not defined"
@@ -1484,6 +2151,11 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:21
 msgid "The destination should be filled."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:115
+msgid ""
+"The e-resource management module is disabled, turn on 'ERMModule' to use it"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:72
@@ -1585,11 +2257,28 @@ msgstr ""
 msgid "The vendor does not exist"
 msgstr "Tài liệu này không tồn tại."
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:9
+msgid "There are no licenses defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:14
+msgid "There are no packages defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:14
+msgid "There are no titles defined"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:52
 msgid "There is no record selected"
 msgstr "Bạn chưa lựa chọn biểu ghi nào"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageAgreements.vue:86
+#, fuzzy
+msgid "This agreement is already linked with this package"
+msgstr "Tài liệu này đã có trong giỏ tài liệu của bạn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 #, fuzzy
 msgid "This bibliographic record does not exist"
 msgstr "Tài liệu này không tồn tại."
@@ -1606,11 +2295,16 @@ msgstr ""
 msgid "This item has been added to your cart"
 msgstr "Tài liệu này đã được thêm vào giỏ tài liệu của bạn"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:370
+#, fuzzy
+msgid "This item has been recalled and the due date updated"
+msgstr "Tài liệu này đã được thêm vào giỏ tài liệu của bạn"
+
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
 msgid "This item is already in your cart"
 msgstr "Tài liệu này đã có trong giỏ tài liệu của bạn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Mẫu đánh số ÂPĐK này đã tồn tại. Bạn muốn chỉnh sửa mẫu đánh số này?"
 
@@ -1632,8 +2326,55 @@ msgstr "Thu"
 msgid "Thursday"
 msgstr "Thứ 5"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:671
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:13
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:109
+msgid "Title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:520
+msgid "Title created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:71
+msgid "Title deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:11
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:24
+msgid "Title identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:209
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:348
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:222
+msgid "Title identifier of any preceding publication title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:320
+msgid "Title identifier of the parent publication"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:515
+#, fuzzy
+msgid "Title updated"
+msgstr "Tài liệu đã có"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:166
+msgid "Title-level URL"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:96
+msgid "Titles"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:10
+msgid "To the following local package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:670
 msgid "Today's checkouts"
 msgstr "Số ghi mượn trong ngày"
 
@@ -1645,25 +2386,34 @@ msgstr "Tue"
 msgid "Tuesday"
 msgstr "Thứ 3"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:128
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:217
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:140
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:138
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:45
+msgid "Type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:86
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:278
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:123
+msgid "URI"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:126
 #, fuzzy
 msgid "Unable to check in"
 msgstr "Quét mã vạch để ghi trả tài liệu:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:941
-#, fuzzy
-msgid "Unable to claim as returned"
-msgstr "Không thể xóa tài khoản bạn đọc"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:338
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:342
 msgid "Unable to resume, hold not found"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:424
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:428
 msgid "Unable to suspend, hold not found"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1106
 msgid "Update"
 msgstr "Cập nhật"
 
@@ -1681,6 +2431,27 @@ msgstr "Cập nhật tài liệu"
 msgid "Upload status: "
 msgstr "Trạng thái đặt mượn "
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:19
+msgid "User"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:116
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:70
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:3
+msgid "Users"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:201
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:36
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:26
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:129
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:118
+msgid "Vendor"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:18
 #, fuzzy
 msgid "View comparison"
@@ -1691,7 +2462,7 @@ msgstr "Hiển thị MARC"
 msgid "Waiting status reverted"
 msgstr "Trạng thái từ khóa."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1706,7 +2477,7 @@ msgstr ""
 "Cảnh báo: Biểu ghi này được sử dụng trong %s đơn hàng.  Việc xóa dữ liệu của "
 "bạn có thể gây lỗi trên phân hệ bổ sung. Bạn chắc chắn muốn xóa biểu ghi này?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 #, fuzzy
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
@@ -1744,7 +2515,7 @@ msgstr "Bạn không thể nhận thêm tài liệu"
 msgid "You have made changes to system preferences."
 msgstr "Bạn đã thay đổi các thông số chung của hệ thống."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1752,11 +2523,11 @@ msgstr ""
 "Bạn đã chỉnh sửa mẫu dự báo nâng cao. Bạn vui lòng lưu lại thay đổi của bạn "
 "hoặc chọn hủy bỏ việc chỉnh sửa."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Bạn phải chọn ngày phát hành đầu tiên"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "Bạn phải chọn số lượng ấn phẩm định kỳ hoặc ngày kết thúc."
 
@@ -1771,7 +2542,7 @@ msgstr "Bạn phải tìm kiếm hoặc tạo một biểu ghi"
 msgid "You must select at least one record"
 msgstr "Bạn phải chọn tài liệu đặt mượn. "
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:103
 msgid "You must select checkout(s) to export"
 msgstr "Bạn phải lựa chọn các ghi mượn để xuất dữ liệu"
 
@@ -1789,12 +2560,17 @@ msgstr "Bạn cần phải đăng nhập lại, phiên làm việc của bạn �
 msgid "Your cart is currently empty"
 msgstr "Giỏ tài liệu trống"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:341
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:427
+#: koha-tmpl/opac-tmpl/bootstrap/js/ratings.js:35
+#, javascript-format
+msgid "Your rating: %s."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:345
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:431
 msgid "Your request could not be processed. Check the logs"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:332
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:338
 msgid "a an the"
 msgstr "a an the"
 
@@ -1807,56 +2583,115 @@ msgstr "Đã có trong CSDL"
 msgid "already in your cart"
 msgstr "đã có trong giỏ tài liệu của bạn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:288
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:296
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:298
 #, fuzzy, javascript-format
 msgid "at %s"
 msgstr "Giỏ đặt hàng số %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:751
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:345
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:750
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:156
 msgid "by _AUTHOR_"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:32
+msgid "has backfile in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:30
+msgid "has demand-driven acquisitions in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:33
+msgid "has frontfile in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:22
+msgid "has post-cancellation access in"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
 msgid "is duplicated"
 msgstr "Tài liệu đã có"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:15
+msgid "is superseded by"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "Được chỉnh sửa"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
 #, fuzzy
 msgid "not checked out"
 msgstr "Tài liệu không được ghi mượn."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:13
+#, fuzzy
+msgid "on"
+msgstr "Mon"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
 #, fuzzy
 msgid "on hold"
 msgstr "Đặt mượn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:18
+msgid "provides post-cancellation access for"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:63
 msgid "quantity values are not filled in or are not numbers"
 msgstr "giá trị số lượng  chưa được khai báo hoặc không phù hợp"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:206
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:204
 #, fuzzy
 msgid "reason unknown"
 msgstr "Dates unknown"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
-msgid "too many consecutive renewals without being seen by the library"
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:34
+msgid "related to"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:6
+#, javascript-format
+msgid "see job #%s"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:14
+msgid "supersedes"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
+msgid "too many consecutive renewals without being seen by the library"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
 #, fuzzy
 msgid "too many renewals"
 msgstr "Tổng số gia hạn"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:26
+msgid "tracks demand-driven acquisitions for"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:272
 #, fuzzy, javascript-format
 msgid "until %s"
 msgstr "đến ngày "
+
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:101
+#, fuzzy
+msgid "years"
+msgstr "%s tuổi"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
+msgid "{credit_type_description} against {debit_type_description}"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Unable to claim as returned"
+#~ msgstr "Không thể xóa tài khoản bạn đọc"

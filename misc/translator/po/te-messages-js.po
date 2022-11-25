@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 20:38-0300\n"
+"POT-Creation-Date: 2022-11-16 10:39-0300\n"
 "PO-Revision-Date: 2022-05-03 18:56+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -20,6 +20,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (ప్రస్తుతం) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:592
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s యొక్క %s కనిపించని పునరుద్ధరణలు మిగిలి ఉన్నాయి"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -102,15 +107,10 @@ msgstr "%s నెల"
 msgid "%s months"
 msgstr "%s నెలల"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:591
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:590
 #, javascript-format
 msgid "%s of %s renewals remaining"
 msgstr "%s యొక్క %s పునరుద్ధరణలు మిగిలి ఉన్నాయి"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s యొక్క %s కనిపించని పునరుద్ధరణలు మిగిలి ఉన్నాయి"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
@@ -120,6 +120,11 @@ msgid ""
 msgstr ""
 "%s ఆర్డర్(s) ఈ రికార్డును ఉపయోగిస్తున్నారు. ఈ రికార్డ్‌ను తొలగించడానికి మీకు ఆర్డర్ మేనేజింగ్ అనుమతులు "
 "అవసరం."
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:49
+#, javascript-format
+msgid "%s packages found locally"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
 #, javascript-format
@@ -162,6 +167,14 @@ msgstr "కోడ్‌తో డిఫాల్ట్ అక్షరం '%s' �
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "కోడ్‌తో ఒక లేఖ '%s' ఇప్పటికే ఉంది '%s'."
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
+msgid "A license is used several times"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:468
+msgid "A package is used several times"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:159
 #, javascript-format
 msgid "AJAX error (%s alert)"
@@ -181,7 +194,16 @@ msgstr "ట్యాగ్‌ను తిరస్కరించడంలో �
 msgid "Access to camera denied."
 msgstr "కెమెరాకు యాక్సెస్ నిరాకరించబడింది."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:358
+msgid "Access type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:273
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:186
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:107
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:174
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:184
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
 msgid "Actions"
 msgstr "చర్యలు"
 
@@ -205,6 +227,38 @@ msgstr "వస్తువు జోడించు"
 msgid "Add multiple items"
 msgstr "బహుళ అంశాలను జోడించండి"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:49
+msgid "Add new agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:103
+msgid "Add new document"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:97
+msgid "Add new license"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:64
+msgid "Add new period"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:79
+msgid "Add new related agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:13
+msgid "Add package to holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:13
+msgid "Add title to holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:88
+msgid "Add to another package"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:490
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:498
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:501
@@ -221,10 +275,48 @@ msgstr "బండికి జోడించండి"
 msgid "Age"
 msgstr "వయసు"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:14
+#, javascript-format
+msgid "Agreement %s"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:393
+msgid "Agreement created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:75
+msgid "Agreement deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:24
+msgid "Agreement name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:390
+msgid "Agreement updated"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:3
+msgid "Agreements"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:27
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:27
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:27
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:51
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:122
 msgid "All"
 msgstr "అన్ని"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:286
+msgid "An agreement is used as relationship several times"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:149
+msgid "An agreement is used several times"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:214
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:220
@@ -295,11 +387,16 @@ msgstr "మీరు ఖచ్చితంగా ఈ కవర్ చిత్�
 msgid "Are you sure you want to delete this field?"
 msgstr "మీరు ఖచ్చితంగా ఈ ఫీల్డ్‌ను తొలగించాలనుకుంటున్నారా?"
 
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:35
+#, fuzzy
+msgid "Are you sure you want to delete this message? This cannot be undone."
+msgstr "మీరు ఖచ్చితంగా ఈ పిల్లవాడిని వయోజన వర్గానికి నవీకరించాలనుకుంటున్నారా? దీన్ని రద్దు చేయలేము."
+
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:50
 msgid "Are you sure you want to delete this record?"
 msgstr "మీరు ఖచ్చితంగా ఈ రికార్డ్‌ను తొలగించాలనుకుంటున్నారా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
 msgid "Are you sure you want to delete this return claim?"
 msgstr "మీరు ఖచ్చితంగా ఈ రిటర్న్ దావాను తొలగించాలనుకుంటున్నారా?"
 
@@ -346,7 +443,7 @@ msgstr ""
 msgid "Are you sure you want to remove this recall?"
 msgstr "మీరు ఖచ్చితంగా ఈ రీకాల్‌ని తీసివేయాలనుకుంటున్నారా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:154
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:146
 msgid "Are you sure you want to renew this patron's registration?"
 msgstr "మీరు ఖచ్చితంగా ఈ పోషకుడి నమోదును పునరుద్ధరించాలనుకుంటున్నారా?"
 
@@ -373,7 +470,7 @@ msgstr "మీరు ఖచ్చితంగా ఈ అంశాన్ని �
 msgid "Are you sure you want to revert the waiting status of this recall?"
 msgstr "మీరు ఈ రీకాల్ యొక్క నిరీక్షణ స్థితిని ఖచ్చితంగా మార్చాలనుకుంటున్నారా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:139
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:131
 msgid ""
 "Are you sure you want to update this child to an Adult category? This cannot "
 "be undone."
@@ -399,24 +496,29 @@ msgstr "ఆగస్టు"
 msgid "August"
 msgstr "ఆగస్టు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:9
+#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:12
 msgid "Authority"
 msgstr "అధికారం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:540
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "స్వయంచాలక పునరుద్ధరణ విఫలమైంది, ఖాతా గడువు ముగిసింది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:533
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:532
 msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr "స్వయంచాలక పునరుద్ధరణ విఫలమైంది, పోషకుడికి చెల్లించని జరిమానాలు ఉన్నాయి"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:236
+#: koha-tmpl/opac-tmpl/bootstrap/js/ratings.js:42
+#, javascript-format
+msgid "Average rating: %s (%s votes)"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
 #, fuzzy
 msgid "Back to top"
 msgstr "టూల్స్ తిరిగి వెళ్ళు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "బిబ్లియోగ్రాఫిక్ రికార్డ్ లేదు!"
 
@@ -424,17 +526,21 @@ msgstr "బిబ్లియోగ్రాఫిక్ రికార్డ�
 msgid "Both subfield values should be filled or empty."
 msgstr "రెండు సబ్ ఫీల్డ్ విలువలు నింపాలి లేదా ఖాళీగా ఉండాలి."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:744
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "CSV"
 msgstr "సిఎస్ వి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:526
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:525
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "ఇకపై స్వయంచాలకంగా పునరుద్ధరించబడదు - చెక్అవుట్ రోజుల సంఖ్య మించిపోయింది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:177
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:79
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:379
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:139
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:407
 msgid "Cancel"
 msgstr "రద్దు చేయండి"
 
@@ -447,7 +553,11 @@ msgstr "పట్టును రద్దు చేయండి"
 msgid "Cancelled"
 msgstr "రద్దు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:59
+msgid "Cannot import, no package selected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr "కింది కారణంతో అంచనా నమూనాను పరీక్షించలేము(s): %s"
@@ -474,8 +584,8 @@ msgstr "చెక్ అవుట్ చేయండి"
 msgid "Check the box next to the alert you want to delete."
 msgstr "మీరు తొలగించాలనుకుంటున్న హెచ్చరిక పక్కన ఉన్న పెట్టెను ఎంచుకోండి."
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:121
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 msgid "Checked in"
 msgstr "చెక్ ఇన్"
 
@@ -487,8 +597,8 @@ msgstr "వరకు తనిఖీ చేశారు: "
 msgid "Checkouts"
 msgstr "చెక్ అవుట్స్ చేయండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:625
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:627
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:624
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:626
 msgid "Claim returned"
 msgstr "దావా తిరిగి వచ్చింది"
 
@@ -500,14 +610,14 @@ msgstr "నిశ్చితమైన"
 msgid "Clear all"
 msgstr "అన్నీ క్లియర్ చేయండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:397
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:401
 msgid "Clear date to suspend indefinitely"
 msgstr "నిరవధికంగా నిలిపివేయడానికి తేదీని క్లియర్ చేయండి"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:774
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
 msgid "Clear filter"
@@ -528,19 +638,55 @@ msgstr "ఈ విభాగాన్ని కూల్చడానికి క
 msgid "Click to expand this section"
 msgstr "ఈ విభాగాన్ని విస్తరించడానికి క్లిక్ చేయండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:790
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:294
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Dialog.vue:11
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:108
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:238
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:99
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:251
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:139
+msgid "Close"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:83
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:234
+msgid "Closure reason"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
 msgid "Columns"
 msgstr "నిలువు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:789
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
 msgid "Columns settings"
 msgstr "నిలువు సెట్టింగ్‌లు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:144
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#, fuzzy
+msgid "Configure"
+msgstr "నిర్ధారించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
 msgid "Confirm"
 msgstr "నిర్ధారించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:231
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:68
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:154
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:48
+#, fuzzy
+msgid "Content type"
+msgstr "ఐటెమ్‌టైప్ లేదు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:48
+msgid "Content type: "
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:119
+msgid "Contributors"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:28
 #, javascript-format
@@ -551,7 +697,7 @@ msgstr "కాపీ %d క్లిప్‌బోర్డ్‌కు వర�
 msgid "Copied one row to clipboard"
 msgstr "క్లిప్‌బోర్డ్‌కు ఒక అడ్డు వరుసను కాపీ చేశారు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:752
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Copy"
 msgstr "కాపీ"
@@ -565,19 +711,54 @@ msgstr "క్లిప్‌బోర్డ్‌కు కాపీ చేయ�
 msgid "Could not access camera."
 msgstr "కంటెంట్ యాక్సెస్ మోడ్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:130
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:103
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:84
+msgid "Coverage dates"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:121
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:134
+msgid "Coverage depth"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:168
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:61
+msgid "Created on"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:60
+msgid "Date of first serial issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:75
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:123
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:88
+msgid "Date of last issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:153
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:254
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:166
+msgid "Date the monograph is first published in print"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:264
+msgid "Date the monograph is first published online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:122
 msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
 msgstr "పుట్టిన తేదీలను ఫార్మాట్‌లో నమోదు చేయాలి 'DD.MM.YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:128
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
 msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
 msgstr "పుట్టిన తేదీలను ఫార్మాట్‌లో నమోదు చేయాలి 'DD/MM/YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:124
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:116
 msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
 msgstr "పుట్టిన తేదీలను ఫార్మాట్‌లో నమోదు చేయాలి 'MM/DD/YYYY'"
 
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:126
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:118
 msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
 msgstr "పుట్టిన తేదీలను ఫార్మాట్‌లో నమోదు చేయాలి 'YYYY-MM-DD'"
 
@@ -593,8 +774,12 @@ msgstr "డిసెంబర్"
 msgid "December"
 msgstr "డిసెంబర్"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:325
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:235
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:223
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:233
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1006
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "తొలగించు"
@@ -603,19 +788,38 @@ msgstr "తొలగించు"
 msgid "Denied"
 msgstr "ఖండించింది"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:15
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:214
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:132
+msgid "Description"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Directory is not writeable"
 msgstr "డైరెక్టరీ వ్రాయలేనిది కాదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:97
+msgid "Documents"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:973
 msgid "Double click to edit"
 msgstr "సవరించడానికి డబుల్ క్లిక్ చేయండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:17
+msgid "E-resource management"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:10
 msgid ""
 "ERROR: Price is not a valid number, please check the price and try again!"
 msgstr "లోపం: ధర చెల్లుబాటు అయ్యే సంఖ్య కాదు, దయచేసి ధరను తనిఖీ చేసి, మళ్లీ ప్రయత్నించండి!"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:307
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:217
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:205
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:215
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:91
 msgid "Edit"
 msgstr "మార్చు"
@@ -625,7 +829,7 @@ msgstr "మార్చు"
 msgid "Edit action %s"
 msgstr "చర్యను సవరించండి %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1017
 msgid "Edit notes"
 msgstr "గమనికలను సవరించండి"
 
@@ -633,6 +837,22 @@ msgstr "గమనికలను సవరించండి"
 #, javascript-format
 msgid "Edit provider %s"
 msgstr "ప్రొవైడర్‌ను సవరించండి %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:296
+msgid "Edition of the monograph"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:188
+msgid "Embargo information"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:33
+msgid "End date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:175
+msgid "Ended on"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Error code 0 not used"
@@ -665,7 +885,7 @@ msgstr "లోపం; మీ డేటా సేవ్ చేయబడకపో�
 msgid "Every"
 msgstr "ప్రతి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:736
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "Excel"
 msgstr "ఎక్సెల్"
@@ -674,12 +894,12 @@ msgstr "ఎక్సెల్"
 msgid "Expired"
 msgstr "ముగిసినది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:805
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
 msgid "Export"
 msgstr "ఎగుమతి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:804
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
 msgid "Export or print"
 msgstr "ఎగుమతి చేయండి లేదా ముద్రించండి"
@@ -696,6 +916,10 @@ msgstr "ఫిబ్రవరి"
 msgid "February"
 msgstr "ఫిబ్రవరి"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:19
+msgid "File"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "File already exists"
 msgstr "ఫైల్ ఇప్పటికే ఉంది"
@@ -703,6 +927,12 @@ msgstr "ఫైల్ ఇప్పటికే ఉంది"
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:179
 msgid "File name:"
 msgstr "ఫైల్ పేరు:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:314
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:218
+#, javascript-format
+msgid "File size exceeds maximum allowed: %s MB"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:181
 #, fuzzy
@@ -714,11 +944,25 @@ msgstr "ఫైల్ పరిమాణం"
 msgid "File type:"
 msgstr "ఫైల్ రకము"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:6
+msgid "Filter by expired"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:10
 msgid "First"
 msgstr "ప్రధమ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:109
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:122
+msgid "First author"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:188
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:201
+msgid "First editor"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "మొదటి ప్రచురణ తేదీ నిర్వచించబడలేదు"
 
@@ -728,7 +972,7 @@ msgid ""
 "consider entering an issue count rather than a time period."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "ఫ్రీక్వెన్సీ నిర్వచించబడలేదు"
 
@@ -765,6 +1009,11 @@ msgstr "హోల్డ్ ఉంది <strong>suspended</strong>"
 msgid "Holds"
 msgstr "పట్టుకొను"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:239
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:148
+msgid "Identifier"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
 msgid "If the field is a control field, the subfield should be empty"
 msgstr "ఫీల్డ్ నియంత్రణ క్షేత్రం అయితే, ఉపక్షేత్రం ఖాళీగా ఉండాలి"
@@ -776,6 +1025,15 @@ msgid ""
 msgstr ""
 "మీరు ఆలస్యమైన లేదా తప్పిపోయిన సమస్యలను క్లెయిమ్ చేయాలనుకుంటే, మీరు ఈ సభ్యత్వాన్ని విక్రేతకు లింక్ చేయాలి. "
 "విస్మరించడానికి సరే క్లిక్ చేయండి లేదా తిరిగి రద్దు చేసి విక్రేతను నమోదు చేయండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:138
+#, fuzzy
+msgid "Import"
+msgstr "ఎగుమతి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:2
+msgid "Import from a list"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
@@ -793,25 +1051,38 @@ msgstr "మీ బండిలో"
 msgid "Internal Server Error, please reload the page"
 msgstr "అంతర్గత సర్వర్ లోపం, దయచేసి పేజీని మళ్లీ లోడ్ చేయండి"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:248
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:64
+msgid "Is perpetual"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:277
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:149
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:298
+#, fuzzy
+msgid "Is selected"
+msgstr "ఏదీ ఎంచుకోబడలేదు"
+
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:385
 msgid "Item cannot be checked out. There are no available formats"
 msgstr "అంశం తనిఖీ చేయబడదు. అందుబాటులో ఉన్న ఆకృతులు లేవు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:302
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:306
 #, javascript-format
 msgid "Item hasn't been transferred yet from %s"
 msgstr "అంశం ఇంకా బదిలీ చేయబడలేదు %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:300
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:304
 #, javascript-format
 msgid "Item is <strong>in transit</strong> from %s since %s"
 msgstr "అంశం <strong>in transit</strong> ఉండి %s నుండి %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:290
 msgid "Item is <strong>waiting here</strong>"
 msgstr "అంశం <strong>waiting here</strong>"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:295
 msgid "Item is <strong>waiting</strong>"
 msgstr "అంశం <strong>waiting</strong>"
 
@@ -849,7 +1120,59 @@ msgstr "జూన్"
 msgid "Last"
 msgstr "చివరి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:90
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:20
+msgid "License"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:275
+msgid "License created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:76
+msgid "License deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:139
+msgid "License info"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:23
+#, fuzzy
+msgid "License name"
+msgstr "ఫైల్ పేరు:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:272
+#, fuzzy
+msgid "License updated"
+msgstr "నకిలీ చేయబడింది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:144
+msgid "Licenses"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:2
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:97
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:113
 msgid "Loading"
 msgstr "ఎక్కించడం"
@@ -864,9 +1187,15 @@ msgstr "మరిన్ని ఫలితాలను లోడ్ చేస్
 msgid "Loading..."
 msgstr "లోడుచేయుచున్నది..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:274
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:272
 msgid "Loading... you may continue scanning."
 msgstr "లోడింగ్... మీరు స్కానింగ్ కొనసాగించవచ్చు."
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:37
+#, fuzzy
+msgid "Local bibliographic record"
+msgstr "మీరు తప్పక బిబ్లియోగ్రాఫిక్ ఎంచుకోవాలి లేదా సృష్టించాలి"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:79
 msgid "Log in to your OverDrive account"
@@ -908,7 +1237,7 @@ msgstr "సోమ"
 msgid "Monday"
 msgstr "సోమవారం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:491
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:492
 msgid "Must be renewed at the library"
 msgstr "లైబ్రరీలో పునరుద్ధరించాలి"
 
@@ -918,9 +1247,37 @@ msgid ""
 "copied"
 msgstr "గమనిక: 'UniqueItemsFields' సిస్టమ్ ప్రాధాన్యతలో జాబితా చేయబడిన ఫీల్డ్‌లు కాపీ చేయబడవు"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:191
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:149
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:196
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:103
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:119
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlePackagesList.vue:42
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:92
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:108
+msgid "Name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:7
+msgid "New agreement"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:344
 msgid "New budget-parent is beneath budget"
 msgstr "కొత్త బడ్జెట్-పేరెంట్ బడ్జెట్ క్రింద ఉంది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:7
+msgid "New license"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:7
+msgid "New package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:7
+msgid "New title"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:93
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:95
@@ -933,7 +1290,12 @@ msgstr "తరువాత"
 msgid "Next available %s item"
 msgstr "తదుపరి అందుబాటులో %s అంశం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:282
+#, fuzzy, javascript-format
+msgid "Next available item group <strong>%s</strong> item"
+msgstr "తదుపరి అందుబాటులో %s అంశం"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "తదుపరి సంచిక ప్రచురణ తేదీ నిర్వచించబడలేదు"
 
@@ -954,7 +1316,7 @@ msgid "No cover image available"
 msgstr "కవర్ చిత్రం అందుబాటులో లేదు"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:533
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:545
 msgid "No data available in table"
 msgstr "పట్టికలో సమాచారం అందుబాటులో లేదు"
 
@@ -991,7 +1353,7 @@ msgctxt "Bibliographic record"
 msgid "No item was selected"
 msgstr "ఏ అంశం ఎంచుకోబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:686
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:685
 msgid "No itemtype"
 msgstr "ఐటెమ్‌టైప్ లేదు"
 
@@ -999,7 +1361,7 @@ msgstr "ఐటెమ్‌టైప్ లేదు"
 msgid "No matching records found"
 msgstr "సరిపోలే రికార్డులు కనుగొనబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:512
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:511
 #, javascript-format
 msgid "No renewal before %s"
 msgstr "ముందు పునరుద్ధరణ లేదు %s"
@@ -1008,27 +1370,50 @@ msgstr "ముందు పునరుద్ధరణ లేదు %s"
 msgid "No results found"
 msgstr "ఎటువంటి ఫలితాలు లభించలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "మన నాలెడ్జ్ బేస్ లో చందా కనుగొనబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:505
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:30
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:25
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:25
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormConfirmDelete.vue:29
+msgid "No, do not delete"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:504
 msgid "Not allowed: overdue"
 msgstr "అనుమతించబడదు: మీరిన"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:498
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:497
 msgid "Not allowed: patron restricted"
 msgstr "అనుమతించబడదు: పోషకుడు పరిమితం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:484
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:485
 msgid "Not renewable"
 msgstr "పునరుత్పాదకం కాదు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:26
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:29
+#, fuzzy
+msgid "Not selected"
+msgstr "ఏదీ ఎంచుకోబడలేదు"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr "గమనిక: _అన్నీ_ విలువ మిగతా అన్ని విలువలను భర్తీ చేస్తుంది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:64
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:150
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:90
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:177
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:209
+msgid "Notes"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:342
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:372
@@ -1048,13 +1433,48 @@ msgstr "నవంబర్"
 msgid "November"
 msgstr "నవంబర్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:691
 msgid "Number of checkouts by item type"
 msgstr "అంశం రకం ప్రకారం చెక్అవుట్ల సంఖ్య"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:98
+msgid "Number of first issue available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:55
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:88
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:68
+msgid "Number of first volume available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
 msgstr "జోడించాల్సిన అంశాల సంఖ్య"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:95
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:159
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:108
+#, fuzzy
+msgid "Number of last issue available online"
+msgstr "పట్టికలో సమాచారం అందుబాటులో లేదు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:132
+msgid "Number of last volume available online"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:175
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:289
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:188
+msgid "Number of volume for monograph"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:143
 msgid "Oct"
@@ -1064,24 +1484,87 @@ msgstr "అక్టోబర్"
 msgid "October"
 msgstr "అక్టోబర్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:477
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:608
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:478
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:607
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
 msgid "On hold"
 msgstr "హోల్డ్‌లో ఉంది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:368
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:366
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:771
 msgid "On-site checkout"
 msgstr "ఆన్-సైట్ చెక్అవుట్"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:66
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:35
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:47
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:48
+msgid "Online-format identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:295
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:302
+msgid "Only one controlling license is allowed"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:127
 msgid "OverDrive account page"
 msgstr "ఓవర్‌డ్రైవ్ ఖాతా పేజీ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:21
+msgid "Package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:93
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:74
+msgid "Package content type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:183
+msgid "Package created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:72
+msgid "Package deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:4
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:13
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:24
+msgid "Package name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:172
+msgid "Package updated"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:3
+msgid "Packages"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 msgid "Patron note"
 msgstr "పోషక గమనిక"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:87
+msgid "Period end"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:89
+#, fuzzy
+msgid "Period note"
+msgstr "పోషక గమనిక"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:83
+msgid "Periods"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:64
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:70
+msgid "Physical location"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:81
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:362
@@ -1090,8 +1573,8 @@ msgid "Place hold"
 msgstr "పట్టుకొను స్థలము"
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:21
-#: koha-tmpl/intranet-tmpl/prog/js/categories.js:88
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:91
+#: koha-tmpl/intranet-tmpl/prog/js/categories.js:94
 msgid "Please choose an enrollment period in months OR by date."
 msgstr "దయచేసి నెలల్లో నమోదు తేదీ లేదా తేదీ ప్రకారం ఎంచుకోండి."
 
@@ -1099,7 +1582,7 @@ msgstr "దయచేసి నెలల్లో నమోదు తేదీ �
 msgid "Please choose at least one external target"
 msgstr "దయచేసి కనీసం ఒక బాహ్య లక్ష్యాన్ని ఎంచుకోండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "సభ్యత్వాన్ని సేవ్ చేయడానికి ముందు దయచేసి 'టెస్ట్ ప్రిడిక్షన్ నమూనా' పై క్లిక్ చేయండి."
 
@@ -1117,7 +1600,7 @@ msgstr "దయచేసి తొలగించండి %s పాత్ర(s)"
 msgid "Please enter %s or more characters"
 msgstr "దయచేసి నమోదు %s లేదా ఎక్కువ అక్షరాలు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "దయచేసి ఈ నమూనా కోసం ఒక పేరును నమోదు చేయండి"
 
@@ -1126,7 +1609,7 @@ msgstr "దయచేసి ఈ నమూనా కోసం ఒక పేరు�
 msgid "Please enter a valid date (should match %s)."
 msgstr "దయచేసి చెల్లుబాటు అయ్యే తేదీని నమోదు చేయండి (%s తో సరిపోలాలి)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1173,23 +1656,53 @@ msgstr ""
 msgid "Previous"
 msgstr "మునుపటి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:293
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:673
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:672
 msgid "Previous checkouts"
 msgstr "మునుపటి చెక్‌అవుట్‌లు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:760
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
 msgid "Print"
 msgstr "ముద్రణ"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:36
+msgid "Print-format identifier"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
 msgid "Processing..."
 msgstr "విధానము..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:470
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:606
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:77
+msgid "Proxy"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:4
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:18
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:23
+msgid "Publication title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:159
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:54
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:225
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:67
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:35
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:230
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:134
+msgid "Publication type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:216
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:133
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:146
+msgid "Publisher name"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:471
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:605
 #, fuzzy
 msgid "Recalled"
 msgstr "అంశాన్ని గుర్తుచేసుకోండి "
@@ -1203,45 +1716,129 @@ msgstr "తిరస్కరించు"
 msgid "Rejected"
 msgstr "తిరస్కరించబడెను"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:20
+msgid "Related agreement"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:3
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:191
+msgid "Related agreements"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:42
+msgid "Relationship"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:26
 msgid "Remove all items"
 msgstr "అన్ని అంశాలను తొలగించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:13
+msgid "Remove from this package"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
 msgid "Remove item"
 msgstr "అంశాన్ని తొలగించండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:22
+msgid "Remove package from holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:71
 msgid "Remove restriction?"
 msgstr "పరిమితిని తొలగించాలా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:14
+msgid "Remove this document"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:14
+#, fuzzy
+msgid "Remove this license"
+msgstr "అన్ని అంశాలను తొలగించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:14
+#, fuzzy
+msgid "Remove this period"
+msgstr "అంశాన్ని తొలగించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:14
+#, fuzzy
+msgid "Remove this relationship"
+msgstr "పరిమితిని తొలగించాలా?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:13
+#, fuzzy
+msgid "Remove this user"
+msgstr "అంశాన్ని తొలగించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:22
+msgid "Remove title from holdings"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:188
 msgid "Renew failed:"
 msgstr "పునరుద్ధరించడం విఫలమైంది:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:556
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:555
 msgid "Renewal denied by syspref"
 msgstr "సిస్ప్రెఫ్ చేత పునరుద్ధరణ తిరస్కరించబడింది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:187
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:259
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:69
+msgid "Renewal priority"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "పునరుద్ధరించబడింది, గడువు:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:60
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:60
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:78
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:22
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:31
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:24
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:52
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:76
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:100
+msgid "Required"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1009
 msgid "Resolve"
 msgstr "పరిష్కరించుకొను"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:31
+msgid "Resource identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:9
+msgid "Resource information"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
 msgid "Results"
 msgstr "ఫలితాలు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "మన నాలెడ్జ్ బేస్ నుండి ఫలితాలు"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:258
 msgid "Resume"
 msgstr "సంక్షిప్తము"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:120
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:74
+msgid "Role"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Root directory for uploads not defined"
@@ -1264,12 +1861,12 @@ msgstr "ప్రాధాన్యత సేవ్ %s"
 msgid "Saving..."
 msgstr "సేవింగ్..."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:519
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:547
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:518
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:546
 msgid "Scheduled for automatic renewal"
 msgstr "స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:236
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
 #, fuzzy
 msgid "Scroll to the top of the page"
 msgstr "మొదటి పేజీకి వెళ్ళండి"
@@ -1282,13 +1879,18 @@ msgstr ""
 msgid "Search:"
 msgstr "వెతకండి:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "మన నాలెడ్జ్ బేస్ లో చందా కోసం శోధిస్తోంది"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
 msgid "Searching…"
 msgstr "వెతుకుతోంది…"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:359
+#, fuzzy
+msgid "Select"
+msgstr "అన్ని ఎంచుకోండి"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
 msgid "Select all"
@@ -1298,6 +1900,23 @@ msgstr "అన్ని ఎంచుకోండి"
 msgid "Select all pending"
 msgstr "పెండింగ్‌లో ఉన్నవన్నీ ఎంచుకోండి"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:28
+#, fuzzy
+msgid "Select user"
+msgstr "అన్ని ఎంచుకోండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:44
+#, fuzzy
+msgid "Selected"
+msgstr "తిరస్కరించబడెను"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:38
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:22
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:25
+#, fuzzy
+msgid "Selection status"
+msgstr "అన్ని ఎంచుకోండి"
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:143
 msgid "Sep"
 msgstr "సెప్టెంబర్"
@@ -1306,21 +1925,21 @@ msgstr "సెప్టెంబర్"
 msgid "September"
 msgstr "సెప్టెంబర్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1080
 #, fuzzy
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "శీర్షిక చూపించు"
 msgstr[1] "శీర్షిక చూపించు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1085
 #, fuzzy
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "పరిష్కరించని వాదనలు"
 msgstr[1] "పరిష్కరించని వాదనలు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "మన ఫలితాలను చూపించు"
 
@@ -1341,12 +1960,29 @@ msgstr "ఫలితాలను చూపుతోంది %s"
 msgid "Some budgets are not defined in item records"
 msgstr "కొన్ని బడ్జెట్లు ఐటెమ్ రికార్డులలో నిర్వచించబడలేదు"
 
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:78
+msgid "Some required item subfields are not set"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:502
+#, fuzzy
+msgid "Something went wrong when loading the table."
+msgstr "ఎక్కడో తేడ జరిగింది. గమనిక సేవ్ చేయబడలేదు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:496
+#, fuzzy, javascript-format
+msgid ""
+"Something went wrong when loading the table.\n"
+"%s: %s. \n"
+"%s"
+msgstr "ఎక్కడో తేడ జరిగింది. గమనిక సేవ్ చేయబడలేదు"
+
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:634
 #, fuzzy
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "ఎక్కడో తేడ జరిగింది. గమనిక సేవ్ చేయబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "ఎక్కడో తేడ జరిగింది. క్రొత్త నంబరింగ్ నమూనాను సృష్టించడం సాధ్యం కాలేదు."
 
@@ -1354,7 +1990,28 @@ msgstr "ఎక్కడో తేడ జరిగింది. క్రొత�
 msgid "Sorry, nothing found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementPeriods.vue:20
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:105
+msgid "Start date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:166
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:61
+msgid "Started on"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:42
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:220
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:46
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:148
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:81
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:152
+msgid "Status"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "మన నాలెడ్జ్ బేస్ లో చందా కనుగొనబడింది:"
 
@@ -1367,17 +2024,26 @@ msgid "Sunday"
 msgstr "ఆదివారం"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:261
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:402
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:406
 msgid "Suspend"
 msgstr "సస్పెండ్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:388
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:392
 msgid "Suspend hold on"
 msgstr "సస్పెండ్ హోల్డ్ ఆన్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "వరకు సస్పెండ్ చేయండి:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
+#, fuzzy
+msgid "Table settings"
+msgstr "నిలువు సెట్టింగ్‌లు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
+msgid "Template name is required."
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Temporary directory for uploads not defined"
@@ -1406,6 +2072,11 @@ msgstr "షరతులతో కూడిన విలువను నింప
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:21
 msgid "The destination should be filled."
 msgstr "గమ్యాన్ని నింపాలి."
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:115
+msgid ""
+"The e-resource management module is disabled, turn on 'ERMModule' to use it"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:72
 msgctxt "Bibliographic record"
@@ -1493,11 +2164,28 @@ msgstr ""
 msgid "The vendor does not exist"
 msgstr "విక్రేత ఉనికిలో లేడు"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:9
+msgid "There are no licenses defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:14
+msgid "There are no packages defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:14
+msgid "There are no titles defined"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:52
 msgid "There is no record selected"
 msgstr "రికార్డ్ ఎంచుకోబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageAgreements.vue:86
+#, fuzzy
+msgid "This agreement is already linked with this package"
+msgstr "ఈ అంశం ఇప్పటికే మీ కార్ట్‌లో ఉంది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 #, fuzzy
 msgid "This bibliographic record does not exist"
 msgstr "బిబ్లియోగ్రాఫిక్ రికార్డ్ లేదు!"
@@ -1514,11 +2202,16 @@ msgstr "ఈ ఫీల్డ్ తప్పనిసరి మరియు క�
 msgid "This item has been added to your cart"
 msgstr "ఈ అంశం మీ కార్ట్‌కు జోడించబడింది"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:370
+#, fuzzy
+msgid "This item has been recalled and the due date updated"
+msgstr "ఈ అంశం మీ కార్ట్‌కు జోడించబడింది"
+
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
 msgid "This item is already in your cart"
 msgstr "ఈ అంశం ఇప్పటికే మీ కార్ట్‌లో ఉంది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "ఈ నమూనా పేరు ఇప్పటికే ఉంది. మీరు దీన్ని సవరించాలనుకుంటున్నారా?"
 
@@ -1539,8 +2232,55 @@ msgstr "గురు"
 msgid "Thursday"
 msgstr "గురువారం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:671
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:13
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:10
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:109
+msgid "Title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:520
+msgid "Title created"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue:71
+msgid "Title deleted"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:11
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:24
+msgid "Title identifier"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:209
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:348
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:222
+msgid "Title identifier of any preceding publication title"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:320
+msgid "Title identifier of the parent publication"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:515
+#, fuzzy
+msgid "Title updated"
+msgstr "నకిలీ చేయబడింది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:166
+msgid "Title-level URL"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/ERMMain.vue:96
+msgid "Titles"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:10
+msgid "To the following local package"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:670
 msgid "Today's checkouts"
 msgstr "నేటి చెక్‌అవుట్‌లు"
 
@@ -1552,24 +2292,34 @@ msgstr "మంగళ"
 msgid "Tuesday"
 msgstr "మంగళవారం"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:128
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:217
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:140
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:57
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:138
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:45
+msgid "Type"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:86
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:278
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:123
+msgid "URI"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:126
 msgid "Unable to check in"
 msgstr "చెక్ ఇన్ చేయడం సాధ్యం కాలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:941
-msgid "Unable to claim as returned"
-msgstr "తిరిగి వచ్చినట్లు క్లెయిమ్ చేయడం సాధ్యం కాలేదు"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:338
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:342
 msgid "Unable to resume, hold not found"
 msgstr "కుదరకపోతే పునఃప్రారంభం, పట్టు కనుగొనబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:424
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:428
 #, fuzzy
 msgid "Unable to suspend, hold not found"
 msgstr "పట్టును నిలిపివేయడం సాధ్యం కాలేదు, పట్టు కనుగొనబడలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1106
 msgid "Update"
 msgstr "నవీకరణ"
 
@@ -1586,6 +2336,27 @@ msgstr "అంశాన్ని నవీకరించండి"
 msgid "Upload status: "
 msgstr "అప్‌లోడ్ స్థితి: "
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:19
+msgid "User"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:116
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:70
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:3
+msgid "Users"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:201
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:206
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:36
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:26
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:129
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:29
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:118
+msgid "Vendor"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:18
 msgid "View comparison"
 msgstr "పోలిక చూడండి"
@@ -1595,7 +2366,7 @@ msgstr "పోలిక చూడండి"
 msgid "Waiting status reverted"
 msgstr "ట్యాగ్ స్థితి ఇక్కడ."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1612,7 +2383,7 @@ msgstr ""
 "హెచ్చరిక: ఈ రికార్డ్ %s ఆర్డర్ (s) లో ఉపయోగించబడుతుంది. దీన్ని తొలగించడం సముపార్జన మాడ్యూల్‌పై తీవ్రమైన "
 "సమస్యలను కలిగిస్తుంది. మీరు ఖచ్చితంగా ఈ రికార్డ్‌ను తొలగించాలనుకుంటున్నారా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1647,18 +2418,18 @@ msgstr "మీరు మరిన్ని వస్తువులను స్
 msgid "You have made changes to system preferences."
 msgstr "మీరు సిస్టమ్ ప్రాధాన్యతలకు మార్పులు చేసారు."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
 msgstr ""
 "మీరు అధునాతన అంచనా నమూనాను సవరించారు. దయచేసి మీ పనిని సేవ్ చేయండి లేదా మార్పులను రద్దు చేయండి."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "మీరు మొదటి ప్రచురణ తేదీని ఎంచుకోవాలి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "మీరు తప్పనిసరిగా చందా పొడవు లేదా ముగింపు తేదీని ఎంచుకోవాలి."
 
@@ -1671,7 +2442,7 @@ msgstr "మీరు తప్పక బిబ్లియోగ్రాఫి�
 msgid "You must select at least one record"
 msgstr "మీరు కనీసం ఒక అంశాన్ని ఎంచుకోవాలి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:103
 msgid "You must select checkout(s) to export"
 msgstr "మీరు తప్పక చెక్అవుట్ ఎంచుకోవాలి (s) ఎగుమతి చేయడానికి"
 
@@ -1688,13 +2459,18 @@ msgstr "మీరు మళ్ళీ లాగిన్ అవ్వాలి, �
 msgid "Your cart is currently empty"
 msgstr "మీ కార్ట్ ప్రస్తుతం ఖాళీగా ఉంది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:341
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:427
+#: koha-tmpl/opac-tmpl/bootstrap/js/ratings.js:35
+#, javascript-format
+msgid "Your rating: %s."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:345
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:431
 #, fuzzy
 msgid "Your request could not be processed. Check the logs"
 msgstr "ఫీల్డ్ తొలగించబడలేదు. లోపాల కోసం లాగ్‌ను తనిఖీ చేయండి."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:332
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:338
 msgid "a an the"
 msgstr "ఎ ఒక ది"
 
@@ -1707,52 +2483,110 @@ msgstr "డేటాబేస్లో ఇప్పటికే ఉంది"
 msgid "already in your cart"
 msgstr "ఇప్పటికే మీ బండిలో ఉంది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:288
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:296
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:298
 #, javascript-format
 msgid "at %s"
 msgstr "వద్ద %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:751
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:345
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:750
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:156
 msgid "by _AUTHOR_"
 msgstr "ద్వారా _రచయిత_"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:32
+msgid "has backfile in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:30
+msgid "has demand-driven acquisitions in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:33
+msgid "has frontfile in"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:22
+msgid "has post-cancellation access in"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
 msgid "is duplicated"
 msgstr "నకిలీ చేయబడింది"
 
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:15
+msgid "is superseded by"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "మార్చబడినది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
 msgid "not checked out"
 msgstr "తనిఖీ చేయలేదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:13
+#, fuzzy
+msgid "on"
+msgstr "సోమ"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
 msgid "on hold"
 msgstr "హోల్డ్‌లో ఉంది"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:18
+msgid "provides post-cancellation access for"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:63
 msgid "quantity values are not filled in or are not numbers"
 msgstr "పరిమాణ విలువలు నింపబడవు లేదా సంఖ్యలు కావు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:206
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:204
 msgid "reason unknown"
 msgstr "కారణం తెలియదు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:34
+msgid "related to"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:6
+#, javascript-format
+msgid "see job #%s"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:14
+msgid "supersedes"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
 msgid "too many consecutive renewals without being seen by the library"
 msgstr "లైబ్రరీ చూడకుండా చాలా ఎక్కువ పునరుద్ధరణలు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
 msgid "too many renewals"
 msgstr "చాలా పునరుద్ధరణలు"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised_values.js:26
+msgid "tracks demand-driven acquisitions for"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:272
 #, javascript-format
 msgid "until %s"
 msgstr "వరకు %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:101
+#, fuzzy
+msgid "years"
+msgstr "%s సంవత్సరాల"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
+msgid "{credit_type_description} against {debit_type_description}"
+msgstr ""
+
+#~ msgid "Unable to claim as returned"
+#~ msgstr "తిరిగి వచ్చినట్లు క్లెయిమ్ చేయడం సాధ్యం కాలేదు"
