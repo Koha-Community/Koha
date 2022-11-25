@@ -21,8 +21,9 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Warn;
+use Try::Tiny;
 use File::Basename qw(dirname);
 
 use Koha::Database;
@@ -541,6 +542,38 @@ subtest 'Existence of object is only checked using primary keys' => sub {
         }
       });
     } [], "No warning about query returning more than one row";
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test bad columns' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    try {
+        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { wrong => 1 } });
+        ok( 0, 'Unexpected pass with wrong column' );
+    }
+    catch {
+        like( $_, qr/^Error: value hash contains unrecognized columns: wrong/, 'Column wrong is bad' );
+    };
+    try {
+        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { surname => 'Pass', nested => { ignored => 1 }} });
+        ok( 1, 'Nested hash ignored' );
+    }
+    catch {
+        ok( 0, 'Unexpected trouble with nested hash' );
+    };
+    try {
+        my $patron = $builder->build_object({
+            class => 'Koha::Patrons',
+             value => { surname => 'WontPass', categorycode => { description => 'bla', wrong_nested => 1 }},
+        });
+        ok( 0, 'Unexpected pass with wrong nested column' );
+    }
+    catch {
+        like( $_, qr/^Error: value hash contains unrecognized columns: wrong_nested/, 'Column wrong_nested is bad' );
+    };
 
     $schema->storage->txn_rollback;
 };
