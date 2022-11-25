@@ -2857,7 +2857,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                library      => $library->branchcode,
+                branchcode   => $library->branchcode,
                 categorycode => $patron_category->{categorycode}
             }
         }
@@ -2866,7 +2866,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                library      => $library->branchcode,
+                branchcode   => $library->branchcode,
                 categorycode => $patron_category->{categorycode}
             }
         }
