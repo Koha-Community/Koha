@@ -131,8 +131,10 @@ subtest 'search_limited' => sub {
     my $patron2 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
     my $job1 = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { borrowernumber => $patron1->id } } );
 
+    my $cnt = Koha::BackgroundJobs->search({ borrowernumber => undef })->count; # expected to be zero, but theoretically possible
+
     C4::Context->set_userenv( undef, q{} );
-    is( Koha::BackgroundJobs->search_limited->count, 0, 'No jobs found without userenv' );
+    is( Koha::BackgroundJobs->search_limited->count, $cnt, 'No jobs found without userenv' );
     C4::Context->set_userenv( $patron1->id, $patron1->userid );
     is( Koha::BackgroundJobs->search_limited->count, 1, 'My job found' );
     C4::Context->set_userenv( $patron2->id, $patron2->userid );
