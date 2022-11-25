@@ -871,7 +871,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered and GetBudgetHierarchy shipping and
         source => 'Aqbudgetperiod',
         value  => {
             budget_period_active => 1,
-            budget_total => 10000,
+            budget_period_total  => 10000,
         }
     });
     my $budget = $builder->build({
