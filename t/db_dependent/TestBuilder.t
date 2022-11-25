@@ -244,7 +244,9 @@ sub default_userpermission {
             privacy => 1,
         },
         module_bit => {
-            flag        => 'my flag',
+            module_bit => {
+                flag        => 'my flag',
+            },
         },
         code => {
             code        => 'my code',

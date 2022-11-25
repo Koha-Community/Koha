@@ -12,6 +12,7 @@ use Bytes::Random::Secure;
 use Carp qw( carp );
 use Module::Load qw( load );
 use String::Random;
+use Array::Utils qw( array_minus );
 
 use constant {
     SIZE_BARCODE => 20, # Not perfect but avoid to fetch the value when creating a new item
@@ -279,6 +280,10 @@ sub _buildColumnValues {
     my $col_values = {};
     my @columns = $self->schema->source($source)->columns;
     my %unique_constraints = $self->schema->source($source)->unique_constraints();
+
+    my @passed_keys = grep { ref($original_value->{$_}) ne 'HASH' } keys %$original_value;
+    my @minus = array_minus( @passed_keys, @columns );
+    die "Error: value hash contains unrecognized columns: ". (join ',', @minus) if @minus;
 
     my $build_value = 5;
     # we try max $build_value times if there are unique constraints
