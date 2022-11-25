@@ -45,7 +45,7 @@
 
         <table>
             <caption>Server information</caption>
-            <tr><th scope="row">Koha version: </th><td>[% kohaVersion | html %]</td></tr>
+            <tr><th scope="row">Koha version: </th><td>[% kohaVersion | html %][% IF kohaCodename %] <strong>[% kohaCodename | html %]</strong>[% END %]</td></tr>
             <tr><th scope="row">OS version ('uname -a'): </th><td>[% osVersion | html %]</td></tr>
             <tr><th scope="row">Perl interpreter: </th><td>[% perlPath | html %]</td></tr>
             <tr><th scope="row">Perl version: </th><td>[% perlVersion | html %]</td></tr>
@@ -554,7 +554,7 @@
             [% IF maintenance_team %]
                 <div class="row">
                     <div class="col-md-6">
-                        <h3>Koha [% short_version | html %] release team</h3>
+                        <h3>Koha [% short_version | html %][% IF kohaCodename %] ([% kohaCodename | html %])[% END %] release team</h3>
                         [% IF development_version %]
                             <p>You are running a development version of Koha</p>
                         [% ELSE %]

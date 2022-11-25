@@ -722,6 +722,7 @@ my $dev_team = (sort {$b <=> $a} (keys %{$teams->{team}}))[0];
 my $short_version = substr($versions{'kohaVersion'},0,5);
 my $minor = substr($versions{'kohaVersion'},3,2);
 my $development_version = ( $minor eq '05' || $minor eq '11' ) ? 0 : 1;
+my $codename;
 $template->param( short_version => $short_version );
 $template->param( development_version => $development_version );
 
@@ -747,7 +748,16 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
                 }
             }
         }
-        elsif ( $role ne 'release_date' ) {
+        elsif ( $role eq 'release_date' ) {
+            $teams->{team}->{$version}->{$role} = DateTime->from_epoch( epoch => $teams->{team}->{$version}->{$role});
+        }
+        elsif ( $role eq 'codename' ) {
+            if ( $version == $short_version ) {
+                $codename = $teams->{team}->{$version}->{$role};
+            }
+            next;
+        }
+        else {
             my $name = $teams->{team}->{$version}->{$role}->{name};
             # Add role to contributors
             push @{ $contributors->{$name}->{roles}->{$normalized_role} },
@@ -757,9 +767,6 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
                 $teams->{team}->{$version}->{$role}->{openhub} =
                   $contributors->{$name}->{openhub};
             }
-        }
-        else {
-            $teams->{team}->{$version}->{$role} = DateTime->from_epoch( epoch => $teams->{team}->{$version}->{$role});
         }
     }
 }
@@ -778,6 +785,7 @@ my @people = map {
   lc($a2last||"") cmp lc($b2last||"");
 } keys %$contributors;
 
+$template->param( kohaCodename  => $codename);
 $template->param( contributors => \@people );
 $template->param( maintenance_team => $teams->{team}->{$dev_team} );
 $template->param( release_team => $teams->{team}->{$short_version} );
