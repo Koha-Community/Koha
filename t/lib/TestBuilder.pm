@@ -403,6 +403,11 @@ sub _buildColumnValue {
             return;
         }
         # otherwise: no need to assign a value
+    } elsif( !exists $value->{$col_name}
+           && exists $self->{default_values}{$source}{$col_name} ) {
+        my $v = $self->{default_values}{$source}{$col_name};
+        $v = &$v() if ref($v) eq 'CODE';
+        push @$retvalue, $v;
     } elsif( $col_info->{is_foreign_key} || _should_be_fk($source,$col_name) ) {
         if( exists $value->{$col_name} ) {
             if( !defined $value->{$col_name} && !$col_info->{is_nullable} ) {
@@ -426,10 +431,6 @@ sub _buildColumnValue {
             return;
         }
         push @$retvalue, $value->{$col_name};
-    } elsif( exists $self->{default_values}{$source}{$col_name} ) {
-        my $v = $self->{default_values}{$source}{$col_name};
-        $v = &$v() if ref($v) eq 'CODE';
-        push @$retvalue, $v;
     } else {
         my $data_type = $col_info->{data_type};
         $data_type =~ s| |_|;
