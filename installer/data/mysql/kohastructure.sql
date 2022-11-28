@@ -1234,7 +1234,7 @@ CREATE TABLE `borrower_message_preferences` (
   `borrowernumber` int(11) DEFAULT NULL,
   `categorycode` varchar(10) DEFAULT NULL,
   `message_attribute_id` int(11) DEFAULT 0,
-  `days_in_advance` int(11) DEFAULT 0,
+  `days_in_advance` int(11) DEFAULT NULL,
   `wants_digest` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`borrower_message_preference_id`),
   KEY `borrowernumber` (`borrowernumber`),
