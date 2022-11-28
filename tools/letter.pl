@@ -497,6 +497,7 @@ sub get_columns_for {
     my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
     for my $row (@{$rows}) {
         next if $row->{'Field'} eq 'timestamp'; # this is really an irrelevant field and there may be other common fields that should be excluded from the list
+        next if $row->{'Field'} eq 'password'; # passwords can no longer be shown in notices so the password field should be removed as a template option
         push @fields, {
             value => $table_prefix . $row->{Field},
             text  => $table_prefix . $row->{Field},
