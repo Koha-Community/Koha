@@ -908,294 +908,295 @@
 
                 [% IF ( execute ) %]
                     <h1>[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1>
-                    [% IF ( notes ) %]
-                        <p><span class="label">Notes:</span> [% notes | html %]</p>
-                    [% END %]
-                    [% IF ( unlimited_total ) %]
-                        <p>
-                            <span class="label">Total number of results:</span>
-                            [% unlimited_total | html %]
-                            [% IF unlimited_total >= limit %]
-                                ([% results.size | html %] shown)
-                            [% END %]
-                        </p>
-                    [% END %]
-
-                    <div id="sql_output" style="display:none;">
-                        <span class="label">Report SQL:</span>
-                        <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
-                    </div>
-
-                    <div>
-                        <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa fa-eye-slash"></i> Hide chart</a>
-                        <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa fa fa-eye"></i> Show chart</a>
-                    </div>
-                    <div id="chart" class="clearfix"></div>
-
-                    [% IF ( execute ) %]
-                        [% UNLESS ( errors ) %]
-                            <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification">
-                                <input type="hidden" name="recordtype" value="biblio" />
-                                <input type="hidden" name="op" value="list" />
-                                [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
-                                    [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
-                                </textarea>
-                            </form>
-
-                            <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion">
-                                <input type="hidden" name="recordtype" value="biblio" />
-                                <input type="hidden" name="op" value="list" />
-                                [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
-                                    [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
-                                </textarea>
-                            </form>
-
-                            <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification">
-                                <input type="hidden" name="op" value="show" />
-                                [% FOREACH result IN results %]
-                                    [% FOREACH cells IN result.cells %]
-                                        [% place = loop.index %]
-                                        [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
-                                        [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
-                                            [% SET batch_itemnumbers = 1 %]
-                                            [% SET header_row.$place.has_itemnumbers = 1 %]
-                                            <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
-                                        [% END %]
-                                    [% END %]
+                    <div class="page-section">
+                        [% IF ( notes ) %]
+                            <p><span class="label">Notes:</span> [% notes | html %]</p>
+                        [% END %]
+                        [% IF ( unlimited_total ) %]
+                            <p>
+                                <span class="label">Total number of results:</span>
+                                [% unlimited_total | html %]
+                                [% IF unlimited_total >= limit %]
+                                    ([% results.size | html %] shown)
                                 [% END %]
-                            </form>
+                            </p>
+                        [% END %]
 
-                            <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion">
-                                <input type="hidden" name="op" value="show" />
-                                <input type="hidden" name="del" value="1" />
-                                [% FOREACH result IN results %]
-                                    [% FOREACH cells IN result.cells %]
-                                        [% place = loop.index %]
-                                        [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
-                                        [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
-                                            [% SET batch_itemnumbers = 1 %]
-                                            [% SET header_row.$place.has_itemnumbers = 1 %]
-                                            <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
-                                        [% END %]
-                                    [% END %]
-                                [% END %]
-                            </form>
+                        <div id="sql_output" style="display:none;">
+                            <span class="label">Report SQL:</span>
+                            <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
+                        </div>
 
-                            <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list">
-                                [% FOREACH result IN results %]
-                                    [% FOREACH cells IN result.cells %]
-                                        [% place = loop.index %]
-                                        [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
-                                        [% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
-                                            [% SET batch_biblionumbers = 1 %]
-                                            [% SET header_row.$place.has_biblionumbers = 1 %]
-                                            <input type="hidden" class="bib_to_list" name="biblionumber" value="[% cells.cell | html %]" />
-                                        [% END %]
-                                    [% END %]
-                                [% END %]
-                            </form>
+                        <div>
+                            <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa fa-eye-slash"></i> Hide chart</a>
+                            <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa fa fa-eye"></i> Show chart</a>
+                        </div>
+                        <div id="chart" class="clearfix"></div>
 
-                            <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
-                                <input type="hidden" name="op" value="show" />
-                                [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
-                                    [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %][% IF cardnumbers %][% SET batch_cardnumbers = 1 %][% cardnumbers | html %][% END -%]
-                                </textarea>
-                            </form>
+                        [% IF ( execute ) %]
+                            [% UNLESS ( errors ) %]
+                                <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification">
+                                    <input type="hidden" name="recordtype" value="biblio" />
+                                    <input type="hidden" name="op" value="list" />
+                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
+                                        [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
+                                    </textarea>
+                                </form>
 
-                            [% BLOCK batch_list %]
-                                    [%- FOREACH result IN results %]
-                                        [%- FOREACH cells IN result.cells %]
-                                            [%- place = loop.index %]
-                                            [%- IF header_row.$place.cell == batch_type || header_types.item(header_row.$place.cell) == batch_type %]
-[%# We must not add whitespace to the cardnumbers %][% cells.cell | html %]
-                                            [%- END %]
-                                        [%- END %]
-                                    [%- END -%]
-                            [% END %]
+                                <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion">
+                                    <input type="hidden" name="recordtype" value="biblio" />
+                                    <input type="hidden" name="op" value="list" />
+                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
+                                        [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
+                                    </textarea>
+                                </form>
 
-                            <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
-                                <input type="hidden" name="phase" value="Run this report"/>
-                                <input type="hidden" name="reports" value="[% report_id | html %]"/>
-                                [% FOREACH p IN sql_params %]
-                                    <input type="hidden" name="sql_params" value="[% p | html %]"/>
-                                [% END %]
-                                [% FOREACH n IN param_names %]
-                                    <input type="hidden" name="param_name" value="[% n | html %]"/>
-                                [% END %]
-                                <input type="hidden" name="limit" id="limit" value="20" />
-                            </form> <!-- /#limitselect -->
-
-                            [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
-                                <div id="toolbar" class="btn-toolbar">
-                                    [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
-                                        <div class="btn-group">
-                                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                Batch operations with [% IF unlimited_total >= limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
-                                                [% FOREACH header_ro IN header_row %]
-                                                    [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
-                                                        <li class="dropdown-header">Bibliographic records</li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
-                                                        </li>
-                                                    [% END %]
-                                                    [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
-                                                        <li class="dropdown-header">Item records</li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
-                                                        </li>
-                                                    [% END %]
-                                                    [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
-                                                        <li class="dropdown-header">Patron records</li>
-                                                        <li>
-                                                            <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
-                                                        </li>
-                                                    [% END %]
-                                                [% END # /FOREACH header_ro %]
-                                            </ul> <!-- /.dropdown-menu -->
-                                        </div> <!-- /.dropdown -->
-                                    [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
-
-                                    [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                [% IF ( limit ) %]
-                                                    Rows per page: <strong>[% limit | html %]</strong>
-                                                [% ELSE %]
-                                                    Rows per page
-                                                [% END %]
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
-                                                [% FOREACH l IN limits %]
-                                                    [% IF l == limit %]
-                                                        <li>
-                                                            <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check"></i> [% l | html %]</a>
-                                                        </li>
-                                                    [% ELSE %]
-                                                        <li>
-                                                            <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw"></i> [% l | html %]</a>
-                                                        </li>
-                                                    [% END %]
-                                                [% END %]
-                                            </ul>
-                                        </div>
-                                    [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
-
-                                    [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
-                                        <a href="#" class="btn btn-link" id="toggle_auto_links">
-                                            <i class="fa fa-eye autolink" style="display:none"></i>
-                                            <i class="fa fa-eye-slash autolink"></i>
-                                            <span class="autolink" style="display:none">Show data menus</span>
-                                            <span class="autolink">Hide data menus</span>
-                                        </a>
-                                    [% END %]
-                                </div> <!-- /#toolbar.btn-toolbar -->
-                            [% END # /IF batch operations || ( unlimited_total > 10 && limit <= 1000 ) %]
-
-                            <div class="pages">
-                                [% pagination_bar | $raw %]
-                            </div>
-
-                        [% END # UNLESS ( errors ) %]
-                    [% END # IF ( execute ) %]
-
-                    [% UNLESS ( errors ) %]
-                        <table id="report_results">
-                            <thead>
-                                <tr>
-                                    [% FOREACH header_ro IN header_row %]
-                                        [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
-                                            <th class="itemnumber">[% header_ro.cell | html %]</th>
-                                        [% ELSIF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
-                                            <th class="biblionumber">[% header_ro.cell | html %]</th>
-                                        [% ELSIF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
-                                            <th class="cardnumber">[% header_ro.cell | html %]</th>
-                                        [% ELSIF header_ro.cell == 'borrowernumber' || header_types.item( header_ro.cell ) == 'borrowernumber' %]
-                                            <th class="borrowernumber">[% header_ro.cell | html %]</th>
-                                        [% ELSE %]
-                                            <th>[% header_ro.cell | html %]</th>
-                                        [% END %]
-                                    [% END %]
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH result IN results %]
-                                    <tr>
+                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification">
+                                    <input type="hidden" name="op" value="show" />
+                                    [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
                                             [% place = loop.index %]
-                                            [%- IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
-                                                <td class="batch-op itemnumber" data-number="itemnumber">
-                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                    <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
-                                                        <ul class="dropdown-menu pull-right" role="menu">
-                                                            <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-pencil"></i> Edit record</a></li>
-                                                            <li role="separator" class="divider"></li>
-                                                            <li><a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye"></i> View record</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            [% ELSIF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
-                                                <td class="batch-op biblionumber" data-number="biblionumber">
-                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                    <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
-                                                        <ul class="dropdown-menu pull-right" role="menu">
-                                                            <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit record</a></li>
-                                                            <li role="separator" class="divider"></li>
-                                                            <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View record</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            [% ELSIF header_row.$place.cell == 'borrowernumber' || header_types.item(header_row.$place.cell) == 'borrowernumber' %]
-                                                <td class="batch-op borrowernumber" data-number="borrowernumber">
-                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                    <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
-                                                        <ul class="dropdown-menu pull-right" role="menu">
-                                                            <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View patron</a></li>
-                                                            <li role="separator" class="divider"></li>
-                                                            <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit patron</a></li>
-                                                            <li role="separator" class="divider"></li>
-                                                            <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            [% ELSIF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %]
-                                                <td class="batch-op cardnumber" data-number="cardnumber">
-                                                    <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                    <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
-                                                        <ul class="dropdown-menu pull-right" role="menu">
-                                                            <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
+                                            [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
+                                            [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
+                                                [% SET batch_itemnumbers = 1 %]
+                                                [% SET header_row.$place.has_itemnumbers = 1 %]
+                                                <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+                                </form>
+
+                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion">
+                                    <input type="hidden" name="op" value="show" />
+                                    <input type="hidden" name="del" value="1" />
+                                    [% FOREACH result IN results %]
+                                        [% FOREACH cells IN result.cells %]
+                                            [% place = loop.index %]
+                                            [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
+                                            [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
+                                                [% SET batch_itemnumbers = 1 %]
+                                                [% SET header_row.$place.has_itemnumbers = 1 %]
+                                                <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+                                </form>
+
+                                <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list">
+                                    [% FOREACH result IN results %]
+                                        [% FOREACH cells IN result.cells %]
+                                            [% place = loop.index %]
+                                            [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
+                                            [% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
+                                                [% SET batch_biblionumbers = 1 %]
+                                                [% SET header_row.$place.has_biblionumbers = 1 %]
+                                                <input type="hidden" class="bib_to_list" name="biblionumber" value="[% cells.cell | html %]" />
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+                                </form>
+
+                                <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
+                                    <input type="hidden" name="op" value="show" />
+                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
+                                        [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %][% IF cardnumbers %][% SET batch_cardnumbers = 1 %][% cardnumbers | html %][% END -%]
+                                    </textarea>
+                                </form>
+
+                                [% BLOCK batch_list %]
+                                        [%- FOREACH result IN results %]
+                                            [%- FOREACH cells IN result.cells %]
+                                                [%- place = loop.index %]
+                                                [%- IF header_row.$place.cell == batch_type || header_types.item(header_row.$place.cell) == batch_type %]
+    [%# We must not add whitespace to the cardnumbers %][% cells.cell | html %]
+                                                [%- END %]
+                                            [%- END %]
+                                        [%- END -%]
+                                [% END %]
+
+                                <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
+                                    <input type="hidden" name="phase" value="Run this report"/>
+                                    <input type="hidden" name="reports" value="[% report_id | html %]"/>
+                                    [% FOREACH p IN sql_params %]
+                                        <input type="hidden" name="sql_params" value="[% p | html %]"/>
+                                    [% END %]
+                                    [% FOREACH n IN param_names %]
+                                        <input type="hidden" name="param_name" value="[% n | html %]"/>
+                                    [% END %]
+                                    <input type="hidden" name="limit" id="limit" value="20" />
+                                </form> <!-- /#limitselect -->
+
+                                [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
+                                    <div id="toolbar" class="btn-toolbar">
+                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                            <div class="btn-group">
+                                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    Batch operations with [% IF unlimited_total >= limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
+                                                    [% FOREACH header_ro IN header_row %]
+                                                        [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
+                                                            <li class="dropdown-header">Bibliographic records</li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
+                                                            </li>
+                                                        [% END %]
+                                                        [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
+                                                            <li class="dropdown-header">Item records</li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
+                                                            </li>
+                                                        [% END %]
+                                                        [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
+                                                            <li class="dropdown-header">Patron records</li>
+                                                            <li>
+                                                                <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
+                                                            </li>
+                                                        [% END %]
+                                                    [% END # /FOREACH header_ro %]
+                                                </ul> <!-- /.dropdown-menu -->
+                                            </div> <!-- /.dropdown -->
+                                        [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+
+                                        [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    [% IF ( limit ) %]
+                                                        Rows per page: <strong>[% limit | html %]</strong>
+                                                    [% ELSE %]
+                                                        Rows per page
+                                                    [% END %]
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
+                                                    [% FOREACH l IN limits %]
+                                                        [% IF l == limit %]
+                                                            <li>
+                                                                <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check"></i> [% l | html %]</a>
+                                                            </li>
+                                                        [% ELSE %]
+                                                            <li>
+                                                                <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw"></i> [% l | html %]</a>
+                                                            </li>
+                                                        [% END %]
+                                                    [% END %]
+                                                </ul>
+                                            </div>
+                                        [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
+
+                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                            <a href="#" class="btn btn-link" id="toggle_auto_links">
+                                                <i class="fa fa-eye autolink" style="display:none"></i>
+                                                <i class="fa fa-eye-slash autolink"></i>
+                                                <span class="autolink" style="display:none">Show data menus</span>
+                                                <span class="autolink">Hide data menus</span>
+                                            </a>
+                                        [% END %]
+                                    </div> <!-- /#toolbar.btn-toolbar -->
+                                [% END # /IF batch operations || ( unlimited_total > 10 && limit <= 1000 ) %]
+
+                                <div class="pages">
+                                    [% pagination_bar | $raw %]
+                                </div>
+
+                            [% END # UNLESS ( errors ) %]
+                        [% END # IF ( execute ) %]
+
+                        [% UNLESS ( errors ) %]
+                            <table id="report_results">
+                                <thead>
+                                    <tr>
+                                        [% FOREACH header_ro IN header_row %]
+                                            [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
+                                                <th class="itemnumber">[% header_ro.cell | html %]</th>
+                                            [% ELSIF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
+                                                <th class="biblionumber">[% header_ro.cell | html %]</th>
+                                            [% ELSIF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
+                                                <th class="cardnumber">[% header_ro.cell | html %]</th>
+                                            [% ELSIF header_ro.cell == 'borrowernumber' || header_types.item( header_ro.cell ) == 'borrowernumber' %]
+                                                <th class="borrowernumber">[% header_ro.cell | html %]</th>
                                             [% ELSE %]
-                                                <td>
-                                                    [% cells.cell | $raw %]
-                                                </td>
+                                                <th>[% header_ro.cell | html %]</th>
                                             [% END %]
                                         [% END %]
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-                    [% END %]
-                    <div class="pages">[% pagination_bar | $raw %]</div>
-
+                                </thead>
+                                <tbody>
+                                    [% FOREACH result IN results %]
+                                        <tr>
+                                            [% FOREACH cells IN result.cells %]
+                                                [% place = loop.index %]
+                                                [%- IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
+                                                    <td class="batch-op itemnumber" data-number="itemnumber">
+                                                        <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                        <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-pencil"></i> Edit record</a></li>
+                                                                <li role="separator" class="divider"></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye"></i> View record</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                [% ELSIF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
+                                                    <td class="batch-op biblionumber" data-number="biblionumber">
+                                                        <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                        <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit record</a></li>
+                                                                <li role="separator" class="divider"></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View record</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                [% ELSIF header_row.$place.cell == 'borrowernumber' || header_types.item(header_row.$place.cell) == 'borrowernumber' %]
+                                                    <td class="batch-op borrowernumber" data-number="borrowernumber">
+                                                        <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                        <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                                <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View patron</a></li>
+                                                                <li role="separator" class="divider"></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit patron</a></li>
+                                                                <li role="separator" class="divider"></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                [% ELSIF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %]
+                                                    <td class="batch-op cardnumber" data-number="cardnumber">
+                                                        <span class="data-plain">[% cells.cell | $raw %]</span>
+                                                        <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                                <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                [% ELSE %]
+                                                    <td>
+                                                        [% cells.cell | $raw %]
+                                                    </td>
+                                                [% END %]
+                                            [% END %]
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        [% END %]
+                        <div class="pages">[% pagination_bar | $raw %]</div>
+                    </div>
                     [% INCLUDE 'chart.inc' %]
 
                 [% END #/IF ( execute ) %]
