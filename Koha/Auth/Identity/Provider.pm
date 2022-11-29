@@ -19,14 +19,10 @@ package Koha::Auth::Identity::Provider;
 
 use Modern::Perl;
 
-use base qw(Koha::Object);
-
-use JSON qw( decode_json encode_json );
-use Try::Tiny;
+use base qw(Koha::Object Koha::Object::JSONFields);
 
 use Koha::Auth::Identity::Provider::Domains;
 use Koha::Exceptions;
-use Koha::Exceptions::Object;
 
 =head1 NAME
 
@@ -61,11 +57,7 @@ Returns a I<hashref> containing the configuration parameters for the provider.
 sub get_config {
     my ($self) = @_;
 
-    return try {
-        return decode_json( Encode::encode_utf8( $self->config ) );
-    } catch {
-        Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
-    };
+    return $self->decode_json_field( { field => 'config' } );
 }
 
 =head3 set_config
@@ -104,14 +96,7 @@ sub set_config {
         }
     }
 
-    try {
-        my $encoded_config = encode_json($config);
-        $self->config($encoded_config);
-    } catch {
-        Koha::Exceptions::Object::BadValue->throw("Error serializing data into JSON: $_");
-    };
-
-    return $self;
+    return $self->set_encoded_json_field( { data => $config, field => 'config' } );
 }
 
 =head3 get_mapping
@@ -125,11 +110,7 @@ Returns a I<hashref> containing the attribute mapping for the provider.
 sub get_mapping {
     my ($self) = @_;
 
-    return try {
-        return decode_json( Encode::encode_utf8( $self->mapping ) );
-    } catch {
-        Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
-    };
+    return $self->decode_json_field( { field => 'mapping' } );
 }
 
 =head3 set_mapping
@@ -143,14 +124,7 @@ This method stores the passed mappings in JSON format.
 sub set_mapping {
     my ( $self, $mapping ) = @_;
 
-    try {
-        my $encoded_mapping = encode_json($mapping);
-        $self->mapping($encoded_mapping);
-    } catch {
-        Koha::Exceptions::Object::BadValue->throw("Error serializing data into JSON: $_");
-    };
-
-    return $self;
+    return $self->set_encoded_json_field( { data => $mapping, field => 'mapping' } );
 }
 
 =head3 upgrade_class
