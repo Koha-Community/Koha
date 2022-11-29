@@ -5,379 +5,381 @@
 
 <body id="cat_unimarc_field_283a" class="cat" style="padding:1em;">
 
-<h3>UNIMARC field 283a builder</h3>
+    <h3>UNIMARC field 283a builder</h3>
 
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td>
-            <select name="f1" id="f1">
-                <optgroup label="Audio carriers">
-                    [% IF ( f1 == "audio cartridge" ) %]
-                        <option value="audio cartridge" selected="selected">audio cartridge</option>
-                    [% ELSE %]
-                        <option value="audio cartridge">audio cartridge</option>
-                    [% END %]
+    <form name="f_pop" action="">
+        <div class="page-section">
+            <table>
+                <tr>
+                    <td>
+                        <select name="f1" id="f1">
+                            <optgroup label="Audio carriers">
+                                [% IF ( f1 == "audio cartridge" ) %]
+                                    <option value="audio cartridge" selected="selected">audio cartridge</option>
+                                [% ELSE %]
+                                    <option value="audio cartridge">audio cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audio belt" ) %]
-                        <option value="audio belt" selected="selected">audio belt</option>
-                    [% ELSE %]
-                        <option value="audio belt">audio belt</option>
-                    [% END %]
+                                [% IF ( f1 == "audio belt" ) %]
+                                    <option value="audio belt" selected="selected">audio belt</option>
+                                [% ELSE %]
+                                    <option value="audio belt">audio belt</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audio cylinder" ) %]
-                        <option value="audio cylinder" selected="selected">audio cylinder</option>
-                    [% ELSE %]
-                        <option value="audio cylinder">audio cylinder</option>
-                    [% END %]
+                                [% IF ( f1 == "audio cylinder" ) %]
+                                    <option value="audio cylinder" selected="selected">audio cylinder</option>
+                                [% ELSE %]
+                                    <option value="audio cylinder">audio cylinder</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audio disc" ) %]
-                        <option value="audio disc" selected="selected">audio disc</option>
-                    [% ELSE %]
-                        <option value="audio disc">audio disc</option>
-                    [% END %]
+                                [% IF ( f1 == "audio disc" ) %]
+                                    <option value="audio disc" selected="selected">audio disc</option>
+                                [% ELSE %]
+                                    <option value="audio disc">audio disc</option>
+                                [% END %]
 
-                    [% IF ( f1 == "sound track reel" ) %]
-                        <option value="sound track reel" selected="selected">sound track reel</option>
-                    [% ELSE %]
-                        <option value="sound track reel">sound track reel</option>
-                    [% END %]
+                                [% IF ( f1 == "sound track reel" ) %]
+                                    <option value="sound track reel" selected="selected">sound track reel</option>
+                                [% ELSE %]
+                                    <option value="sound track reel">sound track reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audio roll" ) %]
-                        <option value="audio roll" selected="selected">audio roll</option>
-                    [% ELSE %]
-                        <option value="audio roll">audio roll</option>
-                    [% END %]
+                                [% IF ( f1 == "audio roll" ) %]
+                                    <option value="audio roll" selected="selected">audio roll</option>
+                                [% ELSE %]
+                                    <option value="audio roll">audio roll</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audio wire reel" ) %]
-                        <option value="audio wire reel" selected="selected">audio wire reel</option>
-                    [% ELSE %]
-                        <option value="audio wire reel">audio wire reel</option>
-                    [% END %]
+                                [% IF ( f1 == "audio wire reel" ) %]
+                                    <option value="audio wire reel" selected="selected">audio wire reel</option>
+                                [% ELSE %]
+                                    <option value="audio wire reel">audio wire reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audiocassette" ) %]
-                        <option value="audiocassette" selected="selected">audiocassette</option>
-                    [% ELSE %]
-                        <option value="audiocassette">audiocassette</option>
-                    [% END %]
+                                [% IF ( f1 == "audiocassette" ) %]
+                                    <option value="audiocassette" selected="selected">audiocassette</option>
+                                [% ELSE %]
+                                    <option value="audiocassette">audiocassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "audiotape reel" ) %]
-                        <option value="audiotape reel" selected="selected">audiotape reel</option>
-                    [% ELSE %]
-                        <option value="audiotape reel">audiotape reel</option>
-                    [% END %]
+                                [% IF ( f1 == "audiotape reel" ) %]
+                                    <option value="audiotape reel" selected="selected">audiotape reel</option>
+                                [% ELSE %]
+                                    <option value="audiotape reel">audiotape reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other audio carrier" ) %]
-                        <option value="other audio carrier" disabled="disabled" selected="selected">other audio carrier</option>
-                    [% ELSE %]
-                        <option value="other audio carrier" >other audio carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other audio carrier" ) %]
+                                    <option value="other audio carrier" disabled="disabled" selected="selected">other audio carrier</option>
+                                [% ELSE %]
+                                    <option value="other audio carrier" >other audio carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Computer carriers">
-                    [% IF ( f1 == "computer card" ) %]
-                        <option value="computer card" selected="selected">computer card</option>
-                    [% ELSE %]
-                        <option value="computer card">computer card</option>
-                    [% END %]
+                            <optgroup label="Computer carriers">
+                                [% IF ( f1 == "computer card" ) %]
+                                    <option value="computer card" selected="selected">computer card</option>
+                                [% ELSE %]
+                                    <option value="computer card">computer card</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer chip cartridge" ) %]
-                        <option value="computer chip cartridge" selected="selected">computer chip cartridge</option>
-                    [% ELSE %]
-                        <option value="computer chip cartridge">computer chip cartridge</option>
-                    [% END %]
+                                [% IF ( f1 == "computer chip cartridge" ) %]
+                                    <option value="computer chip cartridge" selected="selected">computer chip cartridge</option>
+                                [% ELSE %]
+                                    <option value="computer chip cartridge">computer chip cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer disc" ) %]
-                        <option value="computer disc" selected="selected">computer disc</option>
-                    [% ELSE %]
-                        <option value="computer disc">computer disc</option>
-                    [% END %]
+                                [% IF ( f1 == "computer disc" ) %]
+                                    <option value="computer disc" selected="selected">computer disc</option>
+                                [% ELSE %]
+                                    <option value="computer disc">computer disc</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer disc cartridge" ) %]
-                        <option value="computer disc cartridge" selected="selected">computer disc cartridge</option>
-                    [% ELSE %]
-                        <option value="computer disc cartridge">computer disc cartridge</option>
-                    [% END %]
+                                [% IF ( f1 == "computer disc cartridge" ) %]
+                                    <option value="computer disc cartridge" selected="selected">computer disc cartridge</option>
+                                [% ELSE %]
+                                    <option value="computer disc cartridge">computer disc cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer tape cartridge" ) %]
-                        <option value="computer tape cartridge" selected="selected">computer tape cartridge</option>
-                    [% ELSE %]
-                        <option value="computer tape cartridge">computer tape cartridge</option>
-                    [% END %]
+                                [% IF ( f1 == "computer tape cartridge" ) %]
+                                    <option value="computer tape cartridge" selected="selected">computer tape cartridge</option>
+                                [% ELSE %]
+                                    <option value="computer tape cartridge">computer tape cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer tape cassette" ) %]
-                        <option value="computer tape cassette" selected="selected">computer tape cassette</option>
-                    [% ELSE %]
-                        <option value="computer tape cassette">computer tape cassette</option>
-                    [% END %]
+                                [% IF ( f1 == "computer tape cassette" ) %]
+                                    <option value="computer tape cassette" selected="selected">computer tape cassette</option>
+                                [% ELSE %]
+                                    <option value="computer tape cassette">computer tape cassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "computer tape reel" ) %]
-                        <option value="computer tape reel" selected="selected">computer tape reel</option>
-                    [% ELSE %]
-                        <option value="computer tape reel">computer tape reel</option>
-                    [% END %]
+                                [% IF ( f1 == "computer tape reel" ) %]
+                                    <option value="computer tape reel" selected="selected">computer tape reel</option>
+                                [% ELSE %]
+                                    <option value="computer tape reel">computer tape reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "online resource" ) %]
-                        <option value="online resource" selected="selected">online resource</option>
-                    [% ELSE %]
-                        <option value="online resource">online resource</option>
-                    [% END %]
+                                [% IF ( f1 == "online resource" ) %]
+                                    <option value="online resource" selected="selected">online resource</option>
+                                [% ELSE %]
+                                    <option value="online resource">online resource</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other computer carrier" ) %]
-                        <option value="other computer carrier" selected="selected">other computer carrier</option>
-                    [% ELSE %]
-                        <option value="other computer carrier">other computer carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other computer carrier" ) %]
+                                    <option value="other computer carrier" selected="selected">other computer carrier</option>
+                                [% ELSE %]
+                                    <option value="other computer carrier">other computer carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Microform carriers">
-                    [% IF ( f1 == "aperture card" ) %]
-                        <option value="aperture card" selected="selected">aperture card</option>
-                    [% ELSE %]
-                        <option value="aperture card">aperture card</option>
-                    [% END %]
+                            <optgroup label="Microform carriers">
+                                [% IF ( f1 == "aperture card" ) %]
+                                    <option value="aperture card" selected="selected">aperture card</option>
+                                [% ELSE %]
+                                    <option value="aperture card">aperture card</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfiche" ) %]
-                        <option value="microfiche" selected="selected">microfiche</option>
-                    [% ELSE %]
-                        <option value="microfiche">microfiche</option>
-                    [% END %]
+                                [% IF ( f1 == "microfiche" ) %]
+                                    <option value="microfiche" selected="selected">microfiche</option>
+                                [% ELSE %]
+                                    <option value="microfiche">microfiche</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfiche cassette" ) %]
-                        <option value="microfiche cassette" selected="selected">microfiche cassette</option>
-                    [% ELSE %]
-                        <option value="microfiche cassette">microfiche cassette</option>
-                    [% END %]
+                                [% IF ( f1 == "microfiche cassette" ) %]
+                                    <option value="microfiche cassette" selected="selected">microfiche cassette</option>
+                                [% ELSE %]
+                                    <option value="microfiche cassette">microfiche cassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfilm cartridge" ) %]
-                        <option value="microfilm cartridge" selected="selected">microfilm cartridge</option>
-                    [% ELSE %]
-                        <option value="microfilm cartridge">microfilm cartridge</option>
-                    [% END %]
+                                [% IF ( f1 == "microfilm cartridge" ) %]
+                                    <option value="microfilm cartridge" selected="selected">microfilm cartridge</option>
+                                [% ELSE %]
+                                    <option value="microfilm cartridge">microfilm cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfilm cassette" ) %]
-                        <option value="microfilm cassette" selected="selected">microfilm cassette</option>
-                    [% ELSE %]
-                        <option value="microfilm cassette">microfilm cassette</option>
-                    [% END %]
+                                [% IF ( f1 == "microfilm cassette" ) %]
+                                    <option value="microfilm cassette" selected="selected">microfilm cassette</option>
+                                [% ELSE %]
+                                    <option value="microfilm cassette">microfilm cassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfilm reel" ) %]
-                        <option value="microfilm reel" selected="selected">microfilm reel</option>
-                    [% ELSE %]
-                        <option value="microfilm reel">microfilm reel</option>
-                    [% END %]
+                                [% IF ( f1 == "microfilm reel" ) %]
+                                    <option value="microfilm reel" selected="selected">microfilm reel</option>
+                                [% ELSE %]
+                                    <option value="microfilm reel">microfilm reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfilm roll" ) %]
-                        <option value="microfilm roll" selected="selected">microfilm roll</option>
-                    [% ELSE %]
-                        <option value="microfilm roll">microfilm roll</option>
-                    [% END %]
+                                [% IF ( f1 == "microfilm roll" ) %]
+                                    <option value="microfilm roll" selected="selected">microfilm roll</option>
+                                [% ELSE %]
+                                    <option value="microfilm roll">microfilm roll</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microfilm slip" ) %]
-                        <option value="microfilm slip" selected="selected">microfilm slip</option>
-                    [% ELSE %]
-                        <option value="microfilm slip">microfilm slip</option>
-                    [% END %]
+                                [% IF ( f1 == "microfilm slip" ) %]
+                                    <option value="microfilm slip" selected="selected">microfilm slip</option>
+                                [% ELSE %]
+                                    <option value="microfilm slip">microfilm slip</option>
+                                [% END %]
 
-                    [% IF ( f1 == "microopaque" ) %]
-                        <option value="microopaque" selected="selected">microopaque</option>
-                    [% ELSE %]
-                        <option value="microopaque">microopaque</option>
-                    [% END %]
+                                [% IF ( f1 == "microopaque" ) %]
+                                    <option value="microopaque" selected="selected">microopaque</option>
+                                [% ELSE %]
+                                    <option value="microopaque">microopaque</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other microform carrier" ) %]
-                        <option value="other microform carrier" selected="selected">other microform carrier</option>
-                    [% ELSE %]
-                        <option value="other microform carrier">other microform carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other microform carrier" ) %]
+                                    <option value="other microform carrier" selected="selected">other microform carrier</option>
+                                [% ELSE %]
+                                    <option value="other microform carrier">other microform carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Microscopic carriers">
-                    [% IF ( f1 == "microscope slide" ) %]
-                        <option value="microscope slide" selected="selected">microscope slide</option>
-                    [% ELSE %]
-                        <option value="microscope slide">microscope slide</option>
-                    [% END %]
+                            <optgroup label="Microscopic carriers">
+                                [% IF ( f1 == "microscope slide" ) %]
+                                    <option value="microscope slide" selected="selected">microscope slide</option>
+                                [% ELSE %]
+                                    <option value="microscope slide">microscope slide</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other microscopic carrier" ) %]
-                        <option value="other microscopic carrier" selected="selected">other microscopic carrier</option>
-                    [% ELSE %]
-                        <option value="other microscopic carrier">other microscopic carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other microscopic carrier" ) %]
+                                    <option value="other microscopic carrier" selected="selected">other microscopic carrier</option>
+                                [% ELSE %]
+                                    <option value="other microscopic carrier">other microscopic carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Projected image carriers">
-                    [% IF ( f1 == "film cartridge" ) %]
-                        <option value="film cartridge" selected="selected">film cartridge</option>
-                    [% ELSE %]
-                        <option value="film cartridge">film cartridge</option>
-                    [% END %]
+                            <optgroup label="Projected image carriers">
+                                [% IF ( f1 == "film cartridge" ) %]
+                                    <option value="film cartridge" selected="selected">film cartridge</option>
+                                [% ELSE %]
+                                    <option value="film cartridge">film cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "film cassette" ) %]
-                        <option value="film cassette" selected="selected">film cassette</option>
-                    [% ELSE %]
-                        <option value="film cassette">film cassette</option>
-                    [% END %]
+                                [% IF ( f1 == "film cassette" ) %]
+                                    <option value="film cassette" selected="selected">film cassette</option>
+                                [% ELSE %]
+                                    <option value="film cassette">film cassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "film reel" ) %]
-                        <option value="film reel" selected="selected">film reel</option>
-                    [% ELSE %]
-                        <option value="film reel">film reel</option>
-                    [% END %]
+                                [% IF ( f1 == "film reel" ) %]
+                                    <option value="film reel" selected="selected">film reel</option>
+                                [% ELSE %]
+                                    <option value="film reel">film reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "film roll" ) %]
-                        <option value="film roll" selected="selected">film roll</option>
-                    [% ELSE %]
-                        <option value="film roll">film roll</option>
-                    [% END %]
+                                [% IF ( f1 == "film roll" ) %]
+                                    <option value="film roll" selected="selected">film roll</option>
+                                [% ELSE %]
+                                    <option value="film roll">film roll</option>
+                                [% END %]
 
-                    [% IF ( f1 == "filmslip" ) %]
-                        <option value="filmslip" selected="selected">filmslip</option>
-                    [% ELSE %]
-                        <option value="filmslip">filmslip</option>
-                    [% END %]
+                                [% IF ( f1 == "filmslip" ) %]
+                                    <option value="filmslip" selected="selected">filmslip</option>
+                                [% ELSE %]
+                                    <option value="filmslip">filmslip</option>
+                                [% END %]
 
-                    [% IF ( f1 == "filmstrip" ) %]
-                        <option value="filmstrip" selected="selected">filmstrip</option>
-                    [% ELSE %]
-                        <option value="filmstrip">filmstrip</option>
-                    [% END %]
+                                [% IF ( f1 == "filmstrip" ) %]
+                                    <option value="filmstrip" selected="selected">filmstrip</option>
+                                [% ELSE %]
+                                    <option value="filmstrip">filmstrip</option>
+                                [% END %]
 
-                    [% IF ( f1 == "filmstrip cartridge" ) %]
-                        <option value="filmstrip cartridge" selected="selected">filmstrip cartridge</option>
-                    [% ELSE %]
-                        <option value="filmstrip cartridge">filmstrip cartridge</option>
-                    [% END %]
+                                [% IF ( f1 == "filmstrip cartridge" ) %]
+                                    <option value="filmstrip cartridge" selected="selected">filmstrip cartridge</option>
+                                [% ELSE %]
+                                    <option value="filmstrip cartridge">filmstrip cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "overhead transparency" ) %]
-                        <option value="overhead transparency" selected="selected">overhead transparency</option>
-                    [% ELSE %]
-                        <option value="overhead transparency">overhead transparency</option>
-                    [% END %]
+                                [% IF ( f1 == "overhead transparency" ) %]
+                                    <option value="overhead transparency" selected="selected">overhead transparency</option>
+                                [% ELSE %]
+                                    <option value="overhead transparency">overhead transparency</option>
+                                [% END %]
 
-                    [% IF ( f1 == "slide" ) %]
-                        <option value="slide" selected="selected">slide</option>
-                    [% ELSE %]
-                        <option value="slide">slide</option>
-                    [% END %]
+                                [% IF ( f1 == "slide" ) %]
+                                    <option value="slide" selected="selected">slide</option>
+                                [% ELSE %]
+                                    <option value="slide">slide</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other projected image carrier" ) %]
-                        <option value="other projected image carrier" selected="selected">other projected image carrier</option>
-                    [% ELSE %]
-                        <option value="other projected image carrier">other projected image carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other projected image carrier" ) %]
+                                    <option value="other projected image carrier" selected="selected">other projected image carrier</option>
+                                [% ELSE %]
+                                    <option value="other projected image carrier">other projected image carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Stereographic carriers">
-                    [% IF ( f1 == "stereograph card" ) %]
-                        <option value="stereograph card" selected="selected">stereograph card</option>
-                    [% ELSE %]
-                        <option value="stereograph card">stereograph card</option>
-                    [% END %]
+                            <optgroup label="Stereographic carriers">
+                                [% IF ( f1 == "stereograph card" ) %]
+                                    <option value="stereograph card" selected="selected">stereograph card</option>
+                                [% ELSE %]
+                                    <option value="stereograph card">stereograph card</option>
+                                [% END %]
 
-                    [% IF ( f1 == "stereograph disc" ) %]
-                        <option value="stereograph disc" selected="selected">stereograph disc</option>
-                    [% ELSE %]
-                        <option value="stereograph disc">stereograph disc</option>
-                    [% END %]
+                                [% IF ( f1 == "stereograph disc" ) %]
+                                    <option value="stereograph disc" selected="selected">stereograph disc</option>
+                                [% ELSE %]
+                                    <option value="stereograph disc">stereograph disc</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other stereographic carrier" ) %]
-                        <option value="other stereographic carrier" selected="selected">other stereographic carrier</option>
-                    [% ELSE %]
-                        <option value="other stereographic carrier">other stereographic carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other stereographic carrier" ) %]
+                                    <option value="other stereographic carrier" selected="selected">other stereographic carrier</option>
+                                [% ELSE %]
+                                    <option value="other stereographic carrier">other stereographic carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Unmediated carriers">
-                    [% IF ( f1 == "card" ) %]
-                        <option value="card" selected="selected">card</option>
-                    [% ELSE %]
-                        <option value="card">card</option>
-                    [% END %]
+                            <optgroup label="Unmediated carriers">
+                                [% IF ( f1 == "card" ) %]
+                                    <option value="card" selected="selected">card</option>
+                                [% ELSE %]
+                                    <option value="card">card</option>
+                                [% END %]
 
-                    [% IF ( f1 == "flipchart" ) %]
-                        <option value="flipchart" selected="selected">flipchart</option>
-                    [% ELSE %]
-                        <option value="flipchart">flipchart</option>
-                    [% END %]
+                                [% IF ( f1 == "flipchart" ) %]
+                                    <option value="flipchart" selected="selected">flipchart</option>
+                                [% ELSE %]
+                                    <option value="flipchart">flipchart</option>
+                                [% END %]
 
-                    [% IF ( f1 == "roll" ) %]
-                        <option value="roll" selected="selected">roll</option>
-                    [% ELSE %]
-                        <option value="roll">roll</option>
-                    [% END %]
+                                [% IF ( f1 == "roll" ) %]
+                                    <option value="roll" selected="selected">roll</option>
+                                [% ELSE %]
+                                    <option value="roll">roll</option>
+                                [% END %]
 
-                    [% IF ( f1 == "sheet" ) %]
-                        <option value="sheet" selected="selected">sheet</option>
-                    [% ELSE %]
-                        <option value="sheet">sheet</option>
-                    [% END %]
+                                [% IF ( f1 == "sheet" ) %]
+                                    <option value="sheet" selected="selected">sheet</option>
+                                [% ELSE %]
+                                    <option value="sheet">sheet</option>
+                                [% END %]
 
-                    [% IF ( f1 == "volume" ) %]
-                        <option value="volume" selected="selected">volume</option>
-                    [% ELSE %]
-                        <option value="volume">volume</option>
-                    [% END %]
+                                [% IF ( f1 == "volume" ) %]
+                                    <option value="volume" selected="selected">volume</option>
+                                [% ELSE %]
+                                    <option value="volume">volume</option>
+                                [% END %]
 
-                    [% IF ( f1 == "object" ) %]
-                        <option value="object" selected="selected">object</option>
-                    [% ELSE %]
-                        <option value="object">object</option>
-                    [% END %]
+                                [% IF ( f1 == "object" ) %]
+                                    <option value="object" selected="selected">object</option>
+                                [% ELSE %]
+                                    <option value="object">object</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other unmediated carrier" ) %]
-                        <option value="other unmediated carrier" selected="selected">other unmediated carrier</option>
-                    [% ELSE %]
-                        <option value="other unmediated carrier">other unmediated carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other unmediated carrier" ) %]
+                                    <option value="other unmediated carrier" selected="selected">other unmediated carrier</option>
+                                [% ELSE %]
+                                    <option value="other unmediated carrier">other unmediated carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Video carriers">
-                    [% IF ( f1 == "video cartridge" ) %]
-                        <option value="video cartridge" selected="selected">video cartridge</option>
-                    [% ELSE %]
-                        <option value="video cartridge">video cartridge</option>
-                    [% END %]
+                            <optgroup label="Video carriers">
+                                [% IF ( f1 == "video cartridge" ) %]
+                                    <option value="video cartridge" selected="selected">video cartridge</option>
+                                [% ELSE %]
+                                    <option value="video cartridge">video cartridge</option>
+                                [% END %]
 
-                    [% IF ( f1 == "videocassette" ) %]
-                        <option value="videocassette" selected="selected">videocassette</option>
-                    [% ELSE %]
-                        <option value="videocassette">videocassette</option>
-                    [% END %]
+                                [% IF ( f1 == "videocassette" ) %]
+                                    <option value="videocassette" selected="selected">videocassette</option>
+                                [% ELSE %]
+                                    <option value="videocassette">videocassette</option>
+                                [% END %]
 
-                    [% IF ( f1 == "videodisc" ) %]
-                        <option value="videodisc" selected="selected">videodisc</option>
-                    [% ELSE %]
-                        <option value="videodisc">videodisc</option>
-                    [% END %]
+                                [% IF ( f1 == "videodisc" ) %]
+                                    <option value="videodisc" selected="selected">videodisc</option>
+                                [% ELSE %]
+                                    <option value="videodisc">videodisc</option>
+                                [% END %]
 
-                    [% IF ( f1 == "videotape reel" ) %]
-                        <option value="videotape reel" selected="selected">videotape reel</option>
-                    [% ELSE %]
-                        <option value="videotape reel">videotape reel</option>
-                    [% END %]
+                                [% IF ( f1 == "videotape reel" ) %]
+                                    <option value="videotape reel" selected="selected">videotape reel</option>
+                                [% ELSE %]
+                                    <option value="videotape reel">videotape reel</option>
+                                [% END %]
 
-                    [% IF ( f1 == "other video carrier" ) %]
-                        <option value="other video carrier" selected="selected">other video carrier</option>
-                    [% ELSE %]
-                        <option value="other video carrier">other video carrier</option>
-                    [% END %]
-                </optgroup>
+                                [% IF ( f1 == "other video carrier" ) %]
+                                    <option value="other video carrier" selected="selected">other video carrier</option>
+                                [% ELSE %]
+                                    <option value="other video carrier">other video carrier</option>
+                                [% END %]
+                            </optgroup>
 
-                <optgroup label="Unspecified carriers">
-                    [% IF ( f1 == "unspecified" ) %]
-                        <option value="unspecified" selected="selected">unspecified</option>
-                    [% ELSE %]
-                        <option value="unspecified">unspecified</option>
-                    [% END %]
-                </optgroup>
+                            <optgroup label="Unspecified carriers">
+                                [% IF ( f1 == "unspecified" ) %]
+                                    <option value="unspecified" selected="selected">unspecified</option>
+                                [% ELSE %]
+                                    <option value="unspecified">unspecified</option>
+                                [% END %]
+                            </optgroup>
 
-            </select>
-        </td>
-    </tr>
-</table>
-<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p><input type="button" class="btn btn-primary" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </div> <!-- /.page-section -->
+    </form>
 
 <script>
 

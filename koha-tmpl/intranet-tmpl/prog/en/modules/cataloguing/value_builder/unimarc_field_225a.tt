@@ -5,26 +5,26 @@
 </head>
 
 <body id="cat_unimarc_field_225a" class="cat" style="padding:1em;">
-<h1>UNIMARC field 225a builder</h1>
-    <div id="mainbloc">
-        <form name="f_pop" onsubmit="report()" action="">
-            <h2 class="authority">Collection</h2>
-            <p><label>Select a collection</label>
-                <select name="f1" id="f1">
-                [% FOREACH value IN collection.values %]
-                  [% IF ( value == collection.default ) %]
-                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                  [% ELSE %]
-                    <option value="[% value | html %]">[% value | html %]</option>
-                  [% END %]
-                [% END %]
-                </select>
-            </p>
-            OR new collection: <input type="text" value="" name="f2"/>
-            <br/>
-            <input type="submit" value="OK" class="button authority" />
-        </form>
-    </div>
+    <h1>UNIMARC field 225a builder</h1>
+        <div id="mainbloc" class="page-section">
+            <form name="f_pop" onsubmit="report()" action="">
+                <h2 class="authority">Collection</h2>
+                <p><label>Select a collection</label>
+                    <select name="f1" id="f1">
+                    [% FOREACH value IN collection.values %]
+                    [% IF ( value == collection.default ) %]
+                        <option value="[% value | html %]" selected="selected">[% value | html %]</option>
+                    [% ELSE %]
+                        <option value="[% value | html %]">[% value | html %]</option>
+                    [% END %]
+                    [% END %]
+                    </select>
+                </p>
+                OR new collection: <input type="text" value="" name="f2"/>
+                <br/>
+                <input type="submit" value="OK" class="button authority" />
+            </form>
+        </div>
 
 
 [% MACRO jsinclude BLOCK %]

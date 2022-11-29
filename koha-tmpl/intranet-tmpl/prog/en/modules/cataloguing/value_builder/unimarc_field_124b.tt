@@ -5,74 +5,76 @@
 </head>
 
 <body id="cat_unimarc_field_124b" class="cat" style="padding:1em;">
-<h1>UNIMARC field 124b builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Form of cartographic item:</label></td>
-		<td>
-            <select name="f1" id="f1">
-            
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">atlas</option>
-			[% ELSE %]
-				<option value="a">atlas</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">diagram</option>
-			[% ELSE %]
-				<option value="b">diagram</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">globe</option>
-			[% ELSE %]
-				<option value="c">globe</option>
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">map</option>
-			[% ELSE %]
-				<option value="d">map</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">model</option>
-			[% ELSE %]
-				<option value="e">model</option>
-			[% END %]
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">profile</option>
-			[% ELSE %]
-				<option value="f">profile</option>
-			[% END %]
-			[% IF ( f1g ) %]
-				<option value="g" selected="selected">remote sensing image</option>
-			[% ELSE %]
-				<option value="g">remote sensing image</option>
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">section</option>
-			[% ELSE %]
-				<option value="h">section</option>
-			[% END %]
-			[% IF ( f1i ) %]
-				<option value="i" selected="selected">view</option>
-			[% ELSE %]
-				<option value="i">view</option>
-			[% END %]
-			[% IF ( f1j ) %]
-				<option value="j" selected="selected">plan</option>
-			[% ELSE %]
-				<option value="j">plan</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 124b builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Form of cartographic item:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">atlas</option>
+                            [% ELSE %]
+                                <option value="a">atlas</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">diagram</option>
+                            [% ELSE %]
+                                <option value="b">diagram</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">globe</option>
+                            [% ELSE %]
+                                <option value="c">globe</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">map</option>
+                            [% ELSE %]
+                                <option value="d">map</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">model</option>
+                            [% ELSE %]
+                                <option value="e">model</option>
+                            [% END %]
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">profile</option>
+                            [% ELSE %]
+                                <option value="f">profile</option>
+                            [% END %]
+                            [% IF ( f1g ) %]
+                                <option value="g" selected="selected">remote sensing image</option>
+                            [% ELSE %]
+                                <option value="g">remote sensing image</option>
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">section</option>
+                            [% ELSE %]
+                                <option value="h">section</option>
+                            [% END %]
+                            [% IF ( f1i ) %]
+                                <option value="i" selected="selected">view</option>
+                            [% ELSE %]
+                                <option value="i">view</option>
+                            [% END %]
+                            [% IF ( f1j ) %]
+                                <option value="j" selected="selected">plan</option>
+                            [% ELSE %]
+                                <option value="j">plan</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

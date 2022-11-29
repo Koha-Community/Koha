@@ -5,247 +5,249 @@
 </head>
 
 <body id="cat_unimarc_field_121b" class="cat" style="padding:1em;">
-<h1>UNIMARC field 121b builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Altitude of sensor</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">terrestrial</option>
-			[% ELSE %]
-				<option value="a">terrestrial</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">aerial</option>
-			[% ELSE %]
-				<option value="b">aerial</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">space</option>
-			[% ELSE %]
-				<option value="c">space</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-        <td><label for="f2">Attitude of sensor</label></td>
-		<td>
-            <select name="f2" id="f2">
-                        
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">low oblique</option>
-			[% ELSE %]
-				<option value="a">low oblique</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">high oblique</option>
-			[% ELSE %]
-				<option value="b">high oblique</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">vertical</option>
-			[% ELSE %]
-				<option value="c">vertical</option>
-			[% END %]
-			</select>
-		</td></tr>
-		<tr>		<td><label for="f3">Spectral bands : 01 to 99 = number of bands, xx = not applicable</label></td>
-		   <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" />
-		</td></tr>
-<tr>
-		<td><label for="f4">Quality of image</label></td>
-		<td>
-            <select name="f4" id="f4">
-			
-			[% IF ( f4a ) %]
-				<option value="a" selected="selected">poor</option>
-			[% ELSE %]
-				<option value="a">poor</option>
-			[% END %]
-			[% IF ( f4b ) %]
-				<option value="b" selected="selected">fair</option>
-			[% ELSE %]
-				<option value="b">fair</option>
-			[% END %]
-			[% IF ( f4c ) %]
-				<option value="c" selected="selected">good</option>
-			[% ELSE %]
-				<option value="c">good</option>
-			[% END %]
-			[% IF ( f4d ) %]
-				<option value="d" selected="selected">very good</option>
-			[% ELSE %]
-				<option value="d">very good</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-		<td><label for="f5">Cloud cover</label></td>
-		<td>
-            <select name="f5" id="f5">
-
-			[% IF ( f51 ) %]
-				<option value="1" selected="selected">1/8</option>
-			[% ELSE %]
-				<option value="1">1/8</option>
-			[% END %]
-			[% IF ( f52 ) %]
-				<option value="2" selected="selected">2/8</option>
-			[% ELSE %]
-				<option value="2">2/8</option>
-			[% END %]
-			[% IF ( f53 ) %]
-				<option value="3" selected="selected">3/8</option>
-			[% ELSE %]
-				<option value="3">3/8</option>
-			[% END %]
-			[% IF ( f54 ) %]
-				<option value="4" selected="selected">4/8</option>
-			[% ELSE %]
-				<option value="4">4/8</option>
-			[% END %]
-			[% IF ( f55 ) %]
-				<option value="5" selected="selected">5/8</option>
-			[% ELSE %]
-				<option value="5">5/8</option>
-			[% END %]
-			[% IF ( f56 ) %]
-				<option value="6" selected="selected">6/8</option>
-			[% ELSE %]
-				<option value="6">6/8</option>
-			[% END %]
-			[% IF ( f57 ) %]
-				<option value="7" selected="selected">7/8</option>
-			[% ELSE %]
-				<option value="7">7/8</option>
-			[% END %]
-			[% IF ( f58 ) %]
-				<option value="8" selected="selected">completely covered by clouds</option>
-			[% ELSE %]
-				<option value="8">completely covered by clouds</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-
-		       <td><label for="f6">Mean value of ground resolution</label></td>
-                <td>
-                        <select name="f6" id="f6">
-                        [% IF ( f6minus ) %]
-                                <option value="-" selected="selected">less than 1 centimetre</option>
-                        [% ELSE %]
-                                <option value="-">less than 1 centimetre</option>
-                        [% END %]
-                        
-                        [% IF ( f61 ) %]
-                                <option value="1" selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="1">1</option>
-                        [% END %]
-                        [% IF ( f62 ) %]
-                                <option value="2"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="2">2</option>
-                        [% END %]
-                        [% IF ( f63 ) %]
-                                <option value="3"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="3">3</option>
-                        [% END %]
-                        [% IF ( f64 ) %]
-                                <option value="4"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="4">4</option>
-                        [% END %]
-                        [% IF ( f51 ) %]
-                                <option value="5"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="5">5</option>
-                        [% END %]
-                        [% IF ( f66 ) %]
-                                <option value="6"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="6">6</option>
-                        [% END %]
-                        [% IF ( f71 ) %]
-                                <option value="7"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="7">7</option>
-                        [% END %]
-                        [% IF ( f68 ) %]
-                                <option value="8"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="8">8</option>
-                        [% END %]
-                        [% IF ( f69 ) %]
-                                <option value="9"
-                selected="selected">1</option>
-                        [% ELSE %]
-                                <option value="9">9</option>
-                        [% END %]
-                        [% IF ( f6plus ) %]
-                                <option value="+"
-                selected="selected">greater than 9 kilometres</option>
-                        [% ELSE %]
-                                <option value="+">greater than 9 kilometres</option>
-                        [% END %]
-                        [% IF ( f6x ) %]
-                                <option value="x"
-                selected="selected">not applicable</option>
-                        [% ELSE %]
-                                <option value="x">not applicable</option>
-                        [% END %]
+    <h1>UNIMARC field 121b builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Altitude of sensor</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">terrestrial</option>
+                            [% ELSE %]
+                                <option value="a">terrestrial</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">aerial</option>
+                            [% ELSE %]
+                                <option value="b">aerial</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">space</option>
+                            [% ELSE %]
+                                <option value="c">space</option>
+                            [% END %]
                         </select>
-                
-            <select name="f7" id="f7">
-			
-			[% IF ( f7c ) %]
-				<option value="c" selected="selected">Centimetres</option>
-			[% ELSE %]
-				<option value="c">Centimetres</option>
-			[% END %]
-			[% IF ( f7i ) %]
-				<option value="i" selected="selected">Decimetres</option>
-			[% ELSE %]
-				<option value="i">Decimetres</option>
-			[% END %]
-			[% IF ( f7m ) %]
-				<option value="m" selected="selected">Metres</option>
-			[% ELSE %]
-				<option value="m">Metres</option>
-			[% END %]
-			[% IF ( f7d ) %]
-				<option value="d" selected="selected">Decametres</option>
-			[% ELSE %]
-				<option value="d">Decametres</option>
-			[% END %]
-			[% IF ( f7h ) %]
-				<option value="h" selected="selected">Hectametres</option>
-			[% ELSE %]
-				<option value="h">Hectametres</option>
-			[% END %]
-			[% IF ( f7k ) %]
-				<option value="k" selected="selected">Kilometres</option>
-			[% ELSE %]
-				<option value="k">Kilometres</option>
-			[% END %]
-			[% IF ( f7x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-			[% END %]
-			</select>
-		</td>
-	</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                    </td></tr><tr>
+                    <td><label for="f2">Attitude of sensor</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">low oblique</option>
+                            [% ELSE %]
+                                <option value="a">low oblique</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">high oblique</option>
+                            [% ELSE %]
+                                <option value="b">high oblique</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">vertical</option>
+                            [% ELSE %]
+                                <option value="c">vertical</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+                <tr><td><label for="f3">Spectral bands : 01 to 99 = number of bands, xx = not applicable</label></td>
+                    <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" />
+                    </td></tr>
+                <tr>
+                    <td><label for="f4">Quality of image</label></td>
+                    <td>
+                        <select name="f4" id="f4">
+
+                            [% IF ( f4a ) %]
+                                <option value="a" selected="selected">poor</option>
+                            [% ELSE %]
+                                <option value="a">poor</option>
+                            [% END %]
+                            [% IF ( f4b ) %]
+                                <option value="b" selected="selected">fair</option>
+                            [% ELSE %]
+                                <option value="b">fair</option>
+                            [% END %]
+                            [% IF ( f4c ) %]
+                                <option value="c" selected="selected">good</option>
+                            [% ELSE %]
+                                <option value="c">good</option>
+                            [% END %]
+                            [% IF ( f4d ) %]
+                                <option value="d" selected="selected">very good</option>
+                            [% ELSE %]
+                                <option value="d">very good</option>
+                            [% END %]
+                        </select>
+                    </td></tr><tr>
+                    <td><label for="f5">Cloud cover</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+
+                            [% IF ( f51 ) %]
+                                <option value="1" selected="selected">1/8</option>
+                            [% ELSE %]
+                                <option value="1">1/8</option>
+                            [% END %]
+                            [% IF ( f52 ) %]
+                                <option value="2" selected="selected">2/8</option>
+                            [% ELSE %]
+                                <option value="2">2/8</option>
+                            [% END %]
+                            [% IF ( f53 ) %]
+                                <option value="3" selected="selected">3/8</option>
+                            [% ELSE %]
+                                <option value="3">3/8</option>
+                            [% END %]
+                            [% IF ( f54 ) %]
+                                <option value="4" selected="selected">4/8</option>
+                            [% ELSE %]
+                                <option value="4">4/8</option>
+                            [% END %]
+                            [% IF ( f55 ) %]
+                                <option value="5" selected="selected">5/8</option>
+                            [% ELSE %]
+                                <option value="5">5/8</option>
+                            [% END %]
+                            [% IF ( f56 ) %]
+                                <option value="6" selected="selected">6/8</option>
+                            [% ELSE %]
+                                <option value="6">6/8</option>
+                            [% END %]
+                            [% IF ( f57 ) %]
+                                <option value="7" selected="selected">7/8</option>
+                            [% ELSE %]
+                                <option value="7">7/8</option>
+                            [% END %]
+                            [% IF ( f58 ) %]
+                                <option value="8" selected="selected">completely covered by clouds</option>
+                            [% ELSE %]
+                                <option value="8">completely covered by clouds</option>
+                            [% END %]
+                        </select>
+                    </td></tr><tr>
+
+                    <td><label for="f6">Mean value of ground resolution</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+                            [% IF ( f6minus ) %]
+                                <option value="-" selected="selected">less than 1 centimetre</option>
+                            [% ELSE %]
+                                <option value="-">less than 1 centimetre</option>
+                            [% END %]
+
+                            [% IF ( f61 ) %]
+                                <option value="1" selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="1">1</option>
+                            [% END %]
+                            [% IF ( f62 ) %]
+                                <option value="2"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="2">2</option>
+                            [% END %]
+                            [% IF ( f63 ) %]
+                                <option value="3"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="3">3</option>
+                            [% END %]
+                            [% IF ( f64 ) %]
+                                <option value="4"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="4">4</option>
+                            [% END %]
+                            [% IF ( f51 ) %]
+                                <option value="5"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="5">5</option>
+                            [% END %]
+                            [% IF ( f66 ) %]
+                                <option value="6"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="6">6</option>
+                            [% END %]
+                            [% IF ( f71 ) %]
+                                <option value="7"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="7">7</option>
+                            [% END %]
+                            [% IF ( f68 ) %]
+                                <option value="8"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="8">8</option>
+                            [% END %]
+                            [% IF ( f69 ) %]
+                                <option value="9"
+                                    selected="selected">1</option>
+                            [% ELSE %]
+                                <option value="9">9</option>
+                            [% END %]
+                            [% IF ( f6plus ) %]
+                                <option value="+"
+                                    selected="selected">greater than 9 kilometres</option>
+                            [% ELSE %]
+                                <option value="+">greater than 9 kilometres</option>
+                            [% END %]
+                            [% IF ( f6x ) %]
+                                <option value="x"
+                                    selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+                            [% END %]
+                        </select>
+
+                        <select name="f7" id="f7">
+
+                            [% IF ( f7c ) %]
+                                <option value="c" selected="selected">Centimetres</option>
+                            [% ELSE %]
+                                <option value="c">Centimetres</option>
+                            [% END %]
+                            [% IF ( f7i ) %]
+                                <option value="i" selected="selected">Decimetres</option>
+                            [% ELSE %]
+                                <option value="i">Decimetres</option>
+                            [% END %]
+                            [% IF ( f7m ) %]
+                                <option value="m" selected="selected">Metres</option>
+                            [% ELSE %]
+                                <option value="m">Metres</option>
+                            [% END %]
+                            [% IF ( f7d ) %]
+                                <option value="d" selected="selected">Decametres</option>
+                            [% ELSE %]
+                                <option value="d">Decametres</option>
+                            [% END %]
+                            [% IF ( f7h ) %]
+                                <option value="h" selected="selected">Hectametres</option>
+                            [% ELSE %]
+                                <option value="h">Hectametres</option>
+                            [% END %]
+                            [% IF ( f7k ) %]
+                                <option value="k" selected="selected">Kilometres</option>
+                            [% ELSE %]
+                                <option value="k">Kilometres</option>
+                            [% END %]
+                            [% IF ( f7x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

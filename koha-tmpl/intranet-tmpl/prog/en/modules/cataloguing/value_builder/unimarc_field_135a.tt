@@ -5,59 +5,61 @@
 </head>
 
 <body id="cat_unimarc_field_135a" class="cat" style="padding:1em;">
-<h1>UNIMARC field 135a builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Type of electronic resource:</label></td>
-		<td>
-            <select name="f1" id="f1">
-            
-			[% IF ( f1space ) %]
-				<option value=" " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value=" ">non required value</option>
-			[% END %]
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">numeric</option>
-			[% ELSE %]
-				<option value="a">numeric</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">computer program(s)</option>
-			[% ELSE %]
-				<option value="b">computer program(s)</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">representational</option>
-			[% ELSE %]
-				<option value="c">representational</option>
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">text</option>
-			[% ELSE %]
-				<option value="d">text</option>
-			[% END %]
-			[% IF ( f1u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f1v ) %]
-				<option value="v" selected="selected">combination</option>
-			[% ELSE %]
-				<option value="v">combination</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<p><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></p>
-</form>
+    <h1>UNIMARC field 135a builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Type of electronic resource:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+
+                            [% IF ( f1space ) %]
+                                <option value=" " selected="selected">non required value</option>
+                            [% ELSE %]
+                                <option value=" ">non required value</option>
+                            [% END %]
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">numeric</option>
+                            [% ELSE %]
+                                <option value="a">numeric</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">computer program(s)</option>
+                            [% ELSE %]
+                                <option value="b">computer program(s)</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">representational</option>
+                            [% ELSE %]
+                                <option value="c">representational</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">text</option>
+                            [% ELSE %]
+                                <option value="d">text</option>
+                            [% END %]
+                            [% IF ( f1u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f1v ) %]
+                                <option value="v" selected="selected">combination</option>
+                            [% ELSE %]
+                                <option value="v">combination</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <p><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></p>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

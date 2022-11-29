@@ -5,338 +5,340 @@
 </head>
 
 <body id="cat_unimarc_field_121a" class="cat" style="padding:1em;">
-<h1>UNIMARC field 121a builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Physical dimension</label></td>
-		<td>
-            <select name="f1" id="f1">
+    <h1>UNIMARC field 121a builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Physical dimension</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">2-dimensional</option>
-			[% ELSE %]
-				<option value="a">2-dimensional</option>
-			[% END %]
-			[% IF ( f1b ) %]
-                <option value="b" selected="selected">3-dimensional</option>
-			[% ELSE %]
-                <option value="b">3-dimensional</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-		<td><label for="f2">Primary cartographic image 1:</label></td>
-		<td>
-            <select name="f2" id="f2">
-            
-			[% IF ( f2space ) %]
-				<option value=" " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value=" ">non required value</option>
-			[% END %]
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">manually and plotted</option>
-			[% ELSE %]
-				<option value="a">manually and plotted</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">photographically</option>
-			[% ELSE %]
-				<option value="b">photographically</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">by computer</option>
-			[% ELSE %]
-				<option value="c">by computer</option>
-			[% END %]
-			[% IF ( f2d ) %]
-                <option value="d" selected="selected">by active remote sensing technique</option>
-			[% ELSE %]
-                <option value="d">by active remote sensing technique</option>
-			[% END %]
-			[% IF ( f2e ) %]
-				<option value="e" selected="selected">by passive remote sensing techniques</option>
-			[% ELSE %]
-				<option value="e">by passive remote sensing techniques</option>
-			[% END %]
-			</select>
-		</td>
-		</tr>
-		<tr>
-		<td><label for="f3">Primary cartographic image 2:</label></td>
-		<td>
-            <select name="f3" id="f3">
-                        [% IF ( f3space ) %]
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">2-dimensional</option>
+                            [% ELSE %]
+                                <option value="a">2-dimensional</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">3-dimensional</option>
+                            [% ELSE %]
+                                <option value="b">3-dimensional</option>
+                            [% END %]
+                        </select>
+                    </td></tr><tr>
+                    <td><label for="f2">Primary cartographic image 1:</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+
+                            [% IF ( f2space ) %]
                                 <option value=" " selected="selected">non required value</option>
-                        [% ELSE %]
+                            [% ELSE %]
                                 <option value=" ">non required value</option>
-                        [% END %]
-                        
-			[% IF ( f3a ) %]
-				<option value="a" selected="selected">manually and plotted</option>
-			[% ELSE %]
-				<option value="a">manually and plotted</option>
-			[% END %]
-			[% IF ( f3b ) %]
-				<option value="b" selected="selected">photographically</option>
-			[% ELSE %]
-				<option value="b">photographically</option>
-			[% END %]
-			[% IF ( f3c ) %]
-				<option value="c" selected="selected">by computer</option>
-			[% ELSE %]
-				<option value="c">by computer</option>
-			[% END %]
-			[% IF ( f3d ) %]
-				<option value="d" selected="selected">by active remote sensing techniques</option>
-			[% ELSE %]
-				<option value="d">by active remote sensing techniques</option>
-			[% END %]
-			[% IF ( f3e ) %]
-				<option value="e" selected="selected">by passive remote sensing techniques</option>
-			[% ELSE %]
-				<option value="e">by passive remote sensing techniques</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-		<td><label for="f4">Physical medium</label></td>
-		<td>
-            <select name="f4" id="f4">
-			[% IF ( f4aa ) %]
-				<option value="aa" selected="selected">paper</option>
-			[% ELSE %]
-				<option value="aa">paper</option>
-			[% END %]
-			[% IF ( f4ab ) %]
-				<option value="ab" selected="selected">wood</option>
-			[% ELSE %]
-				<option value="ab">wood</option>
-			[% END %]
-			[% IF ( f4ac ) %]
-				<option value="ac" selected="selected">stone</option>
-			[% ELSE %]
-				<option value="ac">stone</option>
-			[% END %]
-			[% IF ( f4ad ) %]
-				<option value="ad" selected="selected">metal</option>
-			[% ELSE %]
-				<option value="ad">metal</option>
-			[% END %]
-			[% IF ( f4ae ) %]
-				<option value="ae" selected="selected">synthetics (e.g. plastics, vinyl)</option>
-			[% ELSE %]
-				<option value="ae">synthetics (e.g. plastics, vinyl)</option>
-			[% END %]
-			[% IF ( f4af ) %]
-				<option value="af" selected="selected">skin (e.g. parchment, vellum)</option>
-			[% ELSE %]
-				<option value="af">skin (e.g. parchment, vellum)</option>
-			[% END %]
-			[% IF ( f4ag ) %]
-				<option value="ag" selected="selected">     textile including manmade fibre textiles (e.g. silk, cloth, nylon)</option>
-			[% ELSE %]
-				<option value="ag">     textile including manmade fibre textiles (e.g. silk, cloth, nylon)</option>
-			[% END %]
-			[% IF ( f4ah ) %]
-				<option value="ah" selected="selected">magnetic storage medium - computer compatible</option>
-			[% ELSE %]
-				<option value="ah">magnetic storage medium - computer compatible</option>
-			[% END %]
-			[% IF ( f4ai ) %]
-				<option value="ai" selected="selected">magnetic storage medium - not computer compatible</option>
-			[% ELSE %]
-				<option value="ai">magnetic storage medium - not computer compatible</option>
-			[% END %]
-			[% IF ( f4aj ) %]
-				<option value="aj" selected="selected">tracing paper</option>
-			[% ELSE %]
-				<option value="aj">tracing paper</option>
-			[% END %]
-			[% IF ( f4ak ) %]
-				<option value="ak" selected="selected">cardboard</option>
-			[% ELSE %]
-				<option value="ak">cardboard</option>
-			[% END %]
-			[% IF ( f4ap ) %]
-				<option value="ap" selected="selected">plaster</option>
-			[% ELSE %]
-				<option value="ap">plaster</option>
-			[% END %]
-			[% IF ( f4au ) %]
-				<option value="au" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="au">unknown</option>
-			[% END %]
-			[% IF ( f4az ) %]
-				<option value="az" selected="selected">other non photographic medium</option>
-			[% ELSE %]
-				<option value="az">other non photographic medium</option>
-			[% END %]
-			[% IF ( f4ba ) %]
-				<option value="ba" selected="selected"> transparent or opaque flexible base positive</option>
-			[% ELSE %]
-				<option value="ba"> transparent or opaque flexible base positive</option>
-			[% END %]
-			[% IF ( f4bb ) %]
-				<option value="bb" selected="selected">transparent or opaque flexible base negative</option>
-			[% ELSE %]
-				<option value="bb">transparent or opaque flexible base negative</option>
-			[% END %]
-			[% IF ( f4bc ) %]
-				<option value="bc" selected="selected">transparent or opaque non-flexible base positive</option>
-			[% ELSE %]
-				<option value="bc">transparent or opaque non-flexible base positive</option>
-			[% END %]
-			[% IF ( f4bd ) %]
-				<option value="bd" selected="selected">transparent or opaque non-flexible base negative</option>
-			[% ELSE %]
-				<option value="bd">transparent or opaque non-flexible base negative</option>
-			[% END %]
-			[% IF ( f4bz ) %]
-				<option value="bz" selected="selected">other photographic medium</option>
-			[% ELSE %]
-				<option value="bz">other photographic medium</option>
-			[% END %]
-			</select>
-		</td></tr><tr>
-		<td><label for="f5">Creation technique</label></td>
-		<td>
-            <select name="f5" id="f5">
-			[% IF ( f5a ) %]
-				<option value="a" selected="selected">manuscript</option>
-			[% ELSE %]
-				<option value="a">manuscript</option>
-			[% END %]
-			[% IF ( f5b ) %]
-				<option value="b" selected="selected">printing</option>
-			[% ELSE %]
-				<option value="b">printing</option>
-			[% END %]
-			[% IF ( f5c ) %]
-				<option value="c" selected="selected">photocopying</option>
-			[% ELSE %]
-				<option value="c">photocopying</option>
-			[% END %]
-			[% IF ( f5d ) %]
-				<option value="d" selected="selected">microphotography</option>
-			[% ELSE %]
-				<option value="d">microphotography</option>
-			[% END %]
-			[% IF ( f5u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f5y ) %]
-                <option value="y" selected="selected">the cartographic item is not a final product</option>
-			[% ELSE %]
-                <option value="y">the cartographic item is not a final product</option>
-			[% END %]
-			[% IF ( f5z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td>
-	</tr><tr>
-		<td><label for="f6">Form of reproduction</label></td>
-		<td>
-            <select name="f6" id="f6">
-			[% IF ( f6a ) %]
-				<option value="a" selected="selected">by hand</option>
-			[% ELSE %]
-				<option value="a">by hand</option>
-			[% END %]
-			[% IF ( f6b ) %]
-				<option value="b" selected="selected">printed</option>
-			[% ELSE %]
-				<option value="b">printed</option>
-			[% END %]
-			[% IF ( f6c ) %]
-				<option value="c" selected="selected">photography</option>
-			[% ELSE %]
-				<option value="c">photography</option>
-			[% END %]
-			[% IF ( f6d ) %]
-				<option value="d" selected="selected">transfer line print</option>
-			[% ELSE %]
-				<option value="d">transfer line print</option>
-			[% END %]
-			[% IF ( f6y ) %]
-				<option value="y" selected="selected">not a reproduction</option>
-			[% ELSE %]
-				<option value="y">not a reproduction</option>
-			[% END %]
-			</select>
-		</td>
-	</tr><tr>
-		<td><label for="f7">Geodetic adjustment</label></td>
-		<td>
-            <select name="f7" id="f7">
-			[% IF ( f7a ) %]
-				<option value="a" selected="selected">a- no adjustment</option>
-			[% ELSE %]
-				<option value="a">a- no adjustment</option>
-			[% END %]
-			[% IF ( f7b ) %]
-				<option value="b" selected="selected">b- adjusted but without grid system</option>
-			[% ELSE %]
-				<option value="b">b- adjusted but without grid system</option>
-			[% END %]
-			[% IF ( f7c ) %]
-				<option value="c" selected="selected">c- adjusted with grid system</option>
-			[% ELSE %]
-				<option value="c">c- adjusted with grid system</option>
-			[% END %]
-			[% IF ( f7x ) %]
-				<option value="x" selected="selected">x- not applicable</option>
-			[% ELSE %]
-				<option value="x">x- not applicable</option>
-			[% END %]
-			</select>
-		</td>
-	</tr>
-<tr>
-		<td><label for="f8">Physical form of publication</label></td>
-		<td>
-            <select name="f8" id="f8">
-			[% IF ( f8a ) %]
-				<option value="a" selected="selected">single</option>
-			[% ELSE %]
-				<option value="a">single</option>
-			[% END %]
-			[% IF ( f8b ) %]
-				<option value="b" selected="selected">in parts</option>
-			[% ELSE %]
-				<option value="b">in parts</option>
-			[% END %]
-			[% IF ( f8c ) %]
-				<option value="c" selected="selected">atlas including loose-leaf published atlas</option>
-			[% ELSE %]
-				<option value="c">atlas including loose-leaf published atlas</option>
-			[% END %]
-			[% IF ( f8d ) %]
-				<option value="d" selected="selected">as a separate supplement to a journal, monograph, etc.</option>
-			[% ELSE %]
-				<option value="d">as a separate supplement to a journal, monograph, etc.</option>
-			[% END %]
-			[% IF ( f8e ) %]
-				<option value="e" selected="selected">bound into a journal, monograph, etc.</option>
-			[% ELSE %]
-				<option value="e">bound into a journal, monograph, etc.</option>
-			[% END %]
-			[% IF ( f8z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td>
-	</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% END %]
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">manually and plotted</option>
+                            [% ELSE %]
+                                <option value="a">manually and plotted</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">photographically</option>
+                            [% ELSE %]
+                                <option value="b">photographically</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">by computer</option>
+                            [% ELSE %]
+                                <option value="c">by computer</option>
+                            [% END %]
+                            [% IF ( f2d ) %]
+                                <option value="d" selected="selected">by active remote sensing technique</option>
+                            [% ELSE %]
+                                <option value="d">by active remote sensing technique</option>
+                            [% END %]
+                            [% IF ( f2e ) %]
+                                <option value="e" selected="selected">by passive remote sensing techniques</option>
+                            [% ELSE %]
+                                <option value="e">by passive remote sensing techniques</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f3">Primary cartographic image 2:</label></td>
+                    <td>
+                        <select name="f3" id="f3">
+                            [% IF ( f3space ) %]
+                                    <option value=" " selected="selected">non required value</option>
+                            [% ELSE %]
+                                    <option value=" ">non required value</option>
+                            [% END %]
+
+                            [% IF ( f3a ) %]
+                                <option value="a" selected="selected">manually and plotted</option>
+                            [% ELSE %]
+                                <option value="a">manually and plotted</option>
+                            [% END %]
+                            [% IF ( f3b ) %]
+                                <option value="b" selected="selected">photographically</option>
+                            [% ELSE %]
+                                <option value="b">photographically</option>
+                            [% END %]
+                            [% IF ( f3c ) %]
+                                <option value="c" selected="selected">by computer</option>
+                            [% ELSE %]
+                                <option value="c">by computer</option>
+                            [% END %]
+                            [% IF ( f3d ) %]
+                                <option value="d" selected="selected">by active remote sensing techniques</option>
+                            [% ELSE %]
+                                <option value="d">by active remote sensing techniques</option>
+                            [% END %]
+                            [% IF ( f3e ) %]
+                                <option value="e" selected="selected">by passive remote sensing techniques</option>
+                            [% ELSE %]
+                                <option value="e">by passive remote sensing techniques</option>
+                            [% END %]
+                        </select>
+                    </td></tr><tr>
+                    <td><label for="f4">Physical medium</label></td>
+                    <td>
+                        <select name="f4" id="f4">
+                            [% IF ( f4aa ) %]
+                                <option value="aa" selected="selected">paper</option>
+                            [% ELSE %]
+                                <option value="aa">paper</option>
+                            [% END %]
+                            [% IF ( f4ab ) %]
+                                <option value="ab" selected="selected">wood</option>
+                            [% ELSE %]
+                                <option value="ab">wood</option>
+                            [% END %]
+                            [% IF ( f4ac ) %]
+                                <option value="ac" selected="selected">stone</option>
+                            [% ELSE %]
+                                <option value="ac">stone</option>
+                            [% END %]
+                            [% IF ( f4ad ) %]
+                                <option value="ad" selected="selected">metal</option>
+                            [% ELSE %]
+                                <option value="ad">metal</option>
+                            [% END %]
+                            [% IF ( f4ae ) %]
+                                <option value="ae" selected="selected">synthetics (e.g. plastics, vinyl)</option>
+                            [% ELSE %]
+                                <option value="ae">synthetics (e.g. plastics, vinyl)</option>
+                            [% END %]
+                            [% IF ( f4af ) %]
+                                <option value="af" selected="selected">skin (e.g. parchment, vellum)</option>
+                            [% ELSE %]
+                                <option value="af">skin (e.g. parchment, vellum)</option>
+                            [% END %]
+                            [% IF ( f4ag ) %]
+                                <option value="ag" selected="selected">     textile including manmade fibre textiles (e.g. silk, cloth, nylon)</option>
+                            [% ELSE %]
+                                <option value="ag">     textile including manmade fibre textiles (e.g. silk, cloth, nylon)</option>
+                            [% END %]
+                            [% IF ( f4ah ) %]
+                                <option value="ah" selected="selected">magnetic storage medium - computer compatible</option>
+                            [% ELSE %]
+                                <option value="ah">magnetic storage medium - computer compatible</option>
+                            [% END %]
+                            [% IF ( f4ai ) %]
+                                <option value="ai" selected="selected">magnetic storage medium - not computer compatible</option>
+                            [% ELSE %]
+                                <option value="ai">magnetic storage medium - not computer compatible</option>
+                            [% END %]
+                            [% IF ( f4aj ) %]
+                                <option value="aj" selected="selected">tracing paper</option>
+                            [% ELSE %]
+                                <option value="aj">tracing paper</option>
+                            [% END %]
+                            [% IF ( f4ak ) %]
+                                <option value="ak" selected="selected">cardboard</option>
+                            [% ELSE %]
+                                <option value="ak">cardboard</option>
+                            [% END %]
+                            [% IF ( f4ap ) %]
+                                <option value="ap" selected="selected">plaster</option>
+                            [% ELSE %]
+                                <option value="ap">plaster</option>
+                            [% END %]
+                            [% IF ( f4au ) %]
+                                <option value="au" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="au">unknown</option>
+                            [% END %]
+                            [% IF ( f4az ) %]
+                                <option value="az" selected="selected">other non photographic medium</option>
+                            [% ELSE %]
+                                <option value="az">other non photographic medium</option>
+                            [% END %]
+                            [% IF ( f4ba ) %]
+                                <option value="ba" selected="selected"> transparent or opaque flexible base positive</option>
+                            [% ELSE %]
+                                <option value="ba"> transparent or opaque flexible base positive</option>
+                            [% END %]
+                            [% IF ( f4bb ) %]
+                                <option value="bb" selected="selected">transparent or opaque flexible base negative</option>
+                            [% ELSE %]
+                                <option value="bb">transparent or opaque flexible base negative</option>
+                            [% END %]
+                            [% IF ( f4bc ) %]
+                                <option value="bc" selected="selected">transparent or opaque non-flexible base positive</option>
+                            [% ELSE %]
+                                <option value="bc">transparent or opaque non-flexible base positive</option>
+                            [% END %]
+                            [% IF ( f4bd ) %]
+                                <option value="bd" selected="selected">transparent or opaque non-flexible base negative</option>
+                            [% ELSE %]
+                                <option value="bd">transparent or opaque non-flexible base negative</option>
+                            [% END %]
+                            [% IF ( f4bz ) %]
+                                <option value="bz" selected="selected">other photographic medium</option>
+                            [% ELSE %]
+                                <option value="bz">other photographic medium</option>
+                            [% END %]
+                        </select>
+                    </td></tr><tr>
+                    <td><label for="f5">Creation technique</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5a ) %]
+                                <option value="a" selected="selected">manuscript</option>
+                            [% ELSE %]
+                                <option value="a">manuscript</option>
+                            [% END %]
+                            [% IF ( f5b ) %]
+                                <option value="b" selected="selected">printing</option>
+                            [% ELSE %]
+                                <option value="b">printing</option>
+                            [% END %]
+                            [% IF ( f5c ) %]
+                                <option value="c" selected="selected">photocopying</option>
+                            [% ELSE %]
+                                <option value="c">photocopying</option>
+                            [% END %]
+                            [% IF ( f5d ) %]
+                                <option value="d" selected="selected">microphotography</option>
+                            [% ELSE %]
+                                <option value="d">microphotography</option>
+                            [% END %]
+                            [% IF ( f5u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f5y ) %]
+                                <option value="y" selected="selected">the cartographic item is not a final product</option>
+                            [% ELSE %]
+                                <option value="y">the cartographic item is not a final product</option>
+                            [% END %]
+                            [% IF ( f5z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr><tr>
+                    <td><label for="f6">Form of reproduction</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+                            [% IF ( f6a ) %]
+                                <option value="a" selected="selected">by hand</option>
+                            [% ELSE %]
+                                <option value="a">by hand</option>
+                            [% END %]
+                            [% IF ( f6b ) %]
+                                <option value="b" selected="selected">printed</option>
+                            [% ELSE %]
+                                <option value="b">printed</option>
+                            [% END %]
+                            [% IF ( f6c ) %]
+                                <option value="c" selected="selected">photography</option>
+                            [% ELSE %]
+                                <option value="c">photography</option>
+                            [% END %]
+                            [% IF ( f6d ) %]
+                                <option value="d" selected="selected">transfer line print</option>
+                            [% ELSE %]
+                                <option value="d">transfer line print</option>
+                            [% END %]
+                            [% IF ( f6y ) %]
+                                <option value="y" selected="selected">not a reproduction</option>
+                            [% ELSE %]
+                                <option value="y">not a reproduction</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr><tr>
+                    <td><label for="f7">Geodetic adjustment</label></td>
+                    <td>
+                        <select name="f7" id="f7">
+                            [% IF ( f7a ) %]
+                                <option value="a" selected="selected">a- no adjustment</option>
+                            [% ELSE %]
+                                <option value="a">a- no adjustment</option>
+                            [% END %]
+                            [% IF ( f7b ) %]
+                                <option value="b" selected="selected">b- adjusted but without grid system</option>
+                            [% ELSE %]
+                                <option value="b">b- adjusted but without grid system</option>
+                            [% END %]
+                            [% IF ( f7c ) %]
+                                <option value="c" selected="selected">c- adjusted with grid system</option>
+                            [% ELSE %]
+                                <option value="c">c- adjusted with grid system</option>
+                            [% END %]
+                            [% IF ( f7x ) %]
+                                <option value="x" selected="selected">x- not applicable</option>
+                            [% ELSE %]
+                                <option value="x">x- not applicable</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f8">Physical form of publication</label></td>
+                    <td>
+                        <select name="f8" id="f8">
+                            [% IF ( f8a ) %]
+                                <option value="a" selected="selected">single</option>
+                            [% ELSE %]
+                                <option value="a">single</option>
+                            [% END %]
+                            [% IF ( f8b ) %]
+                                <option value="b" selected="selected">in parts</option>
+                            [% ELSE %]
+                                <option value="b">in parts</option>
+                            [% END %]
+                            [% IF ( f8c ) %]
+                                <option value="c" selected="selected">atlas including loose-leaf published atlas</option>
+                            [% ELSE %]
+                                <option value="c">atlas including loose-leaf published atlas</option>
+                            [% END %]
+                            [% IF ( f8d ) %]
+                                <option value="d" selected="selected">as a separate supplement to a journal, monograph, etc.</option>
+                            [% ELSE %]
+                                <option value="d">as a separate supplement to a journal, monograph, etc.</option>
+                            [% END %]
+                            [% IF ( f8e ) %]
+                                <option value="e" selected="selected">bound into a journal, monograph, etc.</option>
+                            [% ELSE %]
+                                <option value="e">bound into a journal, monograph, etc.</option>
+                            [% END %]
+                            [% IF ( f8z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

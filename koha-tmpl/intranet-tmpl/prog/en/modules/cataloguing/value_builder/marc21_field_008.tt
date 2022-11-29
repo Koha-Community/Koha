@@ -7,38 +7,43 @@
 </head>
 
 <body id="cat_marc21_field_008" class="cat" style="padding:1em;" onload="loadXmlValues()">
+
 <h1> 008 Fixed-length data elements--Additional material characteristics--General information</h1>
 
-<table>
-    <tr id="tr_result">
-    </tr>
-</table>
+<div class="page-section">
+    <table>
+        <tr id="tr_result">
+        </tr>
+    </table>
+</div> <!-- /.page-section -->
+
 <h4 id="h4_result">&quot;[% result | html %]&quot;</h4>
 
 <form name="f_pop" id="f_pop" style="display:block" onsubmit="report()" action="">
     <div id="toolbar">
         <div class="btn-group">
-            <button type="submit" class="btn btn-default"><i class="fa fa-save"></i> Save</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-default close_window"><i class="fa fa-remove"></i> Cancel</button>
         </div>
     </div>
 
-<input type="hidden" name="plugin_name" value="marc21_field_008.pl" />
-<input type="hidden" id="[% index | html %]" name="index" value="[% index | html %]" />
-<input type="hidden" name="result" id="result" value="[% result | html %]" />
-<table id="table_material_types">
-    <tr id="tr_material_types">
-        <td><label for="material_type" title="Select a type of material to specify the variable values. Pre-populated based on Leader/06.">Type of Material</label></td>
-        <td>
-            <select name="material_type" id="material_type" title="Select a type of material to specify the variable values. Default selection is based on value in the Leader/06." onchange="changeTypeofMaterial(this.form)">
-                <option value="">Select a type of material</option>
-            </select>
-        </td>
-    </tr>
-
-</table>
+    <div class="page-section">
+        <input type="hidden" name="plugin_name" value="marc21_field_008.pl" />
+        <input type="hidden" id="[% index | html %]" name="index" value="[% index | html %]" />
+        <input type="hidden" name="result" id="result" value="[% result | html %]" />
+        <table id="table_material_types">
+            <tr id="tr_material_types">
+                <td><label for="material_type" title="Select a type of material to specify the variable values. Pre-populated based on Leader/06.">Type of Material</label></td>
+                <td>
+                    <select name="material_type" id="material_type" title="Select a type of material to specify the variable values. Default selection is based on value in the Leader/06." onchange="changeTypeofMaterial(this.form)">
+                        <option value="">Select a type of material</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div> <!-- /.page-section -->
 </form>
 
 [% MACRO jsinclude BLOCK %]

@@ -5,43 +5,45 @@
 
 <body id="cat_unimarc_field_283-2" class="cat" style="padding:1em;">
 
-<h3>UNIMARC field 283-2 builder</h3>
+    <h3>UNIMARC field 283-2 builder</h3>
 
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td><label for="f0">System code :</label></td>
-        <td>
-            <select name="f0" id="f0">
-                [% IF ( f0 == "carr" ) %]
-                    <option value="RDAcarrier" selected="selected">RDA carrier</option>
-                [% ELSE %]
-                    <option value="RDAcarrier">RDA carrier</option>
-                [% END %]
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f0">System code :</label></td>
+                    <td>
+                        <select name="f0" id="f0">
+                            [% IF ( f0 == "carr" ) %]
+                                <option value="RDAcarrier" selected="selected">RDA carrier</option>
+                            [% ELSE %]
+                                <option value="RDAcarrier">RDA carrier</option>
+                            [% END %]
 
-                [% IF ( f0 == "cont" ) %]
-                    <option value="RDAcontent" selected="selected">RDA content</option>
-                [% ELSE %]
-                    <option value="RDAcontent">RDA Content</option>
-                [% END %]
+                            [% IF ( f0 == "cont" ) %]
+                                <option value="RDAcontent" selected="selected">RDA content</option>
+                            [% ELSE %]
+                                <option value="RDAcontent">RDA Content</option>
+                            [% END %]
 
-                [% IF ( f0 == "media" ) %]
-                    <option value="RDAmedia" selected="selected">RDA media</option>
-                [% ELSE %]
-                    <option value="RDAmedia">RDA Media</option>
-                [% END %]
+                            [% IF ( f0 == "media" ) %]
+                                <option value="RDAmedia" selected="selected">RDA media</option>
+                            [% ELSE %]
+                                <option value="RDAmedia">RDA Media</option>
+                            [% END %]
 
-                [% IF ( f0 == "frcarr" ) %]
-                    <option value="RDAfrCarrier" selected="selected">RDA fr carrier</option>
-                [% ELSE %]
-                    <option value="RDAfrCarrier">RDA fr carrier</option>
-                [% END %]
-            </select>
-        </td>
-    </tr>
-</table>
-<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
+                            [% IF ( f0 == "frcarr" ) %]
+                                <option value="RDAfrCarrier" selected="selected">RDA fr carrier</option>
+                            [% ELSE %]
+                                <option value="RDAfrCarrier">RDA fr carrier</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p><input type="button" class="btn btn-primary" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </form>
+    </div> <!-- /.page-section -->
 
 <script>
     // The following function just puts back the value of the input #return

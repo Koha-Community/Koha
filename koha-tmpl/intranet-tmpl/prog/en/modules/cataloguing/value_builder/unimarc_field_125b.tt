@@ -5,128 +5,130 @@
 </head>
 
 <body id="unimarc_field_125b" class="cat" style="padding:1em;">
-<h1>UNIMARC field 125b builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Literary text indicator:</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1space ) %]
-				<option value=" " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value=" ">non required value</option>
-			[% END %]
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">poetry</option>
-			[% ELSE %]
-				<option value="a">poetry</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">drama</option>
-			[% ELSE %]
-				<option value="b">drama</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">fiction</option>
-			[% ELSE %]
-				<option value="c">fiction</option>
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">history</option>
-			[% ELSE %]
-				<option value="d">history</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">lectures, speeches</option>
-			[% ELSE %]
-				<option value="e">lectures, speeches</option>
-			[% END %]
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">instructions</option>
-			[% ELSE %]
-				<option value="f">instructions</option>
-			[% END %]
-			[% IF ( f1g ) %]
-				<option value="g" selected="selected">sounds</option>
-			[% ELSE %]
-				<option value="g">sounds</option>
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">autobiography</option>
-			[% ELSE %]
-				<option value="h">autobiography</option>
-			[% END %]
-			[% IF ( f1i ) %]
-				<option value="i" selected="selected">biography</option>
-			[% ELSE %]
-				<option value="i">biography</option>
-			[% END %]
-			[% IF ( f1j ) %]
-				<option value="j" selected="selected">essays</option>
-			[% ELSE %]
-				<option value="j">essays</option>
-			[% END %]
-			[% IF ( f1k ) %]
-				<option value="k" selected="selected">reporting</option>
-			[% ELSE %]
-				<option value="k">reporting</option>
-			[% END %]
-			[% IF ( f1l ) %]
-				<option value="l" selected="selected">memoirs</option>
-			[% ELSE %]
-				<option value="l">memoirs</option>
-			[% END %]
-			[% IF ( f1m ) %]
-				<option value="m" selected="selected">rehearsals</option>
-			[% ELSE %]
-				<option value="m">rehearsals</option>
-			[% END %]
-			[% IF ( f1n ) %]
-				<option value="n" selected="selected">interviews</option>
-			[% ELSE %]
-				<option value="n">interviews</option>
-			[% END %]
-			[% IF ( f1o ) %]
-				<option value="o" selected="selected">advertising texts</option>
-			[% ELSE %]
-				<option value="o">advertising texts</option>
-			[% END %]
-			[% IF ( f1p ) %]
-				<option value="p" selected="selected">instruction (language)</option>
-			[% ELSE %]
-				<option value="p">instruction (language)</option>
-			[% END %]
-			[% IF ( f1q ) %]
-				<option value="q" selected="selected">conference proceedings</option>
-			[% ELSE %]
-				<option value="q">conference proceedings</option>
-			[% END %]
-			[% IF ( f1r ) %]
-				<option value="r" selected="selected">comedy</option>
-			[% ELSE %]
-				<option value="r">comedy</option>
-			[% END %]
-			[% IF ( f1s ) %]
-				<option value="s" selected="selected">folktales</option>
-			[% ELSE %]
-				<option value="s">folktales</option>
-			[% END %]
-			[% IF ( f1t ) %]
-				<option value="t" selected="selected">sacred texts</option>
-			[% ELSE %]
-				<option value="t">sacred texts</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other types of literary text</option>
-			[% ELSE %]
-				<option value="z">other types of literary text</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 125b builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Literary text indicator:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1space ) %]
+                                <option value=" " selected="selected">non required value</option>
+                            [% ELSE %]
+                                <option value=" ">non required value</option>
+                            [% END %]
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">poetry</option>
+                            [% ELSE %]
+                                <option value="a">poetry</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">drama</option>
+                            [% ELSE %]
+                                <option value="b">drama</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">fiction</option>
+                            [% ELSE %]
+                                <option value="c">fiction</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">history</option>
+                            [% ELSE %]
+                                <option value="d">history</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">lectures, speeches</option>
+                            [% ELSE %]
+                                <option value="e">lectures, speeches</option>
+                            [% END %]
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">instructions</option>
+                            [% ELSE %]
+                                <option value="f">instructions</option>
+                            [% END %]
+                            [% IF ( f1g ) %]
+                                <option value="g" selected="selected">sounds</option>
+                            [% ELSE %]
+                                <option value="g">sounds</option>
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">autobiography</option>
+                            [% ELSE %]
+                                <option value="h">autobiography</option>
+                            [% END %]
+                            [% IF ( f1i ) %]
+                                <option value="i" selected="selected">biography</option>
+                            [% ELSE %]
+                                <option value="i">biography</option>
+                            [% END %]
+                            [% IF ( f1j ) %]
+                                <option value="j" selected="selected">essays</option>
+                            [% ELSE %]
+                                <option value="j">essays</option>
+                            [% END %]
+                            [% IF ( f1k ) %]
+                                <option value="k" selected="selected">reporting</option>
+                            [% ELSE %]
+                                <option value="k">reporting</option>
+                            [% END %]
+                            [% IF ( f1l ) %]
+                                <option value="l" selected="selected">memoirs</option>
+                            [% ELSE %]
+                                <option value="l">memoirs</option>
+                            [% END %]
+                            [% IF ( f1m ) %]
+                                <option value="m" selected="selected">rehearsals</option>
+                            [% ELSE %]
+                                <option value="m">rehearsals</option>
+                            [% END %]
+                            [% IF ( f1n ) %]
+                                <option value="n" selected="selected">interviews</option>
+                            [% ELSE %]
+                                <option value="n">interviews</option>
+                            [% END %]
+                            [% IF ( f1o ) %]
+                                <option value="o" selected="selected">advertising texts</option>
+                            [% ELSE %]
+                                <option value="o">advertising texts</option>
+                            [% END %]
+                            [% IF ( f1p ) %]
+                                <option value="p" selected="selected">instruction (language)</option>
+                            [% ELSE %]
+                                <option value="p">instruction (language)</option>
+                            [% END %]
+                            [% IF ( f1q ) %]
+                                <option value="q" selected="selected">conference proceedings</option>
+                            [% ELSE %]
+                                <option value="q">conference proceedings</option>
+                            [% END %]
+                            [% IF ( f1r ) %]
+                                <option value="r" selected="selected">comedy</option>
+                            [% ELSE %]
+                                <option value="r">comedy</option>
+                            [% END %]
+                            [% IF ( f1s ) %]
+                                <option value="s" selected="selected">folktales</option>
+                            [% ELSE %]
+                                <option value="s">folktales</option>
+                            [% END %]
+                            [% IF ( f1t ) %]
+                                <option value="t" selected="selected">sacred texts</option>
+                            [% ELSE %]
+                                <option value="t">sacred texts</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other types of literary text</option>
+                            [% ELSE %]
+                                <option value="z">other types of literary text</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

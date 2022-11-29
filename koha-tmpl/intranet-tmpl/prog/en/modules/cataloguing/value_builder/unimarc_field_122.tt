@@ -5,42 +5,44 @@
 </head>
 
 <body id="cat_unimarc_field_122" class="cat" style="padding:1em;">
-<h1>UNIMARC field 122 builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Era identifier</label></td>
-		<td colspan="7">
-            <select name="f1" id="f1">
-                    [% IF ( f1c ) %]
-                            <option value="c" selected="selected">   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
-                    [% ELSE %]
-                            <option value="c">   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
-                    [% END %]
-                    [% IF ( f1d ) %]
-                            <option value="d" selected="selected">date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
-                    [% ELSE %]
-                            <option value="d">date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
-                    [% END %]
+    <h1>UNIMARC field 122 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Era identifier</label></td>
+                    <td colspan="7">
+                        <select name="f1" id="f1">
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
+                            [% ELSE %]
+                                <option value="c">   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
+                            [% ELSE %]
+                                <option value="d">date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
+                            [% END %]
 
-                </select>
-		</td>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
-                <td><label for="f2">Year</label></td>
-		   <td><input type="text" name="f2" id="f2" maxlength="4" size="5" value="[% f2 | html %]" />
-		</td>
+                    <td><label for="f2">Year</label></td>
+                    <td><input type="text" name="f2" id="f2" maxlength="4" size="5" value="[% f2 | html %]" />
+                    </td>
 
-		<td><label for="f3">Month</label></td>
-		         <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" /></td>
-		<td><label for="f4">Day</label></td>
-		         <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="[% f4 | html %]" /></td>
-		<td><label for="f5">Time</label></td>
-		         <td><input type="text" name="f5" id="f5" maxlength="2" size="3" value="[% f5 | html %]" /></td>
-		</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                    <td><label for="f3">Month</label></td>
+                            <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" /></td>
+                    <td><label for="f4">Day</label></td>
+                            <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="[% f4 | html %]" /></td>
+                    <td><label for="f5">Time</label></td>
+                            <td><input type="text" name="f5" id="f5" maxlength="2" size="3" value="[% f5 | html %]" /></td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

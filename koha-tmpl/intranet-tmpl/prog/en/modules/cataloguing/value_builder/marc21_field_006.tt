@@ -9,28 +9,31 @@
 <body id="cat_marc21_field_006" class="cat" style="padding:1em;" onload="loadXmlValues()">
 <h1>006 Fixed-length data elements--Additional material characteristics--General information</h1>
 
-<table>
-    <tr id="tr_result">
-    </tr>
-</table>
-<h4 id="h4_result">&quot;[% result | html %]&quot;</h4>
+<div class="page-section">
+    <table>
+        <tr id="tr_result">
+        </tr>
+    </table>
 
-<form name="f_pop" id="f_pop" onsubmit="report()" action="">
-<input type="hidden" name="plugin_name" value="marc21_field_006.pl" />
-<input type="hidden" id="[% index | html %]" name="index" value="[% index | html %]" />
-<input type="hidden" id="result" name="result" value="[% result | html %]" />
-<table id="table_material_types">
-    <tr id="tr_material_types">
-        <td><label for="material_type" title="Select a type of material to specify the variable values">Type of material</label></td>
-        <td>
-            <select name="material_type" id="material_type" title="Select a type of material to specify the variable values" onchange="changeTypeofMaterial(this.form)">
-                <option value="">Select a type of material</option>
-            </select>
-        </td>
-    </tr>
-</table>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h4 id="h4_result">&quot;[% result | html %]&quot;</h4>
+
+    <form name="f_pop" id="f_pop" onsubmit="report()" action="">
+        <input type="hidden" name="plugin_name" value="marc21_field_006.pl" />
+        <input type="hidden" id="[% index | html %]" name="index" value="[% index | html %]" />
+        <input type="hidden" id="result" name="result" value="[% result | html %]" />
+        <table id="table_material_types">
+            <tr id="tr_material_types">
+                <td><label for="material_type" title="Select a type of material to specify the variable values">Type of material</label></td>
+                <td>
+                    <select name="material_type" id="material_type" title="Select a type of material to specify the variable values" onchange="changeTypeofMaterial(this.form)">
+                        <option value="">Select a type of material</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+    </form>
+</div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/xmlControlfield.js") | $raw %]

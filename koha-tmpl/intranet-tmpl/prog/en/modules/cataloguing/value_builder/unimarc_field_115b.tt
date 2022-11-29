@@ -5,638 +5,640 @@
 </head>
 
 <body id="cat_unimarc_field_115b" class="cat" style="padding:1em;">
-<h1>UNIMARC field 115b builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Generation</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">original</option>
-			[% ELSE %]
-				<option value="a">original</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">master</option>
-			[% ELSE %]
-				<option value="b">master</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">duplicate</option>
-			[% ELSE %]
-				<option value="c">duplicate</option>
-	
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">reference print/viewing copy</option>
-			[% ELSE %]
-				<option value="d">reference print/viewing copy</option>
-	
-			[% END %]
-			[% IF ( f1u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-	
-			[% END %]
-			[% IF ( f1x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-	
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-	
-			[% END %]
-
-				</select>
-		</td>
-	</tr>
-	<tr>
-		<td><label for="f2">Production elements</label></td>
-		<td>
-            <select name="f2" id="f2">
-			[% IF ( f2pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-            
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">workprint</option>
-			[% ELSE %]
-				<option value="a">workprint</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">trims</option>
-			[% ELSE %]
-				<option value="b">trims</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">outtakes</option>
-			[% ELSE %]
-				<option value="c">outtakes</option>
-	
-			[% END %]
-			[% IF ( f2d ) %]
-				<option value="d" selected="selected">rushes</option>
-			[% ELSE %]
-				<option value="d">rushes</option>
-	
-			[% END %]
-			[% IF ( f2e ) %]
-				<option value="e" selected="selected">mixing tracks</option>
-			[% ELSE %]
-				<option value="e">mixing tracks</option>
-	
-			[% END %]
-			[% IF ( f2g ) %]
-				<option value="g" selected="selected">title bands/intertitle rolls</option>
-			[% ELSE %]
-				<option value="g">title bands/intertitle rolls</option>
-	
-			[% END %]
-			[% IF ( f2h ) %]
-				<option value="h" selected="selected">production rolls</option>
-			[% ELSE %]
-				<option value="h">production rolls</option>
-	
-			[% END %]
-			[% IF ( f2u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-	
-			[% END %]
-			[% IF ( f2x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-	
-			[% END %]
-			[% IF ( f2z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-	
-			[% END %]
-
-				</select>
-		</td>
-	</tr>
-
-	<tr>
-		<td><label for="f3">Refined categories of colour for moving pictures</label></td>
-		<td>
-    <select name="f3" id="f3">
-			[% IF ( f3pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f3a ) %]
-				<option value="a" selected="selected">3 layer colour</option>
-			[% ELSE %]
-				<option value="a">3 layer colour</option>
-			[% END %]
-
-			[% IF ( f3b ) %]
-				<option value="b" selected="selected">2 colour, single strip</option>
-			[% ELSE %]
-				<option value="b">2 colour, single strip</option>
-			[% END %]
-
-			[% IF ( f3c ) %]
-				<option value="c" selected="selected">undetermined 2 colour</option>
-			[% ELSE %]
-				<option value="c">undetermined 2 colour</option>
-			[% END %]
-
-			[% IF ( f3d ) %]
-				<option value="d" selected="selected">undetermined 3 colour</option>
-			[% ELSE %]
-				<option value="d">undetermined 3 colour</option>
-			[% END %]
-
-			[% IF ( f3e ) %]
-				<option value="e" selected="selected">3 strip colour</option>
-			[% ELSE %]
-				<option value="e">3 strip colour</option>
-	
-			[% END %]
-			[% IF ( f3f ) %]
-				<option value="f" selected="selected">2 strip colour</option>
-			[% ELSE %]
-				<option value="f">2 strip colour</option>
-	
-			[% END %]
-			[% IF ( f3g ) %]
-				<option value="g" selected="selected">red strip</option>
-			[% ELSE %]
-				<option value="g">red strip</option>
-	
-			[% END %]
-			[% IF ( f3h ) %]
-				<option value="h" selected="selected">blue or green strip</option>
-			[% ELSE %]
-				<option value="h">blue or green strip</option>
-	
-			[% END %]
-			[% IF ( f3i ) %]
-				<option value="i" selected="selected">cyan strip</option>
-			[% ELSE %]
-				<option value="i">cyan strip</option>
-	
-			[% END %]
-			[% IF ( f3j ) %]
-				<option value="j" selected="selected">magenta strip</option>
-			[% ELSE %]
-				<option value="j">magenta strip</option>
-	
-			[% END %]
-			[% IF ( f3k ) %]
-				<option value="k" selected="selected">yellow strip</option>
-			[% ELSE %]
-				<option value="k">yellow strip</option>
-	
-			[% END %]
-			[% IF ( f3l ) %]
-				<option value="l" selected="selected">SEN 2</option>
-			[% ELSE %]
-				<option value="l">SEN 2</option>
-	
-			[% END %]
-			[% IF ( f3m ) %]
-				<option value="m" selected="selected">SEN 3</option>
-			[% ELSE %]
-				<option value="m">SEN 3</option>
-	
-			[% END %]
-			[% IF ( f3n ) %]
-				<option value="n" selected="selected">sepia tone</option>
-			[% ELSE %]
-				<option value="n">sepia tone</option>
-	
-			[% END %]
-			[% IF ( f3o ) %]
-				<option value="o" selected="selected">other tone</option>
-			[% ELSE %]
-				<option value="o">other tone</option>
-	
-			[% END %]
-			[% IF ( f3p ) %]
-				<option value="p" selected="selected">tint</option>
-			[% ELSE %]
-				<option value="p">tint</option>
-	
-			[% END %]
-			[% IF ( f3q ) %]
-				<option value="q" selected="selected">tinted and toned</option>
-			[% ELSE %]
-				<option value="q">tinted and toned</option>
-	
-			[% END %]
-			[% IF ( f3r ) %]
-				<option value="r" selected="selected">stencil colour</option>
-			[% ELSE %]
-				<option value="r">stencil colour</option>
-	
-			[% END %]
-			[% IF ( f3s ) %]
-				<option value="s" selected="selected">handcoloured</option>
-			[% ELSE %]
-				<option value="s">handcoloured</option>
-	
-			[% END %]
-			[% IF ( f3u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-	
-			[% END %]
-			[% IF ( f3x ) %]
-				<option value="x" selected="selected">not applicable (item not a colour film)</option>
-			[% ELSE %]
-				<option value="x">not applicable (item not a colour film)</option>
-	
-			[% END %]
-			[% IF ( f3z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-				</select>
-		</td>
-	</tr>
-
-
-	<tr>
-		<td><label for="f4">Film emulsion (polarity)</label></td>
-		<td>
-            <select name="f4" id="f4">
-			[% IF ( f4pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f4a ) %]
-				<option value="a" selected="selected">positive</option>
-			[% ELSE %]
-				<option value="a">positive</option>
-	
-			[% END %]
-
-			[% IF ( f4b ) %]
-				<option value="b" selected="selected">negative</option>
-			[% ELSE %]
-				<option value="b">negative</option>
-			[% END %]
-
-			[% IF ( f4u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-
-			[% IF ( f4x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-
-			[% END %]
-			[% IF ( f4z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-				</select>
-		</td>
-	</tr>
-
-	<tr>
-		<td><label for="f5">Film base</label></td>
-		<td>
-            <select name="f5" id="f5">
-			[% IF ( f5pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-			[% IF ( f5a ) %]
-				<option value="a" selected="selected">safety (triacetate)</option>
-			[% ELSE %]
-				<option value="a">safety (triacetate)</option>
-			[% END %]
-
-			[% IF ( f5b ) %]
-				<option value="b" selected="selected">nitrate</option>
-			[% ELSE %]
-				<option value="b">nitrate</option>
-			[% END %]
-
-			[% IF ( f5c ) %]
-				<option value="c" selected="selected">safety (diacetate)</option>
-			[% ELSE %]
-				<option value="c">safety (diacetate)</option>
-			[% END %]
-
-			[% IF ( f5d ) %]
-				<option value="d" selected="selected">polyester base (e.g. ester)</option>
-			[% ELSE %]
-				<option value="d">polyester base (e.g. ester)</option>
-
-			[% END %]
-
-			[% IF ( f5u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-
-			[% END %]
-
-			[% IF ( f5v ) %]
-				<option value="v" selected="selected">mixed base (nitrate and safety)</option>
-			[% ELSE %]
-				<option value="v">mixed base (nitrate and safety)</option>
-
-			[% END %]
-
-			[% IF ( f5z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-
-			[% END %]
-				</select>
-		</td>
-        </tr>
-
-	<tr>
-		<td><label for="f6">Kind of sound for moving images</label></td>
-		<td>
-            <select name="f6" id="f6">
-			[% IF ( f6pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f6a ) %]
-				<option value="a" selected="selected">monaural</option>
-			[% ELSE %]
-				<option value="a">monaural</option>
-	
-			[% END %]
-
-			[% IF ( f6b ) %]
-				<option value="b" selected="selected">stereophonic</option>
-			[% ELSE %]
-				<option value="b">stereophonic</option>
-			[% END %]
-
-			[% IF ( f6c ) %]
-				<option value="c" selected="selected">multichannel, surround or quadraphonic</option>
-			[% ELSE %]
-				<option value="c">multichannel, surround or quadraphonic</option>
-			[% END %]
-
-			[% IF ( f6u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-
-			[% END %]
-
-			[% IF ( f6v ) %]
-				<option value="v" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="v">mixed</option>
-
-			[% END %]
-
-			[% IF ( f6x ) %]
-				<option value="x" selected="selected">not applicable (item is silent)</option>
-			[% ELSE %]
-				<option value="x">not applicable (item is silent)</option>
-
-			[% END %]
-
-
-			[% IF ( f6z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-
-			[% END %]
-
-				</select>
-		</td>
-
-        </tr>
-
-
-	<tr>
-		<td><label for="f7">Kind of film stock or print</label></td>
-		<td>
-            <select name="f7" id="f7">
-			[% IF ( f7pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f7a ) %]
-				<option value="a" selected="selected">imbibition dye transfer</option>
-			[% ELSE %]
-				<option value="a">imbibition dye transfer</option>
-	
-			[% END %]
-
-			[% IF ( f7b ) %]
-				<option value="b" selected="selected">three layer stock</option>
-			[% ELSE %]
-				<option value="b">three layer stock</option>
-			[% END %]
-
-			[% IF ( f7c ) %]
-				<option value="c" selected="selected">three layer stock (low fade)</option>
-			[% ELSE %]
-				<option value="c">three layer stock (low fade)</option>
-			[% END %]
-
-			[% IF ( f7d ) %]
-				<option value="d" selected="selected">duplitised stock</option>
-			[% ELSE %]
-				<option value="d">duplitised stock</option>
-
-			[% END %]
-
-			[% IF ( f7u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-
-			[% END %]
-
-			[% IF ( f7x ) %]
-				<option value="x" selected="selected">not applicable (not a colour film)</option>
-			[% ELSE %]
-				<option value="x">not applicable (not a colour film)</option>
-
-			[% END %]
-
-			[% IF ( f7z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-
-			[% END %]
-				</select>
-		</td>
-
-        </tr>
-
-	<tr>
-		<td><label for="f8">Deterioration stage</label></td>
-		<td>
-            <select name="f8" id="f8">
-			[% IF ( f8pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f8b ) %]
-				<option value="b" selected="selected">nitrate - suspicious odour</option>
-			[% ELSE %]
-				<option value="b">nitrate - suspicious odour</option>
-	
-			[% END %]
-
-			[% IF ( f8c ) %]
-				<option value="c" selected="selected">nitrate - pungent odour</option>
-			[% ELSE %]
-				<option value="c">nitrate - pungent odour</option>
-			[% END %]
-
-			[% IF ( f8d ) %]
-				<option value="d" selected="selected">nitrate - brownish, discoloration, fading, dusty</option>
-			[% ELSE %]
-				<option value="d">nitrate - brownish, discoloration, fading, dusty</option>
-			[% END %]
-
-			[% IF ( f8e ) %]
-				<option value="e" selected="selected">nitrate - sticky</option>
-			[% ELSE %]
-				<option value="e">nitrate - sticky</option>
-
-			[% END %]
-
-			[% IF ( f8f ) %]
-				<option value="f" selected="selected">nitrate - frothy, bubbles, blisters</option>
-			[% ELSE %]
-				<option value="f">nitrate - frothy, bubbles, blisters</option>
-
-			[% END %]
-
-			[% IF ( f8g ) %]
-				<option value="g" selected="selected">nitrate - congealed</option>
-			[% ELSE %]
-				<option value="g">nitrate - congealed</option>
-
-			[% END %]
-			[% IF ( f8h ) %]
-				<option value="h" selected="selected">nitrate - powder</option>
-			[% ELSE %]
-				<option value="h">nitrate - powder</option>
-
-			[% END %]
-			[% IF ( f8k ) %]
-				<option value="k" selected="selected">nonnitrate - detectable deterioration (e.g. diacetate odour)</option>
-			[% ELSE %]
-				<option value="k">nonnitrate - detectable deterioration (e.g. diacetate odour)</option>
-
-			[% END %]
-			[% IF ( f8l ) %]
-				<option value="l" selected="selected">nonnitrate - advanced deterioration</option>
-			[% ELSE %]
-				<option value="l">nonnitrate - advanced deterioration</option>
-
-			[% END %]
-			[% IF ( f8m ) %]
-				<option value="m" selected="selected">nonnitrate - disaster</option>
-			[% ELSE %]
-				<option value="m">nonnitrate - disaster</option>
-
-			[% END %]
-			[% IF ( f8y ) %]
-				<option value="y" selected="selected">no deterioration</option>
-			[% ELSE %]
-				<option value="y">no deterioration</option>
-
-			[% END %]
-				</select>
-		</td>
-
-        </tr>
-
-	<tr>
-		<td><label for="f9">Completeness</label></td>
-		<td>
-            <select name="f9" id="f9">
-			[% IF ( f9pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-
-			[% IF ( f9a ) %]
-				<option value="a" selected="selected">incomplete</option>
-			[% ELSE %]
-				<option value="a">incomplete</option>
-	
-			[% END %]
-
-			[% IF ( f9b ) %]
-				<option value="b" selected="selected">complete</option>
-			[% ELSE %]
-				<option value="b">complete</option>
-			[% END %]
-
-			[% IF ( f9u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-
-			[% IF ( f9x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-
-			[% END %]
-				</select>
-		</td>
-        </tr>
-
-   		<tr>
-                <td>Film inspection date</td>
-                <td><label for="f10">Year</label> <input type="text" name="f10" id="f10" maxlength="4" size="5" value="[% f10 | html %]" /> <label for="f11">Month</label> <input type="text" name="f11" id="f11" maxlength="2" size="3" value="[% f11 | html %]" /></td>
-        </tr>
-	</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 115b builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Generation</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">original</option>
+                            [% ELSE %]
+                                <option value="a">original</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">master</option>
+                            [% ELSE %]
+                                <option value="b">master</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">duplicate</option>
+                            [% ELSE %]
+                                <option value="c">duplicate</option>
+
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">reference print/viewing copy</option>
+                            [% ELSE %]
+                                <option value="d">reference print/viewing copy</option>
+
+                            [% END %]
+                            [% IF ( f1u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+                            [% IF ( f1x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f2">Production elements</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+                            [% IF ( f2pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">workprint</option>
+                            [% ELSE %]
+                                <option value="a">workprint</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">trims</option>
+                            [% ELSE %]
+                                <option value="b">trims</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">outtakes</option>
+                            [% ELSE %]
+                                <option value="c">outtakes</option>
+
+                            [% END %]
+                            [% IF ( f2d ) %]
+                                <option value="d" selected="selected">rushes</option>
+                            [% ELSE %]
+                                <option value="d">rushes</option>
+
+                            [% END %]
+                            [% IF ( f2e ) %]
+                                <option value="e" selected="selected">mixing tracks</option>
+                            [% ELSE %]
+                                <option value="e">mixing tracks</option>
+
+                            [% END %]
+                            [% IF ( f2g ) %]
+                                <option value="g" selected="selected">title bands/intertitle rolls</option>
+                            [% ELSE %]
+                                <option value="g">title bands/intertitle rolls</option>
+
+                            [% END %]
+                            [% IF ( f2h ) %]
+                                <option value="h" selected="selected">production rolls</option>
+                            [% ELSE %]
+                                <option value="h">production rolls</option>
+
+                            [% END %]
+                            [% IF ( f2u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+                            [% IF ( f2x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f2z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f3">Refined categories of colour for moving pictures</label></td>
+                    <td>
+                        <select name="f3" id="f3">
+                            [% IF ( f3pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f3a ) %]
+                                <option value="a" selected="selected">3 layer colour</option>
+                            [% ELSE %]
+                                <option value="a">3 layer colour</option>
+                            [% END %]
+
+                            [% IF ( f3b ) %]
+                                <option value="b" selected="selected">2 colour, single strip</option>
+                            [% ELSE %]
+                                <option value="b">2 colour, single strip</option>
+                            [% END %]
+
+                            [% IF ( f3c ) %]
+                                <option value="c" selected="selected">undetermined 2 colour</option>
+                            [% ELSE %]
+                                <option value="c">undetermined 2 colour</option>
+                            [% END %]
+
+                            [% IF ( f3d ) %]
+                                <option value="d" selected="selected">undetermined 3 colour</option>
+                            [% ELSE %]
+                                <option value="d">undetermined 3 colour</option>
+                            [% END %]
+
+                            [% IF ( f3e ) %]
+                                <option value="e" selected="selected">3 strip colour</option>
+                            [% ELSE %]
+                                <option value="e">3 strip colour</option>
+
+                            [% END %]
+                            [% IF ( f3f ) %]
+                                <option value="f" selected="selected">2 strip colour</option>
+                            [% ELSE %]
+                                <option value="f">2 strip colour</option>
+
+                            [% END %]
+                            [% IF ( f3g ) %]
+                                <option value="g" selected="selected">red strip</option>
+                            [% ELSE %]
+                                <option value="g">red strip</option>
+
+                            [% END %]
+                            [% IF ( f3h ) %]
+                                <option value="h" selected="selected">blue or green strip</option>
+                            [% ELSE %]
+                                <option value="h">blue or green strip</option>
+
+                            [% END %]
+                            [% IF ( f3i ) %]
+                                <option value="i" selected="selected">cyan strip</option>
+                            [% ELSE %]
+                                <option value="i">cyan strip</option>
+
+                            [% END %]
+                            [% IF ( f3j ) %]
+                                <option value="j" selected="selected">magenta strip</option>
+                            [% ELSE %]
+                                <option value="j">magenta strip</option>
+
+                            [% END %]
+                            [% IF ( f3k ) %]
+                                <option value="k" selected="selected">yellow strip</option>
+                            [% ELSE %]
+                                <option value="k">yellow strip</option>
+
+                            [% END %]
+                            [% IF ( f3l ) %]
+                                <option value="l" selected="selected">SEN 2</option>
+                            [% ELSE %]
+                                <option value="l">SEN 2</option>
+
+                            [% END %]
+                            [% IF ( f3m ) %]
+                                <option value="m" selected="selected">SEN 3</option>
+                            [% ELSE %]
+                                <option value="m">SEN 3</option>
+
+                            [% END %]
+                            [% IF ( f3n ) %]
+                                <option value="n" selected="selected">sepia tone</option>
+                            [% ELSE %]
+                                <option value="n">sepia tone</option>
+
+                            [% END %]
+                            [% IF ( f3o ) %]
+                                <option value="o" selected="selected">other tone</option>
+                            [% ELSE %]
+                                <option value="o">other tone</option>
+
+                            [% END %]
+                            [% IF ( f3p ) %]
+                                <option value="p" selected="selected">tint</option>
+                            [% ELSE %]
+                                <option value="p">tint</option>
+
+                            [% END %]
+                            [% IF ( f3q ) %]
+                                <option value="q" selected="selected">tinted and toned</option>
+                            [% ELSE %]
+                                <option value="q">tinted and toned</option>
+
+                            [% END %]
+                            [% IF ( f3r ) %]
+                                <option value="r" selected="selected">stencil colour</option>
+                            [% ELSE %]
+                                <option value="r">stencil colour</option>
+
+                            [% END %]
+                            [% IF ( f3s ) %]
+                                <option value="s" selected="selected">handcoloured</option>
+                            [% ELSE %]
+                                <option value="s">handcoloured</option>
+
+                            [% END %]
+                            [% IF ( f3u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+                            [% IF ( f3x ) %]
+                                <option value="x" selected="selected">not applicable (item not a colour film)</option>
+                            [% ELSE %]
+                                <option value="x">not applicable (item not a colour film)</option>
+
+                            [% END %]
+                            [% IF ( f3z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td><label for="f4">Film emulsion (polarity)</label></td>
+                    <td>
+                        <select name="f4" id="f4">
+                            [% IF ( f4pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f4a ) %]
+                                <option value="a" selected="selected">positive</option>
+                            [% ELSE %]
+                                <option value="a">positive</option>
+
+                            [% END %]
+
+                            [% IF ( f4b ) %]
+                                <option value="b" selected="selected">negative</option>
+                            [% ELSE %]
+                                <option value="b">negative</option>
+                            [% END %]
+
+                            [% IF ( f4u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+
+                            [% IF ( f4x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f4z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f5">Film base</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+                            [% IF ( f5a ) %]
+                                <option value="a" selected="selected">safety (triacetate)</option>
+                            [% ELSE %]
+                                <option value="a">safety (triacetate)</option>
+                            [% END %]
+
+                            [% IF ( f5b ) %]
+                                <option value="b" selected="selected">nitrate</option>
+                            [% ELSE %]
+                                <option value="b">nitrate</option>
+                            [% END %]
+
+                            [% IF ( f5c ) %]
+                                <option value="c" selected="selected">safety (diacetate)</option>
+                            [% ELSE %]
+                                <option value="c">safety (diacetate)</option>
+                            [% END %]
+
+                            [% IF ( f5d ) %]
+                                <option value="d" selected="selected">polyester base (e.g. ester)</option>
+                            [% ELSE %]
+                                <option value="d">polyester base (e.g. ester)</option>
+
+                            [% END %]
+
+                            [% IF ( f5u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+
+                            [% IF ( f5v ) %]
+                                <option value="v" selected="selected">mixed base (nitrate and safety)</option>
+                            [% ELSE %]
+                                <option value="v">mixed base (nitrate and safety)</option>
+
+                            [% END %]
+
+                            [% IF ( f5z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f6">Kind of sound for moving images</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+                            [% IF ( f6pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f6a ) %]
+                                <option value="a" selected="selected">monaural</option>
+                            [% ELSE %]
+                                <option value="a">monaural</option>
+
+                            [% END %]
+
+                            [% IF ( f6b ) %]
+                                <option value="b" selected="selected">stereophonic</option>
+                            [% ELSE %]
+                                <option value="b">stereophonic</option>
+                            [% END %]
+
+                            [% IF ( f6c ) %]
+                                <option value="c" selected="selected">multichannel, surround or quadraphonic</option>
+                            [% ELSE %]
+                                <option value="c">multichannel, surround or quadraphonic</option>
+                            [% END %]
+
+                            [% IF ( f6u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+
+                            [% IF ( f6v ) %]
+                                <option value="v" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="v">mixed</option>
+
+                            [% END %]
+
+                            [% IF ( f6x ) %]
+                                <option value="x" selected="selected">not applicable (item is silent)</option>
+                            [% ELSE %]
+                                <option value="x">not applicable (item is silent)</option>
+
+                            [% END %]
+
+
+                            [% IF ( f6z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td><label for="f7">Kind of film stock or print</label></td>
+                    <td>
+                        <select name="f7" id="f7">
+                            [% IF ( f7pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f7a ) %]
+                                <option value="a" selected="selected">imbibition dye transfer</option>
+                            [% ELSE %]
+                                <option value="a">imbibition dye transfer</option>
+
+                            [% END %]
+
+                            [% IF ( f7b ) %]
+                                <option value="b" selected="selected">three layer stock</option>
+                            [% ELSE %]
+                                <option value="b">three layer stock</option>
+                            [% END %]
+
+                            [% IF ( f7c ) %]
+                                <option value="c" selected="selected">three layer stock (low fade)</option>
+                            [% ELSE %]
+                                <option value="c">three layer stock (low fade)</option>
+                            [% END %]
+
+                            [% IF ( f7d ) %]
+                                <option value="d" selected="selected">duplitised stock</option>
+                            [% ELSE %]
+                                <option value="d">duplitised stock</option>
+
+                            [% END %]
+
+                            [% IF ( f7u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+
+                            [% IF ( f7x ) %]
+                                <option value="x" selected="selected">not applicable (not a colour film)</option>
+                            [% ELSE %]
+                                <option value="x">not applicable (not a colour film)</option>
+
+                            [% END %]
+
+                            [% IF ( f7z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+                        </select>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td><label for="f8">Deterioration stage</label></td>
+                    <td>
+                        <select name="f8" id="f8">
+                            [% IF ( f8pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f8b ) %]
+                                <option value="b" selected="selected">nitrate - suspicious odour</option>
+                            [% ELSE %]
+                                <option value="b">nitrate - suspicious odour</option>
+
+                            [% END %]
+
+                            [% IF ( f8c ) %]
+                                <option value="c" selected="selected">nitrate - pungent odour</option>
+                            [% ELSE %]
+                                <option value="c">nitrate - pungent odour</option>
+                            [% END %]
+
+                            [% IF ( f8d ) %]
+                                <option value="d" selected="selected">nitrate - brownish, discoloration, fading, dusty</option>
+                            [% ELSE %]
+                                <option value="d">nitrate - brownish, discoloration, fading, dusty</option>
+                            [% END %]
+
+                            [% IF ( f8e ) %]
+                                <option value="e" selected="selected">nitrate - sticky</option>
+                            [% ELSE %]
+                                <option value="e">nitrate - sticky</option>
+
+                            [% END %]
+
+                            [% IF ( f8f ) %]
+                                <option value="f" selected="selected">nitrate - frothy, bubbles, blisters</option>
+                            [% ELSE %]
+                                <option value="f">nitrate - frothy, bubbles, blisters</option>
+
+                            [% END %]
+
+                            [% IF ( f8g ) %]
+                                <option value="g" selected="selected">nitrate - congealed</option>
+                            [% ELSE %]
+                                <option value="g">nitrate - congealed</option>
+
+                            [% END %]
+                            [% IF ( f8h ) %]
+                                <option value="h" selected="selected">nitrate - powder</option>
+                            [% ELSE %]
+                                <option value="h">nitrate - powder</option>
+
+                            [% END %]
+                            [% IF ( f8k ) %]
+                                <option value="k" selected="selected">nonnitrate - detectable deterioration (e.g. diacetate odour)</option>
+                            [% ELSE %]
+                                <option value="k">nonnitrate - detectable deterioration (e.g. diacetate odour)</option>
+
+                            [% END %]
+                            [% IF ( f8l ) %]
+                                <option value="l" selected="selected">nonnitrate - advanced deterioration</option>
+                            [% ELSE %]
+                                <option value="l">nonnitrate - advanced deterioration</option>
+
+                            [% END %]
+                            [% IF ( f8m ) %]
+                                <option value="m" selected="selected">nonnitrate - disaster</option>
+                            [% ELSE %]
+                                <option value="m">nonnitrate - disaster</option>
+
+                            [% END %]
+                            [% IF ( f8y ) %]
+                                <option value="y" selected="selected">no deterioration</option>
+                            [% ELSE %]
+                                <option value="y">no deterioration</option>
+
+                            [% END %]
+                        </select>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td><label for="f9">Completeness</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+                            [% IF ( f9pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f9a ) %]
+                                <option value="a" selected="selected">incomplete</option>
+                            [% ELSE %]
+                                <option value="a">incomplete</option>
+
+                            [% END %]
+
+                            [% IF ( f9b ) %]
+                                <option value="b" selected="selected">complete</option>
+                            [% ELSE %]
+                                <option value="b">complete</option>
+                            [% END %]
+
+                            [% IF ( f9u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+
+                            [% IF ( f9x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Film inspection date</td>
+                    <td><label for="f10">Year</label> <input type="text" name="f10" id="f10" maxlength="4" size="5" value="[% f10 | html %]" /> <label for="f11">Month</label> <input type="text" name="f11" id="f11" maxlength="2" size="3" value="[% f11 | html %]" /></td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

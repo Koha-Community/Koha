@@ -3,193 +3,193 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_leader_authorities" class="cat" style="padding:1em;">
-<h3>000 - Leader</h3>
-<form name="f_pop" onsubmit="report()" action="">
-<input name="plugin_name" value="unimarc_leader_authorities.pl" type="hidden">
+    <h3>000 - Leader</h3>
+    <div class="page-section">
+        <form name="f_pop" onsubmit="report()" action="">
+            <input name="plugin_name" value="unimarc_leader_authorities.pl" type="hidden">
+            <table>
+                <tr>
+                    <td>1-4 Record length</td>
+                    <td>(auto-calculated)</td>
+                </tr>
+                <tr>
+                    <td><label for="f5">5- Record status</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5c ) %]
+                                <option value="c" selected="selected">c - Corrected or revised</option>
+                            [% ELSE %]
+                                <option value="c">c - Corrected or revised</option>
+                            [% END %]
+                            [% IF ( f5d ) %]
+                                <option value="d" selected="selected">d - Deleted</option>
+                            [% ELSE %]
+                                <option value="d">d - Deleted</option>
+                            [% END %]
+                            [% IF ( f5n ) %]
+                                <option value="n" selected="selected">n - New</option>
+                            [% ELSE %]
+                                <option value="n">n - New</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f6">6- Type of record</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+                            [% IF ( f6x ) %]
+                                <option value="x" selected="selected">x - Authority entry record</option>
+                            [% ELSE %]
+                                <option value="x">x - Authority entry record</option>
+                            [% END %]
 
-<table>
-    <tr>
-        <td>1-4 Record length</td>
-        <td>(auto-calculated)</td>
-    </tr>
-    <tr>
-        <td><label for="f5">5- Record status</label></td>
-        <td>
-            <select name="f5" id="f5">
-            [% IF ( f5c ) %]
-                <option value="c" selected="selected">c - Corrected or revised</option>
-            [% ELSE %]
-                <option value="c">c - Corrected or revised</option>
-            [% END %]
-            [% IF ( f5d ) %]
-                <option value="d" selected="selected">d - Deleted</option>
-            [% ELSE %]
-                <option value="d">d - Deleted</option>
-            [% END %]
-            [% IF ( f5n ) %]
-                <option value="n" selected="selected">n - New</option>
-            [% ELSE %]
-                <option value="n">n - New</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f6">6- Type of record</label></td>
-        <td>
-            <select name="f6" id="f6">
-            [% IF ( f6x ) %]
-                <option value="x" selected="selected">x - Authority entry record</option>
-            [% ELSE %]
-                <option value="x">x - Authority entry record</option>
-            [% END %]
+                            [% IF ( f6y ) %]
+                                <option value="y" selected="selected">y - Reference entry record</option>
+                            [% ELSE %]
+                                <option value="y">y - Reference entry record</option>
+                            [% END %]
 
-            [% IF ( f6y ) %]
-                <option value="y" selected="selected">y - Reference entry record</option>
-            [% ELSE %]
-                <option value="y">y - Reference entry record</option>
-            [% END %]
+                            [% IF ( f6z ) %]
+                                <option value="z" selected="selected">z - General explanatory entry record</option>
+                            [% ELSE %]
+                                <option value="z">z - General explanatory entry record</option>
+                            [% END %]
 
-            [% IF ( f6z ) %]
-                <option value="z" selected="selected">z - General explanatory entry record</option>
-            [% ELSE %]
-                <option value="z">z - General explanatory entry record</option>
-            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f7">7-8 Undefined</label></td>
+                    <td></td>
+                </tr>
 
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f7">7-8 Undefined</label></td>
-        <td></td>
-    </tr>
+                <tr>
+                    <td><label for="f9">9- Type of entity</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+                            [% IF ( f9a ) %]
+                                <option value="a" selected="selected">a - Personal name entry</option>
+                            [% ELSE %]
+                                <option value="a">a - Personal name entry</option>
+                            [% END %]
 
-    <tr>
-        <td><label for="f9">9- Type of entity</label></td>
-        <td>
-            <select name="f9" id="f9">
-            [% IF ( f9a ) %]
-                <option value="a" selected="selected">a - Personal name entry</option>
-            [% ELSE %]
-                <option value="a">a - Personal name entry</option>
-            [% END %]
+                            [% IF ( f9b ) %]
+                                <option value="b" selected="selected">b - Corporate name entry</option>
+                            [% ELSE %]
+                                <option value="b">b - Corporate name entry</option>
+                            [% END %]
 
-            [% IF ( f9b ) %]
-                <option value="b" selected="selected">b - Corporate name entry</option>
-            [% ELSE %]
-                <option value="b">b - Corporate name entry</option>
-            [% END %]
+                            [% IF ( f9c ) %]
+                                <option value="c" selected="selected">c - Territorial or geographical name</option>
+                            [% ELSE %]
+                                <option value="c">c - Territorial or geographical name</option>
+                            [% END %]
 
-            [% IF ( f9c ) %]
-                <option value="c" selected="selected">c - Territorial or geographical name</option>
-            [% ELSE %]
-                <option value="c">c - Territorial or geographical name</option>
-            [% END %]
+                            [% IF ( f9d ) %]
+                                <option value="d" selected="selected">d - Trademark</option>
+                            [% ELSE %]
+                                <option value="d">d - Trademark</option>
+                            [% END %]
 
-            [% IF ( f9d ) %]
-                <option value="d" selected="selected">d - Trademark</option>
-            [% ELSE %]
-                <option value="d">d - Trademark</option>
-            [% END %]
+                            [% IF ( f9e ) %]
+                                <option value="e" selected="selected">e - Family name</option>
+                            [% ELSE %]
+                                <option value="e">e - Family name</option>
+                            [% END %]
 
-            [% IF ( f9e ) %]
-                <option value="e" selected="selected">e - Family name</option>
-            [% ELSE %]
-                <option value="e">e - Family name</option>
-            [% END %]
+                            [% IF ( f9f ) %]
+                                <option value="f" selected="selected">f - Uniform name</option>
+                            [% ELSE %]
+                                <option value="f">f - Uniform name</option>
+                            [% END %]
 
-            [% IF ( f9f ) %]
-                <option value="f" selected="selected">f - Uniform name</option>
-            [% ELSE %]
-                <option value="f">f - Uniform name</option>
-            [% END %]
+                            [% IF ( f9g ) %]
+                                <option value="g" selected="selected">g - Collective uniform name</option>
+                            [% ELSE %]
+                                <option value="g">g - Collective uniform name</option>
+                            [% END %]
 
-            [% IF ( f9g ) %]
-                <option value="g" selected="selected">g - Collective uniform name</option>
-            [% ELSE %]
-                <option value="g">g - Collective uniform name</option>
-            [% END %]
+                            [% IF ( f9h ) %]
+                                <option value="h" selected="selected">h - Name/title</option>
+                            [% ELSE %]
+                                <option value="h">h - Name/title</option>
+                            [% END %]
 
-            [% IF ( f9h ) %]
-                <option value="h" selected="selected">h - Name/title</option>
-            [% ELSE %]
-                <option value="h">h - Name/title</option>
-            [% END %]
+                            [% IF ( f9i ) %]
+                                <option value="i" selected="selected">i - Name/collective uniform title</option>
+                            [% ELSE %]
+                                <option value="i">i - Name/collective uniform title</option>
+                            [% END %]
 
-            [% IF ( f9i ) %]
-                <option value="i" selected="selected">i - Name/collective uniform title</option>
-            [% ELSE %]
-                <option value="i">i - Name/collective uniform title</option>
-            [% END %]
+                            [% IF ( f9j ) %]
+                                <option value="j" selected="selected">j - Topical subject</option>
+                            [% ELSE %]
+                                <option value="j">j - Topical subject</option>
+                            [% END %]
 
-            [% IF ( f9j ) %]
-                <option value="j" selected="selected">j - Topical subject</option>
-            [% ELSE %]
-                <option value="j">j - Topical subject</option>
-            [% END %]
+                            [% IF ( f9k ) %]
+                                <option value="k" selected="selected">k - Place access</option>
+                            [% ELSE %]
+                                <option value="k">k - Place access</option>
+                            [% END %]
 
-            [% IF ( f9k ) %]
-                <option value="k" selected="selected">k - Place access</option>
-            [% ELSE %]
-                <option value="k">k - Place access</option>
-            [% END %]
+                            [% IF ( f9l ) %]
+                                <option value="l" selected="selected">l - Form, genre or physical characteristics</option>
+                            [% ELSE %]
+                                <option value="l">l - Form, genre or physical characteristics</option>
+                            [% END %]
 
-            [% IF ( f9l ) %]
-                <option value="l" selected="selected">l - Form, genre or physical characteristics</option>
-            [% ELSE %]
-                <option value="l">l - Form, genre or physical characteristics</option>
-            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f10">10-16 indicator/subfields/size</label></td>
+                    <td>(auto-calculated)</td>
+                </tr>
 
-            </select>
-        </td>
-    </tr>
-    <tr>
-         <td><label for="f10">10-16 indicator/subfields/size</label></td>
-        <td>(auto-calculated)</td>
-    </tr>
+                <tr>
+                    <td><label for="f17">17- Encoding level</label></td>
+                    <td>
+                        <select name="f17" id="f17">
+                            [% IF ( f17space ) %]
+                                <option value=" " selected="selected"> - Full</option>
+                            [% ELSE %]
+                                <option value=" ">  - Full</option>
+                            [% END %]
+                            [% IF ( f183 ) %]
+                                <option value="3" selected="selected">3 - Partial</option>
+                            [% ELSE %]
+                                <option value="3">3 - Partial</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-    <tr>
-        <td><label for="f17">17- Encoding level</label></td>
-        <td>
-            <select name="f17" id="f17">
-                [% IF ( f17space ) %]
-                    <option value=" " selected="selected"> - Full</option>
-                [% ELSE %]
-                    <option value=" ">  - Full</option>
-                [% END %]
-                [% IF ( f183 ) %]
-                    <option value="3" selected="selected">3 - Partial</option>
-                [% ELSE %]
-                    <option value="3">3 - Partial</option>
-                [% END %]
-            </select>
-        </td>
-    </tr>
+                <tr>
+                <td>18-19 Undefined</td>
+                <td></td>
+                </tr>
 
-    <tr>
-     <td>18-19 Undefined</td>
-     <td></td>
-    </tr>
+                <tr>
+                    <td>20-24 Entry map &amp; lengths</td>
+                    <td>(auto-filled)</td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="submit" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
-    <tr>
-        <td>20-24 Entry map &amp; lengths</td>
-        <td>(auto-filled)</td>
-    </tr>
-</table>
-<fieldset class="action"><input type="submit" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
 <script>
-//<![CDATA[
-function report() {
-    var doc   = opener.document;
-    var field = doc.getElementById("[% index | html %]");
+    function report() {
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
 
-    field.value ='     '+document.f_pop.f5.value+document.f_pop.f6.value+'  '+document.f_pop.f9.value+'22     '+document.f_pop.f17.value+'  '+'45  ';
+        field.value ='     '+document.f_pop.f5.value+document.f_pop.f6.value+'  '+document.f_pop.f9.value+'22     '+document.f_pop.f17.value+'  '+'45  ';
 
-    self.close();
-    return false;
-}
-//]]>
+        self.close();
+        return false;
+    }
 </script>
 
 [% INCLUDE 'popup-bottom.inc' %]
