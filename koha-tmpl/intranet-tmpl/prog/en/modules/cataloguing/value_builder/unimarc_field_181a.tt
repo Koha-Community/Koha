@@ -5,129 +5,130 @@
 
 <body id="cat_unimarc_field_181a" class="cat" style="padding:1em;">
 
-<h3>UNIMARC field 181a builder</h3>
+    <h3>UNIMARC field 181a builder</h3>
 
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td><label for="f1">Content Form </label></td>
-        <td>
-            <select name="f1" id="f1">
-            [% IF ( f1 == "a" ) %]
-                <option value="a" selected="selected">a - dataset</option>
-            [% ELSE %]
-                <option value="a">a - dataset</option>
-            [% END %]
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Content Form </label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1 == "a" ) %]
+                                <option value="a" selected="selected">a - dataset</option>
+                            [% ELSE %]
+                                <option value="a">a - dataset</option>
+                            [% END %]
 
-            [% IF ( f1 == "b" ) %]
-                <option value="b" selected="selected">b - image</option>
-            [% ELSE %]
-                <option value="b">b - image</option>
-            [% END %]
+                            [% IF ( f1 == "b" ) %]
+                                <option value="b" selected="selected">b - image</option>
+                            [% ELSE %]
+                                <option value="b">b - image</option>
+                            [% END %]
 
-            [% IF ( f1 == "c" ) %]
-                <option value="c" selected="selected">c - movement</option>
-            [% ELSE %]
-                <option value="c">c - movement</option>
-            [% END %]
+                            [% IF ( f1 == "c" ) %]
+                                <option value="c" selected="selected">c - movement</option>
+                            [% ELSE %]
+                                <option value="c">c - movement</option>
+                            [% END %]
 
-            [% IF ( f1 == "d" ) %]
-                <option value="d" selected="selected">d - music</option>
-            [% ELSE %]
-                <option value="d">d - music</option>
-            [% END %]
+                            [% IF ( f1 == "d" ) %]
+                                <option value="d" selected="selected">d - music</option>
+                            [% ELSE %]
+                                <option value="d">d - music</option>
+                            [% END %]
 
-            [% IF ( f1 == "e" ) %]
-                <option value="e" selected="selected">e - object</option>
-            [% ELSE %]
-                <option value="e">e - object</option>
-            [% END %]
+                            [% IF ( f1 == "e" ) %]
+                                <option value="e" selected="selected">e - object</option>
+                            [% ELSE %]
+                                <option value="e">e - object</option>
+                            [% END %]
 
-            [% IF ( f1 == "f" ) %]
-                <option value="f" selected="selected">f - program</option>
-            [% ELSE %]
-                <option value="f">f - program</option>
-            [% END %]
+                            [% IF ( f1 == "f" ) %]
+                                <option value="f" selected="selected">f - program</option>
+                            [% ELSE %]
+                                <option value="f">f - program</option>
+                            [% END %]
 
-            [% IF ( f1 == "g" ) %]
-                <option value="g" selected="selected">g - sounds</option>
-            [% ELSE %]
-                <option value="g">g - sounds</option>
-            [% END %]
+                            [% IF ( f1 == "g" ) %]
+                                <option value="g" selected="selected">g - sounds</option>
+                            [% ELSE %]
+                                <option value="g">g - sounds</option>
+                            [% END %]
 
-            [% IF ( f1 == "h" ) %]
-                <option value="h" selected="selected">h - spoken word</option>
-            [% ELSE %]
-                <option value="h">h - spoken word</option>
-            [% END %]
+                            [% IF ( f1 == "h" ) %]
+                                <option value="h" selected="selected">h - spoken word</option>
+                            [% ELSE %]
+                                <option value="h">h - spoken word</option>
+                            [% END %]
 
-            [% IF ( f1 == "i" ) %]
-                <option value="i" selected="selected">i - text</option>
-            [% ELSE %]
-                <option value="i">i - text</option>
-            [% END %]
+                            [% IF ( f1 == "i" ) %]
+                                <option value="i" selected="selected">i - text</option>
+                            [% ELSE %]
+                                <option value="i">i - text</option>
+                            [% END %]
 
-            [% IF ( f1 == "m" ) %]
-                <option value="m" selected="selected">m - multiple contents forms</option>
-            [% ELSE %]
-                <option value="m">m - multiple contents forms</option>
-            [% END %]
+                            [% IF ( f1 == "m" ) %]
+                                <option value="m" selected="selected">m - multiple contents forms</option>
+                            [% ELSE %]
+                                <option value="m">m - multiple contents forms</option>
+                            [% END %]
 
-            [% IF ( f1 == "z" ) %]
-                <option value="z" selected="selected">z - other content form</option>
-            [% ELSE %]
-                <option value="z">z - other content form</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f2">Extent of applicability </label></td>
-        <td>
-            <select name="f2" id="f2">
-            [% IF ( f2 == "0" ) %]
-                <option value="0" selected="selected">0 - none</option>
-            [% ELSE %]
-                <option value="0">0 - none</option>
-            [% END %]
+                            [% IF ( f1 == "z" ) %]
+                                <option value="z" selected="selected">z - other content form</option>
+                            [% ELSE %]
+                                <option value="z">z - other content form</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f2">Extent of applicability </label></td>
+                    <td>
+                        <select name="f2" id="f2">
+                            [% IF ( f2 == "0" ) %]
+                                <option value="0" selected="selected">0 - none</option>
+                            [% ELSE %]
+                                <option value="0">0 - none</option>
+                            [% END %]
 
-            [% IF ( f2 == "1" ) %]
-                <option value="1" selected="selected">1 - some</option>
-            [% ELSE %]
-                <option value="1">1 - some</option>
-            [% END %]
+                            [% IF ( f2 == "1" ) %]
+                                <option value="1" selected="selected">1 - some</option>
+                            [% ELSE %]
+                                <option value="1">1 - some</option>
+                            [% END %]
 
-            [% IF ( f2 == "2" ) %]
-                <option value="2" selected="selected">2 - substantial</option>
-            [% ELSE %]
-                <option value="2">2 - substantial</option>
-            [% END %]
+                            [% IF ( f2 == "2" ) %]
+                                <option value="2" selected="selected">2 - substantial</option>
+                            [% ELSE %]
+                                <option value="2">2 - substantial</option>
+                            [% END %]
 
-            [% IF ( f2 == "3" ) %]
-                <option value="3" selected="selected">3 - predominate</option>
-            [% ELSE %]
-                <option value="3">3 - predominate</option>
-            [% END %]
+                            [% IF ( f2 == "3" ) %]
+                                <option value="3" selected="selected">3 - predominate</option>
+                            [% ELSE %]
+                                <option value="3">3 - predominate</option>
+                            [% END %]
 
-            [% IF ( f2 == "4" ) %]
-                <option value="4" selected="selected">4 - full</option>
-            [% ELSE %]
-                <option value="4">4 - full</option>
-            [% END %]
+                            [% IF ( f2 == "4" ) %]
+                                <option value="4" selected="selected">4 - full</option>
+                            [% ELSE %]
+                                <option value="4">4 - full</option>
+                            [% END %]
 
-            [% IF ( f2 == "" ) %]
-                <option value=" " selected="selected"># - position not used</option>
-            [% ELSE %]
-                <option value=" "># - position not used</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                            [% IF ( f2 == "" ) %]
+                                <option value=" " selected="selected"># - position not used</option>
+                            [% ELSE %]
+                                <option value=" "># - position not used</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-</table>
-<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
-
+            </table>
+            <p><input type="button" class="btn btn-primary" value="OK" onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </form>
+    </div> <!-- /.page-section -->
 <script>
 
     function submitMyForm() {

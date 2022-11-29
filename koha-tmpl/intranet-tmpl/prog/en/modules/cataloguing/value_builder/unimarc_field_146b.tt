@@ -7,106 +7,108 @@
     <div class="container-fluid">
         <h1>Framework plugin for UNIMARC 146$b</h1>
 
-        <form class="form-horizontal" id="form">
-            <input type="hidden" id="id" name="id" value="[% id | html %]">
+        <div class="page-section">
+            <form class="form-horizontal" id="form">
+                <input type="hidden" id="id" name="id" value="[% id | html %]">
 
-            <div class="form-group">
-                <label for="number" class="col-sm-3 control-label">Number of instruments or voices</label>
-                <div class="col-sm-9">
-                    <input inputmode="numeric" pattern="^[0-9]{0,2}$" title="a number between 0 and 99 (inclusive)" id="number" name="number" value="[% number | html %]">
-                    <p class="help-block">A number between 0 and 99 (inclusive)</p>
+                <div class="form-group">
+                    <label for="number" class="col-sm-3 control-label">Number of instruments or voices</label>
+                    <div class="col-sm-9">
+                        <input inputmode="numeric" pattern="^[0-9]{0,2}$" title="a number between 0 and 99 (inclusive)" id="number" name="number" value="[% number | html %]">
+                        <p class="help-block">A number between 0 and 99 (inclusive)</p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="category" class="col-sm-3 control-label">Category of instrument or voice</label>
-                <div class="col-sm-9">
-                    <select class="form-control" id="category">
-                        <option value=""></option>
-                        [% FOREACH optgroup IN category_optgroups %]
-                            <optgroup label="[% optgroup.label | html %]">
-                                [% FOREACH option IN optgroup.options %]
-                                    [% IF option.value == category %]
-                                        <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
-                                    [% ELSE %]
-                                        <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
+                <div class="form-group">
+                    <label for="category" class="col-sm-3 control-label">Category of instrument or voice</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="category">
+                            <option value=""></option>
+                            [% FOREACH optgroup IN category_optgroups %]
+                                <optgroup label="[% optgroup.label | html %]">
+                                    [% FOREACH option IN optgroup.options %]
+                                        [% IF option.value == category %]
+                                            <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
+                                        [% ELSE %]
+                                            <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
+                                        [% END %]
                                     [% END %]
+                                </optgroup>
+                            [% END %]
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tessitura" class="col-sm-3 control-label">Tessitura</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="tessitura">
+                            <option value=""></option>
+                            [% FOREACH option IN tessitura_options %]
+                                [% IF option.value == tessitura %]
+                                    <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
                                 [% END %]
-                            </optgroup>
-                        [% END %]
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="tessitura" class="col-sm-3 control-label">Tessitura</label>
-                <div class="col-sm-9">
-                    <select class="form-control" id="tessitura">
-                        <option value=""></option>
-                        [% FOREACH option IN tessitura_options %]
-                            [% IF option.value == tessitura %]
-                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
-                            [% ELSE %]
-                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
                             [% END %]
-                        [% END %]
-                    </select>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="number_of_hands_or_keys" class="col-sm-3 control-label">Number of hands / players; keys of pitched instruments</label>
-                <div class="col-sm-9">
-                    <select class="form-control" id="number_of_hands_or_keys">
-                        <option value=""></option>
-                        [% FOREACH option IN number_of_hands_or_keys_options %]
-                            [% IF option.value == number_of_hands_or_keys %]
-                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
-                            [% ELSE %]
-                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                <div class="form-group">
+                    <label for="number_of_hands_or_keys" class="col-sm-3 control-label">Number of hands / players; keys of pitched instruments</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="number_of_hands_or_keys">
+                            <option value=""></option>
+                            [% FOREACH option IN number_of_hands_or_keys_options %]
+                                [% IF option.value == number_of_hands_or_keys %]
+                                    <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% END %]
                             [% END %]
-                        [% END %]
-                    </select>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="other" class="col-sm-3 control-label">Other (position 7)</label>
-                <div class="col-sm-9">
-                    <select class="form-control" id="other">
-                        <option value=""></option>
-                        [% FOREACH option IN other_options %]
-                            [% IF option.value == other %]
-                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
-                            [% ELSE %]
-                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                <div class="form-group">
+                    <label for="other" class="col-sm-3 control-label">Other (position 7)</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="other">
+                            <option value=""></option>
+                            [% FOREACH option IN other_options %]
+                                [% IF option.value == other %]
+                                    <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% END %]
                             [% END %]
-                        [% END %]
-                    </select>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="other2" class="col-sm-3 control-label">Other (position 8)</label>
-                <div class="col-sm-9">
-                    <select class="form-control" id="other2">
-                        <option value=""></option>
-                        [% FOREACH option IN other2_options %]
-                            [% IF option.value == other2 %]
-                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
-                            [% ELSE %]
-                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                <div class="form-group">
+                    <label for="other2" class="col-sm-3 control-label">Other (position 8)</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="other2">
+                            <option value=""></option>
+                            [% FOREACH option IN other2_options %]
+                                [% IF option.value == other2 %]
+                                    <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                                [% END %]
                             [% END %]
-                        [% END %]
-                    </select>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit">OK</button>
-                    <a href="#" class="cancel close">Cancel</a>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">OK</button>
+                        <a href="#" class="cancel close">Cancel</a>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div> <!-- /.page-section -->
     </div>
 
     [% INCLUDE 'select2.inc' %]

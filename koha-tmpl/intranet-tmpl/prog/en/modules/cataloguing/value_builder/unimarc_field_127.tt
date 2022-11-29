@@ -5,26 +5,28 @@
 </head>
 
 <body id="cat_unimarc_field_127" class="cat" style="padding:1em;">
-<h1>UNIMARC field 127 builder</h1>
-<form name="f_pop" action="">
-<table>
-<tr><th colspan="9">(Complete with 0 on the left)</th></tr>
-<tr>          <td><label for="f1">Hours:</label></td>
-                         <td><input type="text" name="f1" id="f1" maxlength="2"
-                         size="3"
-                   value="[% f1 | html %]" /></td>
-          <td><label for="f2">Minutes:</label></td>
-                         <td><input type="text" name="f2" id="f2" maxlength="2"
-                         size="3"
-                   value="[% f2 | html %]" /></td>
-          <td><label for="f3">Seconds:</label></td>
-                         <td><input type="text" name="f3" id="f3" maxlength="2"
-                         size="3"
-                   value="[% f3 | html %]" /></td>
-</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 127 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr><th colspan="9">(Complete with 0 on the left)</th></tr>
+                <tr><td><label for="f1">Hours:</label></td>
+                    <td><input type="text" name="f1" id="f1" maxlength="2"
+                        size="3"
+                        value="[% f1 | html %]" /></td>
+                    <td><label for="f2">Minutes:</label></td>
+                    <td><input type="text" name="f2" id="f2" maxlength="2"
+                        size="3"
+                        value="[% f2 | html %]" /></td>
+                    <td><label for="f3">Seconds:</label></td>
+                    <td><input type="text" name="f3" id="f3" maxlength="2"
+                        size="3"
+                        value="[% f3 | html %]" /></td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

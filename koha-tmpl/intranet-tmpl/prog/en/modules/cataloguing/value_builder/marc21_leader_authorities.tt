@@ -5,121 +5,124 @@
 </head>
 
 <body id="cat_marc21_leader_authorities" class="cat" style="padding:1em;">
-<h1>000 - Leader</h1>
-<form name="f_pop" onsubmit="report()" action="">
-<input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl" />
-<table>
-	<tr>
-		<td>1-4 Record size</td>
-		<td>(auto-filled)</td>
-	</tr>
-	<tr>
-		<td><label for="f5">5- Record status</label></td>
-		<td>
-            <select name="f5" id="f5">
-			[% IF ( f5a ) %]
-				<option value="a" selected="selected">a- Increase in encoding level</option>
-			[% ELSE %]
-				<option value="a">a- Increase in encoding level</option>
-			[% END %]
+    <h1>000 - Leader</h1>
+    <form name="f_pop" onsubmit="report()" action="">
+        <input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl" />
 
-			[% IF ( f5c ) %]
-				<option value="c" selected="selected">c- Corrected or revised</option>
-			[% ELSE %]
-				<option value="c">c- Corrected or revised</option>
-			[% END %]
-			[% IF ( f5d ) %]
-				<option value="d" selected="selected">d- Deleted</option>
-			[% ELSE %]
-				<option value="d">d- Deleted</option>
-			[% END %]
-			[% IF ( f5n ) %]
-				<option value="n" selected="selected">n- New</option>
-			[% ELSE %]
-				<option value="n">n- New</option>
-			[% END %]
-			[% IF ( f5o ) %]
-				<option value="o" selected="selected">o- Obsolete</option>
-			[% ELSE %]
-				<option value="o">o- Obsolete</option>
-			[% END %]
-			[% IF ( f5s ) %]
-				<option value="s" selected="selected">s- Deleted; heading split into two or more headings</option>
-			[% ELSE %]
-				<option value="s">s- Deleted; heading split into two or more headings</option>
-			[% END %]
-			[% IF ( f5x ) %]
-				<option value="x" selected="selected">x- Deleted; heading replaced by another heading</option>
-			[% ELSE %]
-				<option value="x">x- Deleted; heading replaced by another heading</option>
-			[% END %]
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td><label for="f6">6- Type of record</label></td>
-		<td>
-            <input name="f6" id="f6" value="z" type="hidden" />
-            z- Authority data
-		</td>
-	</tr>
-	<tr>
-		<td>7-8 Undefined</td>
-		<td></td>
-	</tr>
+        <div class="page-section">
+            <table>
+                <tr>
+                    <td>1-4 Record size</td>
+                    <td>(auto-filled)</td>
+                </tr>
+                <tr>
+                    <td><label for="f5">5- Record status</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5a ) %]
+                                <option value="a" selected="selected">a- Increase in encoding level</option>
+                            [% ELSE %]
+                                <option value="a">a- Increase in encoding level</option>
+                            [% END %]
 
-	<tr>
-		<td><label for="f9">9- Encoding</label></td>
-		<td>
-            <select name="f9" id="f9">
-				[% IF ( f9 ) %]
-					<option value=" " selected="selected">MARC-8</option>
-				[% ELSE %]
-					<option value=" ">MARC-8</option>
-				[% END %]
-				[% IF ( f9a ) %]
-					<option value="a" selected="selected">a- UCS/Unicode</option>
-				[% ELSE %]
-					<option value="a">a- UCS/Unicode</option>
-				[% END %]
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td>10-16 indicator/subfields/size</td>
-		<td>(auto-filled)</td>
-	</tr>
-	<tr>
-		<td><label for="f17">17- Encoding level</label></td>
-		<td>
-            <select name="f17" id="f17">
-				[% IF ( f17n ) %]
-					<option value="n" selected="selected">n- Complete authority record</option>
-				[% ELSE %]
-					<option value="n">n- Complete authority record</option>
-				[% END %]
-				[% IF ( f17o ) %]
-					<option value="o" selected="selected">o- Incomplete authority record</option>
-				[% ELSE %]
-					<option value="o">o- Incomplete authority record</option>
-				[% END %]
-			</select>
-		</td>
-	</tr>
+                            [% IF ( f5c ) %]
+                                <option value="c" selected="selected">c- Corrected or revised</option>
+                            [% ELSE %]
+                                <option value="c">c- Corrected or revised</option>
+                            [% END %]
+                            [% IF ( f5d ) %]
+                                <option value="d" selected="selected">d- Deleted</option>
+                            [% ELSE %]
+                                <option value="d">d- Deleted</option>
+                            [% END %]
+                            [% IF ( f5n ) %]
+                                <option value="n" selected="selected">n- New</option>
+                            [% ELSE %]
+                                <option value="n">n- New</option>
+                            [% END %]
+                            [% IF ( f5o ) %]
+                                <option value="o" selected="selected">o- Obsolete</option>
+                            [% ELSE %]
+                                <option value="o">o- Obsolete</option>
+                            [% END %]
+                            [% IF ( f5s ) %]
+                                <option value="s" selected="selected">s- Deleted; heading split into two or more headings</option>
+                            [% ELSE %]
+                                <option value="s">s- Deleted; heading split into two or more headings</option>
+                            [% END %]
+                            [% IF ( f5x ) %]
+                                <option value="x" selected="selected">x- Deleted; heading replaced by another heading</option>
+                            [% ELSE %]
+                                <option value="x">x- Deleted; heading replaced by another heading</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f6">6- Type of record</label></td>
+                    <td>
+                        <input name="f6" id="f6" value="z" type="hidden" />
+                        z- Authority data
+                    </td>
+                </tr>
+                <tr>
+                    <td>7-8 Undefined</td>
+                    <td></td>
+                </tr>
 
-	<tr>
-		<td>18-19 Undefined</td>
-		<td></td>
-	</tr>
+                <tr>
+                    <td><label for="f9">9- Encoding</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+                            [% IF ( f9 ) %]
+                                <option value=" " selected="selected">MARC-8</option>
+                            [% ELSE %]
+                                <option value=" ">MARC-8</option>
+                            [% END %]
+                            [% IF ( f9a ) %]
+                                <option value="a" selected="selected">a- UCS/Unicode</option>
+                            [% ELSE %]
+                                <option value="a">a- UCS/Unicode</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10-16 indicator/subfields/size</td>
+                    <td>(auto-filled)</td>
+                </tr>
+                <tr>
+                    <td><label for="f17">17- Encoding level</label></td>
+                    <td>
+                        <select name="f17" id="f17">
+                            [% IF ( f17n ) %]
+                                <option value="n" selected="selected">n- Complete authority record</option>
+                            [% ELSE %]
+                                <option value="n">n- Complete authority record</option>
+                            [% END %]
+                            [% IF ( f17o ) %]
+                                <option value="o" selected="selected">o- Incomplete authority record</option>
+                            [% ELSE %]
+                                <option value="o">o- Incomplete authority record</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-	<tr>
-		<td>20-24 entry map &amp; lengths</td>
-		<td>(auto-filled)</td>
-	</tr>
+                <tr>
+                    <td>18-19 Undefined</td>
+                    <td></td>
+                </tr>
 
-</table>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                <tr>
+                    <td>20-24 entry map &amp; lengths</td>
+                    <td>(auto-filled)</td>
+                </tr>
+
+            </table>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </div> <!-- /.page-section -->
+    </form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

@@ -4,49 +4,51 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_field_123e" class="cat" style="padding:1em;">
-<h1>UNIMARC field 123e builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Hemisphere:</label></td>
-		<td>
-            <select name="f1" id="f1">
-            
-			[% IF ( f1w ) %]
-				<option value="w" selected="selected">west</option>
-			[% ELSE %]
-				<option value="w">west</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">east</option>
-			[% ELSE %]
-				<option value="e">east</option>
-			[% END %]
-			[% IF ( f1n ) %]
-				<option value="n" selected="selected">north</option>
-			[% ELSE %]
-				<option value="n">north</option>
-			[% END %]
-			[% IF ( f1s ) %]
-				<option value="s" selected="selected">south</option>
-			[% ELSE %]
-				<option value="s">south</option>
-			[% END %]
-			</select>
-		</td></tr>
+    <h1>UNIMARC field 123e builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Hemisphere:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-<tr>          <td><label for="f2">Degree (complete with 0):</label></td>
-                         <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="[% f2 | html %]" /></td>
-</tr>
-<tr>          <td><label for="f3">Minute (complete with 0):</label></td>
-                         <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" /></td>
-</tr>
-<tr>          <td><label for="f4">Second (complete with 0):</label></td>
-                         <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="[% f4 | html %]" /></td>
-</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f1w ) %]
+                                <option value="w" selected="selected">west</option>
+                            [% ELSE %]
+                                <option value="w">west</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">east</option>
+                            [% ELSE %]
+                                <option value="e">east</option>
+                            [% END %]
+                            [% IF ( f1n ) %]
+                                <option value="n" selected="selected">north</option>
+                            [% ELSE %]
+                                <option value="n">north</option>
+                            [% END %]
+                            [% IF ( f1s ) %]
+                                <option value="s" selected="selected">south</option>
+                            [% ELSE %]
+                                <option value="s">south</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+
+                <tr><td><label for="f2">Degree (complete with 0):</label></td>
+                    <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="[% f2 | html %]" /></td>
+                </tr>
+                <tr><td><label for="f3">Minute (complete with 0):</label></td>
+                    <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" /></td>
+                </tr>
+                <tr><td><label for="f4">Second (complete with 0):</label></td>
+                    <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="[% f4 | html %]" /></td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

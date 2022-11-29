@@ -5,351 +5,353 @@
 </head>
 
 <body id="cat_unimarc_field_100" class="cat" style="padding:1em;">
-<h1>UNIMARC field 100 builder</h1>
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td><label for="f1">Date entered on file</label></td>
-        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
-    </tr>
-    <tr>
-        <td><label for="f2">States of authority heading code</label></td>
-        <td>
-            <select name="f2" id="f2">
-            [% IF ( f2a ) %]
-                <option value="a" selected="selected">a - established</option>
-            [% ELSE %]
-                <option value="a">a - established</option>
-            [% END %]
-            [% IF ( f2c ) %]
-                <option value="c" selected="selected">c - provisional</option>
-            [% ELSE %]
-                <option value="c">c - provisional</option>
-            [% END %]
-            [% IF ( f2x ) %]
-                <option value="x" selected="selected">x - not applicable</option>
-            [% ELSE %]
-                <option value="x">x - not applicable</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+    <h1>UNIMARC field 100 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Date entered on file</label></td>
+                    <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
+                </tr>
+                <tr>
+                    <td><label for="f2">States of authority heading code</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+                        [% IF ( f2a ) %]
+                            <option value="a" selected="selected">a - established</option>
+                        [% ELSE %]
+                            <option value="a">a - established</option>
+                        [% END %]
+                        [% IF ( f2c ) %]
+                            <option value="c" selected="selected">c - provisional</option>
+                        [% ELSE %]
+                            <option value="c">c - provisional</option>
+                        [% END %]
+                        [% IF ( f2x ) %]
+                            <option value="x" selected="selected">x - not applicable</option>
+                        [% ELSE %]
+                            <option value="x">x - not applicable</option>
+                        [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-    <tr>
-    <td><label for="f3">Language of cataloguing (mandatory)</label></td>
-    <td><input type="text" name="f3" id="f3" maxlength="3" size="4" value="[% f3 | html %]" /></td>
-    </tr>
+                <tr>
+                    <td><label for="f3">Language of cataloguing (mandatory)</label></td>
+                    <td><input type="text" name="f3" id="f3" maxlength="3" size="4" value="[% f3 | html %]" /></td>
+                </tr>
 
-    <tr>
-        <td><label for="f4">Transliteration code</label></td>
-        <td>
-            <select name="f4" id="f4">
+                <tr>
+                    <td><label for="f4">Transliteration code</label></td>
+                    <td>
+                        <select name="f4" id="f4">
 
-            [% IF ( f4a ) %]
-                <option value="a" selected="selected">a- ISO transliteration scheme</option>
-            [% ELSE %]
-                <option value="a">a- ISO transliteration scheme</option>
-            [% END %]
-            [% IF ( f4b ) %]
-                <option value="b" selected="selected">b- other</option>
-            [% ELSE %]
-                <option value="b">b- other</option>
-            [% END %]
-            [% IF ( f4c ) %]
-                <option value="c"
- selected="selected">c- multiple transliterations: ISO or other schemes</option>
-            [% ELSE %]
-                <option value="c">c- multiple transliterations: ISO or other schemes</option>
-            [% END %]
-            [% IF ( f4y ) %]
-                <option value="y" selected="selected">y- no transliteration scheme used</option>
-            [% ELSE %]
-                <option value="y">y- no transliteration scheme used</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-    <td><label for="f5">Character sets (mandatory) 1</label></td>
-        <td>
-            <select name="f5" id="f5">
+                        [% IF ( f4a ) %]
+                            <option value="a" selected="selected">a- ISO transliteration scheme</option>
+                        [% ELSE %]
+                            <option value="a">a- ISO transliteration scheme</option>
+                        [% END %]
+                        [% IF ( f4b ) %]
+                            <option value="b" selected="selected">b- other</option>
+                        [% ELSE %]
+                            <option value="b">b- other</option>
+                        [% END %]
+                        [% IF ( f4c ) %]
+                            <option value="c"
+                                 selected="selected">c- multiple transliterations: ISO or other schemes</option>
+                        [% ELSE %]
+                            <option value="c">c- multiple transliterations: ISO or other schemes</option>
+                        [% END %]
+                        [% IF ( f4y ) %]
+                            <option value="y" selected="selected">y- no transliteration scheme used</option>
+                        [% ELSE %]
+                            <option value="y">y- no transliteration scheme used</option>
+                        [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                <td><label for="f5">Character sets (mandatory) 1</label></td>
+                    <td>
+                        <select name="f5" id="f5">
 
-            [% IF ( f501 ) %]
-                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
-            [% ELSE %]
-                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
-            [% END %]
-            [% IF ( f502 ) %]
-                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% ELSE %]
-                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% END %]
-            [% IF ( f503 ) %]
-                <option value="03" selected="selected">03- ISO 5426 (extended Latin set)</option>
-            [% ELSE %]
-                <option value="03">03- ISO 5426 (extended Latin set)</option>
-            [% END %]
-            [% IF ( f504 ) %]
-                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
-            [% ELSE %]
-                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
-            [% END %]
-            [% IF ( f505 ) %]
-                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
-            [% ELSE %]
-                <option value="05">05- ISO 5428 (Greek set)</option>
-            [% END %]
+                            [% IF ( f501 ) %]
+                                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% ELSE %]
+                                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% END %]
+                            [% IF ( f502 ) %]
+                                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f503 ) %]
+                                <option value="03" selected="selected">03- ISO 5426 (extended Latin set)</option>
+                            [% ELSE %]
+                                <option value="03">03- ISO 5426 (extended Latin set)</option>
+                            [% END %]
+                            [% IF ( f504 ) %]
+                                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f505 ) %]
+                                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
+                            [% ELSE %]
+                                <option value="05">05- ISO 5428 (Greek set)</option>
+                            [% END %]
 
-            [% IF ( f506 ) %]
-                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
-            [% ELSE %]
-                <option value="06">06- ISO 6438 (African coded character set)</option>
-            [% END %]
+                            [% IF ( f506 ) %]
+                                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
+                            [% ELSE %]
+                                <option value="06">06- ISO 6438 (African coded character set)</option>
+                            [% END %]
 
-             [% IF ( f507 ) %]
-                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
-            [% ELSE %]
-                <option value="07">07- ISO 10586 (Georgian set)</option>
-            [% END %]
+                            [% IF ( f507 ) %]
+                                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
+                            [% ELSE %]
+                                <option value="07">07- ISO 10586 (Georgian set)</option>
+                            [% END %]
 
-             [% IF ( f508 ) %]
-                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% ELSE %]
-                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% END %]
+                            [% IF ( f508 ) %]
+                                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% ELSE %]
+                                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% END %]
 
-             [% IF ( f509 ) %]
-                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% ELSE %]
-                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% END %]
+                            [% IF ( f509 ) %]
+                                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% ELSE %]
+                                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% END %]
 
-             [% IF ( f511 ) %]
-                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)
-</option>
-            [% ELSE %]
-                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)
-</option>
-            [% END %]
+                            [% IF ( f511 ) %]
+                                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)
+                                </option>
+                            [% ELSE %]
+                                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)
+                                </option>
+                            [% END %]
 
-            [% IF ( f550 ) %]
-                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)
-                </option>
-            [% ELSE %]
-                <option value="50">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% END %]
-            </select>
-        </td>
+                            [% IF ( f550 ) %]
+                                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)
+                                </option>
+                            [% ELSE %]
+                                <option value="50">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% END %]
+                        </select>
+                    </td>
 
-    </tr>
-    <tr>
-    <td><label for="f6">Character sets (mandatory) 2</label></td>
-        <td>
-            <select name="f6" id="f6">
+                </tr>
+                <tr>
+                    <td><label for="f6">Character sets (mandatory) 2</label></td>
+                    <td>
+                        <select name="f6" id="f6">
 
-            [% IF ( f6dblspace ) %]
-                    <option value="  " selected="selected">non required value</option>
-            [% ELSE %]
-                    <option value="  ">non required value</option>
-            [% END %]
+                            [% IF ( f6dblspace ) %]
+                                    <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                    <option value="  ">non required value</option>
+                            [% END %]
 
-            [% IF ( f601 ) %]
-                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
-            [% ELSE %]
-                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
-            [% END %]
-            [% IF ( f602 ) %]
-                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% ELSE %]
-                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% END %]
-            [% IF ( f603 ) %]
-                <option value="03"
- selected="selected">03- ISO 5426 (extended Latin set)</option>
-            [% ELSE %]
-                <option value="03">03- ISO 5426 (extended Latin set)</option>
-            [% END %]
-            [% IF ( f604 ) %]
-                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
-            [% ELSE %]
-                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
-            [% END %]
-            [% IF ( f605 ) %]
-                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
-            [% ELSE %]
-                <option value="05">05- ISO 5428 (Greek set)</option>
-            [% END %]
-            [% IF ( f606 ) %]
-                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
-            [% ELSE %]
-                <option value="06">06- ISO 6438 (African coded character set)</option>
-            [% END %]
+                            [% IF ( f601 ) %]
+                                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% ELSE %]
+                                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% END %]
+                            [% IF ( f602 ) %]
+                                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f603 ) %]
+                                <option value="03"
+                                    selected="selected">03- ISO 5426 (extended Latin set)</option>
+                            [% ELSE %]
+                                <option value="03">03- ISO 5426 (extended Latin set)</option>
+                            [% END %]
+                            [% IF ( f604 ) %]
+                                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f605 ) %]
+                                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
+                            [% ELSE %]
+                                <option value="05">05- ISO 5428 (Greek set)</option>
+                            [% END %]
+                            [% IF ( f606 ) %]
+                                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
+                            [% ELSE %]
+                                <option value="06">06- ISO 6438 (African coded character set)</option>
+                            [% END %]
 
-            [% IF ( f607 ) %]
-                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
-            [% ELSE %]
-                <option value="07">07- ISO 10586 (Georgian set)</option>
-            [% END %]
+                            [% IF ( f607 ) %]
+                                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
+                            [% ELSE %]
+                                <option value="07">07- ISO 10586 (Georgian set)</option>
+                            [% END %]
 
-             [% IF ( f608 ) %]
-                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% ELSE %]
-                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% END %]
+                            [% IF ( f608 ) %]
+                                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% ELSE %]
+                                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% END %]
 
-             [% IF ( f609 ) %]
-                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% ELSE %]
-                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% END %]
+                            [% IF ( f609 ) %]
+                                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% ELSE %]
+                                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% END %]
 
-             [% IF ( f611 ) %]
-                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)</option>
-            [% ELSE %]
-                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)</option>
-            [% END %]
+                            [% IF ( f611 ) %]
+                                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)</option>
+                            [% ELSE %]
+                                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)</option>
+                            [% END %]
 
-            [% IF ( f650 ) %]
-                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% ELSE %]
-                <option value="50">ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                            [% IF ( f650 ) %]
+                                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% ELSE %]
+                                <option value="50">ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-    <tr>
-        <td><label for="f7">Additional character sets</label></td>
-        <td>
-            <input type="text" name="f7" id="f7" maxlength="4" size="5" value="[% f7 | html %]" />
-        </td>
-    </tr>
+                <tr>
+                    <td><label for="f7">Additional character sets</label></td>
+                    <td>
+                        <input type="text" name="f7" id="f7" maxlength="4" size="5" value="[% f7 | html %]" />
+                    </td>
+                </tr>
 
-    <tr>
-    <td><label for="f8">Script of title</label></td>
-    <td>
-    <select name="f8" id="f8">
-            [% IF ( f8dblspace ) %]
-                    <option value="  " selected="selected">Non required value</option>
-            [% ELSE %]
-                    <option value="  ">Non required value</option>
-            [% END %]
+                <tr>
+                    <td><label for="f8">Script of title</label></td>
+                    <td>
+                        <select name="f8" id="f8">
+                            [% IF ( f8dblspace ) %]
+                                <option value="  " selected="selected">Non required value</option>
+                            [% ELSE %]
+                                <option value="  ">Non required value</option>
+                            [% END %]
 
-            [% IF ( f8ba ) %]
-                <option value="ba" selected="selected">ba- Latin</option>
-            [% ELSE %]
-                <option value="ba">ba- Latin</option>
-            [% END %]
-            [% IF ( f8ca ) %]
-                <option value="ca" selected="selected">ca- Cyrillic</option>
-            [% ELSE %]
-                <option value="ca">ca- Cyrillic</option>
-            [% END %]
+                            [% IF ( f8ba ) %]
+                                <option value="ba" selected="selected">ba- Latin</option>
+                            [% ELSE %]
+                                <option value="ba">ba- Latin</option>
+                            [% END %]
+                            [% IF ( f8ca ) %]
+                                <option value="ca" selected="selected">ca- Cyrillic</option>
+                            [% ELSE %]
+                                <option value="ca">ca- Cyrillic</option>
+                            [% END %]
 
-            [% IF ( f8da ) %]
-                <option value="da" selected="selected">da- Japanese - script unspecified</option>
-            [% ELSE %]
-                <option value="da">da- Japanese - script unspecified</option>
-            [% END %]
+                            [% IF ( f8da ) %]
+                                <option value="da" selected="selected">da- Japanese - script unspecified</option>
+                            [% ELSE %]
+                                <option value="da">da- Japanese - script unspecified</option>
+                            [% END %]
 
-            [% IF ( f8db ) %]
-                <option value="db" selected="selected">db- Japanese -
-                Kanji</option>
-            [% ELSE %]
-                <option value="db">db- Japanese - Kanji</option>
-            [% END %]
+                            [% IF ( f8db ) %]
+                                <option value="db" selected="selected">db- Japanese -
+                                    Kanji</option>
+                            [% ELSE %]
+                                <option value="db">db- Japanese - Kanji</option>
+                            [% END %]
 
-            [% IF ( f8dc ) %]
-                <option value="dc" selected="selected">dc- Japanese -
-                Kana</option>
-            [% ELSE %]
-                <option value="dc">dc- Japanese - Kana</option>
-            [% END %]
-            [% IF ( f8ea ) %]
-                <option value="ea" selected="selected">ea- Chinese</option>
-            [% ELSE %]
-                <option value="ea">ea- Chinese</option>
-            [% END %]
-            [% IF ( f8fa ) %]
-                <option value="fa" selected="selected">fa- Arabic</option>
-            [% ELSE %]
-                <option value="fa">fa- Arabic</option>
-            [% END %]
-            [% IF ( f8ga ) %]
-                <option value="ga" selected="selected">ga- Greek</option>
-            [% ELSE %]
-                <option value="ga">ga- Greek</option>
-            [% END %]
-            [% IF ( f8ha ) %]
-                <option value="ha" selected="selected">ha- Hebrew</option>
-            [% ELSE %]
-                <option value="ha">ha- Hebrew</option>
-            [% END %]
-            [% IF ( f8ia ) %]
-                <option value="ia" selected="selected">ia- Thai</option>
-            [% ELSE %]
-                <option value="ia">ia- Thai</option>
-            [% END %]
-            [% IF ( f8ja ) %]
-                <option value="ja" selected="selected">ja- Devanagari</option>
-            [% ELSE %]
-                <option value="ja">ja- Devanagari</option>
-            [% END %]
-            [% IF ( f8ka ) %]
-                <option value="ka" selected="selected">ka- Korean</option>
-            [% ELSE %]
-                <option value="ka">ka- Korean</option>
-            [% END %]
-            [% IF ( f8la ) %]
-                <option value="la" selected="selected">la- Tamil</option>
-            [% ELSE %]
-                <option value="la">la- Tamil</option>
-            [% END %]
-            [% IF ( f8zz ) %]
-                <option value="zz" selected="selected">zz- Other</option>
-            [% ELSE %]
-                <option value="zz">zz- Other</option>
-            [% END %]
+                            [% IF ( f8dc ) %]
+                                <option value="dc" selected="selected">dc- Japanese -
+                                    Kana</option>
+                            [% ELSE %]
+                                <option value="dc">dc- Japanese - Kana</option>
+                            [% END %]
+                            [% IF ( f8ea ) %]
+                                <option value="ea" selected="selected">ea- Chinese</option>
+                            [% ELSE %]
+                                <option value="ea">ea- Chinese</option>
+                            [% END %]
+                            [% IF ( f8fa ) %]
+                                <option value="fa" selected="selected">fa- Arabic</option>
+                            [% ELSE %]
+                                <option value="fa">fa- Arabic</option>
+                            [% END %]
+                            [% IF ( f8ga ) %]
+                                <option value="ga" selected="selected">ga- Greek</option>
+                            [% ELSE %]
+                                <option value="ga">ga- Greek</option>
+                            [% END %]
+                            [% IF ( f8ha ) %]
+                                <option value="ha" selected="selected">ha- Hebrew</option>
+                            [% ELSE %]
+                                <option value="ha">ha- Hebrew</option>
+                            [% END %]
+                            [% IF ( f8ia ) %]
+                                <option value="ia" selected="selected">ia- Thai</option>
+                            [% ELSE %]
+                                <option value="ia">ia- Thai</option>
+                            [% END %]
+                            [% IF ( f8ja ) %]
+                                <option value="ja" selected="selected">ja- Devanagari</option>
+                            [% ELSE %]
+                                <option value="ja">ja- Devanagari</option>
+                            [% END %]
+                            [% IF ( f8ka ) %]
+                                <option value="ka" selected="selected">ka- Korean</option>
+                            [% ELSE %]
+                                <option value="ka">ka- Korean</option>
+                            [% END %]
+                            [% IF ( f8la ) %]
+                                <option value="la" selected="selected">la- Tamil</option>
+                            [% ELSE %]
+                                <option value="la">la- Tamil</option>
+                            [% END %]
+                            [% IF ( f8zz ) %]
+                                <option value="zz" selected="selected">zz- Other</option>
+                            [% ELSE %]
+                                <option value="zz">zz- Other</option>
+                            [% END %]
 
-            [% IF ( f8ma ) %]
-                <option value="ma" selected="selected">ma- Georgian</option>
-            [% ELSE %]
-                <option value="ma">ma- Georgian</option>
-            [% END %]
+                            [% IF ( f8ma ) %]
+                                <option value="ma" selected="selected">ma- Georgian</option>
+                            [% ELSE %]
+                                <option value="ma">ma- Georgian</option>
+                            [% END %]
 
-            [% IF ( f8mb ) %]
-                <option value="mb" selected="selected">mb- Armenian</option>
-            [% ELSE %]
-                <option value="mb">mb- Armenian</option>
-            [% END %]
-            </select>
-    </td>
-    </tr>
+                            [% IF ( f8mb ) %]
+                                <option value="mb" selected="selected">mb- Armenian</option>
+                            [% ELSE %]
+                                <option value="mb">mb- Armenian</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-    <tr>
-        <td><label for="f9">Direction of Script Cataloguing</label></td>
-        <td>
-            <select name="f9" id="f9">
-            [% IF ( f90 ) %]
-                <option value="0" selected="selected">0 - left to right</option>
-            [% ELSE %]
-                <option value="0">0 - left to right</option>
-            [% END %]
-            [% IF ( f91 ) %]
-                <option value="1" selected="selected">1 - right to left</option>
-            [% ELSE %]
-                <option value="1">1 - right to left</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-</table>
-<p><input type="button" value="OK"  onclick="report();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
+                <tr>
+                    <td><label for="f9">Direction of Script Cataloguing</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+                            [% IF ( f90 ) %]
+                                <option value="0" selected="selected">0 - left to right</option>
+                            [% ELSE %]
+                                <option value="0">0 - left to right</option>
+                            [% END %]
+                            [% IF ( f91 ) %]
+                                <option value="1" selected="selected">1 - right to left</option>
+                            [% ELSE %]
+                                <option value="1">1 - right to left</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p><input type="button" value="OK" class="btn btn-primary" onclick="report();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

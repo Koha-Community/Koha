@@ -5,686 +5,688 @@
 </head>
 
 <body id="cat_unimarc_field_100" class="cat" style="padding:1em;">
-<h1>UNIMARC field 100 builder</h1>
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td><label for="f1">Date entered on file</label></td>
-        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
-    </tr>
-    <tr>
-        <td><label for="f2">Type of publication date: Publication dates 1 and 2</label></td>
-        <td>
-            <select name="f2" id="f2">
-            [% IF ( f2space ) %]
-                <option value=" " selected="selected">Non required value</option>
-            [% ELSE %]
-                <option value=" ">Non required value</option>
-            [% END %]
-            
-            [% IF ( f2a ) %]
-                <option value="a" selected="selected">a - currently published continuing resource</option>
-            [% ELSE %]
-                <option value="a">a - currently published continuing resource</option>
-            [% END %]
-            [% IF ( f2b ) %]
-                <option value="b" selected="selected">b - continuing resource no longer being published</option>
-            [% ELSE %]
-                <option value="b">b - continuing resource no longer being published</option>
-            [% END %]
-            [% IF ( f2c ) %]
-                <option value="c" selected="selected">c - continuing resource of unknown status</option>
-            [% ELSE %]
-                <option value="c">c - continuing resource of unknown status</option>
-            [% END %]
-            [% IF ( f2d ) %]
-                <option value="d" selected="selected">d - monograph complete when issued, or issued within one calendar year</option>
-            [% ELSE %]
-                <option value="d">d - monograph complete when issued, or issued within one calendar year</option>
-            [% END %]
-            [% IF ( f2e ) %]
-                <option value="e" selected="selected">e - reproduction of a document</option>
-            [% ELSE %]
-                <option value="e">e - reproduction of a document</option>
-            [% END %]
-    
-            [% IF ( f2f ) %]
-                <option value="f" selected="selected">f - monograph, date of
-                publication uncertain</option>
-            [% ELSE %]
-                <option value="f">f - monograph, date of
-                publication uncertain</option>
-            [% END %]
+    <h1>UNIMARC field 100 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Date entered on file</label></td>
+                    <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
+                </tr>
+                <tr>
+                    <td><label for="f2">Type of publication date: Publication dates 1 and 2</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+                            [% IF ( f2space ) %]
+                                <option value=" " selected="selected">Non required value</option>
+                            [% ELSE %]
+                                <option value=" ">Non required value</option>
+                            [% END %]
 
-            [% IF ( f2g ) %]
-                <option value="g" selected="selected">g - monograph whose publication continues for more than a
-year</option>
-            [% ELSE %]
-                <option value="g">g - monograph whose publication continues for more than a
-year</option>
-            [% END %]
-    
-            [% IF ( f2h ) %]
-                <option value="h" selected="selected">h - monograph with both actual and copyright/privilege date</option>
-            [% ELSE %]
-                <option value="h">h - monograph with both actual and copyright/privilege date</option>
-            [% END %]
-    
-            [% IF ( f2i ) %]
-                <option value="i" selected="selected">i - monograph with both release/issue date and production date</option>
-            [% ELSE %]
-                <option value="i">i - monograph with both release/issue date and production date</option>
-            [% END %]
-    
-            [% IF ( f2j ) %]
-                <option value="j"
- selected="selected">j - document with detailed date of publication</option>
-            [% ELSE %]
-                <option value="j">j - document with detailed date of publication</option>
-            [% END %]
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">a - currently published continuing resource</option>
+                            [% ELSE %]
+                                <option value="a">a - currently published continuing resource</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">b - continuing resource no longer being published</option>
+                            [% ELSE %]
+                                <option value="b">b - continuing resource no longer being published</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">c - continuing resource of unknown status</option>
+                            [% ELSE %]
+                                <option value="c">c - continuing resource of unknown status</option>
+                            [% END %]
+                            [% IF ( f2d ) %]
+                                <option value="d" selected="selected">d - monograph complete when issued, or issued within one calendar year</option>
+                            [% ELSE %]
+                                <option value="d">d - monograph complete when issued, or issued within one calendar year</option>
+                            [% END %]
+                            [% IF ( f2e ) %]
+                                <option value="e" selected="selected">e - reproduction of a document</option>
+                            [% ELSE %]
+                                <option value="e">e - reproduction of a document</option>
+                            [% END %]
 
-            [% IF ( f2k ) %]
-                <option value="k" selected="selected">k - monograph with both publication date and print date</option>
-            [% ELSE %]
-                <option value="k">k - monograph with both publication date and print date</option>
-            [% END %]
+                            [% IF ( f2f ) %]
+                                <option value="f" selected="selected">f - monograph, date of
+                                publication uncertain</option>
+                            [% ELSE %]
+                                <option value="f">f - monograph, date of
+                                publication uncertain</option>
+                            [% END %]
 
-            [% IF ( f2u ) %]
-                <option value="u" selected="selected">u - Unknown publication date</option>
-            [% ELSE %]
-                <option value="u">u - Unknown publication date</option>
-            [% END %]
+                            [% IF ( f2g ) %]
+                                <option value="g" selected="selected">g - monograph whose publication continues for more than a
+                                    year</option>
+                            [% ELSE %]
+                                <option value="g">g - monograph whose publication continues for more than a
+                                    year</option>
+                            [% END %]
 
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f3">Publication date 1</label></td>
-        <td><input type="text" name="f3" id="f3" maxlength="4" size="5" value="[% f3 | html %]" /></td>
-    </tr>
-    <tr>
-    <td><label for="f4">Publication Date 2</label></td>
-    <td><input type="text" name="f4" id="f4" maxlength="4" size="5" value="[% f4 | html %]" /></td>
-    </tr>
-    <tr>
-        <td><label for="f5">Target audience code</label></td>
-        <td>
-            <select name="f5" id="f5">
-            [% IF ( f5pipe ) %]
-                <option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-                <option value="|">|- Filling character</option>
-            [% END %]
-            
-            [% IF ( f5a ) %]
-                <option value="a" selected="selected">a- juvenile, general</option>
-            [% ELSE %]
-                <option value="a">a- juvenile, general</option>
-            [% END %]
-            [% IF ( f5b ) %]
-                <option value="b"
- selected="selected">b- pre-primary, ages 0-5</option>
-            [% ELSE %]
-                <option value="b">b- pre-primary, ages 0-5</option>
-            [% END %]
-            [% IF ( f5c ) %]
-                <option value="c" selected="selected">c- primary, ages 5-10</option>
-            [% ELSE %]
-                <option value="c">c- primary, ages 5-10</option>
-            [% END %]
-            [% IF ( f5d ) %]
-                <option value="d" selected="selected">d- children, ages 9-14</option>
-            [% ELSE %]
-                <option value="d">d- children, ages 9-14</option>
-            [% END %]
-            [% IF ( f5e ) %]
-                <option value="e" selected="selected">e- young adult, ages 14-20</option>
-            [% ELSE %]
-                <option value="e">e- young adult, ages 14-20</option>
-            [% END %]
-    
-            [% IF ( f5k ) %]
-                <option value="k"
- selected="selected">k- adult, serious</option>
-            [% ELSE %]
-                <option value="k">k- adult, serious</option>
-            [% END %]
+                            [% IF ( f2h ) %]
+                                <option value="h" selected="selected">h - monograph with both actual and copyright/privilege date</option>
+                            [% ELSE %]
+                                <option value="h">h - monograph with both actual and copyright/privilege date</option>
+                            [% END %]
 
-            [% IF ( f5m ) %]
-                <option value="m"
- selected="selected">m- adult, general</option>
-            [% ELSE %]
-                <option value="m">m- adult, general</option>
-            [% END %]
-    
-            [% IF ( f5u ) %]
-                <option value="u"
- selected="selected">u- unknown</option>
-            [% ELSE %]
-                <option value="u">u- unknown</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f6">Target audience code 2</label></td>
-        <td>
-            <select name="f6" id="f6">
-            
-            [% IF ( f6pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-            
-            [% IF ( f6a ) %]
-                <option value="a" selected="selected">a- juvenile, general </option>
-            [% ELSE %]
-                <option value="a">a- juvenile, general</option>
-            [% END %]
-            [% IF ( f6b ) %]
-                <option value="b" selected="selected">b- pre-primary, ages 0-5</option>
-            [% ELSE %]
-                <option value="b">b- pre-primary, ages 0-5</option>
-            [% END %]
-            [% IF ( f6c ) %]
-                <option value="c" selected="selected">c- primary, ages 5-10</option>
-            [% ELSE %]
-                <option value="c">c- primary, ages 5-10</option>
-            [% END %]
-            [% IF ( f6d ) %]
-                <option value="d" selected="selected">d- children, ages 9-14</option>
-            [% ELSE %]
-                <option value="d">d- children, ages 9-14</option>
-            [% END %]
-            [% IF ( f6e ) %]
-                <option value="e" selected="selected">e- young adult, ages 14-20</option>
-            [% ELSE %]
-                <option value="e">e- young adult, ages 14-20</option>
-            [% END %]
-    
-            [% IF ( f6k ) %]
-                <option value="k"
- selected="selected">k- adult, serious</option>
-            [% ELSE %]
-                <option value="k">k- adult, serious</option>
-            [% END %]
+                            [% IF ( f2i ) %]
+                                <option value="i" selected="selected">i - monograph with both release/issue date and production date</option>
+                            [% ELSE %]
+                                <option value="i">i - monograph with both release/issue date and production date</option>
+                            [% END %]
 
-            [% IF ( f6m ) %]
-                <option value="m"
- selected="selected">m- adult, general</option>
-            [% ELSE %]
-                <option value="m">m- adult, general</option>
-            [% END %]
-    
-            [% IF ( f6u ) %]
-                <option value="u"
- selected="selected">u- unknown</option>
-            [% ELSE %]
-                <option value="u">u- unknown</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f7">Target audience code 3</label></td>
-        <td>
-            <select name="f7" id="f7">
-            [% IF ( f7pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
-            
-            [% IF ( f7a ) %]
-                <option value="a" selected="selected">a- juvenile, general </option>
-            [% ELSE %]
-                <option value="a">a- juvenile, general</option>
-            [% END %]
-            [% IF ( f7b ) %]
-                <option value="b"
- selected="selected">b- pre-primary, ages 0-5</option>
-            [% ELSE %]
-                <option value="b">b- pre-primary, ages 0-5</option>
-            [% END %]
-            [% IF ( f7c ) %]
-                <option value="c" selected="selected">c- primary, ages 5-10</option>
-            [% ELSE %]
-                <option value="c">c- primary, ages 5-10</option>
-            [% END %]
-            [% IF ( f7d ) %]
-                <option value="d" selected="selected">d- children, ages 9-14</option>
-            [% ELSE %]
-                <option value="d">d- children, ages 9-14</option>
-            [% END %]
-            [% IF ( f7e ) %]
-                <option value="e" selected="selected">e- young adult, ages 14-20</option>
-            [% ELSE %]
-                <option value="e">e- young adult, ages 14-20</option>
-            [% END %]
-    
-            [% IF ( f7k ) %]
-                <option value="k"
- selected="selected">k- adult, serious</option>
-            [% ELSE %]
-                <option value="k">k- adult, serious</option>
-            [% END %]
+                            [% IF ( f2j ) %]
+                                <option value="j"
+                                    selected="selected">j - document with detailed date of publication</option>
+                            [% ELSE %]
+                                <option value="j">j - document with detailed date of publication</option>
+                            [% END %]
 
-            [% IF ( f7m ) %]
-                <option value="m"
- selected="selected">m- adult, general</option>
-            [% ELSE %]
-                <option value="m">m- adult, general</option>
-            [% END %]
-    
-            [% IF ( f7u ) %]
-                <option value="u"
- selected="selected">u- unknown</option>
-            [% ELSE %]
-                <option value="u">u- unknown</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f8">Government publication</label></td>
-        <td>
-            <select name="f8" id="f8">
-            
-            [% IF ( f8u ) %]
-            	<option value="u" selected="selected">u- unknown</option>
-            [% ELSE %]
-                <option value="u">u- unknown</option>
-            [% END %]
-       		[% IF ( f8a ) %]
-                <option value="a" selected="selected">a- federal/national</option>
-            [% ELSE %]
-                <option value="a">a- federal/national</option>
-            [% END %]
-            [% IF ( f8b ) %]
-                <option value="b" selected="selected">b- state/province</option>
-            [% ELSE %]
-                <option value="b">b- state/province</option>
-            [% END %]
-            [% IF ( f8c ) %]
-                <option value="c" selected="selected">c- county/department</option>
-            [% ELSE %]
-                <option value="c">c- county/department</option>
-            [% END %]
-            [% IF ( f8d ) %]
-                <option value="d"
- selected="selected">d- local(municipal, etc.)</option>
-            [% ELSE %]
-                <option value="d">d- local(municipal, etc.)</option>
-            [% END %]
-            [% IF ( f8e ) %]
-                <option value="e"
- selected="selected">e- multi-local (interstate departments, etc. below the national
-level)</option>
-            [% ELSE %]
-                <option value="e">e- multi-local (interstate departments, etc. below the national
-level)</option>
-            [% END %]
-    
-            [% IF ( f8f ) %]
-                <option value="f"
- selected="selected">f- intergovernmental</option>
-            [% ELSE %]
-                <option value="f">f- intergovernmental</option>
-            [% END %]
+                            [% IF ( f2k ) %]
+                                <option value="k" selected="selected">k - monograph with both publication date and print date</option>
+                            [% ELSE %]
+                                <option value="k">k - monograph with both publication date and print date</option>
+                            [% END %]
 
-            [% IF ( f8g ) %]
-                <option value="g"
- selected="selected">g- government in exile or clandestine</option>
-            [% ELSE %]
-                <option value="g">g- government in exile or clandestine</option>
-            [% END %]
+                            [% IF ( f2u ) %]
+                                <option value="u" selected="selected">u - Unknown publication date</option>
+                            [% ELSE %]
+                                <option value="u">u - Unknown publication date</option>
+                            [% END %]
 
-            [% IF ( f8h ) %]
-                <option value="h"
- selected="selected">h- level not determined</option>
-            [% ELSE %]
-                <option value="h">h- level not determined</option>
-            [% END %]
-            [% IF ( f8u ) %]
-                <option value="u"
- selected="selected">u- unknown</option>
-            [% ELSE %]
-                <option value="u">u- unknown</option>
-            [% END %]
-            [% IF ( f8y ) %]
-                <option value="y"
- selected="selected">y- not a government publication</option>
-            [% ELSE %]
-                <option value="y">y- not a government publication</option>
-            [% END %]
-            [% IF ( f8z ) %]
-                <option value="z"
- selected="selected">z- Other</option>
-            [% ELSE %]
-                <option value="z">z- Other</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f3">Publication date 1</label></td>
+                    <td><input type="text" name="f3" id="f3" maxlength="4" size="5" value="[% f3 | html %]" /></td>
+                </tr>
+                <tr>
+                    <td><label for="f4">Publication Date 2</label></td>
+                    <td><input type="text" name="f4" id="f4" maxlength="4" size="5" value="[% f4 | html %]" /></td>
+                </tr>
+                <tr>
+                    <td><label for="f5">Target audience code</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
 
-    <tr>
-        <td><label for="f9">Modified record code</label></td>
-        <td>
-            <select name="f9" id="f9">
-            
-            [% IF ( f90 ) %]
-                <option value="0" selected="selected">0- unmodified record</option>
-            [% ELSE %]
-                <option value="0">0- unmodified record</option>
-            [% END %]
-            [% IF ( f91 ) %]
-                <option value="1" selected="selected">1- modified record</option>
-            [% ELSE %]
-                <option value="1">1- modified record</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                            [% IF ( f5a ) %]
+                                <option value="a" selected="selected">a- juvenile, general</option>
+                            [% ELSE %]
+                                <option value="a">a- juvenile, general</option>
+                            [% END %]
+                            [% IF ( f5b ) %]
+                                <option value="b"
+                                    selected="selected">b- pre-primary, ages 0-5</option>
+                            [% ELSE %]
+                                <option value="b">b- pre-primary, ages 0-5</option>
+                            [% END %]
+                            [% IF ( f5c ) %]
+                                <option value="c" selected="selected">c- primary, ages 5-10</option>
+                            [% ELSE %]
+                                <option value="c">c- primary, ages 5-10</option>
+                            [% END %]
+                            [% IF ( f5d ) %]
+                                <option value="d" selected="selected">d- children, ages 9-14</option>
+                            [% ELSE %]
+                                <option value="d">d- children, ages 9-14</option>
+                            [% END %]
+                            [% IF ( f5e ) %]
+                                <option value="e" selected="selected">e- young adult, ages 14-20</option>
+                            [% ELSE %]
+                                <option value="e">e- young adult, ages 14-20</option>
+                            [% END %]
+
+                            [% IF ( f5k ) %]
+                                <option value="k"
+                                    selected="selected">k- adult, serious</option>
+                            [% ELSE %]
+                                <option value="k">k- adult, serious</option>
+                            [% END %]
+
+                            [% IF ( f5m ) %]
+                                <option value="m"
+                                    selected="selected">m- adult, general</option>
+                            [% ELSE %]
+                                <option value="m">m- adult, general</option>
+                            [% END %]
+
+                            [% IF ( f5u ) %]
+                                <option value="u"
+                                    selected="selected">u- unknown</option>
+                            [% ELSE %]
+                                <option value="u">u- unknown</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f6">Target audience code 2</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+
+                            [% IF ( f6pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f6a ) %]
+                                <option value="a" selected="selected">a- juvenile, general </option>
+                            [% ELSE %]
+                                <option value="a">a- juvenile, general</option>
+                            [% END %]
+                            [% IF ( f6b ) %]
+                                <option value="b" selected="selected">b- pre-primary, ages 0-5</option>
+                            [% ELSE %]
+                                <option value="b">b- pre-primary, ages 0-5</option>
+                            [% END %]
+                            [% IF ( f6c ) %]
+                                <option value="c" selected="selected">c- primary, ages 5-10</option>
+                            [% ELSE %]
+                                <option value="c">c- primary, ages 5-10</option>
+                            [% END %]
+                            [% IF ( f6d ) %]
+                                <option value="d" selected="selected">d- children, ages 9-14</option>
+                            [% ELSE %]
+                                <option value="d">d- children, ages 9-14</option>
+                            [% END %]
+                            [% IF ( f6e ) %]
+                                <option value="e" selected="selected">e- young adult, ages 14-20</option>
+                            [% ELSE %]
+                                <option value="e">e- young adult, ages 14-20</option>
+                            [% END %]
+
+                            [% IF ( f6k ) %]
+                                <option value="k"
+                                    selected="selected">k- adult, serious</option>
+                            [% ELSE %]
+                                <option value="k">k- adult, serious</option>
+                            [% END %]
+
+                            [% IF ( f6m ) %]
+                                <option value="m"
+                                    selected="selected">m- adult, general</option>
+                            [% ELSE %]
+                                <option value="m">m- adult, general</option>
+                            [% END %]
+
+                            [% IF ( f6u ) %]
+                                <option value="u"
+                                    selected="selected">u- unknown</option>
+                            [% ELSE %]
+                                <option value="u">u- unknown</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f7">Target audience code 3</label></td>
+                    <td>
+                        <select name="f7" id="f7">
+                            [% IF ( f7pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f7a ) %]
+                                <option value="a" selected="selected">a- juvenile, general </option>
+                            [% ELSE %]
+                                <option value="a">a- juvenile, general</option>
+                            [% END %]
+                            [% IF ( f7b ) %]
+                                <option value="b"
+                                    selected="selected">b- pre-primary, ages 0-5</option>
+                            [% ELSE %]
+                                <option value="b">b- pre-primary, ages 0-5</option>
+                            [% END %]
+                            [% IF ( f7c ) %]
+                                <option value="c" selected="selected">c- primary, ages 5-10</option>
+                            [% ELSE %]
+                                <option value="c">c- primary, ages 5-10</option>
+                            [% END %]
+                            [% IF ( f7d ) %]
+                                <option value="d" selected="selected">d- children, ages 9-14</option>
+                            [% ELSE %]
+                                <option value="d">d- children, ages 9-14</option>
+                            [% END %]
+                            [% IF ( f7e ) %]
+                                <option value="e" selected="selected">e- young adult, ages 14-20</option>
+                            [% ELSE %]
+                                <option value="e">e- young adult, ages 14-20</option>
+                            [% END %]
+
+                            [% IF ( f7k ) %]
+                                <option value="k"
+                                    selected="selected">k- adult, serious</option>
+                            [% ELSE %]
+                                <option value="k">k- adult, serious</option>
+                            [% END %]
+
+                            [% IF ( f7m ) %]
+                                <option value="m"
+                                    selected="selected">m- adult, general</option>
+                            [% ELSE %]
+                                <option value="m">m- adult, general</option>
+                            [% END %]
+
+                            [% IF ( f7u ) %]
+                                <option value="u"
+                                    selected="selected">u- unknown</option>
+                            [% ELSE %]
+                                <option value="u">u- unknown</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f8">Government publication</label></td>
+                    <td>
+                        <select name="f8" id="f8">
+
+                            [% IF ( f8u ) %]
+                                <option value="u" selected="selected">u- unknown</option>
+                            [% ELSE %]
+                                <option value="u">u- unknown</option>
+                            [% END %]
+                            [% IF ( f8a ) %]
+                                <option value="a" selected="selected">a- federal/national</option>
+                            [% ELSE %]
+                                <option value="a">a- federal/national</option>
+                            [% END %]
+                            [% IF ( f8b ) %]
+                                <option value="b" selected="selected">b- state/province</option>
+                            [% ELSE %]
+                                <option value="b">b- state/province</option>
+                            [% END %]
+                            [% IF ( f8c ) %]
+                                <option value="c" selected="selected">c- county/department</option>
+                            [% ELSE %]
+                                <option value="c">c- county/department</option>
+                            [% END %]
+                            [% IF ( f8d ) %]
+                                <option value="d"
+                                    selected="selected">d- local(municipal, etc.)</option>
+                            [% ELSE %]
+                                <option value="d">d- local(municipal, etc.)</option>
+                            [% END %]
+                            [% IF ( f8e ) %]
+                                <option value="e"
+                                    selected="selected">e- multi-local (interstate departments, etc. below the national
+                                    level)</option>
+                            [% ELSE %]
+                                <option value="e">e- multi-local (interstate departments, etc. below the national
+                                    level)</option>
+                            [% END %]
+
+                            [% IF ( f8f ) %]
+                                <option value="f"
+                                    selected="selected">f- intergovernmental</option>
+                            [% ELSE %]
+                                <option value="f">f- intergovernmental</option>
+                            [% END %]
+
+                            [% IF ( f8g ) %]
+                                <option value="g"
+                                    selected="selected">g- government in exile or clandestine</option>
+                            [% ELSE %]
+                                <option value="g">g- government in exile or clandestine</option>
+                            [% END %]
+
+                            [% IF ( f8h ) %]
+                                <option value="h"
+                                    selected="selected">h- level not determined</option>
+                            [% ELSE %]
+                                <option value="h">h- level not determined</option>
+                            [% END %]
+                            [% IF ( f8u ) %]
+                                <option value="u"
+                                    selected="selected">u- unknown</option>
+                            [% ELSE %]
+                                <option value="u">u- unknown</option>
+                            [% END %]
+                            [% IF ( f8y ) %]
+                                <option value="y"
+                                    selected="selected">y- not a government publication</option>
+                            [% ELSE %]
+                                <option value="y">y- not a government publication</option>
+                            [% END %]
+                            [% IF ( f8z ) %]
+                                <option value="z"
+                                    selected="selected">z- Other</option>
+                            [% ELSE %]
+                                <option value="z">z- Other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f9">Modified record code</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+
+                            [% IF ( f90 ) %]
+                                <option value="0" selected="selected">0- unmodified record</option>
+                            [% ELSE %]
+                                <option value="0">0- unmodified record</option>
+                            [% END %]
+                            [% IF ( f91 ) %]
+                                <option value="1" selected="selected">1- modified record</option>
+                            [% ELSE %]
+                                <option value="1">1- modified record</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
 
-    <tr>
-    <td><label for="f10">Language of cataloguing (mandatory)</label></td>
-    <td><input type="text" name="f10" id="f10" maxlength="3" size="4" value="[% f10 | html %]" /></td>
-    </tr>
+                <tr>
+                    <td><label for="f10">Language of cataloguing (mandatory)</label></td>
+                    <td><input type="text" name="f10" id="f10" maxlength="3" size="4" value="[% f10 | html %]" /></td>
+                </tr>
 
-    <tr>
-        <td><label for="f11">Transliteration code</label></td>
-        <td>
-            <select name="f11" id="f11">
-            
-            [% IF ( f11a ) %]
-                <option value="a" selected="selected">a- ISO transliteration scheme</option>
-            [% ELSE %]
-                <option value="a">a- ISO transliteration scheme</option>
-            [% END %]
-            [% IF ( f11b ) %]
-                <option value="b" selected="selected">b- other</option>
-            [% ELSE %]
-                <option value="b">b- other</option>
-            [% END %]
-            [% IF ( f11c ) %]
-                <option value="c"
- selected="selected">c- multiple transliterations: ISO or other schemes</option>
-            [% ELSE %]
-                <option value="c">c- multiple transliterations: ISO or other schemes</option>
-            [% END %]
-            [% IF ( f11y ) %]
-                <option value="y" selected="selected">y- no transliteration scheme used</option>
-            [% ELSE %]
-                <option value="y">y- no transliteration scheme used</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-    <td><label for="f12">Character sets (mandatory) 1</label></td>
-        <td>
-            <select name="f12" id="f12">
-            
-            [% IF ( f1201 ) %]
-                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
-            [% ELSE %]
-                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
-            [% END %]
-            [% IF ( f1202 ) %]
-                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% ELSE %]
-                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% END %]
-            [% IF ( f1203 ) %]
-                <option value="03" selected="selected">03- ISO 5426 (extended Latin set)</option>
-            [% ELSE %]
-                <option value="03">03- ISO 5426 (extended Latin set)</option>
-            [% END %]
-            [% IF ( f1204 ) %]
-                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
-            [% ELSE %]
-                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
-            [% END %]
-            [% IF ( f1205 ) %]
-                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
-            [% ELSE %]
-                <option value="05">05- ISO 5428 (Greek set)</option>
-            [% END %]
-            
-            [% IF ( f1206 ) %]
-                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
-            [% ELSE %]
-                <option value="06">06- ISO 6438 (African coded character set)</option>
-            [% END %]
-            
-             [% IF ( f1207 ) %]
-                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
-            [% ELSE %]
-                <option value="07">07- ISO 10586 (Georgian set)</option>
-            [% END %]
+                <tr>
+                    <td><label for="f11">Transliteration code</label></td>
+                    <td>
+                        <select name="f11" id="f11">
 
-             [% IF ( f1208 ) %]
-                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% ELSE %]
-                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% END %]
+                            [% IF ( f11a ) %]
+                                <option value="a" selected="selected">a- ISO transliteration scheme</option>
+                            [% ELSE %]
+                                <option value="a">a- ISO transliteration scheme</option>
+                            [% END %]
+                            [% IF ( f11b ) %]
+                                <option value="b" selected="selected">b- other</option>
+                            [% ELSE %]
+                                <option value="b">b- other</option>
+                            [% END %]
+                            [% IF ( f11c ) %]
+                                <option value="c"
+                                    selected="selected">c- multiple transliterations: ISO or other schemes</option>
+                            [% ELSE %]
+                                <option value="c">c- multiple transliterations: ISO or other schemes</option>
+                            [% END %]
+                            [% IF ( f11y ) %]
+                                <option value="y" selected="selected">y- no transliteration scheme used</option>
+                            [% ELSE %]
+                                <option value="y">y- no transliteration scheme used</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                <td><label for="f12">Character sets (mandatory) 1</label></td>
+                    <td>
+                        <select name="f12" id="f12">
 
-             [% IF ( f1209 ) %]
-                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% ELSE %]
-                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% END %]
-            
-             [% IF ( f1211 ) %]
-                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)
-</option>
-            [% ELSE %]
-                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)
-</option>
-            [% END %]
-            
-            [% IF ( f1250 ) %]
-                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)
-                </option>
-            [% ELSE %]
-                <option value="50">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% END %]
-            </select>
-        </td>
+                            [% IF ( f1201 ) %]
+                                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% ELSE %]
+                                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% END %]
+                            [% IF ( f1202 ) %]
+                                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f1203 ) %]
+                                <option value="03" selected="selected">03- ISO 5426 (extended Latin set)</option>
+                            [% ELSE %]
+                                <option value="03">03- ISO 5426 (extended Latin set)</option>
+                            [% END %]
+                            [% IF ( f1204 ) %]
+                                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f1205 ) %]
+                                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
+                            [% ELSE %]
+                                <option value="05">05- ISO 5428 (Greek set)</option>
+                            [% END %]
 
-    </tr>
-    <tr>
-    <td><label for="f13">Character sets (mandatory) 2</label></td>
-        <td>
-            <select name="f13" id="f13">
-            
-            [% IF ( f13dblspace ) %]
-                    <option value="  " selected="selected">non required value</option>
-            [% ELSE %]
-                    <option value="  ">non required value</option>
-            [% END %]
+                            [% IF ( f1206 ) %]
+                                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
+                            [% ELSE %]
+                                <option value="06">06- ISO 6438 (African coded character set)</option>
+                            [% END %]
 
-            [% IF ( f1301 ) %]
-                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
-            [% ELSE %]
-                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
-            [% END %]
-            [% IF ( f1302 ) %]
-                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% ELSE %]
-                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
-            [% END %]
-            [% IF ( f1303 ) %]
-                <option value="03"
- selected="selected">03- ISO 5426 (extended Latin set)</option>
-            [% ELSE %]
-                <option value="03">03- ISO 5426 (extended Latin set)</option>
-            [% END %]
-            [% IF ( f1304 ) %]
-                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
-            [% ELSE %]
-                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
-            [% END %]
-            [% IF ( f1305 ) %]
-                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
-            [% ELSE %]
-                <option value="05">05- ISO 5428 (Greek set)</option>
-            [% END %]
-            [% IF ( f1306 ) %]
-                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
-            [% ELSE %]
-                <option value="06">06- ISO 6438 (African coded character set)</option>
-            [% END %]
-	    
-	    [% IF ( f1307 ) %]
-                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
-            [% ELSE %]
-                <option value="07">07- ISO 10586 (Georgian set)</option>
-            [% END %]
+                            [% IF ( f1207 ) %]
+                                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
+                            [% ELSE %]
+                                <option value="07">07- ISO 10586 (Georgian set)</option>
+                            [% END %]
 
-             [% IF ( f1308 ) %]
-                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% ELSE %]
-                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
-            [% END %]
+                            [% IF ( f1208 ) %]
+                                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% ELSE %]
+                                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% END %]
 
-             [% IF ( f1309 ) %]
-                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% ELSE %]
-                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
-            [% END %]
-            
-             [% IF ( f1311 ) %]
-                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)</option>
-            [% ELSE %]
-                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
-languages and obsolete typography)</option>
-            [% END %]
-	    
-            [% IF ( f1350 ) %]
-                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% ELSE %]
-                <option value="50">ISO 10646 Level 3 (Unicode, UTF-8)</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                            [% IF ( f1209 ) %]
+                                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% ELSE %]
+                                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% END %]
 
-    <tr>
-        <td><label for="f14">Additional character sets</label></td>
-        <td>
-            <input type="text" name="f14" id="f14" maxlength="4" size="5" value="[% f14 | html %]" />
-        </td>
-    </tr>
+                            [% IF ( f1211 ) %]
+                                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)
+                                </option>
+                            [% ELSE %]
+                                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)
+                                </option>
+                            [% END %]
 
-    <tr>
-    <td><label for="f15">Script of title</label></td>
-    <td>
-    <select name="f15" id="f15">
-            [% IF ( f15dblspace ) %]
-                    <option value="  " selected="selected">Non required value</option>
-            [% ELSE %]
-                    <option value="  ">Non required value</option>
-            [% END %]
-            
-            [% IF ( f15ba ) %]
-                <option value="ba" selected="selected">ba- Latin</option>
-            [% ELSE %]
-                <option value="ba">ba- Latin</option>
-            [% END %]
-            [% IF ( f15ca ) %]
-                <option value="ca" selected="selected">ca- Cyrillic</option>
-            [% ELSE %]
-                <option value="ca">ca- Cyrillic</option>
-            [% END %]
+                            [% IF ( f1250 ) %]
+                                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)
+                                </option>
+                            [% ELSE %]
+                                <option value="50">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% END %]
+                        </select>
+                    </td>
 
-            [% IF ( f15da ) %]
-                <option value="da" selected="selected">da- Japanese - script unspecified</option>
-            [% ELSE %]
-                <option value="da">da- Japanese - script unspecified</option>
-            [% END %]
+                </tr>
+                <tr>
+                <td><label for="f13">Character sets (mandatory) 2</label></td>
+                    <td>
+                        <select name="f13" id="f13">
 
-            [% IF ( f15db ) %]
-                <option value="db" selected="selected">db- Japanese -
-                Kanji</option>
-            [% ELSE %]
-                <option value="db">db- Japanese - Kanji</option>
-            [% END %]
+                            [% IF ( f13dblspace ) %]
+                                    <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                    <option value="  ">non required value</option>
+                            [% END %]
 
-            [% IF ( f15dc ) %]
-                <option value="dc" selected="selected">dc- Japanese -
-                Kana</option>
-            [% ELSE %]
-                <option value="dc">dc- Japanese - Kana</option>
-            [% END %]
-            [% IF ( f15ea ) %]
-                <option value="ea" selected="selected">ea- Chinese</option>
-            [% ELSE %]
-                <option value="ea">ea- Chinese</option>
-            [% END %]
-            [% IF ( f15fa ) %]
-                <option value="fa" selected="selected">fa- Arabic</option>
-            [% ELSE %]
-                <option value="fa">fa- Arabic</option>
-            [% END %]
-            [% IF ( f15ga ) %]
-                <option value="ga" selected="selected">ga- Greek</option>
-            [% ELSE %]
-                <option value="ga">ga- Greek</option>
-            [% END %]
-            [% IF ( f15ha ) %]
-                <option value="ha" selected="selected">ha- Hebrew</option>
-            [% ELSE %]
-                <option value="ha">ha- Hebrew</option>
-            [% END %]
-            [% IF ( f15ia ) %]
-                <option value="ia" selected="selected">ia- Thai</option>
-            [% ELSE %]
-                <option value="ia">ia- Thai</option>
-            [% END %]
-            [% IF ( f15ja ) %]
-                <option value="ja" selected="selected">ja- Devanagari</option>
-            [% ELSE %]
-                <option value="ja">ja- Devanagari</option>
-            [% END %]
-            [% IF ( f15ka ) %]
-                <option value="ka" selected="selected">ka- Korean</option>
-            [% ELSE %]
-                <option value="ka">ka- Korean</option>
-            [% END %]
-            [% IF ( f15la ) %]
-                <option value="la" selected="selected">la- Tamil</option>
-            [% ELSE %]
-                <option value="la">la- Tamil</option>
-            [% END %]
-            [% IF ( f15zz ) %]
-                <option value="zz" selected="selected">zz- Other</option>
-            [% ELSE %]
-                <option value="zz">zz- Other</option>
-            [% END %]
-            
-            [% IF ( f15ma ) %]
-                <option value="ma" selected="selected">ma- Georgian</option>
-            [% ELSE %]
-                <option value="ma">ma- Georgian</option>
-            [% END %]
-            
-            [% IF ( f15mb ) %]
-                <option value="mb" selected="selected">mb- Armenian</option>
-            [% ELSE %]
-                <option value="mb">mb- Armenian</option>
-            [% END %]                        
-            </select>
-    </td>
-    </tr>
-</table>
-<p><input type="button" value="OK"  onclick="report();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
+                            [% IF ( f1301 ) %]
+                                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% ELSE %]
+                                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
+                            [% END %]
+                            [% IF ( f1302 ) %]
+                                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f1303 ) %]
+                                <option value="03"
+                                    selected="selected">03- ISO 5426 (extended Latin set)</option>
+                            [% ELSE %]
+                                <option value="03">03- ISO 5426 (extended Latin set)</option>
+                            [% END %]
+                            [% IF ( f1304 ) %]
+                                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% ELSE %]
+                                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
+                            [% END %]
+                            [% IF ( f1305 ) %]
+                                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
+                            [% ELSE %]
+                                <option value="05">05- ISO 5428 (Greek set)</option>
+                            [% END %]
+                            [% IF ( f1306 ) %]
+                                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
+                            [% ELSE %]
+                                <option value="06">06- ISO 6438 (African coded character set)</option>
+                            [% END %]
+
+                            [% IF ( f1307 ) %]
+                                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
+                            [% ELSE %]
+                                <option value="07">07- ISO 10586 (Georgian set)</option>
+                            [% END %]
+
+                            [% IF ( f1308 ) %]
+                                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% ELSE %]
+                                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
+                            [% END %]
+
+                            [% IF ( f1309 ) %]
+                                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% ELSE %]
+                                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
+                            [% END %]
+
+                            [% IF ( f1311 ) %]
+                                <option value="11" selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)</option>
+                            [% ELSE %]
+                                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+                                    languages and obsolete typography)</option>
+                            [% END %]
+
+                            [% IF ( f1350 ) %]
+                                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% ELSE %]
+                                <option value="50">ISO 10646 Level 3 (Unicode, UTF-8)</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f14">Additional character sets</label></td>
+                    <td>
+                        <input type="text" name="f14" id="f14" maxlength="4" size="5" value="[% f14 | html %]" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f15">Script of title</label></td>
+                    <td>
+                        <select name="f15" id="f15">
+                            [% IF ( f15dblspace ) %]
+                                    <option value="  " selected="selected">Non required value</option>
+                            [% ELSE %]
+                                    <option value="  ">Non required value</option>
+                            [% END %]
+
+                            [% IF ( f15ba ) %]
+                                <option value="ba" selected="selected">ba- Latin</option>
+                            [% ELSE %]
+                                <option value="ba">ba- Latin</option>
+                            [% END %]
+                            [% IF ( f15ca ) %]
+                                <option value="ca" selected="selected">ca- Cyrillic</option>
+                            [% ELSE %]
+                                <option value="ca">ca- Cyrillic</option>
+                            [% END %]
+
+                            [% IF ( f15da ) %]
+                                <option value="da" selected="selected">da- Japanese - script unspecified</option>
+                            [% ELSE %]
+                                <option value="da">da- Japanese - script unspecified</option>
+                            [% END %]
+
+                            [% IF ( f15db ) %]
+                                <option value="db" selected="selected">db- Japanese -
+                                Kanji</option>
+                            [% ELSE %]
+                                <option value="db">db- Japanese - Kanji</option>
+                            [% END %]
+
+                            [% IF ( f15dc ) %]
+                                <option value="dc" selected="selected">dc- Japanese -
+                                Kana</option>
+                            [% ELSE %]
+                                <option value="dc">dc- Japanese - Kana</option>
+                            [% END %]
+                            [% IF ( f15ea ) %]
+                                <option value="ea" selected="selected">ea- Chinese</option>
+                            [% ELSE %]
+                                <option value="ea">ea- Chinese</option>
+                            [% END %]
+                            [% IF ( f15fa ) %]
+                                <option value="fa" selected="selected">fa- Arabic</option>
+                            [% ELSE %]
+                                <option value="fa">fa- Arabic</option>
+                            [% END %]
+                            [% IF ( f15ga ) %]
+                                <option value="ga" selected="selected">ga- Greek</option>
+                            [% ELSE %]
+                                <option value="ga">ga- Greek</option>
+                            [% END %]
+                            [% IF ( f15ha ) %]
+                                <option value="ha" selected="selected">ha- Hebrew</option>
+                            [% ELSE %]
+                                <option value="ha">ha- Hebrew</option>
+                            [% END %]
+                            [% IF ( f15ia ) %]
+                                <option value="ia" selected="selected">ia- Thai</option>
+                            [% ELSE %]
+                                <option value="ia">ia- Thai</option>
+                            [% END %]
+                            [% IF ( f15ja ) %]
+                                <option value="ja" selected="selected">ja- Devanagari</option>
+                            [% ELSE %]
+                                <option value="ja">ja- Devanagari</option>
+                            [% END %]
+                            [% IF ( f15ka ) %]
+                                <option value="ka" selected="selected">ka- Korean</option>
+                            [% ELSE %]
+                                <option value="ka">ka- Korean</option>
+                            [% END %]
+                            [% IF ( f15la ) %]
+                                <option value="la" selected="selected">la- Tamil</option>
+                            [% ELSE %]
+                                <option value="la">la- Tamil</option>
+                            [% END %]
+                            [% IF ( f15zz ) %]
+                                <option value="zz" selected="selected">zz- Other</option>
+                            [% ELSE %]
+                                <option value="zz">zz- Other</option>
+                            [% END %]
+
+                            [% IF ( f15ma ) %]
+                                <option value="ma" selected="selected">ma- Georgian</option>
+                            [% ELSE %]
+                                <option value="ma">ma- Georgian</option>
+                            [% END %]
+
+                            [% IF ( f15mb ) %]
+                                <option value="mb" selected="selected">mb- Armenian</option>
+                            [% ELSE %]
+                                <option value="mb">mb- Armenian</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p><input type="button" value="OK" class="btn btn-primary" onclick="report();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

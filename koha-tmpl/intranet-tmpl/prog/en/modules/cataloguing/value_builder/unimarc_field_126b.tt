@@ -5,172 +5,174 @@
 </head>
 
 <body id="cat_unimarc_field_126b" class="cat" style="padding:1em;">
-<h1>UNIMARC field 126b builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Kind of disc, cylinder or tape:</label></td>
-		<td>
-            <select name="f1" id="f1">
+    <h1>UNIMARC field 126b builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Kind of disc, cylinder or tape:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">instantaneous (unique, cut on the spot)</option>
-			[% ELSE %]
-				<option value="a">instantaneous (unique, cut on the spot)</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">mass produced</option>
-			[% ELSE %]
-				<option value="b">mass produced</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">master tape</option>
-			[% ELSE %]
-				<option value="c">master tape</option>
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">tape duplication master</option>
-			[% ELSE %]
-				<option value="d">tape duplication master</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">disc master (negative)</option>
-			[% ELSE %]
-				<option value="e">disc master (negative)</option>
-			[% END %]
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">mother (positive)</option>
-			[% ELSE %]
-				<option value="f">mother (positive)</option>
-			[% END %]
-			[% IF ( f1g ) %]
-				<option value="g" selected="selected">stamper (negative)</option>
-			[% ELSE %]
-				<option value="g">stamper (negative)</option>
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">test pressing</option>
-			[% ELSE %]
-				<option value="h">test pressing</option>
-			[% END %]
-			[% IF ( f1u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td></tr>
-	<tr>
-		<td><label for="f2">Kind of material:</label></td>
-		<td>
-            <select name="f2" id="f2">
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">instantaneous (unique, cut on the spot)</option>
+                            [% ELSE %]
+                                <option value="a">instantaneous (unique, cut on the spot)</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">mass produced</option>
+                            [% ELSE %]
+                                <option value="b">mass produced</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">master tape</option>
+                            [% ELSE %]
+                                <option value="c">master tape</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">tape duplication master</option>
+                            [% ELSE %]
+                                <option value="d">tape duplication master</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">disc master (negative)</option>
+                            [% ELSE %]
+                                <option value="e">disc master (negative)</option>
+                            [% END %]
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">mother (positive)</option>
+                            [% ELSE %]
+                                <option value="f">mother (positive)</option>
+                            [% END %]
+                            [% IF ( f1g ) %]
+                                <option value="g" selected="selected">stamper (negative)</option>
+                            [% ELSE %]
+                                <option value="g">stamper (negative)</option>
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">test pressing</option>
+                            [% ELSE %]
+                                <option value="h">test pressing</option>
+                            [% END %]
+                            [% IF ( f1u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+                <tr>
+                    <td><label for="f2">Kind of material:</label></td>
+                    <td>
+                        <select name="f2" id="f2">
 
-			[% IF ( f2u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f2x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-			[% END %]
-			[% IF ( f2z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			[% IF ( f2g ) %]
-				<option value="g" selected="selected">wax (instantaneous)</option>
-			[% ELSE %]
-				<option value="g">wax (instantaneous)</option>
-			[% END %]
-			[% IF ( f2h ) %]
-				<option value="h" selected="selected">plastic (mass produced)</option>
-			[% ELSE %]
-				<option value="h">plastic (mass produced)</option>
-			[% END %]
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">lacquered (e.g. acetate)</option>
-			[% ELSE %]
-				<option value="a">lacquered (e.g. acetate)</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">metal (e.g. aluminium)</option>
-			[% ELSE %]
-				<option value="b">metal (e.g. aluminium)</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">shellac pressing</option>
-			[% ELSE %]
-				<option value="c">shellac pressing</option>
-			[% END %]
-			[% IF ( f2d ) %]
-				<option value="d" selected="selected">plastic pressing</option>
-			[% ELSE %]
-				<option value="d">plastic pressing</option>
-			[% END %]
-			[% IF ( f2e ) %]
-				<option value="e" selected="selected">metal and plastic (compact discs)</option>
-			[% ELSE %]
-				<option value="e">metal and plastic (compact discs)</option>
-			[% END %]
-			[% IF ( f2i ) %]
-				<option value="i" selected="selected">paper backed</option>
-			[% ELSE %]
-				<option value="i">paper backed</option>
-			[% END %]
-			[% IF ( f2j ) %]
-				<option value="j" selected="selected">acetate</option>
-			[% ELSE %]
-				<option value="j">acetate</option>
-			[% END %]
-			[% IF ( f2k ) %]
-				<option value="k" selected="selected">P.V.C.</option>
-			[% ELSE %]
-				<option value="k">P.V.C.</option>
-			[% END %]
-			[% IF ( f2l ) %]
-				<option value="l" selected="selected">polyester</option>
-			[% ELSE %]
-				<option value="l">polyester</option>
-			[% END %]
-			</select>
-		</td></tr>
-	<tr>
-		<td><label for="f3">Kind of cutting:</label></td>
-		<td>
-            <select name="f3" id="f3">
-			[% IF ( f3a ) %]
-				<option value="a" selected="selected">lateral or combined cutting</option>
-			[% ELSE %]
-				<option value="a">lateral or combined cutting</option>
-			[% END %]
-			[% IF ( f3b ) %]
-				<option value="b" selected="selected">vertical (hill and dale) cutting</option>
-			[% ELSE %]
-				<option value="b">vertical (hill and dale) cutting</option>
-			[% END %]
-			[% IF ( f3u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f3x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f2u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f2x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+                            [% END %]
+                            [% IF ( f2z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                            [% IF ( f2g ) %]
+                                <option value="g" selected="selected">wax (instantaneous)</option>
+                            [% ELSE %]
+                                <option value="g">wax (instantaneous)</option>
+                            [% END %]
+                            [% IF ( f2h ) %]
+                                <option value="h" selected="selected">plastic (mass produced)</option>
+                            [% ELSE %]
+                                <option value="h">plastic (mass produced)</option>
+                            [% END %]
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">lacquered (e.g. acetate)</option>
+                            [% ELSE %]
+                                <option value="a">lacquered (e.g. acetate)</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">metal (e.g. aluminium)</option>
+                            [% ELSE %]
+                                <option value="b">metal (e.g. aluminium)</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">shellac pressing</option>
+                            [% ELSE %]
+                                <option value="c">shellac pressing</option>
+                            [% END %]
+                            [% IF ( f2d ) %]
+                                <option value="d" selected="selected">plastic pressing</option>
+                            [% ELSE %]
+                                <option value="d">plastic pressing</option>
+                            [% END %]
+                            [% IF ( f2e ) %]
+                                <option value="e" selected="selected">metal and plastic (compact discs)</option>
+                            [% ELSE %]
+                                <option value="e">metal and plastic (compact discs)</option>
+                            [% END %]
+                            [% IF ( f2i ) %]
+                                <option value="i" selected="selected">paper backed</option>
+                            [% ELSE %]
+                                <option value="i">paper backed</option>
+                            [% END %]
+                            [% IF ( f2j ) %]
+                                <option value="j" selected="selected">acetate</option>
+                            [% ELSE %]
+                                <option value="j">acetate</option>
+                            [% END %]
+                            [% IF ( f2k ) %]
+                                <option value="k" selected="selected">P.V.C.</option>
+                            [% ELSE %]
+                                <option value="k">P.V.C.</option>
+                            [% END %]
+                            [% IF ( f2l ) %]
+                                <option value="l" selected="selected">polyester</option>
+                            [% ELSE %]
+                                <option value="l">polyester</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+                <tr>
+                    <td><label for="f3">Kind of cutting:</label></td>
+                    <td>
+                        <select name="f3" id="f3">
+                            [% IF ( f3a ) %]
+                                <option value="a" selected="selected">lateral or combined cutting</option>
+                            [% ELSE %]
+                                <option value="a">lateral or combined cutting</option>
+                            [% END %]
+                            [% IF ( f3b ) %]
+                                <option value="b" selected="selected">vertical (hill and dale) cutting</option>
+                            [% ELSE %]
+                                <option value="b">vertical (hill and dale) cutting</option>
+                            [% END %]
+                            [% IF ( f3u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f3x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

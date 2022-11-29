@@ -5,129 +5,131 @@
 </head>
 
 <body id="cat_unimarc_field_124c" class="cat" style="padding:1em;">
-<h1>UNIMARC field 124c builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">  Presentation technique for photographic or non-photographic image:</label></td>
-		<td>
-            <select name="f1" id="f1">
+    <h1>UNIMARC field 124c builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">  Presentation technique for photographic or non-photographic image:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-			[% IF ( f1aa ) %]
-				<option value="aa" selected="selected">anaglyphic</option>
-			[% ELSE %]
-				<option value="aa">anaglyphic</option>
-			[% END %]
-			[% IF ( f1ab ) %]
-				<option value="ab" selected="selected">polarized</option>
-			[% ELSE %]
-				<option value="ab">polarized</option>
-			[% END %]
-			[% IF ( f1ac ) %]
-				<option value="ac" selected="selected">planimetric</option>
-			[% ELSE %]
-				<option value="ac">planimetric</option>
-			[% END %]
-			[% IF ( f1ad ) %]
-				<option value="ad" selected="selected">diagram map</option>
-			[% ELSE %]
-				<option value="ad">diagram map</option>
-			[% END %]
-			[% IF ( f1ae ) %]
-				<option value="ae" selected="selected">flowline map, flow map</option>
-			[% ELSE %]
-				<option value="ae">flowline map, flow map</option>
-			[% END %]
-			[% IF ( f1af ) %]
-				<option value="af" selected="selected">dot map</option>
-			[% ELSE %]
-				<option value="af">dot map</option>
-			[% END %]
-			[% IF ( f1ag ) %]
-				<option value="ag" selected="selected">diagrammatric map</option>
-			[% ELSE %]
-				<option value="ag">diagrammatric map</option>
-			[% END %]
-			[% IF ( f1ah ) %]
-				<option value="ah" selected="selected">choropleth</option>
-			[% ELSE %]
-				<option value="ah">choropleth</option>
-			[% END %]
-			[% IF ( f1ai ) %]
-				<option value="ai" selected="selected">chorochromatic</option>
-			[% ELSE %]
-				<option value="ai">chorochromatic</option>
-			[% END %]
-			[% IF ( f1aj ) %]
-				<option value="aj" selected="selected">dasymetric</option>
-			[% ELSE %]
-				<option value="aj">dasymetric</option>
-			[% END %]
-			[% IF ( f1ak ) %]
-				<option value="ak" selected="selected">isopleth</option>
-			[% ELSE %]
-				<option value="ak">isopleth</option>
-			[% END %]
-			[% IF ( f1am ) %]
-				<option value="am" selected="selected">anamorphic</option>
-			[% ELSE %]
-				<option value="am">anamorphic</option>
-			[% END %]
-			[% IF ( f1an ) %]
-				<option value="an" selected="selected">pictorial map</option>
-			[% ELSE %]
-				<option value="an">pictorial map</option>
-			[% END %]
-			[% IF ( f1ao ) %]
-				<option value="ao" selected="selected">spatial model on two dimensional surface</option>
-			[% ELSE %]
-				<option value="ao">spatial model on two dimensional surface</option>
-			[% END %]
-			[% IF ( f1ap ) %]
-				<option value="ap" selected="selected">mental or cognitive map</option>
-			[% ELSE %]
-				<option value="ap">mental or cognitive map</option>
-			[% END %]
-			[% IF ( f1aq ) %]
-				<option value="aq" selected="selected">views with horizon showing</option>
-			[% ELSE %]
-				<option value="aq">views with horizon showing</option>
-			[% END %]
-			[% IF ( f1ar ) %]
-				<option value="ar" selected="selected">views without horizon showing</option>
-			[% ELSE %]
-				<option value="ar">views without horizon showing</option>
-			[% END %]
-			[% IF ( f1as ) %]
-				<option value="as" selected="selected">map view</option>
-			[% ELSE %]
-				<option value="as">map view</option>
-			[% END %]
-			[% IF ( f1da ) %]
-				<option value="da" selected="selected">picto map</option>
-			[% ELSE %]
-				<option value="da">picto map</option>
-			[% END %]
-			[% IF ( f1db ) %]
-				<option value="db" selected="selected">random dot map</option>
-			[% ELSE %]
-				<option value="db">random dot map</option>
-			[% END %]
-			[% IF ( f1dc ) %]
-				<option value="dc" selected="selected">screened</option>
-			[% ELSE %]
-				<option value="dc">screened</option>
-			[% END %]
-			[% IF ( f1dd ) %]
-				<option value="dd" selected="selected">not screened</option>
-			[% ELSE %]
-				<option value="dd">not screened</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f1aa ) %]
+                                <option value="aa" selected="selected">anaglyphic</option>
+                            [% ELSE %]
+                                <option value="aa">anaglyphic</option>
+                            [% END %]
+                            [% IF ( f1ab ) %]
+                                <option value="ab" selected="selected">polarized</option>
+                            [% ELSE %]
+                                <option value="ab">polarized</option>
+                            [% END %]
+                            [% IF ( f1ac ) %]
+                                <option value="ac" selected="selected">planimetric</option>
+                            [% ELSE %]
+                                <option value="ac">planimetric</option>
+                            [% END %]
+                            [% IF ( f1ad ) %]
+                                <option value="ad" selected="selected">diagram map</option>
+                            [% ELSE %]
+                                <option value="ad">diagram map</option>
+                            [% END %]
+                            [% IF ( f1ae ) %]
+                                <option value="ae" selected="selected">flowline map, flow map</option>
+                            [% ELSE %]
+                                <option value="ae">flowline map, flow map</option>
+                            [% END %]
+                            [% IF ( f1af ) %]
+                                <option value="af" selected="selected">dot map</option>
+                            [% ELSE %]
+                                <option value="af">dot map</option>
+                            [% END %]
+                            [% IF ( f1ag ) %]
+                                <option value="ag" selected="selected">diagrammatric map</option>
+                            [% ELSE %]
+                                <option value="ag">diagrammatric map</option>
+                            [% END %]
+                            [% IF ( f1ah ) %]
+                                <option value="ah" selected="selected">choropleth</option>
+                            [% ELSE %]
+                                <option value="ah">choropleth</option>
+                            [% END %]
+                            [% IF ( f1ai ) %]
+                                <option value="ai" selected="selected">chorochromatic</option>
+                            [% ELSE %]
+                                <option value="ai">chorochromatic</option>
+                            [% END %]
+                            [% IF ( f1aj ) %]
+                                <option value="aj" selected="selected">dasymetric</option>
+                            [% ELSE %]
+                                <option value="aj">dasymetric</option>
+                            [% END %]
+                            [% IF ( f1ak ) %]
+                                <option value="ak" selected="selected">isopleth</option>
+                            [% ELSE %]
+                                <option value="ak">isopleth</option>
+                            [% END %]
+                            [% IF ( f1am ) %]
+                                <option value="am" selected="selected">anamorphic</option>
+                            [% ELSE %]
+                                <option value="am">anamorphic</option>
+                            [% END %]
+                            [% IF ( f1an ) %]
+                                <option value="an" selected="selected">pictorial map</option>
+                            [% ELSE %]
+                                <option value="an">pictorial map</option>
+                            [% END %]
+                            [% IF ( f1ao ) %]
+                                <option value="ao" selected="selected">spatial model on two dimensional surface</option>
+                            [% ELSE %]
+                                <option value="ao">spatial model on two dimensional surface</option>
+                            [% END %]
+                            [% IF ( f1ap ) %]
+                                <option value="ap" selected="selected">mental or cognitive map</option>
+                            [% ELSE %]
+                                <option value="ap">mental or cognitive map</option>
+                            [% END %]
+                            [% IF ( f1aq ) %]
+                                <option value="aq" selected="selected">views with horizon showing</option>
+                            [% ELSE %]
+                                <option value="aq">views with horizon showing</option>
+                            [% END %]
+                            [% IF ( f1ar ) %]
+                                <option value="ar" selected="selected">views without horizon showing</option>
+                            [% ELSE %]
+                                <option value="ar">views without horizon showing</option>
+                            [% END %]
+                            [% IF ( f1as ) %]
+                                <option value="as" selected="selected">map view</option>
+                            [% ELSE %]
+                                <option value="as">map view</option>
+                            [% END %]
+                            [% IF ( f1da ) %]
+                                <option value="da" selected="selected">picto map</option>
+                            [% ELSE %]
+                                <option value="da">picto map</option>
+                            [% END %]
+                            [% IF ( f1db ) %]
+                                <option value="db" selected="selected">random dot map</option>
+                            [% ELSE %]
+                                <option value="db">random dot map</option>
+                            [% END %]
+                            [% IF ( f1dc ) %]
+                                <option value="dc" selected="selected">screened</option>
+                            [% ELSE %]
+                                <option value="dc">screened</option>
+                            [% END %]
+                            [% IF ( f1dd ) %]
+                                <option value="dd" selected="selected">not screened</option>
+                            [% ELSE %]
+                                <option value="dd">not screened</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

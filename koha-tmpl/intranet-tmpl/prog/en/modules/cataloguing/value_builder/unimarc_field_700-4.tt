@@ -5,47 +5,49 @@
 </head>
 
 <body id="cat_unimarc_field_700-4" class="cat" style="padding:1em;">
-<h1>UNIMARC field 700-4 builder</h1>
-<p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
-<form name="f_pop" onsubmit="report()" action="">
-<table>
-	<tr>
-        <td><label for="f1">Code date publication </label></td><td><select name="f1" id="f1">
-			[% IF ( f1_075 ) %]
-			<option value="075 - postface" selected="selected">postface</option>
-			[% ELSE %]
-			<option value="075 - postface">postface</option>
-			[% END %]
-			
-			[% IF ( f1_651 ) %]
-			<option value="651 - dir. de publication" selected="selected">dir. de publication</option>
-			[% ELSE %]
-			<option value="651 - dir. de publication">dir. de publication</option>
-			[% END %]
-			
-			 [% IF ( f1_440 ) %]
-			<option value="440 - illustrateur" selected="selected">illustrateur</option>
-			[% ELSE %]
-			<option value="440 - illustrateur">illustrateur</option>
-			[% END %]
-			
-			[% IF ( f1_080 ) %]
-			<option value="080 - préface, notes" selected="selected">préface, notes</option>
-			[% ELSE %]
-			<option value="080 - préface, notes">préface, notes</option>
-			[% END %]
-			
-			[% IF ( f1_730 ) %]
-			<option value="730 - traducteur" selected="selected">traducteur</option>
-			[% ELSE %]
-			<option value="730 - traducteur">traducteur</option>
-			[% END %]
-			</select>
-		</td>
-	</tr>
-</table>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 700-4 builder</h1>
+    <p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
+    <form name="f_pop" onsubmit="report()" action="">
+        <div class="page-section">
+            <table>
+                <tr>
+                    <td><label for="f1">Code date publication </label></td><td><select name="f1" id="f1">
+                            [% IF ( f1_075 ) %]
+                                <option value="075 - postface" selected="selected">postface</option>
+                            [% ELSE %]
+                                <option value="075 - postface">postface</option>
+                            [% END %]
+
+                            [% IF ( f1_651 ) %]
+                                <option value="651 - dir. de publication" selected="selected">dir. de publication</option>
+                            [% ELSE %]
+                                <option value="651 - dir. de publication">dir. de publication</option>
+                            [% END %]
+
+                            [% IF ( f1_440 ) %]
+                                <option value="440 - illustrateur" selected="selected">illustrateur</option>
+                            [% ELSE %]
+                                <option value="440 - illustrateur">illustrateur</option>
+                            [% END %]
+
+                            [% IF ( f1_080 ) %]
+                                <option value="080 - préface, notes" selected="selected">préface, notes</option>
+                            [% ELSE %]
+                                <option value="080 - préface, notes">préface, notes</option>
+                            [% END %]
+
+                            [% IF ( f1_730 ) %]
+                                <option value="730 - traducteur" selected="selected">traducteur</option>
+                            [% ELSE %]
+                                <option value="730 - traducteur">traducteur</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </div> <!-- /.page-section -->
+    </form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

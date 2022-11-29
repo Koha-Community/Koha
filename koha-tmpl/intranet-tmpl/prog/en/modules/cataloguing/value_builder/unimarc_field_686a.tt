@@ -6,15 +6,16 @@
 <body id="cat_unimarc_field_686a" class="cat">
     <div class="container-fluid">
 
-<h1>UNIMARC field 686a builder</h1>
+        <h1>UNIMARC field 686a builder</h1>
 
-<h2>Classification</h2>
-<p>Please select a value in the classification. This will copy the 686$a field value from the authority record to the 686$a field of the bibliographic record.</p>
-		<form name="f" method="get" action="../authorities/auth_finder.pl">
-            <input type="hidden" name="op" value="do_search" />
-            <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="nbstatements" value="[% nbstatements | html %]" />
-            <input type="hidden" name="index" value="[% index | html %]" />
+        <h2>Classification</h2>
+        <p>Please select a value in the classification. This will copy the 686$a field value from the authority record to the 686$a field of the bibliographic record.</p>
+        <div class="page-section">
+            <form name="f" method="get" action="../authorities/auth_finder.pl">
+                <input type="hidden" name="op" value="do_search" />
+                <input type="hidden" name="type" value="intranet" />
+                <input type="hidden" name="nbstatements" value="[% nbstatements | html %]" />
+                <input type="hidden" name="index" value="[% index | html %]" />
                 <fieldset class="rows"><ol><li>
                     <span class="label">Authority type</span>
                     [% authtypecode | html %]
@@ -64,7 +65,8 @@
                         <option value="HeadingDsc">Heading descendant</option>
                     </select>
                 </li></ol></fieldset>
-            <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
-		</form>
-
+                <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+            </form>
+        </div> <!-- /.page-section -->
+    </div>
 [% INCLUDE 'popup-bottom.inc' %]

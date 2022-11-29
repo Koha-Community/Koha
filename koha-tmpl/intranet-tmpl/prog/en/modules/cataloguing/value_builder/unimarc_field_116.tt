@@ -5,1589 +5,1591 @@
 </head>
 
 <body id="cat_unimarc_field_116" class="cat" style="padding:1em;">
-<h1>UNIMARC field 116 builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-		<td><label for="f1">Specific material designation</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1pipe ) %]
-                            <option value="|" selected="selected">|- Filling character</option>
-                        [% ELSE %]
-                            <option value="|">|- Filling character</option>
-                        [% END %]
-            
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">a- collage</option>
-			[% ELSE %]
-				<option value="a">a- collage</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">b- drawing</option>
-			[% ELSE %]
-				<option value="b">b- drawing</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">c- painting</option>
-			[% ELSE %]
-				<option value="c">c- painting</option>
-	
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">d- photomechanical reproduction</option>
-			[% ELSE %]
-				<option value="d">d- photomechanical reproduction</option>
-	
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">e- photonegative</option>
-			[% ELSE %]
-				<option value="e">e- photonegative</option>
-	
-			[% END %]
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">f- photoprint</option>
-			[% ELSE %]
-				<option value="f">f- photoprint</option>
-	
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">h- picture</option>
-			[% ELSE %]
-				<option value="h">h- picture</option>
-	
-			[% END %]
-			[% IF ( f1i ) %]
-				<option value="i" selected="selected">i- print</option>
-			[% ELSE %]
-				<option value="i">i- print</option>
-			[% END %]
-			
-			[% IF ( f1k ) %]
-				<option value="k" selected="selected">k- technical drawing</option>
-			[% ELSE %]
-				<option value="k">k- technical drawing</option>
-			[% END %]
+    <h1>UNIMARC field 116 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Specific material designation</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
 
-			[% IF ( f1m ) %]
-				<option value="m" selected="selected">m- master</option>
-			[% ELSE %]
-				<option value="m">m- master</option>
-			[% END %]			
-			
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">z- other non-projected graphic type</option>
-			[% ELSE %]
-				<option value="z">z- other non-projected graphic type</option>
-	
-			[% END %]
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">a- collage</option>
+                            [% ELSE %]
+                                <option value="a">a- collage</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">b- drawing</option>
+                            [% ELSE %]
+                                <option value="b">b- drawing</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">c- painting</option>
+                            [% ELSE %]
+                                <option value="c">c- painting</option>
 
-				</select>
-		</td>
-	</tr>
-	<tr>
-		<td><label for="f2">Primary support material</label></td>
-		<td>
-            <select name="f2" id="f2">
-			[% IF ( f2pipe ) %]
-                            <option value="|" selected="selected">|- Filling character</option>
-                        [% ELSE %]
-                            <option value="|">|- Filling character</option>
-                        [% END %]
-            
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">canvas</option>
-			[% ELSE %]
-				<option value="a">canvas</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">bristol board</option>
-			[% ELSE %]
-				<option value="b">bristol board</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">cardboard/illustration board</option>
-			[% ELSE %]
-				<option value="c">cardboard/illustration board</option>
-	
-			[% END %]
-			[% IF ( f2d ) %]
-				<option value="d" selected="selected">glass</option>
-			[% ELSE %]
-				<option value="d">glass</option>
-	
-			[% END %]
-			[% IF ( f2j ) %]
-				<option value="j" selected="selected">plaster</option>
-			[% ELSE %]
-				<option value="j">plaster</option>
-	
-			[% END %]
-			[% IF ( f2k ) %]
-				<option value="k" selected="selected">hardboard</option>
-			[% ELSE %]
-				<option value="k">hardboard</option>
-	
-			[% END %]
-			[% IF ( f2l ) %]
-				<option value="l" selected="selected">porcelain</option>
-			[% ELSE %]
-				<option value="l">porcelain</option>
-	
-			[% END %]
-			[% IF ( f2m ) %]
-				<option value="m" selected="selected">stone</option>
-			[% ELSE %]
-				<option value="m">stone</option>
-	
-			[% END %]
-			[% IF ( f2n ) %]
-				<option value="n" selected="selected">wood</option>
-			[% ELSE %]
-				<option value="n">wood</option>
-	
-			[% END %]
-			[% IF ( f2u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-	
-			[% END %]
-			[% IF ( f2v ) %]
-				<option value="v" selected="selected">mixed collection</option>
-			[% ELSE %]
-				<option value="v">mixed collection</option>
-	
-			[% END %]
-			[% IF ( f2e ) %]
-				<option value="e" selected="selected">synthetics (plastic, vinyl, etc.)</option>
-			[% ELSE %]
-				<option value="e">synthetics (plastic, vinyl, etc.)</option>
-	
-			[% END %]
-			[% IF ( f2f ) %]
-				<option value="f" selected="selected">skins (leather, parchment, vellum, etc.)</option>
-			[% ELSE %]
-				<option value="f">skins (leather, parchment, vellum, etc.)</option>
-	
-			[% END %]
-			[% IF ( f2g ) %]
-				<option value="g" selected="selected">textiles (including man-made fibres)</option>
-			[% ELSE %]
-				<option value="g">textiles (including man-made fibres)</option>
-	
-			[% END %]
-			[% IF ( f2h ) %]
-				<option value="h" selected="selected">metal</option>
-			[% ELSE %]
-				<option value="h">metal</option>
-	
-			[% END %]
-			[% IF ( f2i ) %]
-				<option value="i" selected="selected">paper</option>
-			[% ELSE %]
-				<option value="i">paper</option>
-	
-			[% END %]
-			[% IF ( f2z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-	
-			[% END %]
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">d- photomechanical reproduction</option>
+                            [% ELSE %]
+                                <option value="d">d- photomechanical reproduction</option>
 
-				</select>
-		</td>
-	</tr>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">e- photonegative</option>
+                            [% ELSE %]
+                                <option value="e">e- photonegative</option>
 
+                            [% END %]
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">f- photoprint</option>
+                            [% ELSE %]
+                                <option value="f">f- photoprint</option>
 
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">h- picture</option>
+                            [% ELSE %]
+                                <option value="h">h- picture</option>
 
-	<tr>
-		<td><label for="f3">Secondary support material</label></td>
-		<td>
-    <select name="f3" id="f3">
-			[% IF ( f3pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
+                            [% END %]
+                            [% IF ( f1i ) %]
+                                <option value="i" selected="selected">i- print</option>
+                            [% ELSE %]
+                                <option value="i">i- print</option>
+                            [% END %]
 
-			[% IF ( f3y ) %]
-				<option value="y" selected="selected">no secondary support</option>
-			[% ELSE %]
-				<option value="y">no secondary support</option>
-			[% END %]
-				</select>
-		</td>
-	</tr>
+                            [% IF ( f1k ) %]
+                                <option value="k" selected="selected">k- technical drawing</option>
+                            [% ELSE %]
+                                <option value="k">k- technical drawing</option>
+                            [% END %]
+
+                            [% IF ( f1m ) %]
+                                <option value="m" selected="selected">m- master</option>
+                            [% ELSE %]
+                                <option value="m">m- master</option>
+                            [% END %]
+
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">z- other non-projected graphic type</option>
+                            [% ELSE %]
+                                <option value="z">z- other non-projected graphic type</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f2">Primary support material</label></td>
+                    <td>
+                        <select name="f2" id="f2">
+                            [% IF ( f2pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
+
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">canvas</option>
+                            [% ELSE %]
+                                <option value="a">canvas</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">bristol board</option>
+                            [% ELSE %]
+                                <option value="b">bristol board</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">cardboard/illustration board</option>
+                            [% ELSE %]
+                                <option value="c">cardboard/illustration board</option>
+
+                            [% END %]
+                            [% IF ( f2d ) %]
+                                <option value="d" selected="selected">glass</option>
+                            [% ELSE %]
+                                <option value="d">glass</option>
+
+                            [% END %]
+                            [% IF ( f2j ) %]
+                                <option value="j" selected="selected">plaster</option>
+                            [% ELSE %]
+                                <option value="j">plaster</option>
+
+                            [% END %]
+                            [% IF ( f2k ) %]
+                                <option value="k" selected="selected">hardboard</option>
+                            [% ELSE %]
+                                <option value="k">hardboard</option>
+
+                            [% END %]
+                            [% IF ( f2l ) %]
+                                <option value="l" selected="selected">porcelain</option>
+                            [% ELSE %]
+                                <option value="l">porcelain</option>
+
+                            [% END %]
+                            [% IF ( f2m ) %]
+                                <option value="m" selected="selected">stone</option>
+                            [% ELSE %]
+                                <option value="m">stone</option>
+
+                            [% END %]
+                            [% IF ( f2n ) %]
+                                <option value="n" selected="selected">wood</option>
+                            [% ELSE %]
+                                <option value="n">wood</option>
+
+                            [% END %]
+                            [% IF ( f2u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+                            [% IF ( f2v ) %]
+                                <option value="v" selected="selected">mixed collection</option>
+                            [% ELSE %]
+                                <option value="v">mixed collection</option>
+
+                            [% END %]
+                            [% IF ( f2e ) %]
+                                <option value="e" selected="selected">synthetics (plastic, vinyl, etc.)</option>
+                            [% ELSE %]
+                                <option value="e">synthetics (plastic, vinyl, etc.)</option>
+
+                            [% END %]
+                            [% IF ( f2f ) %]
+                                <option value="f" selected="selected">skins (leather, parchment, vellum, etc.)</option>
+                            [% ELSE %]
+                                <option value="f">skins (leather, parchment, vellum, etc.)</option>
+
+                            [% END %]
+                            [% IF ( f2g ) %]
+                                <option value="g" selected="selected">textiles (including man-made fibres)</option>
+                            [% ELSE %]
+                                <option value="g">textiles (including man-made fibres)</option>
+
+                            [% END %]
+                            [% IF ( f2h ) %]
+                                <option value="h" selected="selected">metal</option>
+                            [% ELSE %]
+                                <option value="h">metal</option>
+
+                            [% END %]
+                            [% IF ( f2i ) %]
+                                <option value="i" selected="selected">paper</option>
+                            [% ELSE %]
+                                <option value="i">paper</option>
+
+                            [% END %]
+                            [% IF ( f2z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
 
 
-	<tr>
-		<td><label for="f4">Colour</label></td>
-		<td>
-            <select name="f4" id="f4">
-			[% IF ( f4pipe ) %]
-            	<option value="|" selected="selected">|- Filling character</option>
-            [% ELSE %]
-            	<option value="|">|- Filling character</option>
-            [% END %]
 
-			[% IF ( f4a ) %]
-				<option value="a" selected="selected">one-colour, monochrome</option>
-			[% ELSE %]
-				<option value="a">one-colour, monochrome</option>
-	
-			[% END %]
+                <tr>
+                    <td><label for="f3">Secondary support material</label></td>
+                    <td>
+                        <select name="f3" id="f3">
+                            [% IF ( f3pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
 
-			[% IF ( f4b ) %]
-				<option value="b" selected="selected">black-and-white</option>
-			[% ELSE %]
-				<option value="b">black-and-white</option>
-			[% END %]
+                            [% IF ( f3y ) %]
+                                <option value="y" selected="selected">no secondary support</option>
+                            [% ELSE %]
+                                <option value="y">no secondary support</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-			[% IF ( f4c ) %]
-				<option value="c" selected="selected">multicoloured</option>
-			[% ELSE %]
-				<option value="c">multicoloured</option>
-			[% END %]
 
-			[% IF ( f4d ) %]
-				<option value="d" selected="selected">hand coloured</option>
-			[% ELSE %]
-				<option value="d">hand coloured</option>
+                <tr>
+                    <td><label for="f4">Colour</label></td>
+                    <td>
+                        <select name="f4" id="f4">
+                            [% IF ( f4pipe ) %]
+                                <option value="|" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="|">|- Filling character</option>
+                            [% END %]
 
-			[% END %]
-			[% IF ( f4u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
+                            [% IF ( f4a ) %]
+                                <option value="a" selected="selected">one-colour, monochrome</option>
+                            [% ELSE %]
+                                <option value="a">one-colour, monochrome</option>
 
-			[% END %]
-			[% IF ( f4v ) %]
-				<option value="v" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="v">mixed</option>
+                            [% END %]
 
-			[% END %]
-			[% IF ( f4x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
+                            [% IF ( f4b ) %]
+                                <option value="b" selected="selected">black-and-white</option>
+                            [% ELSE %]
+                                <option value="b">black-and-white</option>
+                            [% END %]
 
-			[% END %]
-			[% IF ( f4z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-				</select>
-		</td>
-	</tr>
+                            [% IF ( f4c ) %]
+                                <option value="c" selected="selected">multicoloured</option>
+                            [% ELSE %]
+                                <option value="c">multicoloured</option>
+                            [% END %]
 
-	<tr>
-        <td><label for="f5">Techniques (drawings, paintings) 1</label></td>
-		<td>
-            <select name="f5" id="f5">
-			[% IF ( f5dblpipe ) %]
-                            <option value="||" selected="selected">|- Filling character</option>
-                        [% ELSE %]
-                            <option value="||">||- Filling characters</option>
-                        [% END %]
-                        [% IF ( f5dblspace ) %]
+                            [% IF ( f4d ) %]
+                                <option value="d" selected="selected">hand coloured</option>
+                            [% ELSE %]
+                                <option value="d">hand coloured</option>
+
+                            [% END %]
+                            [% IF ( f4u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+
+                            [% END %]
+                            [% IF ( f4v ) %]
+                                <option value="v" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="v">mixed</option>
+
+                            [% END %]
+                            [% IF ( f4x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f4z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f5">Techniques (drawings, paintings) 1</label></td>
+                    <td>
+                        <select name="f5" id="f5">
+                            [% IF ( f5dblpipe ) %]
+                                <option value="||" selected="selected">|- Filling character</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+                            [% IF ( f5dblspace ) %]
+                                    <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                    <option value="  ">non required value</option>
+                            [% END %]
+                            [% IF ( f5aa ) %]
+                                <option value="aa" selected="selected">pencil</option>
+                            [% ELSE %]
+                                <option value="aa">pencil</option>
+                            [% END %]
+
+                            [% IF ( f5ab ) %]
+                                <option value="ab" selected="selected">graphite</option>
+                            [% ELSE %]
+                                <option value="ab">graphite</option>
+                            [% END %]
+
+                            [% IF ( f5ac ) %]
+                                <option value="ac" selected="selected">colour pencil</option>
+                            [% ELSE %]
+                                <option value="ac">colour pencil</option>
+                            [% END %]
+
+                            [% IF ( f5ad ) %]
+                                <option value="ad" selected="selected">India ink</option>
+                            [% ELSE %]
+                                <option value="ad">India ink</option>
+                            [% END %]
+
+                            [% IF ( f5ae ) %]
+                                <option value="ae" selected="selected">lavierung India ink</option>
+                            [% ELSE %]
+                                <option value="ae">lavierung India ink</option>
+                            [% END %]
+
+                            [% IF ( f5af ) %]
+                                <option value="af" selected="selected">coal</option>
+                            [% ELSE %]
+                                <option value="af">coal</option>
+                            [% END %]
+                            [% IF ( f5ag ) %]
+                                <option value="ag" selected="selected">chalk</option>
+                            [% ELSE %]
+                                <option value="ag">chalk</option>
+
+                            [% END %]
+                            [% IF ( f5ah ) %]
+                                <option value="ah" selected="selected">black chalk</option>
+                            [% ELSE %]
+                                <option value="ah">black chalk</option>
+
+                            [% END %]
+                            [% IF ( f5ai ) %]
+                                <option value="ai" selected="selected">sanguine</option>
+                            [% ELSE %]
+                                <option value="ai">sanguine</option>
+
+                            [% END %]
+                            [% IF ( f5aj ) %]
+                                <option value="aj" selected="selected">water colour</option>
+                            [% ELSE %]
+                                <option value="aj">water colour</option>
+
+                            [% END %]
+                            [% IF ( f5ak ) %]
+                                <option value="ak" selected="selected">tempera</option>
+                            [% ELSE %]
+                                <option value="ak">tempera</option>
+
+                            [% END %]
+                            [% IF ( f5al ) %]
+                                <option value="al" selected="selected">gouache</option>
+                            [% ELSE %]
+                                <option value="al">gouache</option>
+
+                            [% END %]
+                            [% IF ( f5am ) %]
+                                <option value="am" selected="selected">pastel</option>
+                            [% ELSE %]
+                                <option value="am">pastel</option>
+
+                            [% END %]
+                            [% IF ( f5an ) %]
+                                <option value="an" selected="selected">oil</option>
+                            [% ELSE %]
+                                <option value="an">oil</option>
+
+                            [% END %]
+                            [% IF ( f5xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f5ba ) %]
+                                <option value="ba" selected="selected">felt-tip pen</option>
+                            [% ELSE %]
+                                <option value="ba">felt-tip pen</option>
+
+                            [% END %]
+                            [% IF ( f5bb ) %]
+                                <option value="bb" selected="selected">stain</option>
+                            [% ELSE %]
+                                <option value="bb">stain</option>
+
+                            [% END %]
+                            [% IF ( f5bc ) %]
+                                <option value="bc" selected="selected">crayon</option>
+                            [% ELSE %]
+                                <option value="bc">crayon</option>
+
+                            [% END %]
+                            [% IF ( f5bd ) %]
+                                <option value="bd" selected="selected">sepia</option>
+                            [% ELSE %]
+                                <option value="bd">sepia</option>
+
+                            [% END %]
+                            [% IF ( f5be ) %]
+                                <option value="be" selected="selected">writing ink</option>
+                            [% ELSE %]
+                                <option value="be">writing ink</option>
+
+                            [% END %]
+                            [% IF ( f5bf ) %]
+                                <option value="bf" selected="selected">casein</option>
+                            [% ELSE %]
+                                <option value="bf">casein</option>
+
+                            [% END %]
+                            [% IF ( f5bg ) %]
+                                <option value="bg" selected="selected">golding</option>
+                            [% ELSE %]
+                                <option value="bg">golding</option>
+
+                            [% END %]
+                            [% IF ( f5bh ) %]
+                                <option value="bh" selected="selected">encaustic</option>
+                            [% ELSE %]
+                                <option value="bh">encaustic</option>
+
+                            [% END %]
+                            [% IF ( f5bi ) %]
+                                <option value="bi" selected="selected">acrylics</option>
+                            [% ELSE %]
+                                <option value="bi">acrylics</option>
+
+                            [% END %]
+                            [% IF ( f5bj ) %]
+                                <option value="bj" selected="selected">collage</option>
+                            [% ELSE %]
+                                <option value="bj">collage</option>
+
+                            [% END %]
+                            [% IF ( f5bk ) %]
+                                <option value="bk" selected="selected">silver point</option>
+                            [% ELSE %]
+                                <option value="bk">silver point</option>
+
+                            [% END %]
+                            [% IF ( f5bl ) %]
+                                <option value="bl" selected="selected">air brush</option>
+                            [% ELSE %]
+                                <option value="bl">air brush</option>
+
+                            [% END %]
+                            [% IF ( f5uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f5vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f5zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f6">Techniques (drawings, paintings) 2</label></td>
+                    <td>
+                        <select name="f6" id="f6">
+                            [% IF ( f6dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+                            [% IF ( f6dblspace ) %]
                                 <option value="  " selected="selected">non required value</option>
-                        [% ELSE %]
+                            [% ELSE %]
                                 <option value="  ">non required value</option>
-                        [% END %]
-			[% IF ( f5aa ) %]
-				<option value="aa" selected="selected">pencil</option>
-			[% ELSE %]
-				<option value="aa">pencil</option>
-			[% END %]
-
-			[% IF ( f5ab ) %]
-				<option value="ab" selected="selected">graphite</option>
-			[% ELSE %]
-				<option value="ab">graphite</option>
-			[% END %]
-
-			[% IF ( f5ac ) %]
-				<option value="ac" selected="selected">colour pencil</option>
-			[% ELSE %]
-				<option value="ac">colour pencil</option>
-			[% END %]
-
-			[% IF ( f5ad ) %]
-				<option value="ad" selected="selected">India ink</option>
-			[% ELSE %]
-				<option value="ad">India ink</option>
-			[% END %]
-
-			[% IF ( f5ae ) %]
-				<option value="ae" selected="selected">lavierung India ink</option>
-			[% ELSE %]
-				<option value="ae">lavierung India ink</option>
-			[% END %]
-
-			[% IF ( f5af ) %]
-				<option value="af" selected="selected">coal</option>
-			[% ELSE %]
-				<option value="af">coal</option>
-			[% END %]
-			[% IF ( f5ag ) %]
-				<option value="ag" selected="selected">chalk</option>
-			[% ELSE %]
-				<option value="ag">chalk</option>
-
-			[% END %]
-			[% IF ( f5ah ) %]
-				<option value="ah" selected="selected">black chalk</option>
-			[% ELSE %]
-				<option value="ah">black chalk</option>
-
-			[% END %]
-			[% IF ( f5ai ) %]
-				<option value="ai" selected="selected">sanguine</option>
-			[% ELSE %]
-				<option value="ai">sanguine</option>
-
-			[% END %]
-			[% IF ( f5aj ) %]
-				<option value="aj" selected="selected">water colour</option>
-			[% ELSE %]
-				<option value="aj">water colour</option>
-
-			[% END %]
-			[% IF ( f5ak ) %]
-				<option value="ak" selected="selected">tempera</option>
-			[% ELSE %]
-				<option value="ak">tempera</option>
-
-			[% END %]
-			[% IF ( f5al ) %]
-				<option value="al" selected="selected">gouache</option>
-			[% ELSE %]
-				<option value="al">gouache</option>
-
-			[% END %]
-			[% IF ( f5am ) %]
-				<option value="am" selected="selected">pastel</option>
-			[% ELSE %]
-				<option value="am">pastel</option>
-
-			[% END %]
-			[% IF ( f5an ) %]
-				<option value="an" selected="selected">oil</option>
-			[% ELSE %]
-				<option value="an">oil</option>
-
-			[% END %]
-			[% IF ( f5xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f5ba ) %]
-				<option value="ba" selected="selected">felt-tip pen</option>
-			[% ELSE %]
-				<option value="ba">felt-tip pen</option>
-
-			[% END %]
-			[% IF ( f5bb ) %]
-				<option value="bb" selected="selected">stain</option>
-			[% ELSE %]
-				<option value="bb">stain</option>
-
-			[% END %]
-			[% IF ( f5bc ) %]
-				<option value="bc" selected="selected">crayon</option>
-			[% ELSE %]
-				<option value="bc">crayon</option>
-
-			[% END %]
-			[% IF ( f5bd ) %]
-				<option value="bd" selected="selected">sepia</option>
-			[% ELSE %]
-				<option value="bd">sepia</option>
-
-			[% END %]
-			[% IF ( f5be ) %]
-				<option value="be" selected="selected">writing ink</option>
-			[% ELSE %]
-				<option value="be">writing ink</option>
-
-			[% END %]
-			[% IF ( f5bf ) %]
-				<option value="bf" selected="selected">casein</option>
-			[% ELSE %]
-				<option value="bf">casein</option>
-
-			[% END %]
-			[% IF ( f5bg ) %]
-				<option value="bg" selected="selected">golding</option>
-			[% ELSE %]
-				<option value="bg">golding</option>
-
-			[% END %]
-			[% IF ( f5bh ) %]
-				<option value="bh" selected="selected">encaustic</option>
-			[% ELSE %]
-				<option value="bh">encaustic</option>
-
-			[% END %]
-			[% IF ( f5bi ) %]
-				<option value="bi" selected="selected">acrylics</option>
-			[% ELSE %]
-				<option value="bi">acrylics</option>
-
-			[% END %]
-			[% IF ( f5bj ) %]
-				<option value="bj" selected="selected">collage</option>
-			[% ELSE %]
-				<option value="bj">collage</option>
-
-			[% END %]
-			[% IF ( f5bk ) %]
-				<option value="bk" selected="selected">silver point</option>
-			[% ELSE %]
-				<option value="bk">silver point</option>
-
-			[% END %]
-			[% IF ( f5bl ) %]
-				<option value="bl" selected="selected">air brush</option>
-			[% ELSE %]
-				<option value="bl">air brush</option>
-
-			[% END %]
-			[% IF ( f5uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f5vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f5zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-
-			[% END %]
-
-				</select>
-		</td>
-        </tr>
-	<tr>
-        <td><label for="f6">Techniques (drawings, paintings) 2</label></td>
-		<td>
-            <select name="f6" id="f6">
-			[% IF ( f6dblpipe ) %]
-            	<option value="||" selected="selected">||- Filling characters</option>
-            [% ELSE %]
-            	<option value="||">||- Filling characters</option>
-            [% END %]
-			[% IF ( f6dblspace ) %]
-				<option value="  " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value="  ">non required value</option>
-			[% END %]
-			[% IF ( f6aa ) %]
-				<option value="aa" selected="selected">pencil</option>
-			[% ELSE %]
-				<option value="aa">pencil</option>
-	
-			[% END %]
-
-			[% IF ( f6ab ) %]
-				<option value="ab" selected="selected">graphite</option>
-			[% ELSE %]
-				<option value="ab">graphite</option>
-			[% END %]
-
-			[% IF ( f6ac ) %]
-				<option value="ac" selected="selected">colour pencil</option>
-			[% ELSE %]
-				<option value="ac">colour pencil</option>
-			[% END %]
-
-			[% IF ( f6ad ) %]
-				<option value="ad" selected="selected">India ink</option>
-			[% ELSE %]
-				<option value="ad">India ink</option>
-
-			[% END %]
-
-			[% IF ( f6ae ) %]
-				<option value="ae" selected="selected">lavierung India ink</option>
-			[% ELSE %]
-				<option value="ae">lavierung India ink</option>
-
-			[% END %]
-
-			[% IF ( f6af ) %]
-				<option value="af" selected="selected">coal</option>
-			[% ELSE %]
-				<option value="af">coal</option>
-
-			[% END %]
-			[% IF ( f6ag ) %]
-				<option value="ag" selected="selected">chalk</option>
-			[% ELSE %]
-				<option value="ag">chalk</option>
-
-			[% END %]
-			[% IF ( f6ah ) %]
-				<option value="ah" selected="selected">black chalk</option>
-			[% ELSE %]
-				<option value="ah">black chalk</option>
-
-			[% END %]
-			[% IF ( f6ai ) %]
-				<option value="ai" selected="selected">sanguine</option>
-			[% ELSE %]
-				<option value="ai">sanguine</option>
-
-			[% END %]
-			[% IF ( f6aj ) %]
-				<option value="aj" selected="selected">water colour</option>
-			[% ELSE %]
-				<option value="aj">water colour</option>
-
-			[% END %]
-			[% IF ( f6ak ) %]
-				<option value="ak" selected="selected">tempera</option>
-			[% ELSE %]
-				<option value="ak">tempera</option>
-
-			[% END %]
-			[% IF ( f6al ) %]
-				<option value="al" selected="selected">gouache</option>
-			[% ELSE %]
-				<option value="al">gouache</option>
-
-			[% END %]
-			[% IF ( f6am ) %]
-				<option value="am" selected="selected">pastel</option>
-			[% ELSE %]
-				<option value="am">pastel</option>
-
-			[% END %]
-			[% IF ( f6an ) %]
-				<option value="an" selected="selected">oil</option>
-			[% ELSE %]
-				<option value="an">oil</option>
-
-			[% END %]
-			[% IF ( f6xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f6ba ) %]
-				<option value="ba" selected="selected">felt-tip pen</option>
-			[% ELSE %]
-				<option value="ba">felt-tip pen</option>
-
-			[% END %]
-			[% IF ( f6bb ) %]
-				<option value="bb" selected="selected">stain</option>
-			[% ELSE %]
-				<option value="bb">stain</option>
-
-			[% END %]
-			[% IF ( f6bc ) %]
-				<option value="bc" selected="selected">crayon</option>
-			[% ELSE %]
-				<option value="bc">crayon</option>
-
-			[% END %]
-			[% IF ( f6bd ) %]
-				<option value="bd" selected="selected">sepia</option>
-			[% ELSE %]
-				<option value="bd">sepia</option>
-
-			[% END %]
-			[% IF ( f6be ) %]
-				<option value="be" selected="selected">writing ink</option>
-			[% ELSE %]
-				<option value="be">writing ink</option>
-
-			[% END %]
-			[% IF ( f6bf ) %]
-				<option value="bf" selected="selected">casein</option>
-			[% ELSE %]
-				<option value="bf">casein</option>
-
-			[% END %]
-			[% IF ( f6bg ) %]
-				<option value="bg" selected="selected">golding</option>
-			[% ELSE %]
-				<option value="bg">golding</option>
-
-			[% END %]
-			[% IF ( f6bh ) %]
-				<option value="bh" selected="selected">encaustic</option>
-			[% ELSE %]
-				<option value="bh">encaustic</option>
-
-			[% END %]
-			[% IF ( f6bi ) %]
-				<option value="bi" selected="selected">acrylics</option>
-			[% ELSE %]
-				<option value="bi">acrylics</option>
-
-			[% END %]
-			[% IF ( f6bj ) %]
-				<option value="bj" selected="selected">collage</option>
-			[% ELSE %]
-				<option value="bj">collage</option>
-
-			[% END %]
-			[% IF ( f6bk ) %]
-				<option value="bk" selected="selected">silver point</option>
-			[% ELSE %]
-				<option value="bk">silver point</option>
-
-			[% END %]
-			[% IF ( f6bl ) %]
-				<option value="bl" selected="selected">air brush</option>
-			[% ELSE %]
-				<option value="bl">air brush</option>
-
-			[% END %]
-			[% IF ( f6uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f6vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f6zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-
-			[% END %]
-
-				</select>
-		</td>
-        </tr>
-	<tr>
-        <td><label for="f7">Techniques (drawings, paintings) 3</label></td>
-		<td>
-            <select name="f7" id="f7">
-			[% IF ( f7dblpipe ) %]
-            	<option value="||" selected="selected">||- Filling characters</option>
-            [% ELSE %]
-            	<option value="||">||- Filling characters</option>
-            [% END %]
-			[% IF ( f7dblspace ) %]
-				<option value="  " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value="  ">non required value</option>
-			[% END %]
-
-			[% IF ( f7aa ) %]
-				<option value="aa" selected="selected">pencil</option>
-			[% ELSE %]
-				<option value="aa">pencil</option>
-	
-			[% END %]
-
-			[% IF ( f7ab ) %]
-				<option value="ab" selected="selected">graphite</option>
-			[% ELSE %]
-				<option value="ab">graphite</option>
-			[% END %]
-
-			[% IF ( f7ac ) %]
-				<option value="ac" selected="selected">colour pencil</option>
-			[% ELSE %]
-				<option value="ac">colour pencil</option>
-			[% END %]
-
-			[% IF ( f7ad ) %]
-				<option value="ad" selected="selected">India ink</option>
-			[% ELSE %]
-				<option value="ad">India ink</option>
-
-			[% END %]
-
-			[% IF ( f7ae ) %]
-				<option value="ae" selected="selected">lavierung India ink</option>
-			[% ELSE %]
-				<option value="ae">lavierung India ink</option>
-
-			[% END %]
-
-			[% IF ( f7af ) %]
-				<option value="af" selected="selected">coal</option>
-			[% ELSE %]
-				<option value="af">coal</option>
-
-			[% END %]
-			[% IF ( f7ag ) %]
-				<option value="ag" selected="selected">chalk</option>
-			[% ELSE %]
-				<option value="ag">chalk</option>
-
-			[% END %]
-			[% IF ( f7ah ) %]
-				<option value="ah" selected="selected">black chalk</option>
-			[% ELSE %]
-				<option value="ah">black chalk</option>
-
-			[% END %]
-			[% IF ( f7ai ) %]
-				<option value="ai" selected="selected">sanguine</option>
-			[% ELSE %]
-				<option value="ai">sanguine</option>
-
-			[% END %]
-			[% IF ( f7aj ) %]
-				<option value="aj" selected="selected">water colour</option>
-			[% ELSE %]
-				<option value="aj">water colour</option>
-
-			[% END %]
-			[% IF ( f7ak ) %]
-				<option value="ak" selected="selected">tempera</option>
-			[% ELSE %]
-				<option value="ak">tempera</option>
-
-			[% END %]
-			[% IF ( f7al ) %]
-				<option value="al" selected="selected">gouache</option>
-			[% ELSE %]
-				<option value="al">gouache</option>
-
-			[% END %]
-			[% IF ( f7am ) %]
-				<option value="am" selected="selected">pastel</option>
-			[% ELSE %]
-				<option value="am">pastel</option>
-
-			[% END %]
-			[% IF ( f7an ) %]
-				<option value="an" selected="selected">oil</option>
-			[% ELSE %]
-				<option value="an">oil</option>
-
-			[% END %]
-			[% IF ( f7xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f7ba ) %]
-				<option value="ba" selected="selected">felt-tip pen</option>
-			[% ELSE %]
-				<option value="ba">felt-tip pen</option>
-
-			[% END %]
-			[% IF ( f7bb ) %]
-				<option value="bb" selected="selected">stain</option>
-			[% ELSE %]
-				<option value="bb">stain</option>
-
-			[% END %]
-			[% IF ( f7bc ) %]
-				<option value="bc" selected="selected">crayon</option>
-			[% ELSE %]
-				<option value="bc">crayon</option>
-
-			[% END %]
-			[% IF ( f7bd ) %]
-				<option value="bd" selected="selected">sepia</option>
-			[% ELSE %]
-				<option value="bd">sepia</option>
-
-			[% END %]
-			[% IF ( f7be ) %]
-				<option value="be" selected="selected">writing ink</option>
-			[% ELSE %]
-				<option value="be">writing ink</option>
-
-			[% END %]
-			[% IF ( f7bf ) %]
-				<option value="bf" selected="selected">casein</option>
-			[% ELSE %]
-				<option value="bf">casein</option>
-
-			[% END %]
-			[% IF ( f7bg ) %]
-				<option value="bg" selected="selected">golding</option>
-			[% ELSE %]
-				<option value="bg">golding</option>
-
-			[% END %]
-			[% IF ( f7bh ) %]
-				<option value="bh" selected="selected">encaustic</option>
-			[% ELSE %]
-				<option value="bh">encaustic</option>
-
-			[% END %]
-			[% IF ( f7bi ) %]
-				<option value="bi" selected="selected">acrylics</option>
-			[% ELSE %]
-				<option value="bi">acrylics</option>
-
-			[% END %]
-			[% IF ( f7bj ) %]
-				<option value="bj" selected="selected">collage</option>
-			[% ELSE %]
-				<option value="bj">collage</option>
-
-			[% END %]
-			[% IF ( f7bk ) %]
-				<option value="bk" selected="selected">silver point</option>
-			[% ELSE %]
-				<option value="bk">silver point</option>
-
-			[% END %]
-			[% IF ( f7bl ) %]
-				<option value="bl" selected="selected">air brush</option>
-			[% ELSE %]
-				<option value="bl">air brush</option>
-
-			[% END %]
-			[% IF ( f7uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f7vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f7zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-
-			[% END %]
-
-				</select>
-		</td>
-
-        </tr>
-
-	<tr>
-        <td><label for="f8">Technique (prints) 1</label></td>
-		<td>
-            <select name="f8" id="f8">
-			[% IF ( f8dblpipe ) %]
-            	<option value="||" selected="selected">||- Filling characters</option>
-            [% ELSE %]
-            	<option value="||">||- Filling character</option>
-            [% END %]
-                        [% IF ( f8dblspace ) %]
+                            [% END %]
+                            [% IF ( f6aa ) %]
+                                <option value="aa" selected="selected">pencil</option>
+                            [% ELSE %]
+                                <option value="aa">pencil</option>
+
+                            [% END %]
+
+                            [% IF ( f6ab ) %]
+                                <option value="ab" selected="selected">graphite</option>
+                            [% ELSE %]
+                                <option value="ab">graphite</option>
+                            [% END %]
+
+                            [% IF ( f6ac ) %]
+                                <option value="ac" selected="selected">colour pencil</option>
+                            [% ELSE %]
+                                <option value="ac">colour pencil</option>
+                            [% END %]
+
+                            [% IF ( f6ad ) %]
+                                <option value="ad" selected="selected">India ink</option>
+                            [% ELSE %]
+                                <option value="ad">India ink</option>
+
+                            [% END %]
+
+                            [% IF ( f6ae ) %]
+                                <option value="ae" selected="selected">lavierung India ink</option>
+                            [% ELSE %]
+                                <option value="ae">lavierung India ink</option>
+
+                            [% END %]
+
+                            [% IF ( f6af ) %]
+                                <option value="af" selected="selected">coal</option>
+                            [% ELSE %]
+                                <option value="af">coal</option>
+
+                            [% END %]
+                            [% IF ( f6ag ) %]
+                                <option value="ag" selected="selected">chalk</option>
+                            [% ELSE %]
+                                <option value="ag">chalk</option>
+
+                            [% END %]
+                            [% IF ( f6ah ) %]
+                                <option value="ah" selected="selected">black chalk</option>
+                            [% ELSE %]
+                                <option value="ah">black chalk</option>
+
+                            [% END %]
+                            [% IF ( f6ai ) %]
+                                <option value="ai" selected="selected">sanguine</option>
+                            [% ELSE %]
+                                <option value="ai">sanguine</option>
+
+                            [% END %]
+                            [% IF ( f6aj ) %]
+                                <option value="aj" selected="selected">water colour</option>
+                            [% ELSE %]
+                                <option value="aj">water colour</option>
+
+                            [% END %]
+                            [% IF ( f6ak ) %]
+                                <option value="ak" selected="selected">tempera</option>
+                            [% ELSE %]
+                                <option value="ak">tempera</option>
+
+                            [% END %]
+                            [% IF ( f6al ) %]
+                                <option value="al" selected="selected">gouache</option>
+                            [% ELSE %]
+                                <option value="al">gouache</option>
+
+                            [% END %]
+                            [% IF ( f6am ) %]
+                                <option value="am" selected="selected">pastel</option>
+                            [% ELSE %]
+                                <option value="am">pastel</option>
+
+                            [% END %]
+                            [% IF ( f6an ) %]
+                                <option value="an" selected="selected">oil</option>
+                            [% ELSE %]
+                                <option value="an">oil</option>
+
+                            [% END %]
+                            [% IF ( f6xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f6ba ) %]
+                                <option value="ba" selected="selected">felt-tip pen</option>
+                            [% ELSE %]
+                                <option value="ba">felt-tip pen</option>
+
+                            [% END %]
+                            [% IF ( f6bb ) %]
+                                <option value="bb" selected="selected">stain</option>
+                            [% ELSE %]
+                                <option value="bb">stain</option>
+
+                            [% END %]
+                            [% IF ( f6bc ) %]
+                                <option value="bc" selected="selected">crayon</option>
+                            [% ELSE %]
+                                <option value="bc">crayon</option>
+
+                            [% END %]
+                            [% IF ( f6bd ) %]
+                                <option value="bd" selected="selected">sepia</option>
+                            [% ELSE %]
+                                <option value="bd">sepia</option>
+
+                            [% END %]
+                            [% IF ( f6be ) %]
+                                <option value="be" selected="selected">writing ink</option>
+                            [% ELSE %]
+                                <option value="be">writing ink</option>
+
+                            [% END %]
+                            [% IF ( f6bf ) %]
+                                <option value="bf" selected="selected">casein</option>
+                            [% ELSE %]
+                                <option value="bf">casein</option>
+
+                            [% END %]
+                            [% IF ( f6bg ) %]
+                                <option value="bg" selected="selected">golding</option>
+                            [% ELSE %]
+                                <option value="bg">golding</option>
+
+                            [% END %]
+                            [% IF ( f6bh ) %]
+                                <option value="bh" selected="selected">encaustic</option>
+                            [% ELSE %]
+                                <option value="bh">encaustic</option>
+
+                            [% END %]
+                            [% IF ( f6bi ) %]
+                                <option value="bi" selected="selected">acrylics</option>
+                            [% ELSE %]
+                                <option value="bi">acrylics</option>
+
+                            [% END %]
+                            [% IF ( f6bj ) %]
+                                <option value="bj" selected="selected">collage</option>
+                            [% ELSE %]
+                                <option value="bj">collage</option>
+
+                            [% END %]
+                            [% IF ( f6bk ) %]
+                                <option value="bk" selected="selected">silver point</option>
+                            [% ELSE %]
+                                <option value="bk">silver point</option>
+
+                            [% END %]
+                            [% IF ( f6bl ) %]
+                                <option value="bl" selected="selected">air brush</option>
+                            [% ELSE %]
+                                <option value="bl">air brush</option>
+
+                            [% END %]
+                            [% IF ( f6uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f6vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f6zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f7">Techniques (drawings, paintings) 3</label></td>
+                    <td>
+                        <select name="f7" id="f7">
+                            [% IF ( f7dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+                            [% IF ( f7dblspace ) %]
                                 <option value="  " selected="selected">non required value</option>
-                        [% ELSE %]
+                            [% ELSE %]
                                 <option value="  ">non required value</option>
-                        [% END %]
-			[% IF ( f8ba ) %]
-				<option value="ba" selected="selected">woodcut</option>
-			[% ELSE %]
-				<option value="ba">woodcut</option>
-			[% END %]
-
-			[% IF ( f8bb ) %]
-				<option value="bb" selected="selected">chiaroscuro woodcut</option>
-			[% ELSE %]
-				<option value="bb">chiaroscuro woodcut</option>
-			[% END %]
-
-			[% IF ( f8bc ) %]
-				<option value="bc" selected="selected">white-line woodcut</option>
-			[% ELSE %]
-				<option value="bc">white-line woodcut</option>
-			[% END %]
-
-			[% IF ( f8bd ) %]
-				<option value="bd" selected="selected">camaiu</option>
-			[% ELSE %]
-				<option value="bd">camaiu</option>
-			[% END %]
-
-			[% IF ( f8be ) %]
-				<option value="be" selected="selected">heliogravure</option>
-			[% ELSE %]
-				<option value="be">heliogravure</option>
-			[% END %]
-
-			[% IF ( f8bf ) %]
-				<option value="bf" selected="selected">chromolithography</option>
-			[% ELSE %]
-				<option value="bf">chromolithography</option>
-			[% END %]
-
-
-			[% IF ( f8bg ) %]
-				<option value="bg" selected="selected">lino-cut</option>
-			[% ELSE %]
-				<option value="bg">lino-cut</option>
-
-			[% END %]
-			[% IF ( f8bh ) %]
-				<option value="bh" selected="selected">etching</option>
-			[% ELSE %]
-				<option value="bh">etching</option>
-
-			[% END %]
-			[% IF ( f8bi ) %]
-				<option value="bi" selected="selected">lithography</option>
-			[% ELSE %]
-				<option value="bi">lithography</option>
-
-			[% END %]
-			[% IF ( f8bj ) %]
-				<option value="bj" selected="selected">photolithography</option>
-			[% ELSE %]
-				<option value="bj">photolithography</option>
-
-			[% END %]
-			[% IF ( f8bk ) %]
-				<option value="bk" selected="selected">zincography</option>
-			[% ELSE %]
-				<option value="bk">zincography</option>
-
-			[% END %]
-			[% IF ( f8bl ) %]
-				<option value="bl" selected="selected">algraphy</option>
-			[% ELSE %]
-				<option value="bl">algraphy</option>
-
-			[% END %]
-			[% IF ( f8bm ) %]
-				<option value="bm" selected="selected">aquatint</option>
-			[% ELSE %]
-				<option value="bm">aquatint</option>
-
-			[% END %]
-			[% IF ( f8bn ) %]
-				<option value="bn" selected="selected">reservage (sugar aquatint)</option>
-			[% ELSE %]
-				<option value="bn">reservage (sugar aquatint)</option>
-
-			[% END %]
-			[% IF ( f8ca ) %]
-				<option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
-			[% ELSE %]
-				<option value="ca">vernis-mou (soft ground etching or tracing)</option>
-
-			[% END %]
-			[% IF ( f8cb ) %]
-				<option value="cb" selected="selected">engraving</option>
-			[% ELSE %]
-				<option value="cb">engraving</option>
-
-			[% END %]
-			[% IF ( f8cc ) %]
-				<option value="cc" selected="selected">engraving in the crayon manner</option>
-			[% ELSE %]
-				<option value="cc">engraving in the crayon manner</option>
-
-			[% END %]
-			[% IF ( f8cd ) %]
-				<option value="cd" selected="selected">Burin</option>
-			[% ELSE %]
-				<option value="cd">Burin</option>
-
-			[% END %]
-			[% IF ( f8ce ) %]
-				<option value="ce" selected="selected">drypoint</option>
-			[% ELSE %]
-				<option value="ce">drypoint</option>
-
-			[% END %]
-			[% IF ( f8cf ) %]
-				<option value="cf" selected="selected">mezzotinta (mezzotint)</option>
-			[% ELSE %]
-				<option value="cf">Mezzoteinte</option>
-
-			[% END %]
-			[% IF ( f8cg ) %]
-				<option value="cg" selected="selected">monotype</option>
-			[% ELSE %]
-				<option value="cg">monotype</option>
-
-			[% END %]
-			[% IF ( f8ch ) %]
-				<option value="ch" selected="selected">silkscreen</option>
-			[% ELSE %]
-				<option value="ch">silkscreen</option>
-
-			[% END %]
-			[% IF ( f8ci ) %]
-				<option value="ci" selected="selected">steel engraving</option>
-			[% ELSE %]
-				<option value="ci">steel engraving</option>
-
-			[% END %]
-			[% IF ( f8cj ) %]
-				<option value="cj" selected="selected">computer graphics</option>
-			[% ELSE %]
-				<option value="cj">computer graphics</option>
-
-			[% END %]
-			[% IF ( f8ck ) %]
-				<option value="ck" selected="selected">photocopying</option>
-			[% ELSE %]
-				<option value="ck">photocopying</option>
-
-			[% END %]
-			[% IF ( f8uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f8vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f8xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f8zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-			[% END %]
-
-				</select>
-		</td>
-
-        </tr>
-	<tr>
-        <td><label for="f9">Technique (prints) 2</label></td>
-		<td>
-            <select name="f9" id="f9">
-			[% IF ( f9dblpipe ) %]
-            	<option value="||" selected="selected">||- Filling characters</option>
-            [% ELSE %]
-            	<option value="||">||- Filling characters</option>
-            [% END %]
-            
-			[% IF ( f9dblspace ) %]
-				<option value="  " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value="  ">non required value</option>
-			[% END %]
-			[% IF ( f9ba ) %]
-				<option value="ba" selected="selected">woodcut</option>
-			[% ELSE %]
-				<option value="ba">woodcut</option>
-	
-			[% END %]
-
-			[% IF ( f9bb ) %]
-				<option value="bb" selected="selected">chiaroscuro woodcut</option>
-			[% ELSE %]
-				<option value="bb">chiaroscuro woodcut</option>
-			[% END %]
-
-			[% IF ( f9bc ) %]
-				<option value="bc" selected="selected">white-line woodcut</option>
-			[% ELSE %]
-				<option value="bc">white-line woodcut</option>
-			[% END %]
-
-			[% IF ( f9bd ) %]
-				<option value="bd" selected="selected">camaiu</option>
-			[% ELSE %]
-				<option value="bd">camaiu</option>
-
-			[% END %]
-
-			[% IF ( f9be ) %]
-				<option value="be" selected="selected">heliogravure</option>
-			[% ELSE %]
-				<option value="be">heliogravure</option>
-
-			[% END %]
-
-			[% IF ( f9bf ) %]
-				<option value="bf" selected="selected">chromolithography</option>
-			[% ELSE %]
-				<option value="bf">chromolithography</option>
-
-			[% END %]
-
-			[% IF ( f9bg ) %]
-				<option value="bg" selected="selected">lino-cut</option>
-			[% ELSE %]
-				<option value="bg">lino-cut</option>
-
-			[% END %]
-			[% IF ( f9bh ) %]
-				<option value="bh" selected="selected">etching</option>
-			[% ELSE %]
-				<option value="bh">etching</option>
-
-			[% END %]
-			[% IF ( f9bi ) %]
-				<option value="bi" selected="selected">lithography</option>
-			[% ELSE %]
-				<option value="bi">lithography</option>
-
-			[% END %]
-			[% IF ( f9bj ) %]
-				<option value="bj" selected="selected">photolithography</option>
-			[% ELSE %]
-				<option value="bj">photolithography</option>
-
-			[% END %]
-			[% IF ( f9bk ) %]
-				<option value="bk" selected="selected">zincography</option>
-			[% ELSE %]
-				<option value="bk">zincography</option>
-
-			[% END %]
-			[% IF ( f9bl ) %]
-				<option value="bl" selected="selected">algraphy</option>
-			[% ELSE %]
-				<option value="bl">algraphy</option>
-
-			[% END %]
-			[% IF ( f9bm ) %]
-				<option value="bm" selected="selected">aquatint</option>
-			[% ELSE %]
-				<option value="bm">aquatint</option>
-
-			[% END %]
-			[% IF ( f9bn ) %]
-				<option value="bn" selected="selected">reservage (sugar aquatint)</option>
-			[% ELSE %]
-				<option value="bn">reservage (sugar aquatint)</option>
-
-			[% END %]
-			[% IF ( f9ca ) %]
-				<option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
-			[% ELSE %]
-				<option value="ca">vernis-mou (soft ground etching or tracing)</option>
-
-			[% END %]
-			[% IF ( f9cb ) %]
-				<option value="cb" selected="selected">engraving</option>
-			[% ELSE %]
-				<option value="cb">engraving</option>
-
-			[% END %]
-			[% IF ( f9cc ) %]
-				<option value="cc" selected="selected">engraving in the crayon manner</option>
-			[% ELSE %]
-				<option value="cc">engraving in the crayon manner</option>
-
-			[% END %]
-			[% IF ( f9cd ) %]
-				<option value="cd" selected="selected">Burin</option>
-			[% ELSE %]
-				<option value="cd">Burin</option>
-
-			[% END %]
-			[% IF ( f9ce ) %]
-				<option value="ce" selected="selected">drypoint</option>
-			[% ELSE %]
-				<option value="ce">drypoint</option>
-
-			[% END %]
-			[% IF ( f9cf ) %]
-				<option value="cf" selected="selected">mezzotinta (mezzotint)</option>
-			[% ELSE %]
-				<option value="cf">Mezzoteinte</option>
-
-			[% END %]
-			[% IF ( f9cg ) %]
-				<option value="cg" selected="selected">monotype</option>
-			[% ELSE %]
-				<option value="cg">monotype</option>
-
-			[% END %]
-			[% IF ( f9ch ) %]
-				<option value="ch" selected="selected">silkscreen</option>
-			[% ELSE %]
-				<option value="ch">silkscreen</option>
-
-			[% END %]
-			[% IF ( f9ci ) %]
-				<option value="ci" selected="selected">steel engraving</option>
-			[% ELSE %]
-				<option value="ci">steel engraving</option>
-
-			[% END %]
-			[% IF ( f9cj ) %]
-				<option value="cj" selected="selected">computer graphics</option>
-			[% ELSE %]
-				<option value="cj">computer graphics</option>
-
-			[% END %]
-			[% IF ( f9ck ) %]
-				<option value="ck" selected="selected">photocopying</option>
-			[% ELSE %]
-				<option value="ck">photocopying</option>
-
-			[% END %]
-			[% IF ( f9uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f9vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f9xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f9zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-			[% END %]
-
-				</select>
-		</td>
-        </tr>
-	<tr>
-        <td><label for="f10">Technique (prints) 3</label></td>
-		<td>
-            <select name="f10" id="f10">
-			[% IF ( f10dblpipe ) %]
-            	<option value="||" selected="selected">||- Filling characters</option>
-            [% ELSE %]
-            	<option value="||">||- Filling characters</option>
-            [% END %]
-            
-			[% IF ( f10dblspace ) %]
-				<option value="  " selected="selected">non required value</option>
-			[% ELSE %]
-				<option value="  ">non required value</option>
-			[% END %]
-			[% IF ( f10ba ) %]
-				<option value="ba" selected="selected">woodcut</option>
-			[% ELSE %]
-				<option value="ba">woodcut</option>
-	
-			[% END %]
-
-			[% IF ( f10bb ) %]
-				<option value="bb" selected="selected">chiaroscuro woodcut</option>
-			[% ELSE %]
-				<option value="bb">chiaroscuro woodcut</option>
-			[% END %]
-
-			[% IF ( f10bc ) %]
-				<option value="bc" selected="selected">white-line woodcut</option>
-			[% ELSE %]
-				<option value="bc">white-line woodcut</option>
-			[% END %]
-
-			[% IF ( f10bd ) %]
-				<option value="bd" selected="selected">camaiu</option>
-			[% ELSE %]
-				<option value="bd">camaiu</option>
-			[% END %]
-
-			[% IF ( f10be ) %]
-				<option value="be" selected="selected">heliogravure</option>
-			[% ELSE %]
-				<option value="be">heliogravure</option>
-			[% END %]
-
-			[% IF ( f10bf ) %]
-				<option value="bf" selected="selected">chromolithography</option>
-			[% ELSE %]
-				<option value="bf">chromolithography</option>
-			[% END %]
-
-			[% IF ( f10bg ) %]
-				<option value="bg" selected="selected">lino-cut</option>
-			[% ELSE %]
-				<option value="bg">lino-cut</option>
-
-			[% END %]
-			[% IF ( f10bh ) %]
-				<option value="bh" selected="selected">etching</option>
-			[% ELSE %]
-				<option value="bh">etching</option>
-
-			[% END %]
-			[% IF ( f10bi ) %]
-                <option value="bi" selected="selected">lithography</option>
-			[% ELSE %]
-				<option value="bi">lithography</option>
-
-			[% END %]
-			[% IF ( f10bj ) %]
-				<option value="bj" selected="selected">photolithography</option>
-			[% ELSE %]
-				<option value="bj">photolithography</option>
-
-			[% END %]
-			[% IF ( f10bk ) %]
-				<option value="bk" selected="selected">zincography</option>
-			[% ELSE %]
-				<option value="bk">zincography</option>
-
-			[% END %]
-			[% IF ( f10bl ) %]
-				<option value="bl" selected="selected">algraphy</option>
-			[% ELSE %]
-				<option value="bl">algraphy</option>
-
-			[% END %]
-			[% IF ( f10bm ) %]
-				<option value="bm" selected="selected">aquatint</option>
-			[% ELSE %]
-				<option value="bm">aquatint</option>
-
-			[% END %]
-			[% IF ( f10bn ) %]
-				<option value="bn" selected="selected">reservage (sugar aquatint)</option>
-			[% ELSE %]
-				<option value="bn">reservage (sugar aquatint)</option>
-
-			[% END %]
-			[% IF ( f10ca ) %]
-				<option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
-			[% ELSE %]
-				<option value="ca">vernis-mou (soft ground etching or tracing)</option>
-
-			[% END %]
-			[% IF ( f10cb ) %]
-				<option value="cb" selected="selected">engraving</option>
-			[% ELSE %]
-				<option value="cb">engraving</option>
-
-			[% END %]
-			[% IF ( f10cc ) %]
-				<option value="cc" selected="selected">engraving in the crayon manner</option>
-			[% ELSE %]
-				<option value="cc">engraving in the crayon manner</option>
-
-			[% END %]
-			[% IF ( f10cd ) %]
-				<option value="cd" selected="selected">burin engraving</option>
-			[% ELSE %]
-				<option value="cd">burin engraving</option>
-
-			[% END %]
-			[% IF ( f10ce ) %]
-				<option value="ce" selected="selected">drypoint</option>
-			[% ELSE %]
-				<option value="ce">drypoint</option>
-
-			[% END %]
-			[% IF ( f10cf ) %]
-				<option value="cf" selected="selected">mezzotinta (mezzotint)</option>
-			[% ELSE %]
-				<option value="cf">Mezzoteinte</option>
-
-			[% END %]
-			[% IF ( f10cg ) %]
-				<option value="cg" selected="selected">monotype</option>
-			[% ELSE %]
-				<option value="cg">monotype</option>
-
-			[% END %]
-			[% IF ( f10ch ) %]
-				<option value="ch" selected="selected">silkscreen</option>
-			[% ELSE %]
-				<option value="ch">silkscreen</option>
-
-			[% END %]
-			[% IF ( f10ci ) %]
-				<option value="ci" selected="selected">steel engraving</option>
-			[% ELSE %]
-				<option value="ci">steel engraving</option>
-
-			[% END %]
-			[% IF ( f10cj ) %]
-				<option value="cj" selected="selected">computer graphics</option>
-			[% ELSE %]
-				<option value="cj">computer graphics</option>
-
-			[% END %]
-			[% IF ( f10ck ) %]
-				<option value="ck" selected="selected">photocopying</option>
-			[% ELSE %]
-				<option value="ck">photocopying</option>
-
-			[% END %]
-			[% IF ( f10uu ) %]
-				<option value="uu" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="uu">unknown</option>
-
-			[% END %]
-			[% IF ( f10vv ) %]
-				<option value="vv" selected="selected">mixed</option>
-			[% ELSE %]
-				<option value="vv">mixed</option>
-
-			[% END %]
-			[% IF ( f10xx ) %]
-				<option value="xx" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="xx">not applicable</option>
-
-			[% END %]
-			[% IF ( f10zz ) %]
-				<option value="zz" selected="selected">other</option>
-			[% ELSE %]
-				<option value="zz">other</option>
-			[% END %]
-
-				</select>
-		</td>
-        </tr>
-
-	<tr>
-        <td><label for="f11">Functional designation</label></td>
-		<td>
-            <select name="f11" id="f11">
-			[% IF ( f11dblpipe ) %]
-                            <option value="||" selected="selected">||- Filling characters</option>
-                        [% ELSE %]
-                            <option value="||">||- Filling characters</option>
-                        [% END %]
-                        
-			[% IF ( f11aa ) %]
-				<option value="aa" selected="selected">aa- architectural drawing</option>
-			[% ELSE %]
-				<option value="aa">aa- architectural drawing</option>
-			[% END %]
-
-			[% IF ( f11ab ) %]
-				<option value="ab" selected="selected">ab- item cover</option>
-			[% ELSE %]
-				<option value="ab">ab- item cover</option>
-			[% END %]
-
-			[% IF ( f11ac ) %]
-				<option value="ac" selected="selected">ac- sticker</option>
-			[% ELSE %]
-				<option value="ac">ac- sticker</option>
-			[% END %]
-
-			[% IF ( f11ad ) %]
-				<option value="ad" selected="selected">ad- poster</option>
-			[% ELSE %]
-				<option value="ad">ad- poster</option>
-			[% END %]
-
-			[% IF ( f11ae ) %]
-				<option value="ae" selected="selected">ae- postcard</option>
-			[% ELSE %]
-				<option value="ae">ae- postcard</option>
-			[% END %]
-
-			[% IF ( f11af ) %]
-				<option value="af" selected="selected">af- greetings card</option>
-			[% ELSE %]
-				<option value="af">af- greetings card</option>
-			[% END %]
-
-			[% IF ( f11ag ) %]
-				<option value="ag" selected="selected">ag- chart</option>
-			[% ELSE %]
-				<option value="ag">ag- chart</option>
-			[% END %]
-			
-			[% IF ( f11ah ) %]
-				<option value="ah" selected="selected">ah- playing cards</option>
-			[% ELSE %]
-				<option value="ah">ah- playing cards</option>
-			[% END %]
-			
-			[% IF ( f11ai ) %]
-				<option value="ai" selected="selected">ai- flash card</option>
-			[% ELSE %]
-				<option value="ai">ai- flash card</option>
-			[% END %]
-		
-			[% IF ( f11aj ) %]
-				<option value="aj" selected="selected">aj- ephemera</option>
-			[% ELSE %]
-				<option value="aj">aj- ephemera</option>
-			[% END %]
-			
-			[% IF ( f11an ) %]
-				<option value="an" selected="selected">an- calendar</option>
-			[% ELSE %]
-				<option value="an">an- calendar</option>
-			[% END %]
-			
-			[% IF ( f11as ) %]
-				<option value="as" selected="selected">as- place card</option>
-			[% ELSE %]
-				<option value="as">as- place card</option>
-			[% END %]
-			
-			[% IF ( f11au ) %]
-				<option value="au" selected="selected">au- santino</option>
-			[% ELSE %]
-				<option value="au">au- santino</option>
-			[% END %]
-			
-			[% IF ( f11uu ) %]
-				<option value="uu" selected="selected">uu- unknown</option>
-			[% ELSE %]
-				<option value="uu">uu- unknown</option>
-			[% END %]
-			
-			[% IF ( f11vv ) %]
-				<option value="vv" selected="selected">vv- mixed</option>
-			[% ELSE %]
-				<option value="vv">vv- mixed</option>
-			[% END %]
-			
-			[% IF ( f11xx ) %]
-				<option value="xx" selected="selected">xx- not applicable</option>
-			[% ELSE %]
-				<option value="xx">xx- not applicable</option>
-			[% END %]
-			
-			[% IF ( f11zz ) %]
-				<option value="zz" selected="selected">zz- other</option>
-			[% ELSE %]
-				<option value="zz">zz- other</option>
-			[% END %]
-			
-				</select>
-		</td>
-        </tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% END %]
+
+                            [% IF ( f7aa ) %]
+                                <option value="aa" selected="selected">pencil</option>
+                            [% ELSE %]
+                                <option value="aa">pencil</option>
+
+                            [% END %]
+
+                            [% IF ( f7ab ) %]
+                                <option value="ab" selected="selected">graphite</option>
+                            [% ELSE %]
+                                <option value="ab">graphite</option>
+                            [% END %]
+
+                            [% IF ( f7ac ) %]
+                                <option value="ac" selected="selected">colour pencil</option>
+                            [% ELSE %]
+                                <option value="ac">colour pencil</option>
+                            [% END %]
+
+                            [% IF ( f7ad ) %]
+                                <option value="ad" selected="selected">India ink</option>
+                            [% ELSE %]
+                                <option value="ad">India ink</option>
+
+                            [% END %]
+
+                            [% IF ( f7ae ) %]
+                                <option value="ae" selected="selected">lavierung India ink</option>
+                            [% ELSE %]
+                                <option value="ae">lavierung India ink</option>
+
+                            [% END %]
+
+                            [% IF ( f7af ) %]
+                                <option value="af" selected="selected">coal</option>
+                            [% ELSE %]
+                                <option value="af">coal</option>
+
+                            [% END %]
+                            [% IF ( f7ag ) %]
+                                <option value="ag" selected="selected">chalk</option>
+                            [% ELSE %]
+                                <option value="ag">chalk</option>
+
+                            [% END %]
+                            [% IF ( f7ah ) %]
+                                <option value="ah" selected="selected">black chalk</option>
+                            [% ELSE %]
+                                <option value="ah">black chalk</option>
+
+                            [% END %]
+                            [% IF ( f7ai ) %]
+                                <option value="ai" selected="selected">sanguine</option>
+                            [% ELSE %]
+                                <option value="ai">sanguine</option>
+
+                            [% END %]
+                            [% IF ( f7aj ) %]
+                                <option value="aj" selected="selected">water colour</option>
+                            [% ELSE %]
+                                <option value="aj">water colour</option>
+
+                            [% END %]
+                            [% IF ( f7ak ) %]
+                                <option value="ak" selected="selected">tempera</option>
+                            [% ELSE %]
+                                <option value="ak">tempera</option>
+
+                            [% END %]
+                            [% IF ( f7al ) %]
+                                <option value="al" selected="selected">gouache</option>
+                            [% ELSE %]
+                                <option value="al">gouache</option>
+
+                            [% END %]
+                            [% IF ( f7am ) %]
+                                <option value="am" selected="selected">pastel</option>
+                            [% ELSE %]
+                                <option value="am">pastel</option>
+
+                            [% END %]
+                            [% IF ( f7an ) %]
+                                <option value="an" selected="selected">oil</option>
+                            [% ELSE %]
+                                <option value="an">oil</option>
+
+                            [% END %]
+                            [% IF ( f7xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f7ba ) %]
+                                <option value="ba" selected="selected">felt-tip pen</option>
+                            [% ELSE %]
+                                <option value="ba">felt-tip pen</option>
+
+                            [% END %]
+                            [% IF ( f7bb ) %]
+                                <option value="bb" selected="selected">stain</option>
+                            [% ELSE %]
+                                <option value="bb">stain</option>
+
+                            [% END %]
+                            [% IF ( f7bc ) %]
+                                <option value="bc" selected="selected">crayon</option>
+                            [% ELSE %]
+                                <option value="bc">crayon</option>
+
+                            [% END %]
+                            [% IF ( f7bd ) %]
+                                <option value="bd" selected="selected">sepia</option>
+                            [% ELSE %]
+                                <option value="bd">sepia</option>
+
+                            [% END %]
+                            [% IF ( f7be ) %]
+                                <option value="be" selected="selected">writing ink</option>
+                            [% ELSE %]
+                                <option value="be">writing ink</option>
+
+                            [% END %]
+                            [% IF ( f7bf ) %]
+                                <option value="bf" selected="selected">casein</option>
+                            [% ELSE %]
+                                <option value="bf">casein</option>
+
+                            [% END %]
+                            [% IF ( f7bg ) %]
+                                <option value="bg" selected="selected">golding</option>
+                            [% ELSE %]
+                                <option value="bg">golding</option>
+
+                            [% END %]
+                            [% IF ( f7bh ) %]
+                                <option value="bh" selected="selected">encaustic</option>
+                            [% ELSE %]
+                                <option value="bh">encaustic</option>
+
+                            [% END %]
+                            [% IF ( f7bi ) %]
+                                <option value="bi" selected="selected">acrylics</option>
+                            [% ELSE %]
+                                <option value="bi">acrylics</option>
+
+                            [% END %]
+                            [% IF ( f7bj ) %]
+                                <option value="bj" selected="selected">collage</option>
+                            [% ELSE %]
+                                <option value="bj">collage</option>
+
+                            [% END %]
+                            [% IF ( f7bk ) %]
+                                <option value="bk" selected="selected">silver point</option>
+                            [% ELSE %]
+                                <option value="bk">silver point</option>
+
+                            [% END %]
+                            [% IF ( f7bl ) %]
+                                <option value="bl" selected="selected">air brush</option>
+                            [% ELSE %]
+                                <option value="bl">air brush</option>
+
+                            [% END %]
+                            [% IF ( f7uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f7vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f7zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+
+                            [% END %]
+
+                        </select>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td><label for="f8">Technique (prints) 1</label></td>
+                    <td>
+                        <select name="f8" id="f8">
+                            [% IF ( f8dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling character</option>
+                            [% END %]
+                            [% IF ( f8dblspace ) %]
+                                    <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                    <option value="  ">non required value</option>
+                            [% END %]
+                            [% IF ( f8ba ) %]
+                                <option value="ba" selected="selected">woodcut</option>
+                            [% ELSE %]
+                                <option value="ba">woodcut</option>
+                            [% END %]
+
+                            [% IF ( f8bb ) %]
+                                <option value="bb" selected="selected">chiaroscuro woodcut</option>
+                            [% ELSE %]
+                                <option value="bb">chiaroscuro woodcut</option>
+                            [% END %]
+
+                            [% IF ( f8bc ) %]
+                                <option value="bc" selected="selected">white-line woodcut</option>
+                            [% ELSE %]
+                                <option value="bc">white-line woodcut</option>
+                            [% END %]
+
+                            [% IF ( f8bd ) %]
+                                <option value="bd" selected="selected">camaiu</option>
+                            [% ELSE %]
+                                <option value="bd">camaiu</option>
+                            [% END %]
+
+                            [% IF ( f8be ) %]
+                                <option value="be" selected="selected">heliogravure</option>
+                            [% ELSE %]
+                                <option value="be">heliogravure</option>
+                            [% END %]
+
+                            [% IF ( f8bf ) %]
+                                <option value="bf" selected="selected">chromolithography</option>
+                            [% ELSE %]
+                                <option value="bf">chromolithography</option>
+                            [% END %]
+
+
+                            [% IF ( f8bg ) %]
+                                <option value="bg" selected="selected">lino-cut</option>
+                            [% ELSE %]
+                                <option value="bg">lino-cut</option>
+
+                            [% END %]
+                            [% IF ( f8bh ) %]
+                                <option value="bh" selected="selected">etching</option>
+                            [% ELSE %]
+                                <option value="bh">etching</option>
+
+                            [% END %]
+                            [% IF ( f8bi ) %]
+                                <option value="bi" selected="selected">lithography</option>
+                            [% ELSE %]
+                                <option value="bi">lithography</option>
+
+                            [% END %]
+                            [% IF ( f8bj ) %]
+                                <option value="bj" selected="selected">photolithography</option>
+                            [% ELSE %]
+                                <option value="bj">photolithography</option>
+
+                            [% END %]
+                            [% IF ( f8bk ) %]
+                                <option value="bk" selected="selected">zincography</option>
+                            [% ELSE %]
+                                <option value="bk">zincography</option>
+
+                            [% END %]
+                            [% IF ( f8bl ) %]
+                                <option value="bl" selected="selected">algraphy</option>
+                            [% ELSE %]
+                                <option value="bl">algraphy</option>
+
+                            [% END %]
+                            [% IF ( f8bm ) %]
+                                <option value="bm" selected="selected">aquatint</option>
+                            [% ELSE %]
+                                <option value="bm">aquatint</option>
+
+                            [% END %]
+                            [% IF ( f8bn ) %]
+                                <option value="bn" selected="selected">reservage (sugar aquatint)</option>
+                            [% ELSE %]
+                                <option value="bn">reservage (sugar aquatint)</option>
+
+                            [% END %]
+                            [% IF ( f8ca ) %]
+                                <option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
+                            [% ELSE %]
+                                <option value="ca">vernis-mou (soft ground etching or tracing)</option>
+
+                            [% END %]
+                            [% IF ( f8cb ) %]
+                                <option value="cb" selected="selected">engraving</option>
+                            [% ELSE %]
+                                <option value="cb">engraving</option>
+
+                            [% END %]
+                            [% IF ( f8cc ) %]
+                                <option value="cc" selected="selected">engraving in the crayon manner</option>
+                            [% ELSE %]
+                                <option value="cc">engraving in the crayon manner</option>
+
+                            [% END %]
+                            [% IF ( f8cd ) %]
+                                <option value="cd" selected="selected">Burin</option>
+                            [% ELSE %]
+                                <option value="cd">Burin</option>
+
+                            [% END %]
+                            [% IF ( f8ce ) %]
+                                <option value="ce" selected="selected">drypoint</option>
+                            [% ELSE %]
+                                <option value="ce">drypoint</option>
+
+                            [% END %]
+                            [% IF ( f8cf ) %]
+                                <option value="cf" selected="selected">mezzotinta (mezzotint)</option>
+                            [% ELSE %]
+                                <option value="cf">Mezzoteinte</option>
+
+                            [% END %]
+                            [% IF ( f8cg ) %]
+                                <option value="cg" selected="selected">monotype</option>
+                            [% ELSE %]
+                                <option value="cg">monotype</option>
+
+                            [% END %]
+                            [% IF ( f8ch ) %]
+                                <option value="ch" selected="selected">silkscreen</option>
+                            [% ELSE %]
+                                <option value="ch">silkscreen</option>
+
+                            [% END %]
+                            [% IF ( f8ci ) %]
+                                <option value="ci" selected="selected">steel engraving</option>
+                            [% ELSE %]
+                                <option value="ci">steel engraving</option>
+
+                            [% END %]
+                            [% IF ( f8cj ) %]
+                                <option value="cj" selected="selected">computer graphics</option>
+                            [% ELSE %]
+                                <option value="cj">computer graphics</option>
+
+                            [% END %]
+                            [% IF ( f8ck ) %]
+                                <option value="ck" selected="selected">photocopying</option>
+                            [% ELSE %]
+                                <option value="ck">photocopying</option>
+
+                            [% END %]
+                            [% IF ( f8uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f8vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f8xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f8zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+                            [% END %]
+
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><label for="f9">Technique (prints) 2</label></td>
+                    <td>
+                        <select name="f9" id="f9">
+                            [% IF ( f9dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+
+                            [% IF ( f9dblspace ) %]
+                                <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                <option value="  ">non required value</option>
+                            [% END %]
+                            [% IF ( f9ba ) %]
+                                <option value="ba" selected="selected">woodcut</option>
+                            [% ELSE %]
+                                <option value="ba">woodcut</option>
+
+                            [% END %]
+
+                            [% IF ( f9bb ) %]
+                                <option value="bb" selected="selected">chiaroscuro woodcut</option>
+                            [% ELSE %]
+                                <option value="bb">chiaroscuro woodcut</option>
+                            [% END %]
+
+                            [% IF ( f9bc ) %]
+                                <option value="bc" selected="selected">white-line woodcut</option>
+                            [% ELSE %]
+                                <option value="bc">white-line woodcut</option>
+                            [% END %]
+
+                            [% IF ( f9bd ) %]
+                                <option value="bd" selected="selected">camaiu</option>
+                            [% ELSE %]
+                                <option value="bd">camaiu</option>
+
+                            [% END %]
+
+                            [% IF ( f9be ) %]
+                                <option value="be" selected="selected">heliogravure</option>
+                            [% ELSE %]
+                                <option value="be">heliogravure</option>
+
+                            [% END %]
+
+                            [% IF ( f9bf ) %]
+                                <option value="bf" selected="selected">chromolithography</option>
+                            [% ELSE %]
+                                <option value="bf">chromolithography</option>
+
+                            [% END %]
+
+                            [% IF ( f9bg ) %]
+                                <option value="bg" selected="selected">lino-cut</option>
+                            [% ELSE %]
+                                <option value="bg">lino-cut</option>
+
+                            [% END %]
+                            [% IF ( f9bh ) %]
+                                <option value="bh" selected="selected">etching</option>
+                            [% ELSE %]
+                                <option value="bh">etching</option>
+
+                            [% END %]
+                            [% IF ( f9bi ) %]
+                                <option value="bi" selected="selected">lithography</option>
+                            [% ELSE %]
+                                <option value="bi">lithography</option>
+
+                            [% END %]
+                            [% IF ( f9bj ) %]
+                                <option value="bj" selected="selected">photolithography</option>
+                            [% ELSE %]
+                                <option value="bj">photolithography</option>
+
+                            [% END %]
+                            [% IF ( f9bk ) %]
+                                <option value="bk" selected="selected">zincography</option>
+                            [% ELSE %]
+                                <option value="bk">zincography</option>
+
+                            [% END %]
+                            [% IF ( f9bl ) %]
+                                <option value="bl" selected="selected">algraphy</option>
+                            [% ELSE %]
+                                <option value="bl">algraphy</option>
+
+                            [% END %]
+                            [% IF ( f9bm ) %]
+                                <option value="bm" selected="selected">aquatint</option>
+                            [% ELSE %]
+                                <option value="bm">aquatint</option>
+
+                            [% END %]
+                            [% IF ( f9bn ) %]
+                                <option value="bn" selected="selected">reservage (sugar aquatint)</option>
+                            [% ELSE %]
+                                <option value="bn">reservage (sugar aquatint)</option>
+
+                            [% END %]
+                            [% IF ( f9ca ) %]
+                                <option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
+                            [% ELSE %]
+                                <option value="ca">vernis-mou (soft ground etching or tracing)</option>
+
+                            [% END %]
+                            [% IF ( f9cb ) %]
+                                <option value="cb" selected="selected">engraving</option>
+                            [% ELSE %]
+                                <option value="cb">engraving</option>
+
+                            [% END %]
+                            [% IF ( f9cc ) %]
+                                <option value="cc" selected="selected">engraving in the crayon manner</option>
+                            [% ELSE %]
+                                <option value="cc">engraving in the crayon manner</option>
+
+                            [% END %]
+                            [% IF ( f9cd ) %]
+                                <option value="cd" selected="selected">Burin</option>
+                            [% ELSE %]
+                                <option value="cd">Burin</option>
+
+                            [% END %]
+                            [% IF ( f9ce ) %]
+                                <option value="ce" selected="selected">drypoint</option>
+                            [% ELSE %]
+                                <option value="ce">drypoint</option>
+
+                            [% END %]
+                            [% IF ( f9cf ) %]
+                                <option value="cf" selected="selected">mezzotinta (mezzotint)</option>
+                            [% ELSE %]
+                                <option value="cf">Mezzoteinte</option>
+
+                            [% END %]
+                            [% IF ( f9cg ) %]
+                                <option value="cg" selected="selected">monotype</option>
+                            [% ELSE %]
+                                <option value="cg">monotype</option>
+
+                            [% END %]
+                            [% IF ( f9ch ) %]
+                                <option value="ch" selected="selected">silkscreen</option>
+                            [% ELSE %]
+                                <option value="ch">silkscreen</option>
+
+                            [% END %]
+                            [% IF ( f9ci ) %]
+                                <option value="ci" selected="selected">steel engraving</option>
+                            [% ELSE %]
+                                <option value="ci">steel engraving</option>
+
+                            [% END %]
+                            [% IF ( f9cj ) %]
+                                <option value="cj" selected="selected">computer graphics</option>
+                            [% ELSE %]
+                                <option value="cj">computer graphics</option>
+
+                            [% END %]
+                            [% IF ( f9ck ) %]
+                                <option value="ck" selected="selected">photocopying</option>
+                            [% ELSE %]
+                                <option value="ck">photocopying</option>
+
+                            [% END %]
+                            [% IF ( f9uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f9vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f9xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f9zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="f10">Technique (prints) 3</label></td>
+                    <td>
+                        <select name="f10" id="f10">
+                            [% IF ( f10dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+
+                            [% IF ( f10dblspace ) %]
+                                <option value="  " selected="selected">non required value</option>
+                            [% ELSE %]
+                                <option value="  ">non required value</option>
+                            [% END %]
+                            [% IF ( f10ba ) %]
+                                <option value="ba" selected="selected">woodcut</option>
+                            [% ELSE %]
+                                <option value="ba">woodcut</option>
+
+                            [% END %]
+
+                            [% IF ( f10bb ) %]
+                                <option value="bb" selected="selected">chiaroscuro woodcut</option>
+                            [% ELSE %]
+                                <option value="bb">chiaroscuro woodcut</option>
+                            [% END %]
+
+                            [% IF ( f10bc ) %]
+                                <option value="bc" selected="selected">white-line woodcut</option>
+                            [% ELSE %]
+                                <option value="bc">white-line woodcut</option>
+                            [% END %]
+
+                            [% IF ( f10bd ) %]
+                                <option value="bd" selected="selected">camaiu</option>
+                            [% ELSE %]
+                                <option value="bd">camaiu</option>
+                            [% END %]
+
+                            [% IF ( f10be ) %]
+                                <option value="be" selected="selected">heliogravure</option>
+                            [% ELSE %]
+                                <option value="be">heliogravure</option>
+                            [% END %]
+
+                            [% IF ( f10bf ) %]
+                                <option value="bf" selected="selected">chromolithography</option>
+                            [% ELSE %]
+                                <option value="bf">chromolithography</option>
+                            [% END %]
+
+                            [% IF ( f10bg ) %]
+                                <option value="bg" selected="selected">lino-cut</option>
+                            [% ELSE %]
+                                <option value="bg">lino-cut</option>
+
+                            [% END %]
+                            [% IF ( f10bh ) %]
+                                <option value="bh" selected="selected">etching</option>
+                            [% ELSE %]
+                                <option value="bh">etching</option>
+
+                            [% END %]
+                            [% IF ( f10bi ) %]
+                                <option value="bi" selected="selected">lithography</option>
+                            [% ELSE %]
+                                <option value="bi">lithography</option>
+
+                            [% END %]
+                            [% IF ( f10bj ) %]
+                                <option value="bj" selected="selected">photolithography</option>
+                            [% ELSE %]
+                                <option value="bj">photolithography</option>
+
+                            [% END %]
+                            [% IF ( f10bk ) %]
+                                <option value="bk" selected="selected">zincography</option>
+                            [% ELSE %]
+                                <option value="bk">zincography</option>
+
+                            [% END %]
+                            [% IF ( f10bl ) %]
+                                <option value="bl" selected="selected">algraphy</option>
+                            [% ELSE %]
+                                <option value="bl">algraphy</option>
+
+                            [% END %]
+                            [% IF ( f10bm ) %]
+                                <option value="bm" selected="selected">aquatint</option>
+                            [% ELSE %]
+                                <option value="bm">aquatint</option>
+
+                            [% END %]
+                            [% IF ( f10bn ) %]
+                                <option value="bn" selected="selected">reservage (sugar aquatint)</option>
+                            [% ELSE %]
+                                <option value="bn">reservage (sugar aquatint)</option>
+
+                            [% END %]
+                            [% IF ( f10ca ) %]
+                                <option value="ca" selected="selected">vernis-mou (soft ground etching or tracing)</option>
+                            [% ELSE %]
+                                <option value="ca">vernis-mou (soft ground etching or tracing)</option>
+
+                            [% END %]
+                            [% IF ( f10cb ) %]
+                                <option value="cb" selected="selected">engraving</option>
+                            [% ELSE %]
+                                <option value="cb">engraving</option>
+
+                            [% END %]
+                            [% IF ( f10cc ) %]
+                                <option value="cc" selected="selected">engraving in the crayon manner</option>
+                            [% ELSE %]
+                                <option value="cc">engraving in the crayon manner</option>
+
+                            [% END %]
+                            [% IF ( f10cd ) %]
+                                <option value="cd" selected="selected">burin engraving</option>
+                            [% ELSE %]
+                                <option value="cd">burin engraving</option>
+
+                            [% END %]
+                            [% IF ( f10ce ) %]
+                                <option value="ce" selected="selected">drypoint</option>
+                            [% ELSE %]
+                                <option value="ce">drypoint</option>
+
+                            [% END %]
+                            [% IF ( f10cf ) %]
+                                <option value="cf" selected="selected">mezzotinta (mezzotint)</option>
+                            [% ELSE %]
+                                <option value="cf">Mezzoteinte</option>
+
+                            [% END %]
+                            [% IF ( f10cg ) %]
+                                <option value="cg" selected="selected">monotype</option>
+                            [% ELSE %]
+                                <option value="cg">monotype</option>
+
+                            [% END %]
+                            [% IF ( f10ch ) %]
+                                <option value="ch" selected="selected">silkscreen</option>
+                            [% ELSE %]
+                                <option value="ch">silkscreen</option>
+
+                            [% END %]
+                            [% IF ( f10ci ) %]
+                                <option value="ci" selected="selected">steel engraving</option>
+                            [% ELSE %]
+                                <option value="ci">steel engraving</option>
+
+                            [% END %]
+                            [% IF ( f10cj ) %]
+                                <option value="cj" selected="selected">computer graphics</option>
+                            [% ELSE %]
+                                <option value="cj">computer graphics</option>
+
+                            [% END %]
+                            [% IF ( f10ck ) %]
+                                <option value="ck" selected="selected">photocopying</option>
+                            [% ELSE %]
+                                <option value="ck">photocopying</option>
+
+                            [% END %]
+                            [% IF ( f10uu ) %]
+                                <option value="uu" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="uu">unknown</option>
+
+                            [% END %]
+                            [% IF ( f10vv ) %]
+                                <option value="vv" selected="selected">mixed</option>
+                            [% ELSE %]
+                                <option value="vv">mixed</option>
+
+                            [% END %]
+                            [% IF ( f10xx ) %]
+                                <option value="xx" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">not applicable</option>
+
+                            [% END %]
+                            [% IF ( f10zz ) %]
+                                <option value="zz" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="zz">other</option>
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="f11">Functional designation</label></td>
+                    <td>
+                        <select name="f11" id="f11">
+                            [% IF ( f11dblpipe ) %]
+                                <option value="||" selected="selected">||- Filling characters</option>
+                            [% ELSE %]
+                                <option value="||">||- Filling characters</option>
+                            [% END %]
+
+                            [% IF ( f11aa ) %]
+                                <option value="aa" selected="selected">aa- architectural drawing</option>
+                            [% ELSE %]
+                                <option value="aa">aa- architectural drawing</option>
+                            [% END %]
+
+                            [% IF ( f11ab ) %]
+                                <option value="ab" selected="selected">ab- item cover</option>
+                            [% ELSE %]
+                                <option value="ab">ab- item cover</option>
+                            [% END %]
+
+                            [% IF ( f11ac ) %]
+                                <option value="ac" selected="selected">ac- sticker</option>
+                            [% ELSE %]
+                                <option value="ac">ac- sticker</option>
+                            [% END %]
+
+                            [% IF ( f11ad ) %]
+                                <option value="ad" selected="selected">ad- poster</option>
+                            [% ELSE %]
+                                <option value="ad">ad- poster</option>
+                            [% END %]
+
+                            [% IF ( f11ae ) %]
+                                <option value="ae" selected="selected">ae- postcard</option>
+                            [% ELSE %]
+                                <option value="ae">ae- postcard</option>
+                            [% END %]
+
+                            [% IF ( f11af ) %]
+                                <option value="af" selected="selected">af- greetings card</option>
+                            [% ELSE %]
+                                <option value="af">af- greetings card</option>
+                            [% END %]
+
+                            [% IF ( f11ag ) %]
+                                <option value="ag" selected="selected">ag- chart</option>
+                            [% ELSE %]
+                                <option value="ag">ag- chart</option>
+                            [% END %]
+
+                            [% IF ( f11ah ) %]
+                                <option value="ah" selected="selected">ah- playing cards</option>
+                            [% ELSE %]
+                                <option value="ah">ah- playing cards</option>
+                            [% END %]
+
+                            [% IF ( f11ai ) %]
+                                <option value="ai" selected="selected">ai- flash card</option>
+                            [% ELSE %]
+                                <option value="ai">ai- flash card</option>
+                            [% END %]
+
+                            [% IF ( f11aj ) %]
+                                <option value="aj" selected="selected">aj- ephemera</option>
+                            [% ELSE %]
+                                <option value="aj">aj- ephemera</option>
+                            [% END %]
+
+                            [% IF ( f11an ) %]
+                                <option value="an" selected="selected">an- calendar</option>
+                            [% ELSE %]
+                                <option value="an">an- calendar</option>
+                            [% END %]
+
+                            [% IF ( f11as ) %]
+                                <option value="as" selected="selected">as- place card</option>
+                            [% ELSE %]
+                                <option value="as">as- place card</option>
+                            [% END %]
+
+                            [% IF ( f11au ) %]
+                                <option value="au" selected="selected">au- santino</option>
+                            [% ELSE %]
+                                <option value="au">au- santino</option>
+                            [% END %]
+
+                            [% IF ( f11uu ) %]
+                                <option value="uu" selected="selected">uu- unknown</option>
+                            [% ELSE %]
+                                <option value="uu">uu- unknown</option>
+                            [% END %]
+
+                            [% IF ( f11vv ) %]
+                                <option value="vv" selected="selected">vv- mixed</option>
+                            [% ELSE %]
+                                <option value="vv">vv- mixed</option>
+                            [% END %]
+
+                            [% IF ( f11xx ) %]
+                                <option value="xx" selected="selected">xx- not applicable</option>
+                            [% ELSE %]
+                                <option value="xx">xx- not applicable</option>
+                            [% END %]
+
+                            [% IF ( f11zz ) %]
+                                <option value="zz" selected="selected">zz- other</option>
+                            [% ELSE %]
+                                <option value="zz">zz- other</option>
+                            [% END %]
+
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

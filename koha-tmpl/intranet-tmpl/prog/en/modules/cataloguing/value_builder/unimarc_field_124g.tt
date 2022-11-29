@@ -5,69 +5,71 @@
 </head>
 
 <body id="cat_unimarc_field_124g" class="cat" style="padding:1em;">
-<h1>UNIMARC field 124g builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Recording technique for remote sensing image:</label></td>
-		<td>
-            <select name="f1" id="f1">
+    <h1>UNIMARC field 124g builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Recording technique for remote sensing image:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-			[% IF ( f1aa ) %]
-				<option value="aa" selected="selected">video recording</option>
-			[% ELSE %]
-				<option value="aa">video recording</option>
-			[% END %]
-			[% IF ( f1ab ) %]
-				<option value="ab" selected="selected">false colour photography</option>
-			[% ELSE %]
-				<option value="ab">false colour photography</option>
-			[% END %]
-			[% IF ( f1ac ) %]
-				<option value="ac" selected="selected">multispectral photography</option>
-			[% ELSE %]
-				<option value="ac">multispectral photography</option>
-			[% END %]
-			[% IF ( f1ad ) %]
-				<option value="ad" selected="selected">multispectral scanning</option>
-			[% ELSE %]
-				<option value="ad">multispectral scanning</option>
-			[% END %]
-			[% IF ( f1av ) %]
-				<option value="av" selected="selected">combination of various light emission techniques</option>
-			[% ELSE %]
-				<option value="av">combination of various light emission techniques</option>
-			[% END %]
-			[% IF ( f1da ) %]
-				<option value="da" selected="selected">infrared line scanning</option>
-			[% ELSE %]
-				<option value="da">infrared line scanning</option>
-			[% END %]
-			[% IF ( f1dv ) %]
-				<option value="dv" selected="selected">combination of various thermal infrared scanning</option>
-			[% ELSE %]
-				<option value="dv">combination of various thermal infrared scanning</option>
-			[% END %]
-			[% IF ( f1ga ) %]
-                <option value="ga" selected="selected">Sidelooking airbone radar</option>
-			[% ELSE %]
-                <option value="ga">Sidelooking airbone radar</option>
-			[% END %]
-			[% IF ( f1gb ) %]
-                <option value="gb" selected="selected">Synthetic aperture radar</option>
-			[% ELSE %]
-                <option value="gb">Synthetic aperture radar</option>
-			[% END %]
-			[% IF ( f1gc ) %]
-				<option value="gc" selected="selected">passive microwave mapping</option>
-			[% ELSE %]
-				<option value="gc">passive microwave mapping</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f1aa ) %]
+                                <option value="aa" selected="selected">video recording</option>
+                            [% ELSE %]
+                                <option value="aa">video recording</option>
+                            [% END %]
+                            [% IF ( f1ab ) %]
+                                <option value="ab" selected="selected">false colour photography</option>
+                            [% ELSE %]
+                                <option value="ab">false colour photography</option>
+                            [% END %]
+                            [% IF ( f1ac ) %]
+                                <option value="ac" selected="selected">multispectral photography</option>
+                            [% ELSE %]
+                                <option value="ac">multispectral photography</option>
+                            [% END %]
+                            [% IF ( f1ad ) %]
+                                <option value="ad" selected="selected">multispectral scanning</option>
+                            [% ELSE %]
+                                <option value="ad">multispectral scanning</option>
+                            [% END %]
+                            [% IF ( f1av ) %]
+                                <option value="av" selected="selected">combination of various light emission techniques</option>
+                            [% ELSE %]
+                                <option value="av">combination of various light emission techniques</option>
+                            [% END %]
+                            [% IF ( f1da ) %]
+                                <option value="da" selected="selected">infrared line scanning</option>
+                            [% ELSE %]
+                                <option value="da">infrared line scanning</option>
+                            [% END %]
+                            [% IF ( f1dv ) %]
+                                <option value="dv" selected="selected">combination of various thermal infrared scanning</option>
+                            [% ELSE %]
+                                <option value="dv">combination of various thermal infrared scanning</option>
+                            [% END %]
+                            [% IF ( f1ga ) %]
+                                <option value="ga" selected="selected">Sidelooking airbone radar</option>
+                            [% ELSE %]
+                                <option value="ga">Sidelooking airbone radar</option>
+                            [% END %]
+                            [% IF ( f1gb ) %]
+                                <option value="gb" selected="selected">Synthetic aperture radar</option>
+                            [% ELSE %]
+                                <option value="gb">Synthetic aperture radar</option>
+                            [% END %]
+                            [% IF ( f1gc ) %]
+                                <option value="gc" selected="selected">passive microwave mapping</option>
+                            [% ELSE %]
+                                <option value="gc">passive microwave mapping</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

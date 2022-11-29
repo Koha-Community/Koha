@@ -4,33 +4,35 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_field_123a" class="cat" style="padding:1em;">
-<h1>UNIMARC field 123a builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Type of scale:</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">linear scale</option>
-			[% ELSE %]
-				<option value="a">linear scale</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">angular scale</option>
-			[% ELSE %]
-				<option value="b">angular scale</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other type of scale (e.g., time scale, quantitative statistical scale)</option>
-			[% ELSE %]
-				<option value="z">other type of scale (e.g., time scale, quantitative statistical scale)</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+    <h1>UNIMARC field 123a builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Type of scale:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">linear scale</option>
+                            [% ELSE %]
+                                <option value="a">linear scale</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">angular scale</option>
+                            [% ELSE %]
+                                <option value="b">angular scale</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other type of scale (e.g., time scale, quantitative statistical scale)</option>
+                            [% ELSE %]
+                                <option value="z">other type of scale (e.g., time scale, quantitative statistical scale)</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

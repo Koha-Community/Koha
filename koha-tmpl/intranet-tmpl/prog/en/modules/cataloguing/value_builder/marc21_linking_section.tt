@@ -3,124 +3,123 @@
 <title>plugin for links &rsaquo; Cataloguing &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( fillinput ) %]
-    </head>
+        </head>
 
-<body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
-<h1>MARC21 Plugin to build links between records</h1>
+    <body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
+    <h1>MARC21 Plugin to build links between records</h1>
 [% ELSE %]
     </head>
 
-<body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
-<h1>Plugin to build links between records</h1>
+    <body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
+    <h1>Plugin to build links between records</h1>
     [% IF ( Search ) %]
-            <div id="MARC21_Linking_section_search">
-               <h2>Search for</h2>
+        <div id="MARC21_Linking_section_search" class="page-section">
+            <h2>Search for</h2>
             <form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl">
 
-                     <p>
-                            <input type="hidden" name="plugin_name" value="marc21_linking_section.pl" />
-                           <input type="hidden" name="index" value="[% index | html %]" />
-                               <input type="hidden" name="result" value="marc12 field 7 [% index | html %]" />
-                               <input type="hidden" name="op" value="do_search" />
-                            <label class="label100" for="searchbox">Any word</label>
-                               <input type="text" name="search" id="searchbox" size="35" /><br />
-                             <label for="itypeloop">Item type</label>
-                               <select name="itype" id="itypeloop">
-                           <option value="" selected="selected">All item types</option>
-                               [% FOREACH itypeloo IN itypeloop %]
-                             <option value="[% itypeloo.itemtype | html %]">[% itypeloo.description | html %]</option>
-                              [% END %]
-                              </select>
-                      </p>
-                   <p>
-                            <input type="submit" class="btn btn-primary" value="Start search" />
-                   </p>
+                <p>
+                    <input type="hidden" name="plugin_name" value="marc21_linking_section.pl" />
+                    <input type="hidden" name="index" value="[% index | html %]" />
+                    <input type="hidden" name="result" value="marc12 field 7 [% index | html %]" />
+                    <input type="hidden" name="op" value="do_search" />
+                    <label class="label100" for="searchbox">Any word</label>
+                    <input type="text" name="search" id="searchbox" size="35" /><br />
+                    <label for="itypeloop">Item type</label>
+                    <select name="itype" id="itypeloop">
+                        <option value="" selected="selected">All item types</option>
+                        [% FOREACH itypeloo IN itypeloop %]
+                            <option value="[% itypeloo.itemtype | html %]">[% itypeloo.description | html %]</option>
+                        [% END %]
+                    </select>
+                </p>
+                <p>
+                    <input type="submit" class="btn btn-primary" value="Start search" />
+                </p>
 
             </form>
         </div>
 
-       [% ELSE %]
+    [% ELSE %]
 
+        <h2>Search results</h2>
+        <div id="MARC21_Linking_section__resultnumber">
+            <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromprev | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
+            [% FOREACH number IN numbers %]
+                [% IF ( number.highlight ) %] <span class="highlight">[% number.number | html %]</span>
+                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
+                [% END %]
+            [% END %]
+            [% IF ( displaynext ) %]
+                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+            [% END %]</p>
+            <p class="resultcount">
+                [% IF ( total ) %]<span>Results [% from | html %] to [% to | html %] of [% total | html %]</span>
+                [% ELSE %]<span>No results found</span>
+                [% END %]</p></div>
+        <div id="resultlist" class="page-section">
+            <table>
+                <tr>
+                    <th>Concise description</th>
+                    <th>&nbsp;</th>
+                </tr>
+                [% FOREACH resul IN result %]
+                    [% IF ( resul.title ) %]
+                        <tr>
+                            [% IF ( resul.even ) %]<td class="hilighted">
+                            [% ELSE %]<td>[% END %]
+                            [% IF ( resul.MARC_ON ) %]
+                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
+                            [% ELSE %]
+                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
+                            [% END %]
+                            <p>[% resul.author | html %]
+                            [% IF ( resul.publishercode ) %]- [% resul.publishercode | html %][% END %]
+                            [% IF ( resul.place ) %] ; [% resul.place | html %][% END %]
+                            [% IF ( resul.pages ) %] - [% resul.pages | html %][% END %]
+                            [% IF ( resul.notes ) %] : [% resul.notes | html %][% END %]
+                            [% IF ( resul.size ) %] ; [% resul.size | html %][% END %]
+                            </p>
+                            </td>
 
-           <h2>Search results</h2>
-                <div id="MARC21_Linking_section__resultnumber">
-                        <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromprev | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
-                              [% FOREACH number IN numbers %]
-                                [% IF ( number.highlight ) %] <span class="highlight">[% number.number | html %]</span>
-                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
+                            <td>
+                                [% IF ( resul.biblionumber ) %]
+                                    <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;biblionumber=[% resul.biblionumber | uri %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
+                                [% ELSE %]
+                                    <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
                                 [% END %]
-                                [% END %]
-                                [% IF ( displaynext ) %]
-                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
-                                [% END %]</p>
-                  <p class="resultcount">
-                          [% IF ( total ) %]<span>Results [% from | html %] to [% to | html %] of [% total | html %]</span>
-                          [% ELSE %]<span>No results found</span>
-                          [% END %]</p></div>
-            <div id="resultlist">
-                  <table>
-                                <tr>
-                                   <th>Concise description</th>
-                                   <th>&nbsp;</th>
-                                </tr>
-                          [% FOREACH resul IN result %]
-                          [% IF ( resul.title ) %]
-                               <tr>
-                                    [% IF ( resul.even ) %]<td class="hilighted">
-                                    [% ELSE %]<td>[% END %]
-                                                            [% IF ( resul.MARC_ON ) %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
-                                                            [% ELSE %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
-                                                            [% END %]
-                                                    <p>[% resul.author | html %]
-                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode | html %][% END %]
-                                                    [% IF ( resul.place ) %] ; [% resul.place | html %][% END %]
-                                                    [% IF ( resul.pages ) %] - [% resul.pages | html %][% END %]
-                                                    [% IF ( resul.notes ) %] : [% resul.notes | html %][% END %]
-                                                    [% IF ( resul.size ) %] ; [% resul.size | html %][% END %]
-                                            </p>
-                                  </td>
+                            </td>
+                        </tr>
+                    [% END %]
+                [% END %]
+            </table>
+        </div>
+        <div id="resultnumber">
+            <p>
+                [% IF ( displayprev ) %]
+                    <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;amp;index=[% index | html %]&amp;amp;startfrom=[% startfromprev | html %]&amp;amp;search=[% search |url %]&amp;amp;resultsperpage=[% resultsperpage | html %]&amp;amp;type=intranet&amp;amp;op=do_search">
+                        &lt;&lt; Previous
+                    </a>
+                [% END %]
 
-                                 <td>
-                      [% IF ( resul.biblionumber ) %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;biblionumber=[% resul.biblionumber | uri %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
-                      [% ELSE %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
-                      [% END %]
-                                   </td>
-                          </tr>
-                          [% END %]
-                              [% END %]
-                      </table>
-               </div>
-         <div id="resultnumber">
-                        <p>
-                            [% IF ( displayprev ) %]
-                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;amp;index=[% index | html %]&amp;amp;startfrom=[% startfromprev | html %]&amp;amp;search=[% search |url %]&amp;amp;resultsperpage=[% resultsperpage | html %]&amp;amp;type=intranet&amp;amp;op=do_search">
-                                     &lt;&lt; Previous
-                              </a>
-                           [% END %]
+                [% FOREACH number IN numbers %]
+                    [% IF ( number.highlight ) %]
+                        <span class="highlight">
+                            [% number.number | html %]
+                        </span>
+                    [% ELSE %]
+                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search | html %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
+                            [% number.number | html %]
+                        </a>
+                    [% END %]
+                [% END %]
 
-                             [% FOREACH number IN numbers %]
-                                        [% IF ( number.highlight ) %]
-                                          <span class="highlight">
-                                                       [% number.number | html %]
-                                            </span>
-                                        [% ELSE %]
-                                             <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search | html %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
-                                                 [% number.number | html %]
-                                            </a>
-                                   [% END %]
-                              [% END %]
-
-                             [% IF ( displaynext ) %]
-                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
-                                  Next&gt;&gt;
-                           </a>
-                           [% END %]
-                      </p>
-           </div>
+                [% IF ( displaynext ) %]
+                    <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
+                    Next&gt;&gt;
+                    </a>
+                [% END %]
+            </p>
+        </div>
     [% END %]
 
 [% END %]

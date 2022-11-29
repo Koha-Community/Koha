@@ -5,135 +5,137 @@
 </head>
 
 <body id="cat_unimarc_field_125a" class="cat" style="padding:1em;">
-<h1>UNIMARC field 125a builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Type of score:</label></td>
-		<td>
-            <select name="f1" id="f1">
-			[% IF ( f1a ) %]
-				<option value="a" selected="selected">full score, graphic score</option>
-			[% ELSE %]
-				<option value="a">full score, graphic score</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="b" selected="selected">score (miniature or study size)</option>
-			[% ELSE %]
-				<option value="b">score (miniature or study size)</option>
-			[% END %]
-			[% IF ( f1c ) %]
-				<option value="c" selected="selected">vocal score, accompaniment reduced for keyboard</option>
-			[% ELSE %]
-				<option value="c">vocal score, accompaniment reduced for keyboard</option>
-			[% END %]
-			[% IF ( f1d ) %]
-				<option value="d" selected="selected">voice score, chorus score, accompaniment has been dropped</option>
-			[% ELSE %]
-				<option value="d">voice score, chorus score, accompaniment has been dropped</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">condensed score, pianoconductor score</option>
-			[% ELSE %]
-				<option value="e">condensed score, pianoconductor score</option>
-			[% END %]
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">graphic score</option>
-			[% ELSE %]
-				<option value="f">graphic score</option>
-			[% END %]
-			[% IF ( f1g ) %]
-				<option value="g" selected="selected">close score (e.g. hymnals)</option>
-			[% ELSE %]
-				<option value="g">close score (e.g. hymnals)</option>
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">tablature</option>
-			[% ELSE %]
-				<option value="h">tablature</option>
-			[% END %]
-			[% IF ( f1i ) %]
-				<option value="i" selected="selected">choir-book</option>
-			[% ELSE %]
-				<option value="i">choir-book</option>
-			[% END %]
-			[% IF ( f1j ) %]
-				<option value="j" selected="selected">compressed score</option>
-			[% ELSE %]
-				<option value="j">compressed score</option>
-			[% END %]
-			[% IF ( f1k ) %]
-				<option value="k" selected="selected">pseudo-score</option>
-			[% ELSE %]
-				<option value="k">pseudo-score</option>
-			[% END %]
-			[% IF ( f1l ) %]
-				<option value="l" selected="selected">solo part</option>
-			[% ELSE %]
-				<option value="l">solo part</option>
-			[% END %]
-			[% IF ( f1m ) %]
-				<option value="m" selected="selected">multiple formats</option>
-			[% ELSE %]
-				<option value="m">multiple formats</option>
-			[% END %]
-			[% IF ( f1u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f1x ) %]
-				<option value="x" selected="selected">not applicable, not a score</option>
-			[% ELSE %]
-				<option value="x">not applicable, not a score</option>
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other</option>
-			[% ELSE %]
-				<option value="z">other</option>
-			[% END %]
-			</select>
-		</td></tr>
-	<tr>
-        <td><label for="f2">Parts indicator:</label></td>
-		<td>
-            <select name="f2" id="f2">
+    <h1>UNIMARC field 125a builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Type of score:</label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                            [% IF ( f1a ) %]
+                                <option value="a" selected="selected">full score, graphic score</option>
+                            [% ELSE %]
+                                <option value="a">full score, graphic score</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="b" selected="selected">score (miniature or study size)</option>
+                            [% ELSE %]
+                                <option value="b">score (miniature or study size)</option>
+                            [% END %]
+                            [% IF ( f1c ) %]
+                                <option value="c" selected="selected">vocal score, accompaniment reduced for keyboard</option>
+                            [% ELSE %]
+                                <option value="c">vocal score, accompaniment reduced for keyboard</option>
+                            [% END %]
+                            [% IF ( f1d ) %]
+                                <option value="d" selected="selected">voice score, chorus score, accompaniment has been dropped</option>
+                            [% ELSE %]
+                                <option value="d">voice score, chorus score, accompaniment has been dropped</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">condensed score, pianoconductor score</option>
+                            [% ELSE %]
+                                <option value="e">condensed score, pianoconductor score</option>
+                            [% END %]
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">graphic score</option>
+                            [% ELSE %]
+                                <option value="f">graphic score</option>
+                            [% END %]
+                            [% IF ( f1g ) %]
+                                <option value="g" selected="selected">close score (e.g. hymnals)</option>
+                            [% ELSE %]
+                                <option value="g">close score (e.g. hymnals)</option>
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">tablature</option>
+                            [% ELSE %]
+                                <option value="h">tablature</option>
+                            [% END %]
+                            [% IF ( f1i ) %]
+                                <option value="i" selected="selected">choir-book</option>
+                            [% ELSE %]
+                                <option value="i">choir-book</option>
+                            [% END %]
+                            [% IF ( f1j ) %]
+                                <option value="j" selected="selected">compressed score</option>
+                            [% ELSE %]
+                                <option value="j">compressed score</option>
+                            [% END %]
+                            [% IF ( f1k ) %]
+                                <option value="k" selected="selected">pseudo-score</option>
+                            [% ELSE %]
+                                <option value="k">pseudo-score</option>
+                            [% END %]
+                            [% IF ( f1l ) %]
+                                <option value="l" selected="selected">solo part</option>
+                            [% ELSE %]
+                                <option value="l">solo part</option>
+                            [% END %]
+                            [% IF ( f1m ) %]
+                                <option value="m" selected="selected">multiple formats</option>
+                            [% ELSE %]
+                                <option value="m">multiple formats</option>
+                            [% END %]
+                            [% IF ( f1u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f1x ) %]
+                                <option value="x" selected="selected">not applicable, not a score</option>
+                            [% ELSE %]
+                                <option value="x">not applicable, not a score</option>
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other</option>
+                            [% ELSE %]
+                                <option value="z">other</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+                <tr>
+                    <td><label for="f2">Parts indicator:</label></td>
+                    <td>
+                        <select name="f2" id="f2">
 
-			[% IF ( f2a ) %]
-				<option value="a" selected="selected">parts exist (vocal and instrumental)</option>
-			[% ELSE %]
-				<option value="a">parts exist (vocal and instrumental)</option>
-			[% END %]
-			[% IF ( f2b ) %]
-				<option value="b" selected="selected">instrumental parts</option>
-			[% ELSE %]
-				<option value="b">instrumental parts</option>
-			[% END %]
-			[% IF ( f2c ) %]
-				<option value="c" selected="selected">vocal parts</option>
-			[% ELSE %]
-				<option value="c">vocal parts</option>
-			[% END %]
-			[% IF ( f2u ) %]
-				<option value="u" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="u">unknown</option>
-			[% END %]
-			[% IF ( f2x ) %]
-				<option value="x" selected="selected">not applicable</option>
-			[% ELSE %]
-				<option value="x">not applicable</option>
-			[% END %]
-			[% IF ( f2y ) %]
-				<option value="y" selected="selected">parts not present</option>
-			[% ELSE %]
-				<option value="y">parts not present</option>
-			[% END %]
-			</select>
-		</td></tr>
-</table>
-<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f2a ) %]
+                                <option value="a" selected="selected">parts exist (vocal and instrumental)</option>
+                            [% ELSE %]
+                                <option value="a">parts exist (vocal and instrumental)</option>
+                            [% END %]
+                            [% IF ( f2b ) %]
+                                <option value="b" selected="selected">instrumental parts</option>
+                            [% ELSE %]
+                                <option value="b">instrumental parts</option>
+                            [% END %]
+                            [% IF ( f2c ) %]
+                                <option value="c" selected="selected">vocal parts</option>
+                            [% ELSE %]
+                                <option value="c">vocal parts</option>
+                            [% END %]
+                            [% IF ( f2u ) %]
+                                <option value="u" selected="selected">unknown</option>
+                            [% ELSE %]
+                                <option value="u">unknown</option>
+                            [% END %]
+                            [% IF ( f2x ) %]
+                                <option value="x" selected="selected">not applicable</option>
+                            [% ELSE %]
+                                <option value="x">not applicable</option>
+                            [% END %]
+                            [% IF ( f2y ) %]
+                                <option value="y" selected="selected">parts not present</option>
+                            [% ELSE %]
+                                <option value="y">parts not present</option>
+                            [% END %]
+                        </select>
+                    </td></tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

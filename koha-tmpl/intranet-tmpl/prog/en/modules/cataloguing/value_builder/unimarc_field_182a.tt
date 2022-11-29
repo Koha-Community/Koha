@@ -5,81 +5,82 @@
 
 <body id="cat_unimarc_field_182a" class="cat" style="padding:1em;">
 
-<h3>UNIMARC field 182a builder</h3>
+    <h3>UNIMARC field 182a builder</h3>
 
-<form name="f_pop" action="">
-<table>
-    <tr>
-        <td><label for="f1">Media Type Code </label></td>
-        <td>
-            <select name="f1" id="f1">
-            [% IF ( f1 == "a" ) %]
-                <option value="a" selected="selected">a - audio</option>
-            [% ELSE %]
-                <option value="a">a - audio</option>
-            [% END %]
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Media Type Code </label></td>
+                    <td>
+                        <select name="f1" id="f1">
+                        [% IF ( f1 == "a" ) %]
+                            <option value="a" selected="selected">a - audio</option>
+                        [% ELSE %]
+                            <option value="a">a - audio</option>
+                        [% END %]
 
-            [% IF ( f1 == "b" ) %]
-                <option value="b" selected="selected">b - electronic</option>
-            [% ELSE %]
-                <option value="b">b - electronic</option>
-            [% END %]
+                        [% IF ( f1 == "b" ) %]
+                            <option value="b" selected="selected">b - electronic</option>
+                        [% ELSE %]
+                            <option value="b">b - electronic</option>
+                        [% END %]
 
-            [% IF ( f1 == "c" ) %]
-                <option value="c" selected="selected">c - microform</option>
-            [% ELSE %]
-                <option value="c">c - microform</option>
-            [% END %]
+                        [% IF ( f1 == "c" ) %]
+                            <option value="c" selected="selected">c - microform</option>
+                        [% ELSE %]
+                            <option value="c">c - microform</option>
+                        [% END %]
 
-            [% IF ( f1 == "d" ) %]
-                <option value="d" selected="selected">d - microscopic</option>
-            [% ELSE %]
-                <option value="d">d - microscopic</option>
-            [% END %]
+                        [% IF ( f1 == "d" ) %]
+                            <option value="d" selected="selected">d - microscopic</option>
+                        [% ELSE %]
+                            <option value="d">d - microscopic</option>
+                        [% END %]
 
-            [% IF ( f1 == "e" ) %]
-                <option value="e" selected="selected">e - projected</option>
-            [% ELSE %]
-                <option value="e">e - projected</option>
-            [% END %]
+                        [% IF ( f1 == "e" ) %]
+                            <option value="e" selected="selected">e - projected</option>
+                        [% ELSE %]
+                            <option value="e">e - projected</option>
+                        [% END %]
 
-            [% IF ( f1 == "f" ) %]
-                <option value="f" selected="selected">f - stereographic</option>
-            [% ELSE %]
-                <option value="f">f - stereographic</option>
-            [% END %]
+                        [% IF ( f1 == "f" ) %]
+                            <option value="f" selected="selected">f - stereographic</option>
+                        [% ELSE %]
+                            <option value="f">f - stereographic</option>
+                        [% END %]
 
-            [% IF ( f1 == "g" ) %]
-                <option value="g" selected="selected">g - video</option>
-            [% ELSE %]
-                <option value="g">g - video</option>
-            [% END %]
+                        [% IF ( f1 == "g" ) %]
+                            <option value="g" selected="selected">g - video</option>
+                        [% ELSE %]
+                            <option value="g">g - video</option>
+                        [% END %]
 
-            [% IF ( f1 == "m" ) %]
-                <option value="m" selected="selected">m - multiple media</option>
-            [% ELSE %]
-                <option value="m">m - multiple media</option>
-            [% END %]
+                        [% IF ( f1 == "m" ) %]
+                            <option value="m" selected="selected">m - multiple media</option>
+                        [% ELSE %]
+                            <option value="m">m - multiple media</option>
+                        [% END %]
 
-            [% IF ( f1 == "n" ) %]
-                <option value="n" selected="selected">n - unmediated</option>
-            [% ELSE %]
-                <option value="n">n - unmediated</option>
-            [% END %]
+                        [% IF ( f1 == "n" ) %]
+                            <option value="n" selected="selected">n - unmediated</option>
+                        [% ELSE %]
+                            <option value="n">n - unmediated</option>
+                        [% END %]
 
-            [% IF ( f1 == "z" ) %]
-                <option value="z" selected="selected">z - other media</option>
-            [% ELSE %]
-                <option value="z">z - other media</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+                        [% IF ( f1 == "z" ) %]
+                            <option value="z" selected="selected">z - other media</option>
+                        [% ELSE %]
+                            <option value="z">z - other media</option>
+                        [% END %]
+                        </select>
+                    </td>
+                </tr>
 
-</table>
-<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
-</form>
-
+            </table>
+            <p><input type="button" class="btn btn-primary" value="OK" onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+        </form>
+    </div> <!-- /.page-section -->
 <script>
 
     function submitMyForm() {

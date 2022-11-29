@@ -5,86 +5,88 @@
 </head>
 
 <body id="cat_unimarc_field_106" class="cat" style="padding:1em;">
-<h1>UNIMARC field 106 builder</h1>
-<form name="f_pop" action="">
-<table>
-	<tr>
-        <td><label for="f1">Form of item: Coded data: Medium designator (not repeatable)</label></td>
-		<td>
-            <select name="f1" id="f1">
-            
-			[% IF ( f1r ) %]
-				<option value="r" selected="selected">regular print</option>
-			[% ELSE %]
-				<option value="r">regular print</option>
-			[% END %]
-			[% IF ( f1b ) %]
-				<option value="d" selected="selected">large print</option>
-			[% ELSE %]
-				<option value="d">large print</option>
-			[% END %]
-			[% IF ( f1e ) %]
-				<option value="e" selected="selected">newspaper format</option>
-			[% ELSE %]
-				<option value="e">newspaper format</option>
-			[% END %]
+    <h1>UNIMARC field 106 builder</h1>
+    <div class="page-section">
+        <form name="f_pop" action="">
+            <table>
+                <tr>
+                    <td><label for="f1">Form of item: Coded data: Medium designator (not repeatable)</label></td>
+                    <td>
+                        <select name="f1" id="f1">
 
-			[% IF ( f1f ) %]
-				<option value="f" selected="selected">Braille or Moon script</option>
-			[% ELSE %]
-				<option value="f">Braille or Moon script</option>
-	
-			[% END %]
-			[% IF ( f1g ) %]
-				<option value="g" selected="selected">microprint</option>
-			[% ELSE %]
-				<option value="g">microprint</option>
-	
-			[% END %]
-			[% IF ( f1h ) %]
-				<option value="h" selected="selected">handwritten</option>
-			[% ELSE %]
-				<option value="h">handwritten</option>
-	
-			[% END %]
-			[% IF ( f1i ) %]
-				<option value="i" selected="selected">multimedia (e.g. an item in regular print with a microfiche
-supplement)</option>
-			[% ELSE %]
-				<option value="i">multimedia (e.g. an item in regular print with a microfiche
-supplement)</option>
-	
-			[% END %]
-			[% IF ( f1j ) %]
-				<option value="j" selected="selected">mini-print</option>
-			[% ELSE %]
-				<option value="j">mini-print</option>
-				
-			[% END %]
-			[% IF ( f1s ) %]
-				<option value="s" selected="selected">electronic</option>
-			[% ELSE %]
-				<option value="s">electronic</option>
-				
-			[% END %]
-			[% IF ( f1t ) %]
-				<option value="t" selected="selected">microform</option>
-			[% ELSE %]
-				<option value="t">microform</option>
-	
-			[% END %]
-			[% IF ( f1z ) %]
-				<option value="z" selected="selected">other form of material</option>
-			[% ELSE %]
-				<option value="z">other form of material</option>
-	
-			[% END %]
-			</select>
-		</td>
-	</tr>
-</table>
-<fieldset class="action"><input type="button" value="OK"  onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+                            [% IF ( f1r ) %]
+                                <option value="r" selected="selected">regular print</option>
+                            [% ELSE %]
+                                <option value="r">regular print</option>
+                            [% END %]
+                            [% IF ( f1b ) %]
+                                <option value="d" selected="selected">large print</option>
+                            [% ELSE %]
+                                <option value="d">large print</option>
+                            [% END %]
+                            [% IF ( f1e ) %]
+                                <option value="e" selected="selected">newspaper format</option>
+                            [% ELSE %]
+                                <option value="e">newspaper format</option>
+                            [% END %]
+
+                            [% IF ( f1f ) %]
+                                <option value="f" selected="selected">Braille or Moon script</option>
+                            [% ELSE %]
+                                <option value="f">Braille or Moon script</option>
+
+                            [% END %]
+                            [% IF ( f1g ) %]
+                                <option value="g" selected="selected">microprint</option>
+                            [% ELSE %]
+                                <option value="g">microprint</option>
+
+                            [% END %]
+                            [% IF ( f1h ) %]
+                                <option value="h" selected="selected">handwritten</option>
+                            [% ELSE %]
+                                <option value="h">handwritten</option>
+
+                            [% END %]
+                            [% IF ( f1i ) %]
+                                <option value="i" selected="selected">multimedia (e.g. an item in regular print with a microfiche
+                                    supplement)</option>
+                            [% ELSE %]
+                                <option value="i">multimedia (e.g. an item in regular print with a microfiche
+                                supplement)</option>
+
+                            [% END %]
+                            [% IF ( f1j ) %]
+                                <option value="j" selected="selected">mini-print</option>
+                            [% ELSE %]
+                                <option value="j">mini-print</option>
+
+                            [% END %]
+                            [% IF ( f1s ) %]
+                                <option value="s" selected="selected">electronic</option>
+                            [% ELSE %]
+                                <option value="s">electronic</option>
+
+                            [% END %]
+                            [% IF ( f1t ) %]
+                                <option value="t" selected="selected">microform</option>
+                            [% ELSE %]
+                                <option value="t">microform</option>
+
+                            [% END %]
+                            [% IF ( f1z ) %]
+                                <option value="z" selected="selected">other form of material</option>
+                            [% ELSE %]
+                                <option value="z">other form of material</option>
+
+                            [% END %]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK"  onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+        </form>
+    </div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

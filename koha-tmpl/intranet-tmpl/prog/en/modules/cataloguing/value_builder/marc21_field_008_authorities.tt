@@ -5,714 +5,719 @@
 </head>
 
 <body id="cat_marc21_field_008_authorities" class="cat" style="padding:1em;">
-<h1> 008 Fixed-length data elements</h1>
-<form name="f_pop" onsubmit="report()" action="">
-<input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
-<input name="f1" value="[% f1 | html %]" type="hidden" />
-<table>
-	<tr>
-		<td>00-05- Date entered on file</td>
-		<td>[% f1 | html %]</td>
-	</tr>
-	<tr>
-		<td><label for="f6">06- Direct or indirect geographic subdivision</label></td>
-		<td>
-            <select name="f6" id="f6">
-            [% IF ( f6 ) %]
-                <option value=" " selected="selected">#- Not subdivided geographically</option>
-            [% ELSE %]
-                <option value=" ">#- Not subdivided geographically</option>
-            [% END %]
-            [% IF ( f6d ) %]
-                <option value="d" selected="selected">d- Subdivided geographically&mdash;direct</option>
-            [% ELSE %]
-                <option value="d">d- Subdivided geographically&mdash;direct</option>
-            [% END %]
-            [% IF ( f6i ) %]
-                <option value="i" selected="selected">i- Subdivided geographically&mdash;indirect</option>
-            [% ELSE %]
-                <option value="i">i- Subdivided geographically&mdash;indirect</option>
-            [% END %]
-            [% IF ( f6n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f6pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-			</select>
-		</td>
-	</tr>
 
-    <tr>
-        <td><label for="f7">07- Romanization scheme</label></td>
-        <td>
-            <select name="f7" id="f7">
-            [% IF ( f7a ) %]
-                <option value="a" selected="selected">a- International standard</option>
-            [% ELSE %]
-                <option value="a">a- International standard</option>
-            [% END %]
-            [% IF ( f7b ) %]
-                <option value="b" selected="selected">b- National standard</option>
-            [% ELSE %]
-                <option value="b">b- National standard</option>
-            [% END %]
-            [% IF ( f7c ) %]
-                <option value="c" selected="selected">c- National library association standard</option>
-            [% ELSE %]
-                <option value="c">c- National library association standard</option>
-            [% END %]
-            [% IF ( f7d ) %]
-                <option value="d" selected="selected">d- National library or bibliographic agency standard</option>
-            [% ELSE %]
-                <option value="d">d- National library or bibliographic agency standard</option>
-            [% END %]
-            [% IF ( f7e ) %]
-                <option value="e" selected="selected">e- Local standard</option>
-            [% ELSE %]
-                <option value="e">e- Local standard</option>
-            [% END %]
-            [% IF ( f7f ) %]
-                <option value="f" selected="selected">f- Standard of unknown origin</option>
-            [% ELSE %]
-                <option value="f">f- Standard of unknown origin</option>
-            [% END %]
-            [% IF ( f7g ) %]
-                <option value="g" selected="selected">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
-            [% ELSE %]
-                <option value="g">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
-            [% END %]
-            [% IF ( f7n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f7pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f8">08- Language of catalog</label></td>
-        <td>
-            <select name="f8" id="f8">
-            [% IF ( f8 ) %]
-                <option value=" " selected="selected">#- No information provided</option>
-            [% ELSE %]
-                <option value=" ">#- No information provided</option>
-            [% END %]
-            [% IF ( f8b ) %]
-                <option value="b" selected="selected">b- English and French</option>
-            [% ELSE %]
-                <option value="b">b- English and French</option>
-            [% END %]
-            [% IF ( f8e ) %]
-                <option value="e" selected="selected">e- English only</option>
-            [% ELSE %]
-                <option value="e">e- English only</option>
-            [% END %]
-            [% IF ( f8f ) %]
-                <option value="f" selected="selected">f- French only</option>
-            [% ELSE %]
-                <option value="f">f- French only</option>
-            [% END %]
-            [% IF ( f8pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f9">09- Kind of record</label></td>
-        <td>
-            <select name="f9" id="f9">
-            [% IF ( f9a ) %]
-                <option value="a" selected="selected">a- Established heading</option>
-            [% ELSE %]
-                <option value="a">a- Established heading</option>
-            [% END %]
-            [% IF ( f9b ) %]
-                <option value="b" selected="selected">b- Untraced reference</option>
-            [% ELSE %]
-                <option value="b">b- Untraced reference</option>
-            [% END %]
-            [% IF ( f9c ) %]
-                <option value="c" selected="selected">c- Traced reference</option>
-            [% ELSE %]
-                <option value="c">c- Traced reference</option>
-            [% END %]
-            [% IF ( f9d ) %]
-                <option value="d" selected="selected">d- Subdivision</option>
-            [% ELSE %]
-                <option value="d">d- Subdivision</option>
-            [% END %]
-            [% IF ( f9e ) %]
-                <option value="e" selected="selected">e- Node label</option>
-            [% ELSE %]
-                <option value="e">e- Node label</option>
-            [% END %]
-            [% IF ( f9f ) %]
-                <option value="f" selected="selected">f- Established heading and subdivision</option>
-            [% ELSE %]
-                <option value="f">f- Established heading and subdivision</option>
-            [% END %]
-            [% IF ( f9g ) %]
-                <option value="g" selected="selected">g- Reference and subdivision</option>
-            [% ELSE %]
-                <option value="g">g- Reference and subdivision</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f10">10- Descriptive cataloging rules</label></td>
-        <td>
-            <select name="f10" id="f10">
-            [% IF ( f10a ) %]
-                <option value="a" selected="selected">a- Earlier rules</option>
-            [% ELSE %]
-                <option value="a">a- Earlier rules</option>
-            [% END %]
-            [% IF ( f10b ) %]
-                <option value="b" selected="selected">b- AACR 1</option>
-            [% ELSE %]
-                <option value="b">b- AACR 1</option>
-            [% END %]
-            [% IF ( f10c ) %]
-                <option value="c" selected="selected">c- AACR 2</option>
-            [% ELSE %]
-                <option value="c">c- AACR 2</option>
-            [% END %]
-            [% IF ( f10d ) %]
-                <option value="d" selected="selected">d- AACR 2 compatible heading</option>
-            [% ELSE %]
-                <option value="d">d- AACR 2 compatible heading</option>
-            [% END %]
-            [% IF ( f10n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f10z ) %]
-                <option value="z" selected="selected">z- Other</option>
-            [% ELSE %]
-                <option value="z">z- Other</option>
-            [% END %]
-            [% IF ( f10pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f11">11- Subject heading system/thesaurus</label></td>
-        <td>
-            <select name="f11" id="f11">
-            [% IF ( f11a ) %]
-                <option value="a" selected="selected">a- Library of Congress subject headings</option>
-            [% ELSE %]
-                <option value="a">a- Library of Congress Subject Headings</option>
-            [% END %]
-            [% IF ( f11b ) %]
-                <option value="b" selected="selected">b- LC subject headings for children's literature</option>
-            [% ELSE %]
-                <option value="b">b- LC subject headings for children's literature</option>
-            [% END %]
-            [% IF ( f11c ) %]
-                <option value="c" selected="selected">c- Medical subject headings</option>
-            [% ELSE %]
-                <option value="c">c- Medical subject headings</option>
-            [% END %]
-            [% IF ( f11d ) %]
-                <option value="d" selected="selected">d- National Agricultural Library subject authority file</option>
-            [% ELSE %]
-                <option value="d">d- National Agricultural Library subject authority file</option>
-            [% END %]
-            [% IF ( f11k ) %]
-                <option value="k" selected="selected">k- Canadian subject headings</option>
-            [% ELSE %]
-                <option value="k">k- Canadian subject headings</option>
-            [% END %]
-            [% IF ( f11n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f11r ) %]
-                <option value="r" selected="selected">r- Art and architecture thesaurus</option>
-            [% ELSE %]
-                <option value="r">r- Art and architecture thesaurus</option>
-            [% END %]
-            [% IF ( f11s ) %]
-                <option value="s" selected="selected">s- Sears list of subject headings</option>
-            [% ELSE %]
-                <option value="s">s- Sears List of Subject Headings</option>
-            [% END %]
-            [% IF ( f11v ) %]
-                <option value="v" selected="selected">v- Repertoire de vedettes-matiere</option>
-            [% ELSE %]
-                <option value="v">v- Repertoire de vedettes-matiere</option>
-            [% END %]
-            [% IF ( f11z ) %]
-                <option value="z" selected="selected">z- Other</option>
-            [% ELSE %]
-                <option value="z">z- Other</option>
-            [% END %]
-            [% IF ( f11pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f12">12- Type of series</label></td>
-        <td>
-            <select name="f12" id="f12">
-            [% IF ( f12a ) %]
-                <option value="a" selected="selected">a- Monographic series</option>
-            [% ELSE %]
-                <option value="a">a- Monographic series</option>
-            [% END %]
-            [% IF ( f12b ) %]
-                <option value="b" selected="selected">b- Multipart item</option>
-            [% ELSE %]
-                <option value="b">b- Multipart item</option>
-            [% END %]
-            [% IF ( f12c ) %]
-                <option value="c" selected="selected">c- Series-like phrase</option>
-            [% ELSE %]
-                <option value="c">c- Series-like phrase</option>
-            [% END %]
-            [% IF ( f12n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f12z ) %]
-                <option value="z" selected="selected">z- Other</option>
-            [% ELSE %]
-                <option value="z">z- Other</option>
-            [% END %]
-            [% IF ( f12pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f13">13- Numbered or unnumbered series</label></td>
-        <td>
-            <select name="f13" id="f13">
-            [% IF ( f13a ) %]
-                <option value="a" selected="selected">a- Numbered</option>
-            [% ELSE %]
-                <option value="a">a- Numbered</option>
-            [% END %]
-            [% IF ( f13b ) %]
-                <option value="b" selected="selected">b- Unnumbered</option>
-            [% ELSE %]
-                <option value="b">b- Unnumbered</option>
-            [% END %]
-            [% IF ( f13c ) %]
-                <option value="c" selected="selected">c- Numbering varies</option>
-            [% ELSE %]
-                <option value="c">c- Numbering varies</option>
-            [% END %]
-            [% IF ( f13n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f13pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f14">14- Heading use--main or added entry</label></td>
-        <td>
-            <select name="f14" id="f14">
-            [% IF ( f14a ) %]
-                <option value="a" selected="selected">a- Appropriate</option>
-            [% ELSE %]
-                <option value="a">a- Appropriate</option>
-            [% END %]
-            [% IF ( f14b ) %]
-                <option value="b" selected="selected">b- Not appropriate</option>
-            [% ELSE %]
-                <option value="b">b- Not appropriate</option>
-            [% END %]
-            [% IF ( f14pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f15">15- Heading use--subject added entry</label></td>
-        <td>
-            <select name="f15" id="f15">
-            [% IF ( f15a ) %]
-                <option value="a" selected="selected">a- Appropriate</option>
-            [% ELSE %]
-                <option value="a">a- Appropriate</option>
-            [% END %]
-            [% IF ( f15b ) %]
-                <option value="b" selected="selected">b- Not appropriate</option>
-            [% ELSE %]
-                <option value="b">b- Not appropriate</option>
-            [% END %]
-            [% IF ( f15pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f16">16- Heading use--series added entry</label></td>
-        <td>
-            <select name="f16" id="f16">
-            [% IF ( f16a ) %]
-                <option value="a" selected="selected">a- Appropriate</option>
-            [% ELSE %]
-                <option value="a">a- Appropriate</option>
-            [% END %]
-            [% IF ( f16b ) %]
-                <option value="b" selected="selected">b- Not appropriate</option>
-            [% ELSE %]
-                <option value="b">b- Not appropriate</option>
-            [% END %]
-            [% IF ( f16pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f17">17- Type of subject subdivision</label></td>
-        <td>
-            <select name="f17" id="f17">
-            [% IF ( f17a ) %]
-                <option value="a" selected="selected">a- Topical</option>
-            [% ELSE %]
-                <option value="a">a- Topical</option>
-            [% END %]
-            [% IF ( f17b ) %]
-                <option value="b" selected="selected">b- Form</option>
-            [% ELSE %]
-                <option value="b">b- Form</option>
-            [% END %]
-            [% IF ( f17c ) %]
-                <option value="c" selected="selected">c- Chronological</option>
-            [% ELSE %]
-                <option value="c">c- Chronological</option>
-            [% END %]
-            [% IF ( f17d ) %]
-                <option value="d" selected="selected">d- Geographic</option>
-            [% ELSE %]
-                <option value="d">d- Geographic</option>
-            [% END %]
-            [% IF ( f17e ) %]
-                <option value="e" selected="selected">e- Language</option>
-            [% ELSE %]
-                <option value="e">e- Language</option>
-            [% END %]
-            [% IF ( f17n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f17pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+    <h1> 008 Fixed-length data elements</h1>
 
-    <tr>
-        <td>18-27 Undefined character positions</td>
-        <td></td>
-    </tr>
+    <form name="f_pop" onsubmit="report()" action="">
+    <input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
+    <input name="f1" value="[% f1 | html %]" type="hidden" />
 
-    <tr>
-        <td><label for="f28">28- Type of government agency</label></td>
-        <td>
-            <select name="f28" id="f28">
-            [% IF ( f28 ) %]
-                <option value=" " selected="selected">#- Not a government agency</option>
-            [% ELSE %]
-                <option value=" ">#- Not a government agency</option>
-            [% END %]
-            [% IF ( f28a ) %]
-                <option value="a" selected="selected">a- Autonomous or semi-autonomous component</option>
-            [% ELSE %]
-                <option value="a">a- Autonomous or semi-autonomous component</option>
-            [% END %]
-            [% IF ( f28c ) %]
-                <option value="c" selected="selected">c- Multilocal</option>
-            [% ELSE %]
-                <option value="c">c- Multilocal</option>
-            [% END %]
-            [% IF ( f28f ) %]
-                <option value="f" selected="selected">f- Federal/national</option>
-            [% ELSE %]
-                <option value="f">f- Federal/national</option>
-            [% END %]
-            [% IF ( f28i ) %]
-                <option value="i" selected="selected">i- International intergovernmental</option>
-            [% ELSE %]
-                <option value="i">i- International intergovernmental</option>
-            [% END %]
-            [% IF ( f28l ) %]
-                <option value="l" selected="selected">l- Local</option>
-            [% ELSE %]
-                <option value="l">l- Local</option>
-            [% END %]
-            [% IF ( f28m ) %]
-                <option value="m" selected="selected">m- Multistate</option>
-            [% ELSE %]
-                <option value="m">m- Multistate</option>
-            [% END %]
-            [% IF ( f28o ) %]
-                <option value="o" selected="selected">o- Government agency&mdash;type undetermined</option>
-            [% ELSE %]
-                <option value="o">o- Government agency&mdash;type undetermined</option>
-            [% END %]
-            [% IF ( f28s ) %]
-                <option value="s" selected="selected">s- State, provincial, territorial, dependent, etc.</option>
-            [% ELSE %]
-                <option value="s">s- State, provincial, territorial, dependent, etc.</option>
-            [% END %]
-            [% IF ( f28u ) %]
-                <option value="u" selected="selected">u- Unknown if heading is government agency</option>
-            [% ELSE %]
-                <option value="u">u- Unknown if heading is government agency</option>
-            [% END %]
-            [% IF ( f28z ) %]
-                <option value="z" selected="selected">z- Other</option>
-            [% ELSE %]
-                <option value="z">z- Other</option>
-            [% END %]
-            [% IF ( f28pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f29">29- Reference evaluation</label></td>
-        <td>
-            <select name="f29" id="f29">
-            [% IF ( f29a ) %]
-                <option value="a" selected="selected">a- Tracings are consistent with the heading</option>
-            [% ELSE %]
-                <option value="a">a- Tracings are consistent with the heading</option>
-            [% END %]
-            [% IF ( f29b ) %]
-                <option value="b" selected="selected">b- Tracings are not necessarily consistent with the heading</option>
-            [% ELSE %]
-                <option value="b">b- Tracings are not necessarily consistent with the heading</option>
-            [% END %]
-            [% IF ( f29n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f29pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+    <div class="page-section">
+        <table>
+            <tr>
+                <td>00-05- Date entered on file</td>
+                <td>[% f1 | html %]</td>
+            </tr>
+            <tr>
+                <td><label for="f6">06- Direct or indirect geographic subdivision</label></td>
+                <td>
+                    <select name="f6" id="f6">
+                        [% IF ( f6 ) %]
+                            <option value=" " selected="selected">#- Not subdivided geographically</option>
+                        [% ELSE %]
+                            <option value=" ">#- Not subdivided geographically</option>
+                        [% END %]
+                        [% IF ( f6d ) %]
+                            <option value="d" selected="selected">d- Subdivided geographically&mdash;direct</option>
+                        [% ELSE %]
+                            <option value="d">d- Subdivided geographically&mdash;direct</option>
+                        [% END %]
+                        [% IF ( f6i ) %]
+                            <option value="i" selected="selected">i- Subdivided geographically&mdash;indirect</option>
+                        [% ELSE %]
+                            <option value="i">i- Subdivided geographically&mdash;indirect</option>
+                        [% END %]
+                        [% IF ( f6n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f6pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
 
-    <tr>
-        <td>30 Undefined character position</td>
-        <td></td>
-    </tr>
+            <tr>
+                <td><label for="f7">07- Romanization scheme</label></td>
+                <td>
+                    <select name="f7" id="f7">
+                        [% IF ( f7a ) %]
+                            <option value="a" selected="selected">a- International standard</option>
+                        [% ELSE %]
+                            <option value="a">a- International standard</option>
+                        [% END %]
+                        [% IF ( f7b ) %]
+                            <option value="b" selected="selected">b- National standard</option>
+                        [% ELSE %]
+                            <option value="b">b- National standard</option>
+                        [% END %]
+                        [% IF ( f7c ) %]
+                            <option value="c" selected="selected">c- National library association standard</option>
+                        [% ELSE %]
+                            <option value="c">c- National library association standard</option>
+                        [% END %]
+                        [% IF ( f7d ) %]
+                            <option value="d" selected="selected">d- National library or bibliographic agency standard</option>
+                        [% ELSE %]
+                            <option value="d">d- National library or bibliographic agency standard</option>
+                        [% END %]
+                        [% IF ( f7e ) %]
+                            <option value="e" selected="selected">e- Local standard</option>
+                        [% ELSE %]
+                            <option value="e">e- Local standard</option>
+                        [% END %]
+                        [% IF ( f7f ) %]
+                            <option value="f" selected="selected">f- Standard of unknown origin</option>
+                        [% ELSE %]
+                            <option value="f">f- Standard of unknown origin</option>
+                        [% END %]
+                        [% IF ( f7g ) %]
+                            <option value="g" selected="selected">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
+                        [% ELSE %]
+                            <option value="g">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
+                        [% END %]
+                        [% IF ( f7n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f7pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f8">08- Language of catalog</label></td>
+                <td>
+                    <select name="f8" id="f8">
+                        [% IF ( f8 ) %]
+                            <option value=" " selected="selected">#- No information provided</option>
+                        [% ELSE %]
+                            <option value=" ">#- No information provided</option>
+                        [% END %]
+                        [% IF ( f8b ) %]
+                            <option value="b" selected="selected">b- English and French</option>
+                        [% ELSE %]
+                            <option value="b">b- English and French</option>
+                        [% END %]
+                        [% IF ( f8e ) %]
+                            <option value="e" selected="selected">e- English only</option>
+                        [% ELSE %]
+                            <option value="e">e- English only</option>
+                        [% END %]
+                        [% IF ( f8f ) %]
+                            <option value="f" selected="selected">f- French only</option>
+                        [% ELSE %]
+                            <option value="f">f- French only</option>
+                        [% END %]
+                        [% IF ( f8pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f9">09- Kind of record</label></td>
+                <td>
+                    <select name="f9" id="f9">
+                        [% IF ( f9a ) %]
+                            <option value="a" selected="selected">a- Established heading</option>
+                        [% ELSE %]
+                            <option value="a">a- Established heading</option>
+                        [% END %]
+                        [% IF ( f9b ) %]
+                            <option value="b" selected="selected">b- Untraced reference</option>
+                        [% ELSE %]
+                            <option value="b">b- Untraced reference</option>
+                        [% END %]
+                        [% IF ( f9c ) %]
+                            <option value="c" selected="selected">c- Traced reference</option>
+                        [% ELSE %]
+                            <option value="c">c- Traced reference</option>
+                        [% END %]
+                        [% IF ( f9d ) %]
+                            <option value="d" selected="selected">d- Subdivision</option>
+                        [% ELSE %]
+                            <option value="d">d- Subdivision</option>
+                        [% END %]
+                        [% IF ( f9e ) %]
+                            <option value="e" selected="selected">e- Node label</option>
+                        [% ELSE %]
+                            <option value="e">e- Node label</option>
+                        [% END %]
+                        [% IF ( f9f ) %]
+                            <option value="f" selected="selected">f- Established heading and subdivision</option>
+                        [% ELSE %]
+                            <option value="f">f- Established heading and subdivision</option>
+                        [% END %]
+                        [% IF ( f9g ) %]
+                            <option value="g" selected="selected">g- Reference and subdivision</option>
+                        [% ELSE %]
+                            <option value="g">g- Reference and subdivision</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f10">10- Descriptive cataloging rules</label></td>
+                <td>
+                    <select name="f10" id="f10">
+                        [% IF ( f10a ) %]
+                            <option value="a" selected="selected">a- Earlier rules</option>
+                        [% ELSE %]
+                            <option value="a">a- Earlier rules</option>
+                        [% END %]
+                        [% IF ( f10b ) %]
+                            <option value="b" selected="selected">b- AACR 1</option>
+                        [% ELSE %]
+                            <option value="b">b- AACR 1</option>
+                        [% END %]
+                        [% IF ( f10c ) %]
+                            <option value="c" selected="selected">c- AACR 2</option>
+                        [% ELSE %]
+                            <option value="c">c- AACR 2</option>
+                        [% END %]
+                        [% IF ( f10d ) %]
+                            <option value="d" selected="selected">d- AACR 2 compatible heading</option>
+                        [% ELSE %]
+                            <option value="d">d- AACR 2 compatible heading</option>
+                        [% END %]
+                        [% IF ( f10n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f10z ) %]
+                            <option value="z" selected="selected">z- Other</option>
+                        [% ELSE %]
+                            <option value="z">z- Other</option>
+                        [% END %]
+                        [% IF ( f10pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f11">11- Subject heading system/thesaurus</label></td>
+                <td>
+                    <select name="f11" id="f11">
+                        [% IF ( f11a ) %]
+                            <option value="a" selected="selected">a- Library of Congress subject headings</option>
+                        [% ELSE %]
+                            <option value="a">a- Library of Congress Subject Headings</option>
+                        [% END %]
+                        [% IF ( f11b ) %]
+                            <option value="b" selected="selected">b- LC subject headings for children's literature</option>
+                        [% ELSE %]
+                            <option value="b">b- LC subject headings for children's literature</option>
+                        [% END %]
+                        [% IF ( f11c ) %]
+                            <option value="c" selected="selected">c- Medical subject headings</option>
+                        [% ELSE %]
+                            <option value="c">c- Medical subject headings</option>
+                        [% END %]
+                        [% IF ( f11d ) %]
+                            <option value="d" selected="selected">d- National Agricultural Library subject authority file</option>
+                        [% ELSE %]
+                            <option value="d">d- National Agricultural Library subject authority file</option>
+                        [% END %]
+                        [% IF ( f11k ) %]
+                            <option value="k" selected="selected">k- Canadian subject headings</option>
+                        [% ELSE %]
+                            <option value="k">k- Canadian subject headings</option>
+                        [% END %]
+                        [% IF ( f11n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f11r ) %]
+                            <option value="r" selected="selected">r- Art and architecture thesaurus</option>
+                        [% ELSE %]
+                            <option value="r">r- Art and architecture thesaurus</option>
+                        [% END %]
+                        [% IF ( f11s ) %]
+                            <option value="s" selected="selected">s- Sears list of subject headings</option>
+                        [% ELSE %]
+                            <option value="s">s- Sears List of Subject Headings</option>
+                        [% END %]
+                        [% IF ( f11v ) %]
+                            <option value="v" selected="selected">v- Repertoire de vedettes-matiere</option>
+                        [% ELSE %]
+                            <option value="v">v- Repertoire de vedettes-matiere</option>
+                        [% END %]
+                        [% IF ( f11z ) %]
+                            <option value="z" selected="selected">z- Other</option>
+                        [% ELSE %]
+                            <option value="z">z- Other</option>
+                        [% END %]
+                        [% IF ( f11pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f12">12- Type of series</label></td>
+                <td>
+                    <select name="f12" id="f12">
+                        [% IF ( f12a ) %]
+                            <option value="a" selected="selected">a- Monographic series</option>
+                        [% ELSE %]
+                            <option value="a">a- Monographic series</option>
+                        [% END %]
+                        [% IF ( f12b ) %]
+                            <option value="b" selected="selected">b- Multipart item</option>
+                        [% ELSE %]
+                            <option value="b">b- Multipart item</option>
+                        [% END %]
+                        [% IF ( f12c ) %]
+                            <option value="c" selected="selected">c- Series-like phrase</option>
+                        [% ELSE %]
+                            <option value="c">c- Series-like phrase</option>
+                        [% END %]
+                        [% IF ( f12n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f12z ) %]
+                            <option value="z" selected="selected">z- Other</option>
+                        [% ELSE %]
+                            <option value="z">z- Other</option>
+                        [% END %]
+                        [% IF ( f12pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f13">13- Numbered or unnumbered series</label></td>
+                <td>
+                    <select name="f13" id="f13">
+                        [% IF ( f13a ) %]
+                            <option value="a" selected="selected">a- Numbered</option>
+                        [% ELSE %]
+                            <option value="a">a- Numbered</option>
+                        [% END %]
+                        [% IF ( f13b ) %]
+                            <option value="b" selected="selected">b- Unnumbered</option>
+                        [% ELSE %]
+                            <option value="b">b- Unnumbered</option>
+                        [% END %]
+                        [% IF ( f13c ) %]
+                            <option value="c" selected="selected">c- Numbering varies</option>
+                        [% ELSE %]
+                            <option value="c">c- Numbering varies</option>
+                        [% END %]
+                        [% IF ( f13n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f13pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f14">14- Heading use--main or added entry</label></td>
+                <td>
+                    <select name="f14" id="f14">
+                        [% IF ( f14a ) %]
+                            <option value="a" selected="selected">a- Appropriate</option>
+                        [% ELSE %]
+                            <option value="a">a- Appropriate</option>
+                        [% END %]
+                        [% IF ( f14b ) %]
+                            <option value="b" selected="selected">b- Not appropriate</option>
+                        [% ELSE %]
+                            <option value="b">b- Not appropriate</option>
+                        [% END %]
+                        [% IF ( f14pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f15">15- Heading use--subject added entry</label></td>
+                <td>
+                    <select name="f15" id="f15">
+                        [% IF ( f15a ) %]
+                            <option value="a" selected="selected">a- Appropriate</option>
+                        [% ELSE %]
+                            <option value="a">a- Appropriate</option>
+                        [% END %]
+                        [% IF ( f15b ) %]
+                            <option value="b" selected="selected">b- Not appropriate</option>
+                        [% ELSE %]
+                            <option value="b">b- Not appropriate</option>
+                        [% END %]
+                        [% IF ( f15pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f16">16- Heading use--series added entry</label></td>
+                <td>
+                    <select name="f16" id="f16">
+                        [% IF ( f16a ) %]
+                            <option value="a" selected="selected">a- Appropriate</option>
+                        [% ELSE %]
+                            <option value="a">a- Appropriate</option>
+                        [% END %]
+                        [% IF ( f16b ) %]
+                            <option value="b" selected="selected">b- Not appropriate</option>
+                        [% ELSE %]
+                            <option value="b">b- Not appropriate</option>
+                        [% END %]
+                        [% IF ( f16pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f17">17- Type of subject subdivision</label></td>
+                <td>
+                    <select name="f17" id="f17">
+                        [% IF ( f17a ) %]
+                            <option value="a" selected="selected">a- Topical</option>
+                        [% ELSE %]
+                            <option value="a">a- Topical</option>
+                        [% END %]
+                        [% IF ( f17b ) %]
+                            <option value="b" selected="selected">b- Form</option>
+                        [% ELSE %]
+                            <option value="b">b- Form</option>
+                        [% END %]
+                        [% IF ( f17c ) %]
+                            <option value="c" selected="selected">c- Chronological</option>
+                        [% ELSE %]
+                            <option value="c">c- Chronological</option>
+                        [% END %]
+                        [% IF ( f17d ) %]
+                            <option value="d" selected="selected">d- Geographic</option>
+                        [% ELSE %]
+                            <option value="d">d- Geographic</option>
+                        [% END %]
+                        [% IF ( f17e ) %]
+                            <option value="e" selected="selected">e- Language</option>
+                        [% ELSE %]
+                            <option value="e">e- Language</option>
+                        [% END %]
+                        [% IF ( f17n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f17pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
 
-    <tr>
-        <td><label for="f31">31- Record update in process</label></td>
-        <td>
-            <select name="f31" id="f31">
-            [% IF ( f31a ) %]
-                <option value="a" selected="selected">a- Record can be used</option>
-            [% ELSE %]
-                <option value="a">a- Record can be used</option>
-            [% END %]
-            [% IF ( f31b ) %]
-                <option value="b" selected="selected">b- Record is being updated</option>
-            [% ELSE %]
-                <option value="b">b- Record is being updated</option>
-            [% END %]
-            [% IF ( f31pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f32">32- Undifferentiated personal name</label></td>
-        <td>
-            <select name="f32" id="f32">
-            [% IF ( f32a ) %]
-                <option value="a" selected="selected">a- Differentiated personal name</option>
-            [% ELSE %]
-                <option value="a">a- Differentiated personal name</option>
-            [% END %]
-            [% IF ( f32b ) %]
-                <option value="b" selected="selected">b- Undifferentiated personal name</option>
-            [% ELSE %]
-                <option value="b">b- Undifferentiated personal name</option>
-            [% END %]
-            [% IF ( f32n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f32pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f33">33- Level of establishment</label></td>
-        <td>
-            <select name="f33" id="f33">
-            [% IF ( f33a ) %]
-                <option value="a" selected="selected">a- Fully established</option>
-            [% ELSE %]
-                <option value="a">a- Fully established</option>
-            [% END %]
-            [% IF ( f33b ) %]
-                <option value="b" selected="selected">b- Memorandum</option>
-            [% ELSE %]
-                <option value="b">b- Memorandum</option>
-            [% END %]
-            [% IF ( f33c ) %]
-                <option value="c" selected="selected">c- Provisional</option>
-            [% ELSE %]
-                <option value="c">c- Provisional</option>
-            [% END %]
-            [% IF ( f33d ) %]
-                <option value="d" selected="selected">d- Preliminary</option>
-            [% ELSE %]
-                <option value="d">d- Preliminary</option>
-            [% END %]
-            [% IF ( f33n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n- Not applicable</option>
-            [% END %]
-            [% IF ( f33pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
+            <tr>
+                <td>18-27 Undefined character positions</td>
+                <td></td>
+            </tr>
 
-    <tr>
-        <td>34-37 Undefined character positions</td>
-        <td></td>
-    </tr>
+            <tr>
+                <td><label for="f28">28- Type of government agency</label></td>
+                <td>
+                    <select name="f28" id="f28">
+                        [% IF ( f28 ) %]
+                            <option value=" " selected="selected">#- Not a government agency</option>
+                        [% ELSE %]
+                            <option value=" ">#- Not a government agency</option>
+                        [% END %]
+                        [% IF ( f28a ) %]
+                            <option value="a" selected="selected">a- Autonomous or semi-autonomous component</option>
+                        [% ELSE %]
+                            <option value="a">a- Autonomous or semi-autonomous component</option>
+                        [% END %]
+                        [% IF ( f28c ) %]
+                            <option value="c" selected="selected">c- Multilocal</option>
+                        [% ELSE %]
+                            <option value="c">c- Multilocal</option>
+                        [% END %]
+                        [% IF ( f28f ) %]
+                            <option value="f" selected="selected">f- Federal/national</option>
+                        [% ELSE %]
+                            <option value="f">f- Federal/national</option>
+                        [% END %]
+                        [% IF ( f28i ) %]
+                            <option value="i" selected="selected">i- International intergovernmental</option>
+                        [% ELSE %]
+                            <option value="i">i- International intergovernmental</option>
+                        [% END %]
+                        [% IF ( f28l ) %]
+                            <option value="l" selected="selected">l- Local</option>
+                        [% ELSE %]
+                            <option value="l">l- Local</option>
+                        [% END %]
+                        [% IF ( f28m ) %]
+                            <option value="m" selected="selected">m- Multistate</option>
+                        [% ELSE %]
+                            <option value="m">m- Multistate</option>
+                        [% END %]
+                        [% IF ( f28o ) %]
+                            <option value="o" selected="selected">o- Government agency&mdash;type undetermined</option>
+                        [% ELSE %]
+                            <option value="o">o- Government agency&mdash;type undetermined</option>
+                        [% END %]
+                        [% IF ( f28s ) %]
+                            <option value="s" selected="selected">s- State, provincial, territorial, dependent, etc.</option>
+                        [% ELSE %]
+                            <option value="s">s- State, provincial, territorial, dependent, etc.</option>
+                        [% END %]
+                        [% IF ( f28u ) %]
+                            <option value="u" selected="selected">u- Unknown if heading is government agency</option>
+                        [% ELSE %]
+                            <option value="u">u- Unknown if heading is government agency</option>
+                        [% END %]
+                        [% IF ( f28z ) %]
+                            <option value="z" selected="selected">z- Other</option>
+                        [% ELSE %]
+                            <option value="z">z- Other</option>
+                        [% END %]
+                        [% IF ( f28pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f29">29- Reference evaluation</label></td>
+                <td>
+                    <select name="f29" id="f29">
+                        [% IF ( f29a ) %]
+                            <option value="a" selected="selected">a- Tracings are consistent with the heading</option>
+                        [% ELSE %]
+                            <option value="a">a- Tracings are consistent with the heading</option>
+                        [% END %]
+                        [% IF ( f29b ) %]
+                            <option value="b" selected="selected">b- Tracings are not necessarily consistent with the heading</option>
+                        [% ELSE %]
+                            <option value="b">b- Tracings are not necessarily consistent with the heading</option>
+                        [% END %]
+                        [% IF ( f29n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f29pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
 
-    <tr>
-        <td><label for="f38">38- Modified record</label></td>
-        <td>
-            <select name="f38" id="f38">
-            [% IF ( f38 ) %]
-                <option value=" " selected="selected">#- Not modified</option>
-            [% ELSE %]
-                <option value=" ">#- Not modified</option>
-            [% END %]
-            [% IF ( f38s ) %]
-                <option value="s" selected="selected">s- Shortened</option>
-            [% ELSE %]
-                <option value="s">s- Shortened</option>
-            [% END %]
-            [% IF ( f38x ) %]
-                <option value="x" selected="selected">x- Missing characters</option>
-            [% ELSE %]
-                <option value="x">x- Missing characters</option>
-            [% END %]
-            [% IF ( f38pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f39">39- Cataloging source</label></td>
-        <td>
-            <select name="f39" id="f39">
-            [% IF ( f39 ) %]
-                <option value=" " selected="selected">#- National bibliographic agency</option>
-            [% ELSE %]
-                <option value=" ">#- National bibliographic agency</option>
-            [% END %]
-            [% IF ( f39c ) %]
-                <option value="c" selected="selected">c- Cooperative cataloging program</option>
-            [% ELSE %]
-                <option value="c">c- Cooperative cataloging program</option>
-            [% END %]
-            [% IF ( f39d ) %]
-                <option value="d" selected="selected">d- Other</option>
-            [% ELSE %]
-                <option value="d">d- Other</option>
-            [% END %]
-            [% IF ( f39u ) %]
-                <option value="u" selected="selected">u- Unknown</option>
-            [% ELSE %]
-                <option value="u">u- Unknown</option>
-            [% END %]
-            [% IF ( f39pipe ) %]
-                <option value="|" selected="selected">|- No attempt to code</option>
-            [% ELSE %]
-                <option value="|">|- No attempt to code</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-</table>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+            <tr>
+                <td>30 Undefined character position</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td><label for="f31">31- Record update in process</label></td>
+                <td>
+                    <select name="f31" id="f31">
+                        [% IF ( f31a ) %]
+                            <option value="a" selected="selected">a- Record can be used</option>
+                        [% ELSE %]
+                            <option value="a">a- Record can be used</option>
+                        [% END %]
+                        [% IF ( f31b ) %]
+                            <option value="b" selected="selected">b- Record is being updated</option>
+                        [% ELSE %]
+                            <option value="b">b- Record is being updated</option>
+                        [% END %]
+                        [% IF ( f31pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f32">32- Undifferentiated personal name</label></td>
+                <td>
+                    <select name="f32" id="f32">
+                        [% IF ( f32a ) %]
+                            <option value="a" selected="selected">a- Differentiated personal name</option>
+                        [% ELSE %]
+                            <option value="a">a- Differentiated personal name</option>
+                        [% END %]
+                        [% IF ( f32b ) %]
+                            <option value="b" selected="selected">b- Undifferentiated personal name</option>
+                        [% ELSE %]
+                            <option value="b">b- Undifferentiated personal name</option>
+                        [% END %]
+                        [% IF ( f32n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f32pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f33">33- Level of establishment</label></td>
+                <td>
+                    <select name="f33" id="f33">
+                        [% IF ( f33a ) %]
+                            <option value="a" selected="selected">a- Fully established</option>
+                        [% ELSE %]
+                            <option value="a">a- Fully established</option>
+                        [% END %]
+                        [% IF ( f33b ) %]
+                            <option value="b" selected="selected">b- Memorandum</option>
+                        [% ELSE %]
+                            <option value="b">b- Memorandum</option>
+                        [% END %]
+                        [% IF ( f33c ) %]
+                            <option value="c" selected="selected">c- Provisional</option>
+                        [% ELSE %]
+                            <option value="c">c- Provisional</option>
+                        [% END %]
+                        [% IF ( f33d ) %]
+                            <option value="d" selected="selected">d- Preliminary</option>
+                        [% ELSE %]
+                            <option value="d">d- Preliminary</option>
+                        [% END %]
+                        [% IF ( f33n ) %]
+                            <option value="n" selected="selected">n- Not applicable</option>
+                        [% ELSE %]
+                            <option value="n">n- Not applicable</option>
+                        [% END %]
+                        [% IF ( f33pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>34-37 Undefined character positions</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td><label for="f38">38- Modified record</label></td>
+                <td>
+                    <select name="f38" id="f38">
+                        [% IF ( f38 ) %]
+                            <option value=" " selected="selected">#- Not modified</option>
+                        [% ELSE %]
+                            <option value=" ">#- Not modified</option>
+                        [% END %]
+                        [% IF ( f38s ) %]
+                            <option value="s" selected="selected">s- Shortened</option>
+                        [% ELSE %]
+                            <option value="s">s- Shortened</option>
+                        [% END %]
+                        [% IF ( f38x ) %]
+                            <option value="x" selected="selected">x- Missing characters</option>
+                        [% ELSE %]
+                            <option value="x">x- Missing characters</option>
+                        [% END %]
+                        [% IF ( f38pipe ) %]
+                            <option value="|" selected="selected">|- No attempt to code</option>
+                        [% ELSE %]
+                            <option value="|">|- No attempt to code</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="f39">39- Cataloging source</label></td>
+                <td>
+                    <select name="f39" id="f39">
+                    [% IF ( f39 ) %]
+                        <option value=" " selected="selected">#- National bibliographic agency</option>
+                    [% ELSE %]
+                        <option value=" ">#- National bibliographic agency</option>
+                    [% END %]
+                    [% IF ( f39c ) %]
+                        <option value="c" selected="selected">c- Cooperative cataloging program</option>
+                    [% ELSE %]
+                        <option value="c">c- Cooperative cataloging program</option>
+                    [% END %]
+                    [% IF ( f39d ) %]
+                        <option value="d" selected="selected">d- Other</option>
+                    [% ELSE %]
+                        <option value="d">d- Other</option>
+                    [% END %]
+                    [% IF ( f39u ) %]
+                        <option value="u" selected="selected">u- Unknown</option>
+                    [% ELSE %]
+                        <option value="u">u- Unknown</option>
+                    [% END %]
+                    [% IF ( f39pipe ) %]
+                        <option value="|" selected="selected">|- No attempt to code</option>
+                    [% ELSE %]
+                        <option value="|">|- No attempt to code</option>
+                    [% END %]
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+    </div> <!-- /.page-section -->
 </form>
 
 [% MACRO jsinclude BLOCK %]
@@ -748,7 +753,6 @@
             self.close();
             return false;
         }
-
     </script>
 [% END %]
 
