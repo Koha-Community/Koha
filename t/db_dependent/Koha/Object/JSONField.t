@@ -37,66 +37,73 @@ subtest 'decode_json_field() and set_encoded_json_field() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $idp = $builder->build_object({ class => 'Koha::Auth::Identity::Providers' });
+    my $idp = $builder->build_object( { class => 'Koha::Auth::Identity::Providers' } );
 
     my $data = { some => 'data' };
 
-    $idp->set_encoded_json_field({ data => $data, field => 'config' });
+    $idp->set_encoded_json_field( { data => $data, field => 'config' } );
 
-    is_deeply( $idp->_json->decode($idp->config), $data, 'decode what we sent' );
-    is_deeply( $idp->decode_json_field({ field => 'config' }), $data, 'check with decode_json_field' );
+    is_deeply( $idp->_json->decode( $idp->config ),              $data, 'decode what we sent' );
+    is_deeply( $idp->decode_json_field( { field => 'config' } ), $data, 'check with decode_json_field' );
 
     # Let's get some Unicode stuff into the game
     $data = { favorite_Chinese => [ '葑', '癱' ], latin_dancing => [ '¢', '¥', 'á', 'û' ] };
-    $idp->set_encoded_json_field({ data => $data, field => 'config' })->store;
+    $idp->set_encoded_json_field( { data => $data, field => 'config' } )->store;
 
-    $idp->discard_changes; # refresh
-    is_deeply( $idp->decode_json_field({ field => 'config' }), $data, 'Deep compare with Unicode data' );
+    $idp->discard_changes;    # refresh
+    is_deeply( $idp->decode_json_field( { field => 'config' } ), $data, 'Deep compare with Unicode data' );
+
     # To convince you even more
-    is( ord( $idp->decode_json_field({ field => 'config' })->{favorite_Chinese}->[0] ), 33873, 'We still found Unicode \x8451' );
-    is( ord( $idp->decode_json_field({ field => 'config' })->{latin_dancing}->[0] ), 162, 'We still found the equivalent of Unicode \x00A2' );
+    is(
+        ord( $idp->decode_json_field( { field => 'config' } )->{favorite_Chinese}->[0] ), 33873,
+        'We still found Unicode \x8451'
+    );
+    is(
+        ord( $idp->decode_json_field( { field => 'config' } )->{latin_dancing}->[0] ), 162,
+        'We still found the equivalent of Unicode \x00A2'
+    );
 
     # Testing with sending encoded data (which we normally shouldn't do)
     my $utf8_data;
     foreach my $k ( 'favorite_Chinese', 'latin_dancing' ) {
-        foreach my $c ( @{$data->{$k}} ) {
-            push @{$utf8_data->{$k}}, Encode::encode('UTF-8', $c);
+        foreach my $c ( @{ $data->{$k} } ) {
+            push @{ $utf8_data->{$k} }, Encode::encode( 'UTF-8', $c );
         }
     }
-    $idp->set_encoded_json_field({ data => $utf8_data, field => 'config' })->store;
-    $idp->discard_changes; # refresh
-    is_deeply( $idp->decode_json_field({ field => 'config' }), $utf8_data, 'Deep compare with utf8_data' );
+    $idp->set_encoded_json_field( { data => $utf8_data, field => 'config' } )->store;
+    $idp->discard_changes;    # refresh
+    is_deeply( $idp->decode_json_field( { field => 'config' } ), $utf8_data, 'Deep compare with utf8_data' );
+
     # Need more evidence?
-    is( ord( $idp->decode_json_field({ field => 'config' })->{favorite_Chinese}->[0] ), 232, 'We still found a UTF8 encoded byte' ); # ord does not need substr here
+    is(
+        ord( $idp->decode_json_field( { field => 'config' } )->{favorite_Chinese}->[0] ), 232,
+        'We still found a UTF8 encoded byte'
+    );                        # ord does not need substr here
 
     # pathological use cases
 
-    throws_ok
-        { $idp->set_encoded_json_field({ data => $data }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $idp->set_encoded_json_field( { data => $data } ); }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown on missing parameter';
     is( $@->parameter, 'field', 'Correct parameter reported (field)' );
 
-    throws_ok
-        { $idp->set_encoded_json_field({ data => $data, field => undef }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $idp->set_encoded_json_field( { data => $data, field => undef } ); }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown on missing parameter';
     is( $@->parameter, 'field', 'Correct parameter reported (field)' );
 
-    throws_ok
-        { $idp->set_encoded_json_field({ field => 'something' }); }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $idp->set_encoded_json_field( { field => 'something' } ); }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown on missing parameter';
     is( $@->parameter, 'data', 'Correct parameter reported (data)' );
 
-    $idp->set_encoded_json_field({ data => undef, field => 'config' });
+    $idp->set_encoded_json_field( { data => undef, field => 'config' } );
     is( $idp->config, undef, 'undef is undef' );
 
     # set invalid data
     $idp->config('{');
-    throws_ok
-        { $idp->decode_json_field({ field => 'config' }) }
-        'Koha::Exceptions::Object::BadValue',
+    throws_ok { $idp->decode_json_field( { field => 'config' } ) }
+    'Koha::Exceptions::Object::BadValue',
         'Exception thrown';
     like( "$@", qr/Error reading JSON data/ );
 
