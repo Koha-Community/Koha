@@ -375,10 +375,6 @@ sub install_installer {
     my $intradir  = C4::Context->config('intranetdir');
     my $db_scheme = C4::Context->config('db_scheme');
     my $langdir  = "$intradir/installer/data/$db_scheme/$self->{lang}";
-    if ( -d $langdir ) {
-        say "$self->{lang} installer dir $langdir already exists.\nDelete it if you want to recreate it." if $self->{verbose};
-        return;
-    }
 
     say "Install installer files\n" if $self->{verbose};
 
