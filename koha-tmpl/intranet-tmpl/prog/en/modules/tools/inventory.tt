@@ -167,7 +167,7 @@
                               <ul id="statuses-[% fieldname | html %]" style="display: inline;">
                               [% FOREACH value IN status.values %]
                                   [% IF (value.lib) %]
-                                    <li>
+                                    <li style="list-style: none;">
                                     <label for="[% value.id | html %]">
                                         [% IF ( status.fieldname == 'items.notforloan' && value.authorised_value == 0 && value.lib == '__IGNORE__' ) %]
                                             For loan
