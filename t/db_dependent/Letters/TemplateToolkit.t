@@ -658,7 +658,7 @@ EOF
                     lang            => 'default',
                     title           => "A wonderful news",
                     content         => "This is the wonderful news.",
-                    expiration_date => undef,
+                    expirationdate  => undef,
                     published_on    => $one_minute_ago
                 }
             }
