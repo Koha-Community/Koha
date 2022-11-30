@@ -505,7 +505,7 @@ subtest 'add() tests' => sub {
                     value => {
                         mandatory     => 0,
                         repeatable    => 1,
-                        unique        => 0,
+                        unique_id     => 0,
                         category_code => 'ST'
                     }
                 }
@@ -516,7 +516,7 @@ subtest 'add() tests' => sub {
                     value => {
                         mandatory     => 0,
                         repeatable    => 1,
-                        unique        => 0,
+                        unique_id     => 0,
                         category_code => 'ST'
                     }
                 }
