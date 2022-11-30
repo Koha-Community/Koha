@@ -55,7 +55,6 @@ my $course = $builder->build({
     source => 'CourseReserve',
     value => {
         ci_id => $ci_id,
-        enabled => 'no',
     }
 });
 
@@ -219,7 +218,6 @@ subtest 'Ensure modifying fields on existing course items updates the item and c
         source => 'CourseReserve',
         value => {
             ci_id => $ci_id,
-            enabled => 'no',
         }
     });
 
@@ -336,12 +334,7 @@ subtest 'Ensure modifying fields on existing course items updates the item and c
 subtest 'Ensure item info is preserved' => sub {
     plan tests => 8;
 
-    my $course = $builder->build({
-        source => 'Course',
-        value => {
-            enabled => 'no',
-        }
-    });
+    my $course = $builder->build({ source => 'Course' });
     my $item = $builder->build_sample_item({ ccode=>"grasshopper", location=>"transylvania"});
     #Add course item but change nothing
     my $course_item_id = ModCourseItem(
@@ -366,12 +359,7 @@ subtest 'Ensure item info is preserved' => sub {
     is( $item->holdingbranch, $item_after->holdingbranch, "Holdingbranch is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->ccode, $item_after->ccode, "Collection is unchanged after adding to and removing from course reserves for inactive course");
 
-    $course = $builder->build({
-        source => 'Course',
-        value => {
-            enabled => 'yes',
-        }
-    });
+    $course = $builder->build({ source => 'Course' });
     $item = $builder->build_sample_item({ ccode=>"grasshopper", location=>"transylvania"});
     #Add course item but change nothing
     $course_item_id = ModCourseItem(
@@ -401,12 +389,7 @@ subtest 'Ensure item info is preserved' => sub {
 subtest 'biblio added to course without items' => sub {
     plan tests => 1;
 
-    my $course = $builder->build({
-        source => 'Course',
-        value => {
-            enabled => 'no',
-        }
-    });
+    my $course = $builder->build({ source => 'Course' });
     #Add course item but change nothing
     my $course_item_id = ModCourseItem(
         itemnumber    => undef,
@@ -424,7 +407,7 @@ subtest 'biblio added to course without items' => sub {
         public_note => '',
     );
 
-    my $course_item = GetCourseItem({ ci_id => $course_item_id });
+    my $course_item = GetCourseItem( ci_id => $course_item_id );
     is( $course_item->{itemnumber}, undef, "Course reserve with no item correctly added" );
 };
 
