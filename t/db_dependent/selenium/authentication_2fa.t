@@ -94,7 +94,6 @@ SKIP: {
         $driver->find_element('//*[@id="register-2FA"]')->click;
         # Wait for the response then go to the page, don't wait for the redirect
         $s->wait_for_ajax;
-        $driver->capture_screenshot('selenium_failure_2.png');
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         is(
             $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
