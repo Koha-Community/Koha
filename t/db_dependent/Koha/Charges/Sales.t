@@ -77,7 +77,7 @@ subtest 'payment_type (_get_valid_payments) tests' => sub {
     my $cash_register = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
-            value => { branchcode => $library1->branchcode }
+            value => { branch => $library1->branchcode }
         }
     );
 
@@ -125,7 +125,7 @@ subtest 'add_item (_get_valid_items) tests' => sub {
     my $cash_register = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
-            value => { branchcode => $library1->branchcode }
+            value => { branch => $library1->branchcode }
         }
     );
 
@@ -190,7 +190,7 @@ subtest 'purchase tests' => sub {
     my $cash_register = $builder->build_object(
         {
             class => 'Koha::Cash::Registers',
-            value => { branchcode => $library->branchcode }
+            value => { branch => $library->branchcode }
         }
     );
 
