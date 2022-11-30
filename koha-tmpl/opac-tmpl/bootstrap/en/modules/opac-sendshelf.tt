@@ -56,7 +56,7 @@ Your list : [% shelfname | $raw %]
             </span><br/>
             [% END %]
 
-            [% IF ( BIBLIO_RESULT.ISBN ) %]
+            [% IF ( BIBLIO_RESULT.ISBN.size > 0 ) %]
             <span>
                 ISBN: [% FOREACH isbn IN BIBLIO_RESULT.ISBN %]
                           [% isbn | $raw %]
