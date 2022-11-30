@@ -49,7 +49,7 @@ my $guarantee = $builder->build_object(
     {
         class => 'Koha::Patrons',
         value => {
-            patron_category => $patron_category->{categorycode},
+            categorycode => $patron_category->{categorycode},
         }
     }
 );
