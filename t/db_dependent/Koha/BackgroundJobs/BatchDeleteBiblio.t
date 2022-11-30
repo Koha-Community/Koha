@@ -36,9 +36,11 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
 
     my $biblio = $builder->build_sample_biblio;
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->id });
@@ -54,11 +56,18 @@ subtest "process() tests" => sub {
         }
     );
 
-    my $counter = 0;
+    my $update_biblio_counter = 0;
 
     my $mock_holds_queue_job = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
     $mock_holds_queue_job->mock( 'enqueue', sub {
-        $counter++;
+        $update_biblio_counter++;
+    });
+
+    my $index_biblio_counter = 0;
+
+    my $mock_index = Test::MockModule->new("Koha::SearchEngine::Elasticsearch::Indexer");
+    $mock_index->mock( 'index_records', sub {
+        $index_biblio_counter++;
     });
 
     my $job = Koha::BackgroundJob::BatchDeleteBiblio->new(
@@ -81,7 +90,8 @@ subtest "process() tests" => sub {
         }
     );
 
-    is( $counter, 1, 'Holds queue update is enqueued only once' );
+    is( $update_biblio_counter, 1, 'Holds queue update is enqueued only once' );
+    is( $index_biblio_counter,  1, 'Index update is enqueued only once' );
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
@@ -105,7 +115,7 @@ subtest "process() tests" => sub {
         }
     );
 
-    is( $counter, 1, 'Counter untouched with RealTimeHoldsQueue disabled' );
+    is( $update_biblio_counter, 1, 'Counter untouched with RealTimeHoldsQueue disabled' );
 
     $schema->storage->txn_rollback;
 };
