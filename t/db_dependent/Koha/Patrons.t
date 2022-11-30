@@ -189,7 +189,6 @@ subtest 'guarantees' => sub {
             value => {
                 surname     => 'Xerus',
                 firstname   => 'Vulture',
-                guarantorid => $guarantor->borrowernumber
             }
         }
     )->borrowernumber;
@@ -210,7 +209,6 @@ subtest 'guarantees' => sub {
             value => {
                 surname     => 'Xerus',
                 firstname   => 'Unicorn',
-                guarantorid => $guarantor->borrowernumber
             }
         }
     )->borrowernumber;
