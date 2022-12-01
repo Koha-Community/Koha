@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 43;
+use Test::More tests => 46;
 use C4::Serials qw( GetNextSeq );
 
 # TEST CASE 1 - 1 variable, from 1 to 4
@@ -222,13 +222,38 @@ is($seq, 'Z: 12, Y: 8, X: 4');
 $seq = _next_seq($subscription, $pattern);
 is($seq, 'Z: 1, Y: 1, X: 1');
 
+# TEST CASE 7 . Specify how many issues to count forward, 1 variable, from 1 to 4
+
+$subscription = {
+    lastvalue1 => 1, lastvalue2 => 1, lastvalue3 => 1,
+    innerloop1 => 0, innerloop2 => 0, innerloop3 => 0,
+    skip_serialseq => 0,
+    irregularity => '',
+    locale => 'en',
+};
+$pattern = {
+             add1 =>  1,          add2 =>  0,          add3 =>  0,
+           every1 =>  1,        every2 =>  0,        every3 =>  0,
+    whenmorethan1 =>  4, whenmorethan2 =>  0, whenmorethan3 =>  0,
+           setto1 =>  1,        setto2 =>  0,        setto3 =>  0,
+    numberingmethod => 'X: {X}',
+    numbering1 => '',
+    numbering2 => '',
+    numbering3 => '',
+};
+$seq = _next_seq($subscription, $pattern, 1);
+is($seq, 'X: 2');
+$seq = _next_seq($subscription, $pattern, 2);
+is($seq, 'X: 4');
+$seq = _next_seq($subscription, $pattern, 2);
+is($seq, 'X: 2');
 
 sub _next_seq {
-    my ($subscription, $pattern) = @_;
+    my ($subscription, $pattern, $count_forward) = @_;
     my $seq;
     ($seq, $subscription->{lastvalue1}, $subscription->{lastvalue2},
         $subscription->{lastvalue3}, $subscription->{innerloop1},
         $subscription->{innerloop2}, $subscription->{innerloop3}) =
-            GetNextSeq($subscription, $pattern);
+            GetNextSeq($subscription, $pattern, undef, undef, $count_forward);
     return $seq;
 }
