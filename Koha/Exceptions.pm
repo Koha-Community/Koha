@@ -15,6 +15,11 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'Same object already exists',
     },
+    'Koha::Exceptions::FileNotFound' => {
+        isa => 'Koha::Exception',
+        description => 'File not found',
+        fields      => ['filename'],
+    },
     'Koha::Exceptions::InvalidStatus' => {
         isa         => 'Koha::Exception',
         description => 'The current status is not valid in context',
