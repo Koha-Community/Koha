@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::MockObject;
 use Test::Exception;
 
@@ -396,4 +396,16 @@ subtest 'Koha::Exception tests' => sub {
         "Exception 'Koha::Exceptions::Weird' thrown 'Weird exception!'\n",
         'Exception stringified correctly'
     );
+};
+
+subtest 'Passing parameters when throwing exception' => sub {
+    plan tests => 4;
+
+    use Koha::Exceptions;
+
+    throws_ok { Koha::Exceptions::WrongParameter->throw( name => 'wrong1', type => 'ARRAY', value => [ 1, 2 ] ) } qr/Koha::Exceptions::WrongParameter/, 'Exception thrown';
+    my $desc = $@;
+    like( $desc, qr/name => wrong1/, 'Found name' );
+    like( $desc, qr/type => ARRAY/, 'Found type' );
+    like( $desc, qr/value => ARRAY\(\w+\)/, 'Found value' );
 };

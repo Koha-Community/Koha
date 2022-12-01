@@ -55,7 +55,8 @@ use Exception::Class (
     },
     'Koha::Exceptions::WrongParameter' => {
         isa => 'Koha::Exception',
-        description => 'One or more parameters are wrong',
+        description => 'Parameter has wrong value or type',
+        fields => ['name', 'value', 'type'],
     },
     'Koha::Exceptions::NoPermission' => {
         isa => 'Koha::Exception',
