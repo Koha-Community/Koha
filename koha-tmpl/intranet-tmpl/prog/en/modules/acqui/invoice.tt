@@ -7,56 +7,13 @@
 [% USE AuthorisedValues %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 
-<span style="display:none;" id="all_fund_dropdown">
-    [% FOREACH budget IN budgets %]
-        [% IF ( budget.b_active ) %]
-            <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
-        [% ELSE %]
-            <option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat |html %]">[% budget.b_txt | html %] (inactive)</option>
-        [% END %]
-    [% END %]
-</span>
 [% BLOCK fund_dropdown %]
-    <span>
     <label for="[% form_name | html %]">Fund: </label>
     <select id="[% form_id | html %]" name="[% form_name | html %]" class="fund_dropdown" data-selected="[% selected | html %]">
     </select>
-    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+    <label for="showallfunds">&nbsp;Show inactive:</label>
     <input type="checkbox" class="showallfunds" />
-    </span>
 [% END %]
-
-<div id="updateFund" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="updateReceivedFund">Update received fund</h3>
-            </div>
-            <div class="modal-body">
-                <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
-                <fieldset class="rows">
-                <ol>
-                    <li>[% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]</li>
-                    <li>
-                        <label for="sort1">Statistic 1: </label>
-                        <input type="text" name="sort1" />
-                    </li>
-                    <li>
-                        <label for="sort2">Statistic 2: </label>
-                        <input type="text" name="sort2" />
-                    </li>
-                </ol>
-                </fieldset>
-                <a id="update_fund" class="btn btn-default">Update fund</a>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Invoice &rsaquo; Acquisitions &rsaquo; Koha</title>
@@ -206,7 +163,7 @@
                              <th>Note</th>
                              <th>Fund</th>
                              <th>Encumber while invoice open</th>
-                             [% UNLESS readonly %]<th>&nbsp</th>[% END %]
+                             [% UNLESS readonly %]<th>&nbsp;</th>[% END %]
                           </tr>
                           [% total_adj = 0 %]
                           [% FOREACH adjustment IN adjustments %]
@@ -486,6 +443,47 @@
     </aside>
 </div> <!-- /.row -->
 
+<div id="updateFund" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="updateReceivedFund">Update received fund</h3>
+            </div>
+            <div class="modal-body">
+                <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
+                <fieldset class="rows">
+                <ol>
+                    <li>[% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]</li>
+                    <li>
+                        <label for="sort1">Statistic 1: </label>
+                        <input type="text" name="sort1" />
+                    </li>
+                    <li>
+                        <label for="sort2">Statistic 2: </label>
+                        <input type="text" name="sort2" />
+                    </li>
+                </ol>
+                </fieldset>
+                <a id="update_fund" class="btn btn-default">Update fund</a>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<span style="display:none;" id="all_fund_dropdown">
+    [% FOREACH budget IN budgets %]
+        [% IF ( budget.b_active ) %]
+            <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
+        [% ELSE %]
+            <option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat |html %]">[% budget.b_txt | html %] (inactive)</option>
+        [% END %]
+    [% END %]
+</span>
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
@@ -552,7 +550,7 @@
             $('.b_inactive').remove();
 
             $('.showallfunds').click(function() {
-                var the_dropdown = $(this).parent('span').find('.fund_dropdown');
+                var the_dropdown = $(this).siblings('.fund_dropdown');
                 var selected = the_dropdown.val();
                 if ($(this).is(":checked")) {
                     the_dropdown.html(disabledBudgetsCopy).val(selected);
