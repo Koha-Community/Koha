@@ -154,9 +154,9 @@ sub enqueue {
 
     $self->SUPER::enqueue(
         {
-            job_size => scalar @record_ids,
-            job_args => {%$args},
-            queue    => 'long_tasks',
+            job_size  => scalar @record_ids,
+            job_args  => {%$args},
+            job_queue => 'long_tasks',
         }
     );
 }

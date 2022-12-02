@@ -197,9 +197,9 @@ sub enqueue {
     my ( $self, $args) = @_;
 
     $self->SUPER::enqueue({
-        job_size => 0, # TODO Unknown for now?
-        job_args => $args,
-        queue    => 'long_tasks',
+        job_size  => 0, # TODO Unknown for now?
+        job_args  => $args,
+        job_queue => 'long_tasks',
     });
 }
 
