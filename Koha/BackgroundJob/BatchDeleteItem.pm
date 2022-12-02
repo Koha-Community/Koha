@@ -237,7 +237,7 @@ sub enqueue {
                 record_ids     => \@record_ids,
                 delete_biblios => $delete_biblios,
             },
-            queue    => 'long_tasks',
+            job_queue => 'long_tasks',
         }
     );
 }
