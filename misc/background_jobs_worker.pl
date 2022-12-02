@@ -49,10 +49,11 @@ The different values available are:
 
 use Modern::Perl;
 use JSON qw( decode_json );
-use Try::Tiny qw( catch try );
+use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
 
+use Koha::Logger;
 use Koha::BackgroundJobs;
 
 my ( $help, @queues );
@@ -93,15 +94,22 @@ while (1) {
             next;    # will reconnect automatically
         }
 
-        my $body = $frame->body;
-        my $args = decode_json($body); # TODO Should this be from_json? Check utf8 flag.
+        my $job;
+        try {
+            my $body = $frame->body;
+            my $args = decode_json($body); # TODO Should this be from_json? Check utf8 flag.
 
-        # FIXME This means we need to have create the DB entry before
-        # It could work in a first step, but then we will want to handle job that will be created from the message received
-        my $job = Koha::BackgroundJobs->find($args->{job_id});
+            # FIXME This means we need to have create the DB entry before
+            # It could work in a first step, but then we will want to handle job that will be created from the message received
+            $job = Koha::BackgroundJobs->find($args->{job_id});
 
-        $conn->ack( { frame => $frame } ); # Acknowledge the message was received
-        process_job( $job, $args );
+            process_job( $job, $args );
+        } catch {
+            Koha::Logger->get->warn(sprintf "Job and/or frame not processed - %s", $_);
+        } finally {
+            $job->status('failed')->store if $job && @_;
+            $conn->ack( { frame => $frame } );
+        };
 
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
