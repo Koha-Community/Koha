@@ -112,9 +112,9 @@ sub enqueue {
     my ( $self, $args) = @_;
 
     $self->SUPER::enqueue({
-        job_size => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
-        job_args => $args,
-        queue    => 'long_tasks',
+        job_size  => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
+        job_args  => $args,
+        job_queue => 'long_tasks',
     });
 }
 
