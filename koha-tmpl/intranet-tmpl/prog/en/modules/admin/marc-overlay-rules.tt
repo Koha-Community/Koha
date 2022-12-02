@@ -426,11 +426,11 @@
         };
 
         var overlay_rules_label_to_value = {};
-        overlay_rules_label_to_value["add"] = 1;
-        overlay_rules_label_to_value["append"] = 1;
-        overlay_rules_label_to_value["remove"] = 1;
-        overlay_rules_label_to_value["delete"] = 1;
-        overlay_rules_label_to_value["skip"] = 0;
+        overlay_rules_label_to_value[_("Add")] = 1;
+        overlay_rules_label_to_value[_("Append")] = 1;
+        overlay_rules_label_to_value[_("Remove")] = 1;
+        overlay_rules_label_to_value[_("Delete")] = 1;
+        overlay_rules_label_to_value[_("Skip")] = 0;
 
         function hash_config(config) {
           return JSON.stringify(config, Object.keys(config).sort());
@@ -454,7 +454,7 @@
             operations_config[$operation.data('operation')] = overlay_rules_label_to_value[$operation.text()];
           });
           $('.rule-preset', $this).text(
-            operations_config_overlay_rule_preset(operations_config) || _("Custom")
+            $('option[value="' + operations_config_overlay_rule_preset(operations_config) + '"]').text() || _("Custom")
           );
         });
 
