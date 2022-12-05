@@ -111,7 +111,7 @@ what triggered the transfer
 =head2 cancellation_reason
 
   data_type: 'enum'
-  extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation","ReturnToHome","ReturnToHolding","RotatingCollection","Reserve","LostReserve","CancelReserve","ItemLost","WrongTransfer","CancelRecall"]}
+  extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation","ReturnToHome","ReturnToHolding","RotatingCollection","Reserve","LostReserve","CancelReserve","ItemLost","WrongTransfer","RecallCancellation"]}
   is_nullable: 1
 
 what triggered the transfer cancellation
@@ -208,7 +208,7 @@ __PACKAGE__->add_columns(
         "CancelReserve",
         "ItemLost",
         "WrongTransfer",
-        "CancelRecall",
+        "RecallCancellation",
       ],
     },
     is_nullable => 1,
@@ -275,8 +275,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-13 19:14:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xsy1jCS0byj8uyfEVdyG9Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-12-05 16:31:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zk+vU90p0iprjJRPdj0WQQ
 
 sub koha_object_class {
     'Koha::Item::Transfer';
