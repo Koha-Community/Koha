@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -742,6 +743,7 @@
                                                 <th>List name</th>
                                                 <th>Contents</th>
                                                 <th>Type</th>
+                                                <th>Modification date</th>
                                                 <th>&nbsp;</th>
                                             </tr>
                                         </thead>
@@ -758,6 +760,7 @@
                                                             <span>Public</span>
                                                         [% END %]
                                                     </td>
+                                                    <td>[% s.lastmodified | $KohaDates %]</td>
                                                     <td>
                                                         [% IF s.can_be_managed( loggedinusernumber ) %]
                                                             <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">
