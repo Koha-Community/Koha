@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 45;
+use Test::More tests => 44;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1597,59 +1597,6 @@ subtest 'userid_is_valid' => sub {
     $patron_1->delete;
     $patron_2->delete;
     $patron_3->delete;
-};
-
-subtest 'generate_userid' => sub {
-    plan tests => 7;
-
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron_category = $builder->build_object(
-        {
-            class => 'Koha::Patron::Categories',
-            value => { category_type => 'P', enrolmentfee => 0 }
-        }
-    );
-    my %data = (
-        cardnumber   => "123456789",
-        firstname    => "Tômàsító",
-        surname      => "Ñoné",
-        categorycode => $patron_category->categorycode,
-        branchcode   => $library->branchcode,
-    );
-
-    my $expected_userid_patron_1 = 'tomasito.none';
-    my $new_patron = Koha::Patron->new({ firstname => $data{firstname}, surname => $data{surname} } );
-    $new_patron->generate_userid;
-    my $userid = $new_patron->userid;
-    is( $userid, $expected_userid_patron_1, 'generate_userid should generate the userid we expect' );
-    my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
-    my $patron_1 = Koha::Patrons->find($borrowernumber);
-    is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
-
-    $new_patron->generate_userid;
-    $userid = $new_patron->userid;
-    is( $userid, $expected_userid_patron_1 . '1', 'generate_userid should generate the userid we expect' );
-    $data{cardnumber} = '987654321';
-    my $new_borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
-    my $patron_2 = Koha::Patrons->find($new_borrowernumber);
-    isnt( $patron_2->userid, 'tomasito',
-        "Patron with duplicate userid has new userid generated" );
-    is( $patron_2->userid, $expected_userid_patron_1 . '1', # TODO we could make that configurable
-        "Patron with duplicate userid has new userid generated (1 is appened" );
-
-    $new_patron->generate_userid;
-    $userid = $new_patron->userid;
-    is( $userid, $expected_userid_patron_1 . '2', 'generate_userid should generate the userid we expect' );
-
-    $patron_1 = Koha::Patrons->find($borrowernumber);
-    $patron_1->userid(undef);
-    $patron_1->generate_userid;
-    $userid = $patron_1->userid;
-    is( $userid, $expected_userid_patron_1, 'generate_userid should generate the userid we expect' );
-
-    # Cleanup
-    $patron_1->delete;
-    $patron_2->delete;
 };
 
 $nb_of_patrons = Koha::Patrons->search->count;

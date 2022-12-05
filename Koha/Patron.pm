@@ -1791,16 +1791,43 @@ sub has_valid_userid {
 
 =head3 generate_userid
 
-my $patron = Koha::Patron->new( $params );
-$patron->generate_userid
+    $patron->generate_userid;
 
-Generate a userid using the $surname and the $firstname (if there is a value in $firstname).
+    If you do not have a plugin for generating a userid, we will call
+    the legacy method here that returns firstname.surname[.number],
+    where number is an optional suffix to make the userid unique.
+    (Its behavior has not been changed on bug 32426.)
 
-Set a generated userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $userid is unique, or a higher numeric value if not unique).
+    If you have plugin(s), the first valid response will be used.
+    A plugin is assumed to return a valid userid as suggestion, but not
+    assumed to save it already.
+    Does not fallback to legacy (you could arrange for that in your plugin).
+    Clears userid when there are no valid plugin responses.
 
 =cut
 
 sub generate_userid {
+    my ( $self ) = @_;
+    my @responses = Koha::Plugins->call(
+        'patron_generate_userid', { patron => $self },
+    );
+    unless( @responses ) {
+        # Empty list only possible when there are NO enabled plugins for this method.
+        # In that case we provide legacy response.
+        return $self->_generate_userid_legacy;
+    }
+    # If a plugin returned false value or invalid value, we do however not return
+    # legacy response. The plugins should deal with that themselves. So we prevent
+    # unexpected/unwelcome legacy codes for plugin failures.
+    foreach my $response ( grep { $_ } @responses ) {
+        $self->userid( $response );
+        return $self if $self->has_valid_userid;
+    }
+    $self->userid(undef);
+    return $self;
+}
+
+sub _generate_userid_legacy { # as we always did
     my ($self) = @_;
     my $offset = 0;
     my $firstname = $self->firstname // q{};
