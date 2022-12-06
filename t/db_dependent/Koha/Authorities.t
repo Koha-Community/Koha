@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use MARC::Field;
 use MARC::File::XML;
 use MARC::Record;
@@ -283,6 +283,42 @@ subtest 'get_identifiers' => sub {
             }
         ]
     );
+};
+
+subtest 'record tests' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+    my $record = MARC::Record->new();
+    $record->add_fields(
+        [
+            '100', ' ', ' ',
+            a => 'Lastname, Firstname',
+            b => 'b',
+            c => 'c',
+            i => 'i'
+        ],
+        [
+            '024', '', '',
+            a => '0000-0002-1234-5678',
+            2 => 'orcid',
+            6 => 'https://orcid.org/0000-0002-1234-5678'
+        ],
+        [
+            '024', '', '',
+            a => '01234567890',
+            2 => 'scopus',
+            6 => 'https://www.scopus.com/authid/detail.uri?authorId=01234567890'
+        ],
+    );
+    my $authid = C4::AuthoritiesMarc::AddAuthority($record, undef, 'PERSO_NAME');
+    my $authority = Koha::Authorities->find($authid);
+    my $authority_record = $authority->record;
+    is ($authority_record->field('100')->subfield('a'), 'Lastname, Firstname');
+    my @fields_024 = $authority_record->field('024');
+    is ($fields_024[0]->subfield('a'), '0000-0002-1234-5678');
+    is ($fields_024[1]->subfield('a'), '01234567890');
+
 };
 
 $schema->storage->txn_rollback;
