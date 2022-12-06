@@ -95,8 +95,7 @@ sub controlled_indicators {
         ? 'UNIMARCAUTH'
         : 'MARC21';
     if( !$record ) {
-        $record = MARC::Record->new_from_xml(
-            $self->marcxml, 'UTF-8', $flavour );
+        $record = $self->record;
     }
 
     if( !$self->{_report_tag} ) {
@@ -125,12 +124,7 @@ Return a list of identifiers of the authors which are in 024$2$a
 sub get_identifiers {
     my ( $self, $params ) = @_;
 
-    my $flavour =
-      C4::Context->preference('marcflavour') eq 'UNIMARC'
-      ? 'UNIMARCAUTH'
-      : 'MARC21';
-    my $record =
-      MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
+    my $record = $self->record;
 
     my @identifiers;
     for my $field ( $record->field('024') ) {
@@ -141,6 +135,24 @@ sub get_identifiers {
     }
 
     return \@identifiers;
+}
+
+=head3 record
+
+    my $record = $authority->record()
+
+Return the MARC::Record for this authority
+
+=cut
+
+sub record {
+    my ( $self ) = @_;
+
+    my $flavour =
+      C4::Context->preference('marcflavour') eq 'UNIMARC'
+      ? 'UNIMARCAUTH'
+      : 'MARC21';
+    return MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
 }
 
 =head2 Class Methods
