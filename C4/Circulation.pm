@@ -3068,6 +3068,9 @@ sub AddRenewal {
     my $issue  = $item_object->checkout;
     my $item_unblessed = $item_object->unblessed;
 
+    my ($package, $filename, $line) = caller;
+    my $renewal_type = $filename =~ m/automatic_renewals.pl/ ? "Automatic" : "Manual";
+
     my $dbh = C4::Context->dbh;
 
     return unless $issue;
@@ -3206,7 +3209,8 @@ sub AddRenewal {
                 checkout_id => $issue->issue_id,
                 renewer_id  => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                 seen        => $seen,
-                interface   => C4::Context->interface
+                interface   => C4::Context->interface,
+                renewal_type => $renewal_type
             }
         )->store();
 

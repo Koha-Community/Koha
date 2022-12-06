@@ -69,6 +69,14 @@ the interface this renewal took place on
 
 the date and time the renewal took place
 
+=head2 renewal_type
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 9
+
+whether the renewal was an automatic or manual renewal
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -89,6 +97,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "renewal_type",
+  { data_type => "varchar", is_nullable => 0, size => 9 },
 );
 
 =head1 PRIMARY KEY
@@ -126,8 +136,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-27 19:43:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7mjiEx634L5FZyjroACUkg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-12-06 16:44:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BcbN0Iceh09H2DWEA6CDwA
 
 =head2 checkout
 
