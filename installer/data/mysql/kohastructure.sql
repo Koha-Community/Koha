@@ -1714,6 +1714,7 @@ CREATE TABLE `checkout_renewals` (
   `seen` tinyint(1) DEFAULT 0 COMMENT 'boolean denoting whether the item was present or not',
   `interface` varchar(16) NOT NULL COMMENT 'the interface this renewal took place on',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'the date and time the renewal took place',
+  `renewal_type` varchar(9) NOT NULL COMMENT 'whether the renewal was an automatic or manual renewal',
   PRIMARY KEY (`renewal_id`),
   KEY `renewer_id` (`renewer_id`),
   CONSTRAINT `renewals_renewer_id` FOREIGN KEY (`renewer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
