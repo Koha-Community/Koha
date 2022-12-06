@@ -148,6 +148,7 @@ print "found " . $auto_renews->count . " auto renewals\n" if $verbose;
 
 my $renew_digest = {};
 my %report;
+my @item_renewal_ids;
 while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
@@ -181,6 +182,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         }
         if ($confirm){
             my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode, undef, undef, undef, 0, 1 );
+            push @item_renewal_ids, $auto_renew->itemnumber;
             $auto_renew->auto_renew_error(undef)->store;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
@@ -224,6 +226,11 @@ while ( my $auto_renew = $auto_renews->next ) {
         }
     }
 
+}
+
+if( @item_renewal_ids ){
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( \@item_renewal_ids, "specialUpdate", "biblioserver" );
 }
 
 if ( $send_notices && $confirm ) {

@@ -3083,6 +3083,9 @@ fallback to a true value
 
 C<$automatic> is a boolean flag indicating the renewal was triggered automatically and not by a person ( librarian or patron )
 
+C<$skip_record_index> is an optional boolean flag to indicate whether queuing the search indexing
+should be skipped for this renewal.
+
 =cut
 
 sub AddRenewal {
@@ -3094,6 +3097,7 @@ sub AddRenewal {
     my $skipfinecalc    = shift;
     my $seen            = shift;
     my $automatic       = shift;
+    my $skip_record_index = shift;
 
     # Fallback on a 'seen' renewal
     $seen = defined $seen && $seen == 0 ? 0 : 1;
@@ -3188,7 +3192,7 @@ sub AddRenewal {
         $renews = ( $item_object->renewals || 0 ) + 1;
         $item_object->renewals($renews);
         $item_object->onloan($datedue);
-        # Don't index as we are in a transaction
+        # Don't index as we are in a transaction, skip hardcoded here
         $item_object->store({ log_action => 0, skip_record_index => 1 });
 
         # Charge a new rental fee, if applicable
@@ -3274,9 +3278,12 @@ sub AddRenewal {
             }
         });
     });
-    # We index now, after the transaction is committed
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-    $indexer->index_records( $item_object->biblionumber, "specialUpdate", "biblioserver" );
+
+    unless( $skip_record_index ){
+        # We index now, after the transaction is committed
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $item_object->biblionumber, "specialUpdate", "biblioserver" );
+    }
 
     return $datedue;
 }
