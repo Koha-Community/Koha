@@ -624,7 +624,7 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 52;
+    plan tests => 54;
 
     $schema->storage->txn_begin;
 
@@ -914,6 +914,27 @@ subtest 'cancel() tests' => sub {
     is( $messages[1]->payload->{reason}, 'book_reserved', 'Item reserved notified' );
     is( $messages[2]->message, 'error_delbiblio_items', 'Cannot delete on loan item' );
     is( $messages[2]->payload->{biblio}->id, $biblio_id, 'The right biblio is attached' );
+
+    # Call ->store with biblionumber NULL (as ->cancel does)
+    $item_1 = $builder->build_sample_item;
+    $biblio_id = $item_1->biblionumber;
+    $order= $builder->build_object({
+        class => 'Koha::Acquisition::Orders',
+        value => {
+            orderstatus             => 'new',
+            biblionumber            => $biblio_id,
+            datecancellationprinted => undef,
+            cancellationreason      => undef,
+        }
+    });
+    my $columns = {
+        biblionumber            => undef,
+        cancellationreason      => $reason,
+        datecancellationprinted => \'NOW()',
+        orderstatus             => 'cancelled',
+    };
+    lives_ok { $order->set($columns)->store; } 'No croak on missing biblionumber when cancelling an order';
+    throws_ok { $order->orderstatus('new')->store; } qr/Cannot insert order: Mandatory parameter biblionumber is missing/, 'Expected croak';
 
     $schema->storage->txn_rollback;
 };
