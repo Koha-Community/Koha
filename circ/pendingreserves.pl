@@ -269,6 +269,7 @@ foreach my $bibnum ( @biblionumbers ){
 
     # get available values for each biblio
     my $fields = {
+        collections     => 'ccode',
         locations       => 'location',
         callnumbers     => 'itemcallnumber',
         enumchrons      => 'enumchron',

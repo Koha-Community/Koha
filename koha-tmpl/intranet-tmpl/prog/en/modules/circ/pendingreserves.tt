@@ -80,6 +80,7 @@
         <th>Available enumeration</th>
         <th class="string-sort">Available item types</th>
         <th class="string-sort">Available locations</th>
+        <th class="string-sort">Available collections</th>
         <th>Earliest hold date</th>
         <th>Hold notes</th>
         <th class="string-sort">Pickup location</th>
@@ -191,6 +192,13 @@
             [% END %]
             </ul>
         </td>
+        <td>
+            <ul>
+            [% FOREACH ccode IN hold_info.collections %]
+                <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
+            [% END %]
+            </ul>
+        </td>
         <td data-order="[% hold.reservedate | html %]">
             [% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]
         </td>
@@ -257,6 +265,7 @@
         <td><input type="text" class="filter" data-column_num="9" placeholder="Available enumeration" style="width:95%"/></td>
         <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
+        <td></td>
         <td></td>
         <td></td>
         <td id="pickup-location"></td>
