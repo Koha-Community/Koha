@@ -77,6 +77,7 @@ sub store {
 
     # if these parameters are missing, we can't continue
     for my $key (qw( basketno quantity biblionumber budget_id )) {
+        next if $key eq 'biblionumber' && ($self->orderstatus // q{}) eq 'cancelled'; # cancelled order might have biblionumber NULL
         croak "Cannot insert order: Mandatory parameter $key is missing"
           unless $self->$key;
     }
@@ -105,8 +106,11 @@ sub store {
 =head3 cancel
 
     $order->cancel(
-        { [ reason        => $reason,
-            delete_biblio => $delete_biblio ]
+        {
+            [
+                reason        => $reason,
+                delete_biblio => $delete_biblio
+            ]
         }
     );
 
@@ -158,6 +162,7 @@ sub cancel {
                     payload => { biblio => $biblio, reason => $error }
                 }
             ) if $error;
+            $self->biblionumber(undef) unless $error; # constraint cleared biblionumber in db already
         }
         else {
 
