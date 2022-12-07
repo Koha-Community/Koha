@@ -121,6 +121,22 @@ function select_user(borrowernumber, borrower, relationship) {
         if ( relationship ) {
             fieldset.find('.new_guarantor_relationship').val(relationship);
         }
+
+        if(typeof guarantor_attributes !== 'undefined') {
+            $.ajax({
+                url: '/api/v1/patrons/'+borrowernumber,
+                method: "GET",
+                dataType: 'json',
+                success: function(data){
+                    for (var i = 0; i < parseInt(guarantor_attributes.length, 10); i++) {
+                        var attribute = guarantor_attributes[i];
+                        if ( data[attribute] != null && document.forms.entryform[attribute].value == "" ) {
+                            document.forms.entryform[attribute].value = data[attribute];
+                        }
+                    }
+                }
+            });
+        }
     }
 
     return 0;

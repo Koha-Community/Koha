@@ -1968,6 +1968,9 @@ legend:hover {
             });
         [% END %]
         $("#guarantor_template").hide();
+        [% IF guarantor_attributes %]
+            guarantor_attributes = [% To.json(guarantor_attributes) %];
+        [% END %]
 
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
         var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
