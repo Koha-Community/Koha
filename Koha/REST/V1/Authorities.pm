@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Authorities;
+use C4::AuthoritiesMarc qw( DelAuthority );
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -92,6 +93,42 @@ sub get {
                     ]
                 }
             );
+        }
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 delete
+
+Controller function that handles deleting an authority object
+
+=cut
+
+sub delete {
+    my $c = shift->openapi->valid_input or return;
+
+    my $authority = Koha::Authorities->find( { authid => $c->validation->param('authority_id') } );
+
+    if ( not defined $authority ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Object not found" }
+        );
+    }
+
+    return try {
+        my $error = DelAuthority( { authid => $authority->authid } );
+
+        if ($error) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => $error }
+            );
+        }
+        else {
+            return $c->render( status => 204, openapi => "" );
         }
     }
     catch {
