@@ -37,7 +37,11 @@ if (args.view == "opac") {
 
 var sassOptions = {
     errLogToConsole: true,
-    precision: 3
+    precision: 3,
+    includePaths: [
+        __dirname + '/node_modules',
+        __dirname + '/../node_modules'
+    ]
 }
 
 // CSS processing for development
