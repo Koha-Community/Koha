@@ -10,7 +10,7 @@ $(document).ready(function(){
         $('#checkoutRenewals #retrieving').show();
         $.get({ 'url': '/api/v1/checkouts/'+checkoutID+'/renewals', 'headers': { 'x-koha-embed': 'renewer' } }, function(data) {
             if (data.length < renewals) {
-                $('#checkoutRenewals #incomplete').append(renewed_prop.format(data.length, renewals)).show();
+                $('#checkoutRenewals #incomplete').append(__("Note: %s out of %s renewals have been logged").format(data.length, renewals)).show();
             }
             var items = data.map(function(item) {
                 return createLi(item);
@@ -20,6 +20,10 @@ $(document).ready(function(){
         });
     });
     function createLi(renewal) {
-        return '<li><span style="font-weight:bold">' + $datetime(renewal.timestamp) + '</span> ' + renewed + ' <span style="font-weight:bold">' + $patron_to_html(renewal.renewer) + '</span>' + renewed_type + ' <span style="font-weight:bold">' + renewal.renewal_type + '</span></li>';
+        if(renewal.renewal_type === "Manual"){
+            return '<li><span style="font-weight:bold">' + $datetime(renewal.timestamp) + '</span> ' + __("Renewed by") + ' <span style="font-weight:bold">' + $patron_to_html(renewal.renewer) + " " + __("manually") + '</span></li>';
+        } else {
+            return '<li><span style="font-weight:bold">' + $datetime(renewal.timestamp) + '</span> ' + __("Renewal type:") + ' <span style="font-weight:bold">' +  __("Automatic") + '</span></li>';
+        }
     }
 });
