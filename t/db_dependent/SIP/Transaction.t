@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -519,6 +519,113 @@ subtest do_checkin => sub {
 
     };
 };
+
+subtest do_checkout_with_sysprefs_override => sub {
+    plan tests => 8;
+
+    my $mockILS = Test::MockObject->new;
+    my $server = { ils => $mockILS };
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $institution = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils = C4::SIP::ILS->new($institution);
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $patron_under_noissuescharge = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    my $fee_under_noissuescharge = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber => $patron_under_noissuescharge->borrowernumber,
+                amountoutstanding => 4,
+            }
+        }
+    );
+
+    my $patron_over_noissuescharge = $builder->build_object(
+
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    my $fee_over_noissuescharge = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber => $patron_over_noissuescharge->borrowernumber,
+                amountoutstanding => 6,
+            }
+        }
+    );
+
+
+    $server->{account}->{override_fine_on_checkout} = 0;
+
+    t::lib::Mocks::mock_preference( 'AllFinesNeedOverride', '0' );
+    t::lib::Mocks::mock_preference( 'AllowFineOverride', '0' );
+    my $circ = $ils->checkout($patron_under_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_under_noissuescharge->checkouts->count, 1, 'Checkout is allowed when the amount is under noissuecharge, AllFinesNeedOverride and AllowFineOverride disabled');
+
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
+
+    $circ = $ils->checkout($patron_over_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_over_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is over noissuecharge, AllFinesNeedOverride and AllowFineOverride disabled');
+
+    t::lib::Mocks::mock_preference( 'AllFinesNeedOverride', '0' );
+    t::lib::Mocks::mock_preference( 'AllowFineOverride', '1' );
+
+    $circ = $ils->checkout($patron_under_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_under_noissuescharge->checkouts->count, 1, 'Checkout is allowed when the amount is under noissuecharge, AllFinesNeedOverride disabled and AllowFineOverride enabled');
+
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
+
+    $circ = $ils->checkout($patron_over_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_over_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is over noissuecharge, AllFinesNeedOverride disabled and AllowFineOverride enabled');
+
+    t::lib::Mocks::mock_preference( 'AllFinesNeedOverride', '1' );
+    t::lib::Mocks::mock_preference( 'AllowFineOverride', '0' );
+
+    $circ = $ils->checkout($patron_under_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_under_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is under noissuecharge, AllFinesNeedOverride enabled and AllowFineOverride disabled');
+
+    $circ = $ils->checkout($patron_over_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_over_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is over noissuecharge, AllFinesNeedOverride enabled and AllowFineOverride disabled');
+
+    t::lib::Mocks::mock_preference( 'AllFinesNeedOverride', '1' );
+    t::lib::Mocks::mock_preference( 'AllowFineOverride', '1' );
+
+    $circ = $ils->checkout($patron_under_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_under_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is under noissuecharge, AllFinesNeedOverride and AllowFineOverride enabled');
+
+    $circ = $ils->checkout($patron_over_noissuescharge->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $patron_over_noissuescharge->checkouts->count, 0, 'Checkout is blocked when the amount is over noissuecharge, AllFinesNeedOverride and AllowFineOverride enabled');
+};
+
 
 subtest do_checkout_with_patron_blocked => sub {
     plan tests => 5;
