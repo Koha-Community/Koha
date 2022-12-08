@@ -19,6 +19,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Patron',
         description => "Deleting patron failed, AnonymousPatron is not deleteable"
     },
+    'Koha::Exceptions::Patron::InvalidUserid' => {
+        isa         => 'Koha::Exceptions::Patron',
+        description => 'Field userid is not valid (probably not unique)',
+        fields      => [ 'userid' ],
+    },
     'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute' => {
         isa         => 'Koha::Exceptions::Patron',
         description => "Mandatory extended attribute missing",

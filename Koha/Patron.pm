@@ -225,8 +225,9 @@ sub store {
             unless ( $self->in_storage ) {    #AddMember
 
                 # Generate a valid userid/login if needed
-                $self->generate_userid
-                  if not $self->userid or not $self->has_valid_userid;
+                $self->generate_userid unless $self->userid;
+                Koha::Exceptions::Patron::InvalidUserid->throw( userid => $self->userid )
+                    unless $self->has_valid_userid;
 
                 # Add expiration date if it isn't already there
                 unless ( $self->dateexpiry ) {
@@ -291,12 +292,11 @@ sub store {
             else {    #ModMember
 
                 my $self_from_storage = $self->get_from_storage;
-                # FIXME We should not deal with that here, callers have to do this job
-                # Moved from ModMember to prevent regressions
-                unless ( $self->userid ) {
-                    my $stored_userid = $self_from_storage->userid;
-                    $self->userid($stored_userid);
-                }
+
+                # Do not accept invalid userid here
+                $self->generate_userid unless $self->userid;
+                Koha::Exceptions::Patron::InvalidUserid->throw( userid => $self->userid )
+                      unless $self->has_valid_userid;
 
                 # Password must be updated using $self->set_password
                 $self->password($self_from_storage->password);

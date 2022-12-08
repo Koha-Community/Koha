@@ -1810,24 +1810,20 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 8;
+    plan tests => 9;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-
-    my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0; ; # FIXME This does not longer work - because of the transaction in Koha::Patron->store?
 
     my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
     my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
 
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok { $patron_2->userid( $patron_1->userid )->store; }
-        'Koha::Exceptions::Object::DuplicateID',
-          'Koha::Patron->store raises an exception on duplicate ID';
-        close STDERR;
-    }
+    throws_ok { $patron_2->userid( $patron_1->userid )->store; }
+        'Koha::Exceptions::Patron::InvalidUserid',
+        'Koha::Patron->store raises an exception on duplicate ID';
+
+    # Clear userid and check regeneration
+    $patron_2->userid(undef)->store;
+    like( $patron_2->userid, qr/\w+\.\w+/, 'Userid regenerated' ); # old school userid
 
     # Test password
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
@@ -1853,7 +1849,6 @@ subtest '->store' => sub {
     $patron_1->relationship("")->store;
     is( $patron_1->relationship, undef, );
 
-    $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
 
     subtest 'skip updated_on for BorrowersLog' => sub {
