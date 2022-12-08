@@ -466,12 +466,12 @@ subtest do_checkout_with_patron_blocked => sub {
             class => 'Koha::Patrons',
             value => {
                 branchcode => $library->branchcode,
-                dateexpiry => '2020/01/01',
+                dateexpiry => '2020/01/03',
             }
         }
     );
     my $circ = $ils->checkout($expired_patron->cardnumber, $item->barcode);
-    is( $circ->{screen_msg}, 'Patron expired', "Got correct expired screen message" );
+    is( $circ->{screen_msg}, 'Patron expired on 01/03/2020', "Got correct expired screen message" );
 
     my $fines_patron = $builder->build_object(
         {

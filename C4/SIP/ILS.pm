@@ -7,6 +7,7 @@ package C4::SIP::ILS;
 use warnings;
 use strict;
 use C4::SIP::Sip qw( siplog );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Data::Dumper;
 
 use C4::SIP::ILS::Item;
@@ -137,7 +138,7 @@ sub checkout {
         if ($patron->debarred) {
             $circ->screen_msg("Patron debarred");
         } elsif ($patron->expired) {
-            $circ->screen_msg("Patron expired");
+            $circ->screen_msg("Patron expired on " . output_pref({ dt => dt_from_string( $patron->dateexpiry_iso, 'iso' ), dateonly => 1 }));
         } elsif ($patron->fine_blocked) {
             $circ->screen_msg("Patron has fines");
         } else {
