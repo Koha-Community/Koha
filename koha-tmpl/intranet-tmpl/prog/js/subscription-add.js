@@ -740,7 +740,7 @@ $(document).ready(function() {
     });
 
     $("input[name='serialsadditems']").on("change", function(){
-        const display = $(this).val() == "1" ? "block" : "none";
+        const display = $(this).val() == "1" ? "flex" : "none";
         $(".use_items").css('display', display).find("select").val("")
     });
 

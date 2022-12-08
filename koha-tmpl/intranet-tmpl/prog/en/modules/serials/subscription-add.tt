@@ -14,6 +14,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 /* Prevents Bootstrap menus from being hidden inside modal */
 #mana_search_result .modal { overflow: visible; }
 #mana_search_result .modal-body { overflow-y: visible; }
+.inputnote { padding-left: 13rem; padding-top: 1rem; }
 fieldset.rows table { clear: none; margin: 0; }
 </style>
 </head>
@@ -88,12 +89,12 @@ fieldset.rows table { clear: none; margin: 0; }
                                 [% END %]
                                 <li>
                                     <label for="aqbooksellerid">Vendor: </label>
-                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername | html %]" disabled="disabled" readonly="readonly" />) <a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
+                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /><input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername | html %]" disabled="disabled" readonly="readonly" /><a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
                                 </li>
                                 <li>
                                     <label for="biblionumber" class="required">Record:</label>
                                     <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
-                                    (<input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
+                                    <input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" /><span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
                                     <span id="error_bib_not_exist"></span>
                                     <div class="hint">Subscriptions must be associated with a bibliographic record</div>
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
