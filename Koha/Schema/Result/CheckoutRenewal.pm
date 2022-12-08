@@ -71,9 +71,10 @@ the date and time the renewal took place
 
 =head2 renewal_type
 
-  data_type: 'varchar'
+  data_type: 'enum'
+  default_value: 'Manual'
+  extra: {list => ["Automatic","Manual"]}
   is_nullable: 0
-  size: 9
 
 whether the renewal was an automatic or manual renewal
 
@@ -98,7 +99,12 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "renewal_type",
-  { data_type => "varchar", is_nullable => 0, size => 9 },
+  {
+    data_type => "enum",
+    default_value => "Manual",
+    extra => { list => ["Automatic", "Manual"] },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -136,8 +142,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-12-06 16:44:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BcbN0Iceh09H2DWEA6CDwA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-12-08 10:49:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Si1gkXWqpvt98YN0dO7vgw
 
 =head2 checkout
 
