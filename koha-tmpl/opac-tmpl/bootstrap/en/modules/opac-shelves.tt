@@ -486,6 +486,21 @@
 
                                                         [% itemsloo.XSLTBloc | $raw %]
 
+
+                                                        [% IF itemsloo.shelves.count %]
+                                                            <div class="results_summary shelves">
+                                                                <span class="label">Lists:</span>
+                                                                <ul>
+                                                                    [% FOREACH item_shelf IN itemsloo.shelves %]
+                                                                        <li>
+                                                                            <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% item_shelf.shelfnumber | uri %]">[% item_shelf.shelfname | html %]</a>
+                                                                            [%~ UNLESS loop.last %], [% ELSE %].[% END ~%]
+                                                                        </li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                        [% END %]
+
                                                         [% IF ( TagsShowEnabled && itemsloo.TagLoop.size ) %]
                                                             <div class="results_summary tags">
                                                                 <span class="label">Tags:</span>

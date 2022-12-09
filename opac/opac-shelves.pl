@@ -426,6 +426,13 @@ if ( $op eq 'view' ) {
 
                 $this_item->{biblio_object} = $biblio;
                 $this_item->{biblionumber}  = $biblionumber;
+                $this_item->{shelves} =
+                  Koha::Virtualshelves->get_shelves_containing_record(
+                    {
+                        biblionumber   => $biblionumber,
+                        borrowernumber => $loggedinuser,
+                    }
+                  );
                 push @items_info, $this_item;
             }
 
