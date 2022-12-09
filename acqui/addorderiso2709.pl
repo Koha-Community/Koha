@@ -169,7 +169,9 @@ if ($op eq ""){
         my $c_price = shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
 
         # Insert the biblio, or find it through matcher
-        unless ( $biblionumber ) {
+        if ( $biblionumber ) { # If matched during staging we can continue
+            $import_record->status('imported')->store;
+        } else { # Otherwise we check for duplicates, and skip if they exist
             if ($matcher_id) {
                 if ( $matcher_id eq '_TITLE_AUTHOR_' ) {
                     $duplifound = 1 if FindDuplicate($marcrecord);
@@ -183,10 +185,8 @@ if ($op eq ""){
                 $duplinbatch = $import_batch_id and next if $duplifound;
             }
 
-            # add the biblio
-            my $bibitemnum;
-
-            # remove ISBN -
+            # remove hyphens (-) from ISBN
+            # FIXME: This should probably be optional
             my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField( 'biblioitems.isbn' );
             if ( $marcrecord->field($isbnfield) ) {
                 foreach my $field ( $marcrecord->field($isbnfield) ) {
@@ -197,9 +197,9 @@ if ($op eq ""){
                     }
                 }
             }
-            ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
-            $import_record->status('imported')->store;
-        } else {
+
+            # add the biblio
+            ( $biblionumber, undef ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
             $import_record->status('imported')->store;
         }
 
@@ -334,30 +334,28 @@ if ($op eq ""){
                 $orderinfo{listprice} = 0;
             }
 
-        # remove uncertainprice flag if we have found a price in the MARC record
-        $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+            # remove uncertainprice flag if we have found a price in the MARC record
+            $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
 
-        my $order = Koha::Acquisition::Order->new( \%orderinfo );
-        $order->populate_with_prices_for_ordering();
-        $order->populate_with_prices_for_receiving();
-        $order->store;
+            my $order = Koha::Acquisition::Order->new( \%orderinfo );
+            $order->populate_with_prices_for_ordering();
+            $order->populate_with_prices_for_receiving();
+            $order->store;
 
-        # 4th, add items if applicable
-        # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
-        # this is not optimised, but it's working !
-        if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
-            my @tags         = $input->multi_param('tag');
-            my @subfields    = $input->multi_param('subfield');
-            my @field_values = $input->multi_param('field_value');
-            my @serials      = $input->multi_param('serial');
-            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
-            my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
-            for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
-                my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
-                $order->add_item( $itemnumber );
+            # 4th, add items if applicable
+            # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
+            # this is not optimised, but it's working !
+            if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
+                my @tags         = $input->multi_param('tag');
+                my @subfields    = $input->multi_param('subfield');
+                my @field_values = $input->multi_param('field_value');
+                my @serials      = $input->multi_param('serial');
+                my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
+                my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
+                for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
+                    my ( $biblionumber, undef, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
+                    $order->add_item( $itemnumber );
                 }
-            } else {
-                $import_record->status( 'imported' )->store;
             }
         }
         $imported++;
