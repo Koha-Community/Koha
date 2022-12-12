@@ -51,6 +51,7 @@ use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
+use Koha::ImportBatches;
 use Koha::Import::Records;
 use Koha::Patrons;
 
@@ -135,6 +136,8 @@ if ($op eq ""){
 
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
+    my $import_batch = Koha::ImportBatches->find( $import_batch_id );
+    my $overlay_action = $import_batch->overlay_action;
     my $import_records = Koha::Import::Records->search({
         import_batch_id => $import_batch_id,
     });
@@ -171,6 +174,10 @@ if ($op eq ""){
         # Insert the biblio, or find it through matcher
         if ( $biblionumber ) { # If matched during staging we can continue
             $import_record->status('imported')->store;
+            if( $overlay_action eq 'replace' ){
+                my $biblio = Koha::Biblios->find( $biblionumber );
+                $import_record->replace({ biblio => $biblio });
+            }
         } else { # Otherwise we check for duplicates, and skip if they exist
             if ($matcher_id) {
                 if ( $matcher_id eq '_TITLE_AUTHOR_' ) {
