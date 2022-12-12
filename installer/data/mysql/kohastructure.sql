@@ -3285,6 +3285,7 @@ CREATE TABLE `import_auths` (
   `control_number` varchar(25) DEFAULT NULL,
   `authorized_heading` varchar(128) DEFAULT NULL,
   `original_source` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`import_record_id`),
   KEY `import_auths_ibfk_1` (`import_record_id`),
   KEY `matched_authid` (`matched_authid`),
   CONSTRAINT `import_auths_ibfk_1` FOREIGN KEY (`import_record_id`) REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE
