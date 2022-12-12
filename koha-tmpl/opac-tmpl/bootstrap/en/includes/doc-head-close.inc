@@ -5,6 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+[% Asset.css("lib/jquery/jquery.dataTables.min.css") | $raw %]
+[% Asset.css("lib/jquery/responsive.dataTables.min.css") | $raw %]
 [% IF ( Koha.Preference('OpacMetaDescription') ) %]
     <meta name="description" content="[% Koha.Preference('OpacMetaDescription') | html %]" />
 [% END %]
