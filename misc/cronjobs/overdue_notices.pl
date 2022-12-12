@@ -435,18 +435,7 @@ if ( defined $htmlfilename ) {
     open $fh, ">:encoding(UTF-8)",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
   }
   
-  print $fh "<html>\n";
-  print $fh "<head>\n";
-  print $fh "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-  print $fh "<style type='text/css'>\n";
-  print $fh "pre {page-break-after: always;}\n";
-  print $fh "pre {white-space: pre-wrap;}\n";
-  print $fh "pre {white-space: -moz-pre-wrap;}\n";
-  print $fh "pre {white-space: -o-pre-wrap;}\n";
-  print $fh "pre {word-wrap: break-work;}\n";
-  print $fh "</style>\n";
-  print $fh "</head>\n";
-  print $fh "<body>\n";
+  print $fh _get_html_start();
 }
 elsif ( defined $text_filename ) {
   if ( $text_filename eq '' ) {
@@ -848,16 +837,19 @@ END_SQL
         if ( defined $csvfilename ) {
             my $delimiter = C4::Context->csv_delimiter;
             $content = join($delimiter, qw(title name surname address1 address2 zipcode city country email itemcount itemsinfo due_date issue_date)) . "\n";
+            $content .= join( "\n", @output_chunks );
+        } elsif ( defined $htmlfilename ) {
+            $content = _get_html_start();
+            $content .= join( "\n", @output_chunks );
+            $content .= _get_html_end();
+        } else {
+            $content = join( "\n", @output_chunks );
         }
-        else {
-            $content = "";
-        }
-        $content .= join( "\n", @output_chunks );
 
         if ( C4::Context->preference('EmailOverduesNoEmail') ) {
             my $attachment = {
-                filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
-                type => 'text/plain',
+                filename => defined $csvfilename ? 'attachment.csv' : defined $htmlfilename ? 'attachment.html' : 'attachment.txt',
+                type => defined $htmlfilename ? 'text/html' : 'text/plain',
                 content => $content,
             };
 
@@ -885,8 +877,7 @@ if ($csvfilename) {
 }
 
 if ( defined $htmlfilename ) {
-  print $fh "</body>\n";
-  print $fh "</html>\n";
+  print $fh _get_html_end();
   close $fh;
 } elsif ( defined $text_filename ) {
   close $fh;
@@ -944,6 +935,44 @@ sub prepare_letter_for_printing {
         # $return .= Data::Dumper->Dump( [ $params->{'borrowernumber'}, $params->{'letter'} ], [qw( borrowernumber letter )] );
     }
     return $return;
+}
+
+=head2 _get_html_start
+
+Return the start of a HTML document, including html, head and the start body
+tags. This should be usable both in the HTML file written to disc, and in the
+attachment.html sent as email.
+
+=cut
+
+sub _get_html_start {
+
+    return "<html>
+<head>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+<style type='text/css'>
+pre {page-break-after: always;}
+pre {white-space: pre-wrap;}
+pre {white-space: -moz-pre-wrap;}
+pre {white-space: -o-pre-wrap;}
+pre {word-wrap: break-work;}
+</style>
+</head>
+<body>";
+
+}
+
+=head2 _get_html_end
+
+Return the end of an HTML document, namely the closing body and html tags.
+
+=cut
+
+sub _get_html_end {
+
+    return "</body>
+</html>";
+
 }
 
 cronlogaction({ action => 'End', info => "COMPLETED" });
