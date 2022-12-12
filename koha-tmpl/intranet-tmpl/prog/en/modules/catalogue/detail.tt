@@ -552,7 +552,7 @@ Note that permanent location is a code, and location may be an authval.
                             [% END %]
                         [% END %]
 
-                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfer || hold || ( Koha.Preference('UseRecalls') && recall ) ) %]
+                        [% UNLESS ( item.notforloan || item.itemtype.notforloan || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfer || hold || ( Koha.Preference('UseRecalls') && recall ) ) %]
                             <span>Available</span>
                         [% END %]
 
