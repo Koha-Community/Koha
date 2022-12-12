@@ -1200,6 +1200,7 @@
                         "searchPlaceholder": _("Search")
                     },
                     "autoWidth": false,
+                    "responsive": true,
                     buttons: [
                         /* Override default button set so that we can extend the options of print and csv */
                         'clearFilter', 'copy',
@@ -1220,6 +1221,10 @@
                     ]
                 }));
             });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+                dTables.DataTable().responsive.recalc();
+            } );
 
             $("body").on("click", "#buttons-ics", function(){
                 location.href="/cgi-bin/koha/opac-ics.pl";
