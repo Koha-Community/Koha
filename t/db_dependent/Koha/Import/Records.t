@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Koha::Import::Records;
 use Koha::Database;
@@ -85,5 +85,59 @@ is_deeply( $matches->next->unblessed, $match_2->unblessed, "Match 2 is the chose
 
 $retrieved_record_1->delete;
 is( Koha::Import::Records->search->count, $nb_of_records + 1, 'Delete should have deleted the record' );
+
+subtest 'replace' => sub {
+    plan tests => 4;
+
+
+    # Replace biblio
+    my $import_record = $builder->build_object({ class => 'Koha::Import::Records' });
+    my $import_record_biblio = $builder->build_object({
+        class => 'Koha::Import::Record::Biblios',
+        value => {
+            import_record_id => $import_record->id
+        }
+    });
+
+    my $koha_biblio = $builder->build_sample_biblio({ title => "The before" });
+    my $koha_xml = $koha_biblio->metadata->record->as_xml;
+    my $import_biblio = $builder->build_sample_biblio({ title => "The after" });
+    $import_record->marcxml( $import_biblio->metadata->record->as_xml )->store->discard_changes;
+
+    $import_record->replace({ biblio => $koha_biblio });
+    $koha_biblio->discard_changes;
+    $import_record->discard_changes;
+    is( $koha_biblio->title, "The after", "The Koha biblio is successfully updated" );
+    is( $import_record->marcxml_old, $koha_xml, "The old marcxml in import records is correctly updated" );
+
+    # Replace authority
+    my $auth_record = MARC::Record->new;
+    $auth_record->append_fields(
+        MARC::Field->new( '100', '', '', a => 'Author' ),
+    );
+    my $auth_id = C4::AuthoritiesMarc::AddAuthority($auth_record, undef, 'PERSO_NAME');
+    my $koha_auth = Koha::Authorities->find( $auth_id );
+    $koha_xml = $koha_auth->marcxml;
+    $import_record = $builder->build_object({ class => 'Koha::Import::Records' });
+    my $import_record_auth = $builder->build_object({
+        class => 'Koha::Import::Record::Auths',
+        value => {
+            import_record_id => $import_record->id
+        }
+    });
+
+
+    my $field = $auth_record->field('100');
+    $field->update( 'a' => 'Other author' );
+    $import_record->marcxml( $auth_record->as_xml )->store->discard_changes;
+
+    $import_record->replace({ authority => $koha_auth });
+    $koha_auth->discard_changes;
+    $import_record->discard_changes;
+    my $updated_record = MARC::Record->new_from_xml( $koha_auth->marcxml, 'UTF-8');
+    is( $updated_record->field('100')->as_string, $auth_record->field('100')->as_string, "The Koha auhtority record is correctly updated" );
+    is( $import_record->marcxml_old, $koha_xml, "The old marcxml in import record is correctly updated" );
+
+};
 
 $schema->storage->txn_rollback;
