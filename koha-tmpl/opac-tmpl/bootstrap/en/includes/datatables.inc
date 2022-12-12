@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/dataTables.responsive.min.js") | $raw %]
 <script>
     var MSG_DT_FIRST = _("First");
     var MSG_DT_LAST = _("Last");
