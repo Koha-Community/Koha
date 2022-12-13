@@ -1888,7 +1888,7 @@ sub _koha_notify_reserve {
     } );
 
     my $library = Koha::Libraries->find( $hold->branchcode );
-    my $inbound_email_address = $library->inbound_email_address;
+    my $from_email_address = $library->from_email_address;
 
     my %letter_params = (
         module => 'reserves',
@@ -1919,7 +1919,7 @@ sub _koha_notify_reserve {
         C4::Letters::EnqueueLetter( {
             letter => $letter,
             borrowernumber => $borrowernumber,
-            from_address => $inbound_email_address,
+            from_address => $from_email_address,
             message_transport_type => $mtt,
         } );
     };
@@ -1980,7 +1980,7 @@ sub _koha_notify_hold_changed {
             letter                 => $letter,
             borrowernumber         => $patron->id,
             message_transport_type => 'email',
-            from_address           => $email,
+            from_address           => $library->from_email_address,
             to_address             => $email,
         }
     );
