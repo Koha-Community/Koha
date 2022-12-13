@@ -2,7 +2,6 @@
 [% USE Branches %]
 <div id="navmenu">
     <div id="navmenulist">
-
         <h5>Circulation</h5>
         <ul>
             <li>
@@ -14,13 +13,17 @@
             <li>
                 <a href="/cgi-bin/koha/circ/renew.pl">Renew</a>
             </li>
-            [% UNLESS IndependentBranches %]
+            [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
             <li>
                 [% IF Koha.Preference('UseCirculationDesks') %]
                 <a href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
                 [% ELSE %]
                 <a href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                 [% END %]
+            </li>
+            [% ELSIF Koha.Preference('UseCirculationDesks') %]
+            <li>
+                <a href="/cgi-bin/koha/circ/set-library.pl">Set desk</a>
             </li>
             [% END %]
             [% IF ( fast_cataloging && CAN_user_editcatalogue_fast_cataloging ) %]

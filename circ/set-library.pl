@@ -49,8 +49,8 @@ my $userenv_register_id = C4::Context->userenv->{'register_id'} || '';
 my @updated;
 
 # $session lines here are doing the updating
-if ( $branch and my $library = Koha::Libraries->find($branch) ) {
-    if (! $userenv_branch or $userenv_branch ne $branch ) {
+if ( $branch and my $library = Koha::Libraries->find($branch) and ( $flags->{loggedinlibrary} == 1 or $flags->{superlibrarian} == 1 ) ) {
+    if ( !$userenv_branch or $userenv_branch ne $branch  )  {
         my $branchname = $library->branchname;
         $session->param('branchname', $branchname);         # update sesssion in DB
         $session->param('branch', $branch);                 # update sesssion in DB

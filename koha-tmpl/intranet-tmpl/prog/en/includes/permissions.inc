@@ -81,6 +81,9 @@
     [%- CASE 'erm' -%]
         <span class="main_permission erm_permission">Manage the electronic resources module</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'loggedinlibrary' -%]
+        <span class="main_permission loggedinlibrary_permission">Allow staff to change logged in library</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 

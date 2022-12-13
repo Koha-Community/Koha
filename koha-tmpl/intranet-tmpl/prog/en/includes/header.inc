@@ -157,7 +157,7 @@
                         </li>
                     [% END %]
 
-                    [% IF !( Koha.Preference('IndependentBranches') && !CAN_user_superlibrarian && !CAN_user_editcatalogue_edit_catalogue ) %]
+                    [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
                     <li role="separator" class="loggedin-menu-label divider"></li>
                     <li>
                         [% IF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]

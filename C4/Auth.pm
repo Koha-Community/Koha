@@ -1160,7 +1160,8 @@ sub checkauth {
                     my $ip = $ENV{'REMOTE_ADDR'};
 
                     # if they specify at login, use that
-                    if ( $query->param('branch') ) {
+                    my $patron = Koha::Patrons->find({userid => $userid});
+                    if ( $query->param('branch')  && ( haspermission($userid, {  'loggedinlibrary'=> 1 }) || $patron->is_superlibrarian ) ) {
                         $branchcode = $query->param('branch');
                         my $library = Koha::Libraries->find($branchcode);
                         $branchname = $library? $library->branchname: '';

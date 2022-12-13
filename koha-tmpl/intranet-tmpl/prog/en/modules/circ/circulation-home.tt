@@ -44,13 +44,17 @@
                     <li>
                         <a class="circ-button" href="/cgi-bin/koha/circ/renew.pl"><i class="fa fa-retweet"></i> Renew</a>
                     </li>
-                    [% UNLESS IndependentBranches %]
+                    [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
                         <li>
                             [% IF Koha.Preference('UseCirculationDesks') %]
                             <a class="circ-button" href="/cgi-bin/koha/circ/set-library.pl"><i class="fa fa-home"></i> Set library and desk</a>
                             [% ELSE %]
                             <a class="circ-button" href="/cgi-bin/koha/circ/set-library.pl"><i class="fa fa-home"></i> Set library</a>
                             [% END %]
+                        </li>
+                    [% ELSIF Koha.Preference('UseCirculationDesks') %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/set-library.pl"><i class="fa fa-home"></i> Set desk</a>
                         </li>
                     [% END %]
                     [% IF ( fast_cataloging ) %]
