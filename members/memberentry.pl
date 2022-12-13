@@ -618,7 +618,10 @@ if (C4::Context->preference("IndependentBranches")) {
 # Define the fields to be pre-filled in guarantee records
 my $prefillguarantorfields=C4::Context->preference("PrefillGuaranteeField");
 my @prefill_fields=split(/\,/,$prefillguarantorfields);
-$template->param( guarantor_attributes => \@prefill_fields );
+$template->param(
+    guarantor_attributes => \@prefill_fields,
+    to_api_mapping => Koha::Patron->new->to_api_mapping
+);
 
 if ($op eq 'add_form'){
     if ($guarantor_id) {

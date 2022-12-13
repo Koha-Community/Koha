@@ -1971,6 +1971,9 @@ legend:hover {
         [% IF guarantor_attributes %]
             guarantor_attributes = [% To.json(guarantor_attributes) %];
         [% END %]
+        [% IF to_api_mapping %]
+            to_api_mapping = [% To.json(to_api_mapping) %];
+        [% END %]
 
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
         var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];

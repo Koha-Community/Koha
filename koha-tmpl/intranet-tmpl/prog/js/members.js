@@ -122,16 +122,17 @@ function select_user(borrowernumber, borrower, relationship) {
             fieldset.find('.new_guarantor_relationship').val(relationship);
         }
 
-        if(typeof guarantor_attributes !== 'undefined') {
+        if(typeof guarantor_attributes !== 'undefined' && to_api_mapping) {
             $.ajax({
                 url: '/api/v1/patrons/'+borrowernumber,
                 method: "GET",
                 dataType: 'json',
                 success: function(data){
-                    for (var i = 0; i < parseInt(guarantor_attributes.length, 10); i++) {
-                        var attribute = guarantor_attributes[i];
-                        if ( data[attribute] != null && document.forms.entryform[attribute].value == "" ) {
-                            document.forms.entryform[attribute].value = data[attribute];
+                    for (let i = 0; i < parseInt(guarantor_attributes.length, 10); i++) {
+                        let attribute = guarantor_attributes[i];
+                        let key_data = to_api_mapping[attribute] || attribute;
+                        if(data[key_data] != null && attribute in document.forms.entryform && document.forms.entryform[attribute].value == ""){
+                            document.forms.entryform[attribute].value = data[key_data];
                         }
                     }
                 }
