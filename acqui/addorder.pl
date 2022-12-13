@@ -181,7 +181,7 @@ unless($confirm_budget_exceeding) {
         foreach (keys %$vars) {
             push @vars_loop, {
                 name => $_,
-                values => [$input->param($_)],
+                values => [ $input->multi_param($_) ],
             };
         }
 
