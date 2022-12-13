@@ -71,13 +71,11 @@ sub filter {
     return unless defined $record and ref($record) eq 'MARC::Record';
 
     my $items = $self->{params}->{options}->{items};
-    my $mss   = $self->{params}->{options}->{mss}
-      // C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
 
     my @item_fields;
 
     foreach my $item ( @{$items} ) {
-        push @item_fields, $item->as_marc_field( { mss => $mss } );
+        push @item_fields, $item->as_marc_field;
     }
 
     $record->append_fields(@item_fields);
