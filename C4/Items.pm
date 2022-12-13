@@ -307,6 +307,11 @@ sub ModItemFromMarc {
     # to prevent it being blanked by set_or_blank
     $item->{onloan} = $item_object->onloan if( $item_object->onloan && !defined $item->{onloan} );
 
+    # When importing and replacing items we should not remove the dateacquired so we should set it
+    # to the existing value
+    $item->{dateaccessioned} = $item_object->dateaccessioned
+      if ( $item_object->dateaccessioned && !defined $item->{dateaccessioned} );
+
     my ( $perm_loc_tag, $perm_loc_subfield ) = C4::Biblio::GetMarcFromKohaField( "items.permanent_location" );
     my $has_permanent_location = defined $perm_loc_tag && defined $item_marc->subfield( $perm_loc_tag, $perm_loc_subfield );
 
