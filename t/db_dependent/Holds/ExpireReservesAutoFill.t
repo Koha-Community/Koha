@@ -12,9 +12,9 @@ use MARC::Record;
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
-use C4::Reserves qw(CancelExpiredReserves);
 use Koha::Database;
 use Koha::Holds;
+use Koha::Notice::Messages;
 
 BEGIN {
     use FindBin;
@@ -46,21 +46,17 @@ my $branch_2  = $builder->build_object({
 });
 my $library_2 = $branch_2->branchcode;
 
-my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
-my $biblionumber = $biblio->id;
-
-# Create item instance for testing.
-my $itemnumber = $builder->build_sample_item({ library => $library_1, biblionumber => $biblio->biblionumber })->itemnumber;
-
-my $patron_1 = $builder->build( { source => 'Borrower' } );
-my $patron_2 = $builder->build( { source => 'Borrower' } );
-my $patron_3 = $builder->build( { source => 'Borrower' } );
 
 subtest 'Test automatically canceled expired waiting holds to fill the next hold, without a transfer' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
-    $dbh->do('DELETE FROM reserves');
-    $dbh->do('DELETE FROM message_queue');
+    my $item = $builder->build_sample_item({ library => $library_1 });
+    my $biblionumber = $item->biblionumber;
+    my $itemnumber = $item->itemnumber;
+
+    my $patron_1 = $builder->build( { source => 'Borrower' } );
+    my $patron_2 = $builder->build( { source => 'Borrower' } );
+    my $patron_3 = $builder->build( { source => 'Borrower' } );
 
     # Add a hold on the item for each of our patrons
     my $hold_1 = Koha::Hold->new(
@@ -94,7 +90,7 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
     my $hold_3 = Koha::Hold->new(
         {
             priority       => 2,
-            borrowernumber => $patron_2->{borrowernumber},
+            borrowernumber => $patron_3->{borrowernumber},
             branchcode     => $library_1,
             biblionumber   => $biblionumber,
             itemnumber     => $itemnumber,
@@ -113,9 +109,9 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
     t::lib::Mocks::mock_preference( 'ExpireReservesAutoFillEmail',
         'kyle@example.com' );
 
-    CancelExpiredReserves();
+    $hold_1->cancel({ autofill => 1 });
 
-    my $holds = Koha::Holds->search( {}, { order_by => 'priority' } );
+    my $holds = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
     $hold_2 = $holds->next;
     $hold_3 = $holds->next;
 
@@ -123,33 +119,44 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
     is( $hold_2->priority, 0,   'Next hold in line now has priority of 0' );
     is( $hold_2->found,    'W', 'Next hold in line is now set to waiting' );
 
-    my @messages = $schema->resultset('MessageQueue')
-      ->search( { letter_code => 'HOLD_CHANGED' } );
-    is( @messages, 1, 'Found 1 message in the message queue' );
-    is( $messages[0]->to_address, 'kyle@example.com', 'Message sent to correct email address' );
+    my $messages = Koha::Notice::Messages->search({
+        letter_code => 'HOLD_CHANGED',
+        borrowernumber => $patron_2->{borrowernumber}
+    } );
+    is( $messages->count, 1, 'Found message in the message queue with  borrower 2 as the object' );
+    my $message = $messages->next;
+    is( $message->to_address, 'kyle@example.com', 'Message sent to correct email address' );
+    is( $message->from_address, $branch_1->branchemail, "Message is sent from library's email");
 
-    $hold_2->expirationdate('1900-01-01')->store();
+    $hold_2->cancel({ autofill => 1 });
 
-    CancelExpiredReserves();
-
-    $holds = Koha::Holds->search( {}, { order_by => 'priority' } );
+    $holds = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
     $hold_3 = $holds->next;
 
     is( $holds->count,     1,   'Found 1 hold' );
     is( $hold_3->priority, 0,   'Next hold in line now has priority of 0' );
     is( $hold_3->found,    'W', 'Next hold in line is now set to waiting' );
 
-    @messages = $schema->resultset('MessageQueue')
-      ->search( { letter_code => 'HOLD_CHANGED' } );
-    is( @messages, 2, 'Found 2 messages in the message queue' );
-    is( $messages[0]->to_address, 'kyle@example.com', 'Message sent to correct email address' );
+    $messages = Koha::Notice::Messages->search({
+        letter_code => 'HOLD_CHANGED',
+        borrowernumber => $patron_3->{borrowernumber}
+    });
+    is( $messages->count, 1, 'Found message with borrower 3 as the object' );
+    $message = $messages->next;
+    is( $message->to_address, 'kyle@example.com', 'Message sent to correct email address' );
+    is( $message->from_address, $branch_1->branchemail, "Message is sent from library's email");
 };
 
 subtest 'Test automatically canceled expired waiting holds to fill the next hold, with a transfer' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
-    $dbh->do('DELETE FROM reserves');
-    $dbh->do('DELETE FROM message_queue');
+    my $item = $builder->build_sample_item({ library => $library_1 });
+    my $biblionumber = $item->biblionumber;
+    my $itemnumber = $item->itemnumber;
+
+    my $patron_1 = $builder->build( { source => 'Borrower' } );
+    my $patron_2 = $builder->build( { source => 'Borrower' } );
+    my $patron_3 = $builder->build( { source => 'Borrower' } );
 
     # Add a hold on the item for each of our patrons
     my $hold_1 = Koha::Hold->new(
@@ -186,12 +193,11 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
     t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay',       1 );
     t::lib::Mocks::mock_preference( 'ExpireReservesOnHolidays',     1 );
     t::lib::Mocks::mock_preference( 'ExpireReservesAutoFill',       1 );
-    t::lib::Mocks::mock_preference( 'ExpireReservesAutoFillEmail',
-        'kyle@example.com' );
+    t::lib::Mocks::mock_preference( 'ExpireReservesAutoFillEmail', '' );
 
-    CancelExpiredReserves();
+    $hold_1->cancel({ autofill => 1 });
 
-    my @holds = Koha::Holds->search( {}, { order_by => 'priority' } )->as_list;
+    my @holds = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } )->as_list;
     $hold_2 = $holds[0];
 
     is( @holds,            1,   'Found 1 hold' );
@@ -199,12 +205,16 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
     is( $hold_2->found,    'T', 'Next hold in line is now set to in transit' );
     is( $hold_2->branchcode, $library_2, "Next hold in line has correct branchcode" );
 
-    my @messages = $schema->resultset('MessageQueue')
-      ->search( { letter_code => 'HOLD_CHANGED' } );
-    is( @messages, 1, 'Message is generated in the message queue when generating transfer' );
-
-    my $email = $messages[0];
-    is( $email->from_address, $branch_2->branchemail, "Message is sent from library's email");
+    my $messages = Koha::Notice::Messages->search({
+        letter_code => 'HOLD_CHANGED',
+        borrowernumber => $patron_2->{borrowernumber}
+    });
+    is( $messages->count, 1, 'Message is generated in the message queue when generating transfer' );
+    my $message = $messages->next;
+    # Is the below correct? Email of changed hold is sent to the receiving library
+    # how does the sending library know to remove book from the holds shelf?
+    is( $message->to_address, $branch_2->branchreplyto, "Message is sent to the incoming email of the library with the next hold");
+    is( $message->from_address, $branch_2->branchemail, "Message is sent from library's email");
 };
 
 $schema->storage->txn_rollback;
