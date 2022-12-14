@@ -40,13 +40,15 @@ $scriptname
 This script lets you manage the worker daemon for your Koha instances.
 
 Usage:
-$scriptname [--start|--stop|--restart] [--quiet|-q] instancename1 [instancename2...]
+$scriptname [--start|--stop|--restart] [--queue queue_name] [--quiet|-q] instancename1 [instancename2...]
 $scriptname --status instancename1 [instancename2...]
 $scriptname -h|--help
 
     --start               Start the worker daemon for the specified instances
     --stop                Stop the worker daemon for the specified instances
     --restart             Restart the worker daemon for the specified instances
+    --queue               Specify the queue/worker to restart - 'default' is used if not specified
+                          current queues are: default, long_tasks
     --status              Show the status of the worker for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
