@@ -789,7 +789,20 @@ $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 subtest '_koha_notify_reserve() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
+
+    my $branch = $builder->build_object({
+        class => 'Koha::Libraries',
+        value => {
+            branchemail => 'branch@e.mail',
+            branchreplyto => 'branch@reply.to',
+            pickup_location => 1
+        }
+    });
+    my $item = $builder->build_sample_item({
+        homebranch => $branch->branchcode,
+        holdingbranch => $branch->branchcode
+    });
 
     my $wants_hold_and_email = {
         wants_digest => '0',
@@ -852,12 +865,15 @@ subtest '_koha_notify_reserve() tests' => sub {
         })->next()->to_address();
     is($sms_message_address, undef ,"We should not populate the sms message with the sms number, sending will do so");
 
-    my $email_message_address = $schema->resultset('MessageQueue')->search({
+    my $email = $schema->resultset('MessageQueue')->search({
             letter_code     => 'HOLD',
             message_transport_type => 'email',
             borrowernumber => $hold_borrower,
-        })->next()->to_address();
-    is($email_message_address, undef ,"We should not populate the hold message with the email address, sending will do so");
+        })->next();
+    my $email_to_address = $email->to_address();
+    is($email_to_address, undef ,"We should not populate the hold message with the email address, sending will do so");
+    my $email_from_address = $email->from_address();
+    is($email_from_address,'branch@e.mail',"Library's from address is used for sending");
 
 };
 

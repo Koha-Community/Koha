@@ -29,8 +29,22 @@ my $builder = t::lib::TestBuilder->new();
 my $dbh     = C4::Context->dbh;
 
 # Create two random branches
-my $library_1 = $builder->build({ source => 'Branch' })->{ branchcode };
-my $library_2 = $builder->build({ source => 'Branch' })->{ branchcode };
+my $branch_1  = $builder->build_object({
+    class => 'Koha::Libraries',
+    value => {
+        branchemail => 'branch1@e.mail',
+        branchreplyto => 'branch1@reply.to'
+    }
+});
+my $library_1 = $branch_1->branchcode;
+my $branch_2  = $builder->build_object({
+    class => 'Koha::Libraries',
+    value => {
+        branchemail => 'branch2@e.mail',
+        branchreplyto => 'branch2@reply.to'
+    }
+});
+my $library_2 = $branch_2->branchcode;
 
 my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 my $biblionumber = $biblio->id;
@@ -132,7 +146,7 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 };
 
 subtest 'Test automatically canceled expired waiting holds to fill the next hold, with a transfer' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     $dbh->do('DELETE FROM reserves');
     $dbh->do('DELETE FROM message_queue');
@@ -187,5 +201,10 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 
     my @messages = $schema->resultset('MessageQueue')
       ->search( { letter_code => 'HOLD_CHANGED' } );
-    is( @messages, 1, 'Nessage is generated in the message queue when generating transfer' );
+    is( @messages, 1, 'Message is generated in the message queue when generating transfer' );
+
+    my $email = $messages[0];
+    is( $email->from_address, $branch_2->branchemail, "Message is sent from library's email");
 };
+
+$schema->storage->txn_rollback;
