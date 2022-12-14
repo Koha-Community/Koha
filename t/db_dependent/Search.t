@@ -751,6 +751,13 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     );
     is($count, 1, 'MARC21 authorities: one hit on "all" (entire record) contains "professional wrestler"');
 
+    #NOTE: the 2nd parameter is unused in SearchAuthorities...
+    ($auths, $count) = SearchAuthorities(
+        ['Any','Any'], [''], [''], ['contains'],
+        ['professional wrestler','shakespeare'], 0, 10, '', '', 1
+    );
+    is($count, 2, 'MARC21 authorities: multiple values create operands implicitly joined by OR');
+
     # retrieve records that are larger than the MARC limit of 99,999 octets
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef);
@@ -923,7 +930,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 92;
+    plan tests => 93;
     run_marc21_search_tests();
 };
 
