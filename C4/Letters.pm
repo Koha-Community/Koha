@@ -23,7 +23,7 @@ use Carp qw( carp croak );
 use Template;
 use Module::Load::Conditional qw( can_load );
 
-use Try::Tiny qw( catch try );
+use Try::Tiny;
 
 use C4::Members;
 use C4::Log qw( logaction );
@@ -1620,8 +1620,13 @@ sub _process_tt {
     my $output;
     my $schema = Koha::Database->new->schema;
     $schema->txn_begin;
-    $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
-    $schema->txn_rollback;
+    my $processed = try {
+        $template->process( \$content, $tt_params, \$output );
+    }
+    finally {
+        $schema->txn_rollback;
+    };
+    croak "ERROR PROCESSING TEMPLATE: " . $template->error() unless $processed;
 
     return $output;
 }
