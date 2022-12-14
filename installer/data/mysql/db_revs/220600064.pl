@@ -14,11 +14,17 @@ return {
 
         say $out "Added new system preference 'OPACAllowUserToChangeBranch'";
 
+	my ($value) = $dbh->selectrow_array(q{
+            SELECT CASE WHEN value=1 THEN 'intransit' ELSE '' END
+            FROM systempreferences
+            WHERE variable='OPACInTransitHoldPickupLocationChange'
+        });
+
         $dbh->do(q{
             UPDATE systempreferences
-            SET value=(SELECT CASE WHEN value=1 THEN 'intransit' ELSE '' END FROM systempreferences WHERE variable='OPACInTransitHoldPickupLocationChange')
+            SET value=(?)
             WHERE variable='OPACAllowUserToChangeBranch'
-        });
+        }, undef, $value);
 
         $dbh->do(q{
             DELETE FROM systempreferences
