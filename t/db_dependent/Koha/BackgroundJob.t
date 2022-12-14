@@ -69,7 +69,7 @@ subtest '_derived_class() tests' => sub {
 
 subtest 'enqueue() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -108,6 +108,7 @@ subtest 'enqueue() tests' => sub {
     is( $job->size,           3,           'Three steps' );
     is( $job->status,         'new',       'Initial status set correctly' );
     is( $job->borrowernumber, $patron->id, 'Borrowernumber set from userenv' );
+    is( $job->queue,          'long_tasks', 'BatchUpdateItem should use the long_tasks queue' );
     is_deeply( $job->json->decode( $job->context ), $job_context, 'Context set from userenv + interface' );
 
     $schema->storage->txn_rollback;
