@@ -328,8 +328,47 @@ subtest 'checkauth() tests' => sub {
         is( $auth_status, 'ok', 'User waiting for 2FA setup, pref was disabled, access OK' );
     };
 
-    C4::Context->_new_userenv; # For next tests
+    subtest 'loggedinlibrary permission tests' => sub {
 
+        plan tests => 3;
+        my $staff_user = $builder->build_object(
+            { class => 'Koha::Patrons', value => { flags => 536870916 } } );
+
+        my $branch = $builder->build_object({ class => 'Koha::Libraries' });
+
+        my $password = 'password';
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $staff_user->set_password( { password => $password } );
+        my $cgi = Test::MockObject->new();
+        $cgi->mock( 'cookie', sub { return; } );
+        $cgi->mock(
+            'param',
+            sub {
+                my ( $self, $param ) = @_;
+                if    ( $param eq 'userid' )   { return $staff_user->userid; }
+                elsif ( $param eq 'password' ) { return $password; }
+                elsif ( $param eq 'branch' )   { return $branch->branchcode; }
+                else                           { return; }
+            }
+        );
+
+        $cgi->mock( 'request_method', sub { return 'POST' } );
+        my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        my $sesh = C4::Auth::get_session($sessionID);
+        is( $sesh->param('branch'), $branch->branchcode, "If user has permission, they should be able to choose a branch" );
+
+        $staff_user->flags(4)->store->discard_changes;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        $sesh = C4::Auth::get_session($sessionID);
+        is( $sesh->param('branch'), $staff_user->branchcode, "If user has not permission, they should not be able to choose a branch" );
+
+        $staff_user->flags(1)->store->discard_changes;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        $sesh = C4::Auth::get_session($sessionID);
+        is( $sesh->param('branch'), $branch->branchcode, "If user is superlibrarian, they should be able to choose a branch" );
+
+    };
+    C4::Context->_new_userenv; # For next tests
 };
 
 subtest 'track_login_daily tests' => sub {
