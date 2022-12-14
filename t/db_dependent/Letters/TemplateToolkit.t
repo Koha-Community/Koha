@@ -3,7 +3,7 @@
 # This file is part of Koha.
 #
 # Copyright (C) 2016 ByWater Solutions
-# Copyright (C) 2017 Koha Development Team
+# Copyright (C) 2022 Koha Development Team
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1207,6 +1207,21 @@ EOF
     my $branchcode = $library->branchcode;
     like($letter->{content}, qr{=$branchcode=}, 'content generated with the library');
     is( ref($library->get_from_storage), 'Koha::Library', 'calling ->delete on the object has not been comitted');
+
+};
+
+subtest '_process_letter croaks on parsing error' => sub {
+
+    plan tests => 1;
+
+    my $params = {
+        code => 'TEST_CROAK',
+        substitute => { count => 42 },
+    };
+
+    my $tt_template = q|[% IF %]|;
+    eval { process_letter( { template => $tt_template, %$params } ) };
+    like($@, qr{^ERROR PROCESSING TEMPLATE: });
 };
 
 sub reset_template {
