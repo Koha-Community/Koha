@@ -141,8 +141,8 @@
         <fieldset class="rows"><legend>Relationship information</legend>
             <ol>
             <li>
-                <label for="relationship">Special relationship: </label>
-                <select name="relationship" id="relationship">
+                <label for="special_relationship">Special relationship: </label>
+                <select name="relationship" id="special_relationship">
                     [% selected=relationship | html %]
                     [% PROCESS selectoptionopen value='' %]None specified</option>
                     [% IF Koha.Preference('marcflavour') == 'MARC21' %]
