@@ -22,6 +22,7 @@ use Digest::MD5 qw( md5_base64 md5_hex );
 use JSON qw( to_json );
 use List::MoreUtils qw( any each_array uniq );
 use String::Random qw( random_string );
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -213,6 +214,19 @@ if ( $action eq 'create' ) {
             C4::Letters::SendQueuedMessages({ message_id => $message_id });
         }
         else {
+            $borrower{password}         ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode}));
+            my $consent_dt = delete $borrower{gdpr_proc_consent};
+            my $patron;
+            try {
+                $patron = Koha::Patron->new( \%borrower )->store;
+                Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $patron && $consent_dt;
+            } catch {
+                my $type = ref($_);
+                my $info = "$_";
+                $template->param( error_type => $type, error_info => $info );
+                $template->param( borrower => \%borrower );
+            };
+
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
                 {
                     template_name   => "opac-registration-confirmation.tt",
@@ -220,12 +234,8 @@ if ( $action eq 'create' ) {
                     query           => $cgi,
                     authnotrequired => 1,
                 }
-            );
+            ) if $patron;
 
-            $borrower{password}         ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode}));
-            my $consent_dt = delete $borrower{gdpr_proc_consent};
-            my $patron = Koha::Patron->new( \%borrower )->store;
-            Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
             if ( $patron ) {
                 $patron->extended_attributes->filter_by_branch_limitations->delete;
                 $patron->extended_attributes($attributes);
@@ -280,8 +290,6 @@ if ( $action eq 'create' ) {
                     $patron->notify_library_of_registration($notify_library);
                 }
 
-            } else {
-                # FIXME Handle possible errors here
             }
             $template->param(
                 PatronSelfRegistrationAdditionalInstructions =>

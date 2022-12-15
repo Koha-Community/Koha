@@ -125,6 +125,17 @@
                     </div>
                 [% END %]
 
+                [% IF error_type OR error_info %]
+                    <div class="alert alert-error"><li>
+                        <p>There were problems processing your registration. Please contact your library for help.</p>
+                        [% IF error_type == 'Koha::Exceptions::Patron::InvalidUserid' %]
+                            <p>Error: Userid is not valid</p>
+                        [% ELSE %]
+                            <p>Error [% error_type %]: [% error_info %]</p>
+                        [% END %]
+                    </li></div>
+                [% END %]
+
                 [% IF failed_captcha %]
                     <div class="alert alert-warning">You typed in the wrong characters in the box before submitting. Please try again.</div>
                 [% END %]
