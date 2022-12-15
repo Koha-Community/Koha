@@ -23,7 +23,7 @@ export const fetchAgreement = async function (agreement_id) {
 };
 
 export const fetchAgreements = async function () {
-    const apiUrl = "/api/v1/erm/agreements";
+    const apiUrl = "/api/v1/erm/agreements?_per_page=-1";
     let agreements;
     await fetch(apiUrl)
         .then(checkError)
@@ -60,7 +60,7 @@ export const fetchLicense = async function (license_id) {
 };
 
 export const fetchLicenses = async function () {
-    const apiUrl = "/api/v1/erm/licenses";
+    const apiUrl = "/api/v1/erm/licenses?_per_page=-1";
     let licenses;
     await fetch(apiUrl, {
         headers: {
@@ -97,7 +97,7 @@ export const fetchPatron = async function (patron_id) {
 };
 
 export const fetchVendors = async function () {
-    const apiUrl = "/api/v1/acquisitions/vendors";
+    const apiUrl = "/api/v1/acquisitions/vendors?_per_page=-1";
     let vendors;
     await fetch(apiUrl)
         .then(checkError)
@@ -207,7 +207,7 @@ export const _fetchPackages = async function (apiUrl) {
     return packages;
 };
 export const fetchLocalPackages = function () {
-    const apiUrl = "/api/v1/erm/eholdings/local/packages";
+    const apiUrl = "/api/v1/erm/eholdings/local/packages?_per_page=-1";
     return _fetchPackages(apiUrl);
 };
 export const fetchEBSCOPackages = function () {
