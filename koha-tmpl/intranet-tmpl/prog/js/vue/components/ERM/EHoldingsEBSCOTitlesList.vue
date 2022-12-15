@@ -46,15 +46,13 @@
         >
             <div
                 v-if="
-                    local_count_titles !== undefined &&
-                    local_count_titles !== null
+                    local_title_count !== undefined &&
+                    local_title_count !== null
                 "
             >
                 <router-link :to="local_titles_url">
                     {{
-                        $__("%s titles found locally").format(
-                            local_count_titles
-                        )
+                        $__("%s titles found locally").format(local_title_count)
                     }}</router-link
                 >
             </div>
@@ -68,7 +66,7 @@
 <script>
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchCountLocalTitles } from "./../../fetch"
+import { fetchLocalTitleCount } from "./../../fetch"
 import {
     useDataTable,
     build_url_params,
@@ -106,7 +104,7 @@ export default {
             },
             cannot_search: false,
             show_table: false,
-            local_count_titles: null,
+            local_title_count: null,
         }
     },
     computed: {
@@ -137,12 +135,12 @@ export default {
                 )
                 this.$router.push(new_route)
                 this.show_table = true
-                this.local_count_titles = null
+                this.local_title_count = null
                 $("#" + this.table_id)
                     .DataTable()
                     .draw()
                 if (this.erm_providers.includes("local")) {
-                    this.local_count_titles = await fetchCountLocalTitles(
+                    this.local_title_count = await fetchLocalTitleCount(
                         this.filters
                     )
                 }

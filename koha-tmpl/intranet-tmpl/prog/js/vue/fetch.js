@@ -290,19 +290,25 @@ export const fetchEBSCOTitles = function () {
     return _fetchTitles(apiUrl);
 };
 
-export const fetchCountLocalTitles = async function (filters) {
-    const q = {
-        "me.publication_title": {
-            like: "%" + filters.publication_title + "%",
-        },
-        ...(filters.publication_type
-            ? { "me.publication_type": filters.publication_type }
-            : {}),
-    };
+export const fetchLocalTitleCount = async function (filters) {
+    const q = filters
+        ? {
+              ...(filters.publication_title
+                  ? {
+                        "me.publication_title": {
+                            like: "%" + filters.publication_title + "%",
+                        },
+                    }
+                  : {}),
+              ...(filters.publication_type
+                  ? { "me.publication_type": filters.publication_type }
+                  : {}),
+          }
+        : undefined;
     const params = {
         _page: 1,
         _per_page: 1,
-        q: JSON.stringify(q),
+        ...(q ? { q: JSON.stringify(q) } : {}),
     };
     let count_local_titles;
     var apiUrl = "/api/v1/erm/eholdings/local/titles";
@@ -367,7 +373,7 @@ export const fetchEBSCOResources = function () {
     return _fetchResources(apiUrl);
 };
 
-export const checkError = function(response) {
+export const checkError = function (response) {
     if (response.status >= 200 && response.status <= 299) {
         return response.json();
     } else {
