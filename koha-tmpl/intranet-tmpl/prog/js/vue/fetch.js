@@ -267,29 +267,6 @@ export const fetchEBSCOTitle = function (title_id) {
     return _fetchTitle(apiUrl, title_id);
 };
 
-export const _fetchTitles = async function (apiUrl) {
-    let titles;
-    await fetch(apiUrl)
-        .then(checkError)
-        .then(
-            (result) => {
-                titles = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return titles;
-};
-export const fetchLocalTitles = function () {
-    const apiUrl = "/api/v1/erm/eholdings/local/titles";
-    return _fetchTitles(apiUrl);
-};
-export const fetchEBSCOTitles = function () {
-    const apiUrl = "/api/v1/erm/eholdings/ebsco/titles";
-    return _fetchTitles(apiUrl);
-};
-
 export const fetchLocalTitleCount = async function (filters) {
     const q = filters
         ? {
