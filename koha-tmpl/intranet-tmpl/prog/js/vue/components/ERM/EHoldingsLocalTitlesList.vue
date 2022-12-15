@@ -1,14 +1,10 @@
 <template>
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
-        <div v-else-if="titles" id="titles_list">
+        <div v-else-if="title_count" id="titles_list">
             <Toolbar />
-            <div
-                v-if="titles.length"
-                id="title_list_result"
-                class="page-section"
-            >
-                <table v-if="titles.length" :id="table_id"></table>
+            <div v-if="title_count" id="title_list_result" class="page-section">
+                <table v-if="title_count" :id="table_id"></table>
             </div>
             <div v-else-if="initialized" class="dialog message">
                 {{ $__("There are no titles defined") }}
@@ -21,7 +17,7 @@
 import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalTitles } from "../../fetch"
+import { fetchLocalTitleCount } from "../../fetch"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -42,7 +38,7 @@ export default {
     },
     data: function () {
         return {
-            titles: [],
+            title_count: undefined,
             initialized: false,
             filters: {
                 publication_title: this.$route.query.publication_title || "",
@@ -53,13 +49,12 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTitles().then(() => vm.build_datatable())
+            vm.getTitleCount().then(() => vm.build_datatable())
         })
     },
     methods: {
-        async getTitles() {
-            const titles = await fetchLocalTitles()
-            this.titles = titles
+        async getTitleCount() {
+            this.title_count = await fetchLocalTitleCount()
             this.initialized = true
         },
         show_title: function (title_id) {
