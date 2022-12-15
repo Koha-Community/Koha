@@ -347,7 +347,7 @@ subtest "as_marc_field() tests" => sub {
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
 
-    plan tests => 2 * (scalar @mapped_columns + 1) + 4;
+    plan tests => scalar @mapped_columns + 5;
 
     $schema->storage->txn_begin;
 
@@ -355,23 +355,7 @@ subtest "as_marc_field() tests" => sub {
     # Make sure it has at least one undefined attribute
     $item->set({ replacementprice => undef })->store->discard_changes;
 
-    # Tests with the mss parameter
-    my $marc_field = $item->as_marc_field({ mss => $mss });
-
-    is(
-        $marc_field->tag,
-        $itemtag,
-        'Generated field set the right tag number'
-    );
-
-    foreach my $column ( @mapped_columns ) {
-        my $tagsubfield = $mss->{ 'items.' . $column }[0]->{tagsubfield};
-        is( $marc_field->subfield($tagsubfield),
-            $item->$column, "Value is mapped correctly for column $column" );
-    }
-
-    # Tests without the mss parameter
-    $marc_field = $item->as_marc_field();
+    my $marc_field = $item->as_marc_field;
 
     is(
         $marc_field->tag,
