@@ -63,7 +63,7 @@ sub contacts {
 =head3 subscriptions
 
     my $vendor        = Koha::Acquisition::Booksellers->find( $id );
-    my @subscriptions = $vendor->subscriptions();
+    my $subscriptions = $vendor->subscriptions();
 
 Returns the list of subscriptions for the vendor
 
