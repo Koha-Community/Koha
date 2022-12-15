@@ -206,18 +206,18 @@ sub SearchAuthorities {
         }    #if value
     }
     ##Add how many queries generated
-    if (defined $query && $query=~/\S+/){
+    if ( defined $query && $query =~ /\S+/ ) {
         #NOTE: This code path is used by authority search in cataloguing plugins...
         #FIXME: This does not quite work the way the author probably intended.
         #It creates a ($query prefix) AND (query 1) AND (query 2) structure instead of
         #($query prefix) AND (query 1 AND query 2)
-      $query= $and x $attr_cnt . $query . (defined $q2 ? $q2 : '');
+        $query = $and x $attr_cnt . $query . ( defined $q2 ? $q2 : '' );
     } else {
         #NOTE: This code path is used by authority search in authority home and record matching rules...
         my $op_prefix = '';
         #NOTE: Without the following code, multiple queries will never be joined together
         #with a Boolean operator.
-        if ($attr_cnt > 1){
+        if ( $attr_cnt > 1 ) {
             #NOTE: We always need 1 less operator than we have operands,
             #so long as there is more than 1 operand
             my $or_cnt = $attr_cnt - 1;
@@ -225,7 +225,7 @@ sub SearchAuthorities {
             $op_prefix = ' @or ' x $or_cnt;
             #NOTE: This evaluates to a logical structure like (query 1) OR (query 2) OR (query 3)
         }
-      $query= $op_prefix . $q2;
+        $query = $op_prefix . $q2;
     }
     ## Adding order
     #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
