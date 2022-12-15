@@ -319,7 +319,7 @@ sub items {
     # There is no FK on items (may have been deleted)
     my $items_rs = $self->_result->aqorders_items;
     my @itemnumbers = $items_rs->get_column( 'itemnumber' )->all;
-    return Koha::Items->search({ itemnumber => \@itemnumbers });
+    return scalar Koha::Items->search({ itemnumber => \@itemnumbers }); # forcing scalar context for 21.11 prevents crash
 }
 
 =head3 biblio
