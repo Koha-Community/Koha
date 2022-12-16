@@ -35,7 +35,7 @@ subtest 'enqueue() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue();
+    my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue({});
     my $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
 
     is( $job->size,   0,            'Size is correct' );
