@@ -558,7 +558,7 @@ my $itemnumber4 = Koha::Item->new(
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', q{} );
 AddIssue( $borrower_2, 'barcode_6', dt_from_string );
-my $item = Koha::Items->find( $itemnumber4 );
+$item = Koha::Items->find( $itemnumber4 );
 ok( $item->notforloan eq -1, 'UpdateNotForLoanStatusOnCheckout does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', '-1: 0' );
