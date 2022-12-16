@@ -72,7 +72,7 @@
                                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
-                                [% END %]
+                                [% END # /IF messagetransfert%]
                                 [% IF ( waiting ) %]
                                     <div class="dialog message">
                                         <h2>This item is on hold for pick-up at your library</h2>
@@ -83,8 +83,8 @@
                                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
-                                [% END %]
-                            [% END %]
+                                [% END # /IF waiting %]
+                            [% END # /FOREACH cancel_result %]
                         [% ELSE %]
                             [% IF enqueued %]
                                 <div class="dialog message">
@@ -105,7 +105,7 @@
                                             Holds with cancellation requests: [% cancel_reqs_count | html %]
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> <!-- /.nav.nav-tabs -->
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane active" id="holdswaiting">
                                         [% IF ( reserveloop ) %]
@@ -116,7 +116,7 @@
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
                                         [% END %]
-                                    </div>
+                                    </div> <!-- /#holdswaiting -->
                                     <div role="tabpanel" class="tab-pane" id="holdsover">
                                         [% IF ( ReservesMaxPickUpDelay ) %]
                                             <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>
@@ -141,18 +141,18 @@
                                             [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
-                                        [% END %]
-                                    </div>
+                                        [% END # /IF( overloop ) %]
+                                    </div> <!-- /#holdsover -->
                                     <div role="tabpanel" class="tab-pane" id="holdscancelled">
                                         [% IF cancel_reqs_count %]
                                             [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
                                         [% END %]
-                                    </div>
-                                </div>
-                            </div>
-                        [% END %]
+                                    </div> <!-- /#holdscancelled -->
+                                </div> <!-- /.tab-content -->
+                            </div> <!-- /#resultlist.toptabs -->
+                        [% END # /IF ( cancel_result ) %]
                     </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
                     [% IF Koha.Preference('CircSidebar') %]
@@ -190,16 +190,16 @@
                                 [% END %]
                             </select>
                         [% END %]
-                    </fieldset>
-                </div>
+                    </fieldset> <!-- /.action -->
+                </div> <!-- /.modal-body -->
 
                 <div class="modal-footer">
                     <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
                     <a href="#" data-dismiss="modal">Cancel</a>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div> <!-- /.modal-footer -->
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#cancelModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
