@@ -216,7 +216,7 @@
                                                         <li class="guarantees-fines">
                                                             <span class="circ-hlt">Charges:</span>
                                                             Patron's guarantees collectively owe [% guarantees_fines | $Price %].
-                                                            <a id="view-guarantees-finesandcharges" href="#guarantees-finesandcharges" >See all charges.</a>
+                                                            <a id="view_guarantees_finesandcharges" href="#guarantees_finesandcharges" >See all charges.</a>
                                                         </li>
                                                     [% END %]
                                                     [% FOREACH guarantee IN guarantees %]
@@ -675,8 +675,8 @@
                                 </li>
                             [% END %]
                             [% IF ( guarantees_fines ) %]
-                                <li id="guarantees-finestab">
-                                    <a href="#guarantees-finesandcharges">Guarantees' charges ([% guarantees_fines | $Price %])</a>
+                                <li role="presentation" id="guarantees_finestab">
+                                    <a href="#guarantees_finesandcharges" aria-controls="guarantees_finesandcharges" role="tab" data-toggle="tab">Guarantees' charges ([% guarantees_fines | $Price %])</a>
                                 </li>
                             [% END %]
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
@@ -756,7 +756,7 @@
                             [% END %]
 
                         [% IF ( guarantees_fines ) %]
-                            <div id="guarantees-finesandcharges">
+                            <div id="guarantees_finesandcharges" role="tabpanel" class="tab-pane">
                                 <table id="tguaranteesfines">
                                     <thead>
                                         <tr>
@@ -953,8 +953,8 @@
                 $('#debarments-tab-link').click();
             });
 
-            $("#view-guarantees-finesandcharges").on("click",function(){
-                $('#guarantees-finestab a').click();
+            $("#view_guarantees_finesandcharges").on("click",function(){
+                $('#guarantees_finestab a').click();
             });
 
          });
