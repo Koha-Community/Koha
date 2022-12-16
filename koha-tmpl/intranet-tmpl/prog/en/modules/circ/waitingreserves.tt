@@ -38,129 +38,131 @@
             <main>
                 <div class="row">
 
-                [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-sm-10 col-sm-push-2">
-                [% ELSE %]
-                    <div class="col-sm-12">
-                [% END %]
+                    [% IF Koha.Preference('CircSidebar') %]
+                        <div class="col-sm-10 col-sm-push-2">
+                    [% ELSE %]
+                        <div class="col-sm-12">
+                    [% END %]
 
-            <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
-            <h2>
-            [% IF ( all_branches_link ) %]
-            <span><a href="[% all_branches_link | url %]">
-            View all libraries</a></span>
-            [% END %]
-        </h2>
-    [% IF reject_result_error %]
-        <div class="error message">
-        [% IF reject_result_error.invalid_status %]
-            <p>There was a problem rejecting the cancellation request. Cannot reject an already completed cancellation request.</p>
-        [% ELSE %]
-            <p>Some error occurred while rejecting the cancellation request. Please check the logs</p>
-        [% END %]
-        </div>
-    [% END %]
-    [% IF ( cancel_result ) %]
-        [% FOREACH cancel_result %]
-            [% IF ( messagetransfert ) %]
-                <div class="dialog message">
-                    <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) | html %]</h2>
-                    <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
-                    Please retain this item and check it in to process the hold.
-                    </p>
-                    <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="post">
-                        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                    </form>
-                </div>
-            [% END %]
-            [% IF ( waiting ) %]
-                <div class="dialog message">
-                    <h2>This item is on hold for pick-up at your library</h2>
-                    <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
-                    Please retain this item and check it in to process the hold.
-                    </p>
-                    <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="post">
-                        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                    </form>
-                </div>
-            [% END %]
-        [% END %]
-    [% ELSE %]
-        [% IF enqueued %]
-            <div class="dialog message">
-                <p>The job has been enqueued! It will be processed as soon as possible.</p>
-                <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
-            </div>
-        [% END %]
-        <div id="resultlist" class="toptabs">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#holdswaiting" aria-controls="holdswaiting" role="tab" data-toggle="tab">Holds waiting: [% reservecount | html %]</a></li>
-                <li role="presentation">
-                    <a href="#holdsover" aria-controls="holdsover" role="tab" data-toggle="tab">
-                        Holds waiting over [% Koha.Preference('ReservesMaxPickUpDelay') | html %] days: [% overcount | html %]
-                    </a>
-                </li>
-                <li role="presentation">
-                    <a href="#holdscancelled" aria-controls="holdscancelled" role="tab" data-toggle="tab">
-                        Holds with cancellation requests: [% cancel_reqs_count | html %]
-                    </a>
-                </li>
-            </ul>
-            <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="holdswaiting">
-        [% IF ( reserveloop ) %]
-            <div id="toolbar" class="btn-toolbar">
-                <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
-            </div>
-            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
-        [% ELSE %]
-            <div class="dialog message">No holds found.</div>
-        [% END %]
-        </div>
-        <div role="tabpanel" class="tab-pane" id="holdsover">
-            [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>[% END %]
-            [% IF ( overloop ) %]
-                <span id="holdsover-cancel-all">
-                   <button class="cancel_selected_holds" data-bulk="true"></button>
-                   <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
-                       <input type="hidden" name="cancelall" value="1" />
-                       <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
-                       <input type="hidden" name="tab" value="holdsover">
-                       [% IF TransferWhenCancelAllWaitingHolds %]
-                           <input type="submit" class="btn btn-primary" value="Cancel and transfer all" />
-                       [% ELSE %]
-                           <input type="submit" class="btn btn-primary" value="Cancel all" />
-                       [% END %]
-                   </form>
-                   [% UNLESS TransferWhenCancelAllWaitingHolds %]
-                        Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)
-                   [% END %]
-
-                </span>
-               [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
-            [% ELSE %]
-                <div class="dialog message">No holds found.</div>
-            [% END %]
-        </div>
-        <div role="tabpanel" class="tab-pane" id="holdscancelled">
-            [% IF cancel_reqs_count %]
-                [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
-            [% ELSE %]
-                <div class="dialog message">No holds found.</div>
-            [% END %]
-        </div>
-        </div>
-    [% END %]
+                        <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
+                        <h2>
+                            [% IF ( all_branches_link ) %]
+                                <span><a href="[% all_branches_link | url %]">
+                                View all libraries</a></span>
+                            [% END %]
+                        </h2>
+                        [% IF reject_result_error %]
+                            <div class="error message">
+                                [% IF reject_result_error.invalid_status %]
+                                    <p>There was a problem rejecting the cancellation request. Cannot reject an already completed cancellation request.</p>
+                                [% ELSE %]
+                                    <p>Some error occurred while rejecting the cancellation request. Please check the logs</p>
+                                [% END %]
+                            </div>
+                        [% END %]
+                        [% IF ( cancel_result ) %]
+                            [% FOREACH cancel_result %]
+                                [% IF ( messagetransfert ) %]
+                                    <div class="dialog message">
+                                        <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) | html %]</h2>
+                                        <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
+                                        Please retain this item and check it in to process the hold.
+                                        </p>
+                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="post">
+                                            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
+                                        </form>
+                                    </div>
+                                [% END %]
+                                [% IF ( waiting ) %]
+                                    <div class="dialog message">
+                                        <h2>This item is on hold for pick-up at your library</h2>
+                                        <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
+                                        Please retain this item and check it in to process the hold.
+                                        </p>
+                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="post">
+                                            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
+                                        </form>
+                                    </div>
+                                [% END %]
+                            [% END %]
+                        [% ELSE %]
+                            [% IF enqueued %]
+                                <div class="dialog message">
+                                    <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                                    <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
+                                </div>
+                            [% END %]
+                            <div id="resultlist" class="toptabs">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#holdswaiting" aria-controls="holdswaiting" role="tab" data-toggle="tab">Holds waiting: [% reservecount | html %]</a></li>
+                                    <li role="presentation">
+                                        <a href="#holdsover" aria-controls="holdsover" role="tab" data-toggle="tab">
+                                            Holds waiting over [% Koha.Preference('ReservesMaxPickUpDelay') | html %] days: [% overcount | html %]
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#holdscancelled" aria-controls="holdscancelled" role="tab" data-toggle="tab">
+                                            Holds with cancellation requests: [% cancel_reqs_count | html %]
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="holdswaiting">
+                                        [% IF ( reserveloop ) %]
+                                            <div id="toolbar" class="btn-toolbar">
+                                                <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
+                                            </div>
+                                            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
+                                        [% ELSE %]
+                                            <div class="dialog message">No holds found.</div>
+                                        [% END %]
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="holdsover">
+                                        [% IF ( ReservesMaxPickUpDelay ) %]
+                                            <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>
+                                        [% END %]
+                                        [% IF ( overloop ) %]
+                                            <span id="holdsover-cancel-all">
+                                                <button class="cancel_selected_holds" data-bulk="true"></button>
+                                                <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
+                                                    <input type="hidden" name="cancelall" value="1" />
+                                                    <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
+                                                    <input type="hidden" name="tab" value="holdsover">
+                                                    [% IF TransferWhenCancelAllWaitingHolds %]
+                                                        <input type="submit" class="btn btn-primary" value="Cancel and transfer all" />
+                                                    [% ELSE %]
+                                                        <input type="submit" class="btn btn-primary" value="Cancel all" />
+                                                    [% END %]
+                                                </form>
+                                                [% UNLESS TransferWhenCancelAllWaitingHolds %]
+                                                    Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)
+                                                [% END %]
+                                            </span>
+                                            [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
+                                        [% ELSE %]
+                                            <div class="dialog message">No holds found.</div>
+                                        [% END %]
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="holdscancelled">
+                                        [% IF cancel_reqs_count %]
+                                            [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
+                                        [% ELSE %]
+                                            <div class="dialog message">No holds found.</div>
+                                        [% END %]
+                                    </div>
+                                </div>
+                            </div>
+                        [% END %]
+                    </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                            <div class="col-sm-2 col-sm-pull-10">
-                                <aside>
-                                    [% INCLUDE 'circ-nav.inc' %]
-                                </aside>
-                            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-                        </div> <!-- /.row -->
+                        <div class="col-sm-2 col-sm-pull-10">
+                            <aside>
+                                [% INCLUDE 'circ-nav.inc' %]
+                            </aside>
+                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
                     [% END %]
+                </div> <!-- /.row -->
 
             </main>
         </div> <!-- /.col-sm-12 -->
