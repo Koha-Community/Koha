@@ -72,7 +72,9 @@
                         <div id="tabs" class="toptabs">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active"><a href="#records_to_import" aria-controls="records_to_import" role="tab" data-toggle="tab">Select to import</a></li>
-                                <li role="presentation"><a href="#items_info" class="items_info" aria-controls="items_info" role="tab" data-toggle="tab">Item information</a></li>
+                                [% IF items %]
+                                    <li role="presentation"><a href="#items_info" class="items_info" aria-controls="items_info" role="tab" data-toggle="tab">Item information</a></li>
+                                [% END %]
                                 <li role="presentation"><a href="#accounting_details" aria-controls="accounting_details" role="tab" data-toggle="tab">Default accounting details</a></li>
                             </ul>
 
@@ -368,11 +370,11 @@
                                     </div> <!-- /#dataPreview -->
                                 </div> <!-- /#records_to_import -->
 
+                                [% IF ( items ) %]
                                 <div id="items_info" role="tabpanel" class="tab-pane">
                                     <h2>Item information</h2>
                                     <p>Import all the checked items in the basket with the following parameters:</p>
 
-                                    [% IF ( items ) %]
                                             <fieldset class="rows" style="float:none;">
                                                 <legend>Item</legend>
                                                 [% IF ( NoACQframework ) %]
@@ -422,8 +424,8 @@
                                                     [% END #/FOREACH item %]
                                                 </div> <!-- /.item_edit_form -->
                                             </fieldset>
-                                    [% END # /IF items %]
                                 </div> <!-- /#items_info -->
+                                [% END # /IF items %]
 
                                 <div id="accounting_details" role="tabpanel" class="tab-pane">
                                     <p>Import all the checked items in the basket with the following accounting details (used only if no information is filled for the item):</p>
