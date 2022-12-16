@@ -196,6 +196,7 @@ Enqueue the new job
 sub enqueue {
     my ( $self, $args) = @_;
 
+    # FIXME: no $args validation
     $self->SUPER::enqueue({
         job_size  => 0, # TODO Unknown for now?
         job_args  => $args,
