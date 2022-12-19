@@ -557,7 +557,7 @@
                 }
                 else {
                     the_dropdown.find('option[value="'+selected+'"]').removeClass('b_inactive');
-                    $(this).parent('span').find('.b_inactive').remove();
+                    $(this).siblings().find('.b_inactive').remove();
                 }
             });
 
