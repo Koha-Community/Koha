@@ -318,9 +318,9 @@ legend:hover {
                                                     [% END %]
 
                                                     [% IF ( uppercasesurnames ) %]
-                                                        <input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% borrower_data.surname | html %]" />
+                                                        <input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% patron.surname | html %]" />
                                                     [% ELSE %]
-                                                        <input type="text" id="surname" name="surname" size="20"  value="[% borrower_data.surname | html %]" />
+                                                        <input type="text" id="surname" name="surname" size="20"  value="[% patron.surname | html %]" />
                                                     [% END %]
                                                     [% IF ( mandatorysurname ) %]
                                                         <span class="required">Required</span>
