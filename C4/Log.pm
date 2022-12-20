@@ -31,6 +31,7 @@ use File::Basename qw( basename );
 
 use C4::Context;
 use Koha::Logger;
+use Koha::ActionLogs;
 
 use vars qw(@ISA @EXPORT);
 
@@ -111,10 +112,19 @@ sub logaction {
     }
     my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 1 } ) : undef;
 
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface,script,trace) values (now(),?,?,?,?,?,?,?,?)");
-    $sth->execute( $usernumber, $modulename, $actionname, $objectnumber, $infos, $interface, $script, $trace );
-    $sth->finish;
+    Koha::ActionLog->new(
+        {
+            timestamp => \'NOW()',
+            user      => $usernumber,
+            module    => $modulename,
+            action    => $actionname,
+            object    => $objectnumber,
+            info      => $infos,
+            interface => $interface,
+            script    => $script,
+            trace     => $trace,
+        }
+    )->store();
 
     my $logger = Koha::Logger->get(
         {
