@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Authorities;
-use C4::AuthoritiesMarc qw( DelAuthority AddAuthority FindDuplicateAuthority);
+use C4::AuthoritiesMarc qw( DelAuthority AddAuthority FindDuplicateAuthority ModAuthority);
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -186,6 +186,66 @@ sub add {
         $c->render(
             status  => 201,
             openapi => q{},
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+
+=head3 update
+
+Controller function that handles modifying an authority object
+
+=cut
+
+sub update {
+    my $c = shift->openapi->valid_input or return;
+
+    my $authid = $c->validation->param('authority_id');
+    my $authority = Koha::Authorities->find( { authid => $authid } );
+
+    if ( not defined $authority ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Object not found" }
+        );
+    }
+
+    try {
+        my $headers = $c->req->headers;
+
+        my $flavour =
+            C4::Context->preference('marcflavour') eq 'UNIMARC'
+            ? 'UNIMARCAUTH'
+            : 'MARC21';
+
+        my $record;
+        my $authtypecode = $headers->header('x-authority-type') || $authority->authtypecode;
+        if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $c->req->json );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $c->req->body );
+        } else {
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/json",
+                    "application/marcxml+xml",
+                    "application/marc-in-json",
+                    "application/marc"
+                ]
+            );
+        }
+
+        my $authid = ModAuthority( $authid, $record, $authtypecode );
+
+        $c->render(
+            status  => 200,
+            openapi => { id => $authid }
         );
     }
     catch {
