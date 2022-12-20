@@ -400,3 +400,63 @@
         [% content| $raw %]
     </div>
 [% END %]
+
+[%# BOOTSTRAP BREADCRUMBS WRAPPER USAGE
+    [ WRAPPER breadcrumbs ]
+        [ Home breadcrumb automatically included ]
+        [ WRAPPER breadcrumb_item ]
+            <a href="/cgi-bin/koha/module/module-home.pl"> Module </a>
+        [ END ]
+
+        [ IF op == 'add_form' ]
+            [ WRAPPER breadcrumb_item ]
+                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
+            [ END ]
+            [ WRAPPER breadcrumb_item active = 1 ]
+                Add form
+            [ END ]
+
+        [ ELSIF op == 'delete_confirm' ]
+            [ WRAPPER breadcrumb_item ]
+                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
+            [ END ]
+            [ WRAPPER breadcrumb_item active = 1 ]
+                Confirm deletion
+            [ END ]
+
+        [ ELSE ]
+            [ WRAPPER breadcrumb_item active = 1 ]
+                Module page
+            [ END ]
+        [ END #/IF op = add_form ]
+
+    [ END #/ WRAPPER breadcrumbs ]
+ %]
+
+[%# Used to build breadcrumb navigation nav %]
+[% BLOCK breadcrumbs %]
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            [%# Include the Home link every time %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            [% END %]
+            [% content | $raw %]
+        </ol>
+    </nav>
+[% END %]
+
+[%# Used to build individual breadcrumb items in the breadcrumb nav %]
+[% BLOCK breadcrumb_item %]
+    [% IF ( active ) %]
+        <li>
+            <a href="#" aria-current="page">
+                [% content | $raw %]
+            </a>
+        </li>
+    [% ELSE %]
+        <li>
+            [% content | $raw %]
+        </li>
+    [% END %]
+[% END %]
