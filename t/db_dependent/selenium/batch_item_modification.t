@@ -49,15 +49,13 @@ SKIP: {
 
         # Navigate to the batch item mod tool
         $s->click(
-            { href => '/cataloguing/cataloging-home.pl', main => 'container-main' }
+            { href => '/tools/tools-home.pl', main => 'container-main' }
         );
-        $s->click(
-            { href => 'tools/batchMod.pl', main_class => 'main container-fluid' } );
+        $driver->find_element_by_link_text("Batch item modification")->click;
         $driver->find_element('//textarea[@id="barcodelist"]')->send_keys($item->barcode);
         $s->submit_form;
         my $itemnotes = q{✔ ❤ ★};
-        $driver->find_element('//input[@name="items.itemnotes"]')
-          ->send_keys($itemnotes);
+        $driver->find_element('//input[@name="items.itemnotes"]')->send_keys($itemnotes);
         $s->submit_form;
 
         my $view_detail_link = $driver->find_element('//a[contains(@href, "/cgi-bin/koha/admin/background_jobs.pl?op=view&id=")]');
