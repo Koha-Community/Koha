@@ -20,14 +20,14 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
 msgid "(search field {field_name} with mapping {marc_field}.)"
-msgstr "‌(فیلد جستجو {فیلد_نام} با نقشه نگاری {مارک_فیلد}.)"
+msgstr "‌(فیلد جستجو {marc_field} با نقشه نگاری {field_name}.)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-age.inc:9
 #, perl-brace-format
 msgid "({age} year)"
 msgid_plural "({age} years)"
-msgstr[0] "({سن} سال)"
-msgstr[1] "({سن} سال ها)"
+msgstr[0] "({age} سال)"
+msgstr[1] "({age} سال ها)"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:457
 msgctxt "music"
@@ -182,12 +182,12 @@ msgstr "هنگام حذف نقشه های موجود خطایی روی داد. �
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
 msgstr ""
-"هنگام بروز رسانی ایندکس نقشه های جستجوی الستیک خطایی رخ داده است: { پیام }."
+"هنگام بروز رسانی ایندکس نقشه های جستجوی الستیک خطایی رخ داده است: {message}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
-msgstr "هنگام بروزرسانی نقشه نگاری ها خطایی روی داد: {پیام}."
+msgstr "هنگام بروزرسانی نقشه نگاری ها خطایی روی داد: {message}."
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -275,8 +275,8 @@ msgstr "بودجه بندی شده با مالیات بر هزینه."
 #, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
-msgstr[0] "بسته ای از (فهرست موجود) آیتم"
-msgstr[1] "بسته ای از (فهرست موجود) آیتم ها"
+msgstr[0] "بسته ای از {count} آیتم"
+msgstr[1] "بسته ای از {count} آیتم ها"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:459
 msgctxt "music"
@@ -485,12 +485,12 @@ msgstr "ویرایش"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
 #, perl-brace-format
 msgid "Edit {title}"
-msgstr "ویرایش {عنوان}"
+msgstr "ویرایش {title}"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
 #, perl-brace-format
 msgid "Edit {title} by {author}"
-msgstr "ویرایش {عنوان} توسط {نویسنده}"
+msgstr "ویرایش {author} توسط {title}"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
 msgctxt "Editing MARC record titled:"
@@ -589,7 +589,7 @@ msgstr[1] "رزروها"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:98
 #, perl-brace-format
 msgid "Holds waiting over {count} days:"
-msgstr "بیش از {تعداد} روز در رزرو باقی می ماند:"
+msgstr "بیش از {count} روز در رزرو باقی می ماند:"
 
 #: Koha/Database/Columns.pm:142
 msgid "Home library"
@@ -610,12 +610,12 @@ msgstr "تصاویر"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
-msgstr "نمایه '{نمایه}' نیاز به ایجاد دوباره دارد."
+msgstr "نمایه '{index}' نیاز به ایجاد دوباره دارد."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
-msgstr "نمایه '{نمایه}' باید دوباره فهرست شود."
+msgstr "نمایه '{index}' باید دوباره فهرست شود."
 
 #: Koha/Database/Columns.pm:164
 msgid "Initials"
@@ -633,7 +633,7 @@ msgstr "یادداشت داخلی"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:47
 #, perl-brace-format
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
-msgstr "وزن فیلد نا معتبر است'{وزن}'، بایستی یک عدد اعشاری مثبت باشد."
+msgstr "وزن فیلد نا معتبر است'{weight}'، بایستی یک عدد اعشاری مثبت باشد."
 
 #: Koha/Database/Columns.pm:241
 msgid "Inventory number"
@@ -914,7 +914,7 @@ msgstr "توکن تایید اعتبار اوردرایو"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:21
 #, perl-brace-format
 msgid "Overdues at {library}"
-msgstr "معوقات در {کتابخانه}"
+msgstr "معوقات در {library}"
 
 #: Koha/Database/Columns.pm:87
 msgid "Parent order number (internal)"
@@ -1267,7 +1267,7 @@ msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
 msgstr[0] "یک پیشنهاد آرشیو شده وجود دارد."
-msgstr[1] "پیشنهاد آرشیو شده {محاسبه شده} وجود دارد."
+msgstr[1] "پیشنهاد آرشیو شده {count} وجود دارد."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Thursday"
@@ -3066,8 +3066,8 @@ msgstr[1] "{count} محدودیت های کتابخانه"
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."
-msgstr[0] "{عنوان} ({بارکد}) حذف شد از {count} دوره."
-msgstr[1] "{عنوان} ({بارکد}) حذف شد از {count} دوره ها."
+msgstr[0] "{title} ({barcode}) حذف شد از {count} دوره."
+msgstr[1] "{title} ({barcode}) حذف شد از {count} دوره ها."
 
 #~ msgid "author"
 #~ msgstr "نویسنده"
