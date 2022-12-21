@@ -1,16 +1,20 @@
 # Compendium of nb.
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 22.05\n"
+"Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-01 10:55-0300\n"
-"Language-Team: Koha Translation Team \n"
+"PO-Revision-Date: 2022-12-09 08:23+0000\n"
+"Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
+"Language-Team: Koha Translation Team\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Pootle-Path: /nb/22.05/nb-NO-pref.po\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.8\n"
+"X-Pootle-Path: /nb/22.11/nb-NO-pref.po\n"
 "X-Pootle-Revision: 1\n"
+"X-POOTLE-MTIME: 1670574221.190078\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -145,7 +149,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Rund av"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -154,8 +157,11 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"<br><strong>NB:</strong> Denne verdien har ingen effekt om "
-"systeminnstillingen UsageStats er satt til \"Ikke del\"."
+"Denne innstillingen har ingen effekt når <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> "
+"er slått på eller når det ikke er definert noen betalingstyper i autorisert "
+"verdi-kategorien <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a>."
 
 # Accounting > Policy
 #, fuzzy
@@ -403,16 +409,15 @@ msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "Importer "
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Om du velger <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"<br>Om du velger <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> må du legge inn en gyldig epostadresse: "
+"\">EmailAddressForSuggestions</a> må du legge inn en gyldig epostadresse:"
 
 # Acquisitions > Policy
 msgid ""
@@ -579,11 +584,18 @@ msgstr ""
 # Acquisitions > Policy
 #, fuzzy
 msgid ""
-"acquisitions.pref#TaxRates# Please note: The database will only accept "
-"values up to 4 decimals precision, further values will be rounded."
+"acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
+"only accept values up to 4 decimals precision, further values will be "
+"rounded."
 msgstr ""
 "NB: Databasen vil bare godta opp til fire desimaler – desimaler utover dette "
 "vil bli avrundet."
+
+# Acquisitions > Policy > TaxRates
+msgid ""
+"acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> Vendor tax rate "
+"information may need updating if tax rate values are removed."
+msgstr ""
 
 # Acquisitions > Policy
 #, fuzzy
@@ -849,7 +861,6 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -857,16 +868,16 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"La stå tom for alle Google-domener. Krever <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
-"\">GoogleOpenIDConnect</a>."
+"Sammen med <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, aktiverer denne <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2-klient-ID: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -874,9 +885,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"La stå tom for alle Google-domener. Krever <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
-"\">GoogleOpenIDConnect</a>."
+"Sammen med <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"aktiverer denne <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "

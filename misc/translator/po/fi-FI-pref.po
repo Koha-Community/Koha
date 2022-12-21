@@ -1,9 +1,9 @@
 # Compendium of fi.
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 22.05\n"
+"Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2022-11-25 10:54+0000\n"
+"PO-Revision-Date: 2022-12-14 10:50+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -12,9 +12,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-Pootle-Path: /fi/22.05/fi-FI-pref.po\n"
+"X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1669373681.664378\n"
+"X-POOTLE-MTIME: 1671015001.224803\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -154,12 +154,11 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"Tämä järjestelmäasetus ei vaikuta mitenkään, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a> on päällä tai jos <a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
-">PAYMENT_TYPE</a>-maksusuoritustyyppejä ei ole määritelty auktorisoituihin "
-"arvoihin."
+"Tämä järjestelmäasetus ei vaikuta mitenkään, jos <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a> on päällä tai jos <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a>-"
+"maksusuoritustyyppejä ei ole määritelty auktorisoituihin arvoihin."
 
 # Accounting > Policy
 msgid ""
@@ -189,7 +188,7 @@ msgstr ""
 msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
-msgstr "kassoja seurataksesi maksusuorituksia Kohan maksujärjestelmässä."
+msgstr "kassoja seurataksesi maksusuorituksia Kohan maksujärjestelmässä"
 
 # Accounting > Features > UseCashRegisters
 msgid ""
@@ -199,6 +198,10 @@ msgid ""
 "ensure your SIP configurations are updated to map a register to your SIP "
 "device.</p>"
 msgstr ""
+"<p class='text-danger'><strong>Varoitus:</strong> Tämän asetuksen "
+"käyttäminen vaatii kassan pakolliseksi kentäksi kaikissa CASH-tyyppisissä "
+"tapahtumissa. Tämä sisältää SIP00 tapahtumat, joten varmista, että SIP "
+"asetukset on päivitetty yhteensopiviksi kassan SIP asetusten kanssa.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -404,10 +407,9 @@ msgid ""
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"<br>Jos valitset <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"EmailAddressForSuggestions\">EmailAddressForSuggestions</a>, syötä toimiva "
-"sähköpostiosoite:"
+"<br>Jos valitset <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a>, syötä toimiva sähköpostiosoite:"
 
 # Acquisitions > Policy
 msgid ""
@@ -424,7 +426,6 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "kirjaston sähköpostiosoite"
 
@@ -482,9 +483,8 @@ msgstr ""
 "replacementprice and itemcallnumber. Erityiskentät: quantity and budget_code"
 
 # Acquisitions > Printing
-#, fuzzy
 msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
-msgstr "englantilaista 2-sivuista"
+msgstr "englantilaista 1-sivuista"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -571,12 +571,20 @@ msgstr ""
 "oletusarvo. Jos arvoja on enemmän kuin yksi, erotetaan |-merkillä."
 
 # Acquisitions > Policy
+#, fuzzy
 msgid ""
-"acquisitions.pref#TaxRates# Please note: The database will only accept "
-"values up to 4 decimals precision, further values will be rounded."
+"acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
+"only accept values up to 4 decimals precision, further values will be "
+"rounded."
 msgstr ""
 "Huomaa: Tietokanta hyväksyy lukuja korkeintaan neljän desimaalin "
 "tarkkuudella, loput pyöristetään."
+
+# Acquisitions > Policy > TaxRates
+msgid ""
+"acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> Vendor tax rate "
+"information may need updating if tax rate values are removed."
+msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#TaxRates# Tax rates are"
@@ -1064,7 +1072,7 @@ msgid ""
 "admin.pref#ReturnpathDefault# If you leave this empty, the From address will "
 "be used (often defaulting to the admin address)."
 msgstr ""
-"Jos jätät tämän tyhjäksi, käytetään lähettäjän sähöpostiosoitetta (joka on "
+"Jos jätät tämän tyhjäksi, käytetään lähettäjän sähköpostiosoitetta (joka on "
 "monesti myös ylläpidon sähköpostiosoite)."
 
 # Administration > Interface options
@@ -2201,19 +2209,16 @@ msgid ""
 msgstr "Käytettävän CAS-palvelun versio: "
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#noItemTypeImages# Don't show"
-msgstr "Ei"
+msgstr "Älä näytä"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#noItemTypeImages# Show"
-msgstr "Ei"
+msgstr "Näytä"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
-msgstr "Näytä nidetyyppien kuvakkeet hakutuloksissa: "
+msgstr "nidetyyppien kuvakkeet virkailijaliittymässä."
 
 # Administration > Login options
 msgid ""
@@ -2259,12 +2264,10 @@ msgid "authorities.pref Linker"
 msgstr "Linkittäjä"
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
 msgstr "Älä näytä"
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#AuthDisplayHierarchy# Show"
 msgstr "Näytä"
 
@@ -2272,7 +2275,7 @@ msgstr "Näytä"
 msgid ""
 "authorities.pref#AuthDisplayHierarchy# broader term/narrower term "
 "hierarchies when viewing authorities."
-msgstr "laajemmat/suppeammat termihierarkiat, kun näytetään aktoriteettejä."
+msgstr "laajemmat/suppeammat termihierarkiat, kun näytetään auktoriteettejä."
 
 # Authorities > General
 msgid ""
@@ -2376,10 +2379,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"puuttuvia auktoriteettitietueita (<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"RequireChoosingExistingAuthority\">RequireChoosingExistingAuthority</a> -"
-"asetuksen tulee olla \"älä vaadi\" jotta asetus astuu voimaan)."
+"puuttuvia auktoriteettitietueita (<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> -asetuksen tulee olla \"älä vaadi\" "
+"jotta asetus astuu voimaan)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2406,10 +2409,11 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"nimekkeet automaattisesti kuvailtaessa, noudattaa <a href='/cgi-bin/koha/admi"
-"n/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> ja <a "
-"href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CatalogModuleR"
-"elink'>CatalogModuleRelink</a> -asetuksia tietueen muokkauksessa."
+"nimekkeet automaattisesti kuvailtaessa, noudattaa <a href='/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> ja "
+"<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> -"
+"asetuksia tietueen muokkauksessa."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2426,9 +2430,9 @@ msgid ""
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"automaattisesti nimekkeitä, jotka on jo aiemmin linkitetty kuvailtaessa ("
-"vaatii <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=Auto"
-"LinkBiblios'>AutoLinkBiblios</a>-asetuksen)."
+"automaattisesti nimekkeitä, jotka on jo aiemmin linkitetty kuvailtaessa "
+"(vaatii <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>-asetuksen)."
 
 # Circulation > Checkin policy > StoreLastBorrower
 msgid ""
@@ -2439,12 +2443,13 @@ msgid ""
 "a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"Käytä seuraavaa tekstiä arvona 667$ kentälle MARC21 auktoriteettitietueissa ("
-"asetuksen <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=R"
-"equireChoosingExistingAuthority'>RequireChoosingExistingAuthority</a> täytyy "
-"olla \"älä vaadi\" ja asetuksen <a href='/cgi-bin/koha/admin/preferences.pl?o"
-"p=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> täytyy "
-"olla \"luo\"):"
+"Käytä seuraavaa tekstiä arvona 667$ kentälle MARC21 auktoriteettitietueissa "
+"(asetuksen <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> täytyy olla \"älä vaadi\" ja asetuksen <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> "
+"täytyy olla \"luo\"):"
 
 # Circulation > Checkin policy > StoreLastBorrower
 msgid ""
@@ -2456,11 +2461,13 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Käytä seuraavaa tekstiä arvona 670$a -kentälle MARC21 "
-"auktoriteettitietueissa (asetuksen <a href='/cgi-bin/koha/admin/preferences.p"
-"l?op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExis"
-"tingAuthority</a> täytyy olla \"älä vaadi\" ja asetuksen <a href='/cgi-bin/ko"
-"ha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCrea"
-"teAuthorities</a> täytyy olla \"luo\"):"
+"auktoriteettitietueissa (asetuksen <a href='/cgi-bin/koha/admin/preferences."
+"pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> täytyy olla \"älä vaadi\" ja asetuksen <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> "
+"täytyy olla \"luo\"):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2545,9 +2552,9 @@ msgid ""
 "existing authorities. If set to don't, catalogers can manually enter "
 "uncontrolled terms into controlled fields"
 msgstr ""
-"olemassa olevia auktoriteettien käyttöä kuvailussa. Jos valittuna \"älä "
-"vaadi\", kuvailijat voivat lisätä kontrolloimattomia termejä "
-"kontrolloituihin kenttiin."
+"olemassa olevia auktoriteettien käyttöä kuvailussa. Jos valittuna \"älä vaadi"
+"\", kuvailijat voivat lisätä kontrolloimattomia termejä kontrolloituihin "
+"kenttiin."
 
 # Authorities > General
 msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
@@ -2584,7 +2591,7 @@ msgstr ""
 
 # Cataloging
 msgid "cataloguing.pref"
-msgstr "Luettelointi"
+msgstr "Kuvailu"
 
 # Cataloging > Display
 msgid "cataloguing.pref Display"
@@ -2611,12 +2618,10 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Selkätarrat"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#AcquisitionDetails# Don't show"
 msgstr "Älä näytä"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#AcquisitionDetails# Show"
 msgstr "Näytä"
 
@@ -2869,12 +2874,10 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "tiedoston nimessä."
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Älä näytä"
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
 msgstr "Näytä"
 
@@ -3279,9 +3282,8 @@ msgstr ""
 "nidenäyttö kahteen välilehteen, ensimmäisessä välilehdessä on niteet joiden"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# ,"
-msgstr "ei"
+msgstr "mukaan "
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
@@ -3292,10 +3294,9 @@ msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Korkeintaan"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "cataloguing.pref#ShowComponentRecords# By default, sort component results by"
-msgstr "Virkailijaliittymän hakutulosten oletusjärjestys on"
+msgstr "Oletuksen osakohteiden hakutulokset järjestetään"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3308,53 +3309,44 @@ msgid ""
 msgstr "Näytä lista osakohdetietueista, jotka linkitetty kentän 773 kautta"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# ascending."
-msgstr "ei"
+msgstr "nousevassa järjestyksessä."
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# author"
-msgstr "ei"
+msgstr "tekijän"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# biblionumber"
-msgstr "ei"
+msgstr "tietuenumeron"
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "sekä virkailijaliittymässä että verkkokirjastossa"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# call number"
-msgstr "ei"
+msgstr "luokan"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# date added"
-msgstr "ei"
+msgstr "lisäyspvm:n"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# date of publication"
-msgstr "ei"
+msgstr "julkaisuajan"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# descending."
-msgstr "ei"
+msgstr "laskevassa järjestyksessä."
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
-msgstr "ei"
+msgstr "A:sta Ö:hön."
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
-msgstr "ei"
+msgstr "Ö:stä A:han."
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3366,16 +3358,15 @@ msgstr "nimekkeen perustiedot-sivulla."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
-msgstr "tietueet näytetään."
+msgstr "tietuetta näytetään."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "virkailijaliittymässä"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# title"
-msgstr "ei"
+msgstr "nimekkeen"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3412,12 +3403,10 @@ msgid ""
 msgstr "Selkätarran pikatulostuksen vakiokentät:"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
 msgstr "Älä näytä"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
 msgstr "Näytä"
 
@@ -3508,11 +3497,10 @@ msgid ""
 msgstr "Listaa esitäytettävät niteen osakentät (erottele välilyönnein)"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#SubfieldsToUseWhenPrefill# If left empty, all subfields "
 "will be prefilled."
-msgstr "Listaa esitäytettävät niteen osakentät (erottele välilyönnein)"
+msgstr ". Jos jätetään tyhjäksi, kaikki osakentät esitäytetään."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
@@ -3551,28 +3539,26 @@ msgstr ""
 "nimeketietueiden linkittämiseen."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
-msgstr "Näyttö"
+msgstr "Näytä"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
-msgstr "Älä erottele"
+msgstr "Älä näytä"
 
 # Cataloging > Record structure > UseOCLCEncodingLevels
 msgid ""
 "cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
 "encoding level in leader value builder for position 17."
 msgstr ""
+"OCLC määritellyt arvot MARC-koodaustasolle nimiön muodostajan merkkipaikalle "
+"17."
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Älä näytä"
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#advancedMARCeditor# Show"
 msgstr "Näytä"
 
@@ -3609,22 +3595,18 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "ei generoida automaattisesti."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
-msgstr "Älä käytä"
+msgstr "Tietueen kontrollinumero (001)"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
-msgstr "ei"
+msgstr "generoidaan tietuenumerona."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# not generated automatically."
 msgstr "ei generoida automaattisesti."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Älä näytä"
 
@@ -3635,7 +3617,6 @@ msgid ""
 msgstr "MARC-näkymässä kenttänumeroita, osakenttäkoodeja ja indikaattoreita."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#hide_marc# Show"
 msgstr "Näytä"
 
@@ -3747,9 +3728,8 @@ msgid "circulation.pref Course reserves"
 msgstr "Kurssivarannot"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "circulation.pref Curbside pickup module"
-msgstr "Kotipalvelu-moduuli"
+msgstr "Noutopalvelumoduuli"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
@@ -3772,14 +3752,12 @@ msgid "circulation.pref Interlibrary loans"
 msgstr "Kaukolainat"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref Item bundles"
-msgstr "Käyttöliittymä"
+msgstr "Nidepaketit"
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "circulation.pref Patron restrictions"
-msgstr "Palautusilmoitukset"
+msgstr "Asiakkaiden rajoitukset"
 
 # Circulation
 msgid "circulation.pref Recalls"
@@ -4249,7 +4227,7 @@ msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Volume"
-msgstr "Volyymi"
+msgstr "Vuosikerta"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Author"
@@ -4285,7 +4263,7 @@ msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Volume"
-msgstr "Volyymi"
+msgstr "Vuosikerta"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Author"
@@ -4321,7 +4299,7 @@ msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
-msgstr "Volyymi"
+msgstr "Vuosikerta"
 
 # Circulation > Article requests > ArticleRequestsOpacHostRedirection
 msgid ""
@@ -4470,21 +4448,18 @@ msgstr ""
 "niteen viivakoodin sijaan."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Do"
 msgstr "Kuljeta"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
 msgstr "Älä kuljeta"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
 "when the modal is dismissed without clicking 'Yes'."
-msgstr "niteitä automaattisesti kotikirjastoon, kun ne palautetaan."
+msgstr "automaattisesti, kun ikkunasta poistutaan valitsematta 'Kyllä'."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -4551,26 +4526,28 @@ msgid ""
 "circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
 "authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr ""
+"Käytä <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST"
+"\">LOST</a> auktorisoitua arvoa"
 
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
 "return."
-msgstr "ilmaisemaan 'ilmoittaa palauttaneensa'."
+msgstr "ilmaisemaan 'puuttuu nidepaketista' palautuksen yhteydessä."
 
 # Circulation > Item bundles > BundleNotLoanValue
 msgid ""
 "circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
 "authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
 msgstr ""
+"Käytä  <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=NOT_LOAN\">NOT_LOAN</a> auktorisoitua arvoa"
 
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
 "item is attached to bundle."
-msgstr "ilmaisemaan 'ilmoittaa palauttaneensa'."
+msgstr "ilmaisemaan 'lisätty nidepakettiin', kun nide liitetään nidepakettiin."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4664,11 +4641,11 @@ msgstr "tyhjennä näyttö"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr "avaa pikakuitin tulostus -ikkuna"
+msgstr "avaa 'tänään lainatut' -kuitin tulostusikkuna"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
-msgstr "avaa kuitin tulostus -ikkuna"
+msgstr "avaa 'tulosta kuitti' tulostusikkuna"
 
 # Circulation > Interface
 msgid "circulation.pref#CircConfirmItemParts# Don't require"
@@ -4703,32 +4680,32 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "Kirjautuneen käyttäjän kotikirjaston säännöt."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# To determine wether an item is "
 "transferred or remains in the libray after checkin, use the circulation "
 "rules of"
-msgstr "joko aineiston kotikirjastoon tai lainauskirjastoon."
+msgstr ""
+"Määrittääksesi asetetaanko nide kuljetukseen vai jääkö se palautuskirjastoon "
+"palautuksen jälkeen, käytä"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# the library the item is checked "
 "in at."
-msgstr "niteen kotikirjaston säännöt."
+msgstr "niteen palautuskirjaston laina- ja maksusääntöjä."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# the library the item is currently "
 "held by."
-msgstr "niteen kotikirjaston säännöt."
+msgstr ""
+"sen kirjaston laina- ja maksusääntöjä, joka pitää nidettä tällä hetkellä "
+"pitää hallussaan."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# the library the item is owned by."
-msgstr "niteen kotikirjaston säännöt."
+msgstr "niteen omistavan kirjaston laina- ja maksusääntöjä."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
@@ -4784,8 +4761,8 @@ msgid ""
 "circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
 "admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr ""
-"Käytä <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST\""
-">LOST</a> auktorisoitua arvoa"
+"Käytä <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST"
+"\">LOST</a> auktorisoitua arvoa"
 
 # Circulation > Return claims
 msgid ""
@@ -4883,19 +4860,16 @@ msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "rajoitusaikoja."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# Disable"
-msgstr "Älä salli"
+msgstr "Älä ota käyttöön"
 
 # Circulation > Self check-out module
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# Enable"
-msgstr "Mahdollista käyttäjille"
+msgstr "Ota käyttöön"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
-msgstr "kotipalvelu-moduuli."
+msgstr "noutopalvelu"
 
 # Circulation > Holds policy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
@@ -4933,30 +4907,26 @@ msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "vuotta"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# ."
-msgstr "noutokirjastoa"
+msgstr "."
 
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
 "staff interface default the pickup location to the"
-msgstr ""
+msgstr "Aseta virkailijaliittymässä tehtävien varausten oletusnoutopaikaksi"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
-msgstr "sijaintikirjaston sääntöjä."
+msgstr "niteen sijaintikirjasto"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
-msgstr "kuukautta"
+msgstr "niteen kotikirjasto"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
-msgstr "noutokirjastoa"
+msgstr "kirjautunut kirjasto"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5066,31 +5036,27 @@ msgstr ""
 "joku näistä kadonnut-tilan arvoista"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# Don't show clear screen button"
-msgstr "Älä näytä"
+msgstr "Älä näytä tyhjennä näyttö painiketta"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
 "screen buttons"
-msgstr "Näytä"
+msgstr "Näytä 'tänään lainatut' ja 'tyhjennä näyttö ' -painikkeet"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
 "buttons"
-msgstr "Näytä"
+msgstr "Näytä 'tulosta kuitti' ja 'tyhjennä näyttö' -painikkeet"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# to clear the current patron from "
 "the screen on the circulation screen."
-msgstr "asiakastietojen tyhjäyspainike(tta) lainauksessa."
+msgstr "tyhjentääksesi asiakastietonäytön lainauksessa."
 
 # Circulation > Holds policy
 msgid "circulation.pref#DisplayMultiPlaceHold# Don't enable"
@@ -5108,38 +5074,34 @@ msgstr ""
 "varauksen tekeminen useampaan nimekkeeseen kerrallaan hakutuloslistasta"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
-msgstr "Älä salli"
+msgstr "Älä ota käyttöön"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "circulation.pref#EnableItemGroupHolds# Enable"
-msgstr "Salli"
+msgstr "Ota käyttöön"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
 "groups."
-msgstr ""
-"varauksen tekeminen useampaan nimekkeeseen kerrallaan hakutuloslistasta"
+msgstr "varauksen tekeminen nideryhmiin."
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#EnableItemGroups# Don't enable"
-msgstr "Älä salli"
+msgstr "Älä ota käyttöön"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#EnableItemGroups# Enable"
-msgstr "Salli"
+msgstr "Ota käyttöön"
 
 # Circulation > Holds policy > EnableItemGroups
 msgid ""
 "circulation.pref#EnableItemGroups# the item groups feature to allow "
 "collecting groups of items on a record together."
 msgstr ""
+"nideryhmä ominaisuus salliaksesi tietueessa olevien niteiden keräämisen "
+"yhteen."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
@@ -5170,41 +5132,41 @@ msgid ""
 "cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
 "schedule it.<br>"
 msgstr ""
-"<br><strong>HUOM:</strong> Nämä järjestelmäasetukset vaativat "
-"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjobin. Pyydä "
-"kehittäjiä ajastamaan se.<br>"
+"<br><strong>HUOM:</strong> Nämä järjestelmäasetukset vaativat <code>misc/"
+"cronjobs/holds/cancel_expired_holds.pl</code> cronjobin. Pyydä kehittäjiä "
+"ajastamaan se.<br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
 msgstr "Salli"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
-msgstr "Salli"
+msgstr "Täytä"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
-msgstr "Älä salli"
+msgstr "Älä täytä"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Älä salli"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
 "the new hold filled with a canceled item to"
-msgstr "Älä salli"
+msgstr ""
+"Kun jonossa oleva varaus on täytetty vanhentuneista varauksista, lähetä "
+"sähköposti ilmoitus osoitteeseen"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
 "hold using the item."
-msgstr "Älä salli"
+msgstr ""
+"seuraava(a) jonossa oleva(a) varaus(ta) automaattisesti vanhentuneista "
+"varauksista."
 
 # Circulation > Holds policy > ExpireReservesMaxPickUpDelay
 msgid ""
@@ -5215,9 +5177,9 @@ msgid ""
 "system preference.</br>"
 msgstr ""
 "varausten päättyä automaattisesti, jos niitä ei ole noudettu määräajan "
-"puitteissa. Määritä määräaika <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay\""
-">ReservesMaxPickUpDelay</a> -järjestelmäasetuksessa.</br>"
+"puitteissa. Määritä määräaika <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> -"
+"järjestelmäasetuksessa.</br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -5558,9 +5520,9 @@ msgid ""
 "\">ILLSTATUS</a> authorized value category."
 msgstr ""
 "(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaukolainapyynnöt "
-"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta  <a href"
-"=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\""
-">ILLSTATUS</a>."
+"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta  <a href=\"/"
+"cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</"
+"a>."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -5913,26 +5875,24 @@ msgstr ""
 "\">AllowHoldDateInFuture</a>-asetuksen olla sallittu)."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
 "library to pick up a hold for these statuses:"
-msgstr "käyttäjän valita itse varauksen noutopiste(ttä)."
+msgstr ""
+"Salli asiakkaiden vaihtaa itse varauksen noutopiste seuraaville varausten "
+"tiloille:"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
-msgstr "Älä salli"
+msgstr "Kuljetettavana"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
-msgstr "Salli"
+msgstr "Odottavat"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
-msgstr "Salli"
+msgstr "Keskeytetyt"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -6014,11 +5974,10 @@ msgstr ""
 "a> järjestelmäasetukset on otettu käyttöön."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
 "make"
-msgstr "Määritä verkokirjaston varauslomakkeelle pakolliseksi:"
+msgstr "Määritä verkkokirjaston varauslomakkeelle pakolliseksi:"
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
@@ -6033,9 +5992,8 @@ msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "varauksen aloituspvm"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
-msgstr "varauksen loppumispvm"
+msgstr "."
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
@@ -6098,31 +6056,26 @@ msgid ""
 msgstr "myöhästymisilmoitusten aikojen määrittelyyn."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# ."
-msgstr "Älä lainaa"
+msgstr "."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
 "the"
-msgstr "myöhästymisilmoitusten aikojen määrittelyyn."
+msgstr "Järjestä ja lähetä myöhästymisilmoitukset käyttäen"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# checkout library"
-msgstr "Käytä kalenteria"
+msgstr "lainaavaa kirjastoa"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# command-line option"
-msgstr "Käytä kalenteria"
+msgstr "komentorivin asetusta"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# item home library"
-msgstr "niteen kotikirjaston"
+msgstr "niteen kotikirjastoa"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -6186,21 +6139,19 @@ msgstr ""
 "asiakasnäytöllä."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#PatronRestrictionTypes# Allow"
 msgstr "Salli"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
 msgstr "Älä salli"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
 "be specified when applying manually."
-msgstr "rajoitusaikoja."
+msgstr ""
+"asiakkaan rajoituksen tyypin määrittäminen, kun rajoitus lisätään käsin."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6580,7 +6531,6 @@ msgstr ""
 "sääntöön sopiville niteille<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
-#, fuzzy
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:homebranch:ne:\\$holdingbranch:X - "
 "Will return sort bin 'X' for an item returned to CPL where the holdingbranch "
@@ -7185,11 +7135,12 @@ msgstr ""
 "\">CanMarkHoldsToPullAsLost</a> järjestelmäasetuksen)"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
 "only the not for loan description. E.g. '-1: ONLYMESSAGE'."
-msgstr "Jokaisen arvoparin pitää olla omalla rivillä."
+msgstr ""
+"Voidaan käyttää näyttämään vain 'ei lainattavissa' kuvausta Esim. '-1: "
+"ONLYMESSAGE'."
 
 # Circulation > Checkin policy
 msgid ""
@@ -7286,24 +7237,21 @@ msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "kurssivarantoja"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# Use"
 msgstr "Käytä"
 
 # Circulation > SIP2 > UseLocationAsAQInSIP
 msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
-msgstr ""
+msgstr "AQ kentässä SIP protokollassa."
 
 # Circulation > Holds policy
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
-msgstr "kotikirjasto(a)"
+msgstr "kotikirjastoa"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
-msgstr "vaadi vahvistus"
+msgstr "permanent_location:a"
 
 # Circulation > Course reserves
 msgid "circulation.pref#UseRecalls# Don't use"
@@ -7566,30 +7514,30 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
-msgstr "Muunna CueCat-muodosta"
+msgstr "Muunna CueCat-muodosta luetut viivakoodit"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from Libsuite8 form"
-msgstr "Muunna Libsuite8-muodosta"
+msgstr "Muunna Libsuite8-muodosta luetut viivakoodit"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Don't filter"
-msgstr "Älä suodata"
+msgstr "Älä suodata luettuja viivakoodeja"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# EAN-13 or zero-padded UPC-A form"
-msgstr "EAN-13 tai zero-padded UPC-A -muodoissa"
+msgstr "EAN-13 tai zero-padded UPC-A -muodoissa luetut viivakoodit"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Remove spaces from"
-msgstr "Poista välilyönnit"
+msgstr "Poista välilyönnit luetuista viivakoodeista"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# Remove the first number from T-"
 "prefix style"
-msgstr "Poista ensimmäinen numero T-prefix-muodosta"
+msgstr "Poista ensimmäinen numero T-prefix-muodosta luetuista viivakoodeista"
 
 # Circulation > Interface > itemBarcodeInputFilter
 msgid ""
@@ -7597,6 +7545,8 @@ msgid ""
 "any leading or trailing whitespace in a barcode gets removed before this "
 "filter."
 msgstr ""
+". Huomioi, että kaikki tyhjät merkit viivakoodin edessä tai lopussa "
+"poistetaan ennen suodatusta."
 
 # Circulation > Checkout policy
 msgid ""
@@ -7992,7 +7942,6 @@ msgstr "Käytä seuraavia palveluntarjoajia kansikuvien hakuun"
 
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Älä näytä"
 
@@ -8013,7 +7962,6 @@ msgstr ""
 "{field$subfield}. Esimerkiksi {024$a}."
 
 # Enhanced content > Amazon
-#, fuzzy
 msgid "enhanced_content.pref#CustomCoverImages# Show"
 msgstr "Näytä"
 
@@ -8268,12 +8216,10 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "välilehdillä."
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Älä näytä"
 
 # Enhanced content > Amazon
-#, fuzzy
 msgid "enhanced_content.pref#LocalCoverImages# Show"
 msgstr "Näytä"
 
@@ -8430,12 +8376,10 @@ msgid ""
 msgstr "teoksen muita painoksia verkkokirjastossa."
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Älä näytä"
 
 # Enhanced content > Amazon
-#, fuzzy
 msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
 msgstr "Näytä"
 
@@ -8911,58 +8855,52 @@ msgstr ""
 "käytössä). Tämä on eri kuin Library Thing for Libraries."
 
 # Serials
-#, fuzzy
 msgid "erm.pref"
-msgstr "Kausijulkaisut"
+msgstr "Elektronisten aineistojen hallinta"
 
 # Circulation > Interface
-#, fuzzy
 msgid "erm.pref Interface"
 msgstr "Käyttöliittymä"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "erm.pref#ERMModule# Disable"
-msgstr "Älä salli"
+msgstr "Älä ota käyttöön"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "erm.pref#ERMModule# Enable"
-msgstr "Salli"
+msgstr "Ota käyttöön"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "erm.pref#ERMModule# the e-resource management module"
-msgstr "Salli"
+msgstr "elektronisten aineistojen hallintamoduuli(a)"
 
 # E-Resource management > Interface > ERMProviderEbscoApiKey
 msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
-msgstr ""
+msgstr "API avain EBSCO HoldingsIQ:lle"
 
 # E-Resource management > Interface > ERMProviderEbscoCustomerID
 msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
-msgstr ""
+msgstr "Asiakas ID EBSCO HoldingsIQ:lle"
 
 # E-Resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# EBSCO"
-msgstr ""
+msgstr "EBSCO"
 
 # E-Resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# Local"
-msgstr ""
+msgstr "Paikallinen"
 
 # E-resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
-msgstr ""
+msgstr "Elektronisten aineistojen palveluntarjoajat hallintamoduulissa"
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
 msgstr "i18n_l10n"
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref Global"
-msgstr "i18n_l10n"
+msgstr "Yleinen"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
@@ -9164,9 +9102,8 @@ msgid "local_use.pref"
 msgstr "Paikalliskäyttö"
 
 # Local Use
-#, fuzzy
 msgid "local_use.pref Local use"
-msgstr "Paikalliskäyttö"
+msgstr "Paikalliset tiedot"
 
 # Local Use
 msgid "local_use.pref## Nothing defined yet."
@@ -9291,13 +9228,12 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Älä dumppaa"
 
 # Logging > Debugging
-#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
 "HTML source for the OPAC and staff interface."
 msgstr ""
-"Template Toolkit -muuttujat kommentteina virkailijaliittymän HTML-"
-"lähdekoodissa."
+"Template Toolkit -muuttujia kommentteina verkkokirjaston ja "
+"virkailijaliittymän HTML-lähdekoodissa."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9519,9 +9455,8 @@ msgid "opac.pref Shelf browser"
 msgstr "Virtuaalihyllyt"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref Suggestions"
-msgstr "Salli"
+msgstr "Hankintaehdotukset"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -9600,20 +9535,19 @@ msgid ""
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Tyhjä. Mitään XSLT-tiedostoa ei käytetä "
-"(<strong>oletus</strong>)</li><li>Lisää XSLT-tiedoston "
-"hakemistopolku.</li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos "
-"tyylitiedostoja on useita: <ul><li>eri kielet: käytä paikanpitäjä {langcode} "
-"- tämä korvautuu käytössä olevalla kielellä.</li><li>auktoriteettityypit "
-"{authtypecode} - tämä korvautuu auktoriteettityypin koodilla"
+"(<strong>oletus</strong>)</li><li>Lisää XSLT-tiedoston hakemistopolku.</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos tyylitiedostoja on "
+"useita: <ul><li>eri kielet: käytä paikanpitäjä {langcode} - tämä korvautuu "
+"käytössä olevalla kielellä.</li><li>auktoriteettityypit {authtypecode} - "
+"tämä korvautuu auktoriteettityypin koodilla"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
 "OPAC using the XSLT stylesheet at: "
 msgstr ""
-"Näytä auktoriteettitulokset virkailijaliittymässä käyttäen XSLT-"
-"tyylitiedostoa osoitteesta: "
+"Näytä auktoriteettitulokset verkkokirjastossa käyttäen XSLT-tyylitiedostoa "
+"osoitteesta: "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -9719,10 +9653,9 @@ msgid ""
 "\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
 "address: "
 msgstr ""
-"<br>Jos valitset <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"EmailAddressForPatronRegistrations\">EmailAddressForPatronRegistrations</a>, "
-"syötä toimiva sähköpostiosoite: "
+"<br>Jos valitset <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a>, syötä toimiva sähköpostiosoite: "
 
 # Acquisitions > Policy
 msgid ""
@@ -9733,24 +9666,20 @@ msgstr ""
 "itserekisteröitymiset lähetetään: "
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# email address of library"
 msgstr "kirjaston sähköpostiosoite"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# none"
-msgstr "Salli"
+msgstr "Ei mihinkään"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -9797,12 +9726,10 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "hankintaehdotusta"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACAcquisitionDetails# Don't show"
 msgstr "Älä näytä"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACAcquisitionDetails# Show"
 msgstr "Näytä"
 
@@ -9813,34 +9740,32 @@ msgid ""
 msgstr "tilauksen tietoja verkkokirjaston perustiedot-näytöllä."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACAuthorIdentifiers# Display"
-msgstr "Salli"
+msgstr "Näytä"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
-msgstr "Älä salli"
+msgstr "Älä näytä"
 
 # OPAC > Features > OPACAuthorIdentifiers
 msgid ""
 "opac.pref#OPACAuthorIdentifiers# This feature requires authorities with "
 "024$2 and 024$a."
-msgstr ""
+msgstr "Tämä ominaisuus vaatii auktoriteetteja 024$2 ja 024$a."
 
 # OPAC > Features > OPACAuthorIdentifiers
 msgid ""
 "opac.pref#OPACAuthorIdentifiers# Valid source codes in $2 are currently: "
 "orcid, scopus, loop, rid and viaf."
 msgstr ""
+"Sallitut lähdekoodin kentälle $2 ovat tällä hetkellä: orcid, scopus, loop, "
+"rid ja viaf."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
 "the detail pages in the OPAC."
-msgstr ""
-"niteen lainanneen asiakkaan nimeä verkkokirjaston perustiedot-näkymässä."
+msgstr "tekijöiden tunnisteita verkkokirjaston perustiedot-näytössä."
 
 # OPAC > Appearance
 msgid ""
@@ -9964,7 +9889,7 @@ msgid ""
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a> rule to "
 "patrons."
 msgstr ""
-"voimassa olevat krediitit, kun sovelletaan <a href=\"/cgi-bin/koha/admin/"
+"voimassa oleva luotto, kun sovelletaan <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OPACFineNoRenewals"
 "\">OPACFineNoRenewals</a>-järjestelmäasetusta asiakkaille."
 
@@ -10108,12 +10033,10 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Soita"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
 msgstr "Älä näytä"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACPopupAuthorsSearch# Show"
 msgstr "Näytä"
 
@@ -10234,19 +10157,16 @@ msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Älä näytä enempää kuin"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
-msgstr "osatilan (substatus)"
+msgstr "kirjaston ja osatilan (substatus) mukaan"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch only"
-msgstr "kirjaston"
+msgstr "vain kirjaston mukaan"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# substatus only"
-msgstr "osatilan (substatus)"
+msgstr "vain osatilan (substatus) mukaan"
 
 # OPAC > Appearance
 msgid ""
@@ -10257,14 +10177,13 @@ msgstr ""
 "koodi:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
 "{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
 "replaced with information from the displayed record."
 msgstr ""
-"<br />Huomaa: Paikat {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, "
-"{ISSN} ja {AUTHOR} täytetään näytettävän tietueen tiedoilla."
+"<br />Huomaa: Paikkamerkit {BIBLIONUMBER}, {CONTROLNUMBER}, {OCLC_NO}, "
+"{TITLE}, {ISBN}, {ISSN} ja {AUTHOR} korvataan näytettävän tietueen tiedoilla."
 
 # OPAC > Appearance
 msgid ""
@@ -10505,10 +10424,10 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on useita "
-"eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä olevalla "
-"kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on "
+"useita eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä "
+"olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -10528,10 +10447,10 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on useita "
-"eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä olevalla "
-"kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on "
+"useita eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä "
+"olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -10553,13 +10472,13 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen <a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy olla päällä, jos "
-"räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</li></ul>Jos eri "
-"kieliä varten on useita eri tyylitiedostoja, paikanpitäjä {langcode} "
-"korvautuu käytössä olevalla kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on useita eri tyylitiedostoja, paikanpitäjä "
+"{langcode} korvautuu käytössä olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -10595,8 +10514,7 @@ msgid ""
 "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on "
 "the OPAC masthead."
 msgstr ""
-"kirjastot-alasvetovalikko(a) verkkokirjaston yläreunaan hakukentän viereen "
-"(masthead)."
+"kirjastot-pudotusvalikko(a) verkkokirjaston hakulaatikon viereen (masthead)."
 
 # OPAC > Appearance
 msgid ""
@@ -10887,16 +10805,14 @@ msgstr ""
 "community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha-wikistä</a>."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
 "items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
-"Lista asiakastyypeistä, eroteltu merkkillä |, jotka voivat nähdä piilotetut "
-"niteet <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>-"
-"järjestelmäasetuksella:"
+"Lista asiakastyypeistä, jotka voivat nähdä järjestelmäasetuksella <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems"
+"\">OpacHiddenItems</a> piilotetut niteet:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
@@ -11115,12 +11031,10 @@ msgid ""
 msgstr "Tämä kuvaus näkyy hakutuloksissa (160 merkkiä)."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr "Älä näytä"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpacNewsLibrarySelect# Show"
 msgstr "Näytä"
 
@@ -11131,19 +11045,16 @@ msgid ""
 msgstr "uutisten kirjastovalikko(a) verkkokirjastossa."
 
 # Administration > Interface options
-#, fuzzy
 msgid "opac.pref#OpacNoItemTypeImages# Don't show"
-msgstr "Ei"
+msgstr "Älä näytä"
 
 # Administration > Interface options
-#, fuzzy
 msgid "opac.pref#OpacNoItemTypeImages# Show"
-msgstr "Ei"
+msgstr "Näytä"
 
 # Administration > Interface options
-#, fuzzy
 msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
-msgstr "Näytä nidetyyppien kuvakkeet verkkokirjaston hakutuloksissa: "
+msgstr "nidetyyppien kuvakkeet verkkokirjastossa."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11781,9 +11692,8 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "käyttäjänimi"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#ShowReviewerPhoto# Don't show"
-msgstr "Näytä"
+msgstr "Älä näytä"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -11795,7 +11705,7 @@ msgid ""
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
-"opac.pref#ShowReviewerPhoto# kommentoijan avatar kommentin vieressä "
+"opac.pref#ShowReviewerPhoto# kommentoijan avatar(ia) kommentin vieressä "
 "verkkokirjastossa. Avatar haetaan osoitteesta <a href=\"https://www."
 "libravatar.org\" target=\"_blank\">www.libravatar.org</a> asiakkaan "
 "sähköpostiosoitteen perusteella."
@@ -11948,10 +11858,10 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"Kun <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"suggestion\">suggestion</a> on sallittu ja <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions\""
-">AnonSuggestions</a> ei sallittu, seuraavien asiakastyyppien ei ole "
+"Kun <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> on sallittu ja <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> ei sallittu, seuraavien asiakastyyppien ei ole "
 "sallittua tehdä hankintaehdotuksia:"
 
 # OPAC > Features
@@ -11986,7 +11896,7 @@ msgstr "Yksityisyysasetukset"
 
 # Patrons > General
 msgid "patrons.pref Security"
-msgstr "Tietoturva"
+msgstr "Tietoturva-asetukset"
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# Allow only staff"
@@ -12347,16 +12257,15 @@ msgid ""
 msgstr "Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa:"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
 "\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
 "fields added to this preference will be added as search options in the "
 "dropdown menu on the patron search page."
 msgstr ""
-"Jos tyhjä, Koha asettaa oletukseksi \"firstname,surname,othernames,"
-"cardnumber,userid\". Muut tähän asetukseen lisätyt kentät lisätään "
-"vaihtoehtoina alasvetovalikkoon asiakkaan hakusivulla."
+"Jos tyhjä, Koha asettaa oletukseksi \"firstname,middle_name,surname,"
+"othernames,cardnumber,userid\". Muut tähän asetukseen lisätyt kentät "
+"lisätään hakuvaihtoehtoina pudotusvalikkoon asiakkaan hakusivulla."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12381,7 +12290,6 @@ msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Ota käyttöön"
 
 # Patrons > Security > EnableExpiredPasswordReset
-#, fuzzy
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
@@ -12562,6 +12470,8 @@ msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
 "patron deletion, use borrowernumber "
 msgstr ""
+"<br/>Kun vaihdetaan listan omistajuutta asiakkaan poiston yhteydessä, käytä "
+"asiakasta ID:llä "
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12569,12 +12479,15 @@ msgid ""
 "this patron are either deleted or transferred to a new owner according to "
 "your choice; other private lists (not shared) are deleted."
 msgstr ""
+"Kaikki poistettavan asiakkaan julkiset tai jaetut listat joko poistetaan tai "
+"siirretään uudelle omistajalle asetuksen mukaan. Muut yksityiset listat "
+"(joita ei ole jaettu) poistetaan."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
 "owns public or shared lists,"
-msgstr ""
+msgstr "Kun poistetaan asiakasta, joka omistaa julkisia tai jaettuja listoja:"
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12582,15 +12495,17 @@ msgid ""
 "this field empty in order to change owner to the active staff member who "
 "deletes the patron."
 msgstr ""
+"listan uutena omistajana tai jätä kenttä tyhjäksi, jolloin omistajuus "
+"vaihtuu virkailijalle, joka poisti asiakkaan."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
-msgstr ""
+msgstr "muuta listojen omistajaa."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
-msgstr ""
+msgstr "poista listat."
 
 # Patrons > General > LockExpiredDelay
 msgid ""
@@ -12659,21 +12574,18 @@ msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "päivää etukäteen."
 
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Don't notify"
-msgstr "Älä salli"
+msgstr "Älä lähetä ilmoitusta"
 
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Notify"
-msgstr "Salli"
+msgstr "Lähetä ilmoitus"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#NotifyPasswordChange# patrons whenever their password is "
 "changed."
-msgstr "palauttamaan salasana."
+msgstr "asiakkaille, kun heidän salasanansa vaihtuu."
 
 # Patrons > Patron forms
 msgid ""
@@ -12853,7 +12765,7 @@ msgstr "Yhteystieto - Toissijainen email"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Secondary phone"
-msgstr "Yhteystieto - Toissijainen puhelin"
+msgstr "Yhteystieto - Toissijainen puh.nro"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Address"
@@ -13395,7 +13307,7 @@ msgstr "ISO 639-2 kielikoodit (arvot erotetaan | tai , -merkeillä)."
 msgid ""
 "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the "
 "advanced search drop-down to the"
-msgstr "Rajoita tarkan haun kielirajauksen alasvetovalikko"
+msgstr "Rajoita tarkan haun kielirajoituksen pudotusvalikkoon"
 
 # Searching > Search form
 msgid ""
@@ -13436,12 +13348,10 @@ msgstr ""
 "järjestelmäasetus on asetettu kohtaan \"nimeketietueesta\"."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr "Älä näytä"
 
 # Searching > Results Display
-#, fuzzy
 msgid "searching.pref#BiblioItemtypeInfo# Show"
 msgstr "Näytä"
 
@@ -13521,11 +13431,11 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "Lyhennä fasettien pituudeksi"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface (REQUIRES ZEBRA)."
-msgstr "merkkiä (sekä verkkokirjastossa että virkailijaliittymässä)."
+msgstr ""
+"merkkiä sekä verkkokirjastossa että virkailijaliittymässä (VAATII ZEBRAN)."
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# Show up to"
@@ -13686,7 +13596,7 @@ msgstr "Verkkokirjaston hakutulosten oletusjärjestys on"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# ascending."
-msgstr "laskevassa järjestyksessä / uusimmat ensin."
+msgstr "nousevassa järjestyksessä / vanhimmat ensin."
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# author"
@@ -13706,7 +13616,7 @@ msgstr "julkaisuajan mukaan"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# descending."
-msgstr "nousevassa järjestyksessä / vanhimmat ensin."
+msgstr "laskevassa järjestyksessä / uusimmat ensin."
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# from A to Z."
@@ -13884,12 +13794,10 @@ msgstr ""
 "hakumoottorin käyttöä)."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
 msgstr "Älä säilytä"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Retain"
 msgstr "Säilytä"
 
@@ -13898,16 +13806,16 @@ msgid ""
 "searching.pref#RetainCatalogSearchTerms# search terms between searches when "
 "searching from the 'search the catalog' tab in the staff interface header."
 msgstr ""
+"hakutermit hauissa, kun hakuja tehdään virkailijaliittymän hakulaatikon "
+"välilehdellä 'hae tietokannasta'."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
-msgstr "Älä sisällytä"
+msgstr "Älä säilytä"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Retain"
-msgstr "Älä sisällytä"
+msgstr "Säilytä"
 
 # Searching > Results display > RetainPatronsSearchTerms
 msgid ""
@@ -13915,22 +13823,24 @@ msgid ""
 "searching from the 'checkout' and 'search patrons' tab in the staff "
 "interface header."
 msgstr ""
+"hakutermit hauissa, kun hakuja tehdään virkailijaliittymän hakulaatikon "
+"välilehdillä 'lainaus' ja 'hae asiakkaita'."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#SavedSearchFilters# Disable"
-msgstr "Älä yritä soveltaa"
+msgstr "Älä salli"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#SavedSearchFilters# Enable"
-msgstr "Yritä soveltaa"
+msgstr "Salli"
 
 # Searching > Features > SavedSearchFilters
 msgid ""
 "searching.pref#SavedSearchFilters# the option for staff with permission to "
 "create/edit custom saved search filters."
 msgstr ""
+"oikeuksin varustettujen virkailijoiden luoda/muokata tallennettuja "
+"räätälöityjä haun rajauksia."
 
 # Searching > Results display > SearchLimitLibrary
 msgid ""
@@ -13969,23 +13879,19 @@ msgid "searching.pref#SearchWithISBNVariations# search"
 msgstr "hae"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
-msgstr "Kun haetaan ISBN indeksistä,"
+msgstr "Kun haetaan ISSN indeksistä,"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# don't search"
 msgstr "älä hae"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
-msgstr "kaikkia ISBN:n muotoja."
+msgstr "kaikkia ISSN:n muotoja."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "hae"
 
@@ -14072,7 +13978,7 @@ msgstr "Virkailijaliittymän hakutulosten oletusjärjestys on"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
-msgstr "laskeva järjestys / uusimmat ensin."
+msgstr "nouseva järjestys / vanhimmat ensin."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# author"
@@ -14092,7 +13998,7 @@ msgstr "julkaisuajan mukaan"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# descending."
-msgstr "nousevassa järjestyksessä / vanhimmat ensin."
+msgstr "laskevassa järjestyksessä / uusimmat ensin."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# from A to Z."
@@ -14200,7 +14106,6 @@ msgid "serials.pref"
 msgstr "Kausijulkaisut"
 
 # Searching > Features
-#, fuzzy
 msgid "serials.pref Features"
 msgstr "Ominaisuudet"
 
@@ -14476,23 +14381,18 @@ msgstr ""
 "varausta tehtäessä."
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
 msgstr "Älä näytä"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
 msgstr "Näytä"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
-msgstr ""
-"kirjastot-alasvetovalikko(a) verkkokirjaston yläreunaan hakukentän viereen "
-"(masthead)."
+msgstr "kirjastot-pudotusvalikko(a) virkailijaliittymän hakulaatikon vieressä."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -14506,7 +14406,7 @@ msgstr "Näytä"
 msgid ""
 "staff_interface.pref#IntranetCatalogSearchPulldown# a search field pulldown "
 "for 'Search the catalog' boxes."
-msgstr "alasvetovalikko haku-kentissä."
+msgstr "pudotusvalikko haku-kentissä."
 
 # Staff interface > Appearance
 msgid ""
@@ -14652,9 +14552,8 @@ msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr "Salli"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "Salli"
+msgstr "Käytä"
 
 # Administration > CAS authentication
 msgid ""
@@ -14688,10 +14587,10 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on useita "
-"eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä olevalla "
-"kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on "
+"useita eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä "
+"olevalla kielellä."
 
 # Staff Client > Appearance
 msgid ""
@@ -14712,10 +14611,10 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on useita "
-"eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä olevalla "
-"kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos eri kieliä varten on "
+"useita eri tyylitiedostoja, paikanpitäjä {langcode} korvautuu käytössä "
+"olevalla kielellä."
 
 # Staff Client > Appearance
 msgid ""
@@ -14738,13 +14637,13 @@ msgid ""
 msgstr ""
 "<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTLResultsDisplay\" data-value=\"default\">default</a>\" "
-"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</li><li>"
-"Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen <a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy olla päällä, jos "
-"räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</li></ul>Jos eri "
-"kieliä varten on useita eri tyylitiedostoja, paikanpitäjä {langcode} "
-"korvautuu käytössä olevalla kielellä."
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on useita eri tyylitiedostoja, paikanpitäjä "
+"{langcode} korvautuu käytössä olevalla kielellä."
 
 # Staff Client > Appearance
 msgid ""
@@ -15379,13 +15278,12 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Salli"
 
 # Web services > REST API
-#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 "Oauth2-asiakkaan valtuutus REST API:ssa. Vaatii, että Net::OAuth2::"
-"AuthorizationServer on asennettu. [KOKEILUVAIHEESSA]"
+"AuthorizationServer on asennettu."
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"
