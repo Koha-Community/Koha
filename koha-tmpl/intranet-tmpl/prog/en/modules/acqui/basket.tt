@@ -1080,12 +1080,12 @@
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
             [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-                table_settings['columns'].splice(13, 1);
+                table_settings['columns'].splice(16, 1);
             [% END %]
             KohaTable("orders", {
                 "sPaginationType": "full",
                 "autoWidth": false,
-                "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13],
+                "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15[% IF (Koha.Preference('EDIFACT') && ediaccount) %],16[% END %]],
             }, table_settings);
 
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
