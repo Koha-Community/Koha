@@ -30,6 +30,7 @@
                     [% IF ! onlyinfo %]
                         <th class="nosort">Modify</th>
                     [% END %]
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -201,6 +202,7 @@
                                     </form>
                                 [% END %]
                             </td>
+                            <td></td>
                         [% END # / IF onlyinfo %]
                     </tr>
                 [% END # /FOREACH HOLDS %]
