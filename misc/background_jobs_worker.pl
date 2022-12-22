@@ -42,7 +42,11 @@ if ( $conn ) {
     # FIXME cf note in Koha::BackgroundJob about $namespace
     my $namespace = C4::Context->config('memcached_namespace');
     for my $job_type ( @job_types ) {
-        $conn->subscribe({ destination => sprintf("/queue/%s-%s", $namespace, $job_type), ack => 'client' });
+        $conn->subscribe({
+            destination => sprintf("/queue/%s-%s", $namespace, $job_type),
+            ack => 'client',
+            'prefetch-count' => 1,
+        });
     }
 }
 while (1) {
