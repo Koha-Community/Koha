@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2022-11-17 10:24+0000\n"
+"PO-Revision-Date: 2022-11-25 15:58+0000\n"
 "Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sv/22.05/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1668680698.731937\n"
+"X-POOTLE-MTIME: 1669391931.180738\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -77,16 +77,12 @@ msgid ""
 msgstr "Skapa inte automatiskt genererade kreditnummer"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "accounting.pref#EnablePointOfSale#  the point of sale feature to allow "
 "anonymous transactions with the accounting system. (Requires <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Om en låntagares avgifter "
-"överstiger värdet för <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -113,15 +109,11 @@ msgstr ""
 "för kvitto när betalning görs."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# . (Requires <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Om en låntagares avgifter "
-"överstiger värdet för <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
 
 # Accounting > Features
 #, fuzzy
@@ -149,7 +141,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Begär"
 
 # Administration > Share anonymous usage statistics > UsageStatsLibraryType
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -157,9 +148,10 @@ msgid ""
 "when no payment types are defined in the PAYMENT_TYPE authorised value "
 "category."
 msgstr ""
-"<br><strong>NOTERA:</strong> Det här värdet har ingen effekt om <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
-"\">UsageStats</a>-systeminställningen är inställd på \"Nej\" (dela inte)."
+"Den här inställningen har ingen effekt om <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
+">UseCashRegisters</a> är aktiverad eller inga betalningssätt är angivna som "
+"auktoriserade värden i kategorin PAYMENT_TYPE."
 
 # Accounting > Policy
 #, fuzzy
@@ -849,7 +841,6 @@ msgid ""
 msgstr "Skicka alla meddelanden som BCC till denna e-postadress"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -857,16 +848,12 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"admin.pref#GoogleOpenIDConnectDomain# Lämna tomt för alla Google-domäner. "
-"Kräver <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -874,9 +861,6 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"admin.pref#GoogleOpenIDConnectDomain# Lämna tomt för alla Google-domäner. "
-"Kräver <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -896,7 +880,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ja"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -907,9 +890,13 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
-"Du månste välja OAuth2 när du skapar en app i \"google cloud console\" och "
+"Du måste välja OAuth2 när du skapar en app i \"google cloud console\" och "
 "sätta \"web origin\" till your_opac_url och \"redirect url\" till "
-"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect ."
+"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect . Kräver att <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> och <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a> används."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -2421,7 +2408,6 @@ msgstr ""
 "poster sparas i katalogmodulen."
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (requires <a "
@@ -2430,14 +2416,8 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"senaste låntagaren som återlämnade exemplaret. Den här inställningen är "
-"fristående från systeminställningarna <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> och <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
 "default value for the 670$a field of MARC21 authority records (requires <a "
@@ -2446,11 +2426,6 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"senaste låntagaren som återlämnade exemplaret. Den här inställningen är "
-"fristående från systeminställningarna <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> och <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2780,16 +2755,12 @@ msgid ""
 msgstr " Tomma värden skrivs som standard ut på engelska."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#DefaultCountryField008# Fill in the default country code "
 "for field 008 Range 15-17 of MARC21 - Place of publication, production, or "
 "execution. (See <a href='http://www.loc.gov/marc/countries/countries_code."
 "html'>MARC Code List for Countries</a>):"
 msgstr ""
-"cataloguing.pref#DefaultLanguageField008# Fyll i standardspråk för fält 008 "
-"Intervall 35-37 of MARC21-poster (t ex eng, nor, ger, se <a href=\"http://"
-"www.loc.gov/marc/languages/language_code.html\">MARC kodlista för språk</a>)"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
@@ -2992,13 +2963,10 @@ msgstr ""
 "enligt formatet 123$a."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# Store record's creator "
 "borrowernumber in MARC subfield"
-msgstr ""
-". <br/><strong>OBS!:</strong> Använd dollartecken mellan fält och delfält "
-"enligt formatet 123$a."
+msgstr "Spara låntagarnumret för postens skapare i MARC-delfält"
 
 # Cataloging > Record structure
 msgid ""
@@ -3014,13 +2982,10 @@ msgid ""
 msgstr "Mappa det underliggande MARC-fältet"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#MarcFieldForCreatorId# and record's last modifier name in "
 "MARC subfield"
 msgstr ""
-". <br/><strong>OBS!:</strong> Använd dollartecken mellan fält och delfält "
-"enligt formatet 123$a."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# .<br />For example: '001,245ab,600'"
@@ -3067,9 +3032,8 @@ msgid ""
 msgstr "När exemplar skapas, placera dem temporärt i"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#NotesToHide# <br />"
-msgstr "Visa inte"
+msgstr "<br />"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# Don't show"
@@ -3192,14 +3156,13 @@ msgstr ""
 "TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#RisExportAdditionalFields# Use of TY ( record type ) as a "
 "key will <em>replace</em> the default TY with the field value of your "
 "choosing."
 msgstr ""
-"cataloguing.pref#RisExportAdditionalFields# Användning av TY (posttyp) som "
-"nyckel <i>ersätter</i> standard-TY med det fältvärde du väljer."
+"Användning av TY (posttyp) som nyckel <em>ersätter</em> standard-TY med det "
+"fältvärde du väljer."
 
 # Cataloging > Exporting
 #, fuzzy
@@ -3835,15 +3798,16 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "Tillåt inte "
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
 "\">noissuescharge</a> system preference."
 msgstr ""
-"personal manuellt åsidosätta och låna ut exemplar till låntagare som har "
-"högre böter än noissuescharge."
+"personal att manuellt åsidosätta och låna ut exemplar till låntagare som har "
+"högre böter än enligt systeminställningen <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
+">noissuescharge</a>."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4919,11 +4883,10 @@ msgstr ""
 "material."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of "
 "comma separated values, e.g. <em>5,6,7</em>."
-msgstr "."
+msgstr "<br>Ange som lista med kommaavgränsade värden, t.ex. <em>5,6,7</em>."
 
 # Circulation > Checkout policy
 #, fuzzy
@@ -5189,15 +5152,11 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "Inkludera "
 
 # Administration > Share anonymous usage statistics > UsageStatsCountry
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
-"<br><strong>NOTERA:</strong> Det här värdet har ingen effekt om <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
-"\">UsageStats</a>-systeminställningen är inställd på \"Nej\" (dela inte)."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5471,21 +5430,18 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br />Can name any field in the items "
 "table followed by a colon then a space then"
-msgstr "en lista med värden inom parentes separerade med kommatecken."
+msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
-msgstr "Till exempel:"
+msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#ItemsDeniedRenewal# <br />itype: [NEWBK,\"\"]"
-msgstr "Till exempel:"
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -5544,16 +5500,12 @@ msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "Inkludera "
 
 # Administration > Share anonymous usage statistics > UsageStatsCountry
-#, fuzzy
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> "
 "system preference."
 msgstr ""
-"<br><strong>NOTERA:</strong> Det här värdet har ingen effekt om <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
-"\">UsageStats</a>-systeminställningen är inställd på \"Nej\" (dela inte)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -5766,7 +5718,6 @@ msgstr ""
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
 "start date option is only effective and shown on the hold form when <a href="
@@ -5776,11 +5727,6 @@ msgid ""
 "op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
 "a> are enabled."
 msgstr ""
-"senaste låntagaren som återlämnade exemplaret. Den här inställningen är "
-"fristående från systeminställningarna <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> och <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -6050,16 +5996,12 @@ msgid "circulation.pref#RenewAccruingItemInOpac# renew"
 msgstr "låna om"
 
 # Circulation > Checkin policy > CalculateFinesOnReturn
-#, fuzzy
 msgid ""
 "circulation.pref#RenewAccruingItemInOpac# the item automatically. If the "
 "system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
 "\"due date\", renewed items may still be overdue."
 msgstr ""
-"<br /><strong>NOTERA:</strong> Den här systeminställningen kräver att <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode"
-"\">FinesMode</a> är inställd på \"Beräkna och debitera.\""
 
 # Circulation > Checkout policy
 msgid ""
@@ -6076,16 +6018,16 @@ msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
 msgstr "låna om"
 
 # Circulation > Checkin policy > CalculateFinesOnReturn
-#, fuzzy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the "
 "system preference <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
 "\"due date\", renewed items may still be overdue."
 msgstr ""
-"<br /><strong>NOTERA:</strong> Den här systeminställningen kräver att <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode"
-"\">FinesMode</a> är inställd på \"Beräkna och debitera.\""
+"exemplaret automatiskt. Om systeminställningen <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase\""
+">RenewalPeriodBase</a> är inställd på \"due date\" kan förnyade exemplar "
+"ändå vara försenade."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6144,15 +6086,11 @@ msgid "circulation.pref#RentalsInNoissuesCharge# Include"
 msgstr "Inkludera "
 
 # Administration > Share anonymous usage statistics > UsageStatsCountry
-#, fuzzy
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
-"<br><strong>NOTERA:</strong> Det här värdet har ingen effekt om <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
-"\">UsageStats</a>-systeminställningen är inställd på \"Nej\" (dela inte)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
@@ -7750,30 +7688,23 @@ msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
 msgstr "Visa "
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# You can define it using the "
 "following patterns: {isbn}, {issn}, {normalized_isbn}.<br/>"
 msgstr ""
-"enhanced_content.pref#CustomCoverImages# För kontrollfält kan du bara "
-"använda {field}, som {001}."
+"Du kan ange det enligt följande: {isbn}, {issn}, {normalized_isbn}.<br/>"
 
 # Enhanced content > Amazon
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images at the "
 "OPAC.<br/>"
 msgstr ""
-"omslagsbilder från Amazon i sökresultat och detaljsidor för exemplar i OPAC."
 
 # Enhanced content > Amazon
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# custom remote URL images in the "
 "staff interface.<br/>"
 msgstr ""
-"omslagsbilder från Amazon i sökresultat och detaljsidor för exemplar i "
-"personalgränssnittet."
 
 # Enhanced content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -7871,16 +7802,15 @@ msgid ""
 msgstr "enhanced_content.pref Lokala omslagsbilder"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
 "used as a prefix."
 msgstr ""
-"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Om en låntagares avgifter "
-"överstiger värdet för <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
+"Om strängen börjar med '/'  kommer värdet <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=staffClientBaseURL\""
+">staffClientBaseURL</a> att användas som prefix."
 
 # Enhanced content > Manual
 #, fuzzy
@@ -7954,11 +7884,13 @@ msgid "enhanced_content.pref#KohaManualLanguage# Turkish"
 msgstr "Turkiska"
 
 # Enhanced Content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"https://www."
 "librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
-msgstr "<221/>Registrera dig<222/> och ange ditt ID nedan."
+msgstr ""
+"enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\""
+"https://www.librarything.com/forlibraries/\">registrera dig</a>, och skriv "
+"sedan in ID nedan."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# Don't show"
@@ -8293,22 +8225,20 @@ msgid "enhanced_content.pref#OverDriveCirculation# cardnumber"
 msgstr "Möjliggör"
 
 # Enhanced content > OverDrive
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# for user access to OverDrive. "
 "<br />"
-msgstr "användarnamn"
+msgstr "för att ge användare tillgång till OverDrive. <br />"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# user name"
 msgstr "användarnamn"
 
 # Enhanced content > OverDrive
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive "
 "circulation history, and circulate items.<br />"
-msgstr "Visa exemplar från bibliotekets OverDrive-katalog #"
+msgstr ""
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -9012,15 +8942,12 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Dumpa inte"
 
 # Patrons > General > AutoApprovePatronProfileSettings
-#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
 "be visible."
 msgstr ""
-"Kräver att <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a> är aktiverat."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9291,7 +9218,6 @@ msgid "opac.pref#AnonSuggestions# Don't allow"
 msgstr "Tillåt inte "
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
 "suggestions. Suggestions are connected to the <a href=\"/cgi-bin/koha/admin/"
@@ -9299,7 +9225,9 @@ msgid ""
 "system preference."
 msgstr ""
 "låntagare som inte är inloggade att lämna inköpsförslag. Förslag är kopplade "
-"till systeminställningen AnonymousPatron"
+"till systeminställningen <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron\""
+">AnonymousPatron</a>."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -9702,9 +9630,8 @@ msgid ""
 msgstr "Vissa denna HTML när inga resultat hittas för en sökning i OPAC:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACOpenURLItemTypes# <br />"
-msgstr "Nej"
+msgstr "<br />"
 
 # OPAC > OpenURL
 msgid ""
@@ -9788,20 +9715,18 @@ msgstr ""
 "op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACReportProblem# <br/>"
-msgstr "Visa"
+msgstr "<br/>"
 
 # Patrons > Notices and notifications > EnhancedMessagingPreferencesOPAC
-#, fuzzy
 msgid ""
 "opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a> enabled."
 msgstr ""
-"<br><strong>NOTERA:</strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EnhancedMessagingPreferences"
-"\">EnhancedMessagingPreferences</a> måste vara aktiverad."
+"<strong>Obs:</strong> Du måste ha <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress\""
+">KohaAdminEmailAddress</a> aktiverad."
 
 # OPAC > Privacy
 #, fuzzy
@@ -10052,16 +9977,16 @@ msgid ""
 msgstr "Fält som ska vara obligatoriska för inköpsförslag från låntagare:"
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
-#, fuzzy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACSuggestionMandatoryFields"
 "\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
-"Om du väljer <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> så måste du ange en giltig e-postadress:"
+"<br />Obs: Gör inte <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACSuggestionMandatoryFields\">OPACSuggestionMandatoryFields</a> till "
+"oönskade/gömda fält "
 
 # OPAC > Policy
 msgid ""
@@ -10131,7 +10056,6 @@ msgid ""
 msgstr "inköpsförslag från andra låntagare i OPAC."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10140,15 +10064,6 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
-"li><li>Ange en URL för en extern specifik stilmall.</li><li>NOTERA: "
-"Systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> måste vara "
-"aktiverad om din egen stilmall använder data i exemplarfälten</li></ul>Om du "
-"har flera stilmallar för olika språk så kommer biten {langcode} att ersättas "
-"med nuvarande gränssnitts språk."
 
 # OPAC > Appearance
 msgid ""
@@ -10157,7 +10072,6 @@ msgid ""
 msgstr "Visa OPAC-information med XSLT-stilmallen:"
 
 # Staff interface > Appearance > XSLTListsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10168,13 +10082,10 @@ msgid ""
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
-"li><li>Ange en URL för en extern specifik stilmall.</li><li>NOTERA: "
-"Systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> måste vara "
-"aktiverad om din egen stilmall använder data i exemplarfälten</li></ul>Om du "
-"har flera stilmallar för olika språk så kommer biten {langcode} att ersättas "
-"med nuvarande gränssnitts språk."
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
+"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
+"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"nuvarande gränssnitts språk."
 
 # OPAC > Appearance
 msgid ""
@@ -11005,18 +10916,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />Can be an absolute URL starting with "
 "<code>http://</code> or"
-msgstr ""
-"opac.pref#OpacFavicon# för OPAC:s favicon. (Detta bör vara en komplett URL, "
-"som börjar med <code>http://</code>.)"
+msgstr "<br />Kan vara en absolut URL som börjar med <code>http://</code> eller"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpenURLImageLocation# <br />Examples:"
-msgstr "enbart bibliotek"
+msgstr "<br />Exempel:"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <code>https://</code> or a relative URL"
@@ -11033,14 +10940,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLText# Text of OpenURL links (or image title if <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a> is defined):"
 msgstr ""
-"Visa följande HTML när <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> är aktiverat:"
+"Text till OpenURL-länkar (eller bildtitel om <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation\""
+">OpenURLImageLocation</a> är definierad):"
 
 # OPAC > Self registration and modification
 #, fuzzy
@@ -11067,16 +10974,16 @@ msgstr ""
 "formuläret för självregistrering:"
 
 # Circulation > Checkin policy > CalculateFinesOnReturn
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs <a "
 "href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
-"<br /><strong>NOTERA:</strong> Den här systeminställningen kräver att <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode"
-"\">FinesMode</a> är inställd på \"Beräkna och debitera.\""
+"<br><strong>NOTERA:</strong> Den här systeminställningen kräver att <a href"
+"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistra"
+"tionDefaultCategory'>PatronSelfRegistrationDefaultCategory</a> är en giltig "
+"låntagarkategorikod."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -11143,11 +11050,12 @@ msgstr ""
 "lösenord och loginformulär efter att en låntagare har självregistrerat."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
-msgstr "som standardkategori för låntagare som registreras via OPAC."
+msgstr ""
+"<br><strong>OBS: Använd inte en vanlig låntagarkategori vid "
+"självregistrering.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -11191,7 +11099,6 @@ msgstr ""
 "existerar i databasen."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -11201,7 +11108,8 @@ msgid ""
 msgstr ""
 "<br><strong>OBS!</strong> Denna systeminställning kräver att följande "
 "cronjobb körs: <code>misc/cronjobs/cleanup_database.pl</code>Be din "
-"systemadministratör att schemalägga det."
+"systemadministratör att schemalägga det. <br>Inga låntagare kommer att "
+"raderas om inställningen är 0 eller tom."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -12068,7 +11976,6 @@ msgid ""
 msgstr ""
 
 # Patrons > Notices and notifications > EnhancedMessagingPreferencesOPAC
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "only applies to courtesy notices. To manage if patrons have also access to "
@@ -12076,21 +11983,22 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferencesOPAC"
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
-"<br><strong>NOTERA:</strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EnhancedMessagingPreferences"
-"\">EnhancedMessagingPreferences</a> måste vara aktiverad."
+"<br><strong>OBS:</strong> <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"EnhancedMessagingPreferencesOPAC\">EnhancedMessagingPreferencesOPAC</a> "
+"måste vara aktiverad."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This "
 "system preference requires the <code>misc/cronjobs/process_message_queue.pl</"
 "code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask "
 "your system administrator to schedule them."
 msgstr ""
-"<br><strong>NOTERA:</strong> Den här systeminställningen kräver cronjobbet "
-"<code>misc/cronjobs/share_usage_with_koha_community.pl</code>. Be din "
-"systemadministratör att schemalägga det."
+"<br><strong>OBS:</strong> Den här systeminställningen kräver cronjobben "
+"<code>misc/cronjobs/process_message_queue.pl</code> och "
+"<code>misc/cronjobs/advance_notices.pl</code>. Be din systemadministratör "
+"att schemalägga dem."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
@@ -12121,11 +12029,11 @@ msgstr ""
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
-msgstr "patrons.pref#EnhancedMessagingPreferences# Tillåt inte"
+msgstr "Visa inte"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Show"
-msgstr "patrons.pref#EnhancedMessagingPreferences# Tillåt"
+msgstr "Visa"
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12346,7 +12254,6 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff interface."
 msgstr "resultat per sida i personalklienten."
 
 # Patrons > Notices and notifications > TalkingTechItivaPhoneNotification
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# <br/><i class=\"fa fa-exclamation-triangle"
 "\"></i> If <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -12355,11 +12262,12 @@ msgid ""
 "op=search&searchfield=TalkingTechItivaPhoneNotification"
 "\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Om <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
-"\">TalkingTechItivaPhoneNotification</a> är aktiverad, bör <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification"
-"\">PhoneNotification</a> vara inaktiverad."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Om <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification\""
+">PhoneNotification</a> är aktiverad, bör <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"TalkingTechItivaPhoneNotification\">TalkingTechItivaPhoneNotification</a> "
+"vara inaktiverad."
 
 # Patrons > Notices and notifications
 #, fuzzy
@@ -13178,15 +13086,14 @@ msgid "searching.pref#FacetOrder# for each category."
 msgstr "för varje kategori."
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
-"searching.pref#IncludeSeeFromInSearches# <i>se från</i> rubriker (ej "
-"föredraget format) i bibliografiska sökningar. Obs! du måste indexera om den "
-"bibliografiska databasen när denna inställning ändras."
+"<em>se från</em> rubriker (ej föredraget format) i bibliografiska sökningar. "
+"Obs! Du måste indexera om den bibliografiska databasen när denna inställning "
+"ändras."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -14202,7 +14109,6 @@ msgid ""
 msgstr "WYSIWYG-redigerare vid redigering av vissa HTML-systeminställningar."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14213,14 +14119,11 @@ msgid ""
 "language."
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
-"li><li>Ange en URL för en extern specifik stilmall.</li><li>NOTERA: "
-"Systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> måste vara "
-"aktiverad om din egen stilmall använder data i exemplarfälten</li></ul>Om du "
-"har flera stilmallar för olika språk så kommer biten {langcode} att ersättas "
-"med nuvarande gränssnitts språk."
+"syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
+"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
+"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"nuvarande gränssnitts språk."
 
 # Staff interface > Appearance
 msgid ""
@@ -14229,7 +14132,6 @@ msgid ""
 msgstr "Visa detaljer i personalklienten med XSLT-stilmallen: "
 
 # Staff interface > Appearance > XSLTListsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14240,13 +14142,10 @@ msgid ""
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
-"li><li>Ange en URL för en extern specifik stilmall.</li><li>NOTERA: "
-"Systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> måste vara "
-"aktiverad om din egen stilmall använder data i exemplarfälten</li></ul>Om du "
-"har flera stilmallar för olika språk så kommer biten {langcode} att ersättas "
-"med nuvarande gränssnitts språk."
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
+"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
+"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"nuvarande gränssnitts språk."
 
 # Staff interface > Appearance
 msgid ""
@@ -14859,11 +14758,12 @@ msgid ""
 msgstr ""
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/"
 "OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
-msgstr "<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
+msgstr ""
+"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\""
+">Riktlinjer för implementering</a>. "
 
 # Web services > OAI-PMH
 #, fuzzy
