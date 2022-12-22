@@ -37,7 +37,7 @@ number of days.
 
 =head1 SYNOPSIS
 
- cancel_unfilled_holds.pl [--days][--library][--holidays][--confirm][--verbose]
+ cancel_unfilled_holds.pl [--days][--library][--holidays][--confirm][--verbose][--reason]
 
 =head1 OPTIONS
 
@@ -69,6 +69,10 @@ would have done if it were not running in test mode.
 
 More verbose output.
 
+=item B<--reason>
+
+Optionally adds a reason for cancellation (which will trigger a notice to be sent to the patron)
+
 =back
 
 =cut
@@ -79,6 +83,7 @@ my @branchcodes;
 my $use_calendar = 0;
 my $verbose      = 0;
 my $confirm      = 0;
+my $reason;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -89,6 +94,7 @@ GetOptions(
     'holidays'   => \$use_calendar,
     'v|verbose'  => \$verbose,
     'confirm'    => \$confirm,
+    'reason=s' => \$reason
 ) or pod2usage(1);
 pod2usage(1) if $help;
 
@@ -110,6 +116,9 @@ $verbose and warn "Looking for unfilled holds placed $days or more days ago\n";
 
 @branchcodes = Koha::Libraries->search->get_column('branchcode') if !@branchcodes;
 $verbose and warn "Running for branch(es): " . join( "|", @branchcodes ) . "\n";
+
+my $cancellation_params = {};
+$cancellation_params->{cancellation_reason} = $reason if $reason;
 
 foreach my $branch (@branchcodes) {
 
@@ -135,7 +144,7 @@ foreach my $branch (@branchcodes) {
               . $hold->borrowernumber
               . " on biblio: "
               . $hold->biblionumber . "\n";
-            $hold->cancel if $confirm;
+            $hold->cancel( $cancellation_params ) if $confirm;
         }
 
     }
