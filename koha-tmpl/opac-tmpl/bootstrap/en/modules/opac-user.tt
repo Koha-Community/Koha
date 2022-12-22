@@ -351,6 +351,7 @@
                                                         <th class="hidden">Checkout note</th>
                                                         <th id="checkout-notes" class="nosort noExport" title="Use this to report any problems with your currently checked out items">Report a problem</th>
                                                     [% END %]
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -545,6 +546,7 @@
                                                             <input type="hidden" id="note_[% ISSUE.issue_id | html %]" name="note" value="[% ISSUE.note | html %]" data-origvalue="[% ISSUE.note | html %]" />
                                                         </td>
                                                     [% END %]
+                                                    <td></td>
                                                     </tr>
                                                 [% END # /FOREACH ISSUES %]
                                             </tbody>
@@ -673,6 +675,7 @@
                                                 <th>Barcode</th>
                                                 <th>Call number</th>
                                                 <th class="psort">Relative</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
 
@@ -701,6 +704,7 @@
                                                         <td>
                                                             [% r.firstname | html %] [% r.surname | html %]
                                                         </td>
+                                                        <td></td>
                                                     </tr>
                                                 [% END %]
                                             [% END %]
@@ -728,6 +732,7 @@
                                                 [% IF ( OPACFinesTab ) %]
                                                     <th>Fines</th>
                                                 [% END %]
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -825,6 +830,7 @@
                                                             [% END %]
                                                         </td>
                                                     [% END %]
+                                                    <td></td>
                                                 </tr>
                                             [% END %]
                                         </tbody>
@@ -1208,7 +1214,17 @@
                         "searchPlaceholder": _("Search")
                     },
                     "autoWidth": false,
-                    "responsive": true,
+                    "responsive": {
+                        details: {
+                            type: 'column',
+                            target: -1
+                        }
+                    },
+                    "columnDefs": [ {
+                        className: 'dtr-control',
+                        orderable: false,
+                        targets:   -1
+                    } ],
                     buttons: [
                         /* Override default button set so that we can extend the options of print and csv */
                         'clearFilter', 'copy',

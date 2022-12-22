@@ -1225,6 +1225,7 @@
                 [% IF ( ShowCourseReservesHeader ) %]
                     <th id="item_coursereserves" data-colname="item_coursereserves">Course reserves</th>
                 [% END %]
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -1423,6 +1424,7 @@
                         [% END %]
                     </td>
                 [% END  # /IF ShowCourseReservesHeader %]
+                <td></td>
                 </tr>
             [% END %]
         </tbody>
@@ -1743,7 +1745,17 @@
                     ],
                 "bKohaColumnsUseNames": true,
                 "autoWidth": false,
-                "responsive": true
+                "responsive": {
+                    "details": {
+                        "type": 'column',
+                        "target": -1
+                    }
+                },
+                aoColumnDefs: [ {
+                    className:"dtr-control",
+                    orderable: false,
+                    targets:   [-1],
+                } ],
             }, columns_settings);
 
             KohaTable("#otherholdingst", {
