@@ -78,6 +78,7 @@
                                                     <th>Date</th>
                                                     <th>Search</th>
                                                     <th>Results</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -98,6 +99,7 @@
                                                             <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a>
                                                         </td>
                                                         <td>[% s.total | html %]</td>
+                                                        <td></td>
                                                     </tr>
                                                 [% END %]
                                             </tbody>
@@ -123,6 +125,7 @@
                                                     <th>Date</th>
                                                     <th>Search</th>
                                                     <th>Results</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -145,6 +148,7 @@
                                                         </a>
                                                     </td>
                                                     <td>[% s.total | html %]</td>
+                                                    <td></td>
                                                 </tr>
                                             [% END %]
                                             </tbody>
@@ -176,6 +180,7 @@
                                                         <th>Date</th>
                                                         <th>Search</th>
                                                         <th>Results</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -191,6 +196,7 @@
                                                             </td>
                                                             <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                             <td>[% s.total | html %]</td>
+                                                            <td></td>
                                                         </tr>
                                                     [% END %]
                                                 </tbody>
@@ -215,6 +221,7 @@
                                                         <th>Date</th>
                                                         <th>Search</th>
                                                         <th>Results</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -230,6 +237,7 @@
                                                             </td>
                                                             <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                             <td>[% s.total | html %]</td>
+                                                            <td></td>
                                                         </tr>
                                                     [% END %]
                                                 </tbody>
@@ -280,14 +288,20 @@
             "order": [[ 1, "desc" ]],
             "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
             "columnDefs": [
-                { "targets": [ 0 ], "sortable": false, "searchable": false }
+                { "targets": [ 0 ], "sortable": false, "searchable": false },
+                {"className": 'dtr-control',"orderable": false,"targets":   -1}
             ],
             "language": {
                 "search": "_INPUT_",
                 "searchPlaceholder": _("Search")
             },
             "autoWidth": false,
-            "responsive": true,
+            "responsive": {
+                details: {
+                    type: 'column',
+                    target: -1
+                }
+            },
         }));
 
         $(".CheckNone").click(function(e){
