@@ -213,7 +213,7 @@
     [% END %]
     <script>
         let categories = [% To.json(categories) | $raw %].map(e => {
-            e['_id'] = e.categorycode;
+            e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
             return e;
         });
@@ -554,7 +554,7 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return escape_str(categories_map[data].description);
+                                    return escape_str(categories_map[data.toLowerCase()].description);
                                 }
                             }
                             [% CASE 'dateexpiry' %]
