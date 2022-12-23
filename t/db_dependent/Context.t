@@ -53,7 +53,8 @@ $dbh->rollback;
 ok($koha = C4::Context->new,  'C4::Context->new');
 my @keys = keys %$koha;
 my $width = 0;
-if (ok(@keys)) { 
+ok( @keys, 'Expecting entries in context hash' );
+if( @keys ) {
     $width = (sort {$a <=> $b} map {length} @keys)[-1];
     $debug and diag "widest key is $width";
 }
@@ -66,7 +67,6 @@ foreach (sort @keys) {
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
 # Testing syspref caching
-use Test::DBIx::Class;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->debug(1);
