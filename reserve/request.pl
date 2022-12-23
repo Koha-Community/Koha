@@ -503,13 +503,21 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         $default_pickup_branch = C4::Context->userenv->{branch};
                     }
 
-                    if (
-                           !$item->{cantreserve}
-                        && !$exceeded_maxreserves
-                        && $can_item_be_reserved eq 'OK'
-                        # items_any_available defined outside of the current loop,
-                        # so we avoiding loop inside IsAvailableForItemLevelRequest:
-                        && IsAvailableForItemLevelRequest($item_object, $patron, undef, $items_any_available)
+                    if ( $can_item_be_reserved eq 'itemAlreadyOnHold' ) {
+                        # itemAlreadyOnHold cannot be overridden
+                        $num_alreadyheld++
+                    }
+                    elsif (
+                        (
+                               !$item->{cantreserve}
+                            && !$exceeded_maxreserves
+                            && $can_item_be_reserved eq 'OK'
+                            # items_any_available defined outside of the current loop,
+                            # so we avoiding loop inside IsAvailableForItemLevelRequest:
+                            && IsAvailableForItemLevelRequest($item_object, $patron, undef, $items_any_available)
+                        ) || C4::Context->preference('AllowHoldPolicyOverride')
+                             # If AllowHoldPolicyOverride is set, it overrides EVERY restriction
+                             # not just branch item rules
                       )
                     {
                         # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
@@ -522,36 +530,16 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             my $default_pickup_location = $pickup_locations->search({ branchcode => $default_pickup_branch })->next;
                             $item->{default_pickup_location} = $default_pickup_location;
                         }
+                        elsif ( C4::Context->preference('AllowHoldPolicyOverride') ){
+                             $num_items_available++;
+                             $item->{override} = 1;
+                            my $default_pickup_location = $pickup_locations->search({ branchcode => $default_pickup_branch })->next;
+                            $item->{default_pickup_location} = $default_pickup_location;
+                        }
                         else {
                             $item->{available} = 0;
                             $item->{not_holdable} = "no_valid_pickup_location";
                         }
-
-                        push( @available_itemtypes, $item->{itype} );
-                    }
-                    elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
-                        # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-                        # with the exception of itemAlreadyOnHold because, you know, the item is already on hold
-                        if ( $can_item_be_reserved ne 'itemAlreadyOnHold' ) {
-                            # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
-                            my @pickup_locations = $item_object->pickup_locations({ patron => $patron })->as_list;
-                            $item->{pickup_locations_count} = scalar @pickup_locations;
-
-                            if ( @pickup_locations ) {
-                                $num_items_available++;
-                                $item->{override} = 1;
-
-                                my $default_pickup_location;
-
-                                ($default_pickup_location) = grep { $_->branchcode eq $default_pickup_branch } @pickup_locations;
-
-                                $item->{default_pickup_location} = $default_pickup_location;
-                            }
-                            else {
-                                $item->{available} = 0;
-                                $item->{not_holdable} = "no_valid_pickup_location";
-                            }
-                        } else { $num_alreadyheld++ }
 
                         push( @available_itemtypes, $item->{itype} );
                     } else {

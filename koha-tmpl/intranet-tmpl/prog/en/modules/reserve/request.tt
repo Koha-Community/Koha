@@ -679,7 +679,7 @@
                                                     [% END # /IF force_hold_level %]
                                                 </td>
                                                 <td>
-                                                [% IF (itemloo.pickup_locations_count > 0) %]
+                                                [% IF (itemloo.pickup_locations_count > 0) || itemloo.override %]
                                                     <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations" style="width:100%;"
                                                             data-item-id="[% itemloo.itemnumber | html %]"
                                                             data-patron-id="[% patron.borrowernumber | html %]"
@@ -1385,7 +1385,7 @@
                     msg = (_("- Please select an item to place a hold") + "\n");
                 }
             } else {
-                if( $("#pickup").length < 1 || $("#pickup").val() == "" ){
+                if( $("#pickup").length < 1 || $("#pickup").val() == "" || $('#pickup').val() === null ){
                     msg = _("- Please select a pickup location for this hold" + "\n");
                 }
             }
