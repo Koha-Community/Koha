@@ -281,7 +281,8 @@ a.add, a.delete {
                                     <td>
                                     <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
                                     <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
-                                    [% mapping.search_field_label | html %]
+                                    [% mapping.search_field_name | html %]
+                                    [% IF mapping.search_field_label != mapping.search_field_name %] ([% mapping.search_field_label | html %])[% END %]
                                     </td>
                                     <td>
                                     [% IF mapping.sort == 0 %]
@@ -309,7 +310,8 @@ a.add, a.delete {
                                     <td>
                                     <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
                                     <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
-                                    [% mapping.search_field_label | html %]
+                                    [% mapping.search_field_name | html %]
+                                    [% IF mapping.search_field_label != mapping.search_field_name %] ([% mapping.search_field_label | html %])[% END %]
                                     </td>
                                     <td>
                                     <select name="mapping_sort">
@@ -378,7 +380,7 @@ a.add, a.delete {
                                 <input data-id="mapping_index_name" type="hidden" value="[% index.index_name | html %]" />
                                 <select data-id="mapping_search_field_name">
                                 [% FOREACH f IN all_search_fields %]
-                                <option value="[% f.name | html %]">[% f.name | html %]</option>
+                                <option value="[% f.name | html %]">[% f.name | html %][% IF f.label != f.name %] ([% f.label | html %])[% END %]</option>
                                 [% END %]
                                 </select>
                             </td>
