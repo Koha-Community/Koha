@@ -13,20 +13,19 @@ function patron_autocomplete(node, options) {
             on_select_callback = options['on-select-callback'];
         }
     }
-    const search_fields = ['me.surname', 'me.firstname', 'me.cardnumber'];
     return node.autocomplete({
         source: function( request, response ) {
             let subquery_and = [];
             request.term.split(/[\s,]+/)
                 .filter(function(s){ return s.length })
                 .forEach(function(pattern,i){
-                    subquery_and.push(
-                        [
-                            {'me.surname':    {'like': '%' + pattern + '%'}},
-                            {'me.firstname':  {'like': '%' + pattern + '%'}},
-                            {'me.cardnumber': {'like': pattern + '%'}},
-                        ]
-                    );
+                    let subquery_or = [];
+                    defaultPatronSearchFields.split(',').forEach(function(field,i){
+                        subquery_or.push(
+                            {["me."+field]: {'like': '%' + pattern + '%'}}
+                        );
+                    });
+                    subquery_and.push(subquery_or);
                 });
             let q = {"-and": subquery_and};
             let params = {
