@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Biblios;
 use Koha::Ratings;
 use Koha::RecordProcessor;
-use C4::Biblio qw( DelBiblio AddBiblio );
+use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
 use C4::Search qw( FindDuplicate );
 
 use List::MoreUtils qw( any );
@@ -541,4 +541,60 @@ sub add {
     };
 }
 
+=head3 update
+
+Controller function that handles modifying an biblio object
+
+=cut
+
+sub update {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblionumber = $c->validation->param('biblio_id');
+    my $biblio = Koha::Biblios->find( $biblionumber );
+
+    if ( not defined $biblio ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Object not found" }
+        );
+    }
+
+    try {
+        my $body = $c->validation->param('Body');
+
+        my $flavour = $c->validation->param('x-marc-schema');
+        $flavour = C4::Context->preference('marcflavour') unless $flavour;
+
+        my $record;
+        my $frameworkcode = $c->validation->param('x-framework-id') || $biblio->frameworkcode;
+        if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $body );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $body );
+        } else {
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/json",
+                    "application/marcxml+xml",
+                    "application/marc-in-json",
+                    "application/marc"
+                ]
+            );
+        }
+
+        ModBiblio( $record, $biblionumber, $frameworkcode );
+
+        $c->render(
+            status  => 200,
+            openapi => { id => $biblionumber }
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
 1;
