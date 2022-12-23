@@ -71,6 +71,7 @@
 [% IF ( PatronAutoComplete ) %]
     <script>
     // PatronAutoComplete
+    var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
     var singleBranchMode = '[% singleBranchMode | html %]';
     var loggedInClass = "";
