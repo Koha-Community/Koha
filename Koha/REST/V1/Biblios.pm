@@ -22,7 +22,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Biblios;
 use Koha::Ratings;
 use Koha::RecordProcessor;
-use C4::Biblio qw( DelBiblio );
+use C4::Biblio qw( DelBiblio AddBiblio );
+use C4::Search qw( FindDuplicate );
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -473,6 +474,66 @@ sub set_rating {
                 average => $average,
                 count   => $ratings->count
             },
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 add
+
+Controller function that handles creating a biblio object
+
+=cut
+
+sub add {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $body = $c->validation->param('Body');
+
+        my $flavour = $c->validation->param('x-marc-schema');
+        $flavour = C4::Context->preference('marcflavour') unless $flavour;
+
+        my $record;
+
+        my $frameworkcode = $c->validation->param('x-framework-id');
+        if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $body );
+        } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $body );
+        } else {
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/marcxml+xml",
+                    "application/marc-in-json",
+                    "application/marc"
+                ]
+            );
+        }
+
+        my ( $duplicatebiblionumber, $duplicatetitle );
+            ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
+
+        my $confirm_not_duplicate = $c->validation->param('x-confirm-not-duplicate');
+
+        return $c->render(
+            status  => 400,
+            openapi => {
+                error => "Duplicate biblio $duplicatebiblionumber"
+            }
+        ) unless !$duplicatebiblionumber || $confirm_not_duplicate;
+
+        my ( $biblionumber, $oldbibitemnum );
+            ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
+
+        $c->render(
+            status  => 200,
+            openapi => { id => $biblionumber }
         );
     }
     catch {
