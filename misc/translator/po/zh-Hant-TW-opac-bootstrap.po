@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-12 12:10-0300\n"
+"POT-Creation-Date: 2022-12-15 22:35-0300\n"
 "PO-Revision-Date: 2022-11-15 09:18+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -42,7 +42,7 @@ msgstr "%s %s %s %s 您要求此期刊到館後，以 E-Mail 通報 "
 #. %2$s:  END 
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:451
 #, c-format
 msgid "%s %s %s %s by "
 msgstr "%s %s %s %s by "
@@ -281,7 +281,7 @@ msgstr "%s %s 一件類似的文獻已存在: "
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:127
 #, c-format
 msgid "%s %s Did you mean: "
 msgstr "%s %s 您是不是要查： "
@@ -658,7 +658,7 @@ msgstr "%s 借出, 還入,或續借館藏: %s 借出或或續借館藏：%s "
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:536
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:528
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -754,7 +754,7 @@ msgid "%s If you have any questions, please contact the "
 msgstr "%s 若有任何問題，請洽 "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:552
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s 網際網路使用者的批評"
@@ -912,7 +912,7 @@ msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s 待決 %s 處理 %s 完成 %s 取消 %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:563
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s 專業的批評"
@@ -931,7 +931,7 @@ msgid ""
 msgstr "%s 採訪建議 %s %s 您的採訪建議 %s 採訪建議%s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:569
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "%s Quotations"
 msgstr "%s 引句"
@@ -1060,7 +1060,7 @@ msgid "%s This record has no items. %s "
 msgstr "%s 此書目記錄沒有館藏紀錄。%s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:566
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:558
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s 片斷影片"
@@ -1820,86 +1820,75 @@ msgid ""
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
-"&lt;category_type&gt;A&lt;/category_type&gt; "
-"&lt;categorycode&gt;ADUEXT&lt;/categorycode&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;lost&gt;0&lt;/lost&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;amountoutstanding&gt;6&lt;/amountoutstanding&gt; &lt;description&gt;"
-"Adulte extérieur&lt;/description&gt; &lt;title&gt;M&lt;/title&gt; "
-"&lt;enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; "
-"&lt;charges&gt;6.00&lt;/charges&gt; "
-"&lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; "
-"&lt;borrowernotes&gt;&lt;/borrowernotes&gt; "
-"&lt;dateexpiry&gt;2010-03-04&lt;/dateexpiry&gt; "
-"&lt;is_expired&gt;0&lt;/is_expired&gt; &lt;firstname&gt;Jean-"
-"André&lt;/firstname&gt; &lt;gonenoaddress&gt;0&lt;/gonenoaddress&gt; "
-"&lt;dateofbirth&gt;1984-06-08&lt;/dateofbirth&gt; "
-"&lt;debarred&gt;0&lt;/debarred&gt; &lt;branchname&gt;Bibliothèque Jean "
-"Prunier&lt;/branchname&gt; &lt;surname&gt;SANTONI&lt;/surname&gt; "
-"&lt;cardnumber&gt;815&lt;/cardnumber&gt; &lt;initials&gt;JAS&lt;/initials&gt;"
-" &lt;sort1&gt;CSP5&lt;/sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;loans&gt; "
-"&lt;loan&gt; &lt;lastreneweddate&gt;2009-04-03&lt;/lastreneweddate&gt; "
-"&lt;isbn&gt;2253003689&lt;/isbn&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;itemnumber&gt;4454&lt;/itemnumber&gt; "
-"&lt;date_due&gt;2009-05-06&lt;/date_due&gt; "
-"&lt;barcode&gt;4765476&lt;/barcode&gt; "
-"&lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; "
-"&lt;issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au "
-"trésor&lt;/title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;"
-"Robert Louis Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 "
-"14:46:10&lt;/timestamp&gt; &lt;publishercode&gt;Librairie générale "
-"française&lt;/publishercode&gt; "
-"&lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; "
-"&lt;totalrenewals&gt;11&lt;/totalrenewals&gt; "
-"&lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; "
-"&lt;onloan&gt;2008-09-17&lt;/onloan&gt; "
-"&lt;biblioitemnumber&gt;4483&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; "
-"&lt;replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; "
-"&lt;itemcallnumber&gt;RO STE&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
-"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;publicationyear&gt;1985&lt;/publicationyear&gt; "
-"&lt;issues&gt;1&lt;/issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; "
-"&lt;biblionumber&gt;4483&lt;/biblionumber&gt; "
-"&lt;renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;RO_STE&lt;/cn_sort&gt; "
-"&lt;frameworkcode&gt;&lt;/frameworkcode&gt; "
-"&lt;datelastborrowed&gt;2008-08-23&lt;/datelastborrowed&gt; &lt;/loan&gt; "
-"&lt;loan&gt; &lt;lastreneweddate&gt;2009-03-17&lt;/lastreneweddate&gt; "
-"&lt;isbn&gt;9782700017823&lt;/isbn&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;itemnumber&gt;4456&lt;/itemnumber&gt; "
-"&lt;date_due&gt;2009-04-18&lt;/date_due&gt; "
-"&lt;barcode&gt;2700017UUU&lt;/barcode&gt; "
-"&lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; "
-"&lt;issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;La guitare en 10 "
+"&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
+"categorycode&gt; &lt;borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;"
+"lost&gt;0&lt;/lost&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"amountoutstanding&gt;6&lt;/amountoutstanding&gt; &lt;description&gt;Adulte "
+"extérieur&lt;/description&gt; &lt;title&gt;M&lt;/title&gt; &lt;"
+"enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; &lt;charges&gt;6.00&lt;/"
+"charges&gt; &lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; &lt;"
+"borrowernotes&gt;&lt;/borrowernotes&gt; &lt;dateexpiry&gt;2010-03-04&lt;/"
+"dateexpiry&gt; &lt;is_expired&gt;0&lt;/is_expired&gt; &lt;firstname&gt;Jean-"
+"André&lt;/firstname&gt; &lt;gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;"
+"dateofbirth&gt;1984-06-08&lt;/dateofbirth&gt; &lt;debarred&gt;0&lt;/"
+"debarred&gt; &lt;branchname&gt;Bibliothèque Jean Prunier&lt;/branchname&gt; "
+"&lt;surname&gt;SANTONI&lt;/surname&gt; &lt;cardnumber&gt;815&lt;/"
+"cardnumber&gt; &lt;initials&gt;JAS&lt;/initials&gt; &lt;sort1&gt;CSP5&lt;/"
+"sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;loans&gt; &lt;loan&gt; &lt;"
+"lastreneweddate&gt;2009-04-03&lt;/lastreneweddate&gt; &lt;"
+"isbn&gt;2253003689&lt;/isbn&gt; &lt;borrowernumber&gt;419&lt;/"
+"borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"itemnumber&gt;4454&lt;/itemnumber&gt; &lt;date_due&gt;2009-05-06&lt;/"
+"date_due&gt; &lt;barcode&gt;4765476&lt;/barcode&gt; &lt;"
+"datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au trésor&lt;/"
+"title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Robert Louis "
+"Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 14:46:10&lt;/"
+"timestamp&gt; &lt;publishercode&gt;Librairie générale française&lt;/"
+"publishercode&gt; &lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; &lt;"
+"totalrenewals&gt;11&lt;/totalrenewals&gt; &lt;"
+"dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; &lt;"
+"onloan&gt;2008-09-17&lt;/onloan&gt; &lt;biblioitemnumber&gt;4483&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
+"itemcallnumber&gt;RO STE&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
+"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"publicationyear&gt;1985&lt;/publicationyear&gt; &lt;issues&gt;1&lt;/"
+"issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;holdingbranch&gt;"
+"BIB&lt;/holdingbranch&gt; &lt;biblionumber&gt;4483&lt;/biblionumber&gt; &lt;"
+"renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;"
+"cn_sort&gt;RO_STE&lt;/cn_sort&gt; &lt;frameworkcode&gt;&lt;/"
+"frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
+"datelastborrowed&gt; &lt;/loan&gt; &lt;loan&gt; &lt;"
+"lastreneweddate&gt;2009-03-17&lt;/lastreneweddate&gt; &lt;"
+"isbn&gt;9782700017823&lt;/isbn&gt; &lt;borrowernumber&gt;419&lt;/"
+"borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"itemnumber&gt;4456&lt;/itemnumber&gt; &lt;date_due&gt;2009-04-18&lt;/"
+"date_due&gt; &lt;barcode&gt;2700017UUU&lt;/barcode&gt; &lt;"
+"datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;La guitare en 10 "
 "leçons&lt;/title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Jon "
 "Buck&lt;/author&gt; &lt;timestamp&gt;2009-03-17 16:48:14&lt;/timestamp&gt; "
-"&lt;publishercode&gt;Gründ&lt;/publishercode&gt; "
-"&lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; "
-"&lt;totalrenewals&gt;6&lt;/totalrenewals&gt; "
-"&lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; &lt;notes&gt;La "
-"couv. porte en plus : \"un guide simple et facile pour apprendre la guitare\""
-" | Glossaire. Index&lt;/notes&gt; &lt;onloan&gt;2008-09-25&lt;/onloan&gt; "
-"&lt;biblioitemnumber&gt;4486&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; "
-"&lt;replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; "
-"&lt;itemcallnumber&gt;787.87 BUC&lt;/itemcallnumber&gt; &lt;location&gt;"
-"Salle de lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;publicationyear&gt;2007&lt;/publicationyear&gt; "
-"&lt;issues&gt;1&lt;/issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; "
-"&lt;biblionumber&gt;4486&lt;/biblionumber&gt; "
-"&lt;renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;78787_BUC&lt;/cn_sort&gt; &lt;volume&gt;une méthode simple et "
-"facile pour apprendre la guitare&lt;/volume&gt; "
-"&lt;frameworkcode&gt;&lt;/frameworkcode&gt; "
-"&lt;datelastborrowed&gt;2008-08-23&lt;/datelastborrowed&gt; &lt;/loan&gt; "
-"&lt;/loans&gt; &lt;/GetPatronInfo&gt; "
+"&lt;publishercode&gt;Gründ&lt;/publishercode&gt; &lt;"
+"datecreated&gt;2008-08-23&lt;/datecreated&gt; &lt;totalrenewals&gt;6&lt;/"
+"totalrenewals&gt; &lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; "
+"&lt;notes&gt;La couv. porte en plus : \"un guide simple et facile pour "
+"apprendre la guitare\" | Glossaire. Index&lt;/notes&gt; &lt;"
+"onloan&gt;2008-09-25&lt;/onloan&gt; &lt;biblioitemnumber&gt;4486&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
+"itemcallnumber&gt;787.87 BUC&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
+"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"publicationyear&gt;2007&lt;/publicationyear&gt; &lt;issues&gt;1&lt;/"
+"issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;holdingbranch&gt;"
+"BIB&lt;/holdingbranch&gt; &lt;biblionumber&gt;4486&lt;/biblionumber&gt; &lt;"
+"renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;"
+"cn_sort&gt;78787_BUC&lt;/cn_sort&gt; &lt;volume&gt;une méthode simple et "
+"facile pour apprendre la guitare&lt;/volume&gt; &lt;frameworkcode&gt;&lt;/"
+"frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
+"datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt; "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:666
 #, c-format
@@ -2278,7 +2267,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:549
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (依 %s 比率)"
@@ -2354,7 +2343,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 題名描述"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:634
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:626
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s 投票)"
@@ -2599,7 +2588,7 @@ msgid "(Voided)"
 msgstr "(無效)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:294
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:286
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
 #, c-format
 msgid "(done)"
@@ -2611,7 +2600,7 @@ msgid "(filtered from _MAX_ total entries)"
 msgstr "(篩選自 _MAX_ total 款目)"
 
 #. %1$s:  SEARCH_RESULT.timestamp | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:477
 #, c-format
 msgid "(modified on %s)"
 msgstr "(在 %s修改)"
@@ -2652,7 +2641,7 @@ msgstr "(相關搜尋：%s%s%s)"
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:128
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:120
 #, c-format
 msgid "(related searches:%s %s%s)."
 msgstr "(相關搜尋：%s %s%s)."
@@ -2886,7 +2875,7 @@ msgstr "採訪時間：最舊到最新"
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:385
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:293
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:285
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
 msgid "Add"
@@ -2954,7 +2943,7 @@ msgstr "新增到您的書目清單"
 msgid "Add to your list &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "增加到您的虛擬書架 &rsaquo; %s%s%sKoha 線上%s 目錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:230
 #, c-format
 msgid "Add to..."
 msgstr "新增至..."
@@ -2998,7 +2987,7 @@ msgid "Adlibris cover image"
 msgstr "Adlibris 封面"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:359
 msgid "Adlibris thumbnail for ISBN: %s"
 msgstr "Adlibris 的 ISBN 小圖：%s"
 
@@ -3541,7 +3530,7 @@ msgstr "可取得"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:502
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:494
 #, c-format
 msgid "Availability:"
 msgstr "可取得："
@@ -3961,7 +3950,7 @@ msgstr "讀者證號應為 %s 字元。"
 msgid "Card number:"
 msgstr "讀者證號碼："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:232
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:32
 #, c-format
 msgid "Cart"
@@ -4190,7 +4179,7 @@ msgid "Clear"
 msgstr "清除"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:219
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:249
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:339
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:491
@@ -4619,8 +4608,8 @@ msgstr "課程 &rsaquo; %s%s%sKoha 線上%s 目錄"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:437
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:439
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:431
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:478
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:302
@@ -4808,7 +4797,7 @@ msgstr "收到日期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:93
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:496
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:488
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:85
 #, c-format
 msgid "Date:"
@@ -5366,7 +5355,7 @@ msgstr "錯誤！您的標籤為標記語法。未增加。請以純文字再試
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:36
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:62
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:149
 #, c-format
 msgid "Error:"
 msgstr "錯誤："
@@ -5834,7 +5823,7 @@ msgstr "給定書目或館藏辨識碼，送回可使用的館藏清單。"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:324
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:282
@@ -5984,7 +5973,7 @@ msgstr "隱藏不可預約的館藏"
 msgid "Hide window"
 msgstr "隱藏視窗"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:209
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
 #, c-format
 msgid "Highlight"
@@ -6483,7 +6472,7 @@ msgstr "教師："
 msgid "Interlibrary loan item availability"
 msgstr "館際互借可用性"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:675
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:667
 #, c-format
 msgid "Interlibrary loan request"
 msgstr "館際互借請求"
@@ -6670,7 +6659,7 @@ msgstr "館藏撤銷"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:504
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:496
 #, c-format
 msgid "Items available:"
 msgstr "可借的館藏："
@@ -6909,8 +6898,8 @@ msgstr "所有欄位"
 
 #. For the first occurrence,
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:196
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:188
 #, c-format
 msgid "Library default: %s"
 msgstr "預設圖書館：%s"
@@ -7006,7 +6995,7 @@ msgstr "虛擬書架"
 msgid "Lists "
 msgstr "虛擬書架 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:594
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:586
 #, c-format
 msgid "Lists:"
 msgstr "虛擬書架："
@@ -7291,13 +7280,13 @@ msgstr "MARCXML"
 msgid "Main address"
 msgstr "主要地址"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:669
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:671
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:661
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:663
 #, c-format
 msgid "Make a "
 msgstr "做一個 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:675
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:667
 #, c-format
 msgid "Make an "
 msgstr "做一個 "
@@ -7342,7 +7331,7 @@ msgstr "三月"
 msgid "March"
 msgstr "三月"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:600
 #, c-format
 msgid "Match:"
 msgstr "對應："
@@ -7575,7 +7564,7 @@ msgid "New tag(s), separated by a comma:"
 msgstr "新標籤，以逗點區隔："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:291
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:283
 #, c-format
 msgid "New tag:"
 msgstr "新標籤"
@@ -7667,13 +7656,13 @@ msgstr "無借出"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:125
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:383
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:392
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:400
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:408
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:417
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:411
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:432
@@ -7723,7 +7712,7 @@ msgstr "可被預約"
 msgid "No items available."
 msgstr "無可借的館藏。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:532
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:524
 #, c-format
 msgid "No items available:"
 msgstr "無可借的館藏："
@@ -7908,7 +7897,7 @@ msgstr "基本檢視"
 msgid "Not checked in %s"
 msgstr "未借出於 %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:664
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:656
 #, c-format
 msgid "Not finding what you're looking for? "
 msgstr "找不到您要的嗎? "
@@ -7937,7 +7926,7 @@ msgstr "尚未出刊"
 msgid "Not on hold"
 msgstr "可被預約"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:127
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr "不是您預期的嗎？請查 "
@@ -8302,7 +8291,7 @@ msgstr "逾期 "
 msgid "Owner only"
 msgstr "只限擁有者"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:652
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:644
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:728
 #, c-format
 msgid "Pages"
@@ -8526,7 +8515,7 @@ msgstr "請求論文 %s"
 msgid "Place hold"
 msgstr "預約"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:279
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:271
 #, c-format
 msgid "Place hold "
 msgstr "預約 "
@@ -9072,7 +9061,7 @@ msgid "Public lists "
 msgstr "公開虛擬書架 "
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:256
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:248
 msgid "Public lists:"
 msgstr "公開虛擬書架："
 
@@ -9104,7 +9093,7 @@ msgstr "出版年/著作權年：最新到最舊"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "出版年/著作權年：最舊到最新"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:464
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:507
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:64
 #, c-format
@@ -9644,7 +9633,7 @@ msgstr "重新排序虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:92
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:305
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:297
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:117
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:169
@@ -9668,7 +9657,7 @@ msgstr "結果 %s 至 %s 的 %s"
 msgid "Results of search for '%s'"
 msgstr "搜尋結果 '%s'"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:190
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:182
 #, c-format
 msgid "Results per page: "
 msgstr "每頁結果: "
@@ -9721,7 +9710,7 @@ msgid "Return to the catalog home page."
 msgstr "回到目錄首頁。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:143
 #, c-format
 msgid "Return to the last advanced search"
 msgstr "回到上次的進階搜尋"
@@ -9833,7 +9822,7 @@ msgstr "星期六"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:273
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
 #, c-format
 msgid "Save"
@@ -9948,7 +9937,7 @@ msgid "Search for this title in:"
 msgstr "以此題名搜尋："
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:59
 msgid "Search for works by this author"
@@ -10059,8 +10048,8 @@ msgstr "地點："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:109
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:140
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:415
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:407
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:418
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:449
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:155
@@ -10098,7 +10087,7 @@ msgstr "選擇特定的館藏："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1193
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:216
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:336
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:491
@@ -10112,9 +10101,9 @@ msgid "Select none"
 msgstr "不可選取"
 
 #. INPUT type=checkbox name=biblionumber
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:318
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:321
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:313
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:317
 msgid "Select search result: %s"
 msgstr "選擇搜尋結果：%s"
 
@@ -10135,14 +10124,14 @@ msgstr "選擇建議至："
 msgid "Select the item(s) to search"
 msgstr "選擇搜尋的館藏"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:233
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:225
 #, c-format
 msgid "Select titles to:"
 msgstr "選擇題名："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:329
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:694
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:343
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 #, c-format
@@ -10661,14 +10650,14 @@ msgstr "不好意思，不能線上變更您的密碼 。"
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "抱歉，您的作業時間已過。請重新登入。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:159
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 #, c-format
 msgid "Sort"
 msgstr "排序"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:270
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:176
 #, c-format
 msgid "Sort by:"
 msgstr "排序："
@@ -10913,8 +10902,8 @@ msgstr "訂閱此虛擬書架"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:123
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:115
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:87
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:132
@@ -11094,7 +11083,7 @@ msgid "Table of contents provided by Syndetics"
 msgstr "Syndetics提供的目次"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:67
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:277
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:352
 #, c-format
 msgid "Tag"
@@ -11116,7 +11105,7 @@ msgid "Tag status here."
 msgstr "標籤狀態在此。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:387
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:296
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:288
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
 #, c-format
 msgid "Tag status here. "
@@ -11154,7 +11143,7 @@ msgstr "新增標籤： "
 msgid "Tags from this library:"
 msgstr "來自此圖書館的標籤："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:580
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:572
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:547
 #, c-format
 msgid "Tags:"
@@ -11940,7 +11929,7 @@ msgstr "不可得(遺失)"
 msgid "Unavailable issues"
 msgstr "不可借的刊期"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
 #, c-format
 msgid "Unhighlight"
@@ -12102,9 +12091,9 @@ msgstr "瀏覽所有實體館藏。"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:78
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:83
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:454
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:488
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:491
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:493
@@ -12259,7 +12248,7 @@ msgstr "含選擇的建議： "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:329
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:694
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 msgid "With selected titles: "
 msgstr "含選擇的題名： "
@@ -12692,7 +12681,7 @@ msgstr "您必須登入才能新增標籤。"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:694
 msgid "You must be logged in to create or add to lists"
 msgstr "您必須登入才能新增虛擬書架"
 
@@ -13004,7 +12993,7 @@ msgid "Your lists "
 msgstr "您的虛擬書架 "
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:244
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:236
 msgid "Your lists:"
 msgstr "您的虛擬書架："
 
@@ -13191,7 +13180,7 @@ msgid "Your search history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "您的搜尋紀錄 &rsaquo; %s%s%sKoha 線上%s 目錄"
 
 #. %1$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:113
 #, c-format
 msgid "Your search returned %s results. "
 msgstr "您的搜尋送回 %s 結果。 "
@@ -13238,12 +13227,12 @@ msgstr "資料庫裡找不到您的帳號。請再試。"
 msgid "ZIP/Postal code:"
 msgstr "郵遞區號："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:268
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:260
 #, c-format
 msgid "[ More lists ]"
 msgstr "[更多虛擬書架]"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:270
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:262
 #, c-format
 msgid "[ New list ]"
 msgstr "[新增虛擬書架]"
@@ -13304,7 +13293,7 @@ msgid "bib_id"
 msgstr "bib_id"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:339
 msgid "bonus"
 msgstr "額外"
 
@@ -13691,8 +13680,8 @@ msgstr "主要電子郵件地址"
 msgid "privacy policy"
 msgstr "隱私政策"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:669
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:671
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:661
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:663
 #, c-format
 msgid "purchase suggestion"
 msgstr "採訪建議"
@@ -13825,7 +13814,7 @@ msgstr "開始"
 msgid "subjects "
 msgstr "主題 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:127
 #, c-format
 msgid "suggestions"
 msgstr "建議"
