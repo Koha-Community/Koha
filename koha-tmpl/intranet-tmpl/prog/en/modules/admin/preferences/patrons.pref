@@ -58,7 +58,20 @@ Patrons:
      -
          - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option in the patrons or circulation module:"
          - pref: DefaultPatronSearchFields
-           class: multi
+           multiple:
+             firstname: "First name"
+             middle_name: "Middle name"
+             surname: "Last name"
+             othernames: "Other names"
+             cardnumber: "Cardnumber"
+             userid: "Username"
+             email: "Primary email"
+             emailpro: "Secondary email"
+             phone: "Primary phone"
+             phonepro: "Secondary phone"
+             mobile: "Mobile phone"
+             smsalertnumber: "Secondary mobile phone"
+             zipcode: "ZIP/Postal code"
          - "If empty Koha will default to \"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
      -
          - pref: DefaultPatronSearchMethod
