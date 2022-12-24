@@ -1104,14 +1104,6 @@
                                     <fieldset class="brief" id="suggestion_information">
                                         <ol>
                                             <li>
-                                                <label for="archived" style="display: inline;">Include archived:</label>
-                                                [% IF filter_archived %]
-                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
-                                                [% END %]
-                                            </li>
-                                            <li>
                                                 <label for="STATUS[% loop.index | html %]"> Status:</label>
                                                 <select name="STATUS" id="STATUS[% loop.index | html %]">
                                                     <option value="">Any</option>
@@ -1252,6 +1244,18 @@
                                             <input type="submit" value="Go" />
                                         </fieldset>
                                     </fieldset> <!-- /#acquisition_information -->
+                                    <div id="filter_archived_information">
+                                        <ol>
+                                            <li>
+                                                <label for="archived" style="display: inline;">Include archived:</label>
+                                                [% IF filter_archived %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
+                                                [% END %]
+                                            </li>
+                                        </ol>
+                                    </div>
                                 </div> <!-- /#limits -->
                             </fieldset> <!-- /.brief -->
                         </form> <!-- /suggestionsfilter -->
