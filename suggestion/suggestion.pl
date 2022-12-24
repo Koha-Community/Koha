@@ -411,9 +411,8 @@ if ($op=~/else/) {
               || $search_params->{$f} eq '';
         }
 
-        my @suggestions =
-          Koha::Suggestions->search_limited(
-            { %$search_params, archived => $filter_archived } )->as_list;
+        $search_params->{archived} = 0 if !$filter_archived;
+        my @suggestions = Koha::Suggestions->search_limited($search_params)->as_list;
 
         push @allsuggestions,
           {
