@@ -301,7 +301,7 @@ sub safe_to_delete {
 
     # check it doesn't have a waiting reserve
     $error = "book_reserved"
-      if $self->holds->search( { found => [ 'W', 'T' ] } )->count;
+      if $self->holds->filter_by_found->count;
 
     $error = "linked_analytics"
       if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
