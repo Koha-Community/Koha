@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
@@ -669,6 +669,36 @@ subtest 'Test Koha::Hold::item_group' => sub {
 
 
 $schema->storage->txn_rollback;
+
+subtest 'filter_by_found() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $unfilled   = $builder->build_object( { class => 'Koha::Holds', value => { found => undef } } );
+    my $processing = $builder->build_object( { class => 'Koha::Holds', value => { found => 'P' } } );
+    my $in_transit = $builder->build_object( { class => 'Koha::Holds', value => { found => 'T' } } );
+    my $waiting    = $builder->build_object( { class => 'Koha::Holds', value => { found => 'W' } } );
+
+    my $holds = Koha::Holds->search(
+        { reserve_id => [ $unfilled->id, $processing->id, $in_transit->id, $waiting->id ] },
+        { order_by => ['reserve_id'] }
+    );
+
+    is( $holds->count, 4, 'Resultset count is correct' );
+
+    my $found_holds = $holds->filter_by_found;
+
+    is( $found_holds->count, 3, 'Resultset count is correct' );
+
+    ok( $found_holds->next->is_in_processing, 'Status is correct (P)' );
+    ok( $found_holds->next->is_in_transit, 'Status is correct (T)' );
+    ok( $found_holds->next->is_waiting, 'Status is correct (W)' );
+
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'filter_by_has_cancellation_requests() and filter_out_has_cancellation_requests() tests' => sub {
 

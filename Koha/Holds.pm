@@ -34,7 +34,20 @@ Koha::Holds - Koha Hold object set class
 
 =head2 Class methods
 
+=head3 filter_by_found
+
+    my $found_holds = $holds->filter_by_found;
+
+Returns a filtered resultset without holds that are considered I<found>.
+i.e. 'P', 'T' and 'W'.
+
 =cut
+
+sub filter_by_found {
+    my ($self) = @_;
+
+    return $self->search( { found => [ 'P', 'T', 'W' ] } );
+}
 
 =head3 waiting
 
