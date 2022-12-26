@@ -293,20 +293,20 @@ sub safe_to_delete {
 
     $error = "book_on_loan" if $self->checkout;
 
-    $error = "not_same_branch"
+    $error //= "not_same_branch"
       if defined C4::Context->userenv
-      and !C4::Context->IsSuperLibrarian()
-      and C4::Context->preference("IndependentBranches")
-      and ( C4::Context->userenv->{branch} ne $self->homebranch );
+      && !C4::Context->IsSuperLibrarian()
+      && C4::Context->preference("IndependentBranches")
+      && ( C4::Context->userenv->{branch} ne $self->homebranch );
 
     # check it doesn't have a waiting reserve
-    $error = "book_reserved"
+    $error //= "book_reserved"
       if $self->holds->filter_by_found->count;
 
-    $error = "linked_analytics"
+    $error //= "linked_analytics"
       if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
 
-    $error = "last_item_for_hold"
+    $error //= "last_item_for_hold"
       if $self->biblio->items->count == 1
       && $self->biblio->holds->search(
           {
