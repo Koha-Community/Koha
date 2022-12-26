@@ -93,6 +93,58 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
+  delete:
+    x-mojo-to: Items#delete
+    operationId: deleteItem
+    tags:
+      - items
+    summary: Delete item
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Deleted item
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+            * book_on_loan: The item is checked out
+            * book_reserved: Waiting or in-transit hold for the item
+            * last_item_for_hold: The item is the last one on a record on which a biblio-level hold is placed
+            * linked_analytics: The item has linked analytic records
+            * not_same_branch: The item is blocked by independent branches
+        schema:
+              $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        editcatalogue: edit_catalogue
 "/items/{item_id}/bundled_items":
   post:
     x-mojo-to: Items#add_to_bundle

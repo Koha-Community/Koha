@@ -58,7 +58,6 @@ sub list {
     };
 }
 
-
 =head3 get
 
 Controller function that handles retrieving a single Koha::Item
@@ -77,6 +76,71 @@ sub get {
             );
         }
         return $c->render( status => 200, openapi => $item->to_api );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 delete
+
+Controller function that handles deleting a single Koha::Item
+
+=cut
+
+sub delete {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $item = Koha::Items->find($c->validation->param('item_id'));
+        unless ( $item ) {
+            return $c->render(
+                status => 404,
+                openapi => { error => 'Item not found'}
+            );
+        }
+
+        my $safe_to_delete = $item->safe_to_delete;
+
+        if ( !$safe_to_delete ) {
+
+            # Pick the first error, if any
+            my ( $error ) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
+
+            unless ( $error ) {
+                Koha::Exception->throw('Koha::Item->safe_to_delete returned false but carried no error message');
+            }
+
+            my $errors = {
+                book_on_loan       => { code => 'checked_out',        description => 'The item is checked out' },
+                book_reserved      => { code => 'found_hold',         description => 'Waiting or in-transit hold for the item' },
+                last_item_for_hold => { code => 'last_item_for_hold', description => 'The item is the last one on a record on which a biblio-level hold is placed' },
+                linked_analytics   => { code => 'linked_analytics',   description => 'The item has linked analytic records' },
+                not_same_branch    => { code => 'not_same_branch',    description => 'The item is blocked by independent branches' },
+            };
+
+            if ( any { $error->message eq $_ } keys %{$errors} ) {
+
+                my $code = $error->message;
+
+                return $c->render(
+                    status  => 409,
+                    openapi => {
+                        error      => $errors->{ $code }->{description},
+                        error_code => $errors->{ $code }->{code},
+                    }
+                );
+            } else {
+                Koha::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
+            }
+        }
+
+        $item->safe_delete;
+
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
     }
     catch {
         $c->unhandled_exception($_);

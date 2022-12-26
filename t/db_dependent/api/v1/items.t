@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
 
@@ -183,6 +184,82 @@ subtest 'get() tests' => sub {
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 3, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 23;
+
+    $schema->storage->txn_begin;
+
+    my $fail = 0;
+    my $expected_error;
+
+    # we want to control all the safe_to_delete use cases
+    my $item_class = Test::MockModule->new('Koha::Item');
+    $item_class->mock( 'safe_to_delete', sub {
+        if ( $fail ) {
+            return Koha::Result::Boolean->new(0)->add_message({ message => $expected_error });
+        }
+        else {
+            return Koha::Result::Boolean->new(1);
+        }
+    });
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**9 }    # catalogue flag = 2
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item = $builder->build_sample_item;
+
+    my $errors = {
+        book_on_loan       => { code => 'checked_out',        description => 'The item is checked out' },
+        book_reserved      => { code => 'found_hold',         description => 'Waiting or in-transit hold for the item' },
+        last_item_for_hold => { code => 'last_item_for_hold', description => 'The item is the last one on a record on which a biblio-level hold is placed' },
+        linked_analytics   => { code => 'linked_analytics',   description => 'The item has linked analytic records' },
+        not_same_branch    => { code => 'not_same_branch',    description => 'The item is blocked by independent branches' },
+    };
+
+    $fail = 1;
+
+    foreach my $error_code ( keys %{$errors} ) {
+
+        $expected_error = $error_code;
+
+        $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
+          ->status_is(409)
+          ->json_is(
+            { error      => $errors->{$error_code}->{description},
+              error_code => $errors->{$error_code}->{code},
+            }
+        );
+    }
+
+    $expected_error = 'unknown_error';
+    $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
+      ->status_is(500, 'unhandled error case generated default unhandled exception message')
+      ->json_is(
+        { error      => 'Something went wrong, check Koha logs for details.',
+          error_code => 'internal_server_error',
+        }
+    );
+
+    $fail = 0;
+
+    $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
+
+    $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
+      ->status_is(404);
 
     $schema->storage->txn_rollback;
 };
