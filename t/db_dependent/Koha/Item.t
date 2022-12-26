@@ -845,8 +845,6 @@ subtest 'deletion' => sub {
 
     AddReturn( $item->barcode, $library->branchcode );
 
-    # book_reserved is tested in t/db_dependent/Reserves.t
-
     # not_same_branch
     t::lib::Mocks::mock_preference('IndependentBranches', 1);
     my $item_2 = $builder->build_sample_item({ library => $library_2->branchcode });
@@ -885,17 +883,6 @@ subtest 'deletion' => sub {
 
     }
 
-    { # last_item_for_hold
-        C4::Reserves::AddReserve({ branchcode => $patron->branchcode, borrowernumber => $patron->borrowernumber, biblionumber => $item->biblionumber });
-        is(
-            @{$item->safe_to_delete->messages}[0]->message,
-            'last_item_for_hold',
-            'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio'
-        );
-        # With another item attached to the biblio, the item can be deleted
-        $builder->build_sample_item({ biblionumber => $item->biblionumber });
-    }
-
     ok(
         $item->safe_to_delete,
         'Koha::Item->safe_to_delete shows item safe to delete'
@@ -908,6 +895,73 @@ subtest 'deletion' => sub {
     is( $test_item, undef,
         "Koha::Item->safe_delete should delete item if safe_to_delete returns true"
     );
+
+    subtest 'holds tests' => sub {
+
+        plan tests => 9;
+
+        # to avoid noise
+        t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
+
+        $schema->storage->txn_begin;
+
+        my $item = $builder->build_sample_item;
+
+        my $processing     = $builder->build_object( { class => 'Koha::Holds', value => { itemnumber => $item->id, itemnumber => $item->id, found => 'P' } } );
+        my $safe_to_delete = $item->safe_to_delete;
+
+        ok( !$safe_to_delete, 'Cannot delete' );
+        is(
+            @{ $safe_to_delete->messages }[0]->message,
+            'book_reserved',
+            'Koha::Item->safe_to_delete reports a in processing hold blocks deletion'
+        );
+
+        $processing->delete;
+
+        my $in_transit = $builder->build_object( { class => 'Koha::Holds', value => { itemnumber => $item->id, itemnumber => $item->id, found => 'T' } } );
+        $safe_to_delete = $item->safe_to_delete;
+
+        ok( !$safe_to_delete, 'Cannot delete' );
+        is(
+            @{ $safe_to_delete->messages }[0]->message,
+            'book_reserved',
+            'Koha::Item->safe_to_delete reports a in transit hold blocks deletion'
+        );
+
+        $in_transit->delete;
+
+        my $waiting = $builder->build_object( { class => 'Koha::Holds', value => { itemnumber => $item->id, itemnumber => $item->id, found => 'W' } } );
+        $safe_to_delete = $item->safe_to_delete;
+
+        ok( !$safe_to_delete, 'Cannot delete' );
+        is(
+            @{ $safe_to_delete->messages }[0]->message,
+            'book_reserved',
+            'Koha::Item->safe_to_delete reports a waiting hold blocks deletion'
+        );
+
+        $waiting->delete;
+
+        # Add am unfilled biblio-level hold to catch the 'last_item_for_hold' use case
+        $builder->build_object( { class => 'Koha::Holds', value => { biblionumber => $item->biblionumber, itemnumber => undef, found => undef } } );
+
+        $safe_to_delete = $item->safe_to_delete;
+
+        ok( !$safe_to_delete );
+
+        is(
+            @{ $safe_to_delete->messages}[0]->message,
+            'last_item_for_hold',
+            'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio'
+        );
+
+        my $extra_item = $builder->build_sample_item({ biblionumber => $item->biblionumber });
+
+        ok( $item->safe_to_delete );
+
+        $schema->storage->txn_rollback;
+    };
 
     $schema->storage->txn_rollback;
 };
