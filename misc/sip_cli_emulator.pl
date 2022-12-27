@@ -54,6 +54,7 @@ my $fee_identifier;
 my $transaction_id;
 my $pickup_location;
 my $hold_mode;
+my $no_block;
 
 my $terminator = q{};
 
@@ -83,6 +84,7 @@ GetOptions(
     "transaction-id=s"  => \$transaction_id,
     "pickup-location=s" => \$pickup_location,
     "hold-mode=s"       => \$hold_mode,
+    "n|no-block=s"      => \$no_block,
 
     "t|terminator=s" => \$terminator,
 
@@ -100,6 +102,8 @@ if (   $help
     say &help();
     exit();
 }
+
+$no_block //= 'N';
 
 $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
 
@@ -174,7 +178,7 @@ my $handlers = {
         subroutine => \&build_checkout_command_message,
         parameters => {
             SC_renewal_policy => 'Y',
-            no_block          => 'N',
+            no_block          => $no_block,
             transaction_date  => $transaction_date,
             nb_due_date       => undef,
             institution_id    => $location_code,
@@ -198,7 +202,7 @@ my $handlers = {
         name       => 'Checkin',
         subroutine => \&build_checkin_command_message,
         parameters => {
-            no_block          => 'N',
+            no_block          => $no_block,
             transaction_date  => $transaction_date,
             return_date       => $transaction_date,
             current_location  => $location_code,
@@ -220,7 +224,7 @@ my $handlers = {
         subroutine => \&build_renew_command_message,
         parameters => {
             third_party_allowed => 'N',
-            no_block            => 'N',
+            no_block            => $no_block,
             transaction_date    => $transaction_date,
             nb_due_date         => undef,
             institution_id      => $location_code,
@@ -654,6 +658,7 @@ Options:
   --transaction-id  Transaction id for Fee Paid message, optional
   --pickup-location Pickup location (branchcode) for Hold message, optional
   --hold-mode       Accepts "+" to add hold or "-" to cancel hold, defaults to +
+  -n --no-block     Accepts "N" for standard operatoin, "Y" for no-block, defaults to "N"
 
   -m --message     SIP2 message to execute
 
