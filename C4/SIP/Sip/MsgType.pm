@@ -672,8 +672,11 @@ sub handle_checkin {
     if ( $no_block eq 'Y' ) {
 
         # Off-line transactions, ick.
-        siplog( "LOG_WARNING", "received no-block checkin from terminal '%s'", $account->{id} );
-        $status = $ils->checkin_no_block( $item_id, $trans_date, $return_date, $item_props, $cancel );
+        siplog( "LOG_WARNING", "received no-block checkin from terminal '%s' - no-block checkin not supported", $account->{id} );
+        #FIXME We need to write the routine called below
+        #$status = $ils->checkin_no_block( $item_id, $trans_date, $return_date, $item_props, $cancel );
+        #Until we do, lets just checkin the item
+        $status = $ils->checkin( $item_id, $trans_date, $return_date, $my_branch, $item_props, $cancel, $account );
     } else {
         $status = $ils->checkin( $item_id, $trans_date, $return_date, $my_branch, $item_props, $cancel, $account );
     }
