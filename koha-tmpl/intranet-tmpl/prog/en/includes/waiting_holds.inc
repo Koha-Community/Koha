@@ -5,12 +5,12 @@
     <thead>
         <tr>
             <th class="NoSort"><input type="checkbox" class="select_hold_all"/></th>
-            <th>Waiting since</th>
-            <th>Date hold placed</th>
+            <th data-type="@data-sort">Waiting since</th>
+            <th data-type="@data-sort">Date hold placed</th>
           [% IF table_name == 'holdscr' %]
-            <th>Date cancellation requested</th>
+            <th data-type="@data-sort">Date cancellation requested</th>
           [% END %]
-            <th>Expiration date</th>
+            <th data-type="@data-sort">Expiration date</th>
             <th class="anti-the">Title</th>
             <th>Patron</th>
             <th>Home library</th>
@@ -31,7 +31,7 @@
               [% IF table_name == 'holdscr' %]
                 <td>
                 [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
-                    <span>[% cancellation_request.creation_date | $KohaDates %]</span>
+                    <span data-order="[% cancellation_request.creation_date | html %]">[% cancellation_request.creation_date | $KohaDates %]</span>
                 [% END %]
                 </td>
               [% END %]
