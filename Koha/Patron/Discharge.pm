@@ -3,6 +3,7 @@ package Koha::Patron::Discharge;
 use Modern::Perl;
 use CGI;
 use File::Temp qw( tmpnam );
+use IPC::Cmd;
 use Carp qw( carp );
 
 use C4::Templates qw ( gettemplate );
@@ -128,40 +129,27 @@ sub generate_as_pdf {
     my $html_path = tmpnam() . '.html';
     my $pdf_path = tmpnam() . '.pdf';
     my $html_content = $tmpl->output;
+
+    # export to HTML
     open my $html_fh, '>:encoding(utf8)', $html_path;
     say $html_fh $html_content;
     close $html_fh;
-    my $output = eval { require PDF::FromHTML; return; } || $@;
-    if ($output && $params->{testing}) {
-        carp $output;
-        $pdf_path = undef;
-    }
-    elsif ($output) {
-        die $output;
+
+    if ( IPC::Cmd::can_run('weasyprint') ) {
+        my( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+            IPC::Cmd::run( command => "weasyprint $html_path $pdf_path", verbose => 0 );
+
+        map {warn $_} @$stderr_buf
+          if $stderr_buf and scalar @$stderr_buf;
+
+        unless ( $success ) {
+            warn $error_message;
+            $pdf_path = undef;
+        }
     }
     else {
-        my $pdf = PDF::FromHTML->new( encoding => 'utf-8' );
-        $pdf->load_file( $html_path );
-
-        my $ttf = C4::Context->config('ttf');
-        if ( $ttf  && exists $ttf->{font} ) {
-
-            my $type2path;
-            foreach my $font ( @{ $ttf->{font} } ) {
-                    $type2path->{ $font->{type} } = $font->{content};
-            }
-
-            $pdf->convert(
-                FontBold          => $type2path->{'HB'} || 'HelveticaBold',
-                FontOblique       => $type2path->{'HO'} || 'HelveticaOblique',
-                FontBoldOblique   => $type2path->{'HBO'}|| 'HelveticaBoldOblique',
-                FontUnicode       => $type2path->{'H'}  || 'Helvetica',
-                Font              => $type2path->{'H'}  || 'Helvetica',
-            );
-        } else {
-            $pdf->convert();
-        }
-        $pdf->write_file( $pdf_path );
+        warn "weasyprint not found!";
+        $pdf_path = undef;
     }
 
     return $pdf_path;

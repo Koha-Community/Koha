@@ -15,8 +15,13 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 19;
+
+use Test::More tests => 23;
+
+use Test::MockModule;
 use Test::Warn;
+
+use IPC::Cmd qw(can_run);
 use MARC::Record;
 
 use C4::Circulation qw( AddIssue AddReturn );
@@ -114,18 +119,36 @@ is(scalar( Koha::Patron::Discharge::get_pendings ), 1, 'There is a pending disch
 Koha::Patron::Discharge::discharge( { borrowernumber => $patron->{borrowernumber} } );
 is_deeply( [ Koha::Patron::Discharge::get_pendings ], [], 'There is no pending discharge request (second time)');
 
-# Check if PDF::FromHTML is installed.
-my $check = eval { require PDF::FromHTML; };
+SKIP: {
+    skip "Skipping because weasyprint is not installed",
+        5 unless can_run('weasyprint');
 
-# Tests for if PDF::FromHTML is installed
-if ($check) {
-    isnt( Koha::Patron::Discharge::generate_as_pdf({ borrowernumber => $patron->{borrowernumber} }), undef, "Temporary PDF generated." );
-}
-# Tests for if PDF::FromHTML is not installed
-else {
-    warning_like { Koha::Patron::Discharge::generate_as_pdf({ borrowernumber => $patron->{borrowernumber}, testing => 1 }) }
-          [ qr/Can't locate PDF\/FromHTML.pm in \@INC/ ],
-          "Expected failure because of missing PDF::FromHTML.";
+    isnt(
+        Koha::Patron::Discharge::generate_as_pdf( { borrowernumber => $patron->{borrowernumber} } ),
+        undef,
+        "Temporary PDF generated."
+    );
+
+    my $mocked_ipc = Test::MockModule->new('IPC::Cmd');
+
+    $mocked_ipc->mock( 'run', sub { return 0, 'Some error' } );
+
+    my $result;
+    warning_is
+        { $result = Koha::Patron::Discharge::generate_as_pdf( { borrowernumber => $patron->{borrowernumber} } ); }
+        'Some error',
+        'Failed call to run() prints the generated error';
+
+    is( $result, undef, 'undef returned if failed run' );
+
+    $mocked_ipc->mock( 'can_run', undef );
+
+    warning_is
+        { $result = Koha::Patron::Discharge::generate_as_pdf( { borrowernumber => $patron->{borrowernumber} } ); }
+        'weasyprint not found!',
+        'Expected failure because of missing weasyprint';
+
+    is( $result, undef, 'undef returned if missing weasyprint' );
 }
 
 # FIXME Should be a Koha::Object object
