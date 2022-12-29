@@ -1699,6 +1699,13 @@ sub get_notice {
         push @metaarray, "- $key: $value" if $value;
     }
     my $metastring = join("\n", @metaarray);
+
+    my $illrequestattributes = {};
+    my $attributes = $self->illrequestattributes;
+    while ( my $attribute = $attributes->next ) {
+        $illrequestattributes->{$attribute->type} = $attribute->value;
+    }
+
     my $letter = C4::Letters::GetPreparedLetter(
         module                 => 'ill',
         letter_code            => $params->{notice_code},
@@ -1715,7 +1722,8 @@ sub get_notice {
             ill_bib_title      => $title ? $title->value : '',
             ill_bib_author     => $author ? $author->value : '',
             ill_full_metadata  => $metastring,
-            additional_text    => $params->{additional_text}
+            additional_text    => $params->{additional_text},
+            illrequestattributes => $illrequestattributes,
         }
     );
 
