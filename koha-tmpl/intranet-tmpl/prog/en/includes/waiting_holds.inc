@@ -5,12 +5,12 @@
     <thead>
         <tr>
             <th class="NoSort"><input type="checkbox" class="select_hold_all"/></th>
-            <th data-type="@data-sort">Waiting since</th>
-            <th data-type="@data-sort">Date hold placed</th>
+            <th>Waiting since</th>
+            <th>Date hold placed</th>
           [% IF table_name == 'holdscr' %]
             <th data-type="@data-sort">Date cancellation requested</th>
           [% END %]
-            <th data-type="@data-sort">Expiration date</th>
+            <th>Expiration date</th>
             <th class="anti-the">Title</th>
             <th>Patron</th>
             <th>Home library</th>
@@ -26,8 +26,8 @@
         [% FOREACH reserveloo IN reserveloop %]
             <tr>
                 <th><input type="checkbox" class="select_hold" data-id="[% reserveloo.reserve_id | html %]"/></th>
-                <td><span data-order="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
-                <td><span data-order="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
+                <td data-order="[% reserveloo.waitingdate | html %]"><span>[% reserveloo.waitingdate | $KohaDates %]</span></td>
+                <td data-order="[% reserveloo.reservedate | html %]"><span>[% reserveloo.reservedate | $KohaDates %]</span></td>
               [% IF table_name == 'holdscr' %]
                 <td>
                 [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
@@ -35,7 +35,7 @@
                 [% END %]
                 </td>
               [% END %]
-                <td><span data-order="[% reserveloo.expirationdate | html %]">[% reserveloo.expirationdate | $KohaDates %]</span></td>
+                <td data-order="[% reserveloo.expirationdate | html %]"><span>[% reserveloo.expirationdate | $KohaDates %]</span></td>
                 <td>
                     [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio link = 1 %]
                         [% UNLESS ( item_level_itypes ) %]
