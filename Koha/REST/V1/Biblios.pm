@@ -25,6 +25,12 @@ use Koha::RecordProcessor;
 use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
 use C4::Search qw( FindDuplicate );
 
+use C4::Barcodes::ValueBuilder;
+use C4::Context;
+
+use Koha::Items;
+use Koha::Item;
+
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
 
@@ -272,6 +278,62 @@ sub get_items {
     catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head3 add_item
+
+Controller function that handles creating a biblio's item
+
+=cut
+
+sub add_item {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $biblio_id = $c->validation->param('biblio_id');
+        my $biblio = Koha::Biblios->find( $biblio_id );
+
+        unless ($biblio) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Biblio not found" }
+            );
+        }
+
+        my $body = $c->validation->param('body');
+
+        $body->{biblio_id} = $biblio_id;
+
+        # Don't save extended subfields yet. To be done in another bug.
+        $body->{extended_subfields} = undef;
+
+        my $item = Koha::Item->new_from_api($body);
+
+        if ( ! defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
+            my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+            $item->barcode($barcode);
+        }
+
+        if ( defined $item->barcode
+            && Koha::Items->search( { barcode => $item->barcode } )->count )
+        {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Barcode not unique" }
+            );
+        }
+
+        my $storedItem = $item->store;
+        $storedItem->discard_changes;
+
+        $c->render(
+            status => 201,
+            openapi => $storedItem->to_api
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    }
 }
 
 =head3 get_checkouts

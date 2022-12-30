@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -1687,4 +1687,53 @@ subtest 'list() tests' => sub {
       ->status_is(200);
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'add_item() tests' => sub {
+  plan tests => 5;
+
+  $schema->storage->txn_begin;
+
+  my $patron = $builder->build_object(
+      {
+          class => 'Koha::Patrons',
+          value => { flags => 0 }
+      }
+  );
+  my $password = 'thePassword123';
+  $patron->set_password( { password => $password, skip_validation => 1 } );
+  my $userid = $patron->userid;
+
+  my $biblio = $builder->build_sample_biblio();
+  my $biblio_id = $biblio->biblionumber;
+
+  my $barcode = 'mybarcode';
+  my $matching_items = Koha::Items->search({ barcode => $barcode });
+
+  while (my $item = $matching_items->next) {
+    $item->delete;
+  }
+
+  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => { external_id => $barcode })
+    ->status_is(403, 'Not enough permissions to create an item');
+
+  # Add permissions
+  $builder->build(
+      {
+          source => 'UserPermission',
+          value  => {
+              borrowernumber => $patron->borrowernumber,
+              module_bit     => 9,
+              code           => 'edit_catalogue'
+          }
+      }
+  );
+
+  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
+      external_id => $barcode,
+    })
+    ->status_is(201, 'Item created')
+    ->json_is('/biblio_id', $biblio_id);
+
+  $schema->storage->txn_rollback;
 };
