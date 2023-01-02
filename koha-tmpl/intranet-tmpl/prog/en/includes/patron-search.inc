@@ -325,6 +325,14 @@
                         let sub_or = [];
                         search_fields.split(',').forEach(function(attr,ii){
                             sub_or.push({["me."+attr]:{"like":(search_type == "contain" ? "%" : "" ) + pattern + "%"}});
+                            if ( attr == 'dateofbirth' ) {
+                                try {
+                                    let d = $date_to_rfc3339(pattern);
+                                    sub_or.push({["me."+attr]:d});
+                                } catch {
+                                    // Hide the warning if the date is not correct
+                                }
+                            }
                         });
                         subquery_and.push(sub_or);
                     });
