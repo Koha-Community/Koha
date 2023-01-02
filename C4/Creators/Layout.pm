@@ -80,7 +80,7 @@ sub new {
             font            =>      'TR',
             font_size       =>      3,
             scale_width     =>      0.8,
-            scale_height    =>      0.02,
+            scale_height    =>      0.01,
             callnum_split   =>      0,
             text_justify    =>      'L',
             format_string   =>      join(', ', @{ PRESET_FIELDS() }),

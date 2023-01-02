@@ -2348,6 +2348,8 @@ CREATE TABLE `creator_layouts` (
   `oblique_title` int(1) DEFAULT 1,
   `font` char(10) NOT NULL DEFAULT 'TR',
   `font_size` int(4) NOT NULL DEFAULT 10,
+  `scale_width` decimal(28,6) NOT NULL DEFAULT 0.08,
+  `scale_height` decimal(28,6) NOT NULL DEFAULT 0.01,
   `units` char(20) NOT NULL DEFAULT 'POINT',
   `callnum_split` int(1) DEFAULT 0,
   `text_justify` char(1) NOT NULL DEFAULT 'L',
