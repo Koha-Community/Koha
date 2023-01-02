@@ -393,6 +393,74 @@ sub add_item {
     }
 }
 
+=head3 update_item
+
+Controller function that handles updating a biblio's item
+
+=cut
+
+sub update_item {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $biblio_id = $c->validation->param('biblio_id');
+        my $item_id = $c->validation->param('item_id');
+        my $biblio = Koha::Biblios->find({ biblionumber => $biblio_id });
+        unless ($biblio) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Biblio not found" }
+            );
+        }
+
+        my $item = $biblio->items->find({ itemnumber => $item_id });
+
+        unless ($item) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Item not found" }
+            );
+        }
+
+        my $body = $c->validation->param('body');
+
+        $body->{biblio_id} = $biblio_id;
+
+        # Don't save extended subfields yet. To be done in another bug.
+        $body->{extended_subfields} = undef;
+
+        $item->set_from_api($body);
+
+        my $barcodeSearch;
+        $barcodeSearch = Koha::Items->search( { barcode => $body->{external_id} } ) if defined $body->{external_id};
+
+        if ( $barcodeSearch
+            && ($barcodeSearch->count > 1
+                || ($barcodeSearch->count == 1
+                    && $barcodeSearch->next->itemnumber != $item->itemnumber
+                )
+            )
+        )
+        {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Barcode not unique" }
+            );
+        }
+
+        my $storedItem = $item->store;
+        $storedItem->discard_changes;
+
+        $c->render(
+            status => 200,
+            openapi => $storedItem->to_api
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    }
+}
+
 =head3 get_checkouts
 
 List Koha::Checkout objects

@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -1741,6 +1741,64 @@ subtest 'add_item() tests' => sub {
       external_id => $item->barcode,
     })
     ->status_is(409, 'Duplicate barcode');
+
+  $schema->storage->txn_rollback;
+};
+
+subtest 'update_item() tests' => sub {
+  plan tests => 7;
+
+  $schema->storage->txn_begin;
+
+  my $patron = $builder->build_object(
+      {
+          class => 'Koha::Patrons',
+          value => { flags => 0 }
+      }
+  );
+  my $password = 'thePassword123';
+  $patron->set_password( { password => $password, skip_validation => 1 } );
+  my $userid = $patron->userid;
+
+  my $item = $builder->build_sample_item({ replacementprice => 5 });
+  my $biblio_id = $item->biblionumber;
+  my $item_id = $item->itemnumber;
+
+  my $biblio = Koha::Biblios->find($item->biblionumber);
+
+  my $matching_items = Koha::Items->search({ barcode => $item->barcode });
+
+  while (my $mbcitem = $matching_items->next) {
+    $mbcitem->delete if $mbcitem->biblionumber != $item->biblionumber;
+  }
+
+  $t->put_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => { external_id => 'something' })
+    ->status_is(403, 'Not enough permissions to update an item');
+
+  # Add permissions
+  $builder->build(
+      {
+          source => 'UserPermission',
+          value  => {
+              borrowernumber => $patron->borrowernumber,
+              module_bit     => 9,
+              code           => 'edit_catalogue'
+          }
+      }
+  );
+
+  my $other_item = $builder->build_sample_item();
+
+  $t->put_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
+      external_id => $other_item->barcode,
+    })
+    ->status_is(400, 'Barcode not unique');
+
+  $t->put_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
+      replacement_price => 30,
+    })
+    ->status_is(200, 'Item updated')
+    ->json_is('/replacement_price', 30);
 
   $schema->storage->txn_rollback;
 };
