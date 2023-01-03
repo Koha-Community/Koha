@@ -431,32 +431,20 @@ sub update_item {
 
         $item->set_from_api($body);
 
-        my $barcodeSearch;
-        $barcodeSearch = Koha::Items->search( { barcode => $body->{external_id} } ) if defined $body->{external_id};
-
-        if ( $barcodeSearch
-            && ($barcodeSearch->count > 1
-                || ($barcodeSearch->count == 1
-                    && $barcodeSearch->next->itemnumber != $item->itemnumber
-                )
-            )
-        )
-        {
-            return $c->render(
-                status  => 400,
-                openapi => { error => "Barcode not unique" }
-            );
-        }
-
-        my $storedItem = $item->store;
-        $storedItem->discard_changes;
+        $item->store->discard_changes;
 
         $c->render(
             status => 200,
-            openapi => $storedItem->to_api
+            openapi => $item->to_api
         );
     }
     catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Duplicate barcode.' }
+            );
+        }
         $c->unhandled_exception($_);
     }
 }

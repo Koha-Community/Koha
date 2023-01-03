@@ -1792,7 +1792,7 @@ subtest 'update_item() tests' => sub {
   $t->put_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
       external_id => $other_item->barcode,
     })
-    ->status_is(400, 'Barcode not unique');
+    ->status_is(409, 'Barcode not unique');
 
   $t->put_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
       replacement_price => 30,
