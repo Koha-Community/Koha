@@ -93,22 +93,10 @@ foreach my $biblionumber ( @bibs ) {
     next
       if $biblio->hidden_in_opac({ rules => $rules });
 
-    # grab all the items...
-    my $items        = $biblio->items->filter_by_visible_in_opac({ patron => $logged_in_user })->unblessed;
-    foreach my $item (@$items) {
-        my $reserve_status = C4::Reserves::GetReserveStatus($item->{itemnumber});
-        if( $reserve_status eq "Waiting"){ $item->{'waiting'} = 1; }
-        if( $reserve_status eq "Processing"){ $item->{'processing'} = 1; }
-    }
-
     my $hasauthors = 0;
     if($dat->{'author'} || @$marcauthorsarray) {
       $hasauthors = 1;
     }
-    my $collections =
-      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
-    my $shelflocations =
-      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 
 	# COinS format FIXME: for books Only
         my $fmt = substr $record->leader(), 6,2;
@@ -120,21 +108,9 @@ foreach my $biblionumber ( @bibs ) {
         $dat->{'even'} = 1;
     }
 
-    for my $itm (@$items) {
-        if ($itm->{'location'}){
-            $itm->{'location_opac'} = $shelflocations->{$itm->{'location'} };
-        }
-        my $item_object = Koha::Items->find($itm->{itemnumber});
-        my $transfer = $item_object->get_transfer;
-        if ( $transfer && $transfer->in_transit ) {
-            $itm->{transfertwhen} = $transfer->datesent;
-            $itm->{transfertfrom} = $transfer->frombranch;
-            $itm->{transfertto} = $transfer->tobranch;
-        }
-    }
     $num++;
     $dat->{biblionumber} = $biblionumber;
-    $dat->{ITEM_RESULTS}   = $items;
+    $dat->{ITEM_RESULTS}   = $biblio->items->filter_by_visible_in_opac({ patron => $logged_in_user });
     $dat->{MARCNOTES}      = $marcnotesarray;
     $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
     $dat->{MARCAUTHORS}    = $marcauthorsarray;
