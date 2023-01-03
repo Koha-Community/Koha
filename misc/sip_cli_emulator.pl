@@ -103,9 +103,8 @@ if (   $help
     exit();
 }
 
-$no_block = $no_block eq 'Y' ? 'Y' : 'N';
-
-$terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
+$no_block   = $no_block eq 'Y'    ? 'Y' : 'N';
+$terminator = $terminator eq 'CR' ? $CR : $CRLF;
 
 # Set perl to expect the same record terminator it is sending
 $/ = $terminator;
