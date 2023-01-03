@@ -457,6 +457,11 @@ __END_SRU_PUBLICSERVER__
    <vhost>__MESSAGE_BROKER_VHOST__</vhost>
  </message_broker>
 
+ <background_jobs_worker>
+     <!-- Max simultaneous processes per worker -->
+     <max_processes>1</max_processes>
+ </background_jobs_worker>
+
  <do_not_remove_cookie>__KEEP_COOKIE__</do_not_remove_cookie>
  <do_not_remove_cookie>catalogue_editor_\d+</do_not_remove_cookie>
  <!-- Uncomment lines like hereunder to not clear cookies at logout:

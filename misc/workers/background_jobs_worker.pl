@@ -21,7 +21,7 @@ background_jobs_worker.pl - Worker script that will process background jobs
 
 =head1 SYNOPSIS
 
-./background_jobs_worker.pl [--queue QUEUE]
+./background_jobs_worker.pl [--queue QUEUE] [-m|--max-processes MAX_PROCESSES]
 
 =head1 DESCRIPTION
 
@@ -29,6 +29,11 @@ This script will connect to the Stomp server (RabbitMQ) and subscribe to the que
 or if a Stomp server is not active it will poll the database every 10s for new jobs in the passed queue.
 
 You can specify some queues only (using --queue, which is repeatable) if you want to run several workers that will handle their own jobs.
+
+--m --max-processes specifies how many jobs to process simultaneously
+
+Max processes will be set from the command line option, the environment variable MAX_PROCESSES, or the koha-conf file, in that order of precedence.
+By default the script will only run one job at a time.
 
 =head1 OPTIONS
 
@@ -52,16 +57,25 @@ use JSON qw( decode_json );
 use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
+use Parallel::ForkManager;
 
 use C4::Context;
 use Koha::Logger;
 use Koha::BackgroundJobs;
+use C4::Context;
 
 my ( $help, @queues );
+
+my $max_processes = $ENV{MAX_PROCESSES};
+$max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes} if C4::Context->config('background_jobs_worker');
+$max_processes ||= 1;
+
 GetOptions(
+    'm|max-processes=i' => \$max_processes,
     'h|help' => \$help,
     'queue=s' => \@queues,
 ) || pod2usage(1);
+
 
 pod2usage(0) if $help;
 
@@ -75,6 +89,8 @@ try {
 } catch {
     warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
 };
+
+my $pm = Parallel::ForkManager->new($max_processes);
 
 if ( $conn ) {
     # FIXME cf note in Koha::BackgroundJob about $namespace
@@ -118,7 +134,9 @@ while (1) {
             next;
         }
 
+        $pm->start and next;
         process_job( $job, $args );
+        $pm->finish;
 
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
@@ -133,7 +151,9 @@ while (1) {
 
             next unless $args;
 
+            $pm->start and next;
             process_job( $job, { job_id => $job->id, %$args } );
+            $pm->finish;
 
         }
         sleep 10;
