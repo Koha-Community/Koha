@@ -12,6 +12,26 @@
     [% STOP %]
 [% END %]
 
+[% SET transfer = item.get_transfer %]
+[% IF transfer AND transfer.in_transit %]
+    [% SET transfertwhen = transfer.datesent %]
+    [% SET transfertfrom = transfer.frombranch %]
+    [% SET transfertto = transfer.tobranch %]
+[% END %]
+
+[% SET waiting = item.holds.waiting.count %]
+[% IF include_schema_org %]
+    [% IF item.damaged or item.checkout.date_due or item.itemlost or transfertwhen or waiting %]
+        <link property="availability" href="http://schema.org/OutOfStock" />
+    [% ELSIF item.withdrawn %]
+        <link property="availability" href="http://schema.org/Discontinued" />
+    [% ELSIF item.notforloan or item.itemtype.notforloan %]
+        <link property="availability" href="http://schema.org/InStoreOnly" />
+    [% ELSE %]
+        <link property="availability" href="http://schema.org/InStock" />
+    [% END %]
+[% END %]
+
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
     [% itemlost_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost, opac => 1 ) %]
@@ -47,19 +67,13 @@
     [% END %]
 [% END %]
 
-[% SET transfer = item.get_transfer %]
-[% IF transfer AND transfer.in_transit %]
-    [% SET transfertwhen = transfer.datesent %]
-    [% SET transfertfrom = transfer.frombranch %]
-    [% SET transfertto = transfer.tobranch %]
-[% END %]
 [% IF transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
     [% SET itemavailable = 0 %]
     <span class="item-status intransit">In transit from [% Branches.GetName( transfertfrom ) | html %]
     to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
 [% END %]
 
-[% IF item.holds.waiting.count OR item.holds.processing.count %]
+[% IF waiting OR item.holds.processing.count %]
     [% SET itemavailable = 0 %]
     <span class="item-status onhold">On hold</span>
 [% END %]
