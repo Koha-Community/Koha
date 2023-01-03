@@ -84,7 +84,7 @@ sub build_table {
             safe_to_delete => $item->safe_to_delete,
             holds          => $item->biblio->holds->count,
             item_holds     => $item->holds->count,
-            is_checked_out => $item->checkout || 0,
+            is_checked_out => $item->checkout ? 1 : 0,
         };
         push @items, $item_info;
     }
