@@ -7,6 +7,11 @@
 [%#- structure is used by course reserves pages, which do -%]
 [%#- not use an API to fetch items that populates item.datedue. -%]
 
+[% UNLESS item.isa('Koha::Item') %]
+    <div>Programming error, item-status.inc must be called with a Koha::Item object.<div>
+    [% STOP %]
+[% END %]
+
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
     [% itemlost_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost, opac => 1 ) %]
@@ -17,13 +22,9 @@
     [% END %]
 [% END %]
 
-[% IF item.isa('Koha::Item') %]
-    [% SET datedue = item.checkout.date_due %]
-    [% SET onsite_checkout = item.checkout.onsite_checkout %]
-[% ELSE %]
-    [% SET datedue = item.datedue || issue.date_due %]
-    [% SET onsite_checkout = item.onsite_checkout %]
-[% END %]
+[% SET datedue = item.checkout.date_due %]
+[% SET onsite_checkout = item.checkout.onsite_checkout %]
+
 [% IF datedue %]
     [% SET itemavailable = 0 %]
     [% IF onsite_checkout %]
@@ -46,17 +47,11 @@
     [% END %]
 [% END %]
 
-[% IF item.isa('Koha::Item') %]
-    [% SET transfer = item.get_transfer %]
-    [% IF transfer AND transfer.in_transit %]
-        [% SET transfertwhen = transfer.datesent %]
-        [% SET transfertfrom = transfer.frombranch %]
-        [% SET transfertto = transfer.tobranch %]
-    [% END %]
-[% ELSE %]
-        [% SET transfertwhen = item.transfertwhen %]
-        [% SET transfertfrom = item.transfertfrom %]
-        [% SET transfertto = item.transfertto %]
+[% SET transfer = item.get_transfer %]
+[% IF transfer AND transfer.in_transit %]
+    [% SET transfertwhen = transfer.datesent %]
+    [% SET transfertfrom = transfer.frombranch %]
+    [% SET transfertto = transfer.tobranch %]
 [% END %]
 [% IF transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
     [% SET itemavailable = 0 %]
@@ -64,7 +59,7 @@
     to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
 [% END %]
 
-[% IF (item.isa('Koha::Item') AND item.holds.waiting.count) OR (item.isa('Koha::Item') AND item.holds.processing.count) OR (NOT item.isa('Koha::Item') AND item.waiting) OR (NOT item.isa('Koha::Item') AND item.processing) %]
+[% IF item.holds.waiting.count OR item.holds.processing.count %]
     [% SET itemavailable = 0 %]
     <span class="item-status onhold">On hold</span>
 [% END %]
@@ -108,7 +103,7 @@
     [% END %]
 [% END %]
 
-[% IF Koha.Preference('OPACAcquisitionDetails') AND ( item.isa('Koha::Item') ) AND ( item.orders.filter_by_active.count ) %]
+[% IF Koha.Preference('OPACAcquisitionDetails') AND item.orders.filter_by_active.count %]
     [% SET itemavailable = 0 %]
     <span class="item-status onorder">On order</span>
 [% END %]
