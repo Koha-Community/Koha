@@ -9,9 +9,9 @@
 
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost, opac => 1 ) %]
-    [% IF ( av_lib_include ) %]
-        <span class="item-status lost">[% av_lib_include | html %]</span>
+    [% itemlost_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost, opac => 1 ) %]
+    [% IF itemlost_lib %]
+        <span class="item-status lost">[% itemlost_lib | html %]</span>
     [% ELSE %]
         <span class="item-status lost">Item lost</span>
     [% END %]
@@ -71,25 +71,27 @@
 
 [% IF ( item.withdrawn ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
-    [% IF av_lib_include %]
-        <span class="item-status withdrawn">[% av_lib_include | html %]</span>
+    [% withdrawn_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
+    [% IF withdrawn_lib %]
+        <span class="item-status withdrawn">[% withdrawn_lib | html %]</span>
     [% ELSE %]
         <span class="item-status withdrawn">Item withdrawn</span>
     [% END %]
 [% END %]
 
 
-[% IF NOT ( item.isa('Koha::Item') ) AND item.itemnotforloan %]
+[% SET restricted_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
+[% IF item.notforloan %]
     [% SET itemavailable = 0 %]
-    [% IF ( item.notforloanvalueopac ) %]
-        <span class="item-status notforloan">[% item.notforloanvalueopac | html %] [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
+    [% notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
+    [% IF notforloan_lib %]
+        <span class="item-status notforloan">[% notforloan_lib | html %] [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
     [% ELSE %]
-        <span class="item-status notforloan">Not for loan [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
+        <span class="item-status notforloan">Not for loan [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
     [% END %]
-[% ELSIF NOT ( item.isa('Koha::Item') ) AND item.notforloan_per_itemtype %]
+[% ELSIF item.itemtype.notforloan %]
     [% SET itemavailable = 0 %]
-    <span class="item-status notforloan">Not for loan [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
+    <span class="item-status notforloan">Not for loan [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
 [% END %]
 
 [% IF ( item.bundle_host ) %]
@@ -122,6 +124,5 @@
 [% END %]
 
 [% IF ( itemavailable ) %]
-    [% IF NOT item.isa('Koha::Item') %][% SET restrictedvalueopac = item.restrictedvalueopac %][% END %]
-    <span class="item-status available">Available [% IF restrictedvalueopac %]<span class="restricted">([% restrictedvalueopac | html %])</span>[% END %]</span>
+    <span class="item-status available">Available [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
 [% END %]
