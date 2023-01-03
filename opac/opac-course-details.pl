@@ -46,10 +46,7 @@ my $course_reserves = GetCourseReserves( course_id => $course_id, include_items 
 
 if ( C4::Context->preference('UseRecalls') ) {
     foreach my $cr ( @$course_reserves ) {
-        if ( $cr->{issue}->{date_due} and $cr->{issue}->{borrowernumber} and $borrowernumber != $cr->{issue}->{borrowernumber} ) {
-            $cr->{course_item}->{avail_for_recall} = 1;
-            $cr->{course_item}->{biblionumber} = Koha::Items->find( $cr->{itemnumber} )->biblionumber;
-        }
+        $cr->{course_item} = Koha::Items->find($cr->{itemnumber});
     }
 }
 
