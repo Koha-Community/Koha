@@ -1,5 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% USE Asset %]
 [% SET is_popup = 1 %]
@@ -241,12 +243,12 @@
                                                     <ul>
                                                         [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                             <li>
-                                                                <strong>[% ITEM_RESULT.branchname | html %]</strong>
-                                                                [% IF ( ITEM_RESULT.location_opac ) %]<span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>[% END %]
+                                                                <strong>[% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]</strong>
+                                                                <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
                                                                 [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                                     ([% ITEM_RESULT.itemcallnumber | html %])
                                                                 [% END %]
-                                                                ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
+                                                                ([% INCLUDE 'item-status.inc' item = ITEM_RESULT.item_object %])
                                                             </li>
                                                         [% END %]
                                                     </ul>
@@ -303,8 +305,8 @@
                                             </td>
                                             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                 <li>
-                                                    [% ITEM_RESULT.branchname | html %]
-                                                    [% IF ( ITEM_RESULT.location_opac ) %]<span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>[% END %]
+                                                    [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                    <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
                                                     [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                         ([% ITEM_RESULT.itemcallnumber | html %])
                                                     [% END %]
