@@ -1690,7 +1690,7 @@ subtest 'list() tests' => sub {
 };
 
 subtest 'add_item() tests' => sub {
-  plan tests => 5;
+  plan tests => 7;
 
   $schema->storage->txn_begin;
 
@@ -1734,6 +1734,13 @@ subtest 'add_item() tests' => sub {
     })
     ->status_is(201, 'Item created')
     ->json_is('/biblio_id', $biblio_id);
+
+  my $item = $builder->build_sample_item();
+
+  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
+      external_id => $item->barcode,
+    })
+    ->status_is(409, 'Duplicate barcode');
 
   $schema->storage->txn_rollback;
 };

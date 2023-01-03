@@ -314,24 +314,20 @@ sub add_item {
             $item->barcode($barcode);
         }
 
-        if ( defined $item->barcode
-            && Koha::Items->search( { barcode => $item->barcode } )->count )
-        {
-            return $c->render(
-                status  => 400,
-                openapi => { error => "Barcode not unique" }
-            );
-        }
-
-        my $storedItem = $item->store;
-        $storedItem->discard_changes;
+        $item->store->discard_changes;
 
         $c->render(
             status => 201,
-            openapi => $storedItem->to_api
+            openapi => $item->to_api
         );
     }
     catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Duplicate barcode.' }
+            );
+        }
         $c->unhandled_exception($_);
     }
 }
