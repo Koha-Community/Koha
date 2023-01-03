@@ -54,7 +54,7 @@ my $fee_identifier;
 my $transaction_id;
 my $pickup_location;
 my $hold_mode;
-my $no_block;
+my $no_block = 'N';
 
 my $terminator = q{};
 
@@ -103,7 +103,7 @@ if (   $help
     exit();
 }
 
-$no_block //= 'N';
+$no_block = $no_block eq 'Y' ? 'Y' : 'N';
 
 $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
 
