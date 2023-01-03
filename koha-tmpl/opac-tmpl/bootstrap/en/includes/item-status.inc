@@ -39,8 +39,11 @@
             <span class="item-status checkedout">Checked out</span>
         [% END %]
     [% END %]
-    [%# FIXME We should move avail_for_recall to a Koha::Item method %]
-    [% IF !item.isa('Koha::Item') AND item.avail_for_recall %]<a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>[% END %]
+    [% IF show_recall_link %]
+        [% IF datedue && logged_in_user.borrowernumber != issue.borrowernumber %]
+            <a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>
+        [% END %]
+    [% END %]
 [% END %]
 
 [% IF item.isa('Koha::Item') %]
