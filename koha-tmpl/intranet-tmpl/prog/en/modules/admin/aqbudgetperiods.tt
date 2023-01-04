@@ -363,53 +363,55 @@
     <span>There are no unreceived orders for this budget.</span>
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
-    <h3>The unreceived orders from the following funds will be moved</h3>
-      Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
-    <table id="budgeth">
-      <thead>
-        <tr>
-            <th>Fund ID</th>
-            <th>Fund code</th>
-            <th>Fund name</th>
-            <th>Unreceived orders</th>
-        </tr>
-      </thead>
-      <tbody>
-        [% FOREACH budget IN budgets_to_move %]
-          <tr>
-            <td>[% budget.budget_id | html %]</td>
-            <td>[% budget.budget_code | html %]</td>
-            <td>[% budget.budget_name | html %]</td>
-            <td>[% budget.unreceived_orders.size | html %]</td>
-          </tr>
-        [% END %]
-      </tbody>
-    </table>
-    <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
-      <fieldset class="rows">
-        <ol>
-          <li>
-            <label class="required" for="to_budget_period_id">Select a budget</label>
-            <select name="to_budget_period_id" id="to_budget_period_id" required="required">
-              <option value=""></option>
-              [% FOR budget_period IN budget_periods %]
-                <option value="[% budget_period.budget_period_id | html %]">[% budget_period.budget_period_description | html %]</option>
-              [% END %]
-            </select>
-          </li>
-          <li>
-          <label for="move_remaining_unspent">Move remaining unspent funds</label>
-            <input type="checkbox" name="move_remaining_unspent" id="move_remaining_unspent" />
-          </li>
-        </ol>
-      </fieldset>
-      <fieldset class="action">
-          <input type="hidden" name="op" value="close_confirmed" />
-          <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-          <input type="submit" class="btn btn-primary" value="Move unreceived orders" />
-          <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
-      </fieldset>
-    </form>
+    <div class="page-section">
+        <h3>The unreceived orders from the following funds will be moved</h3>
+          Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
+        <table id="budgeth">
+          <thead>
+            <tr>
+                <th>Fund ID</th>
+                <th>Fund code</th>
+                <th>Fund name</th>
+                <th>Unreceived orders</th>
+            </tr>
+          </thead>
+          <tbody>
+            [% FOREACH budget IN budgets_to_move %]
+              <tr>
+                <td>[% budget.budget_id | html %]</td>
+                <td>[% budget.budget_code | html %]</td>
+                <td>[% budget.budget_name | html %]</td>
+                <td>[% budget.unreceived_orders.size | html %]</td>
+              </tr>
+            [% END %]
+          </tbody>
+        </table>
+        <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
+          <fieldset class="rows">
+            <ol>
+              <li>
+                <label class="required" for="to_budget_period_id">Select a budget</label>
+                <select name="to_budget_period_id" id="to_budget_period_id" required="required">
+                  <option value=""></option>
+                  [% FOR budget_period IN budget_periods %]
+                    <option value="[% budget_period.budget_period_id | html %]">[% budget_period.budget_period_description | html %]</option>
+                  [% END %]
+                </select>
+              </li>
+              <li>
+              <label for="move_remaining_unspent">Move remaining unspent funds</label>
+                <input type="checkbox" name="move_remaining_unspent" id="move_remaining_unspent" />
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="action">
+              <input type="hidden" name="op" value="close_confirmed" />
+              <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+              <input type="submit" class="btn btn-primary" value="Move unreceived orders" />
+              <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
+          </fieldset>
+        </form>
+    </div><!-- /.page-section -->
   [% END %]
 [% ELSIF closed %]
     <h1>Budget [% budget_period_description | html %] closed</h1>
