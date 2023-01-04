@@ -1194,113 +1194,115 @@
                         </form> <!-- /#checkin-form -->
 
                         [% IF ( riloop ) %]
-                            <h2>Checked-in items</h2>
-                            <table id="checkedintable">
-                                <thead>
-                                    <tr>
-                                        <th class="ci-duedate">Due date</th>
-                                        <th class="ci-title">Title</th>
-                                        <th class="ci-author">Author</th>
-                                        <th class="ci-barcode">Barcode</th>
-                                        <th class="ci-homelibrary">Home library</th>
-                                        <th class="ci-transferlibrary">Transfer to</th>
-                                        <th class="ci-shelvinglocation">Shelving location</th>
-                                        <th class="ci-callnumber">Call number</th>
-                                        <th class="ci-dateaccessioned">Date acquired</th>
-                                        <th class="ci-recordlevelitemtype">Record-level itemtype</th>
-                                        <th class="ci-itemtype">Item type</th>
-                                        <th class="ci-collection">Collection</th>
-                                        <th class="ci-patron">Patron</th>
-                                        <th class="ci-note">Note</th>
-                                    </tr>
-                                </thead>
+                            <div class="page-section">
+                                <h2>Checked-in items</h2>
+                                <table id="checkedintable">
+                                    <thead>
+                                        <tr>
+                                            <th class="ci-duedate">Due date</th>
+                                            <th class="ci-title">Title</th>
+                                            <th class="ci-author">Author</th>
+                                            <th class="ci-barcode">Barcode</th>
+                                            <th class="ci-homelibrary">Home library</th>
+                                            <th class="ci-transferlibrary">Transfer to</th>
+                                            <th class="ci-shelvinglocation">Shelving location</th>
+                                            <th class="ci-callnumber">Call number</th>
+                                            <th class="ci-dateaccessioned">Date acquired</th>
+                                            <th class="ci-recordlevelitemtype">Record-level itemtype</th>
+                                            <th class="ci-itemtype">Item type</th>
+                                            <th class="ci-collection">Collection</th>
+                                            <th class="ci-patron">Patron</th>
+                                            <th class="ci-note">Note</th>
+                                        </tr>
+                                    </thead>
 
-                                [% FOREACH riloo IN riloop %]
-                                    <tr>
-                                        <td class="ci-duedate">
-                                            [% IF ( riloo.duedate ) %]
-                                                [% IF ( riloo.return_overdue ) %]
-                                                    <span class="overdue">[% riloo.duedate | $KohaDates as_due_date => 1 %] (overdue)</span>
+                                    [% FOREACH riloo IN riloop %]
+                                        <tr>
+                                            <td class="ci-duedate">
+                                                [% IF ( riloo.duedate ) %]
+                                                    [% IF ( riloo.return_overdue ) %]
+                                                        <span class="overdue">[% riloo.duedate | $KohaDates as_due_date => 1 %] (overdue)</span>
+                                                    [% ELSE %]
+                                                        [% riloo.duedate | $KohaDates as_due_date => 1 %]
+                                                    [% END %]
                                                 [% ELSE %]
-                                                    [% riloo.duedate | $KohaDates as_due_date => 1 %]
+                                                    <span>Not checked out</span>
                                                 [% END %]
-                                            [% ELSE %]
-                                                <span>Not checked out</span>
-                                            [% END %]
-                                            [% IF ( riloo.damaged ) %]
-                                                <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => riloo.damaged ) | html %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td class="ci-title">
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
-                                                [% riloo.itemtitle | html %]
-                                                [% FOREACH subtitle IN riloo.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
-                                                [% FOREACH part_number IN riloo.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
-                                                [% FOREACH part_name IN riloo.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
-                                            </a>
-                                            [% IF ( riloo.enumchron ) %]
-                                                <br/>
-                                                <span class="item_enumeration" style="white-space: nowrap;">[% riloo.enumchron | html %]</span>
-                                            [% END %]
-                                        </td>
-                                        <td class="ci-author">[% riloo.itemauthor | html %]</td>
-                                        <td class="ci-barcode">
-                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | uri %]&amp;itemnumber=[% riloo.itemnumber | uri %]#item[% riloo.itemnumber | uri %]">[% riloo.barcode | html %]</a>
-                                        </td>
-                                        <td class="ci-homelibrary">
-                                            [% Branches.GetName( riloo.homebranch ) | html %]
-                                        </td>
-                                        <td class="ci-transferlibrary">
-                                            [% Branches.GetName( riloo.transferbranch ) | html %]
-                                        </td>
-                                        <td class="ci-shelvinglocation">
-                                            <span class="shelvingloc">[% riloo.location | html %]</span>
-                                        </td>
-                                        <td class="ci-callnumber">
-                                            [% riloo.itemcallnumber | html %]
-                                        </td>
-                                        <td class="ci-dateaccessioned">
-                                            [% riloo.dateaccessioned | $KohaDates %]
-                                        </td>
-                                        <td class="ci-recordlevelitemtype">
-                                            [% ItemTypes.GetDescription( riloo.recordtype ) | html %]
-                                        </td>
-                                        <td class="ci-itemtype">
-                                            [% ItemTypes.GetDescription( riloo.itemtype ) | html %]
-                                        </td>
-                                        <td class="ci-collection">
-                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => riloo.ccode) | html %]
-                                        </td>
-                                        <td class="ci-patron">
-                                            [% IF ( riloo.duedate ) %]
-                                                [% INCLUDE 'patron-title.inc' patron=riloo.patron hide_patron_infos_if_needed=1 invert_name=1 %]
-                                                [% IF riloo.borissuescount %]
-                                                    <span class="results_summary nowrap">
-                                                        <span class="label">Checkouts:</span>
-                                                        <span class="number_box">
-                                                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">[% riloo.borissuescount | html %]</a>
+                                                [% IF ( riloo.damaged ) %]
+                                                    <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => riloo.damaged ) | html %]</span>
+                                                [% END %]
+                                            </td>
+                                            <td class="ci-title">
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
+                                                    [% riloo.itemtitle | html %]
+                                                    [% FOREACH subtitle IN riloo.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
+                                                    [% FOREACH part_number IN riloo.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
+                                                    [% FOREACH part_name IN riloo.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
+                                                </a>
+                                                [% IF ( riloo.enumchron ) %]
+                                                    <br/>
+                                                    <span class="item_enumeration" style="white-space: nowrap;">[% riloo.enumchron | html %]</span>
+                                                [% END %]
+                                            </td>
+                                            <td class="ci-author">[% riloo.itemauthor | html %]</td>
+                                            <td class="ci-barcode">
+                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | uri %]&amp;itemnumber=[% riloo.itemnumber | uri %]#item[% riloo.itemnumber | uri %]">[% riloo.barcode | html %]</a>
+                                            </td>
+                                            <td class="ci-homelibrary">
+                                                [% Branches.GetName( riloo.homebranch ) | html %]
+                                            </td>
+                                            <td class="ci-transferlibrary">
+                                                [% Branches.GetName( riloo.transferbranch ) | html %]
+                                            </td>
+                                            <td class="ci-shelvinglocation">
+                                                <span class="shelvingloc">[% riloo.location | html %]</span>
+                                            </td>
+                                            <td class="ci-callnumber">
+                                                [% riloo.itemcallnumber | html %]
+                                            </td>
+                                            <td class="ci-dateaccessioned">
+                                                [% riloo.dateaccessioned | $KohaDates %]
+                                            </td>
+                                            <td class="ci-recordlevelitemtype">
+                                                [% ItemTypes.GetDescription( riloo.recordtype ) | html %]
+                                            </td>
+                                            <td class="ci-itemtype">
+                                                [% ItemTypes.GetDescription( riloo.itemtype ) | html %]
+                                            </td>
+                                            <td class="ci-collection">
+                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => riloo.ccode) | html %]
+                                            </td>
+                                            <td class="ci-patron">
+                                                [% IF ( riloo.duedate ) %]
+                                                    [% INCLUDE 'patron-title.inc' patron=riloo.patron hide_patron_infos_if_needed=1 invert_name=1 %]
+                                                    [% IF riloo.borissuescount %]
+                                                        <span class="results_summary nowrap">
+                                                            <span class="label">Checkouts:</span>
+                                                            <span class="number_box">
+                                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">[% riloo.borissuescount | html %]</a>
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    [% END %]
+                                                    <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
+                                                [% ELSE %]
+                                                    Not checked out
                                                 [% END %]
-                                                <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
-                                            [% ELSE %]
-                                                Not checked out
-                                            [% END %]
-                                        </td>
-                                        <td class="ci-note">
-                                            [% IF ( riloo.patron.borrowernotes ) %]
-                                                <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | html %]</span></p>
-                                            [% END %]
-                                            [% IF ( riloo.itemnote ) %]
-                                                <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</span></p>
-                                            [% END %]
-                                            [% IF ( riloo.itemnotes_nonpublic ) %]
-                                                <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</span></p>
-                                            [% END %]
-                                        </td>
-                                    </tr>
-                                [% END # /FOREACH riloo %]
-                            </table> <!-- /#checkedintable -->
+                                            </td>
+                                            <td class="ci-note">
+                                                [% IF ( riloo.patron.borrowernotes ) %]
+                                                    <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | html %]</span></p>
+                                                [% END %]
+                                                [% IF ( riloo.itemnote ) %]
+                                                    <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</span></p>
+                                                [% END %]
+                                                [% IF ( riloo.itemnotes_nonpublic ) %]
+                                                    <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</span></p>
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END # /FOREACH riloo %]
+                                </table> <!-- /#checkedintable -->
+                            </div><!-- /.page-section -->
                         [% END # /IF riloop %]
 
                     [% IF Koha.Preference('CircSidebar') %]
