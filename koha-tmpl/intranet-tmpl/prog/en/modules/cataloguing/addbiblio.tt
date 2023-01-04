@@ -167,7 +167,7 @@
             e.preventDefault();
             var tab = $(this).data("tab");
             var field = $(this).data("field");
-            var tablink = $("a[data-tabid='" + tab + "']" );
+            var tablink = $("a[data-tabid='" + tab + "']" ).get(0).hash;
             selectTab( tablink );
             window.scrollTo( 0, getScrollto( field, "toolbar" ) );
         });
