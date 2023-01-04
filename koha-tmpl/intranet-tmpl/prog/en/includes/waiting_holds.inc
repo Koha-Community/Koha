@@ -8,7 +8,7 @@
             <th>Waiting since</th>
             <th>Date hold placed</th>
           [% IF table_name == 'holdscr' %]
-            <th data-type="@data-sort">Date cancellation requested</th>
+            <th>Date cancellation requested</th>
           [% END %]
             <th>Expiration date</th>
             <th class="anti-the">Title</th>
@@ -29,11 +29,19 @@
                 <td data-order="[% reserveloo.waitingdate | html %]"><span>[% reserveloo.waitingdate | $KohaDates %]</span></td>
                 <td data-order="[% reserveloo.reservedate | html %]"><span>[% reserveloo.reservedate | $KohaDates %]</span></td>
               [% IF table_name == 'holdscr' %]
-                <td>
-                [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
-                    <span data-order="[% cancellation_request.creation_date | html %]">[% cancellation_request.creation_date | $KohaDates %]</span>
+                [% IF reserveloo.cancellation_requests.count %]
+                  [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
+                    [% IF loop.first %]
+                      <td data-order="[% cancellation_request.creation_date | html %]">
+                    [% END %]
+                        <span>[% cancellation_request.creation_date | $KohaDates %]</span>
+                    [% IF loop.last %]
+                      </td>
+                    [% END %]
+                  [% END %]
+                [% ELSE %]
+                  <td></td>
                 [% END %]
-                </td>
               [% END %]
                 <td data-order="[% reserveloo.expirationdate | html %]"><span>[% reserveloo.expirationdate | $KohaDates %]</span></td>
                 <td>
