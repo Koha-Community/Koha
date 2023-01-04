@@ -415,6 +415,18 @@
                             [% ELSE %]
                                 <option value="c">c- multiple transliterations: ISO or other schemes</option>
                             [% END %]
+                            [% IF ( f11g ) %]
+                                <option value="g"
+                                    selected="selected">g- ALA-LC Romanization Tables</option>
+                            [% ELSE %]
+                                <option value="g">g- ALA-LC Romanization Tables</option>
+                            [% END %]
+                            [% IF ( f11h ) %]
+                                <option value="h"
+                                    selected="selected">h- DIN transliteration scheme</option>
+                            [% ELSE %]
+                                <option value="h">h- DIN transliteration scheme</option>
+                            [% END %]
                             [% IF ( f11y ) %]
                                 <option value="y" selected="selected">y- no transliteration scheme used</option>
                             [% ELSE %]
@@ -628,6 +640,45 @@
                             [% ELSE %]
                                 <option value="ea">ea- Chinese</option>
                             [% END %]
+                            [% IF ( f15eb ) %]
+                                <option value="eb" selected="selected">eb- Chinese -
+                                Han ideograms - simplified version</option>
+                            [% ELSE %]
+                                <option value="eb">eb- Chinese han ideograms (simplified version)</option>
+                            [% END %]
+                            [% IF ( f15ec ) %]
+                                <option value="ec" selected="selected">ec- Chinese -
+                                Han ideograms - traditional version</option>
+                            [% ELSE %]
+                                <option value="ec">ec- Chinese han ideograms (traditional version)</option>
+                            [% END %]
+                            [% IF ( f15ed ) %]
+                                <option value="ed" selected="selected">ed- Mongol biching</option>
+                            [% ELSE %]
+                                <option value="ed">ed- Mongol biching</option>
+                            [% END %]
+                            [% IF ( f15ee ) %]
+                                <option value="ee" selected="selected">ee- Mandchou</option>
+                            [% ELSE %]
+                                <option value="ee">ee- Mandchou</option>
+                            [% END %]
+                            [% IF ( f15ef ) %]
+                                <option value="ef" selected="selected">ef- Yi</option>
+                            [% ELSE %]
+                                <option value="ef">ef- Yi</option>
+                            [% END %]
+                            [% IF ( f15eg ) %]
+                                <option value="eg" selected="selected">eg- Dongba -
+                                Naxi</option>
+                            [% ELSE %]
+                                <option value="eg">eg- Dongba (Naxi)</option>
+                            [% END %]
+                            [% IF ( f15eh ) %]
+                                <option value="eh" selected="selected">eh- Geba -
+                                Naxi</option>
+                            [% ELSE %]
+                                <option value="eh">eh- Geba (Naxi)</option>
+                            [% END %]
                             [% IF ( f15fa ) %]
                                 <option value="fa" selected="selected">fa- Arabic</option>
                             [% ELSE %]
@@ -648,10 +699,30 @@
                             [% ELSE %]
                                 <option value="ia">ia- Thai</option>
                             [% END %]
+                            [% IF ( f15id ) %]
+                                <option value="id" selected="selected">id- Laotian</option>
+                            [% ELSE %]
+                                <option value="id">id- Laotian</option>
+                            [% END %]
+                            [% IF ( f15ie ) %]
+                                <option value="ie" selected="selected">ie- Cham</option>
+                            [% ELSE %]
+                                <option value="ie">ie- Cham</option>
+                            [% END %]
                             [% IF ( f15ja ) %]
                                 <option value="ja" selected="selected">ja- Devanagari</option>
                             [% ELSE %]
                                 <option value="ja">ja- Devanagari</option>
+                            [% END %]
+                            [% IF ( f15jf ) %]
+                                <option value="jf" selected="selected">jf- Tibetan</option>
+                            [% ELSE %]
+                                <option value="jf">jf- Tibetan</option>
+                            [% END %]
+                            [% IF ( f15jg ) %]
+                                <option value="jg" selected="selected">jg- Newars' writing</option>
+                            [% ELSE %]
+                                <option value="jg">jg- Newars' writing</option>
                             [% END %]
                             [% IF ( f15ka ) %]
                                 <option value="ka" selected="selected">ka- Korean</option>
@@ -663,22 +734,45 @@
                             [% ELSE %]
                                 <option value="la">la- Tamil</option>
                             [% END %]
-                            [% IF ( f15zz ) %]
-                                <option value="zz" selected="selected">zz- Other</option>
+                            [% IF ( f15lf ) %]
+                                <option value="lf" selected="selected">lf- Grantha</option>
                             [% ELSE %]
-                                <option value="zz">zz- Other</option>
+                                <option value="lf">lf- Grantha</option>
                             [% END %]
-
-                            [% IF ( f15ma ) %]
+                             [% IF ( f15ma ) %]
                                 <option value="ma" selected="selected">ma- Georgian</option>
                             [% ELSE %]
                                 <option value="ma">ma- Georgian</option>
                             [% END %]
-
                             [% IF ( f15mb ) %]
                                 <option value="mb" selected="selected">mb- Armenian</option>
                             [% ELSE %]
                                 <option value="mb">mb- Armenian</option>
+                            [% END %]
+                            [% IF ( f15nb ) %]
+                                <option value="nb" selected="selected">nb- Tifinagh</option>
+                            [% ELSE %]
+                                <option value="nb">nb- Tifinagh (Berber alphabet)</option>
+                            [% END %]
+                            [% IF ( f15nc ) %]
+                                <option value="nc" selected="selected">nc- N’ko</option>
+                            [% ELSE %]
+                                <option value="nc">nc- N’ko</option>
+                            [% END %]
+                            [% IF ( f15oa ) %]
+                                <option value="oa" selected="selected">oa- Syriac</option>
+                            [% ELSE %]
+                                <option value="oa">oa- Syriac</option>
+                            [% END %]
+                            [% IF ( f15pa ) %]
+                                <option value="pa" selected="selected">pa- Hieroglyphs</option>
+                            [% ELSE %]
+                                <option value="pa">pa- Hieroglyphs (Egypt)</option>
+                            [% END %]
+                            [% IF ( f15zz ) %]
+                                <option value="zz" selected="selected">zz- Other</option>
+                            [% ELSE %]
+                                <option value="zz">zz- Other</option>
                             [% END %]
                         </select>
                     </td>
