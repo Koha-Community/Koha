@@ -87,7 +87,7 @@
                                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode, opac => 1 ) | html %]</td>
                                         <td>[% cr.item.itemcallnumber | html %]</td>
                                         <td>[% cr.item.copynumber | html %]</td>
-                                        <td>[% INCLUDE 'item-status.inc' item=cr.course_item issue=cr.issue show_recall_link=1 %]</td>
+                                        <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue show_recall_link=Koha.Preference('UseRecalls') %]</td>
                                         <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
                                         <td>[% IF ( cr.public_note ) %]
                                                 [% cr.public_note | $raw %]
