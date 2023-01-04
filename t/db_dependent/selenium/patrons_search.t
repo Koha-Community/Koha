@@ -17,9 +17,18 @@
 
 use Modern::Perl;
 
+my $original_dateformat                = C4::Context->preference('dateformat');
+my $original_DefaultPatronSearchFields = C4::Context->preference('DefaultPatronSearchFields');
+my $original_DefaultPatronSearchMethod = C4::Context->preference('DefaultPatronSearchMethod');
+my $original_PatronsPerPage            = C4::Context->preference('PatronsPerPage');
 our @cleanup;
+
 END {
     unless ( @cleanup ) { say "WARNING: Cleanup failed!" }
+    C4::Context->set_preference( 'dateformat',                $original_dateformat );
+    C4::Context->set_preference( 'DefaultPatronSearchFields', $original_DefaultPatronSearchFields );
+    C4::Context->set_preference( 'DefaultPatronSearchMethod', $original_DefaultPatronSearchMethod );
+    C4::Context->set_preference( 'PatronsPerPage',            $original_PatronsPerPage );
     $_->delete for @cleanup;
 };
 
@@ -43,7 +52,6 @@ if ( $@ ) {
     plan tests => 1;
 }
 
-
 my $s             = t::lib::Selenium->new;
 my $driver        = $s->driver;
 my $opac_base_url = $s->opac_base_url;
@@ -52,7 +60,7 @@ my $builder       = t::lib::TestBuilder->new;
 my $schema        = Koha::Database->schema;
 
 subtest 'Search patrons' => sub {
-    plan tests => 25;
+    plan tests => 26;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
@@ -73,9 +81,6 @@ subtest 'Search patrons' => sub {
     my $library = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
-    my $default_patron_search_fields = C4::Context->preference('DefaultPatronSearchFields');
-    my $default_patron_search_method = C4::Context->preference('DefaultPatronSearchMethod');
-    my $default_patron_per_page = C4::Context->preference('PatronsPerPage');
     for my $i ( 1 .. 25 ) {
         push @patrons,
           $builder->build_object(
@@ -98,8 +103,8 @@ subtest 'Search patrons' => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                surname   => "test",
-                firstname => "not_p_a_t_r_o_n",    # won't match 'patron'
+                surname       => "test",
+                firstname     => "not_p_a_t_r_o_n",                # won't match 'patron'
                 categorycode  => $patron_category->categorycode,
                 branchcode    => $library->branchcode,
                 borrowernotes => $borrowernotes,
@@ -112,21 +117,23 @@ subtest 'Search patrons' => sub {
     my $library_2 = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => 'X' . $branchname } }
     );
-    push @patrons,
+    my $patron_27 =
       $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
-                surname       => "test_patron_26",
+                surname       => "test_patron_27",
                 firstname     => $firstname,
                 categorycode  => $patron_category->categorycode,
                 branchcode    => $library_2->branchcode,
                 borrowernotes => $borrowernotes,
                 address       => $address,
                 email         => $email,
+                dateofbirth   => '1980-06-17',
             }
         }
       );
+    push @patrons, $patron_27;
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
         {
@@ -181,6 +188,7 @@ subtest 'Search patrons' => sub {
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
     is( scalar @adv_options, $nb_standard_fields, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
     is( scalar @filter_options, $nb_standard_fields, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     $driver->get( $base_url . "/members/members-home.pl" );
@@ -260,6 +268,7 @@ subtest 'Search patrons' => sub {
 
     # clear form
     $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+
     # Search on searchable attribute, we expect 2 patrons
     $s->fill_form( { search_patron_filter => 'test_attr_2' } );
     $s->submit_form;
@@ -307,8 +316,7 @@ subtest 'Search patrons' => sub {
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[0]->click;
         $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
-        is( $patron_selected_text, "Patrons selected: 3", "Tree patrons are selected" );
-
+        is( $patron_selected_text, "Patrons selected: 3", "Three patrons are selected" );
 
         # Perform another search
         $driver->get( $base_url . "/members/members-home.pl" );
@@ -316,7 +324,7 @@ subtest 'Search patrons' => sub {
         $s->submit_form;
         $s->wait_for_ajax;
         $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
-        is( $patron_selected_text, "Patrons selected: 3", "Tree patrons still selected" );
+        is( $patron_selected_text, "Patrons selected: 3", "Three patrons still selected" );
 
         $driver->find_element('//*[@id="patronlist-menu"]')->click;
         $driver->find_element('//a[@class="patron-list-add"]')->click;
@@ -331,14 +339,70 @@ subtest 'Search patrons' => sub {
         $patron_list->delete;
     };
 
+    subtest 'filter by date of birth' => sub {
+        plan tests => 7;
+
+        C4::Context->set_preference( 'dateformat', 'metric' );
+
+        # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
+
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->submit_form;
+        $s->wait_for_ajax;
+
+        $s->show_all_entries( '//div[@id="' . $table_id . '_wrapper"]' );
+        my $dob_search_filter =
+            $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
+
+        $dob_search_filter->send_keys('1980');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 1, 'search by correct year shows the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('1986');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 0, 'search by incorrect year does not show the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('1980-06');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 1, 'search by correct year-month shows the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('1980-06-17');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 1, 'search by correct full iso date shows the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('1986-06-17');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 0, 'search by incorrect full iso date does not show the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('17/06/1980');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 1, 'search by correct full formatted date shows the patron' );
+        $dob_search_filter->clear;
+
+        $dob_search_filter->send_keys('17/06/1986');
+        $s->wait_for_ajax;
+        is( is_patron_shown($patron_27), 0, 'search by incorrect full formatted date does not show the patron' );
+        $dob_search_filter->clear;
+    };
+
     push @cleanup, $_ for @patrons;
     push @cleanup, $library;
     push @cleanup, $library_2;
     push @cleanup, $patron_category;
     push @cleanup, $attribute_type, $attribute_type_searchable;
-    C4::Context->set_preference('DefaultPatronSearchFields',$default_patron_search_fields);
-    C4::Context->set_preference('DefaultPatronSearchMethod',$default_patron_search_method);
-    C4::Context->set_preference('PatronsPerPage',$default_patron_per_page);
 
     $driver->quit();
 };
+
+sub is_patron_shown {
+    my ($patron) = @_;
+
+    my @checkboxes = $driver->find_elements('//input[@type="checkbox"][@name="borrowernumber"]');
+    return scalar( grep { $_->get_value == $patron->borrowernumber } @checkboxes );
+}
