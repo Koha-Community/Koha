@@ -31,7 +31,7 @@
                     if ( data.city ) {
                         address += ', ';
                     }
-                    address += escape_str(data.city);
+                    address += escape_str(data.state);
                 }
                 if ( data.postal_code ) {
                     address += " " + escape_str(data.postal_code);
