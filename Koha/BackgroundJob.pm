@@ -25,7 +25,6 @@ use Try::Tiny qw( catch try );
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
-use Koha::Plugins;
 use Koha::Exceptions::BackgroundJob;
 
 use base qw( Koha::Object );
@@ -438,6 +437,7 @@ sub plugin_types_to_classes {
     my ($self) = @_;
 
     unless ( exists $self->{_plugin_mapping} ) {
+        require Koha::Plugins;
         my @plugins = Koha::Plugins->new()->GetPlugins( { method => 'background_tasks', } );
 
         foreach my $plugin (@plugins) {
