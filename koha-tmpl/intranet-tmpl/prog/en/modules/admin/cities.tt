@@ -33,7 +33,7 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
             [% END %]
-            [% WRAPPER breadcrumb_item active = 1 %]
+            [% WRAPPER breadcrumb_item bc_active = 1 %]
                 [% IF city.cityid %]
                     <span>Modify city</span>
                 [% ELSE %]
@@ -45,12 +45,12 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
             [% END %]
-            [% WRAPPER breadcrumb_item active = 1 %]
+            [% WRAPPER breadcrumb_item bc_active = 1 %]
                 Confirm deletion of city
             [% END %]
 
         [% ELSE %]
-            [% WRAPPER breadcrumb_item active = 1 %]
+            [% WRAPPER breadcrumb_item bc_active = 1 %]
                 Cities
             [% END %]
         [% END #/IF op = add_form %]
