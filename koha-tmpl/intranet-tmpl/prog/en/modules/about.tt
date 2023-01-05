@@ -13,16 +13,11 @@
 [% PROCESS 'about-team.inc' %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="#" aria-current="page">About Koha</a>
-        </li>
-    </ol>
-</nav>
+        [% END %]
+    [% END %]
 [% END %]
 
 <div class="main container-fluid">
