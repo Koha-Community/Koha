@@ -412,7 +412,7 @@
             [ WRAPPER breadcrumb_item ]
                 <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
             [ END ]
-            [ WRAPPER breadcrumb_item active = 1 ]
+            [ WRAPPER breadcrumb_item bc_active = 1 ]
                 Add form
             [ END ]
 
@@ -420,12 +420,12 @@
             [ WRAPPER breadcrumb_item ]
                 <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
             [ END ]
-            [ WRAPPER breadcrumb_item active = 1 ]
+            [ WRAPPER breadcrumb_item bc_active = 1 ]
                 Confirm deletion
             [ END ]
 
         [ ELSE ]
-            [ WRAPPER breadcrumb_item active = 1 ]
+            [ WRAPPER breadcrumb_item bc_active = 1 ]
                 Module page
             [ END ]
         [ END #/IF op = add_form ]
@@ -448,7 +448,7 @@
 
 [%# Used to build individual breadcrumb items in the breadcrumb nav %]
 [% BLOCK breadcrumb_item %]
-    [% IF ( active ) %]
+    [% IF ( bc_active ) %]
         <li>
             <a href="#" aria-current="page">
                 [% content | $raw %]
