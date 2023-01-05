@@ -16,16 +16,11 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">Acquisitions</a>
-        </li>
-    </ol>
-</nav>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            Acquisitions
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 [% END %]
 
 <div class="main container-fluid">

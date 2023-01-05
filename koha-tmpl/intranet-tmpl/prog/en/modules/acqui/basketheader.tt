@@ -20,35 +20,26 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
-        </li>
+        [% END %]
         [% IF ( add_form ) %]
             [% IF ( basketno ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Edit basket '[% basketname | html %]'
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1%]
+                    Edit basket '[% basketname | html %]'
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Add a basket to [% booksellername | html %]
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1%]
+                    Add a basket to [% booksellername | html %]
+                [% END %]
             [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
