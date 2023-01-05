@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE HtmlTags %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -29,37 +30,20 @@
 
             <h1>About Koha</h1>
 
-            <div id="abouttabs" class="toptabs numbered">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#about" aria-controls="about" role="tab" data-toggle="tab">Server information</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#perl" aria-controls="perl" role="tab" data-toggle="tab">Perl modules</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#sysinfo" aria-controls="sysinfo" role="tab" data-toggle="tab">System information</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#team" aria-controls="team" role="tab" data-toggle="tab">Koha team</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#licenses" aria-controls="licenses" role="tab" data-toggle="tab">Licenses</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#translations" aria-controls="translations" role="tab" data-toggle="tab">Translations</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#history" aria-controls="history" role="tab" data-toggle="tab">Timeline</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#dedications" aria-controls="dedications" role="tab" data-toggle="tab">Dedications</a>
-                    </li>
-                </ul>
+            [% WRAPPER tabs id= "abouttabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% WRAPPER tab_item tabname= "about" active= 1 %] Server information [% END %]
+                    [% WRAPPER tab_item tabname= "perl" %] Perl modules [% END %]
+                    [% WRAPPER tab_item tabname= "sysinfo" %] System information [% END %]
+                    [% WRAPPER tab_item tabname= "team" %] Koha team [% END %]
+                    [% WRAPPER tab_item tabname= "licenses" %] Licenses [% END %]
+                    [% WRAPPER tab_item tabname= "translations" %] Translations [% END %]
+                    [% WRAPPER tab_item tabname= "history" %] Timeline [% END %]
+                    [% WRAPPER tab_item tabname= "dedications" %] Dedications [% END %]
+                [% END %]
 
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="about">
-
+                [% WRAPPER tab_panels %]
+                    [% WRAPPER tab_panel tabname= "about" active= 1 %]
                         <table>
                             <caption>Server information</caption>
                             <tr>
@@ -230,9 +214,9 @@
                                 </td>
                             </tr>
                         </table>
-                    </div> <!-- /#about -->
+                    [% END # /WRAPPER tab_item about %]
 
-                    <div role="tabpanel" class="tab-pane" id="perl">
+                    [% WRAPPER tab_panel tabname= "perl" %]
                         <table style="cursor:pointer">
                             <caption>Perl modules</caption>
                             [% FOREACH tabl IN table %]
@@ -280,9 +264,9 @@
                                 </tr>
                             [% END # /FOREACH tabl %]
                         </table>
-                    </div> <!-- /#perl -->
+                    [% END # /WRAPPER tab_item perl %]
 
-                    <div role="tabpanel" class="tab-pane" id="sysinfo">
+                    [% WRAPPER tab_panel tabname= "sysinfo" %]
                         [% IF warnRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing %]
                             [% IF (warnIsRootUser) %]
                                 <h2>Warning regarding current user</h2>
@@ -707,9 +691,9 @@
                         [% ELSE %]
                             <p>No warnings.</p>
                         [% END # /IF warnRequireChoosingExistingAuthority... %]
-                    </div> <!-- /#sysinfo -->
+                    [% END # /WRAPPER tab_item sysinfo %]
 
-                    <div role="tabpanel" class="tab-pane" id="team">
+                    [% WRAPPER tab_panel tabname= "team" %]
                         <h2>Special thanks to the following organizations</h2>
                         <ul>
                             <li>
@@ -894,9 +878,9 @@
                             <li>Nicholas Rosasco (Documentation Compiler)</li>
                             <li>Regula Sebastiao</li>
                         </ul>
-                    </div> <!-- /#team -->
+                    [% END # /WRAPPER tab_item team %]
 
-                    <div role="tabpanel" class="tab-pane" id="licenses">
+                    [% WRAPPER tab_panel tabname= "licenses" %]
                         <h2>Koha</h2>
                         <p>
                             <a href="http://www.gnu.org/licenses/gpl-3.0.html">Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</a>
@@ -1102,9 +1086,9 @@
                             <a href="https://wicky.nillia.ms/enquire.js">Enquire.js</a> licensed under the <a href="https://github.com/WickyNilliams/enquire.js/blob/master/LICENSE">MIT license</a>.
                         </p>
 
-                    </div> <!-- /#licenses -->
+                    [% END # /WRAPPER tab_item licenses %]
 
-                    <div role="tabpanel" class="tab-pane" id="translations">
+                    [% WRAPPER tab_panel tabname= "translations" %]
                         <h2>Translation</h2>
                         <ul>
                             <li>العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare Technologies; Versions 3.6 to 3.14 by Arabic Koha support team: Karam Qubsi, Kouider Bounama, Sham Bajaa, Ghofran Alshami, Chrestian Aboud, Fatema Salem and Duaa Bazzazi.
@@ -1153,10 +1137,9 @@
                             <li>&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman</li>
                             <li>&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; (Ukrainian) Victor Titarchuk and Serhij Dubyk</li>
                         </ul>
+                    [% END # /WRAPPER tab_item translations %]
 
-                    </div> <!-- /#translations -->
-
-                    <div role="tabpanel" class="tab-pane" id="history">
+                    [% WRAPPER tab_panel tabname= "history" %]
                         <h2>Koha history timeline</h2>
                         [% IF ! timeline_read_error %]
                             <table style="cursor:pointer">
@@ -1180,9 +1163,9 @@
                                 Could not read the history.txt file. Please make sure &lt;docdir&gt; is correctly defined in koha-conf.xml.
                             </div>
                         [% END %]
-                    </div> <!-- /#history -->
+                    [% END # /WRAPPER tab_item history %]
 
-                    <div role="tabpanel" class="tab-pane" id="dedications">
+                    [% WRAPPER tab_panel tabname= "dedications" %]
                         <h2>22.11</h2>
                         <p>
                             The Koha Community would like to dedicate the release of Koha 22.11 to Rosalie Blake.
@@ -1197,9 +1180,9 @@
                             She was also a practicing Justice of the Peace, a stalwart of the Levin Pottery Club and much loved
                             mother of Simon and Jeremy, and grandmother of Ben, Toby, Anna, Charlotte and Billy.
                         </p>
-                    </div> <!-- /#dedications -->
-                 </div> <!-- /.tab-content -->
-            </div> <!-- /#abouttabs -->
+                    [% END # /WRAPPER tab_item dedications %]
+                [% END %]
+            [% END # /WRAPPER abouttabs %]
         </div> <!-- /.col-md-12 -->
     </div> <!-- /.row -->
 
