@@ -341,3 +341,62 @@
     </table> <!-- /#itemst -->
 </div>
 [% END %]
+
+[%# BOOTSTRAP TAB WRAPPER USAGE
+    [ WRAPPER tabs id= "tabs container id" ]
+        [ WRAPPER tabs_nav ]
+            [ WRAPPER tab_item tabname= "tab name 1" ] [ content ] [ END ]
+            [ WRAPPER tab_item tabname= "tab name 2" ] [ content ] [ END ]
+            ...
+        [ END ]
+        [ WRAPPER tab_panels ]
+            [ WRAPPER tab_panel id="tab name 1"] [ content ] [ END ]
+            [ WRAPPER tab_panel id="tab name 2"] [ content ] [ END ]
+            ...
+        [ END ]
+    [ END ]
+ %]
+
+[% BLOCK tabs %]
+    [% IF ( id ) %]
+        <div id="[% id | html %]" class="toptabs">
+    [% ELSE %]
+        <div class="toptabs">
+    [% END %]
+        [% content | $raw %]
+    </div>
+[% END %]
+
+[% BLOCK tabs_nav %]
+    <ul class="nav nav-tabs" role="tablist">
+        [% content | $raw %]
+    </ul>
+[% END %]
+
+[% BLOCK tab_item %]
+    [% IF ( active ) %]
+        <li role="presentation" class="active">
+    [% ELSE %]
+        <li role="presentation">
+    [% END %]
+        <a href="#[% tabname | uri %]_panel" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
+            [% content | $raw %]
+        </a>
+    <li>
+[% END %]
+
+[% BLOCK tab_panels %]
+    <div class="tab-content">
+        [% content | $raw %]
+    </div>
+[% END %]
+
+[% BLOCK tab_panel %]
+    [% IF ( active ) %]
+        <div role="tabpanel" class="tab-pane active" id="[% tabname | html %]_panel">
+    [% ELSE %]
+        <div role="tabpanel" class="tab-pane" id="[% tabname | html %]_panel">
+    [% END %]
+        [% content| $raw %]
+    </div>
+[% END %]
