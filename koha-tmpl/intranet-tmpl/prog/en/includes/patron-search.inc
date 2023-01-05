@@ -314,7 +314,7 @@
                 "-and": function(){
                     let pattern = $("#search_patron_filter").val();
                     if (!pattern) return "";
-                    let patterns = pattern.split(' ').filter(function(s){ return s.length });
+                    let patterns = pattern.split(/[\s,]+/).filter(function(s){ return s.length });
 
                     let filters = [];
                     let search_type = $("#searchtype_filter").val() || "contain";
