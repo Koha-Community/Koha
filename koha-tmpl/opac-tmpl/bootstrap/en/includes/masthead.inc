@@ -395,10 +395,6 @@
                                 <div class="local-login">
                                     <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" autocomplete="off" />
                                     <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" autocomplete="off" />
-                                    <fieldset class="action">
-                                        <input type="submit" class="btn btn-primary" value="Log in" />
-                                    </fieldset>
-                                </div>
                                 [% IF OpacLoginInstructions %]
                                     <div id="nologininstructions-modal" class="nologininstructions">
                                         [% PROCESS koha_news_block news => OpacLoginInstructions %]
@@ -414,14 +410,13 @@
                                         <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
                                     </div>
                                 [% END %]
+                                    <fieldset class="action">
+                                        <input type="submit" class="btn btn-primary" value="Log in" />
+                                    </fieldset>
+                                </div>
                             </fieldset>
                         [% END %]
                     </div>
-                    [% UNLESS Koha.Preference('opacShibOnly') %]
-                        <div class="modal-footer">
-                            <input type="submit" class="btn btn-primary" value="Log in" />
-                        </div>
-                    [% END %]
                 </form> <!-- /#auth -->
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
