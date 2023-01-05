@@ -64,8 +64,8 @@ while (1) {
         # It could work in a first step, but then we will want to handle job that will be created from the message received
         my $job = Koha::BackgroundJobs->find($args->{job_id});
 
+        $conn->ack( { frame => $frame } ); # Acknowledge the message was received
         process_job( $job, $args );
-        $conn->ack( { frame => $frame } ); # FIXME depending on success?
 
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new' });
