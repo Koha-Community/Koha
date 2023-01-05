@@ -54,50 +54,49 @@
     <a href="/cgi-bin/koha/admin/transfer_limits.pl">Switch to advanced editor</a>
 </fieldset>
 
-
-  <div id="transferlimit_tabs" class="toptabs">
-    <ul class="nav nav-tabs" role="tablist">
+[% WRAPPER tabs id = "transferlimit_tabs" %]
+    [% WRAPPER tabs_nav %]
         [% FOREACH codes_loo IN codes_loop %]
-            <li role="presentation">
-                <a href="#[% codes_loo.code | uri %]set" aria-controls="[% codes_loo.code | uri %]set" role="tab" data-toggle="tab">[% codes_loo.code | html %]</a>
-            </li>
+            [% WRAPPER tab_item tabname=codes_loo.code %]
+                [% codes_loo.code | html %]
+            [% END %]
         [% END %]
-    </ul>
-        <form method="post" action="branch_transfer_limits.pl">
-    <div class="tab-content">
+    [% END %]
 
-    [% FOREACH codes_loo IN codes_loop %]
-    <div role="tabpanel" class="tab-pane" id="[% codes_loo.code | html %]set">
-    <h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
+    <form method="post" action="branch_transfer_limits.pl">
+        [% WRAPPER tab_panels %]
+            [% FOREACH codes_loo IN codes_loop %]
+                [% WRAPPER tab_panel tabname=codes_loo.code %]
+                    <h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
 
-    <p><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
+                    <p><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
 
-        <table id="[% codes_loo.code | html %]table" class="sorted">
-            <thead>
-                <tr>
-                    <th>Library</th>
-                    <th>Allow transfer?</th>
-                </tr>
-            </thead>
+                    <table id="[% codes_loo.code | html %]table" class="sorted">
+                        <thead>
+                            <tr>
+                                <th>Library</th>
+                                <th>Allow transfer?</th>
+                            </tr>
+                        </thead>
 
-            <tbody>
-                    [% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
-                        <tr>
-                            <td><label style="min-width:400px;" for="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row">[% to_branch_loo.toBranch | html %] - [% Branches.GetName( to_branch_loo.toBranch ) | html %]</label></td>
-                            <td>
-                            [% IF ( to_branch_loo.isChecked ) %]
-                                <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" checked="checked" />
-                            [% ELSE %]
-                                <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" />
-                            [% END %]
-                            </td>
-                        </tr>
-                    [% END %]
-            </tbody>
-        </table>
-        </div>
-                [% END %]
-        </div>
+                        <tbody>
+                                [% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
+                                    <tr>
+                                        <td><label style="min-width:400px;" for="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row">[% to_branch_loo.toBranch | html %] - [% Branches.GetName( to_branch_loo.toBranch ) | html %]</label></td>
+                                        <td>
+                                        [% IF ( to_branch_loo.isChecked ) %]
+                                            <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" checked="checked" />
+                                        [% ELSE %]
+                                            <input type="checkbox" class="cb cb[% codes_loo.code | html %]" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" />
+                                        [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                        </tbody>
+                    </table>
+                [% END #/WRAPPER tab_panel %]
+            [% END # /FOREACH codes_loo %]
+        [% END # /WRAPPER tab_panels %]
 
         <fieldset class="action">
             <input type="hidden" name="updateLimits" value="1" />
@@ -105,8 +104,8 @@
             <input type="submit" class="btn btn-primary" value="Save" />
             <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a>
         </fieldset>
-        </form>
-        </div>
+    </form>
+[% END # /WRAPPER tabs %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
