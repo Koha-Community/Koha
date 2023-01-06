@@ -99,41 +99,30 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
+        [% END %]
         [% IF ( enter ) %]
             [% IF ( booksellerid ) %]
-                <li>
+                [% WRAPPER breadcrumb_item %]
                     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page">
-                        Update: [% name | html %]
-                    </a>
-                </li>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Update: [% name | html %]
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Add vendor
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Add vendor
+                [% END %]
             [% END %]
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    [% name | html %]
-                </a>
-            </li>
-        [% END %]
-    </ol>
-</nav>
-[% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% name | html %]
+            [% END %]
+        [% END # /IF (enter) %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
