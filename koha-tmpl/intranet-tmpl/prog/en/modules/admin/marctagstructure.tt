@@ -27,20 +27,16 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-        </li>
+        [% END %]
 
         [% IF ( add_form ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
@@ -48,30 +44,26 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                         <span>Default MARC framework</span>
                     [% END%]
                 </a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF heading_add_tag_p %]
-                        <span>Add tag [% searchfield | html %]</span>
-                    [% ELSE %]
-                        <span>Modify tag [% searchfield | html %]</span>
-                    [% END %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                [% IF heading_add_tag_p %]
+                    <span>Add tag [% searchfield | html %]</span>
+                [% ELSE %]
+                    <span>Modify tag [% searchfield | html %]</span>
+                [% END %]
+            [% END %]
 
         [% ELSIF ( else ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF framework %]
-                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
-                    [% ELSE %]
-                        <span>Default MARC framework</span>
-                    [% END %]
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                [% IF framework %]
+                    <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
+                [% ELSE %]
+                    <span>Default MARC framework</span>
+                [% END %]
+            [% END %]
 
         [% ELSIF ( delete_confirm ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
@@ -79,15 +71,13 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                         <span>Default MARC framework</span>
                     [% END %]
                 </a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of tag [% searchfield | html %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                <span>Confirm deletion of tag [% searchfield | html %]</span>
+            [% END %]
 
         [% ELSIF ( delete_confirmed ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
                     [% IF framework %]
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
@@ -95,13 +85,19 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                         <span>Default MARC framework</span>
                     [% END %]
                 </a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Data deleted
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                <span>Data deleted</span>
+            [% END %]
         [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'sub-header.inc' %]
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+
+
     </ol>
 </nav>
 [% END %]

@@ -14,20 +14,15 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">Library groups</a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Library groups</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">

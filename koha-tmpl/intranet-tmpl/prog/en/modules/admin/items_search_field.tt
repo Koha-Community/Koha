@@ -13,35 +13,26 @@
     [% END %]
 
     [% WRAPPER 'sub-header.inc' %]
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-            <ol>
-                <li>
-                    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-                </li>
-                <li>
-                    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-                </li>
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% END %]
 
-                [% IF (field) %]
-                    <li>
-                        <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            [% field.name | html %]
-                        </a>
-                    </li>
-
-                [% ELSE %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Item search fields
-                        </a>
-                    </li>
+            [% IF (field) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
                 [% END %]
-            </ol>
-        </nav>
-    [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% field.name | html %]
+                [% END %]
+
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Item search fields</span>
+                [% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
