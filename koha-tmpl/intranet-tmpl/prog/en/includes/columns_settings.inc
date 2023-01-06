@@ -165,7 +165,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         dt_parameters[ "buttons" ].push(
             {
                 className: "dt_button_configure_table",
-                titleAttr: _("Table settings"),
+                fade: 100,
+                titleAttr: _("Configure table"),
                 text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + _("Configure") + '</span>',
                 action: function() {
                     window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
@@ -228,7 +229,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         deactivate_filters(id_selector);
     }
 
-    $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
+    $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
 
     return table;
 }
