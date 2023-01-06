@@ -28,6 +28,7 @@ use C4::Letters;
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
 use C4::Overdues qw(GetFine);
+use C4::Context;
 
 use Koha::Patrons;
 use Koha::Account::Credits;
@@ -705,31 +706,18 @@ my $non_issues_charges = $self->non_issues_charges
 
 Calculates amount immediately owing by the patron - non-issue charges.
 
-Charges exempt from non-issue are:
-* Res (holds) if HoldsInNoissuesCharge syspref is set to false
-* Rent (rental) if RentalsInNoissuesCharge syspref is set to false
-* Manual invoices if ManInvInNoissuesCharge syspref is set to false
+Charges can be set as exempt from non-issue by editing the debit type in the Debit Types area of System Preferences.
 
 =cut
 
 sub non_issues_charges {
     my ($self) = @_;
 
-    #NOTE: With bug 23049 these preferences could be moved to being attached
-    #to individual debit types to give more flexability and specificity.
-    my @not_fines;
-    push @not_fines, 'RESERVE'
-      unless C4::Context->preference('HoldsInNoissuesCharge');
-    push @not_fines, ( 'RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW' )
-      unless C4::Context->preference('RentalsInNoissuesCharge');
-    unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
-        my @man_inv = Koha::Account::DebitTypes->search({ is_system => 0 })->get_column('code');
-        push @not_fines, @man_inv;
-    }
+    my @blocking_debit_types = Koha::Account::DebitTypes->search({ restricts_checkouts => 1 }, { columns => 'code' })->get_column('code');
 
     return $self->lines->search(
         {
-            debit_type_code => { -not_in => \@not_fines }
+            debit_type_code => { -in => \@blocking_debit_types }
         },
     )->total_outstanding;
 }

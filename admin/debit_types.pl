@@ -77,6 +77,7 @@ elsif ( $op eq 'add_validate' ) {
     my $can_be_invoiced = $input->param('can_be_invoiced') || 0;
     my $can_be_sold = $input->param('can_be_sold') || 0;
     my $default_amount        = $input->param('default_amount') || undef;
+    my $restricts_checkouts = $input->param('restricts_checkouts') || 0;
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     if ( not defined $debit_type ) {
@@ -86,6 +87,7 @@ elsif ( $op eq 'add_validate' ) {
     $debit_type->can_be_invoiced($can_be_invoiced);
     $debit_type->can_be_sold($can_be_sold);
     $debit_type->default_amount($default_amount);
+    $debit_type->restricts_checkouts($restricts_checkouts);
 
     try {
         $debit_type->store;

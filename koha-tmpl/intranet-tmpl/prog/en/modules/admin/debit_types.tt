@@ -119,6 +119,14 @@
                                     [% END %]
                                 </li>
                                 <li>
+                                    <label for="restricts_checkouts">Included in noissuescharge? </label>
+                                    [% IF debit_type.restricts_checkouts %]
+                                        <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" checked="checked" value="1" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" value="1" />
+                                    [% END %]
+                                </li>
+                                <li>
                                     <label for="branches">Libraries limitation: </label>
                                     <select id="branches" name="branches" multiple size="10">
                                         <option value="">All libraries</option>
@@ -159,6 +167,7 @@
                                     <th>Default amount</th>
                                     <th>Available for</th>
                                     <th>Library limitations</th>
+                                    <th>No issues charge</th>
                                     <th class="noExport">Actions</th>
                                 </thead>
                                 <tbody>
@@ -197,8 +206,15 @@
                                                 <span>No limitation</span>
                                             [% END %]
                                         </td>
+                                        <td>
+                                            [% IF debit_type.restricts_checkouts %]
+                                                <span>Included</span>
+                                            [% ELSE %]
+                                                <span>Not Included</span>
+                                            [% END %]
+                                        </td>
                                         <td class="actions">
-                                            [% IF !debit_type.is_system && !debit_type.archived %]
+                                            [% IF !debit_type.archived %]
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
                                             [% ELSIF debit_type.archived %]
