@@ -21,49 +21,38 @@ Library EANs &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
 
         [% IF ean_form %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ean %]
-                        Modify library EAN
-                    [% ELSE %]
-                        Add new library EAN
-                    [% END %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                [% IF ean %]
+                    <span>Modify library EAN</span>
+                [% ELSE %]
+                    <span>Add new library EAN</span>
+                [% END %]
+            [% END %]
 
         [% ELSIF delete_confirm %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of EAN
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                <span>Confirm deletion of EAN</span>
+            [% END %]
 
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Library EANs
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1%]
+                <span>Library EANs</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
