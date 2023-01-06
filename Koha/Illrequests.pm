@@ -31,23 +31,7 @@ Koha::Illrequests - Koha Illrequests Object class
 
 =head1 API
 
-=head2 Class Methods
-
-=head3 _type
-
-=cut
-
-sub _type {
-    return 'Illrequest';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Illrequest';
-}
+=head2 Class methods
 
 ##### To be implemented Facade
 
@@ -72,6 +56,38 @@ sub new {
     return $self;
 }
 
+=head3 filter_by_visible
+
+    my $visible_requests = $requests->filter_by_visible;
+
+Returns a I<Koha::Illrequests> resultset, filtered by statuses that are not listed
+as hidden in the I<ILLHiddenRequestStatuses> system preference.
+
+=cut
+
+sub filter_by_visible {
+    my ($self) = @_;
+
+    my $hidden_statuses_string = C4::Context->preference('ILLHiddenRequestStatuses') // q{};
+    my $hidden_statuses = [ split '\|', $hidden_statuses_string ];
+
+    if ( scalar @{$hidden_statuses} ) {
+        return $self->search(
+            {
+                -and => {
+                    status => { 'not in' => $hidden_statuses },
+                    status_alias => [ -or =>
+                        { 'not in' => $hidden_statuses },
+                        { '=' => undef }
+                    ]
+                }
+            }
+        );
+    }
+
+    return $self;
+}
+
 =head3 search_incomplete
 
     my $requests = $illRequests->search_incomplete;
@@ -88,6 +104,24 @@ sub search_incomplete {
             -and => { '!=', 'COMP' }, { '!=', 'GENCOMP' }
         ]
     } );
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
+
+sub _type {
+    return 'Illrequest';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::Illrequest';
 }
 
 =head1 AUTHOR
