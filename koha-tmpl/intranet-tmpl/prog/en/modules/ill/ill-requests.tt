@@ -606,11 +606,8 @@
                             </a>
                         [% END %]
                     </div>
-                    <div class="ill-view-panel panel panel-default">
-                        <div class="panel-heading">
-                            <h3>Request details</h3>
-                        </div>
-                        <div class="panel-body">
+                    <div class="page-section">
+                        <h3>Request details</h3>
                             <h4>Details from library</h4>
                             <div class="rows">
                                 <ol>
@@ -691,7 +688,6 @@
                                     [% END %]
                                 </ol>
                             </div>
-                        </div>
                     </div>
 
                     <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
@@ -742,44 +738,40 @@
                         </div>
                     </div>
 
-                    <div class="ill-view-panel panel panel-default">
-                        <div class="panel-heading">
-                            <h3>[% request.illcomments.count | html %] comments</h3>
-                        </div>
-                        <div class="panel-body">
-                            [% IF request.illcomments.count && request.illcomments.count > 0 %]
-                                [% FOREACH comment IN request.illcomments %]
-                                    <div class="rows comment_[% comment.patron.categorycode | html %]">
-                                    <h5>Comment by:
-                                    <a href="[% borrowerlink | url %]" title="View patron details">
-                                    [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
-                                    [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
-                                    <p>[% comment.comment | html %]</p>
-                                    </div>
-                                [% END %]
-                            [% END %]
-                                <div class="rows">
-                                    <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
-                                    <div id="addcomment" class="content_hidden">
-                                        <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
-                                            <input type="hidden" value="save_comment" name="method">
-                                            <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
-                                            <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
-                                            <fieldset class="rows">
-                                                <ol>
-                                                    <li>
-                                                        <label class="required" for="comment">Comment: </label>
-                                                        <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
-                                                        <span class="required">Required</span>
-                                                    </li>
-                                                </ol>
-                                            </fieldset>
-                                            <fieldset class="action">
-                                                <input type="submit" class="btn btn-primary" value="Submit" />
-                                            </fieldset>
-                                        </form>
-                                    </div>
+                    <div class="page-section">
+                        <h3>[% request.illcomments.count | html %] comments</h3>
+                        [% IF request.illcomments.count && request.illcomments.count > 0 %]
+                            [% FOREACH comment IN request.illcomments %]
+                                <div class="rows comment_[% comment.patron.categorycode | html %]">
+                                <h5>Comment by:
+                                <a href="[% borrowerlink | url %]" title="View patron details">
+                                [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
+                                [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
+                                <p>[% comment.comment | html %]</p>
                                 </div>
+                            [% END %]
+                        [% END %]
+                        <div class="rows">
+                            <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
+                            <div id="addcomment" class="content_hidden">
+                                <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                    <input type="hidden" value="save_comment" name="method">
+                                    <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
+                                    <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
+                                    <fieldset class="rows">
+                                        <ol>
+                                            <li>
+                                                <label class="required" for="comment">Comment: </label>
+                                                <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
+                                                <span class="required">Required</span>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                    <fieldset class="action">
+                                        <input type="submit" class="btn btn-primary" value="Submit" />
+                                    </fieldset>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -793,7 +785,7 @@
                 [% ELSIF query_type == 'availability' %]
                     <!-- availability -->
                     <h1>Availability</h1>
-                    <div id="results">
+                    <div id="results" class="page-section">
                         <h3>Displaying availability results</h3>
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                             [% FOREACH key IN whole.keys %]
