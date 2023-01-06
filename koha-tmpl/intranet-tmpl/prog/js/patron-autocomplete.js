@@ -17,7 +17,7 @@ function patron_autocomplete(node, options) {
     return node.autocomplete({
         source: function( request, response ) {
             let subquery_and = [];
-            request.term.split(' ')
+            request.term.split(/[\s,]+/)
                 .filter(function(s){ return s.length })
                 .forEach(function(pattern,i){
                     subquery_and.push(
