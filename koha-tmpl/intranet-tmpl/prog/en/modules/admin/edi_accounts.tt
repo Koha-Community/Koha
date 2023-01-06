@@ -22,53 +22,39 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
+
+        [% IF acct_form || delete_confirm %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>EDI accounts</span>
+            [% END %]
+        [% END %]
 
         [% IF acct_form %]
-            <li>
-                <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
-            </li>
             [% IF account %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify account
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Modify account</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Add new account
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Add new account</span>
+                [% END %]
             [% END %]
 
         [% ELSIF delete_confirm %]
-            <li>
-                <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of account
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    EDI accounts
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Confirm deletion of account</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

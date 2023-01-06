@@ -33,22 +33,15 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Did you mean?
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+       [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Did you mean?</span>
+       [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

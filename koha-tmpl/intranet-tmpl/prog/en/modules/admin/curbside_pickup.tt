@@ -26,22 +26,17 @@
 
 [% USE format_minutes = format('%02d') %]
 [% MACRO minutes_format BLOCK %][% IF m != "" %][% format_minutes(m) | html %][% END %][% END %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
 
-        <li>
-            <a href="#" aria-current="page">
-                Curbside pickup
-            </a>
-        </li>
-    </ol>
-</nav>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Curbside pickup</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
