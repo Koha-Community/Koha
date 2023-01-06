@@ -45,39 +45,30 @@ tr.selected td {
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketno | html %]</a>
-        </li>
-        [% IF ( opsearch ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Order from external source
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Search results
-                </a>
-            </li>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketno | html %]</a>
+        [% END %]
+        [% IF ( opsearch ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Order from external source
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Search results
+            [% END %]
+        [% END # /IF opsearch %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
       [% IF ( opsearch ) %]

@@ -23,33 +23,27 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
+        [% END %]
         [% IF invoiceclosedate %]
-            <li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 Receipt summary for <em>[% name | html %]</em>
                 [% IF ( invoice ) %]
                     <em>[ [% invoice | html %] ]</em>
                 [% END %]
-            </li>
+            [% END %]
         [% ELSE %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
-            </li>
-            <li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 Receive orders from [% name | html %]
-            </li>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
-
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
