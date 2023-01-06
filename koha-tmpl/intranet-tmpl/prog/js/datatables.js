@@ -823,7 +823,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             settings[ "buttons" ].push(
                 {
                     className: "dt_button_configure_table",
-                    titleAttr: __("Table settings"),
+                    fade: 100,
+                    titleAttr: __("Configure table"),
                     text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
                     action: function() {
                         window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
@@ -832,7 +833,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             );
         }
 
-        $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
+        $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
 
         if ( add_filters ) {
             settings['orderCellsTop'] = true;
