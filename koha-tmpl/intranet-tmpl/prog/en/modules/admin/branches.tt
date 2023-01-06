@@ -175,7 +175,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchillemail" id="branchillemail" class="email"  size="80" value="[% library.branchillemail | html %]" />
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a> system preference
+                            [% SET pref_ILLDefaultStaffEmail_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>' %]
+                            Default: [% pref_ILLDefaultStaffEmail_link | $raw %] system preference
                         [% ELSE %]
                             Default: ILLDefaultStaffEmail system preference
                         [% END %]
@@ -187,7 +188,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto | html %]" />
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ReplyToDefault">ReplyToDefault</a> system preference
+                            [% SET pref_ReplyToDefault_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>' %]
+                            Default: [% pref_ReplyToDefault_link | $raw %] system preference
                         [% ELSE %]
                             Default: ReplyToDefault system preference
                         [% END %]
@@ -198,7 +200,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath | html %]" />
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a> system preference
+                            [% SET pref_ReturnpathDefault_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>' %]
+                            Default: [% pref_ReturnpathDefault_link | $raw %] system preference
                         [% ELSE %]
                             Default: ReturnpathDefault system preference
                         [% END %]
@@ -232,7 +235,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="marcorgcode" id="marcorgcode" size="16" maxlength="16" value="[% library.marcorgcode | html %]" />
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            If not filled in defaults to system preference <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=MARCOrgCode">MARCOrgCode</a>.
+                            [% SET pref_MARCOrgCode_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>' %]
+                            If not filled in defaults to system preference [% pref_MARCOrgCode_link | $raw %].
                         [% ELSE %]
                             If not filled in defaults to system preference MARCOrgCode.
                         [% END %]
