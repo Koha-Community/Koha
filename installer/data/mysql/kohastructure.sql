@@ -65,6 +65,7 @@ CREATE TABLE `account_debit_types` (
   `default_amount` decimal(28,6) DEFAULT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
   `archived` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to denote if this till is archived or not',
+  `restricts_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'boolean flag to denote if the noissuescharge syspref for this debit type is active',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
