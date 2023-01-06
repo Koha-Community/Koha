@@ -43,6 +43,15 @@ get '/cities' => sub {
     $c->render( status => 200, json => $cities );
 };
 
+get '/cities/rs' => sub {
+    my $c = shift;
+    $c->validation->output( $c->req->params->to_hash );
+    $c->stash_embed;
+    my $cities = $c->objects->search_rs( Koha::Cities->new );
+
+    $c->render( status => 200, json => { count => $cities->count } );
+};
+
 get '/cities/:city_id' => sub {
     my $c = shift;
     my $id = $c->stash("city_id");
@@ -120,8 +129,18 @@ get '/my_patrons' => sub {
     );
 };
 
+get '/cities/:city_id/rs' => sub {
+    my $c = shift;
+    $c->validation->output( $c->req->params->to_hash );
+    $c->stash_embed;
+    my $city_id = $c->param('city_id');
+    my $city    = $c->objects->find_rs( Koha::Cities->new, $city_id );
+
+    $c->render( status => 200, json => { name => $city->city_name } );
+};
+
 # The tests
-use Test::More tests => 16;
+use Test::More tests => 18;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -508,6 +527,47 @@ subtest 'objects.search helper order by embedded columns' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'objects.search_rs helper' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Remove existing cities to have more control on the search results
+    Koha::Cities->delete;
+
+ # Create three sample cities that match the query. This makes sure we
+ # always have a "next" link regardless of Mojolicious::Plugin::OpenAPI version.
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city1'
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city2'
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city3'
+            }
+        }
+    );
+
+    my $t = Test::Mojo->new;
+    $t->get_ok('/cities/rs')->status_is(200)->json_is( '/count' => 3 );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'objects.find helper' => sub {
 
     plan tests => 9;
@@ -847,6 +907,55 @@ subtest 'objects.search helper with expanded authorised values' => sub {
       ->json_is( '/0/name' => 'Manuel' )->json_hasnt('/0/_strings')
       ->json_is( '/1/name' => 'Manuela' )->json_hasnt('/1/_strings');
 
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.find_rs helper' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    # Remove existing cities to have more control on the search results
+    Koha::Cities->delete;
+
+ # Create three sample cities that match the query. This makes sure we
+ # always have a "next" link regardless of Mojolicious::Plugin::OpenAPI version.
+    my $city1 = $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city1'
+            }
+        }
+    );
+    my $city2 = $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city2'
+            }
+        }
+    );
+    my $city3 = $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name => 'city3'
+            }
+        }
+    );
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/cities/' . $city1->id . '/rs' )->status_is(200)
+      ->json_is( '/name' => 'city1' );
+
+    $t->get_ok( '/cities/' . $city2->id . '/rs' )->status_is(200)
+      ->json_is( '/name' => 'city2' );
+
+    $t->get_ok( '/cities/' . $city3->id . '/rs' )->status_is(200)
+      ->json_is( '/name' => 'city3' );
 
     $schema->storage->txn_rollback;
 };
