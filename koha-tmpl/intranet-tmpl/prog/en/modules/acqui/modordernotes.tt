@@ -1,3 +1,4 @@
+[% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[%- IF (type == "vendor") -%]
     Change order vendor note
@@ -11,30 +12,22 @@
 <body id="acq_modordernotes" class="acq">
 [% INCLUDE 'header.inc' %]
 
-
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketname | html %] ([% basketno | html %])</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active=1 %]
+            Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
