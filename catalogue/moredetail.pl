@@ -169,12 +169,12 @@ foreach my $item (@items){
 
     # item has a host number if its biblio number does not match the current bib
     if ($item->biblionumber ne $biblionumber){
-        $item_info->{hostbiblionumber} = $item->{biblionumber};
+        $item_info->{hostbiblionumber} = $item->biblionumber;
         $item_info->{hosttitle} = $item->biblio->title;
     }
 
     # FIXME The acquisition code below could be improved using methods from Koha:: objects
-    my $order  = GetOrderFromItemnumber( $item->{'itemnumber'} );
+    my $order  = GetOrderFromItemnumber( $item->itemnumber );
     $item_info->{'basketno'}                = $order->{'basketno'};
     $item_info->{'orderdate'}               = $order->{'entrydate'};
     if ($item_info->{'basketno'}){
