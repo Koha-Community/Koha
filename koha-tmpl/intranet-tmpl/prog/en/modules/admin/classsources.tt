@@ -38,68 +38,51 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-
-        [% IF op == 'add_source' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF class_source %]
-                        Modify classification source
-                    [% ELSE %]
-                        Add classification source
-                    [% END %]
-                </a>
-            </li>
-
-        [% ELSIF op == 'add_sort_rule' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF sort_rule %]
-                        Modify filing rule
-                    [% ELSE %]
-                        Add filing rule
-                    [% END %]
-                </a>
-            </li>
-
-        [% ELSIF op == 'add_split_rule' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF split_rule %]
-                        Modify splitting rule
-                    [% ELSE %]
-                        Add splitting rule
-                    [% END %]
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Classification sources
-                </a>
-            </li>
         [% END %]
 
-    </ol>
-</nav>
-[% END %]
+        [% IF op == 'add_source' || op == 'add_sort_rule' || op == 'add_split_rule' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/classsources.pl">Classification configuration</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Classification configuration</span>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'add_source' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF class_source %]
+                    <span>Modify classification source</span>
+                [% ELSE %]
+                    <span>Add classification source</span>
+                [% END %]
+            [% END %]
+
+        [% ELSIF op == 'add_sort_rule' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF sort_rule %]
+                    <span>Modify filing rule</span>
+                [% ELSE %]
+                    <span>Add filing rule</span>
+                [% END %]
+            [% END %]
+
+        [% ELSIF op == 'add_split_rule' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF split_rule %]
+                    <span>Modify splitting rule</span>
+                [% ELSE %]
+                    <span>Add splitting rule</span>
+                [% END %]
+            [% END %]
+
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

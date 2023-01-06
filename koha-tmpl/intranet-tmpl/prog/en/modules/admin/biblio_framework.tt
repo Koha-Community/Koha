@@ -21,53 +21,40 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
 
         [% IF op == 'add_form' %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-            </li>
+            [% END %]
             [% IF framework %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify framework text
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Modify framework text
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Add framework
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Add framework
+                [% END %]
             [% END %]
 
         [% ELSIF op == 'delete_confirm' %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
+            [% END %]
 
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    MARC frameworks
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                MARC frameworks
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

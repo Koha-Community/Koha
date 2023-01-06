@@ -21,36 +21,30 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-
-    [% IF CAN_user_parameters_manage_background_jobs %]
-        <li>
-            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        [% IF op == 'view' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/background_jobs.pl">Jobs</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">Details of job #[% job.id | html %]</a>
-            </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF CAN_user_parameters_manage_background_jobs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% END %]
+            [% IF op == 'view' %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/background_jobs.pl">Jobs</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Details of job #[% job.id | html %]</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Jobs</span>
+                [% END %]
+            [% END %]
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">Jobs</a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Administration</span>
+            [% END %]
         [% END %]
-    [% ELSE %]
-        <li>
-            <a href="#" aria-current="page">Administration</a>
-        </li>
-    [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

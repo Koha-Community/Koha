@@ -36,74 +36,52 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
+
+        [% IF op == 'add_form' || op == 'delete_confirm' || op == 'delete_confirmed' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Patron categories</span>
+            [% END %]
+        [% END %]
 
         [% IF op == 'add_form' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
-            </li>
             [% IF ( categorycode ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify category '[% categorycode | html %]'
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Modify category '[% categorycode | html %]'</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New category
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New category</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF op == 'delete_confirm' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
-            </li>
             [% IF ( patrons_in_category > 0 ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Cannot delete: Category [% categorycode | html %] in use
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Cannot delete: Category [% categorycode | html %] in use</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Confirm deletion of category '[% categorycode | html %]'
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Confirm deletion of category '[% categorycode | html %]'</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF op == 'delete_confirmed' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Category deleted
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Category deleted</span>
+            [% END %]
         [% END %]
-
-        [% IF op == 'list' %]
-            <li>
-                <a href="#" aria-current="page">
-                    Patron categories
-                </a>
-            </li>
-        [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
