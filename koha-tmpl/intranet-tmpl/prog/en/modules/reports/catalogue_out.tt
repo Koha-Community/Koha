@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Items with no checkouts &rsaquo; Reports &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -45,9 +46,16 @@
                                 [% ELSE %]
                                     <p>
                                 [% END %]
-                                [% IF ( loopfilte.sql ) %]<span class="sql">[% END %]
-                                [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
-                                [% IF ( loopfilte.sql ) %]</span>[% END %]
+                                [% IF ( loopfilte.sql ) %]
+                                    <span class="sql">
+                                        [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
+                                    </span>
+                                [% ELSE %]
+                                    <span>[% loopfilte.crit | html %] = [% loopfilte.filter | html %]</span>
+                                    [% IF ( loopfilte.crit == "by" ) %]
+                                        [% group_by = loopfilte.filter %]
+                                    [% END %]
+                                [% END %]
                                 </p>
                             [% END %]
                         [% END %]
@@ -65,7 +73,13 @@
                                     [% FOREACH looptable IN mainloo.looptables %]
                                         <tr>
                                             <td>
-                                                <a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a>
+                                                [% IF ( group_by=="itype" ) %]
+                                                    <a href="#table[% looptable.coltitle | uri %]">[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
+                                                [% ELSIF ( group_by=="homebranch" ) %]
+                                                    <a href="#table[% looptable.coltitle | uri %]">[% Branches.GetName( looptable.coltitle ) | html %]</a>
+                                                [% ELSE %]
+                                                    <a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a>
+                                                [% END %]
                                             </td>
                                             <td>
                                                 [% IF ( looptable.looptable_count ) %]
@@ -89,8 +103,13 @@
                         [% FOREACH looptable IN mainloo.looptables %]
                             <div class="page-section">
                                 <h3>
-                                    <a id="table[% looptable.coltitle | html %]"></a>
-                                    [% looptable.coltitle | html %]
+                                    [% IF ( group_by=="itype" ) %]
+                                        <a id="table[% looptable.coltitle | html %]" >[% ItemTypes.GetDescription( looptable.coltitle ) | html %]</a>
+                                    [% ELSIF ( group_by=="homebranch" ) %]
+                                        <a id="table[% looptable.coltitle | html %]" >[% Branches.GetName( looptable.coltitle ) | html %]</a>
+                                    [% ELSE %]
+                                        Ungrouped
+                                    [% END %]
                                 </h3>
                                 <table>
                                     <tr>
