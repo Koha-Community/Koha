@@ -76,8 +76,8 @@ sub calculate {
             if ( ( $i == 1 ) and ( @$filters[ $i - 1 ] ) ) {
                 $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
             }
-            $cell{crit} = "Branch"   if ( $i == 0 );
-            $cell{crit} = "Doc Type" if ( $i == 1 );
+            $cell{crit} = "homelibrary"   if ( $i == 0 );
+            $cell{crit} = "itemtype" if ( $i == 1 );
             push @loopfilter, \%cell;
         }
     }
