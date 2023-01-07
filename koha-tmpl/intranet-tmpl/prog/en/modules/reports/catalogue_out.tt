@@ -53,67 +53,71 @@
                         [% END %]
 
                         [% IF ( mainloo.looptables ) %]
-                            <h3><a name="summary" id="summary"></a>Summary</h3>
-                            <table id="summary_table">
-                                <tr>
-                                    <th>Group</th>
-                                    <th>Call number range</th>
-                                    <th>Number of items displayed</th>
-                                    <th>Total items in group</th>
-                                </tr>
-                                [% FOREACH looptable IN mainloo.looptables %]
+                            <div class="page-section">
+                                <h3><a name="summary" id="summary"></a>Summary</h3>
+                                <table id="summary_table">
                                     <tr>
-                                        <td>
-                                            <a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a>
-                                        </td>
-                                        <td>
-                                            [% IF ( looptable.looptable_count ) %]
-                                                [% looptable.looptable_first | html %] to [% looptable.looptable_last | html %]
-                                            [% END %]
-                                        </td>
-                                        <td>[% looptable.looptable_count | html %]</td>
-                                        <td>[% looptable.coltitle_count | html %]</td>
+                                        <th>Group</th>
+                                        <th>Call number range</th>
+                                        <th>Number of items displayed</th>
+                                        <th>Total items in group</th>
                                     </tr>
-                                [% END %]
-                                <tr>
-                                    <th>TOTAL</th>
-                                    <th></th>
-                                    <th>[% mainloo.total_looptable_count | html %]</th>
-                                    <th>[% mainloo.total_coltitle_count | html %]</th>
-                                </tr>
-                            </table>
+                                    [% FOREACH looptable IN mainloo.looptables %]
+                                        <tr>
+                                            <td>
+                                                <a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a>
+                                            </td>
+                                            <td>
+                                                [% IF ( looptable.looptable_count ) %]
+                                                    [% looptable.looptable_first | html %] to [% looptable.looptable_last | html %]
+                                                [% END %]
+                                            </td>
+                                            <td>[% looptable.looptable_count | html %]</td>
+                                            <td>[% looptable.coltitle_count | html %]</td>
+                                        </tr>
+                                    [% END %]
+                                    <tr>
+                                        <th>TOTAL</th>
+                                        <th></th>
+                                        <th>[% mainloo.total_looptable_count | html %]</th>
+                                        <th>[% mainloo.total_coltitle_count | html %]</th>
+                                    </tr>
+                                </table>
+                            </div>
                         [% END %]
 
                         [% FOREACH looptable IN mainloo.looptables %]
-                            <h3>
-                                <a id="table[% looptable.coltitle | html %]"></a>
-                                [% looptable.coltitle | html %]
-                            </h3>
-                            <table>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Call number</th>
-                                    <th>Barcode</th>
-                                    <th>Item details</th>
-                                </tr>
-                                [% IF ( looptable.looprow ) %]
-                                    [% FOREACH loopro IN looptable.looprow %]
-                                        <tr>
-                                            <td>[% loop.count | html %]</td>
-                                            <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber | html %][% ELSE %]No call number[% END %]</td>
-                                            <td>[% IF ( loopro.barcode ) %][% loopro.barcode | html %][% ELSE %]No barcode[% END %]</td>
-                                            <td>
-                                                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author | html %][% END %]</p>
-                                                [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) | html %][% END %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
-                                    [% ELSE %]
-                                        <tr>
-                                            <td colspan="4">No items for [% looptable.coltitle | html %]</td>
-                                        </tr>
-                                    [% END %]
-                            </table>
+                            <div class="page-section">
+                                <h3>
+                                    <a id="table[% looptable.coltitle | html %]"></a>
+                                    [% looptable.coltitle | html %]
+                                </h3>
+                                <table>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Call number</th>
+                                        <th>Barcode</th>
+                                        <th>Item details</th>
+                                    </tr>
+                                    [% IF ( looptable.looprow ) %]
+                                        [% FOREACH loopro IN looptable.looprow %]
+                                            <tr>
+                                                <td>[% loop.count | html %]</td>
+                                                <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber | html %][% ELSE %]No call number[% END %]</td>
+                                                <td>[% IF ( loopro.barcode ) %][% loopro.barcode | html %][% ELSE %]No barcode[% END %]</td>
+                                                <td>
+                                                    <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author | html %][% END %]</p>
+                                                    [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) | html %][% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                        [% ELSE %]
+                                            <tr>
+                                                <td colspan="4">No items for [% looptable.coltitle | html %]</td>
+                                            </tr>
+                                        [% END %]
+                                </table>
+                            </div>
                         [% END %]
                     [% END %]
                 [% ELSE %]
