@@ -40,24 +40,35 @@
                     [% FOREACH mainloo IN mainloop %]
                         [% IF ( mainloo.loopfilter ) %]
                             <p>Filtered on:</p>
-                            [% FOREACH loopfilte IN mainloo.loopfilter %]
-                                [% IF ( loopfilte.err ) %]
-                                    <p class="error">Error:
-                                [% ELSE %]
-                                    <p>
-                                [% END %]
-                                [% IF ( loopfilte.sql ) %]
-                                    <span class="sql">
-                                        [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
-                                    </span>
-                                [% ELSE %]
-                                    <span>[% loopfilte.crit | html %] = [% loopfilte.filter | html %]</span>
-                                    [% IF ( loopfilte.crit == "by" ) %]
-                                        [% group_by = loopfilte.filter %]
+                            <ul>
+                                [% FOREACH loopfilte IN mainloo.loopfilter %]
+                                    [% IF ( loopfilte.err ) %]
+                                        <p class="error">Error: [% loopfilte.filter | html %]</p>
+                                    [% ELSIF ( loopfilte.sql ) %]
+                                        <span class="sql">
+                                            [% loopfilte.crit | html %] = [% loopfilte.filter | html %]
+                                        </span>
+                                    [% ELSE %]
+                                        [% SWITCH loopfilte.crit %]
+                                            [% CASE 'homelibrary' %]<li>Home library: [% Branches.GetName( loopfilte.filter ) | html %]</li>
+                                            [% CASE 'itemtype' %]<li>Item type: [% ItemTypes.GetDescription( loopfilte.filter ) | html %]</li>
+                                            [% CASE 'limit' %]<li>Limit: [% loopfilte.filter | html %]</li>
+                                            [% CASE 'by' %]
+                                                <li>By:
+                                                    [% group_by = loopfilte.filter %]
+                                                    [% IF ( group_by == "homebranch") %]
+                                                        Home library
+                                                    [% ELSIF ( group_by == "itype" ) %]
+                                                        Item type
+                                                    [% ELSE %]
+                                                        None
+                                                    [% END %]
+                                                </li>
+                                            [% CASE %]<li>[% loopfilte.crit %]: [% loopfilte.filter | html %]</li>
+                                        [% END %]
                                     [% END %]
                                 [% END %]
-                                </p>
-                            [% END %]
+                            </ul>
                         [% END %]
 
                         [% IF ( mainloo.looptables ) %]
@@ -78,7 +89,7 @@
                                                 [% ELSIF ( group_by=="homebranch" ) %]
                                                     <a href="#table[% looptable.coltitle | uri %]">[% Branches.GetName( looptable.coltitle ) | html %]</a>
                                                 [% ELSE %]
-                                                    <a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a>
+                                                    <a href="#table[% looptable.coltitle | uri %]">Ungrouped</a>
                                                 [% END %]
                                             </td>
                                             <td>
