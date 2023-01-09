@@ -261,12 +261,6 @@ subtest 'Test AddRenewal indexer call' => sub {
         t::lib::Mocks::mock_preference( 'SearchEngine', $engine );
         my $mock_index = Test::MockModule->new("Koha::SearchEngine::".$engine."::Indexer");
 
-        $mock_index->mock( index_records => sub {
-            warn $engine;
-            my ($package, undef, undef) = caller;
-            warn $package;
-        });
-
         my $biblio = $builder->build_sample_biblio();
         my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
         my $item = $builder->build_sample_item({
@@ -281,6 +275,13 @@ subtest 'Test AddRenewal indexer call' => sub {
                 itemnumber => $item->itemnumber
             }
         });
+
+        $mock_index->mock( index_records => sub {
+            warn $engine;
+            my ($package, undef, undef) = caller;
+            warn $package;
+        });
+
 
         warnings_are{
             AddRenewal($patron->borrowernumber, $item->itemnumber, $item->homebranch, undef, undef, undef, 0);
