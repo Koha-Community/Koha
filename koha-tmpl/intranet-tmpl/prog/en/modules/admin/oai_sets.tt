@@ -16,45 +16,34 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
+
+        [% IF ( op_new || op_mod ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a>
+            [% END %]
+        [% END %]
 
         [% IF ( op_new ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Add a new OAI set
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Add a new OAI set</span>
+            [% END %]
 
         [% ELSIF ( op_mod ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Edit OAI set '[% spec | html %]'
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Edit OAI set '[% spec | html %]'</span>
+            [% END %]
 
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    OAI sets configuration
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>OAI sets configuration</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
