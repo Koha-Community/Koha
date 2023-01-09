@@ -48,9 +48,6 @@
                                     cols="50"
                                     required
                                 />
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
                             </li>
                             <li>
                                 <label for="agreement_status" class="required"
