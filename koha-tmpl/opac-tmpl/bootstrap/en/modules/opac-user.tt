@@ -888,80 +888,80 @@
                                             </thead>
 
                                             <tbody>
-                                                <tr>
                                                     [% FOREACH ar IN current_article_requests %]
-                                                        <td class="article-request-record-title">
-                                                            [% INCLUDE 'biblio-title.inc' biblio=ar.biblio link=> 1 %]
-                                                            [% ar.item.enumchron | html %]
-                                                            [% ar.biblio.author | html %]
-                                                            [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
-                                                        </td>
+                                                        <tr>
+                                                            <td class="article-request-record-title">
+                                                                [% INCLUDE 'biblio-title.inc' biblio=ar.biblio link=> 1 %]
+                                                                [% ar.item.enumchron | html %]
+                                                                [% ar.biblio.author | html %]
+                                                                [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
+                                                            </td>
 
-                                                        <td class="article-request-created_on">
-                                                            [% ar.created_on | $KohaDates %]
-                                                        </td>
+                                                            <td class="article-request-created_on">
+                                                                [% ar.created_on | $KohaDates %]
+                                                            </td>
 
-                                                        <td class="article-request-title">
-                                                            [% ar.title | html %]
-                                                        </td>
+                                                            <td class="article-request-title">
+                                                                [% ar.title | html %]
+                                                            </td>
 
-                                                        <td class="article-request-author">
-                                                            [% ar.author | html %]
-                                                        </td>
+                                                            <td class="article-request-author">
+                                                                [% ar.author | html %]
+                                                            </td>
 
-                                                        <td class="article-request-volume">
-                                                            [% ar.volume | html %]
-                                                        </td>
+                                                            <td class="article-request-volume">
+                                                                [% ar.volume | html %]
+                                                            </td>
 
-                                                        <td class="article-request-issue">
-                                                            [% ar.issue | html %]
-                                                        </td>
+                                                            <td class="article-request-issue">
+                                                                [% ar.issue | html %]
+                                                            </td>
 
-                                                        <td class="article-request-date">
-                                                            [% ar.date | html %]
-                                                        </td>
+                                                            <td class="article-request-date">
+                                                                [% ar.date | html %]
+                                                            </td>
 
-                                                        <td class="article-request-toc">
-                                                            [% IF ar.toc_request %]Yes[% END %]
-                                                        </td>
+                                                            <td class="article-request-toc">
+                                                                [% IF ar.toc_request %]Yes[% END %]
+                                                            </td>
 
-                                                        <td class="article-request-pages">
-                                                            [% ar.pages | html %]
-                                                        </td>
+                                                            <td class="article-request-pages">
+                                                                [% ar.pages | html %]
+                                                            </td>
 
-                                                        <td class="article-request-chapters">
-                                                            [% ar.chapters | html %]
-                                                        </td>
+                                                            <td class="article-request-chapters">
+                                                                [% ar.chapters | html %]
+                                                            </td>
 
-                                                        <td class="article-request-patron-notes">
-                                                            [% ar.patron_notes | html %]
-                                                        </td>
+                                                            <td class="article-request-patron-notes">
+                                                                [% ar.patron_notes | html %]
+                                                            </td>
 
-                                                        <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>[% ELSIF ar.format == 'SCAN' %]<span>Scan</span>[% END %]</td>
+                                                            <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>[% ELSIF ar.format == 'SCAN' %]<span>Scan</span>[% END %]</td>
 
-                                                        <td class="article-request-status">
-                                                            [% IF ar.status == 'PENDING' %]
-                                                                <span>Pending</span>
-                                                            [% ELSIF ar.status == 'PROCESSING' %]
-                                                                <span>Processing</span>
-                                                            [% ELSIF ar.status == 'REQUESTED' %]
-                                                                <span>New</span>
-                                                            [% ELSIF ar.status == 'COMPLETED' %]
-                                                                <span>Completed</span>
-                                                            [% ELSIF ar.status == 'CANCELED' %]
-                                                                <span>Canceled</span>
-                                                            [% END %]
-                                                        </td>
+                                                            <td class="article-request-status">
+                                                                [% IF ar.status == 'PENDING' %]
+                                                                    <span>Pending</span>
+                                                                [% ELSIF ar.status == 'PROCESSING' %]
+                                                                    <span>Processing</span>
+                                                                [% ELSIF ar.status == 'REQUESTED' %]
+                                                                    <span>New</span>
+                                                                [% ELSIF ar.status == 'COMPLETED' %]
+                                                                    <span>Completed</span>
+                                                                [% ELSIF ar.status == 'CANCELED' %]
+                                                                    <span>Canceled</span>
+                                                                [% END %]
+                                                            </td>
 
-                                                        <td class="article-request-branchcode">
-                                                            [% ar.branch.branchname | html %]
-                                                        </td>
+                                                            <td class="article-request-branchcode">
+                                                                [% ar.branch.branchname | html %]
+                                                            </td>
 
-                                                        <td class="article-request-cancel">
-                                                            <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
-                                                        </td>
+                                                            <td class="article-request-cancel">
+                                                                <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                                            </td>
+                                                        </tr>
                                                     [% END %]
-                                                </tr>
                                             </tbody>
                                         </table>
                                     [% ELSE %]
