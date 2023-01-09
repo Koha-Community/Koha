@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
+[%- USE KohaSpan -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
 [% IF op == 'add_form' %]
@@ -175,8 +176,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchillemail" id="branchillemail" class="email"  size="80" value="[% library.branchillemail | html %]" />
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% SET pref_ILLDefaultStaffEmail_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>' %]
-                            Default: [% pref_ILLDefaultStaffEmail_link | $raw %] system preference
+                            [% pref_ILLDefaultStaffEmail_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>[% END %]
+                            Default: [% pref_ILLDefaultStaffEmail_link | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ILLDefaultStaffEmail system preference
                         [% END %]
@@ -188,8 +189,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto | html %]" />
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% SET pref_ReplyToDefault_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>' %]
-                            Default: [% pref_ReplyToDefault_link | $raw %] system preference
+                            [% pref_ReplyToDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>[% END %]
+                            Default: [% pref_ReplyToDefault_link | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ReplyToDefault system preference
                         [% END %]
@@ -200,8 +201,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath | html %]" />
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% SET pref_ReturnpathDefault_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>' %]
-                            Default: [% pref_ReturnpathDefault_link | $raw %] system preference
+                            [% pref_ReturnpathDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>[% END %]
+                            Default: [% pref_ReturnpathDefault_link | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ReturnpathDefault system preference
                         [% END %]
@@ -235,8 +236,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <input type="text" name="marcorgcode" id="marcorgcode" size="16" maxlength="16" value="[% library.marcorgcode | html %]" />
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% SET pref_MARCOrgCode_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>' %]
-                            If not filled in defaults to system preference [% pref_MARCOrgCode_link | $raw %].
+                            [% pref_MARCOrgCode_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>[% END %]
+                            If not filled in defaults to system preference [% pref_MARCOrgCode_link | $KohaSpan %].
                         [% ELSE %]
                             If not filled in defaults to system preference MARCOrgCode.
                         [% END %]
