@@ -53,6 +53,7 @@ use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
 
+use C4::Context;
 use Koha::Logger;
 use Koha::BackgroundJobs;
 
@@ -79,11 +80,13 @@ if ( $conn ) {
     # FIXME cf note in Koha::BackgroundJob about $namespace
     my $namespace = C4::Context->config('memcached_namespace');
     for my $queue (@queues) {
-        $conn->subscribe({
-            destination => sprintf("/queue/%s-%s", $namespace, $queue),
-            ack => 'client',
-            'prefetch-count' => 1,
-        });
+        $conn->subscribe(
+            {
+                destination      => sprintf( "/queue/%s-%s", $namespace, $queue ),
+                ack              => 'client',
+                'prefetch-count' => 1,
+            }
+        );
     }
 }
 while (1) {
