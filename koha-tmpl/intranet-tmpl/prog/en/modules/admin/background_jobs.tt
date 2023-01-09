@@ -121,7 +121,7 @@
 
     <div>
         <input type="checkbox" id="include_last_hour" checked />
-        <label for="include_last_hour">Only include jobs started in the last hour</label>
+        <label for="include_last_hour">Only include jobs enqueued in the last hour</label>
     </div>
 
     <table id="table_jobs">
@@ -238,7 +238,7 @@
             [% END %]
 
             let additional_filters = {
-                started_on: function(){
+                enqueued_on: function(){
                     let now = new Date();
                     if ( $("#include_last_hour").is(":checked") ) {
                         now.setHours(now.getHours() - 1);
