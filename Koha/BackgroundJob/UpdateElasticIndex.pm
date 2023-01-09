@@ -105,10 +105,12 @@ sub enqueue {
 
     my $record_server = $args->{record_server};
     my @record_ids = @{ $args->{record_ids} };
+    # elastic_index queue will be handled by the es_indexer_daemon script
 
     $self->SUPER::enqueue({
-        job_size => 1,
+        job_size => 1, # Each index is a single job, regardless of the amount of records included
         job_args => {record_server => $record_server, record_ids => \@record_ids},
+        job_queue => 'elastic_index'
     });
 }
 
