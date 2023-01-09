@@ -29,6 +29,7 @@
                 <th scope="col" class="completed_formatted">Completed on</th>
                 <th scope="col">Access URL</th>
                 <th scope="col">Cost</th>
+                <th scope="col">Price paid</th>
                 <th scope="col">Comments</th>
                 <th scope="col">OPAC notes</th>
                 <th scope="col">Staff notes</th>
