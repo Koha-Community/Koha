@@ -160,6 +160,10 @@ __PACKAGE__->add_columns(
     "+can_be_invoiced" => { is_boolean => 1 }
 );
 
+__PACKAGE__->add_columns(
+    "+restricts_checkouts" => { is_boolean => 1 }
+);
+
 sub koha_objects_class {
     'Koha::Account::DebitTypes';
 }
