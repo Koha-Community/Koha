@@ -6,6 +6,7 @@ fieldset {
         color: #696969;
         float: left;
         font-weight: bold;
+        margin-bottom: 0;
 
         ~ * {
             clear: left;
@@ -18,45 +19,270 @@ fieldset {
     }
 }
 
-fieldset.rows ol {
-    $label-width: 12rem;
-    $gap-width: 1rem;
-
-    padding: 0;
-
-    li {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
+fieldset {
+    &.rows {
+        clear: left;
+        float: left;
+        margin: .9em 0 0;
+        padding: 1rem;
         width: 100%;
 
-        & > * {
-            margin: 0 $gap-width 0 0;
+        fieldset {
+            background-color: transparent;
+            margin: 1em;
+            padding: .3em;
+
+            &.action {
+                padding: 1em;
+            }
         }
 
-        label,
-        .label {
-            font-weight: bold;
+        &.inputnote {
+            clear: left;
+            float: left;
+            margin: 1em 0 0 11em;
+        }
 
-            &:first-child {
-                align-self: start;
-                flex-basis: $label-width;
-                flex-shrink: 0;
-                flex-grow: 0;
-                text-align: right;
+
+        &.left {
+            label {
+                text-align: left;
+                width: 8em;
             }
+
+            li {
+                padding-bottom: .4em;
+            }
+
+            span {
+                label {
+                    text-align: left;
+                    width: 8em;
+                }
+            }
+        }
+
+        &.ui-accordion-content {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            table {
+                margin: 0;
+            }
+        }
+
+        &.unselected {
+            background-color: #FFFFFF;
+            border: 0;
+            border-width: 0;
+        }
+
+        caption {
+            font-size: 120%;
+        }
+
+        div {
+            &.hint {
+                font-size: 105%;
+                margin: .5rem 0;
+                margin-left: 11rem;
+            }
+        }
+
+        label {
+            float: left;
+            font-weight: bold;
+            margin-right: 1rem;
+            text-align: right;
+            width: 10rem;
 
             &.error {
-                order: -1;
-                width: 100%;
-                padding-left: $label-width + $gap-width;
+                float: none;
+                margin-left: 1rem;
+                width: auto;
+            }
+
+            &.inline {
+                display: inline;
+                float: none;
+                margin-left: 1rem;
+            }
+
+            &.radio {
+                display: inline-block;
+                margin: 0 1rem 0 0;
+                padding: 0;
+                width: auto;
+            }
+
+            &.yesno {
+                float: none;
+                width: auto;
             }
         }
 
-        div.hint {
+        legend {
+            // font-size: 110%;
+            // font-weight: bold;
+            // margin-left: 1em;
+        }
+
+        li {
+            clear: left;
+            float: left;
+            list-style-type: none;
             width: 100%;
-            margin-top: .25rem;
-            padding-left: $label-width + $gap-width;
+
+            &[aria-disabled="true"] {
+                color: #999;
+            }
+
+            &.radio {
+                margin: 0;
+                padding-left: 7.5em;
+                width: auto;
+
+                input + label {
+                    margin-left: 0;
+                    padding-left: 0;
+                }
+
+                label {
+                    float: none;
+                    margin: 0 0 0 1em;
+                    width: auto;
+                }
+            }
+
+            input + label {
+                margin-left: 0;
+                padding-left: 0;
+            }
+
+            fieldset {
+                margin-left: 7.5em;
+
+                label {
+                    width: 6em;
+                }
+
+                legend {
+                    font-size: 120%;
+                    margin: 0 0 0 1em;
+                }
+
+                li.radio {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        ol {
+            list-style-type: none;
+            padding: 1em 1em 0;
+
+            &.radio {
+                label {
+                    float: none;
+                    margin-left: 20px;
+                    margin-right: 30px;
+                    padding-left: 0;
+                    vertical-align: middle;
+                    width: auto;
+
+                    &.radio {
+                        float: left;
+                        margin-right: 1em;
+                        margin-top: 0;
+                        width: 10em;
+                    }
+                }
+
+                input {
+                    &[type="checkbox"],
+                    &[type="radio"] {
+                        margin-left: -20px;
+                    }
+                }
+            }
+
+            table {
+                display: inline-block;
+                font-size: 105%;
+                margin: 0;
+            }
+        }
+
+        p {
+            margin: 1em 0 1em 1em;
+        }
+
+        span {
+            &.label {
+                float: left;
+                font-weight: bold;
+                margin-right: 1rem;
+                text-align: right;
+                width: 10rem;
+            }
+
+            &.hint {
+                font-size: 105%;
+            }
+        }
+
+        table {
+            clear: both;
+            font-size: 105%;
+            margin: 1em 0 1em 1em;
+
+            &.dataTable {
+                margin: 0;
+            }
+
+            &.mceListBox {
+                margin: 0;
+            }
+        }
+
+        td {
+            label {
+                float: none;
+                font-weight: normal;
+                width: auto;
+            }
+        }
+
+        .inputnote {
+            clear: left;
+            float: left;
+            margin: 1em 0 0 11em;
+        }
+
+        + h3 {
+            clear: both;
+            padding-top: .5em;
+        }
+
+        .dataTables_wrapper {
+            label {
+                font-weight: 400;
+                width: unset;
+            }
+        }
+
+        .dropdown-menu {
+            li {
+                padding-bottom: 0;
+            }
+        }
+
+        .toptabs {
+            clear: both;
+            margin: 1em;
         }
     }
 }
