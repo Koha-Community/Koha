@@ -764,7 +764,7 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
 };
 
 subtest "Koha::Account::non_issues_charges tests" => sub {
-    plan tests => 21;
+    plan tests => 6;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = $patron->account;
@@ -772,6 +772,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     my $res    = 3;
     my $rent   = 5;
     my $manual = 7;
+    my $print = 4;
     $account->add_debit(
         {
             description => 'a Res fee',
@@ -805,10 +806,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         }
     )->store;
 
-
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
     my ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
     my $other_charges = $total - $non_issues_charges;
     is(
@@ -816,115 +813,39 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         $res + $rent + $manual,
         'Total charges should be Res + Rent + Manual'
     );
-    is( $non_issues_charges, 0,
-        'If 0|0|0 there should not have non issues charges' );
-    is( $other_charges, 15, 'If 0|0|0 there should only have other charges' );
+    is( $non_issues_charges, 15,
+        'All types should count towards the non issue charge' );
+    is( $other_charges, 0, 'There shouldn\'t be any non-included charges' );
 
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
-    is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
-    );
-    is( $non_issues_charges, $manual,
-        'If 0|0|1 Only Manual should be a non issue charge' );
-    is(
-        $other_charges,
-        $res + $rent,
-        'If 0|0|1 Res + Rent should be other charges'
-    );
+    Koha::Account::DebitTypes->find_or_create(
+        {
+            code        => 'Print',
+            description => 'Charge for using the printer',
+            is_system   => 0,
+            restricts_checkouts => 0
+        }
+    )->store;
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            description       => 'Non-restricting fee',
+            debit_type_code   => 'Print',
+            amountoutstanding => $print,
+            interface         => 'commandline'
+        }
+    )->store;
 
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
+    my ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    my $other_charges = $total - $non_issues_charges;
     is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
+        $account->balance,
+        $res + $rent + $manual + $print,
+        'Total charges should be Res + Rent + Manual + Print'
     );
-    is( $non_issues_charges, $rent,
-        'If 0|1|0 Only Rental should be a non issue charge' );
-    is(
-        $other_charges,
-        $res + $manual,
-        'If 0|1|0 Rent + Manual should be other charges'
-    );
+    is( $non_issues_charges, 15,
+        'All types except Print should count towards the non issue charge' );
+    is( $other_charges, 4, 'There should be non-included charges for Print' );
 
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
-    is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
-    );
-    is(
-        $non_issues_charges,
-        $rent + $manual,
-        'If 0|1|1 Rent + Manual should be non issues charges'
-    );
-    is( $other_charges, $res, 'If 0|1|1 there should only have other charges' );
-
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
-    is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
-    );
-    is( $non_issues_charges, $res,
-        'If 1|0|0 Only Res should be non issues charges' );
-    is(
-        $other_charges,
-        $rent + $manual,
-        'If 1|0|0 Rent + Manual should be other charges'
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
-    is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
-    );
-    is(
-        $non_issues_charges,
-        $res + $rent,
-        'If 1|1|0 Res + Rent should be non issues charges'
-    );
-    is( $other_charges, $manual,
-        'If 1|1|0 Only Manual should be other charges' );
-
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
-    t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    $other_charges = $total - $non_issues_charges;
-    is(
-        $total,
-        $res + $rent + $manual,
-        'Total charges should be Res + Rent + Manual'
-    );
-    is(
-        $non_issues_charges,
-        $res + $rent + $manual,
-        'If 1|1|1 Res + Rent + Manual should be non issues charges'
-    );
-    is( $other_charges, 0, 'If 1|1|1 there should not have any other charges' );
 };
 
 subtest "Koha::Account::non_issues_charges tests" => sub {
