@@ -71,6 +71,14 @@ boolean flag to denote if this debit type is available at point of sale
 
 boolean flag to denote if this till is archived or not
 
+=head2 restricts_checkouts
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
+boolean flag to denote if the noissuescharge syspref for this debit type is active
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -88,6 +96,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "archived",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "restricts_checkouts",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -135,8 +145,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ulpJRbi7H40EXr1QG+URKg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-01-10 14:49:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9+mMPMSWcc/PwryYNQ2Jqg
 
 __PACKAGE__->add_columns(
     '+is_system' => { is_boolean => 1 }
