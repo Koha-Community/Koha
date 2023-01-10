@@ -747,6 +747,7 @@
                                             <th class="NoSort noExport">&nbsp;</th>
                                             <th class="anti-the">Suggestion</th>
                                             <th>Suggested by</th>
+                                            <th>Suggester category</th>
                                             <th>Suggested on</th>
                                             <th>Patron reason</th>
                                             <th>Managed by</th>
@@ -807,6 +808,9 @@
                                                 <td>
                                                     [% SET suggester = s.suggester %]
                                                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggester.borrowernumber | uri %]">[% suggester.surname | html %][% IF suggester.firstname %], [% suggester.firstname | html %][% END %] [% IF suggester.cardnumber %]([% suggester.cardnumber | html %])[% END %]</a>
+                                                </td>
+                                                <td>
+                                                    [% suggester.category.description | html %]
                                                 </td>
                                                 <td data-order="[% s.suggesteddate | html %]">
                                                     [% IF ( s.suggesteddate ) %][% s.suggesteddate | $KohaDates %][% END %]
