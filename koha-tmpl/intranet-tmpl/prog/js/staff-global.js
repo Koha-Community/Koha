@@ -49,15 +49,18 @@ $.fn.selectTabByID = function (tabID) {
 };
 
 $(document).ready(function() {
-    $('#header_search').tabs({
-        create: function( e, ui ){
-            ui.panel.find("input:text:first").focus();
-        },
-        activate: function ( e, ui ) {
-            ui.newPanel.find("input:text:first").focus();
-        }
-    });
-
+    //check for a hash before setting focus
+    let hash = window.location.hash;
+    if ( ! hash ) {
+        $('#header_search').tabs({
+            create: function( e, ui ){
+                ui.panel.find("input:text:first").focus();
+            },
+            activate: function ( e, ui ) {
+                ui.newPanel.find("input:text:first").focus();
+            }
+        });
+    }
     $(".close").click(function(){ window.close(); });
 
     $("#checkin_search form").preventDoubleFormSubmit();
