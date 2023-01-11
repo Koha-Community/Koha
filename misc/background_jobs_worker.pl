@@ -94,22 +94,27 @@ while (1) {
             next;    # will reconnect automatically
         }
 
-        my $job;
-        try {
+        my $args = try {
             my $body = $frame->body;
-            my $args = decode_json($body); # TODO Should this be from_json? Check utf8 flag.
-
-            # FIXME This means we need to have create the DB entry before
-            # It could work in a first step, but then we will want to handle job that will be created from the message received
-            $job = Koha::BackgroundJobs->find($args->{job_id});
-
-            process_job( $job, $args );
+            decode_json($body); # TODO Should this be from_json? Check utf8 flag.
         } catch {
-            Koha::Logger->get->warn(sprintf "Job and/or frame not processed - %s", $_);
+            Koha::Logger->get->warn(sprintf "Frame not processed - %s", $_);
         } finally {
-            $job->status('failed')->store if $job && @_;
             $conn->ack( { frame => $frame } );
         };
+
+        next unless $args;
+
+        # FIXME This means we need to have create the DB entry before
+        # It could work in a first step, but then we will want to handle job that will be created from the message received
+        my $job = Koha::BackgroundJobs->find($args->{job_id});
+
+        unless ( $job ) {
+            Koha::Logger->get->warn(sprintf "No job found for id=%s", $args->{job_id});
+            next;
+        }
+
+        process_job( $job, $args );
 
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
@@ -133,7 +138,11 @@ sub process_job {
 
     die "fork failed!" unless defined $pid;
 
-    $job->process( $args );
+    try {
+        $job->process( $args );
+    } catch {
+        $job->status('failed')->store;
+    };
 
     exit;
 }
