@@ -24,11 +24,9 @@ const rename = require('gulp-rename');
 const STAFF_CSS_BASE = "koha-tmpl/intranet-tmpl/prog/css";
 const OPAC_CSS_BASE = "koha-tmpl/opac-tmpl/bootstrap/css";
 
-if (args.view == "opac") {
-    var css_base = OPAC_CSS_BASE;
-} else {
-    var css_base = STAFF_CSS_BASE;
-}
+var CSS_BASE = args.view == "opac"
+    ? OPAC_CSS_BASE
+    : STAFF_CSS_BASE;
 
 var sassOptions = {
     includePaths: [
@@ -38,7 +36,8 @@ var sassOptions = {
 }
 
 // CSS processing for development
-function css() {
+function css(css_base) {
+    css_base = css_base || CSS_BASE
     var stream = src(css_base + "/src/**/*.scss")
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions).on('error', sass.logError))
@@ -78,6 +77,14 @@ function build(css_base) {
     }
 
     return stream;
+}
+
+function opac_css(){
+    return css(OPAC_CSS_BASE);
+}
+
+function staff_css(){
+    return css(STAFF_CSS_BASE);
 }
 
 const poTasks = {
@@ -363,13 +370,15 @@ function getLanguages () {
     return Array.from(new Set(languages));
 }
 
-exports.build = build;
-exports.css = css;
+exports.build = function(next){build(); next();};
+exports.css = function(next){css(); next();};
+exports.opac_css = opac_css;
+exports.staff_css = staff_css;
+exports.watch = function () {
+    watch(OPAC_CSS_BASE + "/src/**/*.scss", series('opac_css'));
+    watch(STAFF_CSS_BASE + "/src/**/*.scss", series('staff_css'));
+};
 
 exports['po:create'] = parallel(...poTypes.map(type => series(poTasks[type].extract, poTasks[type].create)));
 exports['po:update'] = parallel(...poTypes.map(type => series(poTasks[type].extract, poTasks[type].update)));
 exports['po:extract'] = parallel(...poTypes.map(type => poTasks[type].extract));
-
-exports.default = function () {
-    watch(css_base + "/src/**/*.scss", series('css'));
-}
