@@ -267,4 +267,20 @@ service rabbitmq-server restart
 update-rc.d koha-common disable
 update-rc.d koha-common enable
 
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "worker"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.worker = WARN, WORKER
+log4perl.appender.WORKER=Log::Log4perl::Appender::Screen
+log4perl.appender.WORKER.stderr=1
+log4perl.appender.WORKER.mode=append
+log4perl.appender.WORKER.layout=PatternLayout
+log4perl.appender.WORKER.layout.ConversionPattern=[%d] [%p] %m %l%n
+log4perl.appender.WORKER.utf8=1
+
+EOF
+    fi
+done
+
 exit 0

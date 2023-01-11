@@ -98,7 +98,7 @@ while (1) {
             my $body = $frame->body;
             decode_json($body); # TODO Should this be from_json? Check utf8 flag.
         } catch {
-            Koha::Logger->get->warn(sprintf "Frame not processed - %s", $_);
+            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame not processed - %s", $_);
             return;
         } finally {
             $conn->ack( { frame => $frame } );
@@ -111,7 +111,7 @@ while (1) {
         my $job = Koha::BackgroundJobs->find($args->{job_id});
 
         unless ( $job ) {
-            Koha::Logger->get->warn(sprintf "No job found for id=%s", $args->{job_id});
+            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "No job found for id=%s", $args->{job_id});
             next;
         }
 
