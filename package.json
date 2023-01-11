@@ -40,11 +40,14 @@
     "vue-select": "4.0.0-beta.3"
   },
   "scripts": {
-    "build": "gulp build",
-    "build_js": "webpack --mode production",
-    "watch_js": "webpack --mode development --watch",
-    "css": "gulp css",
-    "watch": "gulp watch",
+    "css:build": "gulp css && gulp css --view opac",
+    "css:build:prod": "gulp build && gulp css --view opac",
+    "css:watch": "gulp watch",
+    "js:build": "webpack --mode development",
+    "js:watch": "webpack --mode development --watch",
+    "js:build:prod": "webpack --mode production",
+    "build": "yarn css:build && yarn js:build",
+    "build:prod": "yarn css:build:prod && yarn js:build:prod",
     "cypress": "cypress",
     "prettier": "prettier"
   },
