@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE HtmlTags %]
 [% USE Koha %]
+[% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -266,7 +267,7 @@
                         [% SET warnMissingCompiledFiles = 1 %]
                     [% END %]
                     [% WRAPPER tab_panel tabname= "sysinfo" %]
-                        [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing %]
+                        [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles%]
                             [% IF (warnIsRootUser) %]
                                 <h2>Warning regarding current user</h2>
                                 <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -687,9 +688,15 @@
                                 </table>
                             [% END # /IF elasticsearch_has_missing %]
 
+                            [% IF warnMissingCompiledFiles %]
+                                <tr><th scope="row"><strong class="error">Error</strong></th><td>
+                                    Compiled CSS and/or JS files are not present. Please run `yarn build` to generate them.
+                                </td></tr>
+                            [% END # /IF warnMissingCompiledFiles %]
+
                         [% ELSE %]
                             <p>No warnings.</p>
-                        [% END # /IF warnRequireChoosingExistingAuthority... %]
+                        [% END # /IF warnPrefRequireChoosingExistingAuthority... %]
                     [% END # /WRAPPER tab_item sysinfo %]
 
                     [% WRAPPER tab_panel tabname= "team" %]
