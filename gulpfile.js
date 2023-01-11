@@ -21,17 +21,13 @@ const Vinyl = require('vinyl');
 const args = require('minimist')(process.argv.slice(2));
 const rename = require('gulp-rename');
 
-const STAFF_JS_BASE = "koha-tmpl/intranet-tmpl/prog/js";
 const STAFF_CSS_BASE = "koha-tmpl/intranet-tmpl/prog/css";
-const OPAC_JS_BASE = "koha-tmpl/opac-tmpl/bootstrap/js";
 const OPAC_CSS_BASE = "koha-tmpl/opac-tmpl/bootstrap/css";
 
 if (args.view == "opac") {
     var css_base = OPAC_CSS_BASE;
-    var js_base = OPAC_JS_BASE;
 } else {
     var css_base = STAFF_CSS_BASE;
-    var js_base = STAFF_JS_BASE;
 }
 
 var sassOptions = {
