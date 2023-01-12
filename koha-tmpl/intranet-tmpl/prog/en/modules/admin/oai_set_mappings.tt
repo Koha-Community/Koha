@@ -45,94 +45,97 @@
       [% UNLESS ( mappings ) %]
         <div class="dialog alert"><p><strong>Warning:</strong> No mappings have been defined for this set</p></div>
       [% END %]
-      <form action="/cgi-bin/koha/admin/oai_set_mappings.pl" method="post" id="mappingform">
-        <table id="mappings">
-          <thead>
-            <tr>
-              <th>Rule operator</th>
-              <th>Field</th>
-              <th>Subfield</th>
-              <th>Operator</th>
-              <th>Value</th>
-              <th>&nbsp;</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            [% IF ( mappings ) %]
-              [% FOREACH mapping IN mappings %]
-                <tr>
-                  <td>
-                  <select name="rule_operator">
-                    [% IF (mapping.rule_operator == 'and') %]
-                    <option value="and" selected="selected">and</option>
-                    [% ELSE %]
-                    <option value="and">and</option>
-                    [% END %]
-                    [% IF (mapping.rule_operator == 'or') %]
-                    <option value="or" selected="selected">or</option>
-                    [% ELSE %]
-                    <option value="or">or</option>
-                    [% END %]
-                  </select>
-                  </td>
-                  <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield | html %]" /></td>
-                  <td><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield | html %]" /></td>
-                  <td><select name=operator>
-                      [% IF mapping.operator == 'equal' %]
-                        <option value="equal" selected="selected">is equal to</option>
-                        <option value="notequal">not equal to</option>
-                      [% ELSE %]
-                        <option value="equal">is equal to</option>
-                        <option value="notequal" selected="selected">not equal to</option>
-                      [% END %]
-                      </select></td>
-                  <td><input type="text" name="marcvalue" value="[% mapping.marcvalue | html %]" /></td>
-                  <td>
-                    [% IF ( loop.last ) %]
-                        <button type="button" id="new_rule_button" class="btn btn-default btn-xs" title="Add another condition"><i class="fa fa-plus"></i> Add</button>
-                    [% END %]
-                  </td>
-                  <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
-                </tr>
-              [% END %]
-            [% ELSE %]
-              <tr>
-                <td>
-                  <select name="rule_operator">
-                    [% IF (mapping.rule_operator == 'and') %]
-                    <option value="and" selected="selected">and</option>
-                    [% ELSE %]
-                    <option value="and">and</option>
-                    [% END %]
-                    [% IF (mapping.rule_operator == 'or') %]
-                    <option value="or" selected="selected">or</option>
-                    [% ELSE %]
-                    <option value="or">or</option>
-                    [% END %]
-                  </select>
-                </td>
-                <td><input type="text" name="marcfield" size="3" /></td>
-                <td><input type="text" name="marcsubfield" size="1" /></td>
-                <td><select name=operator>
-                    <option value="equal">is equal to</option>
-                    <option value="notequal">not equal to</option>
-                    </select></td>
-                <td><input type="text" name="marcvalue" /></td>
-                <td>
-                    <button type="button" id="new_rule_button" class="btn btn-default btn-xs" title="Add another condition"><i class="fa fa-plus"></i> Add</button>
-                </td>
-                <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
-              </tr>
-            [% END %]
-          </tbody>
-        </table>
-        <input type="hidden" name="id" value="[% id | html %]" />
-        <input type="hidden" name="op" value="save" />
-        <fieldset class="action">
-            <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
-        </fieldset>
-      </form>
+
+        <div class="page-section">
+            <form action="/cgi-bin/koha/admin/oai_set_mappings.pl" method="post" id="mappingform">
+                <table id="mappings">
+                    <thead>
+                        <tr>
+                        <th>Rule operator</th>
+                        <th>Field</th>
+                        <th>Subfield</th>
+                        <th>Operator</th>
+                        <th>Value</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% IF ( mappings ) %]
+                            [% FOREACH mapping IN mappings %]
+                                <tr>
+                                    <td>
+                                    <select name="rule_operator">
+                                        [% IF (mapping.rule_operator == 'and') %]
+                                        <option value="and" selected="selected">and</option>
+                                        [% ELSE %]
+                                        <option value="and">and</option>
+                                        [% END %]
+                                        [% IF (mapping.rule_operator == 'or') %]
+                                        <option value="or" selected="selected">or</option>
+                                        [% ELSE %]
+                                        <option value="or">or</option>
+                                        [% END %]
+                                    </select>
+                                    </td>
+                                    <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield | html %]" /></td>
+                                    <td><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield | html %]" /></td>
+                                    <td><select name=operator>
+                                        [% IF mapping.operator == 'equal' %]
+                                            <option value="equal" selected="selected">is equal to</option>
+                                            <option value="notequal">not equal to</option>
+                                        [% ELSE %]
+                                            <option value="equal">is equal to</option>
+                                            <option value="notequal" selected="selected">not equal to</option>
+                                        [% END %]
+                                        </select></td>
+                                    <td><input type="text" name="marcvalue" value="[% mapping.marcvalue | html %]" /></td>
+                                    <td>
+                                        [% IF ( loop.last ) %]
+                                            <button type="button" id="new_rule_button" class="btn btn-default btn-xs" title="Add another condition"><i class="fa fa-plus"></i> Add</button>
+                                        [% END %]
+                                    </td>
+                                    <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
+                                </tr>
+                            [% END %]
+                        [% ELSE %]
+                            <tr>
+                                <td>
+                                    <select name="rule_operator">
+                                        [% IF (mapping.rule_operator == 'and') %]
+                                            <option value="and" selected="selected">and</option>
+                                        [% ELSE %]
+                                            <option value="and">and</option>
+                                        [% END %]
+                                        [% IF (mapping.rule_operator == 'or') %]
+                                            <option value="or" selected="selected">or</option>
+                                        [% ELSE %]
+                                            <option value="or">or</option>
+                                        [% END %]
+                                    </select>
+                                </td>
+                                <td><input type="text" name="marcfield" size="3" /></td>
+                                <td><input type="text" name="marcsubfield" size="1" /></td>
+                                <td><select name=operator>
+                                    <option value="equal">is equal to</option>
+                                    <option value="notequal">not equal to</option>
+                                    </select></td>
+                                <td><input type="text" name="marcvalue" /></td>
+                                <td>
+                                    <button type="button" id="new_rule_button" class="btn btn-default btn-xs" title="Add another condition"><i class="fa fa-plus"></i> Add</button>
+                                </td>
+                                <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+                <input type="hidden" name="id" value="[% id | html %]" />
+                <input type="hidden" name="op" value="save" />
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
+                </fieldset>
+            </form>
+        </div> <!-- /.page-section -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

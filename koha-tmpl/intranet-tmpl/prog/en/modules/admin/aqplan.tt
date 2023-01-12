@@ -48,131 +48,129 @@
 <input type="hidden" name="authcat" value="[% authcat | html %]" />
 <!-- Budget Lines -->
 
-    [% IF ( budget_lines ) %]
+    <div class="page-section">
 
-        [% INCLUDE 'budgets-active-currency.inc' %]
-        [% IF ( show_actual ) %]
-            <p><strong>Each cell contain both actual and estimated values.</strong></p>
-        [% ELSE %]
-            <p><strong>Cells contain estimated values only.</strong></p>
-        [% END %]
+        [% IF ( budget_lines ) %]
 
-    <p id="selections">
-        <strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
-        [% FOREACH authvals_ro IN authvals_row %]
-            <span class="selected"><label><input type="checkbox" checked="checked" id="col[% authvals_ro.colnum | html %]">[% authvals_ro.code | html %]</label></span>
-        [% END %]
-    </p>
-    <table id="plan">
-    <thead>
-    <tr>
-    <th>Fund name</th>
-    <th>Fund total</th>
-
-    [% FOREACH authvals_ro IN authvals_row %]
-         [% IF ( authvals_ro.display ) %]
-            <th id="col[% authvals_ro.code | html %]" class="[% authvals_ro.colnum | html %]">
-        [% ELSE %]
-            <th id="col[% authvals_ro.code | html %]" style="display:none;" class="[% authvals_ro.colnum | html %]">
-        [% END %]
-
-    [% authvals_ro.code | html %]</th>
-    [% END %]
-
-    <th class="remaining">Fund remaining</th>
-    <th class="noExport">Actions</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    [% FOREACH budget_line IN budget_lines %]
-    <tr id="[% budget_line.budget_id | html %]">
-        [% IF ( budget_line.budget_lock ) %]
-            <td class="locked" title="Fund locked">
-        [% ELSE %]
-            <td>
-        [% END %]
-        <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | uri %]&amp;budget_period_id=[% budget_period_id | uri %]">[% budget_line.budget_name | html %]</a></td>
-        <td><span id="[% budget_line.budget_amount | html %]">[% budget_line.budget_amount | $Price %]&nbsp;</span>
-
-
-        <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
-        <div style="display:none;" id="budget_tot_[% budget_line.budget_id | html %]">[% budget_line.budget_amount | html %]</div></td>
-
-        [% FOREACH line IN budget_line.lines %]
-            [% IF ( line.display ) %]
-                <td class="[% line.colnum | html %]">
+            [% INCLUDE 'budgets-active-currency.inc' %]
+            [% IF ( show_actual ) %]
+                <p><strong>Each cell contain both actual and estimated values.</strong></p>
             [% ELSE %]
-                <td style="display:none;" class="[% line.colnum | html %]">
+                <p><strong>Cells contain estimated values only.</strong></p>
             [% END %]
-            <table class="invis">
+
+        <p id="selections">
+            <strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
+            [% FOREACH authvals_ro IN authvals_row %]
+                <span class="selected"><label><input type="checkbox" checked="checked" id="col[% authvals_ro.colnum | html %]">[% authvals_ro.code | html %]</label></span>
+            [% END %]
+        </p>
+        <table id="plan">
+            <thead>
                 <tr>
-                    [% IF show_actual %]
-                        <td    >[% line.actual_amount | html %]</td>
+                    <th>Fund name</th>
+                    <th>Fund total</th>
+                    [% FOREACH authvals_ro IN authvals_row %]
+                        [% IF ( authvals_ro.display ) %]
+                            <th id="col[% authvals_ro.code | html %]" class="[% authvals_ro.colnum | html %]">
+                        [% ELSE %]
+                            <th id="col[% authvals_ro.code | html %]" style="display:none;" class="[% authvals_ro.colnum | html %]">
+                        [% END %]
+                        [% authvals_ro.code | html %]</th>
                     [% END %]
-                <td>
+                    <th class="remaining">Fund remaining</th>
+                    <th class="noExport">Actions</th>
+                </tr>
+            </thead>
 
-                [% IF ( line.budget_lock ) %]
-                    [% line.estimated_amount | html %]&nbsp;
-                    <input type="hidden" style="text-align: right;"  name="[% line.cell_name | html %]" value="[% line.estimated_amount | html %]"   />
-                [% ELSE %]
-                    <input type="text" size="6" name="[% line.cell_name | html %]"  value="[% line.estimated_amount | html %]"  id="budget_[% line.budget_id | html %][% line.colnum | html %]" class="plan_entry plan_entry_[% line.budget_id | html %]" />
+            <tbody>
+                [% FOREACH budget_line IN budget_lines %]
+                    <tr id="[% budget_line.budget_id | html %]">
+                        [% IF ( budget_line.budget_lock ) %]
+                            <td class="locked" title="Fund locked">
+                        [% ELSE %]
+                            <td>
+                        [% END %]
+                            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | uri %]&amp;budget_period_id=[% budget_period_id | uri %]">[% budget_line.budget_name | html %]</a></td>
+                        <td><span id="[% budget_line.budget_amount | html %]">[% budget_line.budget_amount | $Price %]&nbsp;</span>
+                        <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
+                        <div style="display:none;" id="budget_tot_[% budget_line.budget_id | html %]">[% budget_line.budget_amount | html %]</div></td>
+
+                        [% FOREACH line IN budget_line.lines %]
+                            [% IF ( line.display ) %]
+                                <td class="[% line.colnum | html %]">
+                            [% ELSE %]
+                                <td style="display:none;" class="[% line.colnum | html %]">
+                            [% END %]
+                                <table class="invis">
+                                    <tr>
+                                        [% IF show_actual %]
+                                            <td    >[% line.actual_amount | html %]</td>
+                                        [% END %]
+                                    <td>
+
+                                        [% IF ( line.budget_lock ) %]
+                                            [% line.estimated_amount | html %]&nbsp;
+                                            <input type="hidden" style="text-align: right;"  name="[% line.cell_name | html %]" value="[% line.estimated_amount | html %]"   />
+                                        [% ELSE %]
+                                            <input type="text" size="6" name="[% line.cell_name | html %]"  value="[% line.estimated_amount | html %]"  id="budget_[% line.budget_id | html %][% line.colnum | html %]" class="plan_entry plan_entry_[% line.budget_id | html %]" />
+                                        [% END %]
+
+                                    </td></tr>
+                                </table>
+                            </td>
+                        [% END %]
+
+                        <td>
+                            <table class="invis">
+                                <tr>
+                                    [% IF show_actual %]
+                                        [% IF ( budget_line.act_negative ) %]
+                                            <td style="color: red;">
+                                        [% ELSIF ( budget_line.act_positive ) %]
+                                            <td style="color: green;">
+                                        [% ELSE %]
+                                            <td>
+                                        [% END %]
+                                        [% budget_line.budget_act_remain | html %]
+                                        </td>
+                                    [% END %]
+
+                                    [% IF ( budget_line.est_negative ) %]
+                                        <td style="color: red;" id="budget_est_[% budget_line.budget_id | html %]">
+                                    [% ELSIF ( budget_line.est_positive ) %]
+                                        <td style="color: green;" id="budget_est_[% budget_line.budget_id | html %]">
+                                    [% ELSE %]
+                                        <td id="budget_est_[% budget_line.budget_id | html %]">
+                                    [% END %]
+                                        [% budget_line.budget_est_remain | $Price %]&nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                        <td class="actions">
+                            [% UNLESS ( budget_line.budget_lock ) %]
+                                <input type="button" class="auto_fill_row btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
+                                <input type="button" class="clear_fields btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Clear">
+                            [% ELSE %]
+                                <div style="color:red;">not owned</div>
+                            [% END %]
+                        </td>
+                    </tr>
                 [% END %]
-
-                </td></tr>
-            </table>
-            </td>
-        [% END %]
-
-        <td>
-        <table class="invis">
-            <tr>
-       [% IF show_actual %]
-            [% IF ( budget_line.act_negative ) %]
-                <td style="color: red;">
-            [% ELSIF ( budget_line.act_positive ) %]
-                <td style="color: green;">
-            [% ELSE %]
-                <td>
-            [% END %]
-                    [% budget_line.budget_act_remain | html %]
-            </td>
-        [% END %]
-
-        [% IF ( budget_line.est_negative ) %]
-            <td style="color: red;" id="budget_est_[% budget_line.budget_id | html %]">
-        [% ELSIF ( budget_line.est_positive ) %]
-            <td style="color: green;" id="budget_est_[% budget_line.budget_id | html %]">
-        [% ELSE %]
-            <td id="budget_est_[% budget_line.budget_id | html %]">
-        [% END %] 
-                [% budget_line.budget_est_remain | $Price %]&nbsp;
-            </td>
-            </tr>
+            </tbody>
         </table>
-        </td>
 
-        <td class="actions">
-             [% UNLESS ( budget_line.budget_lock ) %]
-                    <input type="button" class="auto_fill_row btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
-                    <input type="button" class="clear_fields btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Clear">
-            [% ELSE %]
-             <div style="color:red;">not owned</div>
-            [% END %]
-        </td>
-        </tr>
-    [% END %]
-    </tbody>
-    </table>
+        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+        [% IF ( budget_period_locked ) %]
+            <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
+        [% ELSE %]
+            <input type="hidden" name="op" value="save" />
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
+        [% END %]
 
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-    [% IF ( budget_period_locked ) %]
-        <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
-    [% ELSE %]
-        <input type="hidden" name="op" value="save" />
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
-    [% END %]
-
+    </div> <!-- /.page-section -->
 
 <div id="hide_div">
     [% FOREACH authvals_ro IN authvals_row %]

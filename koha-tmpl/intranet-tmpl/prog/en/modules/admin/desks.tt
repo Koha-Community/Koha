@@ -182,29 +182,31 @@
     [% END %]
 
     [% IF desks.count %]
-        <table id="table_desks">
-            <thead>
-                <tr>
-                    <th>Desk ID</th>
-                    <th>Desk</th>
-                    <th>Library</th>
-                    <th class="NoSort noExport">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH desk IN desks %]
-                <tr>
-                    <td>[% desk.desk_id | html %]</td>
-                    <td>[% desk.desk_name | html %]</td>
-                    <td>[% Branches.GetName( desk.branchcode ) | html %]</td>
-                    <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=add_form&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=delete_confirm&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-trash"></i> Delete</a>
-                    </td>
-                </tr>
-                [% END %]
-            </tbody>
-        </table>
+        <div class="page-section">
+            <table id="table_desks">
+                <thead>
+                    <tr>
+                        <th>Desk ID</th>
+                        <th>Desk</th>
+                        <th>Library</th>
+                        <th class="NoSort noExport">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH desk IN desks %]
+                    <tr>
+                        <td>[% desk.desk_id | html %]</td>
+                        <td>[% desk.desk_name | html %]</td>
+                        <td>[% Branches.GetName( desk.branchcode ) | html %]</td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=add_form&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=delete_confirm&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div> <!-- /.page-section -->
     [% ELSE %]
         <div class="dialog message">
             There are no desks defined. <a href="/cgi-bin/koha/admin/desks.pl?op=add_form">Create a new desk</a>.
