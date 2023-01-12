@@ -41,88 +41,90 @@
 
 <h1>Ordered - Fund: [% fund_code | html %]</h1>
 
-<table id="spent">
-    <thead>
-    <tr>
-    <th class="anti-the"> Title </th>
-    <th> [% tp('noun', 'Order') | html %] </th>
-    <th> Vendor </th>
-    <th> Item types </th>
-    <th> Left on order </th>
-    <th> Estimated cost per unit </th>
-    <th> Date ordered </th>
-    <th> Subtotal </th>
-    </tr>
-    </thead>
-    <tbody>
-[% FOREACH order IN ordered %]
-    <tr>
-    <td class="cell">
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
-        [% order.title | html %]
-            </a>
-    </td>
-    <td class="cell">
-        [% IF ( CAN_user_acquisition_order_manage ) %]
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber | uri %]&amp;booksellerid=[% order.booksellerid | uri %]&amp;basketno=[% order.basketno | uri %]">[% order.ordernumber | html %]</a>
-        [% ELSE %]
-            [% order.ordernumber | html %]
-        [% END %]
-    </td>
-    <td class="cell">
-        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
-    </td>
-    <td class="cell">
-        [% FOREACH itemtype IN order.itemtypes %]
-            [% ItemTypes.GetDescription( itemtype ) | html %]
-            [% IF !loop.last() %] | [% END %]
-        [% END %]
-    </td>
-    <td class="cell">
-        [% order.left | html %]
-    </td>
-    <td class="data cell">
-        [% order.ecost_tax_included | $Price %]
-    </td>
-    <td class="cell" data-order="[% order.entrydate | html %]">
-        [% order.entrydate | $KohaDates %]
-    </td>
-    <td class="data cell">
-        [% order.subtotal | $Price %]
-    </td>
-    </tr>
-[% END %]
-    </tbody>
-    <tfoot>
-    [% IF ( adjustments && adjustments.count > 0 ) %]
-            [% FOREACH adjustment IN adjustments %]
-                <tr>
-                    <td></td>
-                    <td colspan="6">Adjustment cost for invoice
-                        <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% adjustment.invoiceid | uri %]">
-                            [% adjustment.invoice.invoicenumber | html %]
-                        </a>
-                    </td>
-                    <td class="data total">[% adjustment.adjustment | $Price %]</td>
-                </tr>
-            [% END %]
+                <div class="page-section">
+                    <table id="spent">
+                        <thead>
+                        <tr>
+                        <th class="anti-the"> Title </th>
+                        <th> [% tp('noun', 'Order') | html %] </th>
+                        <th> Vendor </th>
+                        <th> Item types </th>
+                        <th> Left on order </th>
+                        <th> Estimated cost per unit </th>
+                        <th> Date ordered </th>
+                        <th> Subtotal </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    [% FOREACH order IN ordered %]
+                        <tr>
+                        <td class="cell">
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
+                            [% order.title | html %]
+                                </a>
+                        </td>
+                        <td class="cell">
+                            [% IF ( CAN_user_acquisition_order_manage ) %]
+                                <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber | uri %]&amp;booksellerid=[% order.booksellerid | uri %]&amp;basketno=[% order.basketno | uri %]">[% order.ordernumber | html %]</a>
+                            [% ELSE %]
+                                [% order.ordernumber | html %]
+                            [% END %]
+                        </td>
+                        <td class="cell">
+                            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
+                        </td>
+                        <td class="cell">
+                            [% FOREACH itemtype IN order.itemtypes %]
+                                [% ItemTypes.GetDescription( itemtype ) | html %]
+                                [% IF !loop.last() %] | [% END %]
+                            [% END %]
+                        </td>
+                        <td class="cell">
+                            [% order.left | html %]
+                        </td>
+                        <td class="data cell">
+                            [% order.ecost_tax_included | $Price %]
+                        </td>
+                        <td class="cell" data-order="[% order.entrydate | html %]">
+                            [% order.entrydate | $KohaDates %]
+                        </td>
+                        <td class="data cell">
+                            [% order.subtotal | $Price %]
+                        </td>
+                        </tr>
+                    [% END %]
+                        </tbody>
+                        <tfoot>
+                        [% IF ( adjustments && adjustments.count > 0 ) %]
+                                [% FOREACH adjustment IN adjustments %]
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="6">Adjustment cost for invoice
+                                            <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% adjustment.invoiceid | uri %]">
+                                                [% adjustment.invoice.invoicenumber | html %]
+                                            </a>
+                                        </td>
+                                        <td class="data total">[% adjustment.adjustment | $Price %]</td>
+                                    </tr>
+                                [% END %]
 
-    [% END %]
-    <tr>
-        <td> Total </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td class="data">
-            [% total | $Price %]
-        </td>
-    </tr>
-    </tfoot>
+                        [% END %]
+                        <tr>
+                            <td> Total </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td class="data">
+                                [% total | $Price %]
+                            </td>
+                        </tr>
+                        </tfoot>
 
-</table>
+                    </table>
+                </div> <!-- /.page-section -->
 
 </main>
 </div> <!-- /.col-sm-10.col-sm-push-2 -->

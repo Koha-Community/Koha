@@ -30,20 +30,22 @@
             <main>
 
     <h1>Select the library account submitting the EDI order</h1>
-    <br />
-    <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
-         <p>Select ordering library account: </p>
-         <select id="ean" name="ean">
-             [% FOREACH eanacct IN eans %]
-             <option value="[% eanacct.ean | html %]">[% eanacct.branch.branchname | html %] ([% eanacct.ean | html %]) [% IF eanacct.description %][[% eanacct.description | html %]][% END %]</option>
-             [% END %]
-        </select>
-        <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-        <input type="hidden" value="ediorder" name="op" />
-        <p>
-            <input type="submit" class="btn btn-primary" value="Send EDI order" />
-        </p>
-    </form>
+
+    <div class="page-section">
+        <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
+            <p>Select ordering library account: </p>
+            <select id="ean" name="ean">
+                [% FOREACH eanacct IN eans %]
+                    <option value="[% eanacct.ean | html %]">[% eanacct.branch.branchname | html %] ([% eanacct.ean | html %]) [% IF eanacct.description %][[% eanacct.description | html %]][% END %]</option>
+                [% END %]
+            </select>
+            <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
+            <input type="hidden" value="ediorder" name="op" />
+            <p>
+                <input type="submit" class="btn btn-primary" value="Send EDI order" />
+            </p>
+        </form>
+    </div> <!-- /.page-section -->
 </main>
 </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
