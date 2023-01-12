@@ -34,7 +34,7 @@ function add_provider(){
     clear_form();
     $(".dialog").hide();
     $("legend").text( __("Add an SMS cellular provider") );
-    $("#toolbar,#submit_update,#providerst").hide();
+    $("#toolbar,#submit_update,#providers").hide();
     $("#sms_add_form,#submit_save").show();
     $("#name").focus();
 }
@@ -48,7 +48,7 @@ function edit_provider( id ) {
     $("#name").val( $("#name_" + id).text() );
     $("#domain").val( $("#domain_" + id).text() );
 
-    $("#toolbar,#submit_save,#providerst").hide();
+    $("#toolbar,#submit_save,#providers").hide();
 
     $("#name").focus();
 }
@@ -58,7 +58,7 @@ function cancel_edit() {
     clear_form();
     $(".dialog").show();
     $("#sms_add_form,#submit_update").hide();
-    $("#toolbar,#submit_save,#providerst").show();
+    $("#toolbar,#submit_save,#providers").show();
 }
 
 function delete_provider( id, users ) {

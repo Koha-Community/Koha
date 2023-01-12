@@ -41,36 +41,36 @@
                 <h1>SMS cellular providers</h1>
 
                 [% IF providers.count %]
-
-                    <table id="providerst">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Domain</th>
-                                <th title="Patrons using this provider">Patrons</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            [% FOREACH p IN providers %]
+                    <div id="providers" class="page-section">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td id="name_[% p.id | html %]">[% p.name | html %]</td>
-                                    <td id="domain_[% p.id | html %]">[% p.domain | html %]</td>
-                                    <td id="patrons_using_[% p.id | html %]">[% p.patrons_using | html %]</td>
-                                    <td class="actions">
-                                        <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id | html %]" data-providerid="[% p.id | html %]">
-                                            <i class="fa fa-pencil"></i> Edit
-                                        </a>
-                                        <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id | html %]" data-patrons_using="[% p.patrons_using | html %]" id="delete_[% p.id | html %]">
-                                            <i class="fa fa-trash"></i> Delete
-                                        </a>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Domain</th>
+                                    <th title="Patrons using this provider">Patrons</th>
+                                    <th>&nbsp;</th>
                                 </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
+                            </thead>
 
+                            <tbody>
+                                [% FOREACH p IN providers %]
+                                    <tr>
+                                        <td id="name_[% p.id | html %]">[% p.name | html %]</td>
+                                        <td id="domain_[% p.id | html %]">[% p.domain | html %]</td>
+                                        <td id="patrons_using_[% p.id | html %]">[% p.patrons_using | html %]</td>
+                                        <td class="actions">
+                                            <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id | html %]" data-providerid="[% p.id | html %]">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </a>
+                                            <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id | html %]" data-patrons_using="[% p.patrons_using | html %]" id="delete_[% p.id | html %]">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div> <!-- /.page-section -->
                 [% ELSE %]
 
                     <div class="dialog message">

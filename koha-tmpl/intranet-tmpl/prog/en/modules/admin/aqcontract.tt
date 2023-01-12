@@ -109,7 +109,8 @@
     <div class="dialog alert">Contract has not been deleted. Maybe a basket linked to this contract exists.</div>
 [% END %]
 
-                [% IF ( add_form ) %]
+            [% IF ( add_form ) %]
+                <div class="page-section">
                     <form name="Aform" action="/cgi-bin/koha/admin/aqcontract.pl" id="add_modify_contract" method="post">
                         <input type="hidden" name="op" value="add_validate" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
@@ -150,6 +151,7 @@
                             <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>
                         </fieldset>
                     </form>
+                </div> <!-- /.page-section -->
             [% END %]
             [% IF ( add_validate ) %]
                 <h1>Data recorded</h1>
@@ -191,29 +193,31 @@
             [% IF ( else ) %]
                 <h1>Contract(s) of [% booksellername | html %]</h1>
                 [% IF ( loop ) %]
-                    <table>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Start date</th>
-                            <th scope="col">End date</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    [% FOREACH loo IN loop %]
-                        <tr>
-                        <td>
-                            <a href="[% loo.script_name | url %]?op=add_form&amp;booksellerid=[% loo.booksellerid | uri %]&amp;contractnumber=[% loo.contractnumber | uri %]">[% loo.contractname | html %]</a>
-                        </td>
-                        <td>[% loo.contractdescription | html %]</td>
-                        <td>[% loo.contractstartdate | html %]</td>
-                        <td>[% loo.contractenddate | html %]</td>
-                        <td class="actions">
-                            <a href="[% loo.script_name | url %]?op=add_form&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="[% loo.script_name | url %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                        </tr>
-                    [% END %]
-                </table>
+                    <div class="page-section">
+                        <table>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Start date</th>
+                                <th scope="col">End date</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            [% FOREACH loo IN loop %]
+                                <tr>
+                                    <td>
+                                        <a href="[% loo.script_name | url %]?op=add_form&amp;booksellerid=[% loo.booksellerid | uri %]&amp;contractnumber=[% loo.contractnumber | uri %]">[% loo.contractname | html %]</a>
+                                    </td>
+                                    <td>[% loo.contractdescription | html %]</td>
+                                    <td>[% loo.contractstartdate | html %]</td>
+                                    <td>[% loo.contractenddate | html %]</td>
+                                    <td class="actions">
+                                        <a href="[% loo.script_name | url %]?op=add_form&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a href="[% loo.script_name | url %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </div> <!-- /.page-section -->
                 [% ELSE %]
                     <div class="dialog message">
                         There are no contracts with this vendor.

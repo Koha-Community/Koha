@@ -37,35 +37,36 @@
 
                 <h1>OverDrive library authnames</h1>
 
-                <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
-                    <input type="hidden" name="op" value="update" />
+                <div class="page-section">
+                    <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
+                        <input type="hidden" name="op" value="update" />
 
-                    <table id="od_info">
-                        <thead>
-                            <tr>
-                                <th>Library</th>
-                                <th>Authname</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH b IN branches %]
-                            <tr>
-                                <td>
-                                    [% Branches.GetName( b.branchcode ) | html %]
-                                    <input type="hidden" name="branchcode" value="[% b.branchcode | html %]" />
-                                </td>
-                                <td>
-                                    <input type="text" name="authname" value="[% b.authname | html %]" />
-                                </td>
-                            </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-                    <div class="action">
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </div>
-                </form>
-
+                        <table id="od_info">
+                            <thead>
+                                <tr>
+                                    <th>Library</th>
+                                    <th>Authname</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH b IN branches %]
+                                <tr>
+                                    <td>
+                                        [% Branches.GetName( b.branchcode ) | html %]
+                                        <input type="hidden" name="branchcode" value="[% b.branchcode | html %]" />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="authname" value="[% b.authname | html %]" />
+                                    </td>
+                                </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                        <div class="action">
+                            <input type="submit" class="btn btn-primary" value="Submit" />
+                        </div>
+                    </form>
+                </div> <!-- /.page-section -->
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
