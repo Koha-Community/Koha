@@ -27,22 +27,23 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-  <h1>Koha offline circulation</h1>
-  <p>Your file was uploaded. Once all files are uploaded, please process them in pending offline circulation actions.</p>
+            <h1>Koha offline circulation</h1>
+            <div class="page-section">
+                <p>Your file was uploaded. Once all files are uploaded, please process them in pending offline circulation actions.</p>
 
-[% FOREACH message IN messages %]
-  [% IF ( message.message ) %]
-      [% IF ( message.ERROR_file_version ) %]
-          <div class="dialog alert"><p>Warning: This file is version [% message.upload_version | html %], but I only know how to import version [% message.current_version | html %]. I'll try my best.</p>
-      [% END %]
-  [% END %]
-[% END %]
+                [% FOREACH message IN messages %]
+                    [% IF ( message.message ) %]
+                        [% IF ( message.ERROR_file_version ) %]
+                            <div class="dialog alert"><p>Warning: This file is version [% message.upload_version | html %], but I only know how to import version [% message.current_version | html %]. I'll try my best.</div>
+                        [% END %]
+                    [% END %]
+                [% END %]
 
-<p><a href="process_koc.pl">Upload another KOC file</a></p>
+                <p><a href="process_koc.pl">Upload another KOC file</a></p>
 
-<p><a href="list.pl">View pending offline circulation actions</a></p>
-
+                <p><a href="list.pl">View pending offline circulation actions</a></p>
+            </div> <!-- /.page-section -->
+        </div>
     </div>
-</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
