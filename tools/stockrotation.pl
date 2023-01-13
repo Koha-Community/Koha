@@ -193,6 +193,42 @@ if (!defined $op) {
         item_id  => $params{item_id}
     );
 
+} elsif ($op eq 'confirm_delete_rota') {
+
+    # Get the rota we're deleting
+    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+
+    # Get all items on this rota, for each prefetch their
+    # stage and biblio objects
+    my $sritems = Koha::StockRotationItems->search(
+        { 'stage.rota_id' => $params{rota_id} },
+        {
+            prefetch => {
+                stage => {
+                    'stockrotationitems' => {
+                        'itemnumber' => 'biblionumber'
+                    }
+                }
+            }
+        }
+    );
+
+    $template->param(
+        rota_id  => $params{rota_id},
+        sritemstotal  => $sritems->count,
+        op       => $op
+    );
+
+} elsif ($op eq 'delete_rota') {
+
+    # Get the rota we're deleting
+    my $rota = Koha::StockRotationRotas->find($params{rota_id});
+
+    $rota->delete;
+
+    # Return to the rotas list
+    print $input->redirect("/cgi-bin/koha/tools/stockrotation.pl");
+
 } elsif ($op eq 'confirm_delete_stage') {
 
     # Get the stage we're deleting
