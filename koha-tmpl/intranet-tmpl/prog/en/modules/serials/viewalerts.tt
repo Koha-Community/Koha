@@ -31,28 +31,30 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>Alert subscribers for <em>[% bibliotitle | html %]</em></h1>
+                <h1>Alert subscribers for <em>[% bibliotitle | html %]</em></h1>
+                <p>
+                    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]">[% bibliotitle | html %] #[% subscriptionid | html %]</a>
+                </p>
 
-<p>
-    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]">[% bibliotitle | html %] #[% subscriptionid | html %]</a>
-</p>
+                <div class="page-section">
 
-[% IF subscribers.count %]
-    <table>
-        <tr>
-            <th>Patron name</th>
-        </tr>
-        [% FOREACH subscriber IN subscribers %]
-        <tr>
-            <td>
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
-            </td>
-        </tr>
-        [% END %]
-    </table>
-[% ELSE %]
-    <p>There are no patrons subscribed to this subscription serial alert.</p>
-[% END %]
+                    [% IF subscribers.count %]
+                        <table>
+                            <tr>
+                                <th>Patron name</th>
+                            </tr>
+                            [% FOREACH subscriber IN subscribers %]
+                            <tr>
+                                <td>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
+                                </td>
+                            </tr>
+                            [% END %]
+                        </table>
+                    [% ELSE %]
+                        <p>There are no patrons subscribed to this subscription serial alert.</p>
+                    [% END %]
+                </div> <!-- /.page-section -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
