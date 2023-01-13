@@ -171,9 +171,11 @@ subtest 'checkauth() tests' => sub {
         my ( $return ) = C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
         is( $return, 'ok', 'Former session in shape now' );
 
-        my $mock1 = Test::MockModule->new('C4::Auth')->mock( 'safe_exit', sub {} );
-        my $mock2 = Test::MockModule->new('CGI')     ->mock( 'request_method', 'POST' )
-                                                     ->mock( 'cookie', sub { return $sessionID; } ); # oversimplified..
+        my $mock1 = Test::MockModule->new('C4::Auth');
+        $mock1->mock( 'safe_exit', sub {} );
+        my $mock2 = Test::MockModule->new('CGI');
+        $mock2->mock( 'request_method', 'POST' );
+        $mock2->mock( 'cookie', sub { return $sessionID; } ); # oversimplified..
         my $cgi = CGI->new;
         my $password = 'Incr3d1blyZtr@ng93$';
         $patron2->set_password({ password => $password });
