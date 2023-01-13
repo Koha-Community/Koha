@@ -959,8 +959,9 @@ sub checkauth {
     }
 
     unless ( $userid ) {
-        #we initiate a session prior to checking for a username to allow for anonymous sessions...
-        $session ||= get_session("") or die "Auth ERROR: Cannot get_session()";
+        if( !$session or !$sessionID ) { # if we cleared sessionID, we need a new session
+            $session = get_session() or die "Auth ERROR: Cannot get_session()";
+        }
 
         # Save anonymous search history in new session so it can be retrieved
         # by get_template_and_user to store it in user's search history after
