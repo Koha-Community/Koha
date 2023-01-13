@@ -78,16 +78,23 @@ sub new {
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
     my $fines_amount = ($patron->account->balance > 0) ? $patron->account->non_issues_charges : 0;
+    my $personal_fines_amount = $fines_amount;
     my $fee_limit = _fee_limit();
-    my $fine_blocked = $fines_amount > $fee_limit;
     my $noissueschargeguarantorswithguarantees = C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees');
+    my $fines_msg = "";
+    my $fine_blocked = 0;
     my $noissueschargeguarantees = C4::Context->preference('NoIssuesChargeGuarantees');
-    if ( $noissueschargeguarantorswithguarantees ) {
+    if( $fines_amount > $fee_limit ){
+        $fine_blocked = 1;
+        $fines_msg .= " -- " . "Patron blocked by fines" if $fine_blocked;
+    } elsif ( $noissueschargeguarantorswithguarantees ) {
         $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 0 });
         $fine_blocked ||= $fines_amount > $noissueschargeguarantorswithguarantees;
+        $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on related accounts";
     } elsif ( $noissueschargeguarantees ) {
         $fines_amount += $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 0, include_this_patron => 0 });
         $fine_blocked ||= $fines_amount > $noissueschargeguarantees;
+        $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on guaranteed accounts";
     }
 
     my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
@@ -114,11 +121,11 @@ sub new {
         hold_ok         => ( !$debarred && !$expired && !$fine_blocked),
         card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
         claims_returned => 0,
-        fines           => $fines_amount,
+        fines           => $personal_fines_amount,
         fees            => 0,             # currently not distinct from fines
         recall_overdue  => 0,
         items_billed    => 0,
-        screen_msg      => 'Greetings from Koha. ' . $kp->{opacnote},
+        screen_msg      => 'Greetings from Koha. ' . $kp->{opacnote} . $fines_msg,
         print_line      => '',
         items           => [],
         hold_items      => $flags->{WAITING}->{itemlist},
