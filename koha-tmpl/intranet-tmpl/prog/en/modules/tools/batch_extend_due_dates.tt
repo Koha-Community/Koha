@@ -182,30 +182,32 @@
                             Due dates have been modified!
                         </div>
 
-                        <table id="checkouts_result">
-                            <thead>
-                                <tr>
-                                    <th>Due date</th>
-                                    <th>Title</th>
-                                    <th>Item type</th>
-                                    <th>Home library</th>
-                                    <th>Checked out on</th>
-                                    <th>Checked out from</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOR checkout IN checkouts %]
+                        <div class="page-section">
+                            <table id="checkouts_result">
+                                <thead>
                                     <tr>
-                                        <td>[% checkout.date_due | $KohaDates as_due_date => 1 %]</td>
-                                        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout.item.biblio.biblionumber | uri %]">[% checkout.item.biblio.title | html %]</a></td>
-                                        <td>[% ItemTypes.GetDescription( checkout.item.effective_itemtype ) | html %]</td>
-                                        <td>[% checkout.item.home_branch.branchname | html %]</td>
-                                        <td>[% checkout.issuedate | $KohaDates %]</td>
-                                        <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
+                                        <th>Due date</th>
+                                        <th>Title</th>
+                                        <th>Item type</th>
+                                        <th>Home library</th>
+                                        <th>Checked out on</th>
+                                        <th>Checked out from</th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table> <!-- /#checkouts_result -->
+                                </thead>
+                                <tbody>
+                                    [% FOR checkout IN checkouts %]
+                                        <tr>
+                                            <td>[% checkout.date_due | $KohaDates as_due_date => 1 %]</td>
+                                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout.item.biblio.biblionumber | uri %]">[% checkout.item.biblio.title | html %]</a></td>
+                                            <td>[% ItemTypes.GetDescription( checkout.item.effective_itemtype ) | html %]</td>
+                                            <td>[% checkout.item.home_branch.branchname | html %]</td>
+                                            <td>[% checkout.issuedate | $KohaDates %]</td>
+                                            <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table> <!-- /#checkouts_result -->
+                        </div> <!-- /.page-section -->
                     [% END %]
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
