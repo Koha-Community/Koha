@@ -74,74 +74,74 @@
 <div id="cataloguing_additem_itemlist">
     [% IF items %]
         [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
-        <div>
-        <table id="itemst">
-          <thead>
-            <tr>
-                <th class="NoSort">&nbsp;</th>
-                [% FOREACH item_header IN item_header_loop %]
-                    <th data-colname="[% item_header.attribute | html %]">
-                        [% item_header.header_value | html %]
-                    </th>
-                [% END %]
-            </tr>
-          </thead>
-          <tbody>
-                [% FOREACH item IN items %]
-                    [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
-                    [% IF item.itemnumber == itemnumber%]
-                        [% UNLESS can_be_edited %]
-                           <tr id="row[% item.itemnumber | html %]" class="active">
-                        [% ELSE %]
-                            <tr id="row[% item.itemnumber | html %]" class="active editable">
-                        [% END %]
-                    [% ELSE %]
-                        [% UNLESS can_be_edited %]
-                           <tr id="row[% item.itemnumber | html %]">
-                        [% ELSE %]
-                            <tr id="row[% item.itemnumber | html %]" class="editable">
-                        [% END %]
+        <div class="page-section">
+            <table id="itemst">
+            <thead>
+                <tr>
+                    <th class="NoSort">&nbsp;</th>
+                    [% FOREACH item_header IN item_header_loop %]
+                        <th data-colname="[% item_header.attribute | html %]">
+                            [% item_header.header_value | html %]
+                        </th>
                     [% END %]
-                    [% UNLESS can_be_edited %]
-                      <td>&nbsp;</td>
-                    [% ELSE %]
-                      <td>
-                          <div class="btn-group dropup">
-                          <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
-                              Actions <b class="caret"></b>
-                          </a>
-                          <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item.itemnumber | html %]">
-
-                        [% IF item.biblionumber != biblio.biblionumber %] [%# Host item %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblio.biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
-                        [% ELSE %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
-                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
-                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
-                              <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
-                        [% END %]
-                            [% IF ( OPACBaseURL ) %]
-                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
-                            [% END %]
-                          </ul>
-                          </div>
-                      </td>
-                    [% END %]
-                [% FOREACH header IN item_header_loop %]
-                    [% SET attribute = header.attribute %]
-                    [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
-                        <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
-                    [% ELSIF ( item.$attribute && ( attribute == 'price' || attribute == 'replacementprice' ) ) %]
-                        <td data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
-                    [% ELSE %]
-                        <td>[% item.$attribute | html %]</td>
-                    [% END %]
-                [% END %]
                 </tr>
-                [% END %]
-          </tbody>
-        </table>
-        </div>
+            </thead>
+            <tbody>
+                    [% FOREACH item IN items %]
+                        [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
+                        [% IF item.itemnumber == itemnumber%]
+                            [% UNLESS can_be_edited %]
+                            <tr id="row[% item.itemnumber | html %]" class="active">
+                            [% ELSE %]
+                                <tr id="row[% item.itemnumber | html %]" class="active editable">
+                            [% END %]
+                        [% ELSE %]
+                            [% UNLESS can_be_edited %]
+                            <tr id="row[% item.itemnumber | html %]">
+                            [% ELSE %]
+                                <tr id="row[% item.itemnumber | html %]" class="editable">
+                            [% END %]
+                        [% END %]
+                        [% UNLESS can_be_edited %]
+                        <td>&nbsp;</td>
+                        [% ELSE %]
+                        <td>
+                            <div class="btn-group dropup">
+                            <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
+                                Actions <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item.itemnumber | html %]">
+
+                            [% IF item.biblionumber != biblio.biblionumber %] [%# Host item %]
+                                <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblio.biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
+                            [% ELSE %]
+                                <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                                <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
+                                <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
+                                <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
+                            [% END %]
+                                [% IF ( OPACBaseURL ) %]
+                                    <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
+                                [% END %]
+                            </ul>
+                            </div>
+                        </td>
+                        [% END %]
+                    [% FOREACH header IN item_header_loop %]
+                        [% SET attribute = header.attribute %]
+                        [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
+                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
+                        [% ELSIF ( item.$attribute && ( attribute == 'price' || attribute == 'replacementprice' ) ) %]
+                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
+                        [% ELSE %]
+                            <td>[% item.$attribute | html %]</td>
+                        [% END %]
+                    [% END %]
+                    </tr>
+                    [% END %]
+            </tbody>
+            </table>
+        </div> <!-- /.page-section -->
     [% END %]
 
 <div class="row">
@@ -150,7 +150,7 @@
     </div>
     <div class="col-sm-10">
 
-<div id="cataloguing_additem_newitem" class="item_edit_form">
+<div id="cataloguing_additem_newitem" class="item_edit_form page-section">
     <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | html %]" name="f">
     <input type="hidden" name="op" value="[% op | html %]" />
     [% IF (popup) %]
