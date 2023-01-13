@@ -134,7 +134,7 @@ sub submit_form {
         return;
     }
 
-    my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
+    my $default_submit_selector = '//div[@id="login"]//fieldset[@class="action"]/input[@type="submit"]';
     $self->driver->find_element($default_submit_selector)->click
 }
 
