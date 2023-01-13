@@ -146,6 +146,9 @@ foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
 }
 
+if ($itemnumber) {
+    @items = (grep {$_->itemnumber == $itemnumber} @items);
+}
 my @item_data;
 foreach my $item (@items){
 
