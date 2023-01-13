@@ -226,7 +226,7 @@ sub process_bib {
             );
         }
         if ( not $test_only ) {
-            ModBiblio( $record, $biblionumber, $frameworkcode, { disable_autolink => 1 });
+            ModBiblio( $record, $biblionumber, $frameworkcode, { disable_autolink => 1, skip_holds_queue => 1 });
             #Last param is to note ModBiblio was called from linking script and bib should not be linked again
             $num_bibs_modified++;
         }
