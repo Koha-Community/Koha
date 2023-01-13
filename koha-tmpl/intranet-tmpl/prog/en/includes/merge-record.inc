@@ -68,10 +68,8 @@
 [% END %]
 
 [% BLOCK mergetarget %]
-<div id="result">
     <h2>Destination record</h2>
-    <div style="border:1px solid #E8E8E8;padding:1em;margin-top:2em;">
+    <div id="result" class="page-section">
         <ul id="resultul"></ul>
-    </div>
-</div> <!-- // #result -->
+    </div> <!-- // #result -->
 [% END %]
