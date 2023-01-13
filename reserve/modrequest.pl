@@ -30,19 +30,13 @@ use Try::Tiny;
 
 use C4::Output;
 use C4::Reserves qw( ModReserve ModReserveCancelAll );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( checkauth );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 my $query = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   
-        template_name   => "about.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { reserveforothers => '*' },
-    }
-);
+
+checkauth($query, 0, { reserveforothers => '*' }, 'intranet');
 
 my @reserve_id = $query->multi_param('reserve_id');
 my @rank = $query->multi_param('rank-request');

@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( checkauth );
 use C4::Output;
 use C4::Context;
 use Koha::Patrons;
@@ -27,17 +27,9 @@ use Koha::Patron::Modifications;
 
 my $query = CGI->new;
 
-# FIXME Should be a checkauth call
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "about.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { borrowers => 'edit_borrowers' },
-    }
-);
+my ( $userid, $cookie, $sessionID, $flags ) = checkauth($query, 0, { borrowers => 'edit_borrowers' }, 'intranet');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
+my $logged_in_user = Koha::Patrons->find({ userid => $userid });
 
 my @params = $query->param;
 

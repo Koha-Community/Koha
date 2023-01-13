@@ -23,18 +23,13 @@ use CGI qw ( -utf8 );
 
 use C4::Output;
 use C4::Reserves;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( checkauth );
 
 use C4::CourseReserves qw( DelCourse ModCourse ModCourseInstructors );
 
 my $cgi = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "about.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { coursereserves => 'manage_courses' },
-    }
-);
+
+checkauth($cgi, 0, { coursereserves => 'manage_courses' }, 'intranet');
 
 my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');
