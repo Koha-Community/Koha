@@ -276,7 +276,7 @@ $schema->storage->txn_rollback;
 
 subtest "NoIssuesChargeGuarantees tests" => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
 
@@ -286,7 +286,8 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
     my $child  = $builder->build_object({ class => 'Koha::Patrons' });
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
 
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 1);
+    t::lib::Mocks::mock_preference('noissuescharge', 50);
+    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 11.01);
     t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', undef);
 
     my $fee1 = $builder->build_object(
@@ -311,8 +312,9 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
 
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
-    is( $sip_patron->fines_amount, 11.11,"Guarantor fines correctly included");
+    is( $sip_patron->fines_amount, 11, "Only patron's fines are reported in total");
     ok( !$sip_patron->charge_ok, "Guarantor blocked");
+    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on guaranteed accounts/,"Screen message includes related fines total");
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
@@ -324,7 +326,7 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
 
 subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
 
@@ -334,7 +336,8 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
     my $child  = $builder->build_object({ class => 'Koha::Patrons' });
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
 
-    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', 1);
+    t::lib::Mocks::mock_preference('noissuescharge', 50);
+    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', 11.01);
 
     my $fee1 = $builder->build_object(
         {
@@ -358,13 +361,15 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
-    is( $sip_patron->fines_amount, 11.11,"Guarantee fines correctly included");
+    is( $sip_patron->fines_amount, 11, "Guarantee fines correctly included");
     ok( !$sip_patron->charge_ok, "Guarantor blocked");
+    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,"Screen message includes related fines total");
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
-    is( $sip_patron->fines_amount, 11.11,"Guarantor fines correctly included");
+    is( $sip_patron->fines_amount, 0.11, "Guarantor fines correctly included");
     ok( !$sip_patron->charge_ok, "Guarantee blocked");
+    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on related accounts/,"Screen message includes related fines total");
 
     $schema->storage->txn_rollback;
 };
