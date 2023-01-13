@@ -35,65 +35,67 @@
 
         <h1>Offline circulation</h1>
 
-	    [% IF ( pending_operations ) %]
+        [% IF ( pending_operations ) %]
 
-	        <form>
+           <form>
                 <p>
                     <a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a>
                     <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Uncheck all</a>
                 </p>
 
-	        <table id="operations">
-	            <thead>
-		            <tr>
-		                <th>&nbsp;</th>
-			            <th>Date</th>
-			            <th>Action</th>
-			            <th>Barcode</th>
-                                    <th>Card number</th>
-                                    <th>Amount</th>
-		            </tr>
-		        </thead>
-		        <tbody>
-		            [% FOREACH operation IN pending_operations %]
-		                <tr class="oc-[% operation.action | html %]">
-                            <td><input type="checkbox" name="operationid" id="operationid[% operation.operationid | html %]" value="[% operation.operationid | html %]" /></td>
-                            <td>
-                                <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | html %]</label>
-                            </td>
-                            <td>
-                                [% SWITCH ( operation.action ) -%]
-                                    [%   CASE "issue" -%]
-                                        <span>Check out</span>
-                                    [%   CASE "return" -%]
-                                        <span>Check in</span>
-                                    [%   CASE "payment" -%]
-                                        <span>Payment</span>
-                                    [%   CASE # default case -%]
-                                        <span>[% operation.action | html %]</span>
-                                [% END -%]
-                            </td>
-			                <td>
-                                [% IF ( operation.biblionumber ) %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | uri %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
-			                    [% ELSE %]
-			                        <span class="error">[% operation.barcode | html %]</span>
-			                    [% END %]
-			                </td>
-			                <td>
-			                [% IF ( operation.actionissue || operation.actionpayment) %]
-		                        [% IF ( operation.borrowernumber ) %]
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber | uri %]" title="[% operation.borrower | html %]">[% operation.cardnumber | html %]</a>
-		                        [% ELSE %]
-		                            <span class="error">[% operation.cardnumber | html %]</span>
-		                        [% END %]
-			                [% END %]
-			                </td>
-                                        <td>[% operation.amount | html %]</td>
-		                </tr>
-		            [% END %]
-		        </tbody>
-	        </table>
+            <div class="page-section">
+                <table id="operations">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                            <th>Barcode</th>
+                            <th>Card number</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH operation IN pending_operations %]
+                            <tr class="oc-[% operation.action | html %]">
+                                <td><input type="checkbox" name="operationid" id="operationid[% operation.operationid | html %]" value="[% operation.operationid | html %]" /></td>
+                                <td>
+                                    <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | html %]</label>
+                                </td>
+                                <td>
+                                    [% SWITCH ( operation.action ) -%]
+                                        [%   CASE "issue" -%]
+                                            <span>Check out</span>
+                                        [%   CASE "return" -%]
+                                            <span>Check in</span>
+                                        [%   CASE "payment" -%]
+                                            <span>Payment</span>
+                                        [%   CASE # default case -%]
+                                            <span>[% operation.action | html %]</span>
+                                    [% END -%]
+                                </td>
+                                <td>
+                                    [% IF ( operation.biblionumber ) %]
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | uri %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
+                                    [% ELSE %]
+                                        <span class="error">[% operation.barcode | html %]</span>
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( operation.actionissue || operation.actionpayment) %]
+                                        [% IF ( operation.borrowernumber ) %]
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber | uri %]" title="[% operation.borrower | html %]">[% operation.cardnumber | html %]</a>
+                                        [% ELSE %]
+                                            <span class="error">[% operation.cardnumber | html %]</span>
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                                <td>[% operation.amount | html %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div> <!-- /.page-section -->
 
             <p id="actions">For the selected operations:
             <input type="button" id="process" value="Process" />

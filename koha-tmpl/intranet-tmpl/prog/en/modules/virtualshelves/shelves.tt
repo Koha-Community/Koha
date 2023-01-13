@@ -281,114 +281,117 @@
                             </div>
                         [% END %]
 
-                        <table id="searchresults" class="dataTable">
-                            <thead>
-                                <tr>
-                                    [% IF ( itemsloop ) %]
-                                        <th class="checkall">&nbsp;</th>
-                                    [% END %]
-                                    [% UNLESS ( item_level_itypes ) %]
-                                        <th>Item type</th>
-                                    [% END %]
-                                    [% IF sortfield == 'title' %]
-                                        <th class="sorting_[% direction | html %]">
-                                    [% ELSE %]
-                                        <th class="sorting">
-                                    [% END %]
-                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
-                                    </th>
-                                    [% IF sortfield == 'author' %]
-                                        <th class="sorting_[% direction | html %]">
-                                    [% ELSE %]
-                                        <th class="sorting">
-                                    [% END %]
-                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
-                                    </th>
-                                    [% IF sortfield == 'dateadded' %]
-                                        <th class="sorting_[% direction | html %]">
-                                    [% ELSE %]
-                                        <th class="sorting">
-                                    [% END %]
-                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
-                                    </th>
-                                    [% IF sortfield == 'itemcallnumber' %]
-                                        <th class="sorting_[% direction | html %]">
-                                    [% ELSE %]
-                                        <th class="sorting">
-                                    [% END %]
-                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
-                                    </th>
-                                </tr>
-                            </thead>
-                            [% FOREACH itemsloo IN itemsloop %]
-                                <tr>
-                                    [% IF itemsloop %]
-                                        <td>
-                                            <input type="checkbox" class="selection" value="[% itemsloo.biblionumber | html %]" name="biblionumber" />
-                                        </td>
-                                    [% END %]
-                                    [% UNLESS ( item_level_itypes ) %]
-                                        <td>
-                                            [% UNLESS ( noItemTypeImages || !itemsloo.imageurl ) %]
-                                                <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
-                                            [% END %]
-                                            <span class="itypetext">[% itemsloo.description | html %]</span>
-                                        </td>
-                                    [% END %]
-                                    <td>
-                                        [% IF ( itemsloo.XSLTBloc ) %]
-                                            [% itemsloo.XSLTBloc | $raw %]
-                                        [% ELSE %]
-                                            [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
-                                            </a>
+                        <div class="page-section">
+                            <table id="searchresults" class="dataTable">
+                                <thead>
+                                    <tr>
+                                        [% IF ( itemsloop ) %]
+                                            <th class="checkall">&nbsp;</th>
                                         [% END %]
-                                        <p class="hold">
-                                            [% IF ( itemsloo.notforloan ) %]
-                                                <span class="noholdstext">No holds allowed</span>
-                                            [% ELSE %]
-                                                [% IF ( itemsloo.ITEM_RESULTS.count ) %]
-                                                    <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
-                                                    [% IF ( holdfor ) %]
-                                                        <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 %]</a></span>
-                                                    [% END %]
-                                                [% ELSE %]
-                                                    <span class="noholdstext">No holds allowed</span>
+                                        [% UNLESS ( item_level_itypes ) %]
+                                            <th>Item type</th>
+                                        [% END %]
+                                        [% IF sortfield == 'title' %]
+                                            <th class="sorting_[% direction | html %]">
+                                        [% ELSE %]
+                                            <th class="sorting">
+                                        [% END %]
+                                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
+                                        </th>
+                                        [% IF sortfield == 'author' %]
+                                            <th class="sorting_[% direction | html %]">
+                                        [% ELSE %]
+                                            <th class="sorting">
+                                        [% END %]
+                                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
+                                        </th>
+                                        [% IF sortfield == 'dateadded' %]
+                                            <th class="sorting_[% direction | html %]">
+                                        [% ELSE %]
+                                            <th class="sorting">
+                                        [% END %]
+                                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
+                                        </th>
+                                        [% IF sortfield == 'itemcallnumber' %]
+                                            <th class="sorting_[% direction | html %]">
+                                        [% ELSE %]
+                                            <th class="sorting">
+                                        [% END %]
+                                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                [% FOREACH itemsloo IN itemsloop %]
+                                    <tr>
+                                        [% IF itemsloop %]
+                                            <td>
+                                                <input type="checkbox" class="selection" value="[% itemsloo.biblionumber | html %]" name="biblionumber" />
+                                            </td>
+                                        [% END %]
+                                        [% UNLESS ( item_level_itypes ) %]
+                                            <td>
+                                                [% UNLESS ( noItemTypeImages || !itemsloo.imageurl ) %]
+                                                    <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
                                                 [% END %]
+                                                <span class="itypetext">[% itemsloo.description | html %]</span>
+                                            </td>
+                                        [% END %]
+                                        <td>
+                                            [% IF ( itemsloo.XSLTBloc ) %]
+                                                [% itemsloo.XSLTBloc | $raw %]
+                                            [% ELSE %]
+                                                [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
+                                                </a>
                                             [% END %]
-                                            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                                                | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit record</a>
-                                            [% END %]
-                                            [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                                                | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit items</a>
-                                            [% END %]
-                                        </p>
-                                    </td>
-                                    <td>
-                                        [% itemsloo.author | html %]
-                                    </td>
-                                    <td>
-                                        [% itemsloo.dateadded | $KohaDates%]
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            [% FOREACH item IN itemsloo.ITEM_RESULTS %]
-                                                <li>
-                                                    [% Branches.GetName(item.holdingbranch) | html %]
-                                                    [% IF ( item.location ) %]
-                                                        <span class="shelvingloc">
-                                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
-                                                        </span>
+                                            <p class="hold">
+                                                [% IF ( itemsloo.notforloan ) %]
+                                                    <span class="noholdstext">No holds allowed</span>
+                                                [% ELSE %]
+                                                    [% IF ( itemsloo.ITEM_RESULTS.count ) %]
+                                                        <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
+                                                        [% IF ( holdfor ) %]
+                                                            <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 %]</a></span>
+                                                        [% END %]
+                                                    [% ELSE %]
+                                                        <span class="noholdstext">No holds allowed</span>
                                                     [% END %]
-                                                    [% IF ( item.itemcallnumber ) %]
-                                                        [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
-                                                    [% END %]
-                                                </li>
-                                            [% END # /FOREACH item %]
-                                        </ul>
-                                    </td>
-                                </tr>
-                            [% END #/FOREACH itemsloo %]
-                        </table> <!-- /#searchresults -->
+                                                [% END %]
+                                                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                                    | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit record</a>
+                                                [% END %]
+                                                [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                                    | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit items</a>
+                                                [% END %]
+                                            </p>
+                                        </td>
+                                        <td>
+                                            [% itemsloo.author | html %]
+                                        </td>
+                                        <td>
+                                            [% itemsloo.dateadded | $KohaDates%]
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                [% FOREACH item IN itemsloo.ITEM_RESULTS %]
+                                                    <li>
+                                                        [% Branches.GetName(item.holdingbranch) | html %]
+                                                        [% IF ( item.location ) %]
+                                                            <span class="shelvingloc">
+                                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
+                                                            </span>
+                                                        [% END %]
+                                                        [% IF ( item.itemcallnumber ) %]
+                                                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
+                                                        [% END %]
+                                                    </li>
+                                                [% END # /FOREACH item %]
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                [% END #/FOREACH itemsloo %]
+                            </table> <!-- /#searchresults -->
+                        </div> <!-- /.page-section -->
+
                         <div class="pages">[% pagination_bar | $raw %]</div>
                     </form>
                 [% END # /IF itemsloop %]

@@ -110,49 +110,51 @@
 	<p>Use the dictionary to define custom criteria for reporting.</p>
 
 		[% IF ( definitions ) %]
-        <h2>Current terms</h2>
-		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-        <input type="hidden" name="phase" value="View Dictionary" />
-  [% IF ( areas ) %]
-        Filter by area
-        <select name="area">
-          <option value="">All</option>
-        [% FOREACH area IN areas %]
-          [%- IF ( area.selected ) -%]
-          <option value="[% area.id | html %]" selected="selected">[%- PROCESS area_name area=area.id -%]</option>
-          [%- ELSE -%]
-          <option value="[% area.id | html %]">[%- PROCESS area_name area=area.id -%]</option>
-          [%- END -%]
-        [% END %]
-        </select>
-      <input type="submit" name="submit" class="btn btn-primary" value="Go" />
-  [% END %]
-      </form>
-      <br />
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Area</th>
-                <th>Definition</th>
-                <th>Action</th>
-            </tr>
-            [% FOREACH definition IN definitions %]
-            <tr>
-                <td>[% definition.name | html %]</td>
-                <td>[% definition.description | html %]</td>
-                <td>[% definition.areaname | html %]</td>
-                <td>[% definition.saved_sql | html %]</td>
-                <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-                    <input type="hidden" name="id" value="[% definition.id | html %]" />
-                    <input type="hidden" name="phase" value="Delete Definition" />
-                    <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
-                </form></td>
-            </tr>
-            [% END %]
-        </table>
-                [% ELSE %]
-                <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition">Add a definition to the dictionary.</a></div>
+            <div class="page-section">
+                <h2>Current terms</h2>
+                <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+                    <input type="hidden" name="phase" value="View Dictionary" />
+                    [% IF ( areas ) %]
+                        Filter by area
+                        <select name="area">
+                            <option value="">All</option>
+                            [% FOREACH area IN areas %]
+                                [%- IF ( area.selected ) -%]
+                                    <option value="[% area.id | html %]" selected="selected">[%- PROCESS area_name area=area.id -%]</option>
+                                [%- ELSE -%]
+                                    <option value="[% area.id | html %]">[%- PROCESS area_name area=area.id -%]</option>
+                                [%- END -%]
+                            [% END %]
+                        </select>
+                        <input type="submit" name="submit" class="btn btn-primary" value="Go" />
+                    [% END %]
+                </form>
+                <br />
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Area</th>
+                        <th>Definition</th>
+                        <th>Action</th>
+                    </tr>
+                    [% FOREACH definition IN definitions %]
+                    <tr>
+                        <td>[% definition.name | html %]</td>
+                        <td>[% definition.description | html %]</td>
+                        <td>[% definition.areaname | html %]</td>
+                        <td>[% definition.saved_sql | html %]</td>
+                        <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+                            <input type="hidden" name="id" value="[% definition.id | html %]" />
+                            <input type="hidden" name="phase" value="Delete Definition" />
+                            <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
+                        </form></td>
+                    </tr>
+                    [% END %]
+                </table>
+            </div> <!-- /.page-section -->
+        [% ELSE %]
+            <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition">Add a definition to the dictionary.</a></div>
 		[% END %]
 [% END %]
 

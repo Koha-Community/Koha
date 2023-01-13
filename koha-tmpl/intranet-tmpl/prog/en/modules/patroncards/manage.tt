@@ -60,53 +60,55 @@
                         <div id="manage-patroncards-layouts">
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element | html %]">
-                            <h2>Currently available [% PROCESS translate_card_element element=card_element_title FILTER lower %]</h2>
-                            <table>
-                                [% FOREACH table_loo IN table_loop %]
-                                [% IF ( table_loo.header_fields ) %]
-                                <tr>
-                                [% FOREACH header_field IN table_loo.header_fields %]
-                                    [% SWITCH header_field.field_label -%]
-                                        [%-  CASE 'Layout ID'     -%]<th>Layout ID</th>
-                                        [%-  CASE 'Layout'        -%]<th>Layout</th>
-                                        [%-  CASE 'Action'        -%]<th>Action</th>
-                                        [%-  CASE 'Actions'       -%]<th class="noExport">Actions</th>
-                                        [%-  CASE 'Select'        -%][% IF ( print ) %]<th>Select</th>[% END %]
-                                        [%-  CASE 'Template ID'   -%]<th>Template ID</th>
-                                        [%-  CASE 'Template Name' -%]<th>Template name</th>
-                                        [%-  CASE 'Description'   -%]<th>Description</th>
-                                        [%-  CASE 'Profile ID'    -%]<th>Profile ID</th>
-                                        [%-  CASE 'Printer Name'  -%]<th>Printer name</th>
-                                        [%-  CASE 'Paper Bin'     -%]<th>Paper bin</th>
-                                        [%-  CASE 'Batch ID'      -%]<th>Batch ID</th>
-                                        [%-  CASE 'Patron Count'  -%]<th>Patron count</th>
-                                        [%-  CASE                 -%]<th>[% header_field.field_label | html %]</th>
-                                    [% END -%]
-                                [% END %]
-                                </tr>
-                                [% ELSE %]
-                                <tr>
-                                [% FOREACH text_field IN table_loo.text_fields %]
-                                [% IF ( text_field.select_field ) %]
-                                    <td>
-                                      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/edit-[% card_element | html %].pl?op=edit&element_id=[% text_field.field_value | html %]"><i class="fa fa-edit"></i> Edit</a>
-                                      [% IF ( print ) %]<a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa fa-share-square-o"></i> Export</a>[% END %]
-                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element | html %]&element_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
-                                    </td>
-                                    [% IF ( print ) %]<td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
-                                [% ELSIF ( text_field.field_value ) %]
-                                    <td>[% text_field.field_value | html %]</td>
-                                [% ELSE %]
-                                    <td>&nbsp;</td>
-                                [% END %]
-                                [% END %]
-                                </tr>
-                                [% END %]
-                                [% END %]
-                            </table>
-                            <fieldset class="action">
-                                [% IF ( print ) %]<input type="button" id="print" value="Export selected batches" />[% END %]
-                            </fieldset>
+                            <div class="page-section">
+                                <h2>Currently available [% PROCESS translate_card_element element=card_element_title FILTER lower %]</h2>
+                                <table>
+                                    [% FOREACH table_loo IN table_loop %]
+                                        [% IF ( table_loo.header_fields ) %]
+                                            <tr>
+                                                [% FOREACH header_field IN table_loo.header_fields %]
+                                                    [% SWITCH header_field.field_label -%]
+                                                        [%-  CASE 'Layout ID'     -%]<th>Layout ID</th>
+                                                        [%-  CASE 'Layout'        -%]<th>Layout</th>
+                                                        [%-  CASE 'Action'        -%]<th>Action</th>
+                                                        [%-  CASE 'Actions'       -%]<th class="noExport">Actions</th>
+                                                        [%-  CASE 'Select'        -%][% IF ( print ) %]<th>Select</th>[% END %]
+                                                        [%-  CASE 'Template ID'   -%]<th>Template ID</th>
+                                                        [%-  CASE 'Template Name' -%]<th>Template name</th>
+                                                        [%-  CASE 'Description'   -%]<th>Description</th>
+                                                        [%-  CASE 'Profile ID'    -%]<th>Profile ID</th>
+                                                        [%-  CASE 'Printer Name'  -%]<th>Printer name</th>
+                                                        [%-  CASE 'Paper Bin'     -%]<th>Paper bin</th>
+                                                        [%-  CASE 'Batch ID'      -%]<th>Batch ID</th>
+                                                        [%-  CASE 'Patron Count'  -%]<th>Patron count</th>
+                                                        [%-  CASE                 -%]<th>[% header_field.field_label | html %]</th>
+                                                    [% END -%]
+                                                [% END %]
+                                            </tr>
+                                        [% ELSE %]
+                                            <tr>
+                                                [% FOREACH text_field IN table_loo.text_fields %]
+                                                    [% IF ( text_field.select_field ) %]
+                                                        <td>
+                                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/edit-[% card_element | html %].pl?op=edit&element_id=[% text_field.field_value | html %]"><i class="fa fa-edit"></i> Edit</a>
+                                                        [% IF ( print ) %]<a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa fa-share-square-o"></i> Export</a>[% END %]
+                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element | html %]&element_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                        </td>
+                                                        [% IF ( print ) %]<td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
+                                                    [% ELSIF ( text_field.field_value ) %]
+                                                        <td>[% text_field.field_value | html %]</td>
+                                                    [% ELSE %]
+                                                        <td>&nbsp;</td>
+                                                    [% END %]
+                                                [% END %]
+                                            </tr>
+                                        [% END %]
+                                    [% END %]
+                                </table>
+                                <fieldset class="action">
+                                    [% IF ( print ) %]<input type="button" id="print" value="Export selected batches" />[% END %]
+                                </fieldset>
+                            </div> <!-- /.page-section -->
                             [% IF patron_lists %]
                             <fieldset class="rows">
                                 <legend>Or use a patron list</legend>
