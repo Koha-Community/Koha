@@ -36,7 +36,7 @@ my $mmtid = $query->param('mmtid'); # Marc modification template id
 my $record;
 if ( $record_type eq 'biblio' ) {
     my $biblio = Koha::Biblios->find( $record_id );
-    my $record = $biblio->metadata->record;
+    $record = $biblio->metadata->record;
 } else {
     my $authority = Koha::MetadataRecord::Authority->get_from_authid( $record_id );
     $record = $authority->record;
