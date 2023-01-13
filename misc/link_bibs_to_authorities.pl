@@ -17,6 +17,9 @@ use Time::HiRes qw( time );
 use POSIX qw( ceil strftime );
 use Module::Load::Conditional qw( can_load );
 
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
+
 sub usage {
     pod2usage( -verbose => 2 );
     exit;
@@ -75,6 +78,9 @@ my %unlinked_headings;
 my %linked_headings;
 my %fuzzy_headings;
 my $dbh = C4::Context->dbh;
+my @updated_biblios = ();
+my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+
 $dbh->{AutoCommit} = 0;
 process_bibs( $linker, $bib_limit, $auth_limit, $commit, { tagtolink => $tagtolink, allowrelink => $allowrelink });
 $dbh->commit();
@@ -105,6 +111,7 @@ sub process_bibs {
     }
 
     if ( not $test_only ) {
+        $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
         $dbh->commit;
     }
 
@@ -226,7 +233,12 @@ sub process_bib {
             );
         }
         if ( not $test_only ) {
-            ModBiblio( $record, $biblionumber, $frameworkcode, { disable_autolink => 1, skip_holds_queue => 1 });
+            ModBiblio( $record, $biblionumber, $frameworkcode, {
+                disable_autolink => 1,
+                skip_holds_queue => 1,
+                skip_record_index =>1
+            });
+            push @updated_biblios, $biblionumber;
             #Last param is to note ModBiblio was called from linking script and bib should not be linked again
             $num_bibs_modified++;
         }
@@ -236,6 +248,8 @@ sub process_bib {
 sub print_progress_and_commit {
     my $recs = shift;
     $dbh->commit();
+    $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
+    @updated_biblios = ();
     print "... processed $recs records\n";
 }
 
