@@ -61,7 +61,16 @@ sub get_plugins_opac_head {
         }
     );
 
-    my @data = map { $_->opac_head || q{} } @plugins;
+    my @data = ();
+    foreach my $plugin (@plugins){
+        try {
+            my $datum = $plugin->opac_head || q{};
+            push(@data,$datum);
+        }
+        catch {
+            warn "Error calling 'opac_head' on the " . $plugin->{class} . "plugin ($_)";
+        };
+    }
 
     return join( "\n", @data );
 }
@@ -88,7 +97,16 @@ sub get_plugins_opac_js {
         }
     );
 
-    my @data = map { $_->opac_js || q{} } @plugins;
+    my @data = ();
+    foreach my $plugin (@plugins){
+        try {
+            my $datum = $plugin->opac_js || q{};
+            push(@data,$datum);
+        }
+        catch {
+            warn "Error calling 'opac_js' on the " . $plugin->{class} . "plugin ($_)";
+        };
+    }
 
     return join( "\n", @data );
 }
@@ -115,7 +133,16 @@ sub get_plugins_intranet_head {
         }
     );
 
-    my @data = map { $_->intranet_head || q{} } @plugins;
+    my @data = ();
+    foreach my $plugin (@plugins){
+        try {
+            my $datum = $plugin->intranet_head || q{};
+            push(@data,$datum);
+        }
+        catch {
+            warn "Error calling 'intranet_head' on the " . $plugin->{class} . "plugin ($_)";
+        };
+    }
 
     return join( "\n", @data );
 }
@@ -142,7 +169,16 @@ sub get_plugins_intranet_js {
         }
     );
 
-    my @data = map { $_->intranet_js || q{} } @plugins;
+    my @data = ();
+    foreach my $plugin (@plugins){
+        try {
+            my $datum = $plugin->intranet_js || q{};
+            push(@data,$datum);
+        }
+        catch {
+            warn "Error calling 'intranet_js' on the " . $plugin->{class} . "plugin ($_)";
+        };
+    }
 
     return join( "\n", @data );
 }
