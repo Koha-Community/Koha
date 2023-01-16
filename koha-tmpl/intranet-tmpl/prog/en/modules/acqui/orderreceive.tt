@@ -428,13 +428,13 @@
             <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
         </li>
         <li id="select_currency">
-            <label for="unitprice_currency"></label>
-            <input type="text" size="20" name="unitprice" id="unitprice_currency" value="" />
+            <label for="invoice_unitprice"></label>
+            <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
             [% IF currencies.count %]
-                <select name="currency">
-                    <option value="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                <select name="invoice_currency">
+                    <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
                     [% FOR currency IN currencies %]
-                        <option value="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                        <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
                     [% END %]
                 </select>
             [% END %]
@@ -608,13 +608,13 @@
             }).change();
 
             function update_unitprice() {
-                var rate = Number($("select[name='currency'] option:selected").val());
-                var unitprice = $("#unitprice_currency").val();
+                var rate = Number($("select[name='invoice_currency'] option:selected").data('rate'));
+                var unitprice = $("#invoice_unitprice").val();
                 var new_unitprice = Number( unitprice * rate ).toFixed(2);
                 $("#unitprice").val(new_unitprice);
             }
-            $("select[name='currency']").on("change", function(){update_unitprice()} );
-            $("#unitprice_currency").on("change", function(){update_unitprice()} );
+            $("select[name='invoice_currency']").on("change", function(){update_unitprice()} );
+            $("#invoice_unitprice").on("change", function(){update_unitprice()} );
 
             [% IF other_reason %]
                 $(".select-reason").hide();

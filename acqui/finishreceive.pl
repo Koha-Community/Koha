@@ -51,6 +51,8 @@ my $quantity         = $input->param('quantity');
 my $unitprice        = $input->param('unitprice');
 my $replacementprice = $input->param('replacementprice');
 my $datereceived     = $input->param('datereceived');
+my $invoice_unitprice = $input->param('invoice_unitprice');
+my $invoice_currency = $input->param('invoice_currency');
 my $invoiceid        = $input->param('invoiceid');
 my $invoice          = GetInvoice($invoiceid);
 my $invoiceno        = $invoice->{invoicenumber};
@@ -98,10 +100,22 @@ if ($quantityrec > $origquantityrec ) {
         }
     }
 
-    $order_obj->order_internalnote(scalar $input->param("order_internalnote"));
-    $order_obj->tax_rate_on_receiving(scalar $input->param("tax_rate"));
-    $order_obj->replacementprice($replacementprice);
-    $order_obj->unitprice($unitprice);
+    $order_obj->set(
+        {
+            order_internalnote    => scalar $input->param("order_internalnote"),
+            tax_rate_on_receiving => scalar $input->param("tax_rate"),
+            replacementprice      => $replacementprice,
+            unitprice             => $unitprice,
+            (
+                defined $invoice_unitprice && $invoice_unitprice ne ''
+                ? (
+                    invoice_unitprice => $invoice_unitprice,
+                    invoice_currency  => $invoice_currency,
+                  )
+                : ()
+            ),
+        }
+    );
 
     $order_obj->populate_with_prices_for_receiving();
 
@@ -189,7 +203,15 @@ if (C4::Context->preference("AcquisitionLog")) {
         bookfund         => $bookfund || 'unchanged',
         tax_rate         => $input->param("tax_rate"),
         replacementprice => $replacementprice,
-        unitprice        => $unitprice
+        unitprice        => $unitprice,
+        (
+            defined $invoice_unitprice && $invoice_unitprice ne ''
+            ? (
+                invoice_unitprice => $invoice_unitprice,
+                invoice_currency  => $invoice_currency,
+              )
+            : ()
+        ),
     };
 
     logaction(

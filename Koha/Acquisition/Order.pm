@@ -635,7 +635,8 @@ sub to_api_mapping {
         uncertainprice                => 'uncertain_price',
         unitprice                     => 'unit_price',
         unitprice_tax_excluded        => 'unit_price_tax_excluded',
-        unitprice_tax_included        => 'unit_price_tax_included'
+        unitprice_tax_included        => 'unit_price_tax_included',
+        invoice_unitprice             => 'invoice_unit_price',
     };
 }
 
