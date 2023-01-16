@@ -142,10 +142,19 @@ if($cgi->cookie("bib_list")){
 
 if ($format eq 'rss' or $format eq 'opensearchdescription' or $format eq 'atom') {
     $template->param($format => 1);
+    #NOTE: opensearchdescription doesn't actually use timestamp...
     $template->param(timestamp => strftime("%Y-%m-%dT%H:%M:%S-00:00", gmtime)) if ($format eq 'atom'); 
     # FIXME - the timestamp is a hack - the biblio update timestamp should be used for each
     # entry, but not sure if that's worth an extra database query for each bib
 }
+
+#NOTE: Return now for 'opensearchdescription' BZ 32639
+if ( $format && $format eq 'opensearchdescription' ){
+    my $content_type = $format;
+    output_with_http_headers $cgi, $cookie, $template->output, $content_type;
+    exit;
+}
+
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
