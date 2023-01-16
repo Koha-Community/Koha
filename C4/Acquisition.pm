@@ -1415,23 +1415,29 @@ sub ModReceiveOrder {
             $order->{ordernumber}
         );
 
-        if ( not $order->{subscriptionid} && defined $order->{order_internalnote} ) {
-            $dbh->do(
-                q|UPDATE aqorders
-                SET order_internalnote = ?
-                WHERE ordernumber = ?|, {},
-                $order->{order_internalnote}, $order->{ordernumber}
-            );
-        }
-
         # Recalculate tax_value
-        $dbh->do(q|
+        $query = q|
             UPDATE aqorders
             SET
                 tax_value_on_ordering = quantity * | . get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
                 tax_value_on_receiving = quantity * | . get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
+        |;
+
+        my @params;
+        if ( not $order->{subscriptionid} && defined $order->{order_internalnote} )
+        {
+            $query .= q|, order_internalnote = ?|;
+            push @params, $order->{order_internalnote};
+        }
+        if ( defined $order->{invoice_unitprice} ) {
+            $query .= q|, invoice_unitprice = ?, invoice_currency = ?|;
+            push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
+        }
+        $query .= q|
             WHERE ordernumber = ?
-        |, undef, $order->{ordernumber});
+        |;
+
+        $dbh->do($query, undef, @params, $order->{ordernumber});
 
         delete $order->{ordernumber};
         $order->{budget_id} = ( $budget_id || $order->{budget_id} );
@@ -1483,6 +1489,10 @@ sub ModReceiveOrder {
             , order_internalnote = ?
         | if defined $order->{order_internalnote};
 
+        $query .= q|
+            , invoice_unitprice = ?, invoice_currency = ?
+        | if defined $order->{invoice_unitprice};
+
         $query .= q| where biblionumber=? and ordernumber=?|;
 
         my $sth = $dbh->prepare( $query );
@@ -1506,6 +1516,10 @@ sub ModReceiveOrder {
 
         if ( defined $order->{order_internalnote} ) {
             push @params, $order->{order_internalnote};
+        }
+
+        if ( defined $order->{invoice_unitprice} ) {
+            push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
         }
 
         push @params, ( $biblionumber, $order->{ordernumber} );
