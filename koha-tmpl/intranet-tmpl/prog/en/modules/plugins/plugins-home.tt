@@ -46,7 +46,7 @@
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">View tool plugins</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=to_marc">View MARC conversion plugins</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=opac_online_payment">View online payment plugins</a></li>
-                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=intranet_catalog_biblio_enhancements">View staff catalog biblio enhancement plugins</a></li>
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=intranet_catalog_biblio_enhancements">View bibliographic record enhancement plugins for the staff interface</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=ill_availability_services">View ILL availability plugins</a></li>
                                 </ul>
                             </div>
@@ -107,7 +107,7 @@
                             [% ELSIF method == 'opac_online_payment' %]
                                 <div class="dialog message">No plugins that can process online payments via the public catalog are installed</div>
                             [% ELSIF method == 'intranet_catalog_biblio_enhancements' %]
-                                <div class="dialog message">No plugins that can enhance the intranet catalog biblio records are installed</div>
+                                <div class="dialog message">No plugins that can enhance the bibliographic records in the staff interface are installed</div>
                             [% ELSE %]
                                 <div class="dialog message">Unknown plugin type <em>[% method | html %]</em></div>
                             [% END %]
