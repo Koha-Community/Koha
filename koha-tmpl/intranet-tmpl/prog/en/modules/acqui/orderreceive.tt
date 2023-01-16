@@ -429,12 +429,20 @@
         </li>
         <li id="select_currency">
             <label for="invoice_unitprice"></label>
-            <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
+            <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="[% order.invoice_unitprice | $Price on_editing => 1 %]" />
             [% IF currencies.count %]
                 <select name="invoice_currency">
-                    <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                    [% IF order.invoice_currency == active_currency.currency %]
+                        <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                    [% ELSE %]
+                        <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                    [% END %]
                     [% FOR currency IN currencies %]
-                        <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                        [% IF order.invoice_currency == currency.currency %]
+                            <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]" selected="selected">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                        [% ELSE %]
+                            <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                        [% END %]
                     [% END %]
                 </select>
             [% END %]
@@ -606,6 +614,10 @@
                     $("#unitprice").prop("readonly", "");
                 }
             }).change();
+
+            [% IF order.invoice_unitprice %]
+                $("input[name='change_currency']").click().trigger('change');
+            [% END %]
 
             function update_unitprice() {
                 var rate = Number($("select[name='invoice_currency'] option:selected").data('rate'));
