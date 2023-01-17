@@ -135,13 +135,13 @@
                             [% END # /IF CAN_user_acquisition_merge_invoices %]
                         [% END # /BLOCK invoices_table %]
 
-                        <div id="invoicestabs" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#opened" aria-controls="opened" role="tab" data-toggle="tab">Open invoices ([% openedinvoices.size || 0 | html %])</a></li>
-                                <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed invoices ([% closedinvoices.size || 0 | html %]) </a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div id="opened" role="tabpanel" class="tab-pane active">
+                        [% WRAPPER tabs id= "invoicestabs" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "opened" active= 1 %] Open invoices ([% openedinvoices.size || 0 | html %]) [% END %]
+                                [% WRAPPER tab_item tabname= "closed" %] Closed invoices ([% closedinvoices.size || 0 | html %]) [% END %]
+                            [% END %]
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname="opened" active= 1 %]
                                     [% IF openedinvoices %]
                                         [% INCLUDE invoices_table invoices = openedinvoices %]
                                     [% ELSE %]
@@ -149,8 +149,9 @@
                                             <p>Your search returned no open invoices.</p>
                                         </div>
                                     [% END %]
-                                </div> <!-- /#opened -->
-                                <div id="closed" role="tabpanel" class="tab-pane">
+                                [% END # /#opened %]
+
+                                [% WRAPPER tab_panel tabname="closed" %]
                                     [% IF closedinvoices %]
                                         [% INCLUDE invoices_table invoices = closedinvoices closed = 1 %]
                                     [% ELSE %]
@@ -158,10 +159,9 @@
                                             <p>Your search returned no closed invoices.</p>
                                         </div>
                                     [% END %]
-                                </div> <!-- /#closed -->
-                            </div> <!-- /.tab-content -->
-                        </div> <!-- /#invoicestabs -->
-
+                                [% END # /#closed %]
+                            [% END # /tab_panels %]
+                        [% END # /#invoicestabs %]
 
                         <div id="merge_invoices">
                             <form id="merge_invoice_form" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
