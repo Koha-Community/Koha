@@ -78,16 +78,16 @@ This script has the following parameters :
     exit();
 }
 
-my @metadatas =    # Should be replaced by a call to C4::Search on zebra index
+my $metadatas =    # Should be replaced by a call to C4::Search on zebra index
                    # Record-status when bug 15537 will be pushed
   Koha::Biblio::Metadatas->search( { format => 'marcxml', schema => C4::Context->preference('marcflavour'), metadata => { LIKE => '%<leader>_____d%' } } );
 
-my $total_records_count   = @metadatas;
+my $total_records_count   = $metadatas->count;
 my $deleted_records_count = 0;
 my $total_items_count     = 0;
 my $deleted_items_count   = 0;
-foreach my $m (@metadatas) {
-    my $biblionumber = $m->get_column('biblionumber');
+while ( my $m = $metadatas->next ) {
+    my $biblionumber = $m->biblionumber;
 
     say "RECORD: $biblionumber" if $verbose;
 
