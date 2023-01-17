@@ -81,7 +81,7 @@
                         </div> <!-- / .dropdown-menu -->
                     </li> <!-- / .nav-item.dropdown -->
                 [% END # / IF virtualshelves %]
-                [% IF ( Koha.Preference( 'OpacTrustedCheckout' ) && loggedinusername ) %]
+                [% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
                     <li class="nav-item">
                         <a href="#" class="nav-link" title="Self check out" id="comenulink" role="button" data-toggle="modal" data-target="#checkoutModal">
                             <i id="checkout-icon" class="fa fa-barcode fa-icon-black" aria-hidden="true"></i> <span class="checkout-label">Self checkout</span>

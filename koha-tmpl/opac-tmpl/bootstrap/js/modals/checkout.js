@@ -61,6 +61,30 @@ $(document).ready(function() {
         $('#checkoutConfirm').replaceWith('<button type="submit" id="checkoutSubmit" class="btn btn-primary">Submit</button>');
     };
 
+    // Before modal show, check login
+    $('#checkoutModal').on('show.bs.modal', function(e) {
+       // Redirect to login modal if not logged in
+       if (logged_in_user_id === "") {
+           let url = new URL(window.location.href);
+           url.searchParams.append('modal','checkout');
+           $('#modalAuth').append('<input type="hidden" name="return" value="' + url.href +'" />');
+           $('#loginModal').modal('show');
+           return false;
+       }
+    });
+
+    // Detect that we were redirected here after login and re-open modal
+    let urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('modal')) {
+        let modal = urlParams.get('modal');
+        history.replaceState && history.replaceState(
+            null, '', location.pathname + location.search.replace(/[\?&]modal=[^&]+/, '').replace(/^&/, '?')
+        );
+        if (modal == 'checkout') {
+            $("#checkoutModal").modal('show');
+        }
+    }
+
     // On modal show, clear any prior results and set focus
     $('#checkoutModal').on('shown.bs.modal', function(e) {
         $('#checkoutResults').replaceWith('<div id="checkoutResults"></div>');

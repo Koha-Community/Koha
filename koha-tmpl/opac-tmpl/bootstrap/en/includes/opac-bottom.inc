@@ -117,7 +117,7 @@
     [% END # /IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
 [% END # / UNLESS is_popup %]
 
-[% IF ( Koha.Preference( 'OpacTrustedCheckout' ) && loggedinusername ) %]
+[% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
     [% INCLUDE 'modals/checkout.inc' %]
 [% END %]
 
@@ -305,7 +305,7 @@ $(document).ready(function() {
         </script>
     [% END %]
 [% END %]
-[% IF ( Koha.Preference( 'OpacTrustedCheckout' ) && loggedinusername ) %]
+[% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
     [% Asset.js("js/modals/checkout.js") | $raw %]
 [% END %]
 [% KohaPlugins.get_plugins_opac_js | $raw %]
