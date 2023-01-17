@@ -64,17 +64,17 @@
                         ([% file_name | html %] staged on [% upload_timestamp | $KohaDates  with_hours => 1 %])
                     </h1>
                     <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
-                        <div id="tabs" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#records_to_import" aria-controls="records_to_import" role="tab" data-toggle="tab">Select to import</a></li>
+                        [% WRAPPER tabs id= "tabs" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "records_to_import" active= 1 %] Select to import [% END %]
                                 [% IF items %]
-                                    <li role="presentation"><a href="#items_info" class="items_info" aria-controls="items_info" role="tab" data-toggle="tab">Item information</a></li>
+                                    [% WRAPPER tab_item tabname= "items_info" %] Item information [% END %]
                                 [% END %]
-                                <li role="presentation"><a href="#accounting_details" aria-controls="accounting_details" role="tab" data-toggle="tab">Default accounting details</a></li>
-                            </ul>
+                                [% WRAPPER tab_item tabname= "accounting_details" %] Default accounting details [% END %]
+                            [% END %]
 
-                            <div class="tab-content">
-                                <div id="records_to_import" role="tabpanel" class="tab-pane active" >
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname= "records_to_import" active= 1 %]
                                     <div id="searchheader" class="searchheader">
                                         <div>
                                             <span class="checkall"><a id="checkAll" href="#">Select all</a></span>
@@ -363,66 +363,66 @@
                                             </div> <!-- /.modal-content -->
                                         </div> <!-- /.modal-dialog -->
                                     </div> <!-- /#dataPreview -->
-                                </div> <!-- /#records_to_import -->
+                                [% END # /#records_to_import %]
 
                                 [% IF ( items ) %]
-                                    <div id="items_info" role="tabpanel" class="tab-pane">
+                                    [% WRAPPER tab_panel tabname= "items_info" %]
                                         <h2>Item information</h2>
                                         <p>Import all the checked items in the basket with the following parameters:</p>
 
-                                                <fieldset class="rows" style="float:none;">
-                                                    <legend>Item</legend>
-                                                    [% IF ( NoACQframework ) %]
-                                                        <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
-                                                    [% END %]
-                                                    <div class="item_edit_form">
-                                                        [% FOREACH item IN items %]
-                                                            <div id="outeritemblock">
-                                                                <div id="itemblock">
-                                                                    <ol>
-                                                                        [% FOREACH iteminformatio IN item.iteminformation %]
-                                                                            <li style="[% iteminformatio.hidden | html %];">
-                                                                                <div class="subfield_line" id="subfield[% iteminformatio.serialid | html %][% iteminformatio.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]">
-                                                                                    [% IF (iteminformatio.mandatory) %]
-                                                                                        <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
-                                                                                    [% ELSE %]
-                                                                                        <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
-                                                                                    [% END %]
+                                        <fieldset class="rows" style="float:none;">
+                                            <legend>Item</legend>
+                                            [% IF ( NoACQframework ) %]
+                                                <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
+                                            [% END %]
+                                            <div class="item_edit_form">
+                                                [% FOREACH item IN items %]
+                                                    <div id="outeritemblock">
+                                                        <div id="itemblock">
+                                                            <ol>
+                                                                [% FOREACH iteminformatio IN item.iteminformation %]
+                                                                    <li style="[% iteminformatio.hidden | html %];">
+                                                                        <div class="subfield_line" id="subfield[% iteminformatio.serialid | html %][% iteminformatio.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]">
+                                                                            [% IF (iteminformatio.mandatory) %]
+                                                                                <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                            [% ELSE %]
+                                                                                <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                            [% END %]
 
-                                                                                    [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                                                                                        <select name="field_value" class="input_marceditor">
-                                                                                            [% FOREACH value IN iteminformatio.marc_value.values %]
-                                                                                                [% IF ( value == iteminformatio.marc_value.default ) %]
-                                                                                                    <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% value | html %]">[% iteminformatio.marc_value.labels.$value | html %]</option>
-                                                                                                [% END %]
-                                                                                            [% END %]
-                                                                                        </select>
-                                                                                    [% ELSE %]
-                                                                                    [% iteminformatio.marc_value | $raw %]
+                                                                            [% IF ( iteminformatio.marc_value.type == 'select' ) %]
+                                                                                <select name="field_value" class="input_marceditor">
+                                                                                    [% FOREACH value IN iteminformatio.marc_value.values %]
+                                                                                        [% IF ( value == iteminformatio.marc_value.default ) %]
+                                                                                            <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
+                                                                                        [% ELSE %]
+                                                                                            <option value="[% value | html %]">[% iteminformatio.marc_value.labels.$value | html %]</option>
+                                                                                        [% END %]
                                                                                     [% END %]
-                                                                                    <input type="hidden" name="itemid" value="1" />
-                                                                                    <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield | html %]" />
-                                                                                    <input type="hidden" name="tag" value="[% iteminformatio.tag | html %]" />
-                                                                                    <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
-                                                                                    <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
-                                                                                    [% IF ( iteminformatio.mandatory ) %]
-                                                                                        <span class="required">Required</span>
-                                                                                    [% END %]
-                                                                                </div>
-                                                                            </li>
-                                                                        [% END %]
-                                                                    </ol>
-                                                                </div><!-- /#itemblock -->
-                                                            </div> <!-- /#outeritemblock -->
-                                                        [% END #/FOREACH item %]
-                                                    </div> <!-- /.item_edit_form -->
-                                                </fieldset>
-                                    </div> <!-- /#items_info -->
+                                                                                </select>
+                                                                            [% ELSE %]
+                                                                                [% iteminformatio.marc_value | $raw %]
+                                                                            [% END %]
+                                                                            <input type="hidden" name="itemid" value="1" />
+                                                                            <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield | html %]" />
+                                                                            <input type="hidden" name="tag" value="[% iteminformatio.tag | html %]" />
+                                                                            <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
+                                                                            <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
+                                                                            [% IF ( iteminformatio.mandatory ) %]
+                                                                                <span class="required">Required</span>
+                                                                            [% END %]
+                                                                        </div>
+                                                                    </li>
+                                                                [% END %]
+                                                            </ol>
+                                                        </div><!-- /#itemblock -->
+                                                    </div> <!-- /#outeritemblock -->
+                                                [% END #/FOREACH item %]
+                                            </div> <!-- /.item_edit_form -->
+                                        </fieldset>
+                                    [% END # /#items_info %]
                                 [% END # /IF items %]
 
-                                <div id="accounting_details" role="tabpanel" class="tab-pane">
+                                [% WRAPPER tab_panel tabname= "accounting_details" %]
                                     <p>Import all the checked items in the basket with the following accounting details (used only if no information is filled for the item):</p>
                                     <fieldset class="rows" style="float:none;">
                                         <legend>Accounting details</legend>
@@ -486,9 +486,9 @@
                                             </li>
                                         </ol>
                                     </fieldset> <!-- /.rows -->
-                                </div> <!-- /#accounting_details -->
-                        </div> <!-- /#tabs -->
-
+                                [% END # /#accounting_details %]
+                            [% END #/WRAPPER tab_panels %]
+                        [% END # /WRAPPER tabs %]
                         <fieldset class="action">
                             <input type="submit" id="add_order" class="btn btn-primary" value="Save" /><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Cancel</a>
                         </fieldset>
