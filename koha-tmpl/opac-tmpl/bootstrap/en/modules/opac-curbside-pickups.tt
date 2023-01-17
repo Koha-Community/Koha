@@ -331,6 +331,8 @@
                 }
             });
 
+            const pickupDate_fp = document.getElementById("pickup-date")._flatpickr;
+
             $('#pickup-branch').on('change', function() {
                 let branchcode = $(this).val();
 
@@ -348,12 +350,13 @@
                     $('#existing-pickup-warning').hide();
                     $("#pickup-date,#pickup_date_item").show();
                 }
+
+                pickupDate_fp.set('disable', [function(date) {
+                    return !policies[branchcode].slots_per_day.hasOwnProperty(date.getDay());
+                }]);
+
             });
 
-            const pickupDate_fp = document.getElementById("pickup-date")._flatpickr;
-            pickupDate_fp.set('disable', [function(date) {
-                return !slots_per_day.hasOwnProperty(date.getDay());
-            }]);
             pickupDate_fp.config.onClose.push(function( selectedDates, dateStr, instance ){
                 /* Here we add an onClose event to the existing flatpickr instance */
                 /* It fires after the user has selected a date from the calendar popup */
