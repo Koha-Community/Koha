@@ -1,10 +1,6 @@
 [% USE Koha %]
 <!-- snippet for form to set borrower and patron category messaging preferences -->
 
-<script>
-    var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
-    var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
-</script>
 <input type="hidden" name="modify" value="yes" />
 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
   <table>
