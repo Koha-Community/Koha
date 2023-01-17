@@ -1881,6 +1881,9 @@ legend:hover {
         [% END %]
         $("#guarantor_template").hide();
 
+        var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
+        var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
+
     </script>
     [% Asset.js("js/members.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
