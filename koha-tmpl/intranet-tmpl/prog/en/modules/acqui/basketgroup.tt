@@ -328,13 +328,14 @@
                     </div>
                     <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
                     [% IF (NoEDIMessage) %]<div><strong>No EDIFACT configuration for [% booksellername | html %]</strong></div>[% END %]
-                    <div id="basket_groups" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation"><a href="#opened" aria-controls="opened" role="tab" data-toggle="tab">Open</a></li>
-                            <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="opened">
+
+                    [% WRAPPER tabs id= "basket_groups" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "opened" active= 1 %] Open [% END %]
+                            [% WRAPPER tab_item tabname= "closed" %] Closed [% END %]
+                        [% END %]
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="opened" active= 1 %]
                                 <table id="basket_group_opened">
                                     <thead>
                                         <tr>
@@ -372,8 +373,9 @@
                                         [% END %]
                                     </tbody>
                                 </table>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="closed">
+                            [% END #/opened %]
+
+                            [% WRAPPER tab_panel tabname="closed" %]
                                 <table id="basket_group_closed">
                                     <thead>
                                         <tr>
@@ -416,9 +418,9 @@
                                         [% END %]
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
+                            [% END #/closed %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /#basket_groups %]
                 [% END %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
