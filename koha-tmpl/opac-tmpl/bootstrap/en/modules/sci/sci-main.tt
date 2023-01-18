@@ -35,17 +35,21 @@
     <link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]
 [% IF ( bidi ) %]
-    [% Asset.css("lib/jquery/jquery-ui-rtl-1.13.1.min.css") | $raw %]
     [% Asset.css("css/sco-rtl.css") | $raw %]
 [% ELSE %]
-    [% Asset.css("lib/jquery/jquery-ui-1.13.1.css") | $raw %]
     [% Asset.css("css/sco.css") | $raw %]
 [% END %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style>[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
 <script>
+    var Koha = {};
     function _(s) { return s } // dummy function for gettext
 </script>
+[% IF lang && lang != 'en' %]
+    [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
+[% END %]
+[% Asset.js('js/Gettext.js') | $raw %]
+[% Asset.js('js/i18n.js') | $raw %]
 </head>
 <body id="sci_main" class="sci" onload="dofocus();" onunload="mungeHistory();">
     [% INCLUDE 'masthead-sci.inc' %]
