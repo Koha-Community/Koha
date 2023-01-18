@@ -55,6 +55,7 @@ use Koha::Illrequest::Config;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::Logger;
 use Koha::Filter::MARC::ViewPolicy;
+use Koha::Installer;
 
 use C4::Members::Statistics;
 
@@ -626,6 +627,14 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
     if ( $@ ) {
         warn $@;
         $template->param( warnConnectBroker => $@ );
+    }
+}
+
+#BZ 28267: Warn administrators if there are database rows with a format other than 'DYNAMIC'
+{
+    my $db_row_format_result = Koha::Installer->check_db_row_format();
+    if ( my $count = $db_row_format_result->{count} ){
+        $template->param( warnDbRowFormat => $count );
     }
 }
 
