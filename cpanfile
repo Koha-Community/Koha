@@ -148,7 +148,6 @@ recommends 'File::Path', '2.07';
 recommends 'File::Temp', '0.22';
 recommends 'Graphics::Magick', 'v1.3.5';
 recommends 'Gravatar::URL', '1.03';
-recommends 'HTTPD::Bench::ApacheBench', '0.73';
 recommends 'Lingua::Ispell', '0.07';
 recommends 'Locale::XGettext::TT2', '0.6';
 recommends 'Module::Bundled::Files', '0.03';
