@@ -90,6 +90,7 @@ if ($op eq "") {
 } elsif ($op eq "commit-batch") {
     my $frameworkcode = $input->param('framework');
     my $overlay_framework = $input->param('overlay_framework');
+    $overlay_framework = undef if $overlay_framework = '_USE_ORIG';
     try {
         my $job_id = Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue(
             {
