@@ -529,7 +529,7 @@ subtest 'get_items_that_can_fill' => sub {
         }
     );
     $items = $holds->get_items_that_can_fill;
-    is_deeply( [ sort map { $_->itemnumber } $items->as_list ],
+    is_deeply( [ sort { $a <=> $b } map { $_->itemnumber } $items->as_list ],
         [ $item_1->itemnumber, $item_2->itemnumber, $item_5->itemnumber ], 'Items 1, 2, and 5 are available for filling the holds' );
 
     my $no_holds = Koha::Holds->new->empty();
