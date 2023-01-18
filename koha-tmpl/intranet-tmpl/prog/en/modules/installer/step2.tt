@@ -49,6 +49,15 @@
                                     <p>Need help? For help with granting permissions, please search online for "[% dbms | $HtmlTags tag=>'code' %] manual grant permissions"
                                     </p>
                                 [% END %]
+                                [% IF ( warnDbRowFormat ) %]
+                                    <div class="alert alert-danger" role="alert">
+                                        <p>Database tables with a row format other than 'DYNAMIC': [% warnDbRowFormat | html %]</p>
+                                        <p>You may experience problems upgrading to newer versions of Koha unless you update the row format for your database tables.</p>
+                                        <p>To know how to avoid this problem see the related wiki page:
+                                            <a href="https://wiki.koha-community.org/wiki/Database_row_format">Database row format</a>
+                                        </p>
+                                    </div>
+                                [% END %]
                             [% ELSE %]
                                 <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' %] detected.</p></div>
                                 <p>Please create the database before continuing.</p>
