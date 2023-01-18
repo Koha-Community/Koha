@@ -53,7 +53,7 @@ subtest 'list() tests' => sub {
     my $hold_1 = $builder->build_object({ class => 'Koha::Holds', value => { borrowernumber => $patron->id } });
     my $hold_2 = $builder->build_object({ class => 'Koha::Holds', value => { borrowernumber => $patron->id } });
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds')
+    $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?_order_by=+me.hold_id')
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_is( '' => [ $hold_1->to_api, $hold_2->to_api ], 'Holds retrieved' );
 
