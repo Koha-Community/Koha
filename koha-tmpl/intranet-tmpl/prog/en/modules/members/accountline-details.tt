@@ -50,25 +50,19 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-            <h1>
-                [% IF type == 'credit' %]
-                    <span>Details of payment</span>
-                [% ELSIF type == 'debit' %]
-                    <span>Details of fee</span>
-                [% END %]
-            </h1>
-
             [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
+            <h1>Transaction details</h1>
+
             [% IF accountline %]
-                [% af_values = accountline.additional_field_values %]
-                [% IF accountline.credit_type_code %]
-                    <h2>Details of credit</h2>
-                [% ELSIF accountline.debit_type_code %]
-                    <h2>Details of debit</h2>
-                [% END %]
 
                 <div class="page-section">
+                    [% af_values = accountline.additional_field_values %]
+                    [% IF accountline.credit_type_code %]
+                        <h2>Details of credit</h2>
+                    [% ELSIF accountline.debit_type_code %]
+                        <h2>Details of debit</h2>
+                    [% END %]
 
                     <table id="table_account_fines">
                         <thead>
