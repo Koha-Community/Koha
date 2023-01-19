@@ -1,14 +1,20 @@
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-    <div id="checkin_search" class="residentsearch">
+    <!-- checkin-search-box.inc -->
+    [% IF( bs_tab_active ) %]
+        <div id="checkin_search" role="tabpanel" class="tab-pane active">
+    [% ELSE %]
+        <div id="checkin_search" role="tabpanel" class="tab-pane">
+    [% END %]
         <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
-            <span class="form-title">
+            <div class="form-title">
                 <label class="control-label">Check in</label>
-            </span>
+            </div>
 
-            <span class="form-content">
+            <div class="form-content">
                 <input name="barcode" id="ret_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to check in" size="40"/>
-            </span>
+            </div>
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
     </div>
+    <!-- /checkin-search-box.inc -->
 [% END %]

@@ -1,28 +1,43 @@
 [% USE Koha %]
-<div id="header_search">
+<!-- z3950-admin-search.inc -->
+<div id="header_search" role="tablist">
+    <div class="tab-content">
+        <div id="z3950_search" role="tabpanel" class="tab-pane active">
+            <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
+                <div class="form-title">
+                    <label class="control-label">Search Z39.50/SRU servers</label>
+                </div>
 
-    <div id="z3950_search" class="residentsearch">
-        <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
-            <span class="form-title">
-                <label class="control-label">Search Z39.50/SRU servers</label>
-            </span>
+                <div class="form-content">
+                    <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
+                </div>
 
-            <span class="form-content">
-                <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
-            </span>
+                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            </form>
+        </div>
 
-            <button type="submit"><i class="fa fa-arrow-right"></i></button>
-        </form>
-    </div>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            [% INCLUDE 'patron-search-box.inc' %]
+        [% END %]
+        [% IF ( CAN_user_catalogue ) %]
+            [% INCLUDE 'catalogue-search-box.inc' %]
+        [% END %]
 
-    [% INCLUDE 'patron-search-box.inc' %]
-
-    [% INCLUDE 'catalogue-search-box.inc' %]
-
-    <ul>
-        <li><a title="Search Z39.50/SRU servers" href="#z3950_search" class="keep_text"><i class="fa fa-search"></i> <span class="tab-title">Search Z39.50/SRU servers</span></a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a></li>[% END %]
+    </div><!-- /.tab-content -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a title="Search Z39.50/SRU servers" href="#z3950_search" aria-controls="z3950_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-search"></i> <span class="tab-title">Search Z39.50/SRU servers</span></a>
+        </li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            <li role="presentation">
+                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a>
+            </li>
+        [% END %]
+        [% IF ( CAN_user_catalogue ) %]
+            <li role="presentation">
+                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a>
+            </li>
+        [% END %]
     </ul>
-</div>
-<!-- End Members Resident Search Box -->
+</div><!-- /#header_search -->
+<!-- /z3950-admin-search.inc -->

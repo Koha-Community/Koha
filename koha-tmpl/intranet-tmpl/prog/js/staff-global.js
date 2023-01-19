@@ -45,32 +45,57 @@ $.fn.tabIndex = function () {
     return $(this).parent().children('div').index(this);
 };
 $.fn.selectTabByID = function (tabID) {
-    $(this).tabs("option", "active", $( tabID ).tabIndex());
+    $("a[href='" + tabID + "']", $(this) ).tab("show");
 };
 
 $(document).ready(function() {
+
     //check for a hash before setting focus
     let hash = window.location.hash;
     if ( ! hash ) {
-        $('#header_search').tabs({
-            create: function( e, ui ){
-                ui.panel.find("input:text:first").focus();
-            },
-            activate: function ( e, ui ) {
-                ui.newPanel.find("input:text:first").focus();
-            }
-        });
+        $(".tab-pane.active input:text:first").focus();
     }
+    $("#header_search a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $( e.target.hash ).find("input:text:first").focus();
+    });
+
     $(".close").click(function(){ window.close(); });
 
     $("#checkin_search form").preventDoubleFormSubmit();
 
-    if($("#header_search #checkin_search").length > 0){ shortcut.add('Alt+r',function (){ $("#header_search").selectTabByID("#checkin_search"); $("#ret_barcode").focus(); }); } else { shortcut.add('Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
-    if($("#header_search #circ_search").length > 0){ shortcut.add('Alt+u',function (){ $("#header_search").selectTabByID("#circ_search"); $("#findborrower").focus(); }); } else { shortcut.add('Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
-    if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").selectTabByID("#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
-    if($("#header_search #renew_search").length > 0){ shortcut.add('Alt+w',function (){ $("#header_search").selectTabByID("#renew_search"); $("#ren_barcode").focus(); }); } else { shortcut.add('Alt+w',function(){ location.href="/cgi-bin/koha/circ/renew.pl"; }); }
-
-    $("#header_search > ul > li").show();
+    if($("#header_search #checkin_search").length > 0){
+        shortcut.add('Alt+r',function (){
+            $("#header_search").selectTabByID("#checkin_search");
+            $("#ret_barcode").focus();
+        });
+    } else {
+        shortcut.add('Alt+r',function (){
+            location.href="/cgi-bin/koha/circ/returns.pl"; });
+    }
+    if($("#header_search #circ_search").length > 0){
+        shortcut.add('Alt+u',function (){
+            $("#header_search").selectTabByID("#circ_search");
+            $("#findborrower").focus();
+        });
+    } else {
+        shortcut.add('Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; });
+    }
+    if($("#header_search #catalog_search").length > 0){
+        shortcut.add('Alt+q',function (){
+            $("#header_search").selectTabByID("#catalog_search");
+            $("#search-form").focus();
+        });
+    } else {
+        shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; });
+    }
+    if($("#header_search #renew_search").length > 0){
+        shortcut.add('Alt+w',function (){
+            $("#header_search").selectTabByID("#renew_search");
+            $("#ren_barcode").focus();
+        });
+    } else {
+        shortcut.add('Alt+w',function(){ location.href="/cgi-bin/koha/circ/renew.pl"; });
+    }
 
     $('#header_search .form-extra-content-toggle').on('click', function () {
         const extraContent = $(this).closest('form').find('.form-extra-content');

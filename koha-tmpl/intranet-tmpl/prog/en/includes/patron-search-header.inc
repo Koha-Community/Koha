@@ -1,15 +1,39 @@
-<div id="header_search">
-    [% INCLUDE 'member-search-box.inc' %]
-    [% INCLUDE 'patron-search-box.inc' %]
-    [% INCLUDE 'checkin-search-box.inc' %]
-    [% INCLUDE 'renew-search-box.inc' %]
-    [% INCLUDE 'catalogue-search-box.inc' %]
+<!-- patron-search-header.inc -->
+<div id="header_search" role="tablist">
+    <div class="tab-content">
+        [% INCLUDE 'member-search-box.inc' bs_tab_active= 1 %]
 
-    <ul>
-        <li><a title="Search patrons" href="#patron_search" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> <span class="tab-title"><span class="tab-title">Search patrons</span></span></a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title"><span class="tab-title">Check out</span></span></a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search" class="keep_text"><i class="fa fa-download"></i> <span class="tab-title"><span class="tab-title">Check in</span></span></a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search" class="keep_text"><i class="fa fa-retweet"></i> <span class="tab-title"><span class="tab-title">Renew</span></span></a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title"><span class="tab-title">Search catalog</span></span></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            [% INCLUDE 'patron-search-box.inc' %]
+            [% INCLUDE 'checkin-search-box.inc' %]
+            [% INCLUDE 'renew-search-box.inc' %]
+        [% END %]
+
+        [% IF ( CAN_user_catalogue ) %]
+            [% INCLUDE 'catalogue-search-box.inc' %]
+        [% END %]
+    </div><!-- /.tab-content -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a title="Search patrons" href="#patron_search" aria-controls="patron_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> <span class="tab-title">Search patrons</span></a>
+        </li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            <li role="presentation">
+                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title"><span class="tab-title">Check out</span></span></a>
+            </li>
+            <li role="presentation">
+                <a title="Check in" href="#checkin_search" aria-controls="checkin_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-download"></i> <span class="tab-title"><span class="tab-title">Check in</span></span></a>
+            </li>
+            <li role="presentation">
+                <a title="Renew" href="#renew_search" aria-controls="renew_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-retweet"></i> <span class="tab-title"><span class="tab-title">Renew</span></span></a>
+            </li>
+        [% END %]
+
+        [% IF ( CAN_user_catalogue ) %]
+            <li role="presentation">
+                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title"><span class="tab-title">Search catalog</span></span></a>
+            </li>
+        [% END %]
     </ul>
-</div><!-- /header_search -->
+</div><!-- /#header_search -->
+<!-- /patron-search-header.inc -->

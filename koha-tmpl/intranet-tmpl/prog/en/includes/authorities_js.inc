@@ -79,13 +79,13 @@ $(document).ready(function () {
     var searchType = '[% marclist | html %]';
     if (searchType) {
         if ('mainmainentry' == searchType) {
-            $("#header_search").tabs( "option", "active", 0 );
+            $("#header_search a[href='#mainmain_heading']").tab("show");
         } else if ('mainentry' == searchType) {
-            $("#header_search").tabs( "option", "active", 1 );
+            $("#header_search a[href='#main_heading']").tab("show");
         } else if ('match' == searchType) {
-            $("#header_search").tabs( "option", "active", 2 );
+            $("#header_search a[href='#matchheading_search']").tab("show");
         } else if ('all' == searchType) {
-            $("#header_search").tabs( "option", "active", 3 );
+            $("#header_search a[href='#entire_record']").tab("show");
         }
     }
 

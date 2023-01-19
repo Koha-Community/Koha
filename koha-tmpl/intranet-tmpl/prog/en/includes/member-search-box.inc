@@ -1,17 +1,22 @@
+<!-- member-search-box.inc -->
 [% USE Branches %]
 [% USE Categories %]
 [% USE Koha %]
 [% PROCESS 'patronfields.inc' %]
 [% IF CAN_user_borrowers_edit_borrowers %]
-    <div id="patron_search" class="residentsearch">
+    [% IF( bs_tab_active ) %]
+        <div id="patron_search" role="tabpanel" class="tab-pane active">
+    [% ELSE %]
+        <div id="patron_search" role="tabpanel" class="tab-pane">
+    [% END %]
         <form method="post" action="/cgi-bin/koha/members/member.pl">
             <input type="hidden" name="quicksearch" value="1" />
 
-            <span class="form-title">
+            <div class="form-title">
                 <label class="control-label">Search patrons</label>
-            </span>
+            </div>
 
-            <span class="form-content">
+            <div class="form-content">
                 [% IF ( Koha.Preference('RetainPatronsSearchTerms') ) %]
                     <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25" value="[% searchmember | html %]"/>
                 [% ELSE %]
@@ -19,7 +24,7 @@
                 [% END %]
 
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
-            </span>
+            </div>
 
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
@@ -31,13 +36,13 @@
                 <div>
                     <label for="searchtype" class="control-label">Search type</label>
                     <select name="searchtype" id="searchtype" class="form-control">
-                    [% IF searchtype == 'start_with' %]
-                        <option value='start_with'>Starts with</option>
-                        <option value='contain'>Contains</option>
-                    [% ELSE %]
-                        <option value='start_with'>Starts with</option>
-                        <option value='contain'>Contains</option>
-                    [% END %]
+                        [% IF searchtype == 'start_with' %]
+                            <option value='start_with'>Starts with</option>
+                            <option value='contain'>Contains</option>
+                        [% ELSE %]
+                            <option value='start_with'>Starts with</option>
+                            <option value='contain'>Contains</option>
+                        [% END %]
                     </select>
                 </div>
 
@@ -46,7 +51,7 @@
                     <label for="branchcode" class="control-label">Library</label>
                     <select name="branchcode_filter" id="branchcode" class="form-control">
                         [% IF branches.size != 1 %]
-                        <option value="">Any</option>
+                            <option value="">Any</option>
                         [% END %]
                         [% PROCESS options_for_libraries libraries => branches %]
                     </select>
@@ -70,3 +75,4 @@
         </form>
     </div>
 [% END %]
+<!-- /member-search-box.inc -->

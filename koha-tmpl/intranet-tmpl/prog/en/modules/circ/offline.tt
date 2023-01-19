@@ -719,7 +719,7 @@
                 $('.offline-returns').hide();
                 $('.offline-circulation').hide();
                 $('.offline-circulation-instructions').show();
-                $('#header_search').tabs("option", "active", 0);
+                $('#header_search').selectTabByID("#circ_search");
                 setTimeout(function() { $('#circ_search input[name="findborrower"]').trigger('focus'), 1 });
             });
 
