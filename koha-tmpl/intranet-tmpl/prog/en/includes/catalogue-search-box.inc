@@ -1,13 +1,18 @@
 [% USE Koha %]
 [% USE Branches %]
 [% IF ( CAN_user_catalogue ) %]
-    <div id="catalog_search" class="residentsearch">
+    <!-- catalogue-search-box.inc -->
+    [% IF( bs_tab_active ) %]
+        <div id="catalog_search" role="tabpanel" class="tab-pane active">
+    [% ELSE %]
+        <div id="catalog_search" role="tabpanel" class="tab-pane">
+    [% END %]
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-            <span class="form-title">
+            <div class="form-title">
                 <label class="control-label">Search catalog</label>
-            </span>
+            </div>
 
-            <span class="form-content">
+            <div class="form-content">
                 [% IF ( Koha.Preference('RetainCatalogSearchTerms') ) %]
                     <input type="text" name="q" id="search-form" size="20" value="[% ms_value | html %]" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% ELSE %]
@@ -17,7 +22,7 @@
                 [% IF Koha.Preference('IntranetCatalogSearchPulldown') || Koha.Preference('IntranetAddMastheadLibraryPulldown') %]
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 [% END %]
-            </span>
+            </div>
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
             <div class="form-extra-content">
@@ -40,4 +45,5 @@
             </div>
         </form>
     </div>
+    <!-- /catalogue-search-box.inc -->
 [% END %]
