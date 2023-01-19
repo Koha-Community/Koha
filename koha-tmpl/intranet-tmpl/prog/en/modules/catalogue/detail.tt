@@ -1129,6 +1129,10 @@ Note that permanent location is a code, and location may be an authval.
                     $(coverSlide).remove();
                 } else {
                     $(coverSlide).addClass("cover-slides");
+                    var img = $(coverSlide).find(".cover-image:visible").find("img")[0];
+                    if( $(img).length > 0 && img.complete && img.naturalHeight > 0 ){
+                        $(".cover-slides").css({"background-image":"none"});
+                    }
                 }
             });
 
