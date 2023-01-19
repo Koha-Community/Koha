@@ -84,6 +84,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       or equal to 1.
    --log-modules      Specify which action log modules to trim. Repeatable.
    --preserve-log     Specify which action logs to exclude. Repeatable.
+   --log-action       Specify which action log action entries to trim. Repeatable.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
@@ -162,6 +163,7 @@ my $labels;
 my $cards;
 my @log_modules;
 my @preserve_logs;
+my @log_actions;
 my $jobs_days;
 my @jobs_types;
 my $reports;
@@ -183,6 +185,7 @@ GetOptions(
     'logs:i'                     => \$pLogs,
     'log-module:s'               => \@log_modules,
     'preserve-log:s'             => \@preserve_logs,
+    'log-action:s'               => \@log_actions,
     'messages:i'                 => \$pMessages,
     'fees:i'                     => \$fees_days,
     'searchhistory:i'            => \$pSearchhistory,
@@ -385,6 +388,10 @@ if ($pLogs) {
     if( @log_modules ){
         $log_query .= " AND module IN (" . join(',',('?') x @log_modules ) . ")";
         push @query_params, @log_modules;
+    }
+    if( @log_actions ){
+        $log_query .= " AND action IN (" . join(',',('?') x @log_actions ) . ")";
+        push @query_params, @log_actions;
     }
     $sth = $dbh->prepare( $log_query );
     if ( $confirm ) {
