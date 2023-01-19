@@ -248,7 +248,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
                         : $table eq 'biblio'
                         ? $i->biblio->$column
                         : $i->biblioitem->$column;
-                    $output .= " {" . $i->itemnumber . " => " . $value . "}";
+                    $output .= " {" . $i->itemnumber . " => " . $value . "}\n";
                 }
                 new_item(
                     sprintf(
