@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -42,6 +43,7 @@ my $token = $cgi->param('token');
 my $m = Koha::Patron::Modifications->find( { verification_token => $token } );
 
 my ( $template, $borrowernumber, $cookie );
+my ( $error_type, $error_info );
 
 if (
     $m # The token exists and the email is unique if requested
@@ -51,15 +53,6 @@ if (
     )
   )
 {
-    ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-        {
-            template_name   => "opac-registration-confirmation.tt",
-            type            => "opac",
-            query           => $cgi,
-            authnotrequired => 1,
-        }
-    );
-
     my $patron_attrs = $m->unblessed;
     $patron_attrs->{password} ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($patron_attrs->{categorycode}));
     my $consent_dt = delete $patron_attrs->{gdpr_proc_consent};
@@ -68,9 +61,15 @@ if (
     delete $patron_attrs->{verification_token};
     delete $patron_attrs->{changed_fields};
     delete $patron_attrs->{extended_attributes};
-    my $patron = Koha::Patron->new( $patron_attrs )->store;
 
-    Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
+    my $patron;
+    try {
+        $patron = Koha::Patron->new( $patron_attrs )->store;
+        Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $patron && $consent_dt;
+    } catch {
+        $error_type = ref($_);
+        $error_info = "$_";
+    };
 
     if ($patron) {
         if( $m->extended_attributes ){
@@ -80,6 +79,14 @@ if (
         } else {
             $m->delete();
         }
+        ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+            {
+                template_name   => "opac-registration-confirmation.tt",
+                type            => "opac",
+                query           => $cgi,
+                authnotrequired => 1,
+            }
+        );
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $patron->plain_text_password );
@@ -132,17 +139,16 @@ if (
         my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-registration-confirmation.tt','opac',$cgi);
         $template->param( news_lang => $news_lang );
     }
-
 }
-else {
-    ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-        {
-            template_name   => "opac-registration-invalid.tt",
-            type            => "opac",
-            query           => $cgi,
-            authnotrequired => 1,
-        }
-    );
+
+if( !$template ) { # Missing token, patron exception, etc.
+    ( $template, $borrowernumber, $cookie ) = get_template_and_user({
+        template_name   => "opac-registration-invalid.tt",
+        type            => "opac",
+        query           => $cgi,
+        authnotrequired => 1,
+    });
+    $template->param( error_type => $error_type, error_info => $error_info );
 }
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -37,6 +37,13 @@
                             <h1>Registration invalid!</h1>
 
                             <p>There were problems processing your registration. Please contact your library for help.</p>
+                            [% IF error_type OR error_info %]
+                                [% IF error_type == 'Koha::Exceptions::Patron::InvalidUserid' %]
+                                    <p>Error: Userid is not valid</p>
+                                [% ELSE %]
+                                    <p>Error [% error_type %]: [% error_info %]</p>
+                                [% END %]
+                            [% END %]
                         </div>
                     </div> <!-- /#registration-confirmation-error -->
                 </div> <!-- /.col-lg-10/12 -->
