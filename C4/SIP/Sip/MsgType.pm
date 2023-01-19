@@ -1717,6 +1717,13 @@ sub patron_status_string {
 
     my $patron_status;
 
+    my $too_many_lost = 0;
+    if ( my $lost_block_checkout = $server->{account}->{lost_block_checkout} ) {
+        my $lost_block_checkout_value = $server->{account}->{lost_block_checkout_value} // 1;
+        my $lost_checkouts = Koha::Checkouts->search({ borrowernumber => $patron->borrowernumber, 'itemlost' => { '>=', $lost_block_checkout_value } }, { join => 'item'} )->count;
+        $too_many_lost = $lost_checkouts >= $lost_block_checkout;
+    }
+
     siplog( "LOG_DEBUG", "patron_status_string: %s charge_ok: %s", $patron->id, $patron->charge_ok );
     $patron_status = sprintf(
         '%s%s%s%s%s%s%s%s%s%s%s%s%s%s',
@@ -1729,7 +1736,7 @@ sub patron_status_string {
         $server->{account}->{overdues_block_checkout} ? boolspace( $patron->too_many_overdue ) : q{ },
         boolspace( $patron->too_many_renewal ),
         boolspace( $patron->too_many_claim_return ),
-        boolspace( $patron->too_many_lost ),
+        boolspace( $too_many_lost ),
         boolspace( $patron->excessive_fines ),
         boolspace( $patron->excessive_fees ),
         boolspace( $patron->recall_overdue ),

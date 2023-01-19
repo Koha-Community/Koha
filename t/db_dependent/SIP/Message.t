@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -31,7 +31,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Reserves qw( AddReserve );
-use C4::Circulation qw( AddReturn );
+use C4::Circulation qw( AddIssue AddReturn );
 use Koha::Database;
 use Koha::AuthUtils qw(hash_password);
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -235,6 +235,90 @@ subtest 'Lastseen response' => sub {
     is( output_pref({str => $seen_patron->lastseen(), dateonly => 1}), output_pref({dt => dt_from_string(), dateonly => 1}),'Last seen updated if tracking patrons');
     $schema->storage->txn_rollback;
 
+};
+
+subtest "Test patron_status_string" => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 9;
+
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $patron = $builder->build({
+        source => 'Borrower',
+        value  => {
+            branchcode => $branchcode,
+        },
+    });
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->{cardnumber} );
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branchcode });
+
+     my $item1 = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            permanent_location => "PERMANENT_LOCATION"
+        }
+    );
+     AddIssue( $patron, $item1->barcode );
+
+     my $item2 = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            permanent_location => "PERMANENT_LOCATION"
+        }
+    );
+    AddIssue( $patron, $item2->barcode );
+
+    is( Koha::Checkouts->search({ borrowernumber => $patron->{borrowernumber} })->count, 2, "Found 2 checkouts for this patron" );
+
+    $item1->itemlost(1)->store();
+    $item2->itemlost(2)->store();
+
+    is( Koha::Checkouts->search({ borrowernumber => $patron->{borrowernumber}, 'itemlost' => { '>', 0 } }, { join => 'item'} )->count, 2, "Found 2 lost checkouts for this patron" );
+
+    my $server->{account}->{lost_block_checkout} = undef;
+    my $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{ }, "lost_block_checkout = 0 does not block checkouts with 2 lost checkouts" );;
+
+    $server->{account}->{lost_block_checkout} = 0;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{ }, "lost_block_checkout = 0 does not block checkouts with 2 lost checkouts" );;
+
+    $server->{account}->{lost_block_checkout} = 1;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{Y}, "lost_block_checkout = 1 does block checkouts with 2 lost checkouts" );;
+
+    $server->{account}->{lost_block_checkout} = 2;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{Y}, "lost_block_checkout = 2 does block checkouts with 2 lost checkouts" );;
+
+    $server->{account}->{lost_block_checkout} = 3;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{ }, "lost_block_checkout = 3 does not block checkouts with 2 lost checkouts" );;
+
+    $server->{account}->{lost_block_checkout} = 2;
+    $server->{account}->{lost_block_checkout_value} = 2;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{ }, "lost_block_checkout = 2, lost_block_checkout_value = 2 does not block checkouts with 2 lost checkouts where only 1 has itemlost = 2" );
+
+    $server->{account}->{lost_block_checkout} = 1;
+    $server->{account}->{lost_block_checkout_value} = 2;
+    $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
+    is( substr($patron_status_string, 9, 1), q{Y}, "lost_block_checkout = 2, lost_block_checkout_value = 2 does block checkouts with 2 lost checkouts where only 1 has itemlost = 2" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest "Test build_additional_item_fields_string" => sub {
