@@ -48,6 +48,7 @@ my $verbose;
 my $output_dir;
 my $log;
 my $maxdays;
+my $verify_issue;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -57,6 +58,7 @@ GetOptions(
     'l|log'     => \$log,
     'o|out:s'   => \$output_dir,
     'm|maxdays:i' => \$maxdays,
+    'i|verifyissue' => \$verify_issue,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -71,6 +73,8 @@ This script has the following parameters :
     -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
     -m --maxdays: how many days back of overdues to process
+    -i --verifyissue: verify the issue before updating the fine in case the
+               item is returned while the fines job is running
 
 ENDUSAGE
 
@@ -160,6 +164,14 @@ for my $overdue ( @{$overdues} ) {
         && ( $amount && $amount > 0 )
       )
     {
+        if ( $verify_issue ) {
+            # if the issue changed before the script got to it, then pass on it.
+            my $issue = Koha::Checkouts->find({ issue_id => $overdue->{issue_id} });
+            if ( ! $issue or $issue->date_due ne $overdue->{date_due} ) {
+                $counted--;
+                next;
+            }
+        }
         UpdateFine(
             {
                 issue_id       => $overdue->{issue_id},
