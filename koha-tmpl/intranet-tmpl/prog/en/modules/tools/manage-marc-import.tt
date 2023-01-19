@@ -545,18 +545,20 @@
                                     checked = 'checked="checked"';
                                     any_checked = 1;
                                 }
-                                [% IF(item.record_type == 'auth') -%]
-                                    var matching_msg = _("Matches authority %s (score=%s):%s");
-                                [%- ELSE -%]
-                                    var matching_msg = _("Matches bibliographic record %s (score=%s):%s");
-                                [%- END %]
                                     var match_option = "";
                                     match_option = '<input type="radio" data-import_record_id="'+aData['import_record_id']+'" class="chosen" name="import_record_id_'+aData['import_record_id']+'_match" value="'+item.candidate_match_id+'" ' + checked + disabled + '> ';
 
                                     var diff_url = '/cgi-bin/koha/tools/showdiffmarc.pl?batchid=%s&importid=%s&id=%s&type=%s';
                                     var match_citation = '';
-                                    if( item.title  ){ match_citation += item.title + ' ' }
-                                    if( item.author ){ match_citation += item.author }
+                                    var matching_msg = '';
+                                    if ( item.record_type == 'auth' ){
+                                        matching_msg = _("Matches authority %s (score=%s):%s");
+                                        if( item.authorized_heading ){ match_citation += item.authorized_heading }
+                                    } else {
+                                        matching_msg = _("Matches bibliographic record %s (score=%s):%s");
+                                        if( item.title  ){ match_citation += item.title + ' ' }
+                                        if( item.author ){ match_citation += item.author }
+                                    }
                                 $('td:eq(4) ul', nRow).append('<li><label for="import_record_id_'+aData['import_record_id']+'_match_'+index+'">'+match_option+
                                     matching_msg.format(item.candidate_match_id, item.score,
                                         '<a target="_blank" href="' + record_details_url
