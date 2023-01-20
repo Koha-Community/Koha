@@ -31,107 +31,112 @@
 
                 <div id="results" class="toptabs">
 
-                    <ul>
-                        <li><a href="#recallswaiting">Recalls waiting: [% recalls.count | html %]</a></li>
-                        <li><a href="#recallsover">Recalls waiting over [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days: [% over.count | html %]</a></li>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#recallswaiting" aria-controls="recallswaiting" role="tab" data-toggle="tab">Recalls waiting: [% recalls.count | html %]</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#recallsover" aria-controls="recallsover" role="tab" data-toggle="tab">Recalls waiting over [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days: [% over.count | html %]</a>
+                        </li>
                     </ul>
 
-                    <div id="recallswaiting">
-                        [% IF ( recalls ) %]
-                            <table id="recallswaiting-table">
-                                <thead><tr>
-                                    <th class="recall-waitingdate title-string">Available since</th>
-                                    <th class="recall-title anti-the">Title</th>
-                                    <th class="recall-patron">Requested by</th>
-                                    <th class="recall-library">Pickup location</th>
-                                    <th class="recall-action nosort">&nbsp;</th>
-                                </tr></thead>
-                                <tbody>
-                                    [% FOREACH recall IN recalls %]<tr>
-                                        <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
-                                        <td class="recall-title">
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
-                                                [% recall.biblio.title | html %]
-                                                [% FOREACH s IN recall.biblio.subtitle %]
-                                                    [% s | html %]
-                                                [% END %]
-                                            </a>
-                                            [% recall.biblio.author | html %]
-                                            <br><i>Barcode: [% recall.item.barcode | html %]</i>
-                                        </td>
-                                        <td class="recall-patron">
-                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
-                                             [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
-                                             [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
-                                        </td>
-                                        <td class="recall-library">[% recall.library.branchname | html %]</td>
-                                        <td class="recall-action actions">
-                                            <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
-                                                <input type="hidden" name="recall_id" value="[% recall.id | html %]">
-                                                <input type="hidden" name="op" value="modify">
-                                                <fieldset class="action">
-                                                    <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
-                                                    <input type="submit" name="expire" class="expire_recall" value="Expire recall">
-                                                </fieldset>
-                                            </form>
-                                        </td>
-                                    </tr>[% END %]
-                                </tbody>
-                            </table>
-                        [% ELSE %]
-                            <div class="dialog message">There are no recalls to show.</div>
-                        [% END %]
-                    </div> <!-- recallswaiting -->
+                    <div class="tab-content">
+                        <div id="recallswaiting" role="tabpanel" class="tab-pane active">
+                            [% IF ( recalls ) %]
+                                <table id="recallswaiting-table">
+                                    <thead><tr>
+                                        <th class="recall-waitingdate title-string">Available since</th>
+                                        <th class="recall-title anti-the">Title</th>
+                                        <th class="recall-patron">Requested by</th>
+                                        <th class="recall-library">Pickup location</th>
+                                        <th class="recall-action nosort">&nbsp;</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        [% FOREACH recall IN recalls %]<tr>
+                                            <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
+                                            <td class="recall-title">
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
+                                                    [% recall.biblio.title | html %]
+                                                    [% FOREACH s IN recall.biblio.subtitle %]
+                                                        [% s | html %]
+                                                    [% END %]
+                                                </a>
+                                                [% recall.biblio.author | html %]
+                                                <br><i>Barcode: [% recall.item.barcode | html %]</i>
+                                            </td>
+                                            <td class="recall-patron">
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
+                                                [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
+                                                [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
+                                            </td>
+                                            <td class="recall-library">[% recall.library.branchname | html %]</td>
+                                            <td class="recall-action actions">
+                                                <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
+                                                    <input type="hidden" name="recall_id" value="[% recall.id | html %]">
+                                                    <input type="hidden" name="op" value="modify">
+                                                    <fieldset class="action">
+                                                        <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
+                                                        <input type="submit" name="expire" class="expire_recall" value="Expire recall">
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                        </tr>[% END %]
+                                    </tbody>
+                                </table>
+                            [% ELSE %]
+                                <div class="dialog message">There are no recalls to show.</div>
+                            [% END %]
+                        </div> <!-- recallswaiting -->
 
-                    <div id="recallsover">
-                        [% IF ( over.size ) %]
-                            [% IF ( Koha.Preference('RecallsMaxPickUpDelay') ) %]<p>Recalls listed here have been awaiting pickup for more than [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days.</p>[% END %]
-                            <table id="recallsover-table">
-                                <thead><tr>
-                                    <th class="recall-waitingdate title-string">Available since</th>
-                                    <th class="recall-title anti-the">Title</th>
-                                    <th class="recall-patron">Requested by</th>
-                                    <th class="recall-library">Pickup location</th>
-                                    <th class="recall-action nosort">&nbsp;</th>
-                                </tr></thead>
-                                <tbody>
-                                    [% FOREACH recall IN over %]<tr>
-                                        <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
-                                        <td class="recall-title">
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
-                                                [% recall.biblio.title | html %]
-                                                [% FOREACH s IN recall.biblio.subtitles %]
-                                                    [% s | html %]
-                                                [% END %]
-                                                [% recall.item.enumchron | html %]
-                                            </a>
-                                            [% recall.biblio.author | html %]
-                                            <br><i>Barcode: [% recall.item.barcode | html %]</i>
-                                        </td>
-                                        <td class="recall-patron">
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
-                                            [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
-                                            [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
-                                        </td>
-                                        <td class="recall-library">[% recall.library.branchname | html %]</td>
-                                        <td class="recall-action actions">
-                                            <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
-                                                <input type="hidden" name="recall_id" value="[% recall.id | html %]">
-                                                <input type="hidden" name="op" value="modify">
-                                                <fieldset class="action">
-                                                    <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
-                                                    <input type="submit" name="expire" class="expire_recall" value="Expire recall">
-                                                </fieldset>
-                                            </form>
-                                        </td>
-                                    </tr>[% END %]
-                                </tbody>
-                            </table>
-                        [% ELSE %]
-                            <div class="dialog message">There are no recalls to show.</div>
-                        [% END %]
-                    </div> <!-- recallsover -->
-
+                        <div id="recallsover" role="tabpanel" class="tab-pane">
+                            [% IF ( over.size ) %]
+                                [% IF ( Koha.Preference('RecallsMaxPickUpDelay') ) %]<p>Recalls listed here have been awaiting pickup for more than [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days.</p>[% END %]
+                                <table id="recallsover-table">
+                                    <thead><tr>
+                                        <th class="recall-waitingdate title-string">Available since</th>
+                                        <th class="recall-title anti-the">Title</th>
+                                        <th class="recall-patron">Requested by</th>
+                                        <th class="recall-library">Pickup location</th>
+                                        <th class="recall-action nosort">&nbsp;</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        [% FOREACH recall IN over %]<tr>
+                                            <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
+                                            <td class="recall-title">
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
+                                                    [% recall.biblio.title | html %]
+                                                    [% FOREACH s IN recall.biblio.subtitles %]
+                                                        [% s | html %]
+                                                    [% END %]
+                                                    [% recall.item.enumchron | html %]
+                                                </a>
+                                                [% recall.biblio.author | html %]
+                                                <br><i>Barcode: [% recall.item.barcode | html %]</i>
+                                            </td>
+                                            <td class="recall-patron">
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
+                                                [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
+                                                [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
+                                            </td>
+                                            <td class="recall-library">[% recall.library.branchname | html %]</td>
+                                            <td class="recall-action actions">
+                                                <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
+                                                    <input type="hidden" name="recall_id" value="[% recall.id | html %]">
+                                                    <input type="hidden" name="op" value="modify">
+                                                    <fieldset class="action">
+                                                        <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
+                                                        <input type="submit" name="expire" class="expire_recall" value="Expire recall">
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                        </tr>[% END %]
+                                    </tbody>
+                                </table>
+                            [% ELSE %]
+                                <div class="dialog message">There are no recalls to show.</div>
+                            [% END %]
+                        </div> <!-- recallsover -->
+                    </div> <!-- /.tab-content -->
                 </div> <!-- results-->
 
                 [% ELSE %]
@@ -150,15 +155,12 @@
         [% END %]
 
     </div> <!-- /.row -->
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            $('#results').tabs();
-
             $("#recallswaiting-table, #recallsover-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "autoWidth": false,
                 "aoColumnDefs": [
