@@ -626,10 +626,11 @@
                         <xsl:when test="@ind2=' '">
                             In:
                         </xsl:when>
-                        <xsl:when test="@ind2=8">
-                            <xsl:if test="marc:subfield[@code='i']">
-                                <xsl:value-of select="marc:subfield[@code='i']"/>
-                            </xsl:if>
+                        <xsl:when test="@ind2=8 and marc:subfield[@code='i']">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">i</xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text> </xsl:text>
                         </xsl:when>
                     </xsl:choose>
                     </span>
