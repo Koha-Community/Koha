@@ -3020,7 +3020,7 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate], [$seen]);
+  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate], [$seen], [$automatic]);
 
 Renews a loan.
 
@@ -3049,6 +3049,8 @@ C<$seen> is a boolean flag indicating if the item was seen or not during the ren
 informs the incrementing of the unseen_renewals column. If this flag is not supplied, we
 fallback to a true value
 
+C<$automatic> is a boolean flag indicating the renewal was triggered automatically and not by a person ( librarian or patron )
+
 =cut
 
 sub AddRenewal {
@@ -3059,6 +3061,7 @@ sub AddRenewal {
     my $lastreneweddate = shift || dt_from_string();
     my $skipfinecalc    = shift;
     my $seen            = shift;
+    my $automatic       = shift;
 
     # Fallback on a 'seen' renewal
     $seen = defined $seen && $seen == 0 ? 0 : 1;
@@ -3068,8 +3071,7 @@ sub AddRenewal {
     my $issue  = $item_object->checkout;
     my $item_unblessed = $item_object->unblessed;
 
-    my ($package, $filename, $line) = caller;
-    my $renewal_type = $filename =~ m/automatic_renewals.pl/ ? "Automatic" : "Manual";
+    my $renewal_type = $automatic ? "Automatic" : "Manual";
 
     my $dbh = C4::Context->dbh;
 

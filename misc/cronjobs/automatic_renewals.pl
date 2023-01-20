@@ -180,7 +180,7 @@ while ( my $auto_renew = $auto_renews->next ) {
               $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would';
         }
         if ($confirm){
-            my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode, undef, undef, undef, 0 );
+            my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode, undef, undef, undef, 0, 1 );
             $auto_renew->auto_renew_error(undef)->store;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
