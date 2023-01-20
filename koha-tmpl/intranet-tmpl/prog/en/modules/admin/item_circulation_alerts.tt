@@ -113,16 +113,14 @@
                 <h2>Circulation alerts for [% Branches.GetName( branch ) || 'Default' | html %]</h2>
                 <p>Click on the grid to toggle the settings.</p>
 
+                [% WRAPPER tabs id= "alerttabs" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "checkout" bt_active= 1 %] Checkout [% END %]
+                        [% WRAPPER tab_item tabname= "checkin" %] Check-in [% END %]
+                    [% END %]
 
-                <div id="alerttabs" class="toptabs">
-
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#checkout" aria-controls="checkout" role="tab" data-toggle="tab">Checkout</a></li>
-                        <li role="presentation"><a href="#checkin" aria-controls="checkin" role="tab" data-toggle="tab">Check-in</a></li>
-                    </ul>
-
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="checkout">
+                    [% WRAPPER tab_panels %]
+                        [% WRAPPER tab_panel tabname="checkout" bt_active= 1 %]
                             <h3>Checkout</h3>
                             <table class="grid active" width="100%">
                                 <thead>
@@ -144,9 +142,9 @@
                                     [% END %]
                                 </tbody>
                             </table> <!-- /.grid.active -->
-                        </div> <!-- /#checkout -->
+                        [% END #/ #checkout %]
 
-                        <div role="tabpanel" class="tab-pane" id="checkin">
+                        [% WRAPPER tab_panel tabname="checkin" %]
                             <h3>Check-in</h3>
                             <table class="grid active" width="100%">
                                 <thead>
@@ -168,11 +166,10 @@
                                     [% END %]
                                 </tbody>
                             </table>
-                        </div>
-                    </div> <!-- /.tab-content -->
+                        [% END # /#checkin %]
+                    [% END # /.tab_panels %]
 
-                </div> <!-- /#alerttabs -->
-
+                [% END # //#alerttabs %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
