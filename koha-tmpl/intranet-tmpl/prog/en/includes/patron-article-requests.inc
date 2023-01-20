@@ -26,7 +26,7 @@
             [% FOREACH ar IN current_article_requests %]
                 <tr>
                     <td class="article-request-record-title">
-                        <a class="article-request-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">
+                        <a class="article-request-record-link-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">
                             [% ar.biblio.title | html %]
                             [% ar.item.enumchron | html %]
                         </a>
