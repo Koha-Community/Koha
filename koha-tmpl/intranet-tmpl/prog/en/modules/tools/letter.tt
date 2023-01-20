@@ -346,233 +346,137 @@
                                     [% ELSE %]
                                         <select name="module" id="module">
                                     [% END %]
-                                    [% IF ( module == "acquisition" ) %]
-                                        <option value="acquisition" selected="selected">Acquisition</option>
-                                    [% ELSE %]
-                                        <option value="acquisition" >Acquisition</option>
-                                    [% END %]
-                                    [% IF ( module == "catalogue" ) %]
-                                        <option value="catalogue" selected="selected">Catalog</option>
-                                    [% ELSE %]
-                                        <option value="catalogue" >Catalog</option>
-                                    [% END %]
-                                    [% IF ( module == "circulation" ) %]
-                                        <option value="circulation" selected="selected">Circulation</option>
-                                    [% ELSE %]
-                                        <option value="circulation">Circulation</option>
-                                    [% END %]
-                                    [% IF ( module == "orderacquisition" ) %]
-                                        <option value="orderacquisition" selected="selected">Order acquisition</option>
-                                    [% ELSE %]
-                                        <option value="orderacquisition">Order acquisition</option>
-                                    [% END %]
-                                    [% IF ( module == "claimacquisition" ) %]
-                                        <option value="claimacquisition" selected="selected">Claim acquisition</option>
-                                    [% ELSE %]
-                                        <option value="claimacquisition">Claim acquisition</option>
-                                    [% END %]
-                                    [% IF ( module == "claimissues" ) %]
-                                        <option value="claimissues" selected="selected">Claim serial issue</option>
-                                    [% ELSE %]
-                                        <option value="claimissues">Claim serial issue</option>
-                                    [% END %]
-                                    [% IF ( module == "reserves" ) %]
-                                        <option value="reserves" selected="selected">Holds</option>
-                                    [% ELSE %]
-                                        <option value="reserves">Holds</option>
-                                    [% END %]
-                                    [% IF ( module == "ill" ) %]
-                                      <option value="ill" selected="selected">Interlibrary loans</option>
-                                    [% ELSE %]
-                                      <option value="ill">Interlibrary loans</option>
-                                    [% END %]
-                                    [% IF ( module == "members" ) %]
-                                        <option value="members" selected="selected">Patrons</option>
-                                    [% ELSE %]
-                                        <option value="members">Patrons</option>
-                                    [% END %]
-                                    [% IF ( module == "serial" ) %]
-                                        <option value="serial" selected="selected">Serials (new issue)</option>
-                                    [% ELSE %]
-                                        <option value="serial">Serials (new issue)</option>
-                                    [% END %]
-                                    [% IF ( module == "suggestions" ) %]
-                                        <option value="suggestions" selected="selected">Suggestions</option>
-                                    [% ELSE %]
-                                        <option value="suggestions">Suggestions</option>
-                                    [% END %]
-                                    [% IF ( module == "pos" ) %]
-                                        <option value="pos" selected="selected">Point of sale</option>
-                                    [% ELSE %]
-                                        <option value="pos">Point of sale</option>
-                                    [% END %]
-                                </select>
-                            </li>
-                            <li>
-                                [% IF adding %]
-                                    <label for="code" class="required">Code:</label>
-                                    <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required"/>
-                                    <span class="required">Required</span>
-                                [% ELSE %]
-                                    <span class="label">Code:</span>
-                                    <input type="hidden" id="code" name="code" value="[% code | html %]" />
-                                    [% code | html %]
-                                [% END %]
-                            </li>
-                            <li>
-                                <label for="name" class="required">Name:</label>
-                                <input type="text" id="name" name="name" size="60" value="[% letter_name | html %]" required="required" />
-                                <span class="required">Required</span>
-                            </li>
-                            [% IF code and preview_is_available%]
-                                <li>
-                                    <label for="name">Data for preview:</label>
-                                    [% SWITCH code %]
-                                        [% CASE 'CHECKIN' %]
-                                            <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode" />
-                                        [% CASE 'CHECKOUT' %]
-                                            <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode|borrowernumber" />
-                                        [% CASE 'HOLD_SLIP' %]
-                                            <input type="text" id="data_preview" name="data_preview" value="" placeholder="biblionumber|borrowernumber" />
-                                        [% CASE %]
-                                            Not supported yet.
-                                    [% END %]
-                                    </li>
-                            [% END # /IF code %]
-                        </ol>
-                    </fieldset> <!-- /#add_notice -->
-
-                    [% IF Koha.Preference('TranslateNotices') %]
-                        <div style="clear:both"></div>
-                        <div id="tabs">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation">
-                                    <a href="#lang_default" aria-controls="lang_default" role="tab" data-toggle="tab">Default</a>
-                                </li>
-                                [% FOR language IN languages %]
-                                    [% FOR sublanguage IN language.sublanguages_loop %]
-                                        [% IF language.plural %]
-                                            <li role="presentation">
-                                                <a href="#lang_[% sublanguage.rfc4646_subtag | uri %]" aria-controls="lang_[% sublanguage.rfc4646_subtag | uri %]" role="tab" data-toggle="tab">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</a>
-                                            </li>
+                                        [% IF ( module == "acquisition" ) %]
+                                            <option value="acquisition" selected="selected">Acquisition</option>
                                         [% ELSE %]
-                                            <li role="presentation">
-                                                <a href="#lang_[% sublanguage.rfc4646_subtag | uri %]" aria-controls="lang_[% sublanguage.rfc4646_subtag | uri %]" role="tab" data-toggle="tab">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</a>
-                                            </li>
+                                            <option value="acquisition" >Acquisition</option>
+                                        [% END %]
+                                        [% IF ( module == "catalogue" ) %]
+                                            <option value="catalogue" selected="selected">Catalog</option>
+                                        [% ELSE %]
+                                            <option value="catalogue" >Catalog</option>
+                                        [% END %]
+                                        [% IF ( module == "circulation" ) %]
+                                            <option value="circulation" selected="selected">Circulation</option>
+                                        [% ELSE %]
+                                            <option value="circulation">Circulation</option>
+                                        [% END %]
+                                        [% IF ( module == "orderacquisition" ) %]
+                                            <option value="orderacquisition" selected="selected">Order acquisition</option>
+                                        [% ELSE %]
+                                            <option value="orderacquisition">Order acquisition</option>
+                                        [% END %]
+                                        [% IF ( module == "claimacquisition" ) %]
+                                            <option value="claimacquisition" selected="selected">Claim acquisition</option>
+                                        [% ELSE %]
+                                            <option value="claimacquisition">Claim acquisition</option>
+                                        [% END %]
+                                        [% IF ( module == "claimissues" ) %]
+                                            <option value="claimissues" selected="selected">Claim serial issue</option>
+                                        [% ELSE %]
+                                            <option value="claimissues">Claim serial issue</option>
+                                        [% END %]
+                                        [% IF ( module == "reserves" ) %]
+                                            <option value="reserves" selected="selected">Holds</option>
+                                        [% ELSE %]
+                                            <option value="reserves">Holds</option>
+                                        [% END %]
+                                        [% IF ( module == "ill" ) %]
+                                        <option value="ill" selected="selected">Interlibrary loans</option>
+                                        [% ELSE %]
+                                        <option value="ill">Interlibrary loans</option>
+                                        [% END %]
+                                        [% IF ( module == "members" ) %]
+                                            <option value="members" selected="selected">Patrons</option>
+                                        [% ELSE %]
+                                            <option value="members">Patrons</option>
+                                        [% END %]
+                                        [% IF ( module == "serial" ) %]
+                                            <option value="serial" selected="selected">Serials (new issue)</option>
+                                        [% ELSE %]
+                                            <option value="serial">Serials (new issue)</option>
+                                        [% END %]
+                                        [% IF ( module == "suggestions" ) %]
+                                            <option value="suggestions" selected="selected">Suggestions</option>
+                                        [% ELSE %]
+                                            <option value="suggestions">Suggestions</option>
+                                        [% END %]
+                                        [% IF ( module == "pos" ) %]
+                                            <option value="pos" selected="selected">Point of sale</option>
+                                        [% ELSE %]
+                                            <option value="pos">Point of sale</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    [% IF adding %]
+                                        <label for="code" class="required">Code:</label>
+                                        <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required"/>
+                                        <span class="required">Required</span>
+                                    [% ELSE %]
+                                        <span class="label">Code:</span>
+                                        <input type="hidden" id="code" name="code" value="[% code | html %]" />
+                                        [% code | html %]
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="name" class="required">Name:</label>
+                                    <input type="text" id="name" name="name" size="60" value="[% letter_name | html %]" required="required" />
+                                    <span class="required">Required</span>
+                                </li>
+                                [% IF code and preview_is_available%]
+                                    <li>
+                                        <label for="name">Data for preview:</label>
+                                        [% SWITCH code %]
+                                            [% CASE 'CHECKIN' %]
+                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode" />
+                                            [% CASE 'CHECKOUT' %]
+                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="barcode|borrowernumber" />
+                                            [% CASE 'HOLD_SLIP' %]
+                                                <input type="text" id="data_preview" name="data_preview" value="" placeholder="biblionumber|borrowernumber" />
+                                            [% CASE %]
+                                                Not supported yet.
+                                        [% END %]
+                                    </li>
+                                [% END # /IF code %]
+                            </ol>
+                        </fieldset> <!-- /#add_notice -->
+
+                        [% IF Koha.Preference('TranslateNotices') %]
+                            <div style="clear:both"></div>
+                            [% WRAPPER tabs id= "tabs" %]
+                                [% WRAPPER tabs_nav %]
+                                    [% WRAPPER tab_item tabname= "lang_default" bt_active= 1 %] Default [% END %]
+                                    [% FOR language IN languages %]
+                                        [% FOR sublanguage IN language.sublanguages_loop %]
+                                            [% IF language.plural %]
+                                                [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %] [% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %]) [% END %]
+                                            [% ELSE %]
+                                                [% WRAPPER tab_item tabname= "lang_${sublanguage.rfc4646_subtag}" %] [% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %]) [% END %]
+                                            [% END %]
                                         [% END %]
                                     [% END %]
-                                [% END %]
-                            </ul>
-                            <div class="tab-content">
-                    [% ELSE %]
-                        <div style="clear:both"></div>
-                    [% END # /IF TranslateNotices %]
+                                [% END # /.tabs_nav %]
 
-                    [% FOREACH lang IN letters.keys %]
-                        <div role="tabpanel" class="tab-pane" id="lang_[% lang | html %]">
-                            <div class="panel-group" id="group_[% lang | html %]" role="tablist" aria-multiselectable="true">
-                            [% FOR mtt IN letters.$lang.templates.keys.sort %]
-                                [% SET letter = letters.$lang.templates.$mtt %]
-                                [% NEXT IF letter.message_transport_type == "itiva" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
-                                [% NEXT IF letter.message_transport_type == "phone" && !Koha.Preference('PhoneNotification') %]
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="[% letter.message_transport_type | html %]_[% lang | html %]Heading">
-                                        <h3 class="panel-title">
-                                            <a role="button" class="collapsed" data-toggle="collapse" data-parent="#group_[% lang | html %]" href="#[% letter.message_transport_type | html %]_[% lang | html %]" aria-expanded="false" aria-controls="[% letter.message_transport_type | html %]_[% lang | html %]">
-                                                [% SWITCH letter.message_transport_type %]
-                                                    [% CASE 'email' %]<span>Email</span>
-                                                    [% CASE 'print' %]<span>[% tp('Message transport type', 'Print') | html %]</span>
-                                                    [% CASE 'sms' %]<span>SMS</span>
-                                                    [% CASE 'feed' %]<span>Feed</span>
-                                                    [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
-                                                    [% CASE 'phone' %]<span>Phone</span>
-                                                    [% CASE %]<span>[% letter.message_transport_type | html %]</span>
-                                                [% END %]
-                                            </a>
-                                        </h3>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="[% letter.message_transport_type | html %]_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="[% letter.message_transport_type | html %]_[% lang | html %]Heading">
-                                        <div class="panel-body">
-                                            [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
-                                                <fieldset class="rows mtt" disabled="disabled">
-                                                    <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
-                                            [% ELSE %]
-                                                <fieldset class="rows mtt">
-                                            [% END %]
-                                                <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
-                                                <input type="hidden" name="lang" value="[% lang | html %]" />
-                                                <ol>
-                                                    [% IF ( letter.tt_error ) %]
-                                                        <li class="template_toolkit_error">
-                                                            <span class="label error">Template Toolkit error:</span>
-                                                            [% letter.tt_error | html %]
-                                                        </li>
-                                                    [% END %]
-                                                    [% IF ( letter.updated_on ) %]
-                                                        <li>
-                                                            <span class="label">Last updated:</span>
-                                                            [% letter.updated_on | $KohaDates with_hours = 1 %]
-                                                        </li>
-                                                    [% END %]
-                                                    <li>
-                                                        <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
-                                                        [% IF letter.is_html %]
-                                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
-                                                        [% ELSE %]
-                                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
-                                                        [% END %]
-                                                    </li>
-                                                    <li>
-                                                        <label for="title_[% letter.message_transport_type | html %]_[% lang | html %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" />
-                                                    </li>
-                                                    <li>
-                                                        <label for="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]">Message body:</label>
-                                                        [% IF letter.message_transport_type == 'sms' %]
-                                                            <span class="sms_counter" id="sms_counter_[% lang | html %]">
-                                                                [% IF letter.content && letter.content.length > 0 %]
-                                                                    [% letter.content.length | html %]
-                                                                [% ELSE %]
-                                                                    0
-                                                                [% END %]/160 characters</span>
-                                                        [% END %]
-                                                        <table>
-                                                            <tr>
-                                                                <td>
-                                                                    <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
-                                                                        [% FOREACH SQLfieldname IN SQLfieldnames %]
-                                                                            <option value="[% SQLfieldname.value | html %]">[% SQLfieldname.text | html %]</option>
-                                                                        [% END %]
-                                                                    </select>
-                                                                </td>
-                                                                <td class="actions">
-                                                                    <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
-                                                                </td>
-                                                                <td>
-                                                                    <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </li>
-                                                    [% IF preview_is_available %]
-                                                        <li>
-                                                            <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa fa-eye"></i> Preview</a>
-                                                        </li>
-                                                    [% END %]
-                                                </ol>
-                                            </fieldset> <!-- /.rows.mtt -->
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div> <!-- /.panel.panel-default -->
-                            [% END # /FOR mtt %]
-                        </div> <!-- /.panel-group#lang_[% lang | html %] -->
-                    </div> <!-- /.tab-panel -->
-                    [% END # /FOREACH lang %]
-
-                    [% IF Koha.Preference('TranslateNotices') %]
-                            </div> <!-- /.tab-content -->
-                        </div> <!-- /#tabs -->
-                    [% END %]
+                                [% WRAPPER tab_panels %]
+                                    [% FOREACH lang IN letters.keys %]
+                                        [% IF( loop.first ) %]
+                                            [% SET bt_active = 1 %]
+                                        [% ELSE %]
+                                            [% SET bt_active = 0 %]
+                                        [% END %]
+                                        [% WRAPPER tab_panel tabname="lang_${lang}" bt_active= bt_active %]
+                                            [% PROCESS message_templates %]
+                                        [% END # /WRAPPER tab_panel %]
+                                    [% END # /FOREACH lang %]
+                                [% END # /WRAPPER tab_panels %]
+                            [% END # /WRAPPER tabs#tabs %]
+                        [% ELSE %]
+                            <div style="clear:both"></div>
+                            [% FOREACH lang IN letters.keys %]
+                                [% PROCESS message_templates %]
+                            [% END # /FOREACH lang %]
+                        [% END # /IF TranslateNotices %]
 
                         <input type="hidden" id="redirect" name="redirect" value="" />
                         <input type="hidden" id="section" name="section" value="[% section | html %]" />
@@ -642,6 +546,104 @@
             </div> <!-- /.col-sm-2.col-sm-pull-10 -->
         </div> <!-- /.row -->
     [% END %]
+
+[% BLOCK message_templates %]
+    <div class="panel-group" id="group_[% lang | html %]" role="tablist" aria-multiselectable="true">
+        [% FOR mtt IN letters.$lang.templates.keys.sort %]
+            [% SET letter = letters.$lang.templates.$mtt %]
+            [% NEXT IF letter.message_transport_type == "itiva" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+            [% NEXT IF letter.message_transport_type == "phone" && !Koha.Preference('PhoneNotification') %]
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="[% letter.message_transport_type | html %]_[% lang | html %]Heading">
+                    <h3 class="panel-title">
+                        <a role="button" class="collapsed" data-toggle="collapse" data-parent="#group_[% lang | html %]" href="#[% letter.message_transport_type | html %]_[% lang | html %]" aria-expanded="false" aria-controls="[% letter.message_transport_type | html %]_[% lang | html %]">
+                            [% SWITCH letter.message_transport_type %]
+                                [% CASE 'email' %]<span>Email</span>
+                                [% CASE 'print' %]<span>[% tp('Message transport type', 'Print') | html %]</span>
+                                [% CASE 'sms' %]<span>SMS</span>
+                                [% CASE 'feed' %]<span>Feed</span>
+                                [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
+                                [% CASE 'phone' %]<span>Phone</span>
+                                [% CASE %]<span>[% letter.message_transport_type | html %]</span>
+                            [% END %]
+                        </a>
+                    </h3>
+                </div> <!-- /.panel-heading -->
+                <div id="[% letter.message_transport_type | html %]_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="[% letter.message_transport_type | html %]_[% lang | html %]Heading">
+                    <div class="panel-body">
+                        [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
+                            <fieldset class="rows mtt" disabled="disabled">
+                                <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
+                        [% ELSE %]
+                            <fieldset class="rows mtt">
+                        [% END %]
+                            <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
+                            <input type="hidden" name="lang" value="[% lang | html %]" />
+                            <ol>
+                                [% IF ( letter.tt_error ) %]
+                                    <li class="template_toolkit_error">
+                                        <span class="label error">Template Toolkit error:</span>
+                                        [% letter.tt_error | html %]
+                                    </li>
+                                [% END %]
+                                [% IF ( letter.updated_on ) %]
+                                    <li>
+                                        <span class="label">Last updated:</span>
+                                        [% letter.updated_on | $KohaDates with_hours = 1 %]
+                                    </li>
+                                [% END %]
+                                <li>
+                                    <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
+                                    [% IF letter.is_html %]
+                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="title_[% letter.message_transport_type | html %]_[% lang | html %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" />
+                                </li>
+                                <li>
+                                    <label for="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]">Message body:</label>
+                                    [% IF letter.message_transport_type == 'sms' %]
+                                        <span class="sms_counter" id="sms_counter_[% lang | html %]">
+                                            [% IF letter.content && letter.content.length > 0 %]
+                                                [% letter.content.length | html %]
+                                            [% ELSE %]
+                                                0
+                                            [% END %]/160 characters</span>
+                                    [% END %]
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
+                                                    [% FOREACH SQLfieldname IN SQLfieldnames %]
+                                                        <option value="[% SQLfieldname.value | html %]">[% SQLfieldname.text | html %]</option>
+                                                    [% END %]
+                                                </select>
+                                            </td>
+                                            <td class="actions">
+                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
+                                            </td>
+                                            <td>
+                                                <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                [% IF preview_is_available %]
+                                    <li>
+                                        <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa fa-eye"></i> Preview</a>
+                                    </li>
+                                [% END %]
+                            </ol>
+                        </fieldset> <!-- /.rows.mtt -->
+                    </div> <!-- /.panel-body -->
+                </div> <!-- /.panel-collapse -->
+            </div> <!-- /.panel.panel-default -->
+        [% END # /FOR mtt %]
+    </div> <!-- /.panel-group#lang_lang -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
