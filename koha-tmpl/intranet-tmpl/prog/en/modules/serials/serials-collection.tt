@@ -146,22 +146,35 @@
 
                 [% IF ( years ) %]
                     <form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="post">
-                        <div id="subscription_years" class="toptabs numbered">
-                            <ul class="nav nav-tabs" role="tablist">
+                        [% WRAPPER tabs id= "subscription_years" %]
+                            [% WRAPPER tabs_nav %]
                                 [% FOREACH year IN years %]
+                                    [% IF ( loop.first ) %]
+                                        [% bt_active = 1 %]
+                                    [% ELSE %]
+                                        [% bt_active = 0 %]
+                                    [% END %]
                                     [% IF ( year.year ) %]
                                         [% IF year.year == 'manage' %]
-                                            <li role="presentation"><a href="#subscription-year-manage" aria-controls="subscription-year-manage" role="tab" data-toggle="tab">Manage</a></li>
+                                            [% SET tabname = "subscription-year-manage" %]
+                                            [% SET tab_text = "Manage" %]
                                         [% ELSE %]
-                                            <li role="presentation"><a href="#subscription-year-[% year.year | uri %]" aria-controls="subscription-year-[% year.year | uri %]" role="tab" data-toggle="tab">[% year.year | html %]</a></li>
+                                            [% SET tabname = "subscription-year-${year.year}" %]
+                                            [% SET tab_text = year.year %]
                                         [% END %]
+                                        [% WRAPPER tab_item tabname= tabname bt_active= bt_active %] [% tab_text | html %] [% END %]
                                     [% END %]
                                 [% END %]
-                            </ul>
+                            [% END # /WRAPPER tabs_nav %]
 
-                            <div class="tab-content">
+                            [% WRAPPER tab_panels %]
                                 [% FOREACH year IN years %]
-                                    <div id="subscription-year-[% year.year | html %]" role="tabpanel" class="tab-pane">
+                                    [% IF ( loop.first ) %]
+                                        [% SET bt_active = 1 %]
+                                    [% ELSE %]
+                                        [% SET bt_active = 0 %]
+                                    [% END %]
+                                    [% WRAPPER tab_panel tabname="subscription-year-${year.year}" bt_active= bt_active %]
                                         [% IF ( CAN_user_serials_receive_serials ) %]
                                             <p>
                                                 <div class="btn-group"><input type="submit" value="Edit serials" class="btn btn-primary btn-sm" /></div>
@@ -305,11 +318,11 @@
                                                 [% END %]
                                             </tbody>
                                         </table> <!-- /.subscription-year-table -->
-                                    </div> <!-- /#subscription-year-year -->
+                                    [% END # /WRAPPER tab_panel#subscription-year %]
                                 [% END # /FOREACH year %]
-                            </div> <!-- /.tab-content -->
+                            [% END # /WRAPPER tab_panels %]
                             <input type="hidden" name="subscriptionid" value="[% subscriptionidlist | html %]" />
-                        </div> <!-- /#subscription_years -->
+                        [% END # /WRAPPER tabs#subscription_years %]
                     </form>
                 [% END # /IF years %]
 

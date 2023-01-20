@@ -310,22 +310,23 @@
 
                     [% IF ( done_searched ) %]
                         [% IF ( total ) %]
-                            <div id="serialstabs" class="toptabs">
-                                <ul class="nav nav-tabs" role="tablist">
+
+                            [% WRAPPER tabs id= "serialstabs" %]
+                                [% WRAPPER tabs_nav %]
                                     [% IF mana %]
-                                        <li role="presentation" class="active"><a href="#mana" aria-controls="mana" role="tab" data-toggle="tab">Mana ([% total || 0 | html %])</a></li>
+                                        [% WRAPPER tab_item tabname= "mana" bt_active= 1 %] Mana ([% total || 0 | html %]) [% END %]
                                     [% ELSE %]
-                                        <li role="presentation" class="active"><a href="#opened" aria-controls="opened" role="tab" data-toggle="tab">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
-                                        <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
+                                        [% WRAPPER tab_item tabname= "opened" bt_active= 1 %] Open ([% openedsubscriptions.size || 0 | html %]) [% END %]
+                                        [% WRAPPER tab_item tabname= "closed" %] Closed ([% closedsubscriptions.size || 0 | html %]) [% END %]
                                     [% END %]
-                                </ul>
-                                <div class="tab-content">
+                                [% END # /WRAPPER tabs_nav %]
+                                [% WRAPPER tab_panels %]
                                     [% IF mana %]
-                                        <div id="mana" role="tabpanel" class="tab-pane active" >
+                                        [% WRAPPER tab_panel tabname="mana" bt_active= 1 %]
                                             [% INCLUDE 'mana/mana-subscription-search-result.inc' %]
-                                        </div>
+                                        [% END # /WRAPPER tab_panel#mana %]
                                     [% ELSE %]
-                                        <div id="opened" role="tabpanel" class="tab-pane active" >
+                                        [% WRAPPER tab_panel tabname="opened" bt_active= 1 %]
                                             [% IF openedsubscriptions %]
                                                 [% INCLUDE subscriptions_table subscriptions = openedsubscriptions %]
                                             [% ELSE %]
@@ -333,8 +334,8 @@
                                                     <p>Your search returned no open subscriptions.</p>
                                                 </div>
                                             [% END %]
-                                        </div>
-                                        <div id="closed" role="tabpanel" class="tab-pane" >
+                                        [% END # /WRAPPER tab_panel#opened %]
+                                        [% WRAPPER tab_panel tabname="closed" %]
                                             [% IF closedsubscriptions %]
                                                 [% INCLUDE subscriptions_table subscriptions = closedsubscriptions closed = 1 %]
                                             [% ELSE %]
@@ -342,10 +343,11 @@
                                                     <p>Your search returned no closed subscriptions.</p>
                                                 </div>
                                             [% END %]
-                                        </div>
+                                        [% END # /WRAPPER tab_panel#closed %]
                                     [% END # /IF mana %]
-                                </div> <!-- /.tab-content -->
-                            </div> <!-- /#serialstabs -->
+                                [% END # /WRAPPER tab_panels %]
+                            [% END # /WRAPPER tabs#serialstabs %]
+
                         [% ELSE %]
                             <div class="dialog message">
                                 <p>Your search returned no results.</p>
@@ -479,7 +481,7 @@
             }
 
         $(document).ready(function() {
-            var osrlt = $("#opened table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var osrlt = $("#opened_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "full",
                 "order": [[ 2, "asc" ]],
                 "aoColumnDefs": [
@@ -488,7 +490,7 @@
                 ]
             }));
 
-            var csrlt = $("#closed table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var csrlt = $("#closed_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 // FIXME sort function of additional_fields!
                 "order": [[ 2, "asc" ]],
                 "sPaginationType": "full",
