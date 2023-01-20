@@ -22,6 +22,21 @@ use base qw( Template::Plugin );
 use C4::Context;
 use Koha::ClassSources;
 
+=head1 NAME
+
+Koha::Template::Plugin::ClassSources - Template::Toolkit plugin for Koha Classification Source Object
+
+=head1 METHODS
+
+=head2 all
+
+Return the list of class sources
+
+    [% class_sources = ClassSources.all() %]
+    [% class_sources = ClassSources.all({ selected => $selected }) %]
+
+=cut
+
 sub all {
     my ($self, $params) = @_;
 

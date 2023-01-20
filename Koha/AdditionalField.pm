@@ -13,6 +13,17 @@ use base qw(Koha::Object);
 use C4::Context;
 use Koha::MarcSubfieldStructures;
 
+=head1 METHODS
+
+=head2 effective_authorised_value_category
+
+Returns the authorised value category of the additional field or the authorised
+value category of the MARC field, if any.
+
+    my $av_category = $additional_field->effective_authorised_value_category;
+
+=cut
+
 sub effective_authorised_value_category {
     my ($self) = @_;
 
