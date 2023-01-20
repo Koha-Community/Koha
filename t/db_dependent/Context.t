@@ -16,7 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::MockModule;
 
 use C4::Context;
 use Koha::Database;
@@ -146,4 +147,25 @@ subtest 'Zconn' => sub {
     isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
     $oConnection = C4::Context->Zconn('biblioserver', 1);
     is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
+};
+
+subtest 'get_versions' => sub {
+    plan tests => 2;
+
+    my $dbh = C4::Context->dbh;
+    my $mod = Test::MockModule->new( 'C4::Context' );
+    my $no_dbh;
+    $mod->mock( 'dbh', sub { return $no_dbh ? undef : $dbh; } );
+
+    my $client = `mysql -V`;
+    my $server = ( C4::Context->dbh->selectrow_array("SHOW VARIABLES LIKE 'version'") )[1];
+    my $server_version;
+    if( $server =~ /(\d+(\.\d+)+)/ ) {
+        $server_version = $1;
+        $server_version =~ s/\./\\./g;
+    }
+    my $v;
+    like( $v = { C4::Context::get_versions }->{mysqlVersion}, qr/$server_version/, "Server version $v found" );
+    $no_dbh = 1;
+    is( $v = { C4::Context::get_versions }->{mysqlVersion}, $client, "Client version $v found" );
 };
