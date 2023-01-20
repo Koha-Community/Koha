@@ -32,7 +32,7 @@
 
             [% WRAPPER tabs id= "abouttabs" %]
                 [% WRAPPER tabs_nav %]
-                    [% WRAPPER tab_item tabname= "about" active= 1 %] Server information [% END %]
+                    [% WRAPPER tab_item tabname= "about" bt_active= 1 %] Server information [% END %]
                     [% WRAPPER tab_item tabname= "perl" %] Perl modules [% END %]
                     [% WRAPPER tab_item tabname= "sysinfo" %] System information [% END %]
                     [% WRAPPER tab_item tabname= "team" %] Koha team [% END %]
@@ -43,7 +43,7 @@
                 [% END %]
 
                 [% WRAPPER tab_panels %]
-                    [% WRAPPER tab_panel tabname= "about" active= 1 %]
+                    [% WRAPPER tab_panel tabname= "about" bt_active= 1 %]
                         <table>
                             <caption>Server information</caption>
                             <tr>
