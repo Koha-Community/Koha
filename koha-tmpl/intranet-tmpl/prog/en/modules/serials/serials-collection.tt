@@ -72,7 +72,7 @@
                             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
                         </form>
                     </div>
-                [% END %]
+                [% END # /IF delete %]
 
                 [% IF ( error_delitem ) %]
                     <div class="dialog alert">
@@ -130,10 +130,10 @@
                                     [% END %]
                                 [% ELSE %]
                                     &nbsp;
-                                [% END %]
+                                [% END # /UNLESS subscription.closed %]
                                 </td>
                             </tr>
-                        [% END %]
+                        [% END # /FOREACH subscription %]
                         [% IF ( subscr ) %]
                             [% IF ( subscriptioncount > 1 ) %]
                                 <tr>
@@ -142,7 +142,7 @@
                             [% END %]
                         [% END %]
                     </table>
-                [% END %]
+                [% END # /IF subscriptions %]
 
                 [% IF ( years ) %]
                     <form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="post">
@@ -175,7 +175,7 @@
                                                 [% END %]
                                                 <input type="button" value="Delete selected issues" class="delete-issues btn btn-default btn-sm" data-subscriptionids="[% subscriptionidlist | html %]" />
                                             </p>
-                                        [% END %]
+                                        [% END # /IF CAN_user_serials_receive_serials %]
 
                                         <span class="checkall">
                                             <a class="CheckAll" href="#" data-year="[% year.year | html %]">Select all</a>
@@ -228,11 +228,11 @@
                                                                             [% ELSE %]
                                                                                 <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" />
                                                                             [% END %]
-                                                                        [% END %]
-                                                                    [% END %]
-                                                                [% END %]
+                                                                        [% END # /IF delete %]
+                                                                    [% END # /IF serial.subscriptionexpired %]
+                                                                [% END # /UNLESS CAN_user_serials_receive_serials %]
                                                             </td>
-                                                        [% END %]
+                                                        [% END # /IF CAN_user_serials_receive_serials %]
                                                         [% IF ( subscriptions.size > 1 ) %]
                                                             <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid | uri %]">[% serial.subscriptionid | html %]</a></td>
                                                         [% END %]
@@ -304,14 +304,14 @@
                                                     </tr>
                                                 [% END %]
                                             </tbody>
-                                        </table>
-                                    </div>
-                                [% END %]
-                            </div>
+                                        </table> <!-- /.subscription-year-table -->
+                                    </div> <!-- /#subscription-year-year -->
+                                [% END # /FOREACH year %]
+                            </div> <!-- /.tab-content -->
                             <input type="hidden" name="subscriptionid" value="[% subscriptionidlist | html %]" />
-                        </div>
+                        </div> <!-- /#subscription_years -->
                     </form>
-                [% END %]
+                [% END # /IF years %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
