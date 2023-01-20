@@ -820,20 +820,25 @@ Gets various version info, for core Koha packages, Currently called from carp ha
 
 # A little example sub to show more debugging info for CGI::Carp
 sub get_versions {
-    my %versions;
+    my ( %versions, $mysqlVersion );
     $versions{kohaVersion}  = Koha::version();
     $versions{kohaDbVersion} = C4::Context->preference('version');
     $versions{osVersion} = join(" ", POSIX::uname());
     $versions{perlVersion} = $];
+
+    my $dbh = C4::Context->dbh;
+    $mysqlVersion = $dbh->get_info(18) if $dbh; # SQL_DBMS_VER
+
     {
         no warnings qw(exec); # suppress warnings if unable to find a program in $PATH
-        $versions{mysqlVersion}  = `mysql -V`;
+        $mysqlVersion          ||= `mysql -V`; # fallback to sql client version?
         $versions{apacheVersion} = (`apache2ctl -v`)[0];
         $versions{apacheVersion} = `httpd -v`             unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `httpd2 -v`            unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `apache2 -v`           unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
     }
+    $versions{mysqlVersion} = $mysqlVersion;
     return %versions;
 }
 
