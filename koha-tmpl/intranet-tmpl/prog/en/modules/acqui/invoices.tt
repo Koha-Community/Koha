@@ -137,11 +137,11 @@
 
                         [% WRAPPER tabs id= "invoicestabs" %]
                             [% WRAPPER tabs_nav %]
-                                [% WRAPPER tab_item tabname= "opened" active= 1 %] Open invoices ([% openedinvoices.size || 0 | html %]) [% END %]
+                                [% WRAPPER tab_item tabname= "opened" bt_active= 1 %] Open invoices ([% openedinvoices.size || 0 | html %]) [% END %]
                                 [% WRAPPER tab_item tabname= "closed" %] Closed invoices ([% closedinvoices.size || 0 | html %]) [% END %]
                             [% END %]
                             [% WRAPPER tab_panels %]
-                                [% WRAPPER tab_panel tabname="opened" active= 1 %]
+                                [% WRAPPER tab_panel tabname="opened" bt_active= 1 %]
                                     [% IF openedinvoices %]
                                         [% INCLUDE invoices_table invoices = openedinvoices %]
                                     [% ELSE %]
