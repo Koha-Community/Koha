@@ -89,6 +89,16 @@
         [% END %]
         </li>
 
+        [% IF ( interlibrary_loans ) %]
+            <li class="active">
+                <a title="Interlibrary loans" href="/cgi-bin/koha/admin/preferences.pl?tab=interlibrary_loans">Interlibrary loans</a>
+                [% PROCESS subtabs  %]
+        [% ELSE %]
+            <li>
+                <a title="Interlibrary loans" href="/cgi-bin/koha/admin/preferences.pl?tab=interlibrary_loans">Interlibrary loans</a>
+        [% END %]
+        </li>
+
         [% IF ( local_use ) %]
             <li class="active">
                 <a href="/cgi-bin/koha/admin/systempreferences.pl">Local use</a>
