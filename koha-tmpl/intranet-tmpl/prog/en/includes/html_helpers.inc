@@ -345,12 +345,12 @@
 [%# BOOTSTRAP TAB WRAPPER USAGE
     [ WRAPPER tabs id= "tabs container id" ]
         [ WRAPPER tabs_nav ]
-            [ WRAPPER tab_item tabname= "tab name 1" ] [ content ] [ END ]
+            [ WRAPPER tab_item tabname= "tab name 1" bt_active= 1 ] [ content ] [ END ]
             [ WRAPPER tab_item tabname= "tab name 2" ] [ content ] [ END ]
             ...
         [ END ]
         [ WRAPPER tab_panels ]
-            [ WRAPPER tab_panel id="tab name 1"] [ content ] [ END ]
+            [ WRAPPER tab_panel id="tab name 1" bt_active= 1 ] [ content ] [ END ]
             [ WRAPPER tab_panel id="tab name 2"] [ content ] [ END ]
             ...
         [ END ]
@@ -374,7 +374,7 @@
 [% END %]
 
 [% BLOCK tab_item %]
-    [% IF ( active ) %]
+    [% IF ( bt_active ) %]
         <li role="presentation" class="active">
     [% ELSE %]
         <li role="presentation">
@@ -392,7 +392,7 @@
 [% END %]
 
 [% BLOCK tab_panel %]
-    [% IF ( active ) %]
+    [% IF ( bt_active ) %]
         <div role="tabpanel" class="tab-pane active" id="[% tabname | html %]_panel">
     [% ELSE %]
         <div role="tabpanel" class="tab-pane" id="[% tabname | html %]_panel">
