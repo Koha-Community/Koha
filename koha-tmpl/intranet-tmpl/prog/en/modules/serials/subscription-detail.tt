@@ -93,28 +93,19 @@
                     </div>
                 [% END %]
 
-                <div id="subscription_description" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#subscription_info" aria-controls="subscription_info" role="tab" data-toggle="tab">Information</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#subscription_planning" aria-controls="subscription_planning" role="tab" data-toggle="tab">Planning</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#subscription_issues" aria-controls="subscription_issues" role="tab" data-toggle="tab">Issues</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#subscription_summary" aria-controls="subscription_summary" role="tab" data-toggle="tab">Summary</a>
-                        </li>
+                [% WRAPPER tabs id= "subscription_description" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "subscription_info" bt_active= 1 %] Information [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_planning" %] Planning [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_issues" %] Issues [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_summary" %] Summary [% END %]
                         [% IF orders_grouped.size %]
-                            <li role="presentation">
-                                <a href="#acquisition_details" aria-controls=" aria-controls="profile" role="tab" data-toggle="tab"" role="tab" data-toggle="tab">Acquisition details</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "acquisition_details" %] Acquisition details [% END %]
                         [% END %]
-                    </ul>
-                    <div class="tab-content">
-                        <div id="subscription_info" role="tabpanel" class="tab-pane active">
+                    [% END # /WRAPPER tabs_nav %]
+
+                    [% WRAPPER tab_panels %]
+                        [% WRAPPER tab_panel tabname="subscription_info" bt_active= 1 %]
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="rows">
@@ -182,9 +173,9 @@
                                     </div> <!-- /.col-sm-6 -->
                                 </div> <!-- /.row -->
                             [% END %]
-                        </div> <!-- /#subscription_info -->
+                        [% END # /WRAPPER#subscription_info %]
 
-                        <div id="subscription_planning" role="tabpanel" class="tab-pane">
+                        [% WRAPPER tab_panel tabname="subscription_planning" %]
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="rows">
@@ -263,71 +254,9 @@
                                     </div> <!-- /.rows -->
                                 </div> <!-- /.col-sd-12 -->
                             </div> <!-- /.row -->
-                        </div> <!-- /#subscription_planning -->
+                        [% END # /WRAPPER#subscription_planning %]
 
-                        <div id="subscription_numbering" role="tabpanel" class="tab-pane" style="display:none">
-                            <h3>Numbering calculation</h3>
-                            <p><label>Numbering formula:</label> [% numberingmethod | html %]</p>
-                            <table>
-                                <tr>
-                                    <th>&nbsp;</th>
-                                    <th>X</th>
-                                    <th>Y</th>
-                                    <th>Z</th>
-                                </tr>
-                                <tr>
-                                    <td>Add</td>
-                                    <td>
-                                        [% add1 | html %]
-                                    </td>
-                                    <td>
-                                    [% add2 | html %]
-                                </td>
-                                <td>
-                                    [% add3 | html %]
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>once every</td>
-                                <td>[% every1 | html %]</td>
-                                <td>[% every2 | html %]</td>
-                                <td>[% every3 | html %]</td>
-                            </tr>
-                            <tr>
-                                <td>When more than</td>
-                                <td>[% whenmorethan1 | html %] [% IF ( innerloop1 ) %]<br />
-                                    <em>(is [% innerloop1 | html %])</em>[% END %]</td>
-                                <td>[% whenmorethan2 | html %] [% IF ( innerloop2 ) %]<br />
-                                    <em>(is [% innerloop2 | html %])</em>[% END %]</td>
-                                <td>[% whenmorethan3 | html %] [% IF ( innerloop3 ) %]<br />
-                                    <em>(is [% innerloop3 | html %])</em>[% END %]</td>
-                            </tr>
-                            <tr>
-                                <td>Set back to</td>
-                                <td>[% setto1 | html %]</td>
-                                <td>[% setto2 | html %]</td>
-                                <td>[% setto3 | html %]</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                        Inner counter
-                                </td>
-                                <td>[% innerloop1 | html %]</td>
-                                <td>[% innerloop2 | html %]</td>
-                                <td>[% innerloop3 | html %]</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                        Last value
-                                </td>
-                                <td>[% lastvalue1 | html %]</td>
-                                <td>[% lastvalue2 | html %]</td>
-                                <td>[% lastvalue3 | html %]</td>
-                            </tr>
-                        </table>
-                    </div> <!-- /#subscription_numbering -->
-
-                        <div id="subscription_issues" role="tabpanel" class="tab-pane">
+                        [% WRAPPER tab_panel tabname="subscription_issues" %]
                             <table>
                                 <tr>
                                     <th>Issue number</th>
@@ -345,44 +274,44 @@
                                             [% IF serialslis.planneddate %]
                                                 [% serialslis.planneddate | html %]
                                             [% ELSE %]
-                                            <span>Unknown</span>
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% IF serialslis.publisheddate %]
-                                            [% serialslis.publisheddate | html %]
-                                        [% ELSE %]
-                                            <span>Unknown</span>
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% serialslis.publisheddatetext | html %]
-                                    </td>
-                                    <td>
-                                        [% IF ( serialslis.status1 ) %]<span>Expected</span>[% END %]
-                                        [% IF ( serialslis.status2 ) %]<span>Arrived</span>[% END %]
-                                        [% IF ( serialslis.status3 ) %]<span>Late</span>[% END %]
-                                        [% IF ( serialslis.status4 ) %]<span>Missing</span>[% END %]
-                                        [% IF ( serialslis.status41 ) %]<span>Missing (never received)</span>[% END %]
-                                        [% IF ( serialslis.status42 ) %]<span>Missing (sold out)</span>[% END %]
-                                        [% IF ( serialslis.status43 ) %]<span>Missing (damaged)</span>[% END %]
-                                        [% IF ( serialslis.status44 ) %]<span>Missing (lost)</span>[% END %]
-                                        [% IF ( serialslis.status5 ) %]<span>Not issued</span>[% END %]
-                                        [% IF ( serialslis.status6 ) %]<span>Delete</span>[% END %]
-                                        [% IF ( serialslis.status7 ) %]
-                                            <span>Claimed</span>
-                                            [% IF ( serialslis.claimdate ) %]
-                                                [% serialslis.claimdate | html %]
+                                                <span>Unknown</span>
                                             [% END %]
-                                        [% END %]
-                                        [% IF ( serialslis.status8 ) %]<span>Stopped</span>[% END %]
-                                    </td>
-                                </tr>
-                            [% END # /FOREACH serialslist %]
-                        </table>
-                    </div> <!-- /#subscription_issues -->
+                                        </td>
+                                        <td>
+                                            [% IF serialslis.publisheddate %]
+                                                [% serialslis.publisheddate | html %]
+                                            [% ELSE %]
+                                                <span>Unknown</span>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% serialslis.publisheddatetext | html %]
+                                        </td>
+                                        <td>
+                                            [% IF ( serialslis.status1 ) %]<span>Expected</span>[% END %]
+                                            [% IF ( serialslis.status2 ) %]<span>Arrived</span>[% END %]
+                                            [% IF ( serialslis.status3 ) %]<span>Late</span>[% END %]
+                                            [% IF ( serialslis.status4 ) %]<span>Missing</span>[% END %]
+                                            [% IF ( serialslis.status41 ) %]<span>Missing (never received)</span>[% END %]
+                                            [% IF ( serialslis.status42 ) %]<span>Missing (sold out)</span>[% END %]
+                                            [% IF ( serialslis.status43 ) %]<span>Missing (damaged)</span>[% END %]
+                                            [% IF ( serialslis.status44 ) %]<span>Missing (lost)</span>[% END %]
+                                            [% IF ( serialslis.status5 ) %]<span>Not issued</span>[% END %]
+                                            [% IF ( serialslis.status6 ) %]<span>Delete</span>[% END %]
+                                            [% IF ( serialslis.status7 ) %]
+                                                <span>Claimed</span>
+                                                [% IF ( serialslis.claimdate ) %]
+                                                    [% serialslis.claimdate | html %]
+                                                [% END %]
+                                            [% END %]
+                                            [% IF ( serialslis.status8 ) %]<span>Stopped</span>[% END %]
+                                        </td>
+                                    </tr>
+                                [% END # /FOREACH serialslist %]
+                            </table>
+                        [% END # /WRAPPER#subscription_issues %]
 
-                        <div id="subscription_summary" role="tabpanel" class="tab-pane">
+                        [% WRAPPER tab_panel tabname="subscription_summary" %]
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="rows">
@@ -401,10 +330,10 @@
                                     </div> <!-- /.rows -->
                                 </div> <!-- /.col-sm-12 -->
                             </div> <!-- /.row -->
-                        </div> <!-- /#subscription_summary -->
+                        [% END # /WRAPPER#subscription_summary %]
 
                         [% IF orders_grouped.size %]
-                            <div id="acquisition_details" role="tabpanel" class="tab-pane">
+                            [% WRAPPER tab_panel tabname="acquisition_details" %]
                                 <h2>Acquisition details</h2>
                                 <table id="orders">
                                     <caption>
@@ -441,76 +370,76 @@
                                                     [% IF CAN_user_acquisition_order_manage %]
                                                         <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% parent_order.basket.basketno | uri %]">[% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])</a>
                                                     [% ELSE %]
-                                                    [% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])
-                                                [% END %]
-                                            </td>
-                                            <td></td> [%# ordernumber %]
-                                            <td>[% parent_order.basket.creationdate | $KohaDates %]</td>
-                                            <td>[% parent_order.datereceived | $KohaDates %]</td>
-                                            <td>
-                                                [% SWITCH parent_order.orderstatus %]
-                                                    [% CASE 'new' %]<span title="status_1">New</span>
-                                                    [% CASE 'ordered' %]<span title="status_2">Ordered</span>
-                                                    [% CASE 'partial' %]<span title="status_3">Partial</span>
-                                                    [% CASE 'complete' %]<span title="status_4">Complete</span>
-                                                    [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
-                                                [% END %]
-                                            </td>
-                                            <td></td> [%# internalnote %]
-                                            <td></td> [%# vendornote %]
-                                            <td></td> [%# fund %]
-                                            <td>[% parent_order.quantity | html %]</td>
-                                            <td>[% parent_order.ecost_tax_excluded | $Price %] / [% parent_order.ecost_tax_included | $Price %]</td>
-                                            <td>[% parent_order.unitprice_tax_excluded | $Price %] / [% parent_order.unitprice_tax_included | $Price %]</td>
-                                        </tr>
-                                        [% FOR order IN parent_order.orders %]
-                                            <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
+                                                        [% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])
+                                                    [% END %]
+                                                </td>
+                                                <td></td> [%# ordernumber %]
+                                                <td>[% parent_order.basket.creationdate | $KohaDates %]</td>
+                                                <td>[% parent_order.datereceived | $KohaDates %]</td>
                                                 <td>
-                                                [% IF order.invoice %]
-                                                    [% IF CAN_user_acquisition %]
-                                                        <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
-                                                           [% order.invoice.invoicenumber | html %]</a>
-                                                    [% ELSE %]
-                                                        [% order.invoice.invoicenumber | html %]
-                                                    [% END %]
-                                                [% END %]
-                                                </td>
-                                                <td></td> [%# basket %]
-                                                <td>[% order.ordernumber | html %]</td>
-                                                <td data-order="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</td>
-                                                <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</td>
-                                                    [% SWITCH order.orderstatus %]
-                                                        [% CASE 'new' %]<td data-order="status_1"><span>New</span>
-                                                        [% CASE 'ordered' %]<td data-order="status_2"><span>Ordered</span>
-                                                        [% CASE 'partial' %]<td data-order="status_3"><span>Partial</span>
-                                                        [% CASE 'complete' %]<td data-order="status_4"><span>Complete</span>
-                                                        [% CASE 'cancelled' %]<td data-order="status_5"><span>Cancelled</span>
+                                                    [% SWITCH parent_order.orderstatus %]
+                                                        [% CASE 'new' %]<span title="status_1">New</span>
+                                                        [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                                                        [% CASE 'partial' %]<span title="status_3">Partial</span>
+                                                        [% CASE 'complete' %]<span title="status_4">Complete</span>
+                                                        [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
                                                     [% END %]
                                                 </td>
-                                                <td>[% order.order_internalnote | html %]</td>
-                                                <td>[% order.order_vendornote | html %]</td>
-                                                <td>[% order.fund.budget_name | html %]</td>
-                                                <td>[% order.quantity | html %]</td>
-                                                <td>
-                                                    [% UNLESS order.datereceived %]
-                                                        [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
-                                                    [% END %]
-                                                </td>
-                                                <td>
-                                                    [% IF order.datereceived %]
-                                                        [%# FIXME What if unitprice has not been filled? %]
-                                                        [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
-                                                    [% END %]
-                                                </td>
+                                                <td></td> [%# internalnote %]
+                                                <td></td> [%# vendornote %]
+                                                <td></td> [%# fund %]
+                                                <td>[% parent_order.quantity | html %]</td>
+                                                <td>[% parent_order.ecost_tax_excluded | $Price %] / [% parent_order.ecost_tax_included | $Price %]</td>
+                                                <td>[% parent_order.unitprice_tax_excluded | $Price %] / [% parent_order.unitprice_tax_included | $Price %]</td>
                                             </tr>
-                                        [% END # /FOR order %]
-                                    [% END # /FOR ordernumber %]
-                                </tbody>
-                            </table> <!-- /#orders -->
-                        </div> <!-- /#acquisition_details -->
-                    [% END # IF orders_grouped.size %]
-                    </div> <!-- /.tab-content -->
-                </div> <!-- /#subscription_description -->
+                                            [% FOR order IN parent_order.orders %]
+                                                <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
+                                                    <td>
+                                                        [% IF order.invoice %]
+                                                            [% IF CAN_user_acquisition %]
+                                                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
+                                                                [% order.invoice.invoicenumber | html %]</a>
+                                                            [% ELSE %]
+                                                                [% order.invoice.invoicenumber | html %]
+                                                            [% END %]
+                                                        [% END %]
+                                                    </td>
+                                                    <td></td> [%# basket %]
+                                                    <td>[% order.ordernumber | html %]</td>
+                                                    <td data-order="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</td>
+                                                    <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</td>
+                                                        [% SWITCH order.orderstatus %]
+                                                            [% CASE 'new' %]<td data-order="status_1"><span>New</span>
+                                                            [% CASE 'ordered' %]<td data-order="status_2"><span>Ordered</span>
+                                                            [% CASE 'partial' %]<td data-order="status_3"><span>Partial</span>
+                                                            [% CASE 'complete' %]<td data-order="status_4"><span>Complete</span>
+                                                            [% CASE 'cancelled' %]<td data-order="status_5"><span>Cancelled</span>
+                                                        [% END %]
+                                                    </td>
+                                                    <td>[% order.order_internalnote | html %]</td>
+                                                    <td>[% order.order_vendornote | html %]</td>
+                                                    <td>[% order.fund.budget_name | html %]</td>
+                                                    <td>[% order.quantity | html %]</td>
+                                                    <td>
+                                                        [% UNLESS order.datereceived %]
+                                                            [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
+                                                        [% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% IF order.datereceived %]
+                                                            [%# FIXME What if unitprice has not been filled? %]
+                                                            [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
+                                                        [% END %]
+                                                    </td>
+                                                </tr>
+                                            [% END # /FOR order %]
+                                        [% END # /FOR ordernumber %]
+                                    </tbody>
+                                </table> <!-- /#orders -->
+                            [% END # /WRAPPER tab_panel#acquisition_details %]
+                        [% END # IF orders_grouped.size %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs#subscription_description %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
