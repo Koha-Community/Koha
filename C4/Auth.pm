@@ -1320,7 +1320,7 @@ sub checkauth {
             $uri->query_param_delete('password');
             $uri->query_param_delete('koha_login_context');
             print $query->redirect(-uri => $uri->as_string, -cookie => $cookie, -status=>'303 See other');
-            safe_exit;
+            exit;
         }
 
         return ( $userid, $cookie, $sessionID, $flags );
