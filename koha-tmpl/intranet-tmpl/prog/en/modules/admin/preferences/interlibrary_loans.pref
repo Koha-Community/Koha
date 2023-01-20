@@ -1,0 +1,56 @@
+Interlibrary loans:
+    Features:
+        -
+            - pref: ILLModule
+              default: 0
+              choices:
+                  1: Enable
+                  0: Disable
+            - the interlibrary loans module (master switch).
+        -
+            - "Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
+            - pref: ILLModuleCopyrightClearance
+              type: textarea
+              class: long
+        -
+            - pref: ILLModuleUnmediated
+              default: 0
+              choices:
+                  1: Enable
+                  0: Disable
+            - unmediated interlibrary loan requests. If enabled and the ILL backend supports it, the newly created requests are immediately requested by backend.
+        -
+            - pref: CirculateILL
+              default: 0
+              choices:
+                  1: Enable
+                  0: Disable
+            - the circulation of ILL requested items.
+        -
+            - pref: ILLCheckAvailability
+              default: 0
+              choices:
+                  1: Check
+                  0: "Don't check"
+            - external sources for availability during the request process.
+        -
+            - "ILL statuses that are considered finished and should not be displayed in the ILL module: "
+            - pref: ILLHiddenRequestStatuses
+              class: multi
+            - (separated with |). If left empty, all ILL requests will be displayed. The request codes can be found in the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS">ILLSTATUS</a> authorized value category.
+    Notifications:
+        -
+            - "Send these ILL notices to staff when appropriate:"
+            - pref: ILLSendStaffNotices
+              class: multi
+            - "(separated with |). e.g. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices will be sent."
+        -
+            - "Fallback email address for staff ILL notices to be sent to in the absence of a library address:"
+            - pref: ILLDefaultStaffEmail
+              class: email
+    OPAC:
+        -
+            - "Enabled ILL backends for OPAC initiated requests:"
+            - pref: ILLOpacbackends
+              class: multi
+            - (separated with |). If left empty, all installed backends will be enabled.
