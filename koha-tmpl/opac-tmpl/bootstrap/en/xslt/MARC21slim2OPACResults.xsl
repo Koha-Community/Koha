@@ -660,10 +660,6 @@
 	</div>
     </xsl:if>
 
-    <xsl:call-template name="host-item-entries">
-        <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
-    </xsl:call-template>
-
 <xsl:if test="$DisplayOPACiconsXSLT!='0'">
     <div class="results_summary type">
     <xsl:if test="$typeOf008!=''">
@@ -1148,6 +1144,11 @@
             </xsl:for-each>
 	</div>
     </xsl:if>
+
+    <xsl:call-template name="host-item-entries">
+        <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
+    </xsl:call-template>
+
     <xsl:if test="marc:datafield[@tag=856]">
          <div class="results_summary online_resources">
 			   <span class="label">Online access: </span>

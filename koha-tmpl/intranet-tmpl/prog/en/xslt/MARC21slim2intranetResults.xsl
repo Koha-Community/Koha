@@ -929,10 +929,6 @@
     </span>
     </xsl:if>
 
-    <xsl:call-template name="host-item-entries">
-        <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
-    </xsl:call-template>
-
     <!-- Other Title  Statement: Alternate Graphic Representation (MARC 880) -->
     <xsl:if test="$display880">
        <xsl:call-template name="m880Select">
@@ -955,6 +951,11 @@
             </xsl:for-each>
 	</span>
     </xsl:if>
+
+    <xsl:call-template name="host-item-entries">
+        <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
+    </xsl:call-template>
+
     <xsl:if test="marc:datafield[@tag=856]">
         <span class="results_summary online_access">
             <span class="label">Online access: </span>
