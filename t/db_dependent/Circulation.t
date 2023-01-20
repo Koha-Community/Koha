@@ -4614,7 +4614,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 };
 
 subtest 'AddRenewal() adds to renewals' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $library  = $builder->build_object({ class => 'Koha::Libraries' });
     my $patron   = $builder->build_object({
@@ -4631,7 +4631,7 @@ subtest 'AddRenewal() adds to renewals' => sub {
     is(ref($issue), 'Koha::Checkout', 'Issue added');
 
     # Renew item
-    my $duedate = AddRenewal( $patron->id, $item->id, $library->id );
+    my $duedate = AddRenewal( $patron->id, $item->id, $library->id, undef, undef, undef, undef, 1 );
 
     ok( $duedate, "Renewal added" );
 
@@ -4639,6 +4639,7 @@ subtest 'AddRenewal() adds to renewals' => sub {
     is($renewals->count, 1, 'One renewal added');
     my $THE_renewal = $renewals->next;
     is( $THE_renewal->renewer_id, C4::Context->userenv->{'number'}, 'Renewer recorded from context' );
+    is( $THE_renewal->renewal_type, 'Automatic', 'AddRenewal "automatic" parameter sets renewal type to "Automatic"');
 };
 
 subtest 'ProcessOfflinePayment() tests' => sub {
