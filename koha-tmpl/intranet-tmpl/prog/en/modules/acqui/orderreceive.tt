@@ -611,12 +611,16 @@
                     $("#unitprice").prop("readonly", "true");
                 } else {
                     $("#select_currency").hide();
+                    $("#invoice_unitprice").val(""); // Empty to not store the values
+                    $("#invoice_currency").val("");
                     $("#unitprice").prop("readonly", "");
                 }
-            }).change();
+            });
 
             [% IF order.invoice_unitprice %]
-                $("input[name='change_currency']").click().trigger('change');
+                $("input[name='change_currency']").click();
+            [% ELSE %]
+                $("input[name='change_currency']").trigger('change');
             [% END %]
 
             function update_unitprice() {

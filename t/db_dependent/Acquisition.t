@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -783,8 +783,179 @@ subtest 'ModReceiveOrder and subscription' => sub {
     is( $received_order->order_internalnote,
         $second_note, "No price set if none passed in" );
 
-    $order->get_from_storage;
     is( $order->get_from_storage->order_internalnote, $first_note );
+};
+
+subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new;
+    subtest 'partial order' => sub {
+        plan tests => 2;
+
+        subtest 'no invoice_unitprice' => sub {
+            plan tests => 4;
+            my $order = $builder->build_object(
+                {
+                    class => 'Koha::Acquisition::Orders',
+                    value => {
+                        quantity               => 5,
+                        quantityreceived       => 0,
+                        ecost_tax_excluded     => 42,
+                        unitprice_tax_excluded => 42,
+                    }
+                }
+            );
+            my $order_info = {
+                %{ $order->unblessed },
+                invoice_unitprice => undef,
+                invoice_currency  => undef,
+            };
+            my ( undef, $received_ordernumber ) = ModReceiveOrder(
+                {
+                    biblionumber     => $order->biblionumber,
+                    order            => $order_info,
+                    quantityreceived => 1,                   # We receive only 1
+                    budget_id        => $order->budget_id,
+                }
+            );
+            my $received_order =
+              Koha::Acquisition::Orders->find($received_ordernumber);
+            is( $received_order->invoice_unitprice,
+                undef, 'no price should be stored if none passed' );
+            is( $received_order->invoice_currency,
+                undef, 'no currency should be stored if none passed' );
+            $order = $order->get_from_storage;
+            is( $order->invoice_unitprice, undef,
+                'no price should be stored if none passed' );
+            is( $order->invoice_currency, undef,
+                'no currency should be stored if none passed' );
+        };
+        subtest 'with invoice_unitprice' => sub {
+            plan tests => 4;
+            my $order = $builder->build_object(
+                {
+                    class => 'Koha::Acquisition::Orders',
+                    value => {
+                        quantity               => 5,
+                        quantityreceived       => 0,
+                        ecost_tax_excluded     => 42,
+                        unitprice_tax_excluded => 42,
+                    }
+                }
+            );
+            my $order_info = {
+                %{ $order->unblessed },
+                invoice_unitprice => 37,
+                invoice_currency  => 'GBP',
+            };
+            my ( undef, $received_ordernumber ) = ModReceiveOrder(
+                {
+                    biblionumber     => $order->biblionumber,
+                    order            => $order_info,
+                    quantityreceived => 1,
+                    budget_id        => $order->budget_id,
+                }
+            );
+            my $received_order =
+              Koha::Acquisition::Orders->find($received_ordernumber);
+            is( $received_order->invoice_unitprice + 0,
+                37, 'price should be stored in new order' );
+            is( $received_order->invoice_currency,
+                'GBP', 'currency should be stored in new order' );
+            $order = $order->get_from_storage;
+            is( $order->invoice_unitprice + 0,
+                37, 'price should be stored in existing order' );
+            is( $order->invoice_currency, 'GBP',
+                'currency should be stored in existing order' );
+
+        };
+    };
+
+    subtest 'full received order' => sub {
+        plan tests => 2;
+
+        subtest 'no invoice_unitprice' => sub {
+            plan tests => 4;
+            my $builder = t::lib::TestBuilder->new;
+            my $order   = $builder->build_object(
+                {
+                    class => 'Koha::Acquisition::Orders',
+                    value => {
+                        quantity               => 5,
+                        quantityreceived       => 0,
+                        ecost_tax_excluded     => 42,
+                        unitprice_tax_excluded => 42,
+                    }
+                }
+            );
+            my $order_info = {
+                %{ $order->unblessed },
+                invoice_unitprice => undef,
+                invoice_currency  => undef,
+            };
+            my ( undef, $received_ordernumber ) = ModReceiveOrder(
+                {
+                    biblionumber => $order->biblionumber,
+                    order        => $order_info,
+                    quantityreceived => 5,                # We receive them all!
+                    budget_id        => $order->budget_id,
+                }
+            );
+            my $received_order =
+              Koha::Acquisition::Orders->find($received_ordernumber);
+            is( $received_order->invoice_unitprice,
+                undef, 'no price should be stored if none passed' );
+            is( $received_order->invoice_currency,
+                undef, 'no currency should be stored if none passed' );
+            $order = $order->get_from_storage;
+            is( $order->invoice_unitprice, undef,
+                'no price should be stored if none passed' );
+            is( $order->invoice_currency, undef,
+                'no currency should be stored if none passed' );
+        };
+
+        subtest 'with invoice_unitprice' => sub {
+            plan tests => 4;
+            my $order = $builder->build_object(
+                {
+                    class => 'Koha::Acquisition::Orders',
+                    value => {
+                        quantity               => 5,
+                        quantityreceived       => 0,
+                        ecost_tax_excluded     => 42,
+                        unitprice_tax_excluded => 42,
+                    }
+                }
+            );
+            my $order_info = {
+                %{ $order->unblessed },
+                invoice_unitprice => 37,
+                invoice_currency  => 'GBP',
+            };
+            my ( undef, $received_ordernumber ) = ModReceiveOrder(
+                {
+                    biblionumber     => $order->biblionumber,
+                    order            => $order_info,
+                    quantityreceived => 1,
+                    budget_id        => $order->budget_id,
+                }
+            );
+            my $received_order =
+              Koha::Acquisition::Orders->find($received_ordernumber);
+            is( $received_order->invoice_unitprice + 0,
+                37, 'price should be stored in new order' );
+            is( $received_order->invoice_currency,
+                'GBP', 'currency should be stored in new order' );
+            $order = $order->get_from_storage;
+            is( $order->invoice_unitprice + 0,
+                37, 'price should be stored in existing order' );
+            is( $order->invoice_currency, 'GBP',
+                'currency should be stored in existing order' );
+
+        };
+    };
+
 };
 
 subtest 'GetHistory with additional fields' => sub {

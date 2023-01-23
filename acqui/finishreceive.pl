@@ -107,12 +107,15 @@ if ($quantityrec > $origquantityrec ) {
             replacementprice      => $replacementprice,
             unitprice             => $unitprice,
             (
-                defined $invoice_unitprice && $invoice_unitprice ne ''
+                $invoice_unitprice && $invoice_unitprice ne ''
                 ? (
                     invoice_unitprice => $invoice_unitprice,
                     invoice_currency  => $invoice_currency,
                   )
-                : ()
+                : (
+                    invoice_unitprice => undef,
+                    invoice_currency  => undef,
+                )
             ),
         }
     );

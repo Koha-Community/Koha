@@ -1429,10 +1429,10 @@ sub ModReceiveOrder {
             $query .= q|, order_internalnote = ?|;
             push @params, $order->{order_internalnote};
         }
-        if ( defined $order->{invoice_unitprice} ) {
-            $query .= q|, invoice_unitprice = ?, invoice_currency = ?|;
-            push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
-        }
+
+        $query .= q|, invoice_unitprice = ?, invoice_currency = ?|;
+        push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
+
         $query .= q|
             WHERE ordernumber = ?
         |;
@@ -1491,7 +1491,7 @@ sub ModReceiveOrder {
 
         $query .= q|
             , invoice_unitprice = ?, invoice_currency = ?
-        | if defined $order->{invoice_unitprice};
+        |;
 
         $query .= q| where biblionumber=? and ordernumber=?|;
 
@@ -1518,9 +1518,7 @@ sub ModReceiveOrder {
             push @params, $order->{order_internalnote};
         }
 
-        if ( defined $order->{invoice_unitprice} ) {
-            push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
-        }
+        push @params, $order->{invoice_unitprice}, $order->{invoice_currency};
 
         push @params, ( $biblionumber, $order->{ordernumber} );
 
