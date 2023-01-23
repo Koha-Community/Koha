@@ -1388,7 +1388,7 @@ sub IsAvailableForItemLevelRequest {
         return $any_available ? 0 : 1;
 
     } else {  # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
-        return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
+        return $item->notforloan < 0 || $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
 }
 

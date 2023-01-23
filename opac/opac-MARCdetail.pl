@@ -58,7 +58,7 @@ use C4::Biblio qw(
     GetMarcStructure
     TransformMarcToKoha
 );
-use C4::Reserves;
+use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Members;
 use C4::Koha qw( GetNormalizedISBN );
 use List::MoreUtils qw( uniq );
@@ -136,15 +136,14 @@ $template->param(
 ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 
-my $allow_onshelf_holds;
+my $can_item_be_reserved = 0;
 $items->reset;
 
 while ( my $item = $items->next ) {
-    $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
-      unless $allow_onshelf_holds;
+    $can_item_be_reserved = $can_item_be_reserved || IsAvailableForItemLevelRequest($item, $patron, undef);
 }
 
-if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
+if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
 
