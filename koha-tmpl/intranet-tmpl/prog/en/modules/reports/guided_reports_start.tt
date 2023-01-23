@@ -7,6 +7,7 @@
 [% USE JSON.Escape %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% USE To %]
 
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
@@ -1259,7 +1260,9 @@
                             <legend>SQL:</legend>
                             <div style="margin:1em;">
                                 [% PROCESS insert_runtime_parameter  %]
-                                <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea>
+                                <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10" >[% sql | html %]</textarea>
+                                <span style='color:#383838; font-style:italic'>* In order to achieve auto-complete for columns, please prepend the column name with the table name, followed by a period. For example: 'borrowers.surname'</span>
+                                <br/>
                                 <span class="required">Required</span>
                             </div>
                         </fieldset>
@@ -1269,6 +1272,7 @@
                             <input type="submit" name="submit" class="btn btn-primary" value="Save report" />
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
+
                     </form>
                 [% END #/IF ( create ) %]
 
@@ -1371,6 +1375,8 @@
                             <legend>SQL:</legend>
                                 [% PROCESS insert_runtime_parameter  %]
                                 <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea>
+                                <span style='color:#383838; font-style:italic'>* In order to achieve auto-complete for columns, please prepend the column name with the table name, followed by a period. For example: 'borrowers.surname'</span>
+                                <br/>
                                 <span class="required" style="margin-left:30px;">Required</span>
                         </fieldset>
 
@@ -1494,8 +1500,14 @@
     [% END %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/overlay.min.js" ) | $raw %]
-    [% Asset.js( "lib/codemirror/sql.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/sql.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/show-hint.js" ) | $raw %]
+    [% Asset.css("lib/codemirror/show-hint.css") | $raw %]
+    [% Asset.js( "lib/codemirror/sql-hint.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/highlight.js" ) | $raw %]
+    [% Asset.css("lib/codemirror/highlight.css") | $raw %]
     [% Asset.js( "js/mana.js" ) | $raw %]
+
     <script>
 
         function hide_bar_element() {
@@ -1526,38 +1538,6 @@
             }
         }
 
-        /* overlay a syntax-highlighting definition on top of the existing sql one */
-        CodeMirror.defineMode("sqlPlaceholders", function(config, parserConfig) {
-            var sqlPlaceholdersOverlay = {
-                token: function(stream, state) {
-                    var ch;
-
-                    if (stream.match("<<")) {
-                        while ((ch = stream.next()) != null) {
-                            if (ch == ">" && stream.next() == ">") {
-                                stream.eat(">");
-                                return "sqlParams";
-                            }
-                        }
-                    }
-
-                    if (stream.match("[[")) {
-                        while ((ch = stream.next()) != null) {
-                            if (ch == "]" && stream.next() == "]") {
-                                stream.eat("]");
-                                return "columnPlaceholder";
-                            }
-                        }
-                    }
-
-                    else if (stream.next() != null) {
-                        return null;
-                    }
-                }
-            };
-            return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "text/x-sql"), sqlPlaceholdersOverlay);
-        });
-
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
         var group_subgroups = {};
         [% FOREACH group IN groups_with_subgroups %]
@@ -1574,12 +1554,78 @@
 
             var editor = CodeMirror.fromTextArea(sql, {
                 lineNumbers: true,
-                mode: "sqlPlaceholders", /* text/x-sql plus custom sqlPlaceholders configuration */
+                mode: "text/x-sql",
                 lineWrapping: true,
-                smartIndent: false
+                smartIndent: false,
+                keyword: { // Custom highlighting for items bounded in [[ ]] or << >>.
+                    "\\[\\[(.*?)\\]\\]":"style1",
+                    "<<(.*?)>>":"style1"
+                },
+                extraKeys: {"Tab": "autocomplete"}, //enable tab to accept auto-complete
+                hint: CodeMirror.hint.sql,
             });
+            var ExcludedTriggerKeys = { //key-code combinations of keys that will not fire the auto-complete script
+                "8": "backspace",
+                "9": "tab",
+                "13": "enter",
+                "16": "shift",
+                "17": "ctrl",
+                "18": "alt",
+                "19": "pause",
+                "20": "capslock",
+                "27": "escape",
+                "33": "pageup",
+                "32": "spacebar",
+                "34": "pagedown",
+                "35": "end",
+                "36": "home",
+                "37": "left",
+                "38": "up",
+                "39": "right",
+                "40": "down",
+                "45": "insert",
+                "46": "delete",
+                "56": "asterisk",
+                "59": "semicolon",
+                "91": "left window key",
+                "92": "right window key",
+                "93": "select",
+                "106": "asterisk",
+                "107": "add",
+                "109": "subtract",
+                "110": "decimal point",
+                "111": "divide",
+                "112": "f1",
+                "113": "f2",
+                "114": "f3",
+                "115": "f4",
+                "116": "f5",
+                "117": "f6",
+                "118": "f7",
+                "119": "f8",
+                "120": "f9",
+                "121": "f10",
+                "122": "f11",
+                "123": "f12",
+                "144": "numlock",
+                "145": "scrolllock",
+                "186": "semicolon",
+                "187": "equalsign",
+                "188": "comma",
+                "189": "dash",
+                "191": "slash",
+                "192": "graveaccent",
+                "220": "backslash",
+                "222": "quote"
+            }
+            //Trigger auto-complete on all keys not in dictionary of exclusions above.
+            editor.on("keyup", function(cm, e) {
+                if (ExcludedTriggerKeys[e.keyCode] == undefined) {
+                         CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
+                }
+            })
 
-            // https://stackoverflow.com/questions/2086287/how-to-clear-jquery-validation-error-messages#answer-16025232
+           // https://stackoverflow.com/questions/2086287/how-to-clear-jquery-validation-error-messages#answer-16025232
             function clearValidation( formElement ){
                 // formElement should be a jQuery object
                 var validator = formElement.validate();
@@ -1594,11 +1640,16 @@
         [% END %]
 
         [% IF ( showsql ) %]
+
             var editor = CodeMirror.fromTextArea(sql, {
                 lineNumbers: false,
-                mode: "sqlPlaceholders", /* text/x-sql plus custom sqlPlaceholders configuration */
+                mode: "text/x-sql",
                 lineWrapping: true,
-                readOnly: true
+                readOnly: true,
+                keyword: { // Custom highlighting for items bounded in [[ ]] or << >>.
+                    "\\[\\[(.*?)\\]\\]":"style2",
+                    "<<(.*?)>>":"style1"
+               },
             });
         [% END %]
 
