@@ -260,6 +260,7 @@ sub draw_text {
 #        my $string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
         my $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});
         if (($string_width + $text_attribs->{'llx'}) > $self->{'width'}) {
+            my $cur_line = "";
             WRAP_LINES:
             while (1) {
 #                $line =~ m/^.*(\s\b.*\b\s*|\s&|\<\b.*\b\>)$/; # original regexp... can be removed after dev stage is over
@@ -287,6 +288,12 @@ sub draw_text {
                         push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
                         last WRAP_LINES;
                     }
+                } else {
+                    # We only split lines on spaces - it seems if we push a line too far, it can end
+                    # never getting short enough in which case we need to escape and the malformed PDF
+                    # will indicate the layout problem
+                    last WRAP_LINES if $cur_line eq $line;
+                    $cur_line = $line;
                 }
             }
         }
