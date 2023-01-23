@@ -52,7 +52,7 @@ use C4::Biblio qw(
     GetMarcISSN
     TransformMarcToKoha
 );
-use C4::Reserves;
+use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Koha qw(
     GetNormalizedEAN
@@ -168,7 +168,7 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
-my $allow_onshelf_holds;
+my $can_item_be_reserved = 0;
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'opac',
@@ -178,11 +178,10 @@ my $res = GetISBDView({
 my $items = $biblio->items;
 while ( my $item = $items->next ) {
 
-    $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
-      unless $allow_onshelf_holds;
+    $can_item_be_reserved = $can_item_be_reserved || IsAvailableForItemLevelRequest($item, $patron, undef);
 }
 
-if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
+if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
 
