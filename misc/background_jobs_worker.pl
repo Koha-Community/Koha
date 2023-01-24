@@ -119,8 +119,17 @@ while (1) {
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
         while ( my $job = $jobs->next ) {
-            my $args = $job->json->decode($job->data);
+            my $args = try {
+                $job->json->decode($job->data);
+            } catch {
+                Koha::Logger->get->warn(sprintf "Cannot decode data for job id=%s", $job->id);
+                $job->status('failed')->store;
+            };
+
+            next unless $args;
+
             process_job( $job, { job_id => $job->id, %$args } );
+
         }
         sleep 10;
     }
