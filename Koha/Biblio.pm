@@ -1264,6 +1264,22 @@ sub normalized_isbn {
     return C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'biblionumber',   'frameworkcode',   'author',
+        'title',          'medium',          'subtitle',
+        'part_number',    'part_name',       'unititle',
+        'notes',          'serial',          'seriestitle',
+        'copyrightdate',  'abstract'
+    ];
+}
+
 =head3 to_api
 
     my $json = $biblio->to_api;
@@ -1278,7 +1294,7 @@ sub to_api {
     my ($self, $args) = @_;
 
     my $response = $self->SUPER::to_api( $args );
-    my $biblioitem = $self->biblioitem->to_api;
+    my $biblioitem = $self->biblioitem->to_api( $args );
 
     return { %$response, %$biblioitem };
 }

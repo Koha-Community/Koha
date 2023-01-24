@@ -30,6 +30,26 @@ Koha::Biblioitem - Koha Biblioitem Object class
 
 =head2 Class methods
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'volume',           'number',                'isbn',
+        'issn',             'ean',                   'publicationyear',
+        'publishercode',    'volumedate',            'columedesc',
+        'collectiontitle',  'collectionissn',        'collectionvolume',
+        'editionstatement', 'editionresponsibility', 'pages',
+        'place',            'lccn',                  'url',
+        'cn_source',        'cn_class',              'cn)item',
+        'cn_suffix',        'cn_sort',               'agerestriction',
+        'totalissues'
+    ];
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Biblioitem object
@@ -57,7 +77,6 @@ sub to_api_mapping {
         totalissues      => 'serial_total_issues',
         volumedate       => 'volume_date',
         volumedesc       => 'volume_description',
-
     };
 }
 
