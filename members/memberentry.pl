@@ -20,6 +20,7 @@
 
 # pragma
 use Modern::Perl;
+use Try::Tiny;
 
 # external modules
 use CGI qw ( -utf8 );
@@ -273,31 +274,7 @@ $newdata{'country'} = $input->param('country') if defined($input->param('country
 
 $newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'));
 
-# builds default userid
-# userid input text may be empty or missing because of syspref BorrowerUnwantedField
-if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ && !defined $data{'userid'} ) {
-    my $fake_patron = Koha::Patron->new;
-    $fake_patron->userid($patron->userid) if $patron; # editing
-    if ( ( defined $newdata{'firstname'} || $category->category_type eq 'I' ) && ( defined $newdata{'surname'} ) ) {
-        # Full page edit, firstname and surname input zones are present
-        $fake_patron->firstname($newdata{firstname});
-        $fake_patron->surname($newdata{surname});
-        $fake_patron->generate_userid;
-        $newdata{'userid'} = $fake_patron->userid;
-    }
-    elsif ( ( defined $data{'firstname'} || $category->category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
-        # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
-        # Still, if the userid field is erased, we can create a new userid with available firstname and surname
-        # FIXME clean thiscode newdata vs data is very confusing
-        $fake_patron->firstname($data{firstname});
-        $fake_patron->surname($data{surname});
-        $fake_patron->generate_userid;
-        $newdata{'userid'} = $fake_patron->userid;
-    }
-    else {
-        $newdata{'userid'} = $data{'userid'};
-    }
-}
+# Bug 32426 removed the fake_patron code here that filled $newdata{userid}. We should leave it now to patron->store.
 
 my $extended_patron_attributes;
 if ($op eq 'save' || $op eq 'insert'){
@@ -350,15 +327,8 @@ if ($op eq 'save' || $op eq 'insert'){
       }
     }
   }
-  # Check if the 'userid' is unique. 'userid' might not always be present in
-  # the edited values list when editing certain sub-forms. Get it straight
-  # from the DB if absent.
-  my $userid = $newdata{ userid } // $borrower_data->{ userid };
-  my $p = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : Koha::Patron->new();
-  $p->userid( $userid );
-  unless ( $p->has_valid_userid ) {
-    push @errors, "ERROR_login_exist";
-  }
+
+  # Bug 32426 removed the userid unique-check here. Postpone it to patron->store.
 
   my $password = $input->param('password');
   my $password2 = $input->param('password2');
@@ -428,15 +398,25 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
         delete $newdata{password2};
-        $patron = eval { Koha::Patron->new(\%newdata)->store };
-        if ( $@ ) {
-            # FIXME Urgent error handling here, we cannot fail without relevant feedback
-            # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
-            warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
-            push @messages, {error => 'error_on_insert_patron'};
+        $success = 1;
+        $patron = try {
+            Koha::Patron->new(\%newdata)->store;
+        } catch {
+            $success = 0;
+            $nok = 1;
+            if( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
+                push @errors, "ERROR_login_exist";
+            } else {
+                # FIXME Urgent error handling here, we cannot fail without relevant feedback
+                # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
+                warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
+                push @messages, {error => 'error_on_insert_patron'};
+            }
             $op = "add";
-        } else {
-            $success = 1;
+            return;
+        };
+
+        if ( $success ) {
             add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
             $newdata{'borrowernumber'} = $borrowernumber;
@@ -444,7 +424,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
-        if ( C4::Context->preference("AutoEmailNewUser") ) {
+        if ( $patron && C4::Context->preference("AutoEmailNewUser") ) {
             #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
             my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice 
@@ -513,19 +493,24 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 
         delete $newdata{password2};
 
-        eval {
-            $patron->set(\%newdata)->store if scalar(keys %newdata) > 1; # bug 4508 - avoid crash if we're not
-                                                                    # updating any columns in the borrowers table,
-                                                                    # which can happen if we're only editing the
-                                                                    # patron attributes or messaging preferences sections
-        };
-        if ( $@ ) {
-            warn "Patron modification failed! - $@"; # Maybe we must die instead of just warn
-            push @messages, {error => 'error_on_update_patron'};
-            $op = "modify";
-        } else {
-
+        try {
+            $patron->set(\%newdata)->store if scalar(keys %newdata) > 1;
+                # bug 4508 - avoid crash if we're not updating any columns in the borrowers table (editing patron attrs or msg prefs)
             $success = 1;
+        } catch {
+            $success = 0;
+            $nok = 1;
+            if( ref($_) eq 'Koha::Exceptions::Patron::InvalidUserid' ) {
+                push @errors, "ERROR_login_exist";
+            } else {
+                warn "Patron modification failed! - $@"; # Maybe we must die instead of just warn
+                push @messages, {error => 'error_on_update_patron'};
+            }
+            $op = "modify";
+        };
+
+        if ( $success ) {
+
             # Update or create our HouseboundRole if necessary.
             my $housebound_role = Koha::Patron::HouseboundRoles->find($borrowernumber);
             my ( $hsbnd_chooser, $hsbnd_deliverer ) = ( 0, 0 );
