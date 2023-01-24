@@ -294,7 +294,8 @@ sub build_query_compat {
         while ( my ( $oand, $otor, $index ) = $ea->() ) {
             next if ( !defined($oand) || $oand eq '' );
             $oand = $self->clean_search_term($oand);
-            $oand = $self->_truncate_terms($oand) if ($truncate);
+            $oand = $self->_truncate_terms($oand)
+                if $truncate && $self->_is_safe_to_auto_truncate( $index->{field}, $oand );
             push @search_params, {
                 operand => $oand,      # the search terms
                 operator => defined($otor) ? uc $otor : undef,    # AND and so on
@@ -1336,6 +1337,74 @@ sub _search_fields {
         # Exclude weight from field
         return [map { $_->[0] } @{$search_fields}];
     }
+}
+
+
+=pod
+
+=head2 _is_safe_to_auto_truncate
+
+_is_safe_to_auto_truncate($index_field, $oand);
+
+Checks if it is safe to auto truncate a search term within a given search field.
+
+The search term should not be auto truncated when searching for identifiers, e.g.
+koha-auth-number, record-control-number, local-number etc.  Also, non-text fields
+must not be auto truncated (doing so would generate ES exception).
+
+=cut
+
+sub _is_safe_to_auto_truncate {
+    my ( $self, $index_field, $oand ) = @_;
+
+    # Do not auto truncate fields that should not be auto truncated,
+    # primarily various types of identifiers, above all record identifiers.
+    # Other search fields that should not be auto truncated can be defined
+    # with ESPreventAutoTruncate syspref.
+    my %do_not_autotruncate_fields;
+    my $cache                          = Koha::Caches->get_instance();
+    my $cache_key                      = 'elasticsearch_search_do_not_autotruncate';
+    my $do_not_autotruncate_fields_ref = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+    %do_not_autotruncate_fields = %$do_not_autotruncate_fields_ref if $do_not_autotruncate_fields_ref;
+    if ( !scalar( keys %do_not_autotruncate_fields ) ) {
+        %do_not_autotruncate_fields =
+            map { $_ => 1 } qw / biblioitemnumber host-item-number itemnumber koha-auth-number local-number /;
+
+        # In addition, under no circumstances should non-text fields
+        # be auto truncated.
+        my $schema = Koha::Database->new()->schema();
+        my $sfs =
+            $schema->resultset('SearchField')
+            ->search(
+            { '-or' => [ { type => 'boolean' }, { type => 'number' }, { type => 'sum' }, { type => 'year' } ] } );
+        while ( my $sf = $sfs->next ) {
+            $do_not_autotruncate_fields{ $sf->name } = 1;
+        }
+        $cache->set_in_cache( $cache_key, \%do_not_autotruncate_fields );
+    }
+
+    # processing of the syspref is done outside cache since the systempreference
+    # can be modified and the modification should be reflected in the
+    # $do_not_autotruncate_fields array
+    my $prevent_autotruncate = C4::Context->preference('ESPreventAutoTruncate');
+    for my $field ( split( /\s*[,;|]\s*/, $prevent_autotruncate ) ) {
+        $do_not_autotruncate_fields{$field} = 1;
+    }
+
+    # search fields can be given as a explicit index name (e.g. from advanced
+    # search):
+    if ($index_field) {
+        return 0 if grep { $index_field eq $_ } keys %do_not_autotruncate_fields;
+
+        # OR can be given implicitly, as prefix in the operand (e.g. in links generated
+        # by Koha like catalogue/search.pl?q=an:<authid>):
+    } elsif ( $oand =~ /\b($field_name_pattern):/ ) {    # check field name prefixing operand
+        my $field_name = $1;
+        return 0 if grep { $field_name eq $_ } keys %do_not_autotruncate_fields;
+    }
+
+    # It is safe to auto truncate:
+    return 1;
 }
 
 1;
