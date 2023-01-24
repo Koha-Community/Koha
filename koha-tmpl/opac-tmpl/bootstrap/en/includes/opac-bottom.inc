@@ -289,6 +289,7 @@ $(document).ready(function() {
 });
 </script>
 [% INCLUDE 'js-date-format.inc' %]
+[% INCLUDE 'js-biblio-format.inc' %]
 [% PROCESS jsinclude %]
 [% IF ( Koha.Preference('OPACUserJS') ) %]
     <script>

@@ -55,8 +55,18 @@ $(document).ready(function() {
         // Display checkouts table if not already visible
         $('#checkoutsTable').show();
         // Add checkout to checkouts table
-        $('#checkoutsTable > tbody').append('<tr><td>' + current_item.external_id +'</td><td>'+ $date(checkout.due_date) +'</td></tr>');
-        $('#checkoutsCount').html(++checkouts_count);
+        $("#checkoutsTable > tbody").append(
+            "<tr><td>" +
+                current_item.external_id +
+                "</td><td>" +
+                $biblio_to_html(current_item.biblio, { link: 0 }) +
+                "</td><td>" +
+                current_item.callnumber +
+                "</td><td>" +
+                $date(checkout.due_date) +
+                "</td></tr>"
+        );
+        $("#checkoutsCount").html(++checkouts_count);
         // Reset to submission
         $('#checkoutConfirm').replaceWith('<button type="submit" id="checkoutSubmit" class="btn btn-primary">Submit</button>');
     };
@@ -108,9 +118,12 @@ $(document).ready(function() {
 
         let item_id;
         let items = $.ajax({
-            url: '/api/v1/public/items?external_id=' + external_id,
-            dataType: 'json',
-            type: 'GET'
+            url: "/api/v1/public/items?external_id=" + external_id,
+            headers: {
+                "x-koha-embed": "biblio",
+            },
+            dataType: "json",
+            type: "GET",
         });
 
         $('#availabilityResult').replaceWith('<div id="availabilityResult"></div>');

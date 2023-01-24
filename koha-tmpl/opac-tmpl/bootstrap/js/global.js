@@ -27,6 +27,20 @@ function formatstr(str, col) {
     });
 };
 
+var HtmlCharsToEscape = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+};
+String.prototype.escapeHtml = function() {
+    return this.replace(/[&<>]/g, function(c) {
+        return HtmlCharsToEscape[c] || c;
+    });
+};
+function escape_str(s){
+    return s != null ? s.escapeHtml() : "";
+}
+
 function confirmDelete(message) {
     return (confirm(message) ? true : false);
 }

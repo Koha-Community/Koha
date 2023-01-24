@@ -19,6 +19,8 @@
                     <thead>
                       <tr>
                           <th>Barcode</th>
+                          <th>Title</th>
+                          <th>Call number</th>
                           <th>Due date</th>
                       </tr>
                     </thead>
@@ -26,7 +28,7 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="2" class="text-right"><span id="checkoutsCount"></span> items checked out</td>
+                        <td colspan="4" class="text-right"><span id="checkoutsCount"></span> items checked out</td>
                       </tr>
                     </tfoot>
                 </table>
