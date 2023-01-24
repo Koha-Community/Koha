@@ -99,6 +99,7 @@ while (1) {
             decode_json($body); # TODO Should this be from_json? Check utf8 flag.
         } catch {
             Koha::Logger->get->warn(sprintf "Frame not processed - %s", $_);
+            return;
         } finally {
             $conn->ack( { frame => $frame } );
         };
@@ -124,6 +125,7 @@ while (1) {
             } catch {
                 Koha::Logger->get->warn(sprintf "Cannot decode data for job id=%s", $job->id);
                 $job->status('failed')->store;
+                return;
             };
 
             next unless $args;
