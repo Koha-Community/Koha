@@ -115,8 +115,8 @@
                                                 </form>
                                             </div>
                                         [% END %]
-                                    </div>
-                                [% END %]
+                                    </div> <!-- /#toolbar -->
+                                [% END # / UNLESS ( delete_confirmed ) %]
 
                                 <!-- Modal for confirm deletion box-->
                                 <div class="modal" id="deleteBasketModal" tabindex="-1" role="dialog" aria-labelledby="delbasketModalLabel" aria-hidden="true">
@@ -165,13 +165,13 @@
                                                         <input type="hidden" name="delbiblio" value="1" />
                                                         <button type="submit" class="btn btn-default btn-default">Delete basket, orders, and records</button>
                                                     </form>
-                                                </div>
-                                            [% END %]
-                                        </div>
-                                    </div>
-                                </div>
+                                                </div> <!-- /.modal-footer -->
+                                            [% END # /UNLESS book_foot_loop %]
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /.modal#deleteBasketModal -->
                                 <!-- End of Modal-->
-                            [% ELSE %]
+                            [% ELSE # UNLESS ( closedate ) %]
                                 <div id="toolbar" class="btn-toolbar">
                                     [% IF grouped %]
                                         <div title="Can not reopen baskets that are part of a basket group." class="btn-group">
@@ -183,8 +183,8 @@
                                         [% PROCESS csv_export %]
                                     [% END %]
                                 </div>
-                            [% END %]
-                        [% END %]
+                            [% END # /UNLESS ( closedate ) %]
+                        [% END # /UNLESS ( selectbasketg ) %]
 
                         [% IF ( NO_BOOKSELLER ) %]
                             <h1>Vendor not found</h1>
@@ -214,8 +214,8 @@
                                     <a href="booksellers.pl">Go back to vendor page</a>
                                 [% ELSE %]
                                     <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
-                                [% END %]
-                            [% ELSE %]
+                                [% END # /IF (cannotdelbiblios) %]
+                            [% ELSE # IF ( delete_confirmed ) %]
 
                                 [% FOR m IN messages %]
                                     <div class="dialog [% m.type | html %]">
@@ -232,7 +232,7 @@
                                             <span>ERROR! - [% m.code | html %]</span>
                                         [% END %]
                                     </div>
-                                [% END %]
+                                [% END # /FOR m %]
 
                                 <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
 
@@ -283,7 +283,7 @@
                                                             <input type="hidden" id="op" name="op" value="mod_users" />
                                                         </form>
 
-                                                    </li>
+                                                    </li> <!-- /#managedby -->
                                                     <li id="branch">
                                                         <span class="label">Managing library:</span>
                                                         [% IF basketbranchcode %]
@@ -293,7 +293,7 @@
                                                             No library
                                                             <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Set library</a>
                                                         [% END %]
-                                                    </li>
+                                                    </li> <!-- /#branch -->
                                                     [% IF branches_loop.size %]
                                                         <li id="managing_library_entry" style="display:none;">
                                                             <span class="label">&nbsp;</span>
@@ -314,8 +314,8 @@
                                                                     <input type="hidden" id="op" name="op" value="mod_branch" />
                                                                 </form>
                                                             </div>
-                                                        </li>
-                                                    [% END %]
+                                                        </li> <!-- #/managing_library_entry -->
+                                                    [% END # /IF branches_loop.size %]
 
                                                     [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
 
@@ -436,7 +436,7 @@
                                             </div> <!-- /.rows -->
                                         </div> <!-- /.col-sm-6 -->
                                     </div> <!-- /#acqui_basket_summary.row -->
-                                [% END %]
+                                [% END # /IF ( basketno ) %]
 
                                 [% IF ( duplinbatch ) %]
                                     <div class="dialog alert">
@@ -688,8 +688,8 @@
                                                     </tr>
                                                 [% END %]
                                             </tbody>
-                                        </table>
-                                    [% END %]
+                                        </table> <!-- /#orders -->
+                                    [% END # / IF ( books_loop ) %]
                                     [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>[% END %]
                                 </div> <!-- /#acqui_basket_content -->
 
@@ -774,11 +774,11 @@
                                                         <td class="number">[% order.tax_value | $Price %]</td>
                                                         <td>[% order.budget_name | html %]
                                                     </tr>
-                                                [% END %]
+                                                [% END # /FOREACH order %]
                                             </tbody>
-                                        </table>
+                                        </table> <!-- /#cancelledorderst -->
                                     </div> <!-- /#cancelledorders -->
-                                [% END %]
+                                [% END # /IF (cancelledorders_loop) %]
                                 <br />
 
                                 [% UNLESS ( closedate ) %]
@@ -800,14 +800,14 @@
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
-                                [% END %]
+                                    </div><!-- /.modal#addtoBasket -->
+                                [% END # /UNLESS ( closedate ) %]
 
-                            [% END %]
-                        [% END %]
+                            [% END # /IF ( delete_confirmed ) %]
+                        [% END # /IF ( NO_BOOKSELLER ) %]
                     [% ELSE %]
                         <!-- if we want just to select a basketgroup for a closed basket -->
-                    [% END %]
+                    [% END #/IF !confirm_close && !edi_confirm  %]
 
                     [% IF ( confirm_close ) %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
@@ -816,8 +816,8 @@
                                 <h1>Are you sure you want to close basket [% basketname | html %]?</h1>
                                 [% IF ( CAN_user_acquisition_group_manage ) %]
                                     <p>
-                                    <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
-                                    <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
+                                        <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
+                                        <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
                                     </p>
                                 [% END %]
                                 <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
@@ -832,7 +832,7 @@
                                 <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
                             </form>
                         </div>
-                    [% END %]
+                    [% END # /IF ( confirm_close ) %]
 
                     [% IF edi_confirm %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
@@ -856,9 +856,9 @@
                                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                 <button type="submit" class="deny" accesskey="N"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
                             </form>
-                        </div>
-                    [% END %]
-                [% END %][%# IF (cannot_manage_basket) %]
+                        </div> <!-- /#closebasket_needsconfirmation -->
+                    [% END # /IF edi_confirm %]
+                [% END # /IF (cannot_manage_basket) %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -890,10 +890,10 @@
                         <button type="submit" class="btn btn-default">Save</button>
                         <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
+                </div> <!-- /.modal-content -->
+            </form> <!-- /#modify_order_notes -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal#noteEditor -->
 
     <!-- Modal for editing estimated delivery date -->
     <div class="modal" id="dateEditor" tabindex="-1" role="dialog" aria-labelledby="dateEditorLabel">
@@ -914,10 +914,10 @@
                         <button type="submit" class="btn btn-default">Save</button>
                         <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
+                </div> <!-- /.modal-content -->
+            </form> <!-- /#modify_estimated_delivery_date -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal#dateEditor -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
@@ -1064,8 +1064,8 @@
                     }
                 }
             </script>
-        [% END %]
-    [% END %]
+        [% END # /UNLESS grouped %]
+    [% END # /UNLESS (closedate) %]
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
