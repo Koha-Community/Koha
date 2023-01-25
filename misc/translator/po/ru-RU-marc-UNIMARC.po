@@ -4,27 +4,28 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 20:05-0300\n"
-"PO-Revision-Date: 2022-11-02 02:53+0000\n"
-"Last-Translator: Alexandra <Alexandra.goznaya@letovo.ru>\n"
+"PO-Revision-Date: 2023-01-24 02:10+0000\n"
+"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.11/ru-RU-marc-UNIMARC.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1667357636.158439\n"
+"X-POOTLE-MTIME: 1674526210.140661\n"
 
+# Используется, если позиция символа 0 содержит значение 3, для указания частей копии, на которые распространяется эмбарго.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:116
 #, c-format
 msgid "# - no attempt to code"
-msgstr ""
+msgstr "# - позиция не используется"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:122
@@ -42,15 +43,15 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:231
 #, c-format
 msgid "# - position not used"
-msgstr ""
+msgstr "# - позиция не используется"
 
-# уровень не определен
-# Используется, когда каталогизируемый документ издан от имени какого-либо органа управления, но уровень этого органа не может быть определен из имеющейся информации.
+# $h	Код полноты копии
+# Подполе кодированных данных относится к копии многочастного, в частности, продолжающегося ресурса. Односимвольный код, указывающий степень завершенности создания копии.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "# - undetermined"
-msgstr "h — уровень не определён"
+msgstr "# - не определено"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:505
@@ -343,6 +344,8 @@ msgid ""
 "/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&amp;"
 "type=intranet&amp;value=identifier-standard%%3A"
 msgstr ""
+"/cgi-bin/koha/authorities/authorities-"
+"home.pl?op=do_search&amp;type=intranet&amp;value=identifier-standard%%3A"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:35
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:80
@@ -392,9 +395,9 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:70
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:128
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=pb:"
-msgstr "/cgi-bin/koha/catalogue/search.pl?q=an:"
+msgstr "/cgi-bin/koha/catalogue/search.pl?q=pb:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:397
 #, c-format
@@ -435,9 +438,9 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:231
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:289
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=pb:"
-msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+msgstr "/cgi-bin/koha/opac-search.pl?q=pb:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:439
 #, c-format
@@ -464,9 +467,9 @@ msgstr "0 — указатель отсутствует"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "0 - none"
-msgstr "0 — указатель отсутствует"
+msgstr "0 - не применимо"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:988
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:990
@@ -474,17 +477,13 @@ msgstr "0 — указатель отсутствует"
 msgid "0 - not a festschrift"
 msgstr "0 — не является юбилейным изданием"
 
-# репродуцированный документ
-# Каталогизируемый документ является репринтом, перепечаткой, факсимильной копией, и т.д., но не новым изданием. Для новых изданий используются коды: 'd', 'f', 'g', или 'h', в соответствии с правилами их применения.
-# Если это продолжающийся ресурс, то указывается начальный год переиздания и начальный год издания.
-# Дата публикации 1 содержит год издания репродукции.
-# Дата публикации 2 содержит год издания оригинала.
-# Если одна из дат точно не известна, вместо любой неизвестной цифры указывается символ пробела: '#'.
+# $h	Код полноты копии
+# Подполе кодированных данных относится к копии многочастного, в частности, продолжающегося ресурса. Односимвольный код, указывающий степень завершенности создания копии.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "0 - reproduction is not complete"
-msgstr "e — репродуцированный документ"
+msgstr "0 - репродукция не завершена"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:962
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:964
@@ -636,7 +635,7 @@ msgstr "1 — является юбилейным изданием"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:20
 #, c-format
 msgid "1 - free-to-read"
-msgstr ""
+msgstr "1 - свободный доступ для чтения"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1018
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1020
@@ -644,17 +643,13 @@ msgstr ""
 msgid "1 - index present"
 msgstr "1 — указатель имеется"
 
-# репродуцированный документ
-# Каталогизируемый документ является репринтом, перепечаткой, факсимильной копией, и т.д., но не новым изданием. Для новых изданий используются коды: 'd', 'f', 'g', или 'h', в соответствии с правилами их применения.
-# Если это продолжающийся ресурс, то указывается начальный год переиздания и начальный год издания.
-# Дата публикации 1 содержит год издания репродукции.
-# Дата публикации 2 содержит год издания оригинала.
-# Если одна из дат точно не известна, вместо любой неизвестной цифры указывается символ пробела: '#'.
+# $h	Код полноты копии
+# Подполе кодированных данных относится к копии многочастного, в частности, продолжающегося ресурса. Односимвольный код, указывающий степень завершенности создания копии.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "1 - reproduction is complete"
-msgstr "e — репродуцированный документ"
+msgstr "1 - репродукция завершена"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:344
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:346
@@ -662,13 +657,13 @@ msgstr "e — репродуцированный документ"
 msgid "1 - right to left"
 msgstr "1 — cправа налево"
 
-# образцы
-# Шаблоны и т. п.
+# $a / Позиция символа 1.  Степень применимости.
+# Односимвольный код, указывающий на степень применимости указанной категории вида содержания для каталогизируемого ресурса.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "1 - some"
-msgstr "l — образцы, модели"
+msgstr "1 - частично"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:126
@@ -876,17 +871,18 @@ msgid ""
 "record"
 msgstr "2 — Подуровень 2 (например, допубликационная запись)"
 
+# Значение используется, если свободный доступ определен для существенной части копии. Не используется, если свободный доступ определен только для второстепенных частей (например, оглавления, аннотации, презентации).
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:26
 #, c-format
 msgid "2 - free-to-read, partly"
-msgstr ""
+msgstr "2 - свободный доступ для чтения, частично"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "2 - substantial"
-msgstr "3 - Частичная"
+msgstr "2 - существенно"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:157
@@ -947,15 +943,13 @@ msgstr "3 — Подуровень 3 (Не полностью каталоги�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:32
 #, c-format
 msgid "3 - free-to-read, after embargo"
-msgstr ""
+msgstr "3 - свободный доступ для чтения, после эмбарго"
 
-# гравюра
-# Рисунок или изображение, перенесенные с гравированной доски, деревянной доски, литографского камня или другого носителя. Обычно различаются четыре типа: гравюра плоской печати, гравюра высокой печати, гравюра глубокой печати и трафаретная печать.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "3 - predominate"
-msgstr "i — гравюра"
+msgstr "3 - преобладает"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:136
@@ -1033,13 +1027,13 @@ msgstr "3D (объемный)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:116
 #, c-format
 msgid "4 - full"
-msgstr ""
+msgstr "4 - полностью"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:38
 #, c-format
 msgid "4 - fully"
-msgstr ""
+msgstr "4 - платный доступ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:133
@@ -1080,7 +1074,7 @@ msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:44
 #, c-format
 msgid "5 - free-to-read upon subscription (requires signing up)"
-msgstr ""
+msgstr "5 - свободный доступ для чтения по подписке (требуется регистрация)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:16
@@ -1260,13 +1254,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:18
 #, c-format
 msgid "A number between 0 and 99 (inclusive)"
-msgstr ""
+msgstr "Число от 0 до 99 (включительно)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:18
 #, c-format
 msgid "A number between 0 and 999 (inclusive) "
-msgstr ""
+msgstr "Число от 0 до 999 (включительно) "
 
 # Метеорологические
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:22
@@ -1454,15 +1448,13 @@ msgstr "Аудитория: "
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:15
-#, fuzzy
 msgid "Audio Carriers"
-msgstr "Аудио файл"
+msgstr "Аудионосители"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:16
-#, fuzzy
 msgid "Audio carriers"
-msgstr "Аудио файл"
+msgstr "Аудионосители"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:510
 #, c-format
@@ -1817,26 +1809,26 @@ msgstr "Кассини"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Category"
-msgstr "аллегория"
+msgstr "Категория"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:23
 #, c-format
 msgid "Category of ensemble"
-msgstr ""
+msgstr "Тип ансамбля"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:22
 #, c-format
 msgid "Category of instrument"
-msgstr ""
+msgstr "Тип инструмента"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:22
 #, c-format
 msgid "Category of instrument or voice"
-msgstr ""
+msgstr "Тип инструмента или голоса"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124e.tt:13
 #, c-format
@@ -2023,9 +2015,9 @@ msgid "Completeness"
 msgstr "Полнота"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "Completeness of the reproduction code :"
-msgstr "Форма воспроизведения"
+msgstr "Код полноты копии :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:245
@@ -2037,15 +2029,13 @@ msgstr "Компьютер"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:77
-#, fuzzy
 msgid "Computer Carriers"
-msgstr "компьютерная графика"
+msgstr "Тип носителя"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:78
-#, fuzzy
 msgid "Computer carriers"
-msgstr "компьютерная графика"
+msgstr "Тип носителя"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:952
 #, c-format
@@ -2063,14 +2053,14 @@ msgid "Content"
 msgstr "Содержание"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Content Form "
-msgstr "Содержание: "
+msgstr "Вид содержания "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Content Type "
-msgstr "Содержание: "
+msgstr "Код вида содержания "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:91
 #, c-format
@@ -2286,9 +2276,9 @@ msgstr "Направление графики каталогизации"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:259
-#, fuzzy, c-format
+#, c-format
 msgid "Distribution: "
-msgstr "Описание: "
+msgstr "Распределение: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:993
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:995
@@ -2449,9 +2439,9 @@ msgid "Explorer II"
 msgstr "Explorer II"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Extent of applicability "
-msgstr "x — не применяется"
+msgstr "Степень применимости "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:730
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:732
@@ -2579,85 +2569,92 @@ msgstr "Форма воспроизведения"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:2
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:5
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr "Пример модуля структуры &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146a.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$a"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$a"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$b"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$b"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$c"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$c"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$d"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$d"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$e"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$e"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$f"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$f"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$h"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$h"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:8
 #, c-format
 msgid "Framework plugin for UNIMARC 146$i"
-msgstr ""
+msgstr "Framework plugin for UNIMARC 146$i"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146a.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146a &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146a &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146b &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146b &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146c &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146c &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146d &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146c &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:2
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146e &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146c &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146h &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146c &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Framework plugin unimarc_field_146i &rsaquo; Cataloguing &rsaquo; Koha"
-msgstr "4XX plugin &rsaquo; Каталогизация &rsaquo; Koha"
+msgstr ""
+"Framework plugin unimarc_field_146c &rsaquo; Каталогизация &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:93
 #, c-format
@@ -2688,7 +2685,7 @@ msgstr "Функциональное назначение"
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:23
 #, c-format
 msgid "GT : "
-msgstr ""
+msgstr "GT : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:433
@@ -3269,7 +3266,7 @@ msgstr "Мандолины"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:260
 #, c-format
 msgid "Manufacture: "
-msgstr ""
+msgstr "Производство: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:381
 #, c-format
@@ -3307,12 +3304,12 @@ msgstr "Средняя величина разрешающей способно�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:14
 #, c-format
 msgid "Media Type "
-msgstr ""
+msgstr "Средство доступа "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:14
 #, c-format
 msgid "Media Type Code "
-msgstr ""
+msgstr "Код средства доступа "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:136
 #, c-format
@@ -3364,27 +3361,23 @@ msgstr "Меццо-тинто, черная манера"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:133
-#, fuzzy
 msgid "Microform Carriers"
-msgstr "микроформа в патроне"
+msgstr "Носители микроформ"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:134
-#, fuzzy
 msgid "Microform carriers"
-msgstr "микроформа в патроне"
+msgstr "Носители микроформ"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:195
-#, fuzzy
 msgid "Microscopic Carriers"
-msgstr "препараты для микроскопа"
+msgstr "Микроскопические носители"
 
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:196
-#, fuzzy
 msgid "Microscopic carriers"
-msgstr "препараты для микроскопа"
+msgstr "Микроскопические носители"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:528
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:530
@@ -3617,7 +3610,7 @@ msgstr "Нормальная кратность (16x – 30х)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:15
 #, c-format
 msgid "Number of ensembles"
-msgstr ""
+msgstr "Количество ансамблей"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:58
@@ -3625,39 +3618,39 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:58
 #, c-format
 msgid "Number of hands / players; keys of pitched instruments"
-msgstr ""
+msgstr "количество рук / исполнителей, тональность инструментов"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:15
 #, c-format
 msgid "Number of instruments"
-msgstr ""
+msgstr "Количество инструментов"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Number of instruments or voices"
-msgstr "Инструменты или голоса для солистов"
+msgstr "Количество инструментов или голосов"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:15
 #, c-format
 msgid "Number of parts"
-msgstr ""
+msgstr "Количество партий"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:15
 #, c-format
 msgid "Number of players"
-msgstr ""
+msgstr "Количество исполнителей"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:43
 #, c-format
 msgid "Number of real parts"
-msgstr ""
+msgstr "Количество партий в ансамбле"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:122
 #, c-format
 msgid "Number of units under embargo :"
-msgstr ""
+msgstr "Количество единиц, на которые распространяется эмбарго :"
 
 #. INPUT type=button
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:687
@@ -3812,18 +3805,18 @@ msgstr "другое"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Other (position 7)"
-msgstr "эталонный (позитив)"
+msgstr "Другая информация"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146d.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid "Other (position 8)"
-msgstr "эталонный (позитив)"
+msgstr "Другая информация"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:225
@@ -4156,7 +4149,7 @@ msgstr "квадруплекс, катушечный учетверенный (�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:50
 #, c-format
 msgid "Qualifier type :"
-msgstr ""
+msgstr "Тип ограничения :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:58
 #, c-format
@@ -4177,7 +4170,7 @@ msgstr "ежеквартально"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183-2.tt:20
 #, c-format
 msgid "RDA Carrier"
-msgstr ""
+msgstr "RDA Carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:26
@@ -4186,9 +4179,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183-2.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183-2.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "RDA Content"
-msgstr "Содержание"
+msgstr "RDA Content"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:32
@@ -4199,18 +4192,18 @@ msgstr "Содержание"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:32
 #, c-format
 msgid "RDA Media"
-msgstr ""
+msgstr "RDA Media"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:20
 #, c-format
 msgid "RDA carrier"
-msgstr ""
+msgstr "RDA carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "RDA content"
-msgstr "Содержание"
+msgstr "RDA content"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:38
@@ -4220,23 +4213,23 @@ msgstr "Содержание"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183-2.tt:38
 #, c-format
 msgid "RDA fr Carrier"
-msgstr ""
+msgstr "RDA fr Carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:38
 #, c-format
 msgid "RDA fr carrier"
-msgstr ""
+msgstr "RDA fr carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:30
 #, c-format
 msgid "RDA media"
-msgstr ""
+msgstr "RDA media"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:29
 #, c-format
 msgid "RT : "
-msgstr ""
+msgstr "RT : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:440
@@ -4340,7 +4333,7 @@ msgstr "SEN 3"
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:26
 #, c-format
 msgid "ST : "
-msgstr ""
+msgstr "ST : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:311
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:352
@@ -4385,9 +4378,9 @@ msgstr "Поиск авторитетного источника: РЕДАКТО
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:129
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:232
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:290
-#, fuzzy, c-format
+#, c-format
 msgid "Search for publisher"
-msgstr "Результаты поиска"
+msgstr "Поиск издательства"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:15
 #, c-format
@@ -4462,17 +4455,17 @@ msgstr "дважды в неделю"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:110
 #, c-format
 msgid "Sensory Specification 1 "
-msgstr ""
+msgstr "Спецификация способа сенсорного восприятия"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:153
 #, c-format
 msgid "Sensory Specification 2 "
-msgstr ""
+msgstr "Спецификация способа сенсорного восприятия"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:195
 #, c-format
 msgid "Sensory Specification 3 "
-msgstr ""
+msgstr "Спецификация способа сенсорного восприятия"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:127
 #, c-format
@@ -4581,17 +4574,17 @@ msgstr "Точное значение кратности уменьшения"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:80
 #, c-format
 msgid "Specification of Dimensionality "
-msgstr ""
+msgstr "Спецификация размерности "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "Specification of Motion "
-msgstr "Точное значение кратности уменьшения"
+msgstr "Спецификация наличия или отсутствия движения "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Specification of Type "
-msgstr "Точное значение кратности уменьшения"
+msgstr "Спецификация природы информации "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:54
 #, c-format
@@ -4777,7 +4770,7 @@ msgstr "комплексный апертурный радар (SAR)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:14
 #, c-format
 msgid "System code :"
-msgstr ""
+msgstr "Источник данных :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:9
 #, c-format
@@ -4870,9 +4863,9 @@ msgid "Tenor"
 msgstr "тенор"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Terms of access to the reproduction :"
-msgstr "Форма воспроизведения"
+msgstr "Условия доступа к копии :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146c.tt:42
@@ -4880,7 +4873,7 @@ msgstr "Форма воспроизведения"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:42
 #, c-format
 msgid "Tessitura"
-msgstr ""
+msgstr "Тесситура"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:291
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:332
@@ -5052,7 +5045,7 @@ msgstr "тип C (катушка)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146a.tt:15
 #, c-format
 msgid "Type of Performance Medium"
-msgstr ""
+msgstr "Тип средства исполнения"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:13
 #, c-format
@@ -5111,7 +5104,7 @@ msgstr "U-matic (видеокассета двухкатушечная)"
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCauthResults.xsl:527
 #, c-format
 msgid "UF : "
-msgstr ""
+msgstr "UF : "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:3
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:8
@@ -5338,49 +5331,49 @@ msgid "UNIMARC field 141 builder"
 msgstr "Компоновщик UNIMARC-поля 141"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181-2.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 181-2 builder"
-msgstr "Компоновщик UNIMARC-поля 122"
+msgstr "builder UNIMARC поля 181-2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 181a builder"
-msgstr "Компоновщик UNIMARC-подполя 121a"
+msgstr "builder UNIMARC поля 181a"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 181b builder"
-msgstr "Компоновщик UNIMARC-подполя 121b"
+msgstr "builder UNIMARC поля 181b"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 181c builder"
-msgstr "Компоновщик UNIMARC-подполя 128^c"
+msgstr "builder UNIMARC поля 181c"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182-2.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 182-2 builder"
-msgstr "Компоновщик UNIMARC-поля 122"
+msgstr "builder UNIMARC поля 182-2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 182a builder"
-msgstr "Компоновщик UNIMARC-подполя 121a"
+msgstr "builder UNIMARC поля 182a"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 182c builder"
-msgstr "Компоновщик UNIMARC-подполя 124^c"
+msgstr "builder UNIMARC поля 182c"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183-2.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 183-2 builder"
-msgstr "Компоновщик UNIMARC-поля 122"
+msgstr "builder UNIMARC поля 183-2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 183a builder"
-msgstr "Компоновщик UNIMARC-подполя 123a"
+msgstr "builder UNIMARC поля 183a"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:5
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:10
@@ -5407,24 +5400,24 @@ msgid "UNIMARC field 225a builder &rsaquo; Koha"
 msgstr "UNIMARC подполя 225a компоновщик &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283-2.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 283-2 builder"
-msgstr "Компоновщик UNIMARC-поля 122"
+msgstr "builder UNIMARC поля 283-2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 283a builder"
-msgstr "Компоновщик UNIMARC-подполя 123a"
+msgstr "builder UNIMARC поля 283a"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325h.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 325h builder"
-msgstr "Компоновщик UNIMARC-подполя 125a"
+msgstr "builder UNIMARC поля 325h"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "UNIMARC field 325j builder"
-msgstr "Компоновщик UNIMARC-подполя 125a"
+msgstr "builder UNIMARC поля 325j"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:11
 #, c-format
@@ -5477,7 +5470,7 @@ msgstr "Унифицированная форма названия"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:80
 #, c-format
 msgid "Unit under embargo :"
-msgstr ""
+msgstr "Единица, на которую распространяется эмбарго :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:165
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:159
@@ -5627,9 +5620,8 @@ msgstr "Гринтена"
 #. OPTGROUP
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:335
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:336
-#, fuzzy
 msgid "Video carriers"
-msgstr "видео-картридж; видеокассета однокатушечная"
+msgstr "Видеоносители"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:114
 #, c-format
@@ -5822,9 +5814,9 @@ msgstr "a - Имя лица как предмет"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "a - audio"
-msgstr "a — автобиография"
+msgstr "a - аудио"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:117
@@ -5832,9 +5824,9 @@ msgstr "a — автобиография"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:201
-#, fuzzy, c-format
+#, c-format
 msgid "a - aural"
-msgstr "a — автобиография"
+msgstr "a - слуховой"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1114
@@ -5865,9 +5857,9 @@ msgstr "a — текущий продолжающийся ресурс"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "a - dataset"
-msgstr "a — установленная"
+msgstr "a - электронные данные"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:23
@@ -5899,19 +5891,19 @@ msgstr "a — иллюстрации"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:56
 #, c-format
 msgid "a - moving"
-msgstr ""
+msgstr "a - движущееся"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "a - notated"
-msgstr "a — установленная"
+msgstr "a - знаковый"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "a - two-dimensional"
-msgstr "двухмерная"
+msgstr "2 = двухмерное"
 
 #. INPUT name=number
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146b.tt:17
@@ -5921,13 +5913,13 @@ msgstr "двухмерная"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146e.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146f.tt:17
 msgid "a number between 0 and 99 (inclusive)"
-msgstr ""
+msgstr "число от 0 до 99 (включительно)"
 
 #. INPUT type=text name=number
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146h.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_146i.tt:17
 msgid "a number between 0 and 999 (inclusive)"
-msgstr ""
+msgstr "число от 0 до 999 (включительно)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:403
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:405
@@ -6466,27 +6458,25 @@ msgstr "b — драма"
 # Материал, предназначенный для компьютерной обработки. Ресурс может располагаться на носителе, доступ к которому может быть прямым или удаленным; в некоторых случаях требуется использование периферийных устройств, подключенных к компьютеру (например, устройство для чтения CD-ROM). Этот код НЕ используется для материалов, которые не требуют обязательного использования компьютера (например, музыкальные компакт-диски, видеодиски).
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "b - electronic"
-msgstr "электронный ресурс"
+msgstr "b - электронное"
 
-# 440  (Illustrator) Автор оформления или иллюстрации.
-# Имитатор (Counterfeiter) см. Forger (380)
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:207
-#, fuzzy, c-format
+#, c-format
 msgid "b - gustatory"
-msgstr ", иллюстратор"
+msgstr "b - вкусовой"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "b - image"
-msgstr "b — географические карты"
+msgstr "b - изображение"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1119
@@ -6506,19 +6496,17 @@ msgstr "b — биография одного лица"
 msgid "b - maps"
 msgstr "b — географические карты"
 
-# формы
-# Бланки, анкеты и т.д.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "b - performed"
-msgstr "k — форматированные бланки"
+msgstr "b = исполнительский"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "b - still"
-msgstr "рекламные кадры"
+msgstr "b = неподвижное"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:92
@@ -6760,7 +6748,7 @@ msgstr "черно-белый"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:60
 #, c-format
 msgid "blog"
-msgstr ""
+msgstr "блог"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:193
@@ -6903,9 +6891,9 @@ msgstr "c - Географическое наименование как пре�
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "c - cartographic"
-msgstr "ортографическая"
+msgstr "c = картографический"
 
 # коллективная биография
 # Например, биография семьи.
@@ -6954,28 +6942,25 @@ msgstr "c — указатель"
 # микропечать (печать на микроносителях)
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "c - microform"
-msgstr "микроформа"
+msgstr "c = микроформа"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:32
 #, c-format
 msgid "c - movement"
-msgstr ""
+msgstr "c = движение"
 
-# справочное издание
-# Издание, содержащее краткие сведения научного или прикладного характера, расположенные в порядке, удобном для их быстрого отыскания, не предназначенное для сплошного чтения (ГОСТ 7.60-2003).
-# Например, упорядоченный список лиц, организаций или населенных пунктов, территорий, стран и т.п. с информацией о них.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:213
-#, fuzzy, c-format
+#, c-format
 msgid "c - olfactory"
-msgstr "g — справочное издание"
+msgstr "c = обонятельный"
 
 # портреты
 # Индивидуальные и групповые.
@@ -7038,9 +7023,9 @@ msgstr "c — для детей младшего возраста, 5-10 лет"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid "ca - computer tape cartridge"
-msgstr "лента (кассетная однокатушечная)"
+msgstr "ca - computer tape cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:602
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:604
@@ -7100,9 +7085,9 @@ msgstr "канцона"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:294
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:296
-#, fuzzy, c-format
+#, c-format
 msgid "card"
-msgstr "картон"
+msgstr "карта"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:1081
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:1083
@@ -7181,18 +7166,17 @@ msgstr "каталог"
 msgid "catechism"
 msgstr "катехизическое богословие"
 
-# 115^a - диапозитив кассетный однокатушечный
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "cb - computer chip cartridge"
-msgstr "диафильм в картридже; диапозитив кассетный однокатушечный"
+msgstr "cb - computer chip cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "cd - computer disc"
-msgstr "компьютерная графика"
+msgstr "cd - computer disc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:427
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:574
@@ -7204,7 +7188,7 @@ msgstr "cdn"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:99
 #, c-format
 msgid "ce - computer disc cartridge"
-msgstr ""
+msgstr "ce - computer disc cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:268
@@ -7218,15 +7202,15 @@ msgstr "керамика"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "cf - computer tape cassette"
-msgstr "лента (кассетная двухкатушечная)"
+msgstr "cf - computer tape cassette"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:117
 #, c-format
 msgid "ch - computer tape reel"
-msgstr ""
+msgstr "ch - computer tape reel"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:339
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:341
@@ -7360,9 +7344,9 @@ msgstr "летописи"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "ck - computer card"
-msgstr "компьютерные"
+msgstr "ck - computer card"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:250
@@ -7451,7 +7435,7 @@ msgstr "Соавтор"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:45
 #, c-format
 msgid "cod - computer dataset"
-msgstr ""
+msgstr "cod - computer dataset"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:107
@@ -7576,29 +7560,27 @@ msgstr "сжатая партитура"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "computer card"
-msgstr "компьютерная графика"
+msgstr "computer card"
 
-# 115^a - диапозитив кассетный однокатушечный
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "computer chip cartridge"
-msgstr "диафильм в картридже; диапозитив кассетный однокатушечный"
+msgstr "computer chip cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "computer disc"
-msgstr "компьютерная графика"
+msgstr "computer disc"
 
-# 115^a - диапозитив кассетный однокатушечный
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "computer disc cartridge"
-msgstr "диафильм в картридже; диапозитив кассетный однокатушечный"
+msgstr "computer disc cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1045
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1047
@@ -7618,21 +7600,21 @@ msgstr "компьютерная программа"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "computer tape cartridge"
-msgstr "лента (кассетная однокатушечная)"
+msgstr "computer tape cartridge"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:112
-#, fuzzy, c-format
+#, c-format
 msgid "computer tape cassette"
-msgstr "лента (кассетная двухкатушечная)"
+msgstr "computer tape cassette"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_283a.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid "computer tape reel"
-msgstr "компьютерная графика"
+msgstr "computer tape reel"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:84
@@ -7734,7 +7716,7 @@ msgstr "отмывка"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:187
 #, c-format
 msgid "continuously updated"
-msgstr ""
+msgstr "обновляется постоянно"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:85
@@ -7750,9 +7732,9 @@ msgstr "горизонтали"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "cop - computer program"
-msgstr "компьютерная программа"
+msgstr "cop - computer program"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:356
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:358
@@ -7796,9 +7778,9 @@ msgstr "музыка кантри"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:123
-#, fuzzy, c-format
+#, c-format
 msgid "cr - online resource"
-msgstr "электронный ресурс"
+msgstr "cr - online resource"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:407
@@ -7812,39 +7794,39 @@ msgstr "цветной мелок"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "crd - cartographic dataset"
-msgstr "Форма картографической единицы:"
+msgstr "crd - cartographic dataset"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:57
 #, c-format
 msgid "crf - cartographic three-dimensional form"
-msgstr ""
+msgstr "crf - cartographic three-dimensional form"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid "cri - cartographic image"
-msgstr "Исходные картографические материалы 1:"
+msgstr "cri - cartographic image"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "crm - cartographic moving image"
-msgstr "Исходные картографические материалы 1:"
+msgstr "crm - cartographic moving image"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:39
 #, c-format
 msgid "crn - cartographic tactile three-dimensional form"
-msgstr ""
+msgstr "crn - cartographic tactile three-dimensional form"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "crt - cartographic tactile image"
-msgstr "e — Картографические материалы, кроме рукописных"
+msgstr "crt - cartographic tactile image"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:639
@@ -7880,7 +7862,7 @@ msgstr "цилиндрическая, конкретный тип неизвес
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:129
 #, c-format
 msgid "cz - other computer carrier"
-msgstr ""
+msgstr "cz - other computer carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:27
@@ -7952,9 +7934,9 @@ msgstr "d — юмор, сатира"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "d - microscopic"
-msgstr "препараты для микроскопа"
+msgstr "d = микроскопическое"
 
 # монография, изданная в одном томе или изданная в течение одного календарного года
 # Монография, изданная в одном томе, либо в нескольких томах, изданных в одно время или с одинаковой датой издания, т.е. изданная в течение одного календарного года. Если дата точно не известна, используется код 'f'. Однако, если дата точно не известна, но указана в области выходных данных как единичный год, например, [1769?], или [около 1769], то используется код 'd'.
@@ -7971,25 +7953,21 @@ msgstr ""
 "d — монография, изданная в одном томе или изданная в течение одного "
 "календарного года"
 
-# музыкальные произведения
-# Только в текстовой форме. Для звукозаписей, являющихся сопроводительным материалом, используется код 'm'.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "d - music"
-msgstr "g — музыкальные произведения"
+msgstr "d = музыка"
 
-# договоры
-# Официально заключенные и ратифицированные в установленном порядке соглашения между государствами. Для других законодательных актов используется код 'n'.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:219
-#, fuzzy, c-format
+#, c-format
 msgid "d - tactile"
-msgstr "s — договоры, соглашения и конвенции"
+msgstr "d = тактильный"
 
 # для детей среднего школьного возраста, подростков (9-14 лет)
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:137
@@ -8348,9 +8326,9 @@ msgstr "e — письма"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "e - object"
-msgstr "предметы дизайна"
+msgstr "e = предмет"
 
 # планы
 # Например, планы территорий со зданиями.
@@ -8366,12 +8344,11 @@ msgstr "предметы дизайна"
 msgid "e - plans"
 msgstr "e — планы"
 
-# проектная документация
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "e - projected"
-msgstr "h — описание проекта"
+msgstr "e = проекционное"
 
 # репродуцированный документ
 # Каталогизируемый документ является репринтом, перепечаткой, факсимильной копией, и т.д., но не новым изданием. Для новых изданий используются коды: 'd', 'f', 'g', или 'h', в соответствии с правилами их применения.
@@ -8387,9 +8364,9 @@ msgstr "e — репродуцированный документ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "e - stereographic"
-msgstr "стереографическая"
+msgstr "e - stereographic"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:141
@@ -8399,7 +8376,7 @@ msgstr "стереографическая"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:225
 #, c-format
 msgid "e - visual"
-msgstr ""
+msgstr "e = визуальный"
 
 # межтерриториальный (включающий разные департаменты и правительства ниже национального уровня)
 # Любая административная единица ниже национального уровня, объединяющая или охватывающая более одной административной единицы (например, транспортная администрация, подчиненная нескольким муниципалитетам).
@@ -8468,9 +8445,9 @@ msgstr "редакция"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:275
-#, fuzzy, c-format
+#, c-format
 msgid "eh - stereograph card"
-msgstr "стереографическая"
+msgstr "eh - stereograph card"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:376
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:378
@@ -8588,9 +8565,9 @@ msgstr "эротическая литература"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:281
-#, fuzzy, c-format
+#, c-format
 msgid "es - stereograph disc"
-msgstr "стереографическая"
+msgstr "es - stereograph disc"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1437
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:1439
@@ -8655,7 +8632,7 @@ msgstr "отличный"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:287
 #, c-format
 msgid "ez - other stereographic carrier"
-msgstr ""
+msgstr "ez - other stereographic carrier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:97
@@ -8711,7 +8688,7 @@ msgstr "f — вкладные листы"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:50
 #, c-format
 msgid "f - program"
-msgstr ""
+msgstr "f = электронная программа"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1061
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1063
@@ -8721,9 +8698,9 @@ msgstr "f — короткие рассказы, новеллы"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "f - stereographic"
-msgstr "стереографическая"
+msgstr "f = стереографическое"
 
 # межправительственный
 # Международные организации и их агентства, уполномоченные заключать договоры с суверенными государствами (например, Международный валютный фонд или Организация Объединенных Наций).
@@ -9077,18 +9054,15 @@ msgstr "g — поэтические произведения"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "g - sounds"
-msgstr "песня"
+msgstr "g = звуки"
 
-# справочное издание
-# Издание, содержащее краткие сведения научного или прикладного характера, расположенные в порядке, удобном для их быстрого отыскания, не предназначенное для сплошного чтения (ГОСТ 7.60-2003).
-# Например, упорядоченный список лиц, организаций или населенных пунктов, территорий, стран и т.п. с информацией о них.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "g - video"
-msgstr "g — справочное издание"
+msgstr "g = видео"
 
 # нелегальное правительство или правительство в изгнании
 # Неофициальные правительства ( например, правительство Франции в изгнании с 1941 по 1944 гг.).
@@ -9338,7 +9312,7 @@ msgstr "h — речи и другие риторические формы"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:62
 #, c-format
 msgid "h - spoken word"
-msgstr ""
+msgstr "h = устная речь"
 
 # уровень не определен
 # Используется, когда каталогизируемый документ издан от имени какого-либо органа управления, но уровень этого органа не может быть определен из имеющейся информации.
@@ -9627,7 +9601,7 @@ msgstr "i — гербы"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:104
 #, c-format
 msgid "i - issue(s) part"
-msgstr ""
+msgstr "i = выпуск (выпуски)"
 
 # монографии, имеющие как дату производства, так и дату реализации
 # Используется для фильмов, аудиовизуальных материалов и т.д., когда есть различия между датой производства документа и датой его реализации.
@@ -9655,9 +9629,9 @@ msgstr "i — статистические данные"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "i - text"
-msgstr "языковой/текстовый материал"
+msgstr "i = текст"
 
 # гравюра
 # Рисунок или изображение, перенесенные с гравированной доски, деревянной доски, литографского камня или другого носителя. Обычно различаются четыре типа: гравюра плоской печати, гравюра высокой печати, гравюра глубокой печати и трафаретная печать.
@@ -10056,11 +10030,12 @@ msgstr "ювелирные изделия"
 msgid "jigsaws"
 msgstr "составная картинка-паззл"
 
+# A periodical addressing readers interested in a specific subject or profession. Often includes original research and current developments.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:70
 #, c-format
 msgid "journal"
-msgstr ""
+msgstr "journal"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:244
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:404
@@ -10169,14 +10144,11 @@ msgstr "l — Электронный ресурс"
 msgid "l - Form, genre or physical characteristics"
 msgstr "l - форма, жанр, физические характеристики"
 
-# вкладные листы
-# Листы, содержащие иллюстративные материалы с текстовыми пояснениями или без них и не являющиеся частью страниц или листов основного текста.
-# ??? гравюры, эстампы, вклейки, иллюстрации, на отдельных листах, экслибрисы и тому подобное ???
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "l - latest"
-msgstr "f — вкладные листы"
+msgstr "1 = последняя"
 
 # образцы
 # Шаблоны и т. п.
@@ -10484,20 +10456,19 @@ msgstr "m — диссертация (оригинал)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:86
 #, c-format
 msgid "m - month(s) time"
-msgstr ""
+msgstr "m = месяц (месяцы)"
 
-# многожанровый документ или другие жанры
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "m - multiple contents forms"
-msgstr "z — смешанные и другие литературные формы"
+msgstr "m = разные виды содержания"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "m - multiple media"
-msgstr "m — Разнородные материалы"
+msgstr "m = разные средства доступа"
 
 # звукозаписи
 # Например, пластинка или диск с звукозаписью, вложенные в кармашек книги
@@ -10551,11 +10522,12 @@ msgstr "механизмы"
 msgid "madrigal"
 msgstr "мадригал"
 
+# A specialized periodical addressing non-scientific, non-professional general interest topics.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:75
 #, c-format
 msgid "magazine"
-msgstr ""
+msgstr "magazine"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:205
@@ -11344,9 +11316,9 @@ msgstr "n — прозрачные пленочные материалы"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "n - unmediated"
-msgstr "m — Разнородные материалы"
+msgstr "n = непосредственное"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_183a.tt:307
@@ -12565,17 +12537,15 @@ msgstr "р -Предварительный выпуск неполной зап�
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "p - microscopic"
-msgstr "препараты для микроскопа"
+msgstr "p - microscopic"
 
-# религиозные тексты
-# Материал, содержащий текст религиозного, литургического характера, священные писания и/или музыкальные произведения (например, библейские сказания, катехизисы, священные тексты, церковыне гимны, индульгенции, литании, религиозные пьесы, проповеди, служебники, антифонарии, бревиарии и т.д.).
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "p - previous"
-msgstr "w - религиозные тексты"
+msgstr "2 = предыдущая"
 
 # технический отчет
 # Документ, содержащий результаты исследования или изучения научного или технического объекта.
@@ -13504,14 +13474,12 @@ msgstr "макеты, копии"
 msgid "reporting"
 msgstr "репортаж"
 
-# 110^a - справочное издание
-# Продолжающийся ресурс, содержащий краткие сведения научного или прикладного характера, расположенные в порядке, удобном для их быстрого отыскания, не предназначенный для сплошного чтения (ГОСТ 7.60-2003).
-# Например, упорядоченный список лиц, организаций или населенных пунктов, территорий, стран и т.п. с информацией о них.
+# An archive for collecting, preserving, and disseminating digital copies of the intellectual output of an institution or a group of institutions, particularly a scholarly or research. It can also be a collection of materials on a specific subject, or from a specific community. It includes materials such as e-prints, technical reports, theses and dissertations, datasets, and teaching and learning materials.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "repository"
-msgstr "справочник"
+msgstr "репозиторий"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_135a.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_135a.tt:35
@@ -15108,19 +15076,20 @@ msgstr "не определено / неизвестно"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "updating database"
 msgstr "обновляемый веб-сайт"
 
+# A bibliographic resource that consists of a base volume(s) updated by separate pages which are inserted, removed, and/or substituted.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "updating loose-leaf"
-msgstr "обновляемое листовое издание с отрывными листами"
+msgstr "updating loose-leaf"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "updating website"
 msgstr "обновляемый веб-сайт"
 
@@ -15455,7 +15424,7 @@ msgstr "w - религиозные тексты"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:92
 #, c-format
 msgid "w - week(s) time"
-msgstr ""
+msgstr "w = неделя (недели)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:357
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:359
@@ -15621,15 +15590,15 @@ msgstr "x — не применяемая"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181b.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "x - not applicable (resource is not an image)"
-msgstr "не используется (не цветной фильм)"
+msgstr "x = не применяется (ресурс не является изображением)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "x - other"
-msgstr "z — другой тип содержания"
+msgstr "x - другой тип содержания"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:294
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:296
@@ -15645,9 +15614,9 @@ msgstr "xx — не применяется"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181c.tt:159
-#, fuzzy, c-format
+#, c-format
 msgid "xxx - other"
-msgstr "z — другой тип содержания"
+msgstr "xxx - другой тип содержания"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader_authorities.tt:50
@@ -15687,7 +15656,7 @@ msgstr "y — не биография"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_325j.tt:98
 #, c-format
 msgid "y - year(s) time"
-msgstr ""
+msgstr "y = год (годы)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:421
@@ -15759,15 +15728,15 @@ msgstr "z — другой тип содержания"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_181a.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "z - other content form"
-msgstr "другие формы"
+msgstr "z = другой вид содержания"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182a.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "z - other media"
-msgstr "z — другой тип содержания"
+msgstr "z = другое средство"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_182c.tt:74

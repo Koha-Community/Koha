@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2022-05-23 14:03+0000\n"
+"PO-Revision-Date: 2023-01-05 16:09+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pt\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pt/22.11/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653314629.335477\n"
+"X-POOTLE-MTIME: 1672934969.708962\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -124,36 +124,30 @@ msgstr ""
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# When collecting a payment, "
-msgstr "Não usar"
+msgstr "Quando receber um pagamento, "
 
 # Accounting > Features
-#, fuzzy
 msgid "accounting.pref#RequireCashRegister# always require a cash register"
-msgstr "Não usar"
+msgstr "exigir sempre uma caixa registadora"
 
 # Accounting > Features
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# require a cash register only when the "
 "CASH payment type is selected"
 msgstr ""
-"as caixas registadoras com o sistema de contabilidade para efetuar os "
-"pagamentos."
+"exigir uma caixa registadora apenas quando um pagamento do tipo CASH estiver "
+"selecionado"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Don't require"
-msgstr "Não arredondar"
+msgstr "Não exigir"
 
 # Accounting > Policy
-#, fuzzy
 msgid "accounting.pref#RequirePaymentType# Require"
-msgstr "Arredondar"
+msgstr "Exigir"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -162,18 +156,19 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"<br><strong>NOTA:</strong> Este valor não tem efeito se a preferência <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
-"\">UsageStats</a> está definida como \"Não\" (não partilhar)."
+"Esta preferência não tem efeito quando a preferência <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
+">UseCashRegisters</a> estiver ativa ou quando não existem tipos de "
+"pagamentos definidos na categoria de valor autorizado <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
+">PAYMENT_TYPE</a>."
 
 # Accounting > Policy
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# staff to select a payment type when a "
 "payment is made."
 msgstr ""
-"automaticamente uma janela de impressão do pagamento quando receber uma "
-"pagamento."
+"que os técnicos escolham o tipo de pagamento quando um pagamento é feito."
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# Do"
@@ -209,6 +204,11 @@ msgid ""
 "ensure your SIP configurations are updated to map a register to your SIP "
 "device.</p>"
 msgstr ""
+"<p class='text-danger'><strong>Aviso:</strong> Ao ativar esta preferência de "
+"sistema vai tornar o campo caixa registadora como obrigatório para todas as "
+"transações CASH; Também estão incluídas as transações SIP00, por isso "
+"certifique-se que as configurações SIP estão atualizadas para mapear uma "
+"caixa registada ao seu dispositivo SIP.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -367,18 +367,16 @@ msgid ""
 msgstr "Mostrar os montantes com o seguinte formato"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Disable"
-msgstr "EDIFACT"
+msgstr "Desativar"
 
 # Acquisitions > EDIFACT > EDIFACT
 msgid "acquisitions.pref#EDIFACT# EDIFACT message exchange for acquisitions"
-msgstr ""
+msgstr "a troca de mensagens EDIFACT para as aquisições"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EDIFACT# Enable"
-msgstr "EDIFACT"
+msgstr "Ativar"
 
 # Acquisitions > EDIFACT
 msgid ""
@@ -397,35 +395,32 @@ msgid "acquisitions.pref#EdifactInvoiceImport# Don't"
 msgstr "Não"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ#  in items."
-msgstr "Sim"
+msgstr " nos exemplares."
 
 # Acquisitions > EDIFACT > EdifactLSQ
 msgid "acquisitions.pref#EdifactLSQ# Map sequence code (GIR:LSQ) field to "
-msgstr ""
+msgstr "Mapear o campo de código de sequência (GIR:LSQ) para a "
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# collection"
-msgstr "Sim"
+msgstr "coleção"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# location"
-msgstr "Sim"
+msgstr "localização"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Se escolheu <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> insira um endereço de email válido: "
+"<br>Se escolheu <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"EmailAddressForSuggestions\">EmailAddressForSuggestions</a> insira um "
+"endereço de email válido: "
 
 # Acquisitions > Policy
 msgid ""
@@ -444,7 +439,6 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
 msgstr "endereço de email da biblioteca"
 
@@ -502,9 +496,8 @@ msgstr ""
 "replacementprice e itemcallnumber. Campos especiais: quantity e budget_code"
 
 # Acquisitions > Printing
-#, fuzzy
 msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
-msgstr "Inglês 2-páginas"
+msgstr "Inglês 1-página"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
