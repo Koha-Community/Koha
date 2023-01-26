@@ -55,7 +55,7 @@
                     [% IF ( CAN_user_suggestions_suggestions_manage ) %]
                         <li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>
                     [% END %]
-                    [% IF ( CAN_user_tools ) %]
+                    [% IF ( CAN_user_tools || CAN_user_clubs ) %]
                         <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
                     [% END %]
                     [% IF ( Koha.Preference('EnablePointOfSale') && Koha.Preference('UseCashRegisters') && CAN_user_cash_management_takepayment ) %]
