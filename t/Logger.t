@@ -24,6 +24,7 @@ use t::lib::Mocks;
 use File::Temp qw/tempfile/;
 use Test::More tests => 1;
 use Test::Warn;
+use Test::Exception;
 
 subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
     plan tests => 10;
@@ -31,8 +32,7 @@ subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
     my $ret;
     t::lib::Mocks::mock_config('log4perl_conf', undef);
 
-    eval { Koha::Logger->get };
-    ok( $@, 'Logger did not init correctly without config');
+    throws_ok { Koha::Logger->get } qr/Configuration not defined/, 'Logger did not init correctly without config';
 
     my $log = mytempfile();
     my $config_file = mytempfile( <<"HERE"
@@ -48,8 +48,7 @@ HERE
     t::lib::Mocks::mock_config('log4perl_conf', $config_file);
 
     system("chmod 400 $log");
-    eval { Koha::Logger->get };
-    ok( $@, 'Logger did not init correctly without permission');
+    throws_ok { Koha::Logger->get } qr/Permission denied/, 'Logger did not init correctly without permission';
 
     system("chmod 700 $log");
     my $logger = Koha::Logger->get( { interface => 'intranet' } );
