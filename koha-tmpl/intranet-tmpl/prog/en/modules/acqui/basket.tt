@@ -240,199 +240,205 @@
                                     <div id="acqui_basket_summary" class="row">
                                         <div class="rows">
                                             <div class="col-sm-6">
-                                                <ol>
-                                                    [% IF ( basketnote ) %]
-                                                        <li><span class="label">Internal note:</span> [% basketnote | html %]</li>
-                                                    [% END %]
-                                                    [% IF ( basketbooksellernote ) %]
-                                                        <li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>
-                                                    [% END %]
-                                                    [% IF ( basketcontractno ) %]
-                                                        <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | uri %]&amp;booksellerid=[% booksellerid | uri %]">[% basketcontractname | html %]</a></li>
-                                                    [% END %]
-                                                    [% IF deliveryplace %]
-                                                        <li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) | html %]</li>
-                                                    [% END %]
-                                                    [% IF billingplace %]
-                                                        <li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>
-                                                    [% END %]
-                                                    [% IF ( authorisedbyname ) %]
-                                                        <li><span class="label">[% tp('basket created by', 'Created by:') | html %]</span>  [% authorisedbyname | html %]</li>
-                                                    [% END %]
-                                                    <li id="managedby">
-                                                        <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
-                                                            <span class="label">Managed by:</span>
-                                                            <div style="display:inline-block">
-                                                                <ul id="users_names" style="padding-left:0">
-                                                                    [% FOREACH user IN users %]
-                                                                        <li id="user_[% user.borrowernumber | html %]">
-                                                                            [% user.firstname | html %] [% user.surname | html %]
-                                                                            <a href="#" data-borrowernumber="[% user.borrowernumber | html %]" class="del_user"><i class="fa fa-trash"></i> Delete user</a>
-                                                                        </li>
-                                                                    [% END %]
-                                                                    <li>
-                                                                        <a href="#" id="add_user"><i class="fa fa-plus"></i> Add user</a>
-                                                                    </li>
-                                                                    <li id="add_user_submit" style="display:none;">
-                                                                        <button type="submit" class="btn btn-default btn-xs">Save changes</button>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
-                                                            <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
-                                                            <input type="hidden" id="op" name="op" value="mod_users" />
-                                                        </form>
-
-                                                    </li> <!-- /#managedby -->
-                                                    <li id="branch">
-                                                        <span class="label">Managing library:</span>
-                                                        [% IF basketbranchcode %]
-                                                            [% Branches.GetName( basketbranchcode ) | html %]
-                                                            <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Change library</a>
-                                                        [% ELSE %]
-                                                            No library
-                                                            <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Set library</a>
+                                                <div class="page-section">
+                                                    <h2>General information</h3>
+                                                    <ol>
+                                                        [% IF ( basketnote ) %]
+                                                            <li><span class="label">Internal note:</span> [% basketnote | html %]</li>
                                                         [% END %]
-                                                    </li> <!-- /#branch -->
-                                                    [% IF branches_loop.size %]
-                                                        <li id="managing_library_entry" style="display:none;">
-                                                            <span class="label">&nbsp;</span>
-                                                            <div style="float:left">
-                                                                <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
-                                                                    <select id="select_managing_library" name="branch">
-                                                                        <option value="">(no library)</option>
-                                                                        [% FOREACH branch IN branches_loop %]
-                                                                            [% IF ( basketbranchcode == branch.branchcode ) %]
-                                                                                <option selected="selected" value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
-                                                                            [% ELSE %]
-                                                                                <option value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
-                                                                            [% END %]
+                                                        [% IF ( basketbooksellernote ) %]
+                                                            <li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>
+                                                        [% END %]
+                                                        [% IF ( basketcontractno ) %]
+                                                            <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | uri %]&amp;booksellerid=[% booksellerid | uri %]">[% basketcontractname | html %]</a></li>
+                                                        [% END %]
+                                                        [% IF deliveryplace %]
+                                                            <li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) | html %]</li>
+                                                        [% END %]
+                                                        [% IF billingplace %]
+                                                            <li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>
+                                                        [% END %]
+                                                        [% IF ( authorisedbyname ) %]
+                                                            <li><span class="label">[% tp('basket created by', 'Created by:') | html %]</span>  [% authorisedbyname | html %]</li>
+                                                        [% END %]
+                                                        <li id="managedby">
+                                                            <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                                                <span class="label">Managed by:</span>
+                                                                <div style="display:inline-block">
+                                                                    <ul id="users_names" style="padding-left:0">
+                                                                        [% FOREACH user IN users %]
+                                                                            <li id="user_[% user.borrowernumber | html %]">
+                                                                                [% user.firstname | html %] [% user.surname | html %]
+                                                                                <a href="#" data-borrowernumber="[% user.borrowernumber | html %]" class="del_user"><i class="fa fa-trash"></i> Delete user</a>
+                                                                            </li>
                                                                         [% END %]
-                                                                    </select>
-                                                                    <a id="library_entry_cancel" href="#" class="cancel">Cancel</a>
-                                                                    <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
-                                                                    <input type="hidden" id="op" name="op" value="mod_branch" />
-                                                                </form>
-                                                            </div>
-                                                        </li> <!-- #/managing_library_entry -->
-                                                    [% END # /IF branches_loop.size %]
+                                                                        <li>
+                                                                            <a href="#" id="add_user"><i class="fa fa-plus"></i> Add user</a>
+                                                                        </li>
+                                                                        <li id="add_user_submit" style="display:none;">
+                                                                            <button type="submit" class="btn btn-default btn-xs">Save changes</button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
+                                                                <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
+                                                                <input type="hidden" id="op" name="op" value="mod_users" />
+                                                            </form>
 
-                                                    [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
+                                                        </li> <!-- /#managedby -->
+                                                        <li id="branch">
+                                                            <span class="label">Managing library:</span>
+                                                            [% IF basketbranchcode %]
+                                                                [% Branches.GetName( basketbranchcode ) | html %]
+                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Change library</a>
+                                                            [% ELSE %]
+                                                                No library
+                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Set library</a>
+                                                            [% END %]
+                                                        </li> <!-- /#branch -->
+                                                        [% IF branches_loop.size %]
+                                                            <li id="managing_library_entry" style="display:none;">
+                                                                <span class="label">&nbsp;</span>
+                                                                <div style="float:left">
+                                                                    <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                                                        <select id="select_managing_library" name="branch">
+                                                                            <option value="">(no library)</option>
+                                                                            [% FOREACH branch IN branches_loop %]
+                                                                                [% IF ( basketbranchcode == branch.branchcode ) %]
+                                                                                    <option selected="selected" value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
+                                                                                [% ELSE %]
+                                                                                    <option value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
+                                                                                [% END %]
+                                                                            [% END %]
+                                                                        </select>
+                                                                        <a id="library_entry_cancel" href="#" class="cancel">Cancel</a>
+                                                                        <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
+                                                                        <input type="hidden" id="op" name="op" value="mod_branch" />
+                                                                    </form>
+                                                                </div>
+                                                            </li> <!-- #/managing_library_entry -->
+                                                        [% END # /IF branches_loop.size %]
 
-                                                </ol>
+                                                        [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
+
+                                                    </ol>
+                                                </div> <!-- /.page-section -->
                                             </div> <!-- /.col-sm-6 -->
 
                                             <div class="col-sm-6">
-                                                <ol>
-                                                    [% IF ( creationdate ) %]
-                                                        <li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>
-                                                    [% END %]
-                                                    [% IF ( closedate ) %]
-                                                        <li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>
-                                                    [% END %]
-                                                    [% IF ( ediaccount ) %]
-                                                        [%- BLOCK edi_status -%]
-                                                            [%- SWITCH edi_order.status -%]
-                                                                [%- CASE 'Pending'   -%]<span>Pending</span>
-                                                                [%- CASE 'Sent'      -%]<span>Sent</span>
-                                                                [%- CASE 'Processed' -%]<span>Processed</span>
-                                                            [%- END -%]
-                                                        [%- END -%]
-                                                        [% IF ( edi_order ) %]
-                                                            <li><span class="label">EDI status:</span> [%- PROCESS edi_status edi_order=edi_order -%] ([% edi_order.transfer_date | $KohaDates %])</li>
-                                                        [% ELSE %]
-                                                            <li><span class="label">EDI status:</span> Not ordered</li>
-                                                        [% END %]
-                                                    [% END %]
-                                                    [% IF ( estimateddeliverydate ) %]
-                                                        <li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates %]</li>
-                                                    [% END %]
-                                                    <li><span class="label">Orders are standing:</span> [% IF is_standing %]Yes[% ELSE %]No[% END %]</li>
-
-                                                    [% IF basket.create_items %]
-                                                        <li>
-                                                            <span class="label">Create items when:</span>
-                                                            [% SWITCH basket.create_items %]
-                                                                [% CASE 'receiving' %]<span>Receiving items</span>
-                                                                [% CASE 'cataloguing' %]<span>Cataloguing items</span>
-                                                                [% CASE %]<span>Placing orders</span>
-                                                            [% END %]
-                                                        </li>
-                                                    [% END %]
-                                                </ol>
-
-                                                [% IF ( closedate ) %]
+                                                <div class="page-section">
+                                                    <h2>Settings</h2>
                                                     <ol>
-                                                        <li>
-                                                            <span class="label">Basket group:</span>
-                                                            [% IF basketgroup.id and not basketgroup.name %]
-                                                                [% SET basketgroup.name = "Basket group no. " _ basketgroup.id %]
-                                                            [% END %]
-
-                                                            [% IF basketgroup.closed %]
-                                                                [% IF ( CAN_user_acquisition_group_manage ) %]
-                                                                    <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]" title="basketgroup">[% basketgroup.name | html %] <span>(closed)</span></a>
-                                                                [% ELSE %]
-                                                                    [% basketgroup.name | html %] <span>(closed)</span>
-                                                                [% END %]
-                                                            [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
-                                                                [%- IF basketgroup.id -%]
-                                                            [% basketgroup.name | html %]
-                                                                [%- ELSE -%]
-                                                                    <span>No group</span>
-                                                                [%- END -%]
-                                                            [% ELSE %]
-                                                                [% IF ( CAN_user_acquisition_group_manage ) %]
-                                                                    [% IF ( basketgroup.id ) %]
-                                                                        [% basketgroup.name | html %]
-                                                                        <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Change basket group</a>
-                                                                    [% ELSE %]
-                                                                        No group
-                                                                        <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Set basket group</a>
-                                                                    [% END %]
-                                                                [% END %]
-                                                            [% END %]
-                                                        </li>
-                                                        [% IF ( CAN_user_acquisition_group_manage ) %]
-                                                            <li id="basket_grouping" style="display:none;">
-                                                                <span class="label">&nbsp;</span>
-                                                                <div style="float:left">
-                                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-                                                                        <select id="basketgroupid" name="basketgroupid">
-                                                                            <option value="">No group</option>
-                                                                            [% FOREACH bg IN basketgroups %]
-                                                                                [% IF ( bg.default ) %]
-                                                                                    <option value="[% bg.id | html %]" selected="selected">[% bg.name | html %]</option>
-                                                                                [% ELSE %]
-                                                                                    [% UNLESS bg.closed %]
-                                                                                        <option value="[% bg.id | html %]">[% bg.name | html %]</option>
-                                                                                    [% ELSE %]
-                                                                                        <option value="[% bg.id | html %]" disabled="disabled">[% bg.name | html %] <span>(closed)</span></option>
-                                                                                    [% END %]
-                                                                                [% END %]
-                                                                            [% END %]
-                                                                            <option value="new">Add new group</option>
-                                                                        </select>
-                                                                        <a href="#" id="basket_group_cancel" class="cancel">Cancel</a>
-                                                                        <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-                                                                        <input type="hidden" value="mod_basket" name="op" />
-                                                                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                                                                    </form>
-                                                                </div>
-                                                            </li>
-                                                        [% END # /IF ( CAN_user_acquisition_group_manage ) %]
-                                                        [% IF basketgroup.deliveryplace %]
-                                                            <li>
-                                                                <span class="label">Basket group delivery placename:</span> [% Branches.GetName( basketgroup.deliveryplace ) | html %]
-                                                            </li>
+                                                        [% IF ( creationdate ) %]
+                                                            <li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>
                                                         [% END %]
-                                                        [% IF basketgroup.billingplace %]
+                                                        [% IF ( closedate ) %]
+                                                            <li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>
+                                                        [% END %]
+                                                        [% IF ( ediaccount ) %]
+                                                            [%- BLOCK edi_status -%]
+                                                                [%- SWITCH edi_order.status -%]
+                                                                    [%- CASE 'Pending'   -%]<span>Pending</span>
+                                                                    [%- CASE 'Sent'      -%]<span>Sent</span>
+                                                                    [%- CASE 'Processed' -%]<span>Processed</span>
+                                                                [%- END -%]
+                                                            [%- END -%]
+                                                            [% IF ( edi_order ) %]
+                                                                <li><span class="label">EDI status:</span> [%- PROCESS edi_status edi_order=edi_order -%] ([% edi_order.transfer_date | $KohaDates %])</li>
+                                                            [% ELSE %]
+                                                                <li><span class="label">EDI status:</span> Not ordered</li>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( estimateddeliverydate ) %]
+                                                            <li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates %]</li>
+                                                        [% END %]
+                                                        <li><span class="label">Orders are standing:</span> [% IF is_standing %]Yes[% ELSE %]No[% END %]</li>
+
+                                                        [% IF basket.create_items %]
                                                             <li>
-                                                                <span class="label">Basket group billing place:</span> [% Branches.GetName( basketgroup.billingplace ) | html %]
+                                                                <span class="label">Create items when:</span>
+                                                                [% SWITCH basket.create_items %]
+                                                                    [% CASE 'receiving' %]<span>Receiving items</span>
+                                                                    [% CASE 'cataloguing' %]<span>Cataloguing items</span>
+                                                                    [% CASE %]<span>Placing orders</span>
+                                                                [% END %]
                                                             </li>
                                                         [% END %]
                                                     </ol>
-                                                [% END # /IF closeddate %]
+
+                                                    [% IF ( closedate ) %]
+                                                        <ol>
+                                                            <li>
+                                                                <span class="label">Basket group:</span>
+                                                                [% IF basketgroup.id and not basketgroup.name %]
+                                                                    [% SET basketgroup.name = "Basket group no. " _ basketgroup.id %]
+                                                                [% END %]
+
+                                                                [% IF basketgroup.closed %]
+                                                                    [% IF ( CAN_user_acquisition_group_manage ) %]
+                                                                        <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]" title="basketgroup">[% basketgroup.name | html %] <span>(closed)</span></a>
+                                                                    [% ELSE %]
+                                                                        [% basketgroup.name | html %] <span>(closed)</span>
+                                                                    [% END %]
+                                                                [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
+                                                                    [%- IF basketgroup.id -%]
+                                                                [% basketgroup.name | html %]
+                                                                    [%- ELSE -%]
+                                                                        <span>No group</span>
+                                                                    [%- END -%]
+                                                                [% ELSE %]
+                                                                    [% IF ( CAN_user_acquisition_group_manage ) %]
+                                                                        [% IF ( basketgroup.id ) %]
+                                                                            [% basketgroup.name | html %]
+                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Change basket group</a>
+                                                                        [% ELSE %]
+                                                                            No group
+                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Set basket group</a>
+                                                                        [% END %]
+                                                                    [% END %]
+                                                                [% END %]
+                                                            </li>
+                                                            [% IF ( CAN_user_acquisition_group_manage ) %]
+                                                                <li id="basket_grouping" style="display:none;">
+                                                                    <span class="label">&nbsp;</span>
+                                                                    <div style="float:left">
+                                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+                                                                            <select id="basketgroupid" name="basketgroupid">
+                                                                                <option value="">No group</option>
+                                                                                [% FOREACH bg IN basketgroups %]
+                                                                                    [% IF ( bg.default ) %]
+                                                                                        <option value="[% bg.id | html %]" selected="selected">[% bg.name | html %]</option>
+                                                                                    [% ELSE %]
+                                                                                        [% UNLESS bg.closed %]
+                                                                                            <option value="[% bg.id | html %]">[% bg.name | html %]</option>
+                                                                                        [% ELSE %]
+                                                                                            <option value="[% bg.id | html %]" disabled="disabled">[% bg.name | html %] <span>(closed)</span></option>
+                                                                                        [% END %]
+                                                                                    [% END %]
+                                                                                [% END %]
+                                                                                <option value="new">Add new group</option>
+                                                                            </select>
+                                                                            <a href="#" id="basket_group_cancel" class="cancel">Cancel</a>
+                                                                            <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
+                                                                            <input type="hidden" value="mod_basket" name="op" />
+                                                                            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                                                                        </form>
+                                                                    </div>
+                                                                </li>
+                                                            [% END # /IF ( CAN_user_acquisition_group_manage ) %]
+                                                            [% IF basketgroup.deliveryplace %]
+                                                                <li>
+                                                                    <span class="label">Basket group delivery placename:</span> [% Branches.GetName( basketgroup.deliveryplace ) | html %]
+                                                                </li>
+                                                            [% END %]
+                                                            [% IF basketgroup.billingplace %]
+                                                                <li>
+                                                                    <span class="label">Basket group billing place:</span> [% Branches.GetName( basketgroup.billingplace ) | html %]
+                                                                </li>
+                                                            [% END %]
+                                                        </ol>
+                                                    [% END # /IF closeddate %]
+                                                </div> <!-- /.page-section -->
                                             </div> <!-- /.rows -->
                                         </div> <!-- /.col-sm-6 -->
                                     </div> <!-- /#acqui_basket_summary.row -->
