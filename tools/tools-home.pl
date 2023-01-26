@@ -29,7 +29,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "tools/tools-home.tt",
         query           => $query,
         type            => "intranet",
-        flagsrequired   => { tools => '*' },
+        flagsrequired   => [ tools => '*', clubs => '*' ],
     }
 );
 
