@@ -261,6 +261,55 @@
                                                         [% IF ( authorisedbyname ) %]
                                                             <li><span class="label">[% tp('basket created by', 'Created by:') | html %]</span>  [% authorisedbyname | html %]</li>
                                                         [% END %]
+
+                                                        [% IF ( creationdate ) %]
+                                                            <li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>
+                                                        [% END %]
+                                                        [% IF ( closedate ) %]
+                                                            <li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>
+                                                        [% END %]
+
+                                                        [% IF ( ediaccount ) %]
+                                                            [%- BLOCK edi_status -%]
+                                                                [%- SWITCH edi_order.status -%]
+                                                                    [%- CASE 'Pending'   -%]<span>Pending</span>
+                                                                    [%- CASE 'Sent'      -%]<span>Sent</span>
+                                                                    [%- CASE 'Processed' -%]<span>Processed</span>
+                                                                [%- END -%]
+                                                            [%- END -%]
+                                                            [% IF ( edi_order ) %]
+                                                                <li><span class="label">EDI status:</span> [%- PROCESS edi_status edi_order=edi_order -%] ([% edi_order.transfer_date | $KohaDates %])</li>
+                                                            [% ELSE %]
+                                                                <li><span class="label">EDI status:</span> Not ordered</li>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( estimateddeliverydate ) %]
+                                                            <li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates %]</li>
+                                                        [% END %]
+                                                        <li><span class="label">Orders are standing:</span> [% IF is_standing %]Yes[% ELSE %]No[% END %]</li>
+
+                                                        [% IF basket.create_items %]
+                                                            <li>
+                                                                <span class="label">Create items when:</span>
+                                                                [% SWITCH basket.create_items %]
+                                                                    [% CASE 'receiving' %]<span>Receiving items</span>
+                                                                    [% CASE 'cataloguing' %]<span>Cataloguing items</span>
+                                                                    [% CASE %]<span>Placing orders</span>
+                                                                [% END %]
+                                                            </li>
+                                                        [% END %]
+
+                                                        [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
+
+                                                    </ol>
+                                                </div> <!-- /.page-section -->
+                                            </div> <!-- /.col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <div class="page-section">
+                                                    <h2>Settings</h2>
+
+                                                    <ol>
                                                         <li id="managedby">
                                                             <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                                 <span class="label">Managed by:</span>
@@ -299,7 +348,7 @@
                                                         [% IF branches_loop.size %]
                                                             <li id="managing_library_entry" style="display:none;">
                                                                 <span class="label">&nbsp;</span>
-                                                                <div style="float:left">
+                                                                <div>
                                                                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                                         <select id="select_managing_library" name="branch">
                                                                             <option value="">(no library)</option>
@@ -319,51 +368,6 @@
                                                             </li> <!-- #/managing_library_entry -->
                                                         [% END # /IF branches_loop.size %]
 
-                                                        [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
-
-                                                    </ol>
-                                                </div> <!-- /.page-section -->
-                                            </div> <!-- /.col-sm-6 -->
-
-                                            <div class="col-sm-6">
-                                                <div class="page-section">
-                                                    <h2>Settings</h2>
-                                                    <ol>
-                                                        [% IF ( creationdate ) %]
-                                                            <li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>
-                                                        [% END %]
-                                                        [% IF ( closedate ) %]
-                                                            <li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>
-                                                        [% END %]
-                                                        [% IF ( ediaccount ) %]
-                                                            [%- BLOCK edi_status -%]
-                                                                [%- SWITCH edi_order.status -%]
-                                                                    [%- CASE 'Pending'   -%]<span>Pending</span>
-                                                                    [%- CASE 'Sent'      -%]<span>Sent</span>
-                                                                    [%- CASE 'Processed' -%]<span>Processed</span>
-                                                                [%- END -%]
-                                                            [%- END -%]
-                                                            [% IF ( edi_order ) %]
-                                                                <li><span class="label">EDI status:</span> [%- PROCESS edi_status edi_order=edi_order -%] ([% edi_order.transfer_date | $KohaDates %])</li>
-                                                            [% ELSE %]
-                                                                <li><span class="label">EDI status:</span> Not ordered</li>
-                                                            [% END %]
-                                                        [% END %]
-                                                        [% IF ( estimateddeliverydate ) %]
-                                                            <li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates %]</li>
-                                                        [% END %]
-                                                        <li><span class="label">Orders are standing:</span> [% IF is_standing %]Yes[% ELSE %]No[% END %]</li>
-
-                                                        [% IF basket.create_items %]
-                                                            <li>
-                                                                <span class="label">Create items when:</span>
-                                                                [% SWITCH basket.create_items %]
-                                                                    [% CASE 'receiving' %]<span>Receiving items</span>
-                                                                    [% CASE 'cataloguing' %]<span>Cataloguing items</span>
-                                                                    [% CASE %]<span>Placing orders</span>
-                                                                [% END %]
-                                                            </li>
-                                                        [% END %]
                                                     </ol>
 
                                                     [% IF ( closedate ) %]
