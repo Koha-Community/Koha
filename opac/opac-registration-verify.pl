@@ -21,6 +21,7 @@ use CGI qw ( -utf8 );
 use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
+use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members;
@@ -84,7 +85,7 @@ if (
                 template_name   => "opac-registration-confirmation.tt",
                 type            => "opac",
                 query           => $cgi,
-                authnotrequired => 1,
+                authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
             }
         );
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
@@ -146,7 +147,7 @@ if( !$template ) { # Missing token, patron exception, etc.
         template_name   => "opac-registration-invalid.tt",
         type            => "opac",
         query           => $cgi,
-        authnotrequired => 1,
+        authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
     });
     $template->param( error_type => $error_type, error_info => $error_info );
 }

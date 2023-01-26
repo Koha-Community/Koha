@@ -131,7 +131,7 @@
                         [% IF error_type == 'Koha::Exceptions::Patron::InvalidUserid' %]
                             <p>Error: Userid is not valid</p>
                         [% ELSE %]
-                            <p>Error [% error_type %]: [% error_info %]</p>
+                            <p>Error [% error_type | html %]: [% error_info | html %]</p>
                         [% END %]
                     </li></div>
                 [% END %]
