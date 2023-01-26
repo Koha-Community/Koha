@@ -408,6 +408,9 @@
                     }
                 ],
                 createdRow: function (row, data, dataIndex) {
+                    if ( data.is_default ) {
+                        $(row).addClass('default warn');
+                    }
                     if ( data.debug ) {
                         $(row).addClass('debug');
                     }
