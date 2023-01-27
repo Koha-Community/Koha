@@ -292,7 +292,7 @@
                     <label for="UserJS">UserJS: </label>
                     <div style="display:flex; flex-direction:column;">
                         <a class="expand-textarea" id="expand_userjs" data-target="userjs" data-syntax="javascript" href="#">Click to edit</a>
-                        <textarea style="display:none" name="userjs" id="userjs" class="codemirror" rows="10" cols="40">[% library.userjs %]</textarea>
+                        <textarea style="display:none" name="userjs" id="userjs" class="codemirror" rows="10" cols="40">[% library.userjs | html %]</textarea>
                         <a class="collapse-textarea" id="collapse_userjs" data-target="userjs" data-syntax="javascript" style="display:none" href="#">Click to collapse</br></a>
                     </div>
                 </li>
@@ -300,7 +300,7 @@
                     <label for="UserCSS">UserCSS: </label>
                     <div style="display:flex; flex-direction:column;">
                         <a class="expand-textarea" id="expand_usercss" data-target="usercss" data-syntax="css" href="#">Click to edit</a>
-                        <textarea style="display:none" name="usercss" id="usercss" class="" rows="10" cols="40">[% library.usercss %]</textarea>
+                        <textarea style="display:none" name="usercss" id="usercss" class="" rows="10" cols="40">[% library.usercss | html %]</textarea>
                         <a class="collapse-textarea" id="collapse_usercss" data-target="usercss" data-syntax="css" style="display:none" href="#">Click to collapse</br></a>
                     </div>
                 </li>
@@ -504,7 +504,6 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/css.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/javascript.min.js" ) | $raw %]
@@ -520,7 +519,6 @@
     [% Asset.js( "lib/codemirror/css-lint.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/yaml-lint.min.js" ) | $raw %]
     [% Asset.css("lib/codemirror/codemirror.css") | $raw %]
-    [% INCLUDE 'str/tinymce_i18n.inc' %]
     <style>
         .CodeMirror {
             border: 1px solid #EEE;

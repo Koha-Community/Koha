@@ -218,7 +218,7 @@ subtest 'pickup_locations() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'branch specfic js and css' => sub {
+subtest 'branch specific js and css' => sub {
 
     plan tests => 2;
 

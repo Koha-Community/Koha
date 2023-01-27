@@ -13,6 +13,11 @@
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <style>
+        [% Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
+    </style>
+[% END %]
 [% IF ( SCOUserCSS ) %]<style>[% SCOUserCSS | $raw %]</style>[% END %]
 <script>
     var Koha = {};

@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE Branches %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
