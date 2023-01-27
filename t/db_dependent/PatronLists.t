@@ -17,13 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
 use Koha::List::Patron
     qw( AddPatronList AddPatronsToList DelPatronList DelPatronsFromList GetPatronLists ModPatronList );
+use Koha::Patrons;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -97,6 +98,11 @@ DelPatronsFromList(
 );
 $list1->discard_changes();
 is( $list1->patron_list_patrons()->count(), 0, 'DelPatronsFromList works.' );
+
+my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+AddPatronsToList({list => $list2,borrowernumbers => [ $patron->borrowernumber ]});
+@lists = $patron->get_lists_with_patron;
+is( scalar @lists, 1, 'get_lists_with_patron works' );
 
 @lists = GetPatronLists( { owner => $owner } );
 is( scalar @lists, $list_count_original + 2, 'GetPatronLists works' );

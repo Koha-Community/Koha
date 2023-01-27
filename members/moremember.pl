@@ -287,6 +287,7 @@ elsif ( $patron->is_going_to_expire ) {
 
 
 my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;
+my $patron_lists_count = $patron->get_lists_with_patron->count();
 
 $template->param(
     patron          => $patron,
@@ -303,6 +304,7 @@ $template->param(
     logged_in_user => $logged_in_user,
     files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
     has_modifications         => $has_modifications,
+    patron_lists_count => $patron_lists_count,
 );
 
 if ( C4::Context->preference('UseRecalls') ) {

@@ -1642,6 +1642,29 @@ sub get_enrollable_clubs {
     return Koha::Clubs->get_enrollable($params);
 }
 
+
+=head3 get_lists_with_patron
+
+my @lists = $patron->get_lists_with_patron;
+
+=cut
+
+sub get_lists_with_patron {
+    my ( $self ) = @_;
+    my $borrowernumber = $self->borrowernumber;
+
+    return Koha::Database->new()->schema()->resultset('PatronList')->search(
+        {
+            'patron_list_patrons.borrowernumber' => $borrowernumber,
+        },
+        {
+            join => 'patron_list_patrons',
+            collapse => 1,
+            order_by => 'name',
+        }
+    );
+}
+
 =head3 account_locked
 
 my $is_locked = $patron->account_locked

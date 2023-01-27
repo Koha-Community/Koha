@@ -77,6 +77,12 @@
                 <span>Clubs ([% enrollments.count | html %]/[% enrollable.count | html %])</span>
             [% END %]
         [% END %]
+
+        [% IF CAN_user_tools_manage_patron_lists || patron_lists_count %]
+            [% WRAPPER tab_item tabname="pat_lists" %]
+                <span>Patron lists ([% patron_lists_count | html %])</span>
+            [% END %]
+        [% END %]
     [% END # /WRAPPER tabs_nav %]
 
 
@@ -126,6 +132,12 @@
 
         [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
             [% WRAPPER tab_panel tabname="clubs" %]
+                Loading...
+            [% END # /tab_panel# %]
+        [% END %]
+
+        [% IF CAN_user_tools_manage_patron_lists || patron_lists_count %]
+            [% WRAPPER tab_panel tabname="pat_lists" %]
                 Loading...
             [% END # /tab_panel# %]
         [% END %]

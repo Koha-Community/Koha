@@ -638,7 +638,11 @@ if ( C4::Context->preference("ExportCircHistory") ) {
     $template->param(csv_profiles => Koha::CsvProfiles->search({ type => 'marc' }));
 }
 
-my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;
+my ( $has_modifications, $patron_lists_count);
+if ( $patron ) {
+    $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;
+    $patron_lists_count = $patron->get_lists_with_patron->count();
+}
 $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
@@ -646,6 +650,7 @@ $template->param(
     today_due_date_and_time   => dt_from_string()->set(hour => 23)->set(minute => 59),
     restriction_types         => scalar Koha::Patron::Restriction::Types->search(),
     has_modifications         => $has_modifications,
+    patron_lists_count        => $patron_lists_count,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
     autoswitched              => $autoswitched,
