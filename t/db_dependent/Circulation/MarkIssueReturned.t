@@ -285,7 +285,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
 
     $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaning items would not result in patron debarment' );
+    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
 
     $schema->storage->txn_rollback;
 };
