@@ -292,7 +292,7 @@
             [% END %]
             <select class="select2" id="bookfund" name="bookfund">
                 <optgroup label="Current">
-                        <option value="[% order.fund.budget.id %]" selected="selected" data-sort1-authcat="[% order.fund.sort1_authcat | html %]" data-sort2-authcat="[% order.fund.sort2_authcat | html %]">
+                        <option value="[% order.fund.budget.id | html %]" selected="selected" data-sort1-authcat="[% order.fund.sort1_authcat | html %]" data-sort2-authcat="[% order.fund.sort2_authcat | html %]">
                             Keep current ([% order.fund.budget_name | html %])</option>
                 </optgroup>
             [% FOREACH budget_period_id IN budget_loops.keys %]
