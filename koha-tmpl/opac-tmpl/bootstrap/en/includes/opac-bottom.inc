@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE AdditionalContents %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
@@ -237,6 +238,11 @@ $(document).ready(function() {
 [% IF ( Koha.Preference('OPACUserJS') ) %]
     <script>
         [% Koha.Preference('OPACUserJS') | $raw %]
+    </script>
+[% END %]
+[% IF Branches.GetBranchSpecificJS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <script>
+        [% Branches.GetBranchSpecificJS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
     </script>
 [% END %]
 [% IF SCO_login %]

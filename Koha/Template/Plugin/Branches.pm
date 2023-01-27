@@ -153,4 +153,26 @@ sub pickup_locations {
     return \@libraries;
 }
 
+sub GetBranchSpecificJS {
+    my ($self, $branchcode) = @_;
+
+    return q{} unless defined $branchcode;
+
+    my $library = Koha::Libraries->find($branchcode);
+    my $userjs = $library ? $library->userjs : q{};
+
+    return $userjs
+}
+
+sub GetBranchSpecificCSS {
+    my ($self, $branchcode) = @_;
+
+    return q{} unless defined $branchcode;
+
+    my $library = Koha::Libraries->find($branchcode);
+    my $usercss = $library ? $library->usercss : q{};
+
+    return $usercss
+}
+
 1;

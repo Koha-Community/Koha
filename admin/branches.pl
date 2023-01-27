@@ -81,6 +81,8 @@ if ( $op eq 'add_form' ) {
       marcorgcode
       pickup_location
       public
+      userjs
+      usercss
     );
     my $is_a_modif = $input->param('is_a_modif');
 

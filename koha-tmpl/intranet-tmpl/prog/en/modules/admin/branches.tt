@@ -23,6 +23,8 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
+[% Asset.css("lib/codemirror/lint.min.css") | $raw %]
 </head>
 
 <body id="admin_branches" class="admin">
@@ -286,6 +288,23 @@
                     </select>
                     <div class="hint">Set to 'yes' to show this library as a search option and on the libraries page in the OPAC.</div>
                 </li>
+                <li>
+                    <label for="UserJS">UserJS: </label>
+                    <div style="display:flex; flex-direction:column;">
+                        <a class="expand-textarea" id="expand_userjs" data-target="userjs" data-syntax="javascript" href="#">Click to edit</a>
+                        <textarea style="display:none" name="userjs" id="userjs" class="codemirror" rows="10" cols="40">[% library.userjs %]</textarea>
+                        <a class="collapse-textarea" id="collapse_userjs" data-target="userjs" data-syntax="javascript" style="display:none" href="#">Click to collapse</br></a>
+                    </div>
+                </li>
+                <li>
+                    <label for="UserCSS">UserCSS: </label>
+                    <div style="display:flex; flex-direction:column;">
+                        <a class="expand-textarea" id="expand_usercss" data-target="usercss" data-syntax="css" href="#">Click to edit</a>
+                        <textarea style="display:none" name="usercss" id="usercss" class="" rows="10" cols="40">[% library.usercss %]</textarea>
+                        <a class="collapse-textarea" id="collapse_usercss" data-target="usercss" data-syntax="css" style="display:none" href="#">Click to collapse</br></a>
+                    </div>
+                </li>
+                </li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -486,7 +505,30 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
+    [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/css.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/javascript.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/xml.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/yaml.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/linters/jshint.min.js" ) | $raw %]
+    [% Asset.js( "lib/linters/htmlhint.min.js" ) | $raw %]
+    [% Asset.js( "lib/linters/csslint.min.js" ) | $raw %]
+    [% Asset.js( "lib/linters/js-yaml.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/javascript-lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/css-lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/yaml-lint.min.js" ) | $raw %]
+    [% Asset.css("lib/codemirror/codemirror.css") | $raw %]
     [% INCLUDE 'str/tinymce_i18n.inc' %]
+    <style>
+        .CodeMirror {
+            border: 1px solid #EEE;
+            margin: 1em, 1em, 1em, 0;
+            resize: vertical;
+            width: 50em;
+        }
+    </style>
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         var saved_table = localStorage.getItem("DataTables_libraries_/cgi-bin/koha/admin/branches.pl");
@@ -685,17 +727,40 @@
             [% END %]
         });
 
-        tinyMCE.init({
-            branding : false,
-            relative_urls : false,
-            content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
-            menubar : "file edit view insert format tools table",
-            mode : "specific_textareas",
-            plugins : "autoresize table hr link image charmap lists code emoticons",
-            toolbar : [
-                "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
-                "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code"
-            ],
+        $( ".expand-textarea" ).on("click", function(e){
+            e.preventDefault();
+            $(this).hide();
+            var target = $(this).data("target");
+            var syntax = $(this).data("syntax");
+            $("#collapse_" + target ).show();
+            if( syntax ){
+                var editor = CodeMirror.fromTextArea( document.getElementById( target ), {
+                    lineNumbers: true,
+                    mode: syntax,
+                    lineWrapping: true,
+                    viewportMargin: Infinity,
+                    gutters: ["CodeMirror-lint-markers"],
+                    lint: true
+                });
+                editor.on("blur", function(){
+                    editor.save();
+                });
+            } else {
+                $( target ).show();
+            }
+        });
+
+        $( ".collapse-textarea" ).on("click", function(e){
+            e.preventDefault();
+            $(this).hide();
+            var target = $(this).data("target");
+            var syntax = $(this).data("syntax");
+            $("#expand_" + target ).show();
+            if( syntax ){
+                var editor = $( "#" + target ).next(".CodeMirror")[0].CodeMirror;
+                editor.toTextArea();
+            }
+            $( "#" + target ).hide();
         });
     </script>
 [% END %]

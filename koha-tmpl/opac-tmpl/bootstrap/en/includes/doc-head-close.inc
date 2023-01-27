@@ -44,6 +44,11 @@
 [% IF ( Koha.Preference('OPACUserCSS') ) %]
     <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
 [% END %]
+[% IF Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <style>
+        [% Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
+    </style>
+[% END %]
 [% IF SCO_login %]
     [% SET SCOUserCSS = Koha.Preference('SCOUserCSS') %]
     [% IF SCOUserCSS %]
