@@ -1015,15 +1015,15 @@ sub has_overdues {
 }
 
 
-=head3 has_debarring_overdues
+=head3 has_restricting_overdues
 
-my $has_debarring_overdues = $patron->has_debarring_overdues({ issue_branchcode => $branchcode });
+my $has_restricting_overdues = $patron->has_restricting_overdues({ issue_branchcode => $branchcode });
 
 Returns true if patron has overdues that would result in debarment.
 
 =cut
 
-sub has_debarring_overdues {
+sub has_restricting_overdues {
     my ($self, $params) = @_;
     $params //= {};
     my $date = dt_from_string()->truncate( to => 'day' );
