@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Text::CSV_XS;
 use DateTime;
 use DateTime::Duration;
@@ -69,7 +69,7 @@ overdue_notices.pl
    --date         <yyyy-mm-dd>     Emulate overdues run for this date.
    --email        <email_type>     Type of email that will be used.
                                    Can be 'email', 'emailpro' or 'B_email'. Repeatable.
-   --frombranch                    Organize and send overdue notices by home library (item-homebranch) or checkout library (item-issuebranch).
+   --frombranch                    Organize and send overdue notices by home library (item-homebranch) or checkout library (item-issuebranch) or patron home library (patron-homebranch).
                                    This option is only used, if the OverdueNoticeFrom system preference is set to 'command-line option'.
                                    Defaults to item-issuebranch.
 
@@ -184,7 +184,7 @@ Allows to specify which type of email will be used. Can be email, emailpro or B_
 
 =item B<--frombranch>
 
-Organize overdue notices either by checkout library (item-issuebranch) or item home library (item-homebranch).
+Organize overdue notices either by checkout library (item-issuebranch) or item home library (item-homebranch)  or patron home library (patron-homebranch).
 This option is only used, if the OverdueNoticeFrom system preference is set to use 'command-line option'.
 Defaults to checkout library (item-issuebranch).
 
@@ -341,11 +341,14 @@ if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
 
-die "--frombranch takes item-homebranch or item-issuebranch only"
+die "--frombranch takes item-homebranch or item-issuebranch or patron-homebranch only"
     unless ( $frombranch eq 'item-issuebranch'
-        || $frombranch eq 'item-homebranch' );
-$frombranch = C4::Context->preference('OverdueNoticeFrom') ne 'cron' ? C4::Context->preference('OverdueNoticeFrom') : $frombranch;
+    || $frombranch eq 'item-homebranch'
+    || $frombranch eq 'patron-homebranch' );
+$frombranch =
+    C4::Context->preference('OverdueNoticeFrom') ne 'cron' ? C4::Context->preference('OverdueNoticeFrom') : $frombranch;
 my $owning_library = ( $frombranch eq 'item-homebranch' ) ? 1 : 0;
+my $patron_homelibrary = ( $frombranch eq 'patron-homebranch' ) ? 1 : 0;
 
 my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();    # Branches with overdue rules
 my @branches;                                    # Branches passed as parameter with overdue rules
@@ -446,6 +449,8 @@ elsif ( defined $text_filename ) {
   }
 }
 
+my %already_queued;
+my %seen = map { $_ => 1 } @branches;
 foreach my $branchcode (@branches) {
     my $calendar;
     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
@@ -476,10 +481,10 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
 
-    if($owning_library) {
-      $sql2 .= ' AND items.homebranch = ? ';
+    if ($owning_library) {
+        $sql2 .= ' AND items.homebranch = ? ' unless ($patron_homelibrary);
     } else {
-      $sql2 .= ' AND issues.branchcode = ? ';
+        $sql2 .= ' AND issues.branchcode = ? ' unless ($patron_homelibrary);
     }
     my $sth2 = $dbh->prepare($sql2);
 
@@ -595,6 +600,7 @@ END_SQL
                     next;
                 }
                 $borrowernumber = $data->{'borrowernumber'};
+                next if ( $patron_homelibrary && $already_queued{"$borrowernumber$i"} );
                 my $borr = sprintf( "%s%s%s (%s)",
                     $data->{'surname'} || '',
                     $data->{'firstname'} && $data->{'surname'} ? ', ' : '',
@@ -603,6 +609,13 @@ END_SQL
                 $verbose and warn "borrower $borr has items triggering level $i.\n";
 
                 my $patron = Koha::Patrons->find( $borrowernumber );
+                if ($patron_homelibrary) {
+                    $branchcode           = $patron->branchcode;
+                    $library              = Koha::Libraries->find($branchcode);
+                    $admin_email_address  = $library->from_email_address;
+                    $branch_email_address = C4::Context->preference('AddressForFailedOverdueNotices')
+                        || $library->inbound_email_address;
+                }
                 @emails_to_use = ();
                 my $notice_email = $patron->notice_email_address;
                 unless ($nomail) {
@@ -645,7 +658,7 @@ END_SQL
                     ) unless $test_mode;
                     $verbose and warn "debarring $borr\n";
                 }
-                my @params = ($borrowernumber,$branchcode);
+                my @params = $patron_homelibrary ? ($borrowernumber) : ( $borrowernumber, $branchcode );
 
                 $sth2->execute(@params);
                 my $itemcount = 0;
@@ -690,6 +703,7 @@ END_SQL
                       $exceededPrintNoticesMaxLines = 1;
                       last;
                     }
+                    next if $patron_homelibrary and !grep { $seen{ $item_info->{branchcode} } } @branches;
                     $j++;
 
                     $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields, dateonly => 1 } );
@@ -813,6 +827,7 @@ END_SQL
                         }
                     }
                 }
+                $already_queued{"$borrowernumber$i"} = 1;
             }
             $sth->finish;
         }
