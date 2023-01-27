@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 
 use C4::Context;
@@ -214,6 +214,33 @@ subtest 'pickup_locations() tests' => sub {
             is( $pickup_location->{branchcode}, $library_3->branchcode, 'The right library is marked as selected' );
         }
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'branch specfic js and css' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $newbranch = $builder->build({
+        source => 'Branch',
+        value => {
+            branchcode => 'AAA',
+            branchname => 'Specific Branch',
+            userjs => 'console.log(\'Hello World\');',
+            usercss => 'body { background-color: blue; }'
+        }
+    });
+
+    my $plugin = Koha::Template::Plugin::Branches->new();
+
+    my $userjs = $plugin->GetBranchSpecificJS($newbranch->{branchcode});
+    is($userjs, $newbranch->{userjs},'received correct JS string from function');
+
+    my $usercss = $plugin->GetBranchSpecificCSS($newbranch->{branchcode});
+    is($usercss, $newbranch->{usercss},'received correct CSS string from function');
 
     $schema->storage->txn_rollback;
 };
