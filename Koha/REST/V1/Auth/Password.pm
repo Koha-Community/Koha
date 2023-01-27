@@ -41,8 +41,8 @@ Controller method that checks a patron's password
 sub validate {
     my $c = shift->openapi->valid_input or return;
     my $body   = $c->validation->param('body');
-    my $username = $body->{username} // '';
-    my $patron = Koha::Patrons->find({ userid => $username });
+    my $userid = $body->{userid} // '';
+    my $patron = Koha::Patrons->find({ userid => $userid });
 
     unless ($patron) {
         return $c->render( status => 400, openapi => { error => "Validation failed" } );
