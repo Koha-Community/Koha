@@ -3,12 +3,13 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    Koha &rsaquo;
-    Cataloging &rsaquo;
-    Upload local cover image
     [% IF ( biblio ) %]
-        &rsaquo; [% INCLUDE 'biblio-title-head.inc' %]
+        Upload local cover image for [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
+    [% ELSE %]
+        Upload local cover image &rsaquo;
     [% END %]
+    Cataloging &rsaquo;
+    Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
@@ -89,9 +90,11 @@
         <li>
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
         </li>
-        <li>
-            <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
-        </li>
+        [% IF uploadimage || biblio || itemnumber || biblionumber %]
+            <li>
+                <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
+            </li>
+        [% END %]
 
         [% IF ( uploadimage ) %]
             <li>
@@ -104,6 +107,12 @@
                     <a href="#" aria-current="page"><em>[% INCLUDE 'biblio-title.inc' %]</em></a>
                 </li>
             [% END %]
+        [% ELSIF biblio %]
+            <li>
+                <a href="#" aria-current="page">
+                    Upload cover for <em>[% INCLUDE 'biblio-title.inc' %]</em>
+                </a>
+            </li>
         [% ELSIF itemnumber %]
             <li>
                 <a href="#" aria-current="page">
