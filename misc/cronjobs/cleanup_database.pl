@@ -113,7 +113,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --jobs-days DAYS        Purge all finished background jobs this many days old. Defaults to 1 if no DAYS provided.
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
-   --reports DAYS          Purge reports data saved more than DAYS days ago.
+   --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
 USAGE
     exit $_[0];
 }
