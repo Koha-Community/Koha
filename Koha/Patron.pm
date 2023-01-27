@@ -25,23 +25,24 @@ use JSON qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
 
-use C4::Context;
 use C4::Auth qw( checkpw_hash );
+use C4::Context;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Log qw( logaction );
 use Koha::Account;
 use Koha::ArticleRequests;
-use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Club::Enrollments;
+use Koha::CurbsidePickups;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Encryption;
 use Koha::Exceptions::Password;
 use Koha::Holds;
-use Koha::CurbsidePickups;
 use Koha::Old::Checkouts;
+use Koha::OverdueRules;
 use Koha::Patron::Attributes;
 use Koha::Patron::Categories;
 use Koha::Patron::Debarments;
@@ -1073,23 +1074,24 @@ sub _get_overdue_debarred_delay {
     my ($branchcode, $categorycode) = @_;
     my $dbh = C4::Context->dbh();
 
-    my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? AND categorycode = ?";
-
-    my $rqoverduerules = $dbh->prepare($query);
-    $rqoverduerules->execute($branchcode, $categorycode);
-
     # We get default rules if there is no rule for this branch
-    if($rqoverduerules->rows == 0) {
-        $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' AND categorycode = ?";
+    my $rule = Koha::OverdueRules->find(
+        {
+            branchcode   => $branchcode,
+            categorycode => $categorycode
+        }
+      )
+      || Koha::OverdueRules->find(
+        {
+            branchcode   => q{},
+            categorycode => $categorycode
+        }
+      );
 
-        $rqoverduerules = $dbh->prepare($query);
-        $rqoverduerules->execute($categorycode);
-    }
-
-    while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
-        return $overdue_rules->{"delay1"} if($overdue_rules->{"debarred1"});
-        return $overdue_rules->{"delay2"} if($overdue_rules->{"debarred2"});
-        return $overdue_rules->{"delay3"} if($overdue_rules->{"debarred3"});
+    if ( $rule ) {
+        return $rule->delay1 if $rule->debarred1;
+        return $rule->delay2 if $rule->debarred2;
+        return $rule->delay3 if $rule->debarred3;
     }
 }
 
