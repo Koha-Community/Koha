@@ -310,6 +310,24 @@
                 </div> <!-- /.modal-dialog -->
             </div> <!-- #delete_confirm_modal -->
 
+            <div id="default_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="default_confirm_modal_label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="default_confirm_modal_no closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="default_confirm_modal_label">Set default server</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="default_confirm_dialog">Are you sure you want to change the default SMTP server?</div>
+                        </div>
+                        <div class="modal-footer">
+                            <a id="default_confirm_dialog" href="#" class="btn btn-default default_confirm_modal_yes" id="default_confirm_modal_button" role="button" data-toggle="modal">Yes</a>
+                            <button class="btn btn-link default_confirm_modal_no" data-dismiss="modal" aria-hidden="true">No</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- #default_confirm_modal -->
+
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -439,6 +457,17 @@
                 );
                 $("#delete_confirm_modal_button").data('smtp-server-id', smtp_server_id);
                 $("#delete_confirm_modal_button").data('smtp-server-name', smtp_server_name);
+            });
+
+            $('#smtp_default').on( "click", function () {
+                $("#default_confirm_modal").show();
+            });
+            $('.default_confirm_modal_yes').on( "click", function () {
+                $("#default_confirm_modal").hide();
+            });
+            $('.default_confirm_modal_no').on( "click", function () {
+                $("#smtp_default").prop('checked', !$("#smtp_default").prop('checked') );
+                $("#default_confirm_modal").hide();
             });
 
             $("#delete_confirm_modal_button").on( "click", function () {
