@@ -232,8 +232,6 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
     $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $nine_days_ago ); # overdue, but would not trigger debarment
 
-    print STDERR "DUEDATE: " . $nine_days_ago->stringify . "\n";
-
     Koha::Patron::Debarments::AddUniqueDebarment(
         {
             borrowernumber => $patron->borrowernumber,
