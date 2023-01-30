@@ -30,8 +30,6 @@ Koha::Patron::Restriction - Koha Patron::Restriction Object class
 
 =head2 Class methods
 
-=head2 Relation accessors
-
 =head3 type
 
   my $restriction_type = $restriction->type;
