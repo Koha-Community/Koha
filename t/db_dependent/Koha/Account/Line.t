@@ -504,9 +504,9 @@ subtest 'Renewal related tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $item = $builder->build_object({ class => 'Koha::Items' });
-    my $issue = $builder->build_object(
+    my $staff  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item   = $builder->build_sample_item;
+    my $issue  = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -525,6 +525,7 @@ subtest 'Renewal related tests' => sub {
         debit_type_code   => "OVERDUE",
         status            => "UNRETURNED",
         amountoutstanding => 0,
+        amount            => 0,
         interface         => 'commandline',
     })->store;
 
