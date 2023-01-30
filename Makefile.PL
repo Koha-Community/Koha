@@ -692,6 +692,9 @@ my $pl_files = {
 	  'fix-perl-path.PL' => [	# this script ensures the correct shebang line for the platform installed on...
 		 'blib'
 		 ],
+      'build-resources.PL' => [
+          'blib'
+         ],
 };
 
 push @{ $pl_files->{'rewrite-config.PL'} }, (
