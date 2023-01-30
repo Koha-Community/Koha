@@ -101,7 +101,9 @@
                 </select>
                 <input type="submit" class="btn btn-primary" value="Filter" />
             </form>
-            <form action="[% scriptname | html %]" method="post" id="uncertainprices">
+        </div> <!-- /.page-section -->
+        <form action="[% scriptname | html %]" method="post" id="uncertainprices">
+            <fieldset class="rows">
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 <input type="hidden" name="op" value="validate" />
                 <table id="uncertainpricet">
@@ -158,9 +160,9 @@
                         [% END %]
                     </tbody>
                 </table>
-                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
-            </form>
-        </div> <!-- /.page-section -->
+            </fieldset>
+            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
+        </form>
 	[% END %]
 
 </main>
