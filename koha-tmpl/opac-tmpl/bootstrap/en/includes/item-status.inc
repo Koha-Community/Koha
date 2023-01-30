@@ -19,9 +19,10 @@
     [% SET transfertto = transfer.tobranch %]
 [% END %]
 
-[% SET waiting = item.holds.waiting.count %]
+[% SET checkout = item.checkout %]
+[% SET waiting  = item.holds.waiting.count %]
 [% IF include_schema_org %]
-    [% IF item.damaged or item.checkout.date_due or item.itemlost or transfertwhen or waiting %]
+    [% IF item.damaged or checkout or item.itemlost or transfertwhen or waiting %]
         <link property="availability" href="http://schema.org/OutOfStock" />
     [% ELSIF item.withdrawn %]
         <link property="availability" href="http://schema.org/Discontinued" />
@@ -42,26 +43,26 @@
     [% END %]
 [% END %]
 
-[% SET datedue = item.checkout.date_due %]
-[% SET onsite_checkout = item.checkout.onsite_checkout %]
+[% IF checkout %]
+    [% SET checkout_patron = checkout.patron %]
+    [% SET onsite_checkout = checkout.onsite_checkout %]
 
-[% IF datedue %]
     [% SET itemavailable = 0 %]
     [% IF onsite_checkout %]
         [% IF ( OPACShowCheckoutName ) %]
-            <span class="item-status checkedout">Currently in local use by [% item.firstname | html %] [% item.surname | html %] [% IF ( item.cardnumber ) %]([% item.cardnumber | html %])[% END %]</span>
+            <span class="item-status checkedout">Currently in local use by [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span>
         [% ELSE %]
             <span class="item-status checkedout">Currently in local use</span>
         [% END %]
     [% ELSE %]
         [% IF ( OPACShowCheckoutName ) %]
-            <span class="item-status checkedout">Checked out to [% item.firstname | html %] [% item.surname | html %] [% IF ( item.cardnumber ) %]([% item.cardnumber | html %])[% END %]</span>
+            <span class="item-status checkedout">Checked out to [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span>
         [% ELSE %]
             <span class="item-status checkedout">Checked out</span>
         [% END %]
     [% END %]
     [% IF show_recall_link %]
-        [% IF datedue && logged_in_user.borrowernumber != issue.borrowernumber %]
+        [% IF logged_in_user.borrowernumber != issue.borrowernumber %]
             <a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>
         [% END %]
     [% END %]
