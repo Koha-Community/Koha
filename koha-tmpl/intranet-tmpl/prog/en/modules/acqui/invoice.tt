@@ -27,24 +27,23 @@
 
 [% SET readonly = NOT CAN_user_acquisition_edit_invoices %]
 
-
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">[% invoicenumber | html %]</a>
-        </li>
-    </ol>
-</nav>
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">[% invoicenumber | html %]</a>
+            </li>
+        </ol>
+    </nav>
 [% END %]
 
 <div class="main container-fluid">
@@ -52,396 +51,426 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-      <h1>Invoice: [% invoicenumber | html %]</h1>
+                <h1>Invoice: [% invoicenumber | html %]</h1>
                 [% INCLUDE 'blocking_errors.inc' %]
 
-      [% IF ( modified ) %]
-        <div class="dialog message">
-          <p>Invoice has been modified</p>
-        </div>
-      [% END %]
-
-      <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
-        <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
-        <fieldset class="rows">
-            <ol>
-            <li>
-                [% IF readonly %]
-                    <label for="shipmentdate">Invoice number:</label>
-                    [% invoicenumber | html %]
-                [% ELSE %]
-                    <label for="shipmentdate" class="required">Invoice number:</label>
-                    <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
-                    <span class="required">Required</span>
+                [% IF ( modified ) %]
+                    <div class="dialog message">
+                        <p>Invoice has been modified</p>
+                    </div>
                 [% END %]
-            </li>
 
-            <li>
-                <label for="shipmentdate">Shipment date:</label>
-                [% IF readonly %]
-                    [% shipmentdate | $KohaDates %]
-                [% ELSE %]
-                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | html %]" class="flatpickr" />
-                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                [% END %]
-            </li>
+                <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
 
-            <li>
-                <label for="billingdate">Billing date:</label>
-                [% IF readonly %]
-                    [% billingdate | $KohaDates %]
-                [% ELSE %]
-                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | html %]" class="flatpickr" />
-                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                [% END %]
-            </li>
+                <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                [% IF readonly %]
+                                    <label for="shipmentdate">Invoice number:</label>
+                                    [% invoicenumber | html %]
+                                [% ELSE %]
+                                    <label for="shipmentdate" class="required">Invoice number:</label>
+                                    <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
+                                    <span class="required">Required</span>
+                                [% END %]
+                            </li>
+                            <li>
+                                <label for="shipmentdate">Shipment date:</label>
+                                [% IF readonly %]
+                                    [% shipmentdate | $KohaDates %]
+                                [% ELSE %]
+                                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | html %]" class="flatpickr" />
+                                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                [% END %]
+                            </li>
+                            <li>
+                                <label for="billingdate">Billing date:</label>
+                                [% IF readonly %]
+                                    [% billingdate | $KohaDates %]
+                                [% ELSE %]
+                                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | html %]" class="flatpickr" />
+                                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                [% END %]
+                            </li>
+                            <li>
+                                <label for="shipmentcost">Shipping cost:</label>
+                                [% IF readonly %]
+                                    [% shipmentcost | $Price %]
+                                [% ELSE %]
+                                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PROCESS fund_dropdown form_id => 'shipment_budget_id' form_name => 'shipment_budget_id' selected => shipment_budget_id %]
+                            </li>
 
-            <li>
-                <label for="shipmentcost">Shipping cost:</label>
-                [% IF readonly %]
-                    [% shipmentcost | $Price %]
-                [% ELSE %]
-                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
-                [% END %]
-            </li>
-            <li>
-                [% PROCESS fund_dropdown form_id => 'shipment_budget_id' form_name => 'shipment_budget_id' selected => shipment_budget_id %]
-            </li>
+                            [% IF ( invoiceclosedate ) %]
+                                <li>
+                                    <span class="label">Status:</span>
+                                    Closed on [% invoiceclosedate | $KohaDates %]
+                                </li>
+                                [% IF CAN_user_acquisition_reopen_closed_invoices AND NOT readonly %]
+                                    <li>
+                                        <label for="reopen">Reopen: </label>
+                                        <input type="checkbox" name="reopen" id="reopen" />
+                                    </li>
+                                [% END %]
+                            [% ELSE %]
+                                <li>
+                                    <span class="label">Status:</span>
+                                    Open
+                                </li>
+                                [% UNLESS ( readonly ) %]
+                                    <li>
+                                        <label for="close">Close: </label>
+                                        <input type="checkbox" name="close" id="close" />
+                                    </li>
+                                [% END %]
+                            [% END %]
+                        </ol>
 
-            [% IF ( invoiceclosedate ) %]
-            <li><span class="label">Status:</span>
-                Closed on [% invoiceclosedate | $KohaDates %]</li>
+                        <fieldset class="rows">
+                            [% IF available_additional_fields.count %]
+                                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+                            [% END %]
+                        </fieldset>
 
-                [% IF CAN_user_acquisition_reopen_closed_invoices AND NOT readonly %]
-                    <li>
-                        <label for="reopen">Reopen: </label>
-                        <input type="checkbox" name="reopen" id="reopen" />
-                    </li>
-                [% END %]
-            [% ELSE %]
-                <li>
-                    <span class="label">Status:</span>
-                    Open
-                </li>
-                [% UNLESS ( readonly ) %]
-                    <li>
-                        <label for="close">Close: </label>
-                        <input type="checkbox" name="close" id="close" />
-                    </li>
-                [% END %]
-            [% END %]
-            </ol>
-          <fieldset class="rows">
-            [% IF available_additional_fields.count %]
-                [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
-            [% END %]
-          </fieldset>
-        [% UNLESS readonly %]
-          <input type="hidden" name="op" value="mod" />
-          <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
-            <fieldset class="action">
-                <input type="submit" class="btn btn-primary" value="Save" />
-                [% IF CAN_user_acquisition_delete_invoices AND NOT orders_loop.size %]
-                <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
-                [% END %]
-            </fieldset>
-        [% END %]
-        </fieldset>
-      </form>
+                        [% UNLESS readonly %]
+                            <input type="hidden" name="op" value="mod" />
+                            <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
+                            <fieldset class="action">
+                                <input type="submit" class="btn btn-primary" value="Save" />
+                                [% IF CAN_user_acquisition_delete_invoices AND NOT orders_loop.size %]
+                                    <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
+                                [% END %]
+                            </fieldset>
+                        [% END %]
+                    </fieldset>
+                </form>
 
-        <h3>Adjustments</h3>
+                <h3>Adjustments</h3>
 
-          <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
-              <fieldset class="rows">
-                  <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
-                  [% IF (adjustments && adjustments.count > 0) %]
-                      <table id="invoice_adj_table">
-                          <tr>
-                             <th>Id</th>
-                             <th>Amount</th>
-                             <th>Reason</th>
-                             <th>Note</th>
-                             <th>Fund</th>
-                             <th>Encumber while invoice open</th>
-                             [% UNLESS readonly %]<th>&nbsp;</th>[% END %]
-                          </tr>
-                          [% total_adj = 0 %]
-                          [% FOREACH adjustment IN adjustments %]
-                              [% total_adj = total_adj + adjustment.adjustment %]
-                              <tr>
-                                  <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
-                                  <td>
-                                    [% IF readonly %]
-                                        [% adjustment.adjustment | $Price %]
+                <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
+                    <fieldset class="rows">
+                        <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
+                        [% IF (adjustments && adjustments.count > 0) %]
+                            <table id="invoice_adj_table">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Amount</th>
+                                    <th>Reason</th>
+                                    <th>Note</th>
+                                    <th>Fund</th>
+                                    <th>Encumber while invoice open</th>
+                                    [% UNLESS readonly %]<th>&nbsp;</th>[% END %]
+                                </tr>
+                                [% total_adj = 0 %]
+                                [% FOREACH adjustment IN adjustments %]
+                                    [% total_adj = total_adj + adjustment.adjustment %]
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]
+                                        </td>
+                                        <td>
+                                            [% IF readonly %]
+                                                [% adjustment.adjustment | $Price %]
+                                            [% ELSE %]
+                                                <input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" />
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF readonly %]
+                                                [% AuthorisedValues.GetByCode('ADJ_REASON', adjustment.reason) | html %]
+                                            [% ELSE %]
+                                                [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                                                [% IF reasons.0 %]
+                                                    <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
+                                                        <option value="">No reason</option>
+                                                        [% FOREACH reason IN reasons %]
+                                                            [% IF ( adjustment.reason == reason.authorised_value ) %]
+                                                                <option selected="selected" value="[% reason.authorised_value | html %]">
+                                                            [% ELSE %]
+                                                                <option value="[% reason.authorised_value | html %]">
+                                                            [% END %]
+                                                                [% reason.lib | html %]
+                                                                </option>
+                                                        [% END %]
+                                                    </select>
+                                                [% ELSE %]
+                                                    <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
+                                                    <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id | html %]" value="" />
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF readonly %]
+                                                [% adjustment.note | html %]
+                                            [% ELSE %]
+                                                <input type="text" name="note" id="note_new" value="[% adjustment.note | html %]"/>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% PROCESS fund_dropdown form_id => "budget_id_" _ adjustment.adjustment_id form_name => 'budget_id' selected => adjustment.budget_id %]
+                                        </td>
+                                        [% IF adjustment.encumber_open %]
+                                            <td>
+                                                [% IF readonly %]
+                                                    <input type="checkbox" checked="checked" readonly="readonly" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" checked/>
+                                                [% END %]
+                                            </td>
+                                        [% ELSE %]
+                                            <td>
+                                                [% IF readonly %]
+                                                    <input type="checkbox" disabled="disabled" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" />
+                                                [% END %]
+                                            </td>
+                                        [% END %]
+                                        [% UNLESS readonly %]
+                                            <td>
+                                                <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                            </td>
+                                        [% END %]
+                                    </tr>
+                                [% END %]
+                            </table>
+                        [% END %]
+
+                        [% UNLESS readonly %]
+                            <p>
+                                <a href="#" id="show_invoice_adjustment" class="toggle_invoice_adjustment"><i class="fa fa-plus"></i> Add an adjustment</a>
+                            </p>
+
+                            <fieldset id="add_invoice_adjustment" style="display:none">
+                                <h4>Add an adjustment</h4>
+                                <input type="hidden" name="adjustment_id" value="new" />
+                                <ol>
+                                    <li>
+                                        <label for="adjustment_new">Amount: </label>
+                                        <input type="text" name="adjustment" id="adjustment_new" />
+                                    </li>
+                                    [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                                    [% IF reasons.0 %]
+                                        <li>
+                                            <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
+                                            <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
+                                                <option value="">No reason</option>
+                                                [% FOREACH reason IN reasons %]
+                                                    <option value="[% reason.authorised_value | html %]">
+                                                        [% reason.lib | html %]
+                                                    </option>
+                                                [% END %]
+                                            </select>
+                                        </li>
                                     [% ELSE %]
-                                        <input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" />
+                                        <li>
+                                            <span class="label">Reason: </span>
+                                            <span>None</span>
+                                            <div class="hint">Define values in authorised value category ADJ_REASON to enable</div>
+                                        </li>
                                     [% END %]
-                                  </td>
-                                  <td>
-                                      [% IF readonly %]
-                                          [% AuthorisedValues.GetByCode('ADJ_REASON', adjustment.reason) | html %]
-                                      [% ELSE %]
-                                          [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                                          [% IF reasons.0 %]
-                                              <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
-                                                  <option value="">No reason</option>
-                                                  [% FOREACH reason IN reasons %]
-                                                      [% IF ( adjustment.reason == reason.authorised_value ) %]
-                                                          <option selected="selected" value="[% reason.authorised_value | html %]">
-                                                      [% ELSE %]
-                                                          <option value="[% reason.authorised_value | html %]">
-                                                      [% END %]
-                                                      [% reason.lib | html %]
-                                                      </option>
-                                                  [% END %]
-                                              </select>
-                                          [% ELSE %]
-                                              <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
-                                              <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id | html %]" value="" />
-                                          [% END %]
-                                        [% END %]
-                                  </td>
-                                  <td>
-                                      [% IF readonly %]
-                                          [% adjustment.note | html %]
-                                      [% ELSE %]
-                                          <input type="text" name="note" id="note_new" value="[% adjustment.note | html %]"/>
-                                      [% END %]
-                                  </td>
-                                  <td>
-                                      [% PROCESS fund_dropdown form_id => "budget_id_" _ adjustment.adjustment_id form_name => 'budget_id' selected => adjustment.budget_id %]
-                                  </td>
-                                  [% IF adjustment.encumber_open %]
-                                      <td>
-                                        [% IF readonly %]
-                                          <input type="checkbox" checked="checked" readonly="readonly" />
-                                        [% ELSE %]
-                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" checked/>
-                                        [% END %]
-                                      </td>
-                                  [% ELSE %]
-                                      <td>
-                                        [% IF readonly %]
-                                          <input type="checkbox" disabled="disabled" />
-                                        [% ELSE %]
-                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" />
-                                        [% END %]
-                                      </td>
-                                  [% END %]
-                                  [% UNLESS readonly %]
-                                      <td>
-                                         <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
-                                      </td>
-                                  [% END %]
-                              </tr>
-                          [% END %]
-                      </table>
-                  [% END %]
+                                    <li>
+                                        <label for="note_new">Note: </label>
+                                        <input type="text" name="note" id="note_new" value=""/>
+                                    </li>
+                                    <li>
+                                        [% PROCESS fund_dropdown form_id => "budget_id_new" form_name => 'budget_id' selected => "" %]
+                                    </li>
+                                    <li>
+                                        <label for="encumber_new">Encumber while invoice open? </label>
+                                        <input type="checkbox" name="encumber_open" id="encumber_new" value="new" />
+                                        <input type="hidden" name="delete" value="">
+                                    </li>
+                                    <li>
+                                        <span class="label">&nbsp;</span>
+                                        <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment" style="display:none"><i class="fa fa-remove"></i> Cancel</a>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="hidden" name="op" value="mod_adj" />
+                                <input type="submit" class="btn btn-primary" value="Update adjustments" />
+                            </fieldset>
+                        [% END %]
+                    </fieldset>
+                </form>
 
-                  [% UNLESS readonly %]
-                      <p>
-                          <a href="#" id="show_invoice_adjustment" class="toggle_invoice_adjustment"><i class="fa fa-plus"></i> Add an adjustment</a>
-                      </p>
+                <p>
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]">Go to receipt page</a>
+                    [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]">Manage invoice files</a>[% END %]
+                </p>
 
-                      <fieldset id="add_invoice_adjustment" style="display:none">
-                          <h4>Add an adjustment</h4>
-                          <input type="hidden" name="adjustment_id" value="new" />
-                              <ol>
-                                  <li>
-                                      <label for="adjustment_new">Amount: </label>
-                                      <input type="text" name="adjustment" id="adjustment_new" />
-                                  </li>
-                                  [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                                  [% IF reasons.0 %]
-                                      <li>
-                                          <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
-                                          <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
-                                              <option value="">No reason</option>
-                                              [% FOREACH reason IN reasons %]
-                                                  <option value="[% reason.authorised_value | html %]">
-                                                      [% reason.lib | html %]
-                                                  </option>
-                                              [% END %]
-                                          </select>
-                                      </li>
-                                  [% ELSE %]
-                                      <li>
-                                          <span class="label">Reason: </span>
-                                          <span>None</span>
-                                          <div class="hint">Define values in authorised value category ADJ_REASON to enable</div>
-                                      </li>
-                                  [% END %]
-                                  <li>
-                                      <label for="note_new">Note: </label>
-                                      <input type="text" name="note" id="note_new" value=""/>
-                                  </li>
-                                  <li>
-                                      [% PROCESS fund_dropdown form_id => "budget_id_new" form_name => 'budget_id' selected => "" %]
-                                  </li>
-                                  <li>
-                                      <label for="encumber_new">Encumber while invoice open? </label>
-                                      <input type="checkbox" name="encumber_open" id="encumber_new" value="new" />
-                                      <input type="hidden" name="delete" value="">
-                                  </li>
-                                  <li>
-                                      <span class="label">&nbsp;</span>
-                                      <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment" style="display:none"><i class="fa fa-remove"></i> Cancel</a>
-                                  </li>
-                              </ol>
-                          </fieldset>
-                          <fieldset class="action">
-                              <input type="hidden" name="op" value="mod_adj" />
-                              <input type="submit" class="btn btn-primary" value="Update adjustments" />
-                          </fieldset>
-                    [% END %]
-                  </fieldset>
-              </form>
-      <p>
-          <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]">Go to receipt page</a>
-          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]">Manage invoice files</a>[% END %]
-      </p>
-      <h2>Invoice details</h2>
-      <fieldset>
-      [% IF orders_loop.size %]
-          <label for="show_all_details">
-            <input type="checkbox" style="vertical-align: middle;" id="show_all_details" />
-            Show all details
-          </label>
-          <table id="orderst">
-            <thead>
-              <tr>
-                <th class="anti-the">Summary</th>
-                <th>Library</th>
-                <th class="tax_excluded">Actual cost tax exc.</th>
-                <th class="tax_included">Actual cost tax inc.</th>
-                <th class="replacementprice">Replacement price</th>
-                <th>Qty.</th>
-                <th class="tax_excluded">Total tax exc. ([% currency.symbol | html %])</th>
-                <th class="tax_included">Total tax inc. ([% currency.symbol | html %])</th>
-                <th>GST %</th>
-                <th>GST</th>
-                <th>Fund</th>
-              </tr>
-            </thead>
-            <tbody>
-              [% FOREACH order IN orders_loop %]
-                <tr>
-                  <td>
-                    [% IF order.biblionumber %]
-                      [% INCLUDE 'biblio-title.inc' biblio=order link = 1 %]
-                      [% IF ( order.author ) %]
-                        <br /><em>by</em> [% order.author | html %]
-                      [% END %]
+                <h2>Invoice details</h2>
+
+                <fieldset>
+                    [% IF orders_loop.size %]
+                        <label for="show_all_details">
+                            <input type="checkbox" style="vertical-align: middle;" id="show_all_details" />
+                            Show all details
+                        </label>
+                        <table id="orderst">
+                            <thead>
+                                <tr>
+                                    <th class="anti-the">Summary</th>
+                                    <th>Library</th>
+                                    <th class="tax_excluded">Actual cost tax exc.</th>
+                                    <th class="tax_included">Actual cost tax inc.</th>
+                                    <th class="replacementprice">Replacement price</th>
+                                    <th>Qty.</th>
+                                    <th class="tax_excluded">Total tax exc. ([% currency.symbol | html %])</th>
+                                    <th class="tax_included">Total tax inc. ([% currency.symbol | html %])</th>
+                                    <th>GST %</th>
+                                    <th>GST</th>
+                                    <th>Fund</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH order IN orders_loop %]
+                                    <tr>
+                                        <td>
+                                            [% IF order.biblionumber %]
+                                                [% INCLUDE 'biblio-title.inc' biblio=order link = 1 %]
+                                                [% IF ( order.author ) %]
+                                                    <br /><em>by</em> [% order.author | html %]
+                                                [% END %]
+                                            [% ELSE %]
+                                                <em>Deleted bibliographic record, can't find title</em>
+                                            [% END %]
+                                            [% IF ( order.isbn ) %] &ndash; [% order.isbn | html %][% END %]
+                                            [% IF ( order.publishercode ) %]
+                                                <br/>[% order.publishercode | html %]
+                                                [% IF order.publicationyear %], [% order.publicationyear | html %]
+                                                [% ELSIF ( order.copyrightdate ) %][% order.copyrightdate | html %][% END %]
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            <p>[% order.branchcode | html %]</p>
+                                        </td>
+                                        <td class="number tax_excluded">
+                                            [% order.unitprice_tax_excluded | $Price %]
+                                        </td>
+                                        <td class="number tax_included">
+                                            [% order.unitprice_tax_included | $Price %]
+                                        </td>
+                                        <td class="number replacementprice">
+                                            [% order.replacementprice | $Price %]
+                                            [% IF ( order.uncertainprice ) %]
+                                                <span>(Uncertain)</span>
+                                            [% END %]
+                                        </td>
+                                        <td class="number">
+                                            [% order.quantity | html %]
+                                        </td>
+                                        <td class="number tax_excluded">
+                                            [% order.total_tax_excluded | $Price %]
+                                        </td>
+                                        <td class="number tax_included">
+                                            [% order.total_tax_included | $Price %]
+                                        </td>
+                                        <td class="number">
+                                            [% order.tax_rate * 100 | html %]
+                                        </td>
+                                        <td class="number">
+                                            [% order.tax_value | $Price %]
+                                        </td>
+                                        <td>
+                                            <span class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</span></br>
+                                            <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort_1="[% order.sort1 | html %]" data-sort_2="[% order.sort2 | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                            <tfoot>
+                                [% FOR tf IN foot_loop %]
+                                    <tr>
+                                        <th colspan="2">Total (GST [% tf.tax_rate * 100 | html %] %)</th>
+                                        <th class="tax_excluded"></th>
+                                        <th class="tax_included"></th>
+                                        <th class="replacementprice"/>
+                                        <th>[% tf.quantity | html %]</th>
+                                        <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
+                                        <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
+                                        <th>&nbsp;</th>
+                                        <th>[% tf.tax_value | $Price %]</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                [% END %]
+                                <tr>
+                                    <th colspan="2">Total ([% currency.symbol | html %])</th>
+                                    <th class="tax_excluded"></th>
+                                    <th class="tax_included"></th>
+                                    <th class="replacementprice"/>
+                                    <th>[% total_quantity | html %]</th>
+                                    <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
+                                    <th class="tax_included">[% total_tax_included | $Price %]</th>
+                                    <th>&nbsp;</th>
+                                    <th>[% total_tax_value | $Price %]</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Total + adjustments + shipment cost ([% currency.symbol | html %])</th>
+                                    <th class="tax_excluded"></th>
+                                    <th class="tax_included"></th>
+                                    <th class="replacementprice"/>
+                                    <th>[% total_quantity | html %]</th>
+                                    <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
+                                    <th class="tax_included">[% total_tax_included_shipment + total_adj | $Price %]</th>
+                                    <th>&nbsp;</th>
+                                    <th>[% total_tax_value | $Price %]</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     [% ELSE %]
-                      <em>Deleted bibliographic record, can't find title</em>
+                        <div class="dialog message">
+                            <p>No orders yet</p>
+                            [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
+                                <p>Adjustments plus shipping: [% total_adj + shipmentcost | $Price %]</p>
+                            [% END %]
+                        </div>
                     [% END %]
-                    [% IF ( order.isbn ) %] &ndash; [% order.isbn | html %][% END %]
-                    [% IF ( order.publishercode ) %]
-                      <br/>[% order.publishercode | html %]
-                        [% IF order.publicationyear %], [% order.publicationyear | html %]
-                        [% ELSIF ( order.copyrightdate ) %][% order.copyrightdate | html %][% END %]
+                    [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
+                        <br />
+                        <h2>Files attached to invoice</h2>
+                        <table id="invoice_files_table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Uploaded</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH f IN files %]
+                                    <tr>
+                                        <td>
+                                            <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
+                                        </td>
+                                        <td>[% f.file_type | html %]</td>
+                                        <td>[% f.file_description | html %]</td>
+                                        <td data-order="[% f.date_uploaded | html %]">
+                                            [% f.date_uploaded | $KohaDates %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
                     [% END %]
-                  </td>
-                  <td><p>[% order.branchcode | html %]</p></td>
-                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price %]</td>
-                  <td class="number tax_included">[% order.unitprice_tax_included | $Price %]</td>
-                  <td class="number replacementprice">[% order.replacementprice | $Price %] [% IF ( order.uncertainprice ) %] <span>(Uncertain)</span> [% END %]</td>
-                  <td class="number">[% order.quantity | html %]</td>
-                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
-                  <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
-                  <td class="number">[% order.tax_rate * 100 | html %]</td>
-                  <td class="number">[% order.tax_value | $Price %]</td>
-                  <td>
-                      <span class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</span></br>
-                      <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort_1="[% order.sort1 | html %]" data-sort_2="[% order.sort2 | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
-                  </td>
-                </tr>
-              [% END %]
-            </tbody>
-            <tfoot>
-              [% FOR tf IN foot_loop %]
-                <tr>
-                    <th colspan="2">Total (GST [% tf.tax_rate * 100 | html %] %)</th>
-                    <th class="tax_excluded"></th>
-                    <th class="tax_included"></th>
-                    <th class="replacementprice"/>
-                    <th>[% tf.quantity | html %]</th>
-                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
-                    <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% tf.tax_value | $Price %]</th>
-                    <th>&nbsp;</th>
-                </tr>
-              [% END %]
-              <tr>
-                <th colspan="2">Total ([% currency.symbol | html %])</th>
-                <th class="tax_excluded"></th>
-                <th class="tax_included"></th>
-                <th class="replacementprice"/>
-                <th>[% total_quantity | html %]</th>
-                <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
-                <th class="tax_included">[% total_tax_included | $Price %]</th>
-                <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price %]</th>
-                <th>&nbsp;</th>
-              </tr>
-              <tr>
-                <th colspan="2">Total + adjustments + shipment cost ([% currency.symbol | html %])</th>
-                <th class="tax_excluded"></th>
-                <th class="tax_included"></th>
-                <th class="replacementprice"/>
-                <th>[% total_quantity | html %]</th>
-                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
-                <th class="tax_included">[% total_tax_included_shipment + total_adj | $Price %]</th>
-                <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price %]</th>
-                <th>&nbsp;</th>
-              </tr>
-            </tfoot>
-          </table>
-        [% ELSE %]
-            <div class="dialog message"><p>No orders yet</p>
-            [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
-            <p>Adjustments plus shipping: [% total_adj + shipmentcost | $Price %]</p>
-            [% END %]
-            </div>
-        [% END %]
-        [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
-            <br />
-            <h2>Files attached to invoice</h2>
-            <table id="invoice_files_table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Uploaded</th>
-                    </tr>
-                </thead>
-                <tbody>
-                [% FOREACH f IN files %]
-                    <tr>
-                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
-                         <td>[% f.file_type | html %]</td>
-                         <td>[% f.file_description | html %]</td>
-                         <td data-order="[% f.date_uploaded | html %]">
-                            [% f.date_uploaded | $KohaDates %]
-                         </td>
-                    </tr>
-                [% END %]
-                </tbody>
-            </table>
-        [% END %]
-        </fieldset>
-    </main>
-  </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                </fieldset>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-    <aside>
-        <div class="col-sm-2 col-sm-pull-10">
-            [% INCLUDE 'acquisitions-menu.inc' %]
-        </div>
-    </aside>
-</div> <!-- /.row -->
+        <aside>
+            <div class="col-sm-2 col-sm-pull-10">
+                [% INCLUDE 'acquisitions-menu.inc' %]
+            </div>
+        </aside>
+    </div> <!-- /.row -->
 
 <div id="updateFund" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
     <div class="modal-dialog">
@@ -453,17 +482,19 @@
             <div class="modal-body">
                 <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
                 <fieldset class="rows">
-                <ol>
-                    <li>[% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]</li>
-                    <li>
-                        <label for="sort1">Statistic 1: </label>
-                        <input type="text" name="sort1" />
-                    </li>
-                    <li>
-                        <label for="sort2">Statistic 2: </label>
-                        <input type="text" name="sort2" />
-                    </li>
-                </ol>
+                    <ol>
+                        <li>
+                            [% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]
+                        </li>
+                        <li>
+                            <label for="sort1">Statistic 1: </label>
+                            <input type="text" name="sort1" />
+                        </li>
+                        <li>
+                            <label for="sort2">Statistic 2: </label>
+                            <input type="text" name="sort2" />
+                        </li>
+                    </ol>
                 </fieldset>
                 <a id="update_fund" class="btn btn-default">Update fund</a>
             </div>
