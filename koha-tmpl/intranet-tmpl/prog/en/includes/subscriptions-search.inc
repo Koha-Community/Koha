@@ -43,10 +43,10 @@
             [% IF (basketno) %]
                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
             [% END %]
-            <fieldset class="action">
-              <input type="submit" class="btn btn-primary" value="Search" />
-            </fieldset>
             </div>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Search" />
         </fieldset>
     </form>
 </div>
