@@ -2856,39 +2856,40 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             categorycode => undef,
             itemtype     => undef,
             branchcode   => undef,
-            rules        => {
-                finedays => 0,
-            }
+            rules => {
+                finedays   => 0,
+                lengthunit => 'days',
+              }
         }
     );
 
     Koha::Patron::Debarments::AddDebarment(
         {
-            borrowernumber => $patron->{borrowernumber},
+            borrowernumber => $patron->borrowernumber,
             expiration     => '9999-12-31',
             type           => 'MANUAL',
         }
     );
 
-    AddIssue( $patron, $item_1->barcode, $now->clone->subtract( days => 1 ) );
+    AddIssue( $patron->unblessed, $item_1->barcode, $now->clone->subtract( days => 1 ) );
     my ( undef, $message ) = AddReturn( $item_1->barcode, $library->{branchcode}, undef, $now );
     is( $message->{WasReturned} && exists $message->{ForeverDebarred}, 1, 'Forever debarred message for Addreturn when overdue');
 
     Koha::Patron::Debarments::DelUniqueDebarment(
         {
-            borrowernumber => $patron->{borrowernumber},
+            borrowernumber => $patron->borrowernumber,
             type           => 'MANUAL',
         }
     );
     Koha::Patron::Debarments::AddDebarment(
         {
-            borrowernumber => $patron->{borrowernumber},
+            borrowernumber => $patron->borrowernumber,
             expiration     => $now->clone->add( days => 10 ),
             type           => 'MANUAL',
         }
     );
 
-    AddIssue( $patron, $item_1->barcode, $now->clone->subtract( days => 1 ) );
+    AddIssue( $patron->unblessed, $item_1->barcode, $now->clone->subtract( days => 1 ) );
     (undef, $message) = AddReturn( $item_1->barcode, $library->{branchcode}, undef, $now );
     is( $message->{WasReturned} && exists $message->{PrevDebarred}, 1, 'Previously debarred message for Addreturn when overdue');
 };
