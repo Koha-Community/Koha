@@ -2062,6 +2062,13 @@ __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5hh2lGCcKclyTnY7KNPkvg
 
 __PACKAGE__->has_many(
+  "restrictions",
+  "Koha::Schema::Result::BorrowerDebarment",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->has_many(
   "extended_attributes",
   "Koha::Schema::Result::BorrowerAttribute",
   { "foreign.borrowernumber" => "self.borrowernumber" },

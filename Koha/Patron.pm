@@ -1268,7 +1268,7 @@ Returns the patron restrictions.
 
 sub restrictions {
     my ($self) = @_;
-    my $restrictions_rs = $self->_result->borrower_debarments;
+    my $restrictions_rs = $self->_result->restrictions;
     return Koha::Patron::Restrictions->_new_from_dbic($restrictions_rs);
 }
 
