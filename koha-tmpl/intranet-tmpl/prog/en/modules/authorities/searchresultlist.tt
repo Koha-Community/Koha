@@ -49,84 +49,86 @@
 <h1>Authority search results</h1>
 
 <div id="merge_in_progress"></div>
-[% IF ( total ) %]
-<div class="pages">[% pagination_bar | $raw %]</div>
+<div class="page-section">
+    [% IF ( total ) %]
+    <div class="pages">[% pagination_bar | $raw %]</div>
 
-<p id="authorities_searchresultlist_current_page_info">
-  Results [% from | html %] to [% to | html %] of [% total | html %]
-</p>
+    <p id="authorities_searchresultlist_current_page_info">
+      Results [% from | html %] to [% to | html %] of [% total | html %]
+    </p>
 
-<div id="authorities_searchresultlist_results" class="page-section">
-  <table>
-      <tr>
-        <th>Summary</th>
-        <th>Heading type</th>
-        [% UNLESS ( isEDITORS ) %]
-          <th>Used in</th>
+    <div id="authorities_searchresultlist_results">
+      <table>
+          <tr>
+            <th>Summary</th>
+            <th>Heading type</th>
+            [% UNLESS ( isEDITORS ) %]
+              <th>Used in</th>
+            [% END %]
+            [% IF Koha.Preference('ShowHeadingUse') %]
+              <th class="heading_use">Heading use</th>
+            [% END %]
+            [% IF ( CAN_user_editauthorities ) %]
+              <th>&nbsp;</th>
+            [% END %]
+          </tr>
+        [% FOREACH resul IN result %]
+        <tr data-authid="[% resul.authid | html %]">
+          <td>
+            [% IF resul.html %]
+              [% resul.html | $raw %]
+            [% ELSE %]
+              [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+            [% END %]
+          </td>
+          <td>[% resul.authtype | html %]</td>
+        [% UNLESS ( resul.isEDITORS ) %]
+          <td>
+          [% IF resul.used > 0 %]
+              <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid | uri %]" class="button">[% resul.used | html %] record(s)</a>
+          [% ELSE %]
+              0 records
+          [% END %]
+          </td>
         [% END %]
         [% IF Koha.Preference('ShowHeadingUse') %]
-          <th class="heading_use">Heading use</th>
+            <td class="heading_use"><ul class="usefor">
+                <li>[% IF resul.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
+                <li>[% IF resul.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
+                <li>[% IF resul.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
+            </ul></td>
         [% END %]
         [% IF ( CAN_user_editauthorities ) %]
-          <th>&nbsp;</th>
+          <td>
+          <div class="btn-group dropup">
+            <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-toggle="dropdown" href="#">
+            Actions <b class="caret"></b></a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
+              <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+              <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
+              [% UNLESS ( resul.used ) %]
+                <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash"></i> Delete</a></li>
+              [% END %]
+              <li class="authority_preview">
+                <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa fa-eye"></i> MARC preview</a>
+              </li>
+            </ul>
+          </div>
+          </td>
         [% END %]
-      </tr>
-    [% FOREACH resul IN result %]
-    <tr data-authid="[% resul.authid | html %]">
-      <td>
-        [% IF resul.html %]
-          [% resul.html | $raw %]
-        [% ELSE %]
-          [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+        </tr>
         [% END %]
-      </td>
-      <td>[% resul.authtype | html %]</td>
-    [% UNLESS ( resul.isEDITORS ) %]
-      <td>
-      [% IF resul.used > 0 %]
-          <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid | uri %]" class="button">[% resul.used | html %] record(s)</a>
-      [% ELSE %]
-          0 records
-      [% END %]
-      </td>
-    [% END %]
-    [% IF Koha.Preference('ShowHeadingUse') %]
-        <td class="heading_use"><ul class="usefor">
-            <li>[% IF resul.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
-            <li>[% IF resul.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
-            <li>[% IF resul.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
-        </ul></td>
-    [% END %]
-    [% IF ( CAN_user_editauthorities ) %]
-      <td>
-      <div class="btn-group dropup">
-        <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-toggle="dropdown" href="#">
-        Actions <b class="caret"></b></a>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
-          <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
-          <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
-          [% UNLESS ( resul.used ) %]
-            <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash"></i> Delete</a></li>
-          [% END %]
-          <li class="authority_preview">
-            <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa fa-eye"></i> MARC preview</a>
-          </li>
-        </ul>
-      </div>
-      </td>
-    [% END %]
-    </tr>
-    [% END %]
-  </table>
-</div>
+      </table>
+    </div>
 
-[% INCLUDE 'authority-detail-modal.inc' %]
+    [% INCLUDE 'authority-detail-modal.inc' %]
 
-<div class="pages">[% pagination_bar | $raw %]</div>
+    <div class="pages">[% pagination_bar | $raw %]</div>
 
-[% ELSE %]
-  No results found
-[% END %]
+    [% ELSE %]
+      No results found
+    [% END %]
+</div> <!-- /.page-section -->
 </div>
 </div>
 
