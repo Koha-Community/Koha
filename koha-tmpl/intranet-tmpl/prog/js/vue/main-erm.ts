@@ -60,3 +60,12 @@ const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
     removeMessages(); // This will actually flag the messages as displayed already
 });
+router.afterEach((to, from) => {
+    let tab_id = 1; // Agreements
+    if ( to.path.match(/\/erm\/eholdings\/local\/titles/)){
+        tab_id = 2;
+    } else if ( to.path.match(/\/erm\/eholdings\/local\/packages/)){
+        tab_id = 3;
+    }
+    document.getElementById('ui-id-' + tab_id).click();
+})
