@@ -37,10 +37,9 @@
 
                 <h1>OverDrive library authnames</h1>
 
-                <div class="page-section">
-                    <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
-                        <input type="hidden" name="op" value="update" />
-
+                <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
+                    <input type="hidden" name="op" value="update" />
+                    <fieldset>
                         <table id="od_info">
                             <thead>
                                 <tr>
@@ -62,11 +61,11 @@
                                 [% END %]
                             </tbody>
                         </table>
-                        <div class="action">
-                            <input type="submit" class="btn btn-primary" value="Submit" />
-                        </div>
-                    </form>
-                </div> <!-- /.page-section -->
+                    </fieldset>
+                    <div class="action">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                    </div>
+                </form>
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
