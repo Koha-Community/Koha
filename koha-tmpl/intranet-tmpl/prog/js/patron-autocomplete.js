@@ -22,7 +22,7 @@ function patron_autocomplete(node, options) {
                     let subquery_or = [];
                     defaultPatronSearchFields.split(',').forEach(function(field,i){
                         subquery_or.push(
-                            {["me."+field]: {'like': '%' + pattern + '%'}}
+                            {["me."+field]: {'like': pattern + '%'}}
                         );
                     });
                     subquery_and.push(subquery_or);
