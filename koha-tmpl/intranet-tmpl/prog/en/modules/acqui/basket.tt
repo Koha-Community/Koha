@@ -269,9 +269,9 @@
                                                         [% IF ( ediaccount ) %]
                                                             [%- BLOCK edi_status -%]
                                                                 [%- SWITCH edi_order.status -%]
-                                                                    [%- CASE 'Pending'   -%]<span>Pending</span>
-                                                                    [%- CASE 'Sent'      -%]<span>Sent</span>
-                                                                    [%- CASE 'Processed' -%]<span>Processed</span>
+                                                                    [%- CASE 'pending'   -%]<span>Pending</span>
+                                                                    [%- CASE 'sent'      -%]<span>Sent</span>
+                                                                    [%- CASE 'processed' -%]<span>Processed</span>
                                                                 [%- END -%]
                                                             [%- END -%]
                                                             [% IF ( edi_order ) %]
