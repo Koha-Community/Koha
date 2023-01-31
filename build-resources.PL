@@ -32,7 +32,10 @@ This helper script ensures that src JS and SCSS files are compiled for packaging
 
 =cut
 
-my $command = "yarn build:prod";
-system($command);
+my $install_command = "yarn install";
+system($install_command);
+
+my $build_command = "yarn build:prod";
+system($build_command);
 
 1;
