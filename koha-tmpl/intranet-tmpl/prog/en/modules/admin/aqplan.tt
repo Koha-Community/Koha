@@ -252,10 +252,10 @@
         <label for="show_actual">Show actual/estimated values</label>
     </li>
     </ol>
-    <fieldset class="action">
-        <input type="submit" name="option_submit" class="btn btn-primary" value="Submit" />
-        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-    </fieldset>
+</fieldset>
+<fieldset class="action">
+    <input type="submit" name="option_submit" class="btn btn-primary" value="Submit" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 </fieldset>
 </form>
 [% IF ( budget_lines ) %]
@@ -277,13 +277,13 @@
             </select>
         </li>
     </ol>
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+    <input type="hidden" name="authcat" value="[% authcat | html %]" />
+    </fieldset>
     <fieldset class="action">    <input type="submit" class="btn btn-primary" value="Submit" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     <input type="hidden" name="report_name" value="[% report_name | html %]" />
     <input type="hidden" name="output" value="file" /></fieldset>
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-    <input type="hidden" name="authcat" value="[% authcat | html %]" />
-    </fieldset>
 </form>
 [% END %]
 
