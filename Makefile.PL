@@ -679,6 +679,9 @@ $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/print.css'} = 'blib/OPAC_TMPL_DIR
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/print-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/print-rtl.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/sco.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/sco.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/sco-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/sco-rtl.css';
+$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/opac-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/opac-rtl.css.map';
+$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/print-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/print-rtl.css.map';
+$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/sco-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/sco-rtl.css.map';
 
 my $pl_files = {
       'rewrite-config.PL' => [
@@ -692,9 +695,6 @@ my $pl_files = {
 	  'fix-perl-path.PL' => [	# this script ensures the correct shebang line for the platform installed on...
 		 'blib'
 		 ],
-      'build-resources.PL' => [
-          'blib'
-         ],
 };
 
 push @{ $pl_files->{'rewrite-config.PL'} }, (
@@ -1814,6 +1814,18 @@ sub postamble {
 	}
 
     return "$env\n";
+}
+
+sub top_targets {
+    my $inherited = shift->SUPER::top_targets(@_);
+    my $compile_step;
+    $compile_step .= "all :: compile_css_js\n";
+    $compile_step .= "\t" . '$(NOECHO) $(NOOP)' . "\n";
+    $compile_step .= "\n";
+    $compile_step .= "compile_css_js:\n";
+    $compile_step .= "\t" . '$(PERLRUN) build-resources.PL' . "\n";
+    my $top_targets = $compile_step . "\n" . $inherited;
+    return $top_targets;
 }
 
 sub _build_perl5lib_string {
