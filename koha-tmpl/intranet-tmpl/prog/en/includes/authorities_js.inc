@@ -21,14 +21,14 @@ function showMergingInProgress() {
     var alreadySelected = Cookies.get('auth_to_merge');
     if (alreadySelected !== undefined) {
         alreadySelected = JSON.parse(alreadySelected);
-        $('#merge_in_progress').html(_("Merging with authority: ") + "<a href='detail.pl?authid=" + alreadySelected.authid + "'><span class='authorizedheading'>" + alreadySelected.summary + "</span> (" + alreadySelected.authid + ")</a> <a href='#' id='cancel_merge'>" + _("Cancel merge") + "</a>");
+        $('#merge_in_progress').show().html(_("Merging with authority: ") + "<a href='detail.pl?authid=" + alreadySelected.authid + "'><span class='authorizedheading'>" + alreadySelected.summary + "</span> (" + alreadySelected.authid + ")</a> <a href='#' id='cancel_merge'>" + _("Cancel merge") + "</a>");
         $('#cancel_merge').click(function(event) {
             event.preventDefault();
             Cookies.remove('auth_to_merge');
-            $('#merge_in_progress').empty();
+            $('#merge_in_progress').hide().empty();
         });
     } else {
-        $('#merge_in_progress').empty();
+        $('#merge_in_progress').hide().empty();
     }
 }
 
