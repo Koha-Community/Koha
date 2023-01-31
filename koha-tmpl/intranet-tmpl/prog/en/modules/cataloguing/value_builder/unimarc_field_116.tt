@@ -1,4 +1,5 @@
 [% SET footerjs = 1 %]
+ [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 116 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -60,9 +61,9 @@
 
                             [% END %]
                             [% IF ( f1i ) %]
-                                <option value="i" selected="selected">i- print</option>
+                                <option value="i" selected="selected">i- [% tp('UNIMARC 116 painting techniques', 'print') | html %]</option>
                             [% ELSE %]
-                                <option value="i">i- print</option>
+                                <option value="i">i- [% tp('UNIMARC 116 painting techniques', 'print') | html %]</option>
                             [% END %]
 
                             [% IF ( f1k ) %]
@@ -72,9 +73,9 @@
                             [% END %]
 
                             [% IF ( f1m ) %]
-                                <option value="m" selected="selected">m- master</option>
+                                <option value="m" selected="selected">m- mould</option>
                             [% ELSE %]
-                                <option value="m">m- master</option>
+                                <option value="m">m- mould</option>
                             [% END %]
 
                             [% IF ( f1z ) %]
@@ -402,9 +403,9 @@
 
                             [% END %]
                             [% IF ( f5bc ) %]
-                                <option value="bc" selected="selected">crayon</option>
+                                <option value="bc" selected="selected">charcoal</option>
                             [% ELSE %]
-                                <option value="bc">crayon</option>
+                                <option value="bc">charcoal</option>
 
                             [% END %]
                             [% IF ( f5bd ) %]
@@ -603,9 +604,9 @@
 
                             [% END %]
                             [% IF ( f6bc ) %]
-                                <option value="bc" selected="selected">crayon</option>
+                                <option value="bc" selected="selected">charcoal</option>
                             [% ELSE %]
-                                <option value="bc">crayon</option>
+                                <option value="bc">charcoal</option>
 
                             [% END %]
                             [% IF ( f6bd ) %]
@@ -805,9 +806,9 @@
 
                             [% END %]
                             [% IF ( f7bc ) %]
-                                <option value="bc" selected="selected">crayon</option>
+                                <option value="bc" selected="selected">charcoal</option>
                             [% ELSE %]
-                                <option value="bc">crayon</option>
+                                <option value="bc">charcoal</option>
 
                             [% END %]
                             [% IF ( f7bd ) %]
@@ -889,7 +890,7 @@
                 </tr>
 
                 <tr>
-                    <td><label for="f8">Technique (prints) 1</label></td>
+                    <td><label for="f8">Techniques - [% tp('UNIMARC 116 painting techniques', 'print') | html %] 1</label></td>
                     <td>
                         <select name="f8" id="f8">
                             [% IF ( f8dblpipe ) %]
@@ -921,9 +922,9 @@
                             [% END %]
 
                             [% IF ( f8bd ) %]
-                                <option value="bd" selected="selected">camaiu</option>
+                                <option value="bd" selected="selected">cameo</option>
                             [% ELSE %]
-                                <option value="bd">camaiu</option>
+                                <option value="bd">cameo</option>
                             [% END %]
 
                             [% IF ( f8be ) %]
@@ -1042,9 +1043,9 @@
 
                             [% END %]
                             [% IF ( f8cj ) %]
-                                <option value="cj" selected="selected">computer graphics</option>
+                                <option value="cj" selected="selected">infography</option>
                             [% ELSE %]
-                                <option value="cj">computer graphics</option>
+                                <option value="cj">infography</option>
 
                             [% END %]
                             [% IF ( f8ck ) %]
@@ -1082,7 +1083,7 @@
 
                 </tr>
                 <tr>
-                    <td><label for="f9">Technique (prints) 2</label></td>
+                    <td><label for="f9">Techniques - [% tp('UNIMARC 116 painting techniques', 'print') | html %] 2</label></td>
                     <td>
                         <select name="f9" id="f9">
                             [% IF ( f9dblpipe ) %]
@@ -1116,9 +1117,9 @@
                             [% END %]
 
                             [% IF ( f9bd ) %]
-                                <option value="bd" selected="selected">camaiu</option>
+                                <option value="bd" selected="selected">cameo</option>
                             [% ELSE %]
-                                <option value="bd">camaiu</option>
+                                <option value="bd">cameo</option>
 
                             [% END %]
 
@@ -1239,9 +1240,9 @@
 
                             [% END %]
                             [% IF ( f9cj ) %]
-                                <option value="cj" selected="selected">computer graphics</option>
+                                <option value="cj" selected="selected">infography</option>
                             [% ELSE %]
-                                <option value="cj">computer graphics</option>
+                                <option value="cj">infography</option>
 
                             [% END %]
                             [% IF ( f9ck ) %]
@@ -1278,7 +1279,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="f10">Technique (prints) 3</label></td>
+                    <td><label for="f10">Techniques - [% tp('UNIMARC 116 painting techniques', 'print') | html %] 3</label></td>
                     <td>
                         <select name="f10" id="f10">
                             [% IF ( f10dblpipe ) %]
@@ -1312,9 +1313,9 @@
                             [% END %]
 
                             [% IF ( f10bd ) %]
-                                <option value="bd" selected="selected">camaiu</option>
+                                <option value="bd" selected="selected">cameo</option>
                             [% ELSE %]
-                                <option value="bd">camaiu</option>
+                                <option value="bd">cameo</option>
                             [% END %]
 
                             [% IF ( f10be ) %]
@@ -1432,9 +1433,9 @@
 
                             [% END %]
                             [% IF ( f10cj ) %]
-                                <option value="cj" selected="selected">computer graphics</option>
+                                <option value="cj" selected="selected">infography</option>
                             [% ELSE %]
-                                <option value="cj">computer graphics</option>
+                                <option value="cj">infography</option>
 
                             [% END %]
                             [% IF ( f10ck ) %]
@@ -1488,9 +1489,9 @@
                             [% END %]
 
                             [% IF ( f11ab ) %]
-                                <option value="ab" selected="selected">ab- item cover</option>
+                                <option value="ab" selected="selected">ab- resource cover</option>
                             [% ELSE %]
-                                <option value="ab">ab- item cover</option>
+                                <option value="ab">ab- resource cover</option>
                             [% END %]
 
                             [% IF ( f11ac ) %]
@@ -1518,9 +1519,9 @@
                             [% END %]
 
                             [% IF ( f11ag ) %]
-                                <option value="ag" selected="selected">ag- chart</option>
+                                <option value="ag" selected="selected">ag- diagram</option>
                             [% ELSE %]
-                                <option value="ag">ag- chart</option>
+                                <option value="ag">ag- diagram</option>
                             [% END %]
 
                             [% IF ( f11ah ) %]
