@@ -49,13 +49,13 @@
 
     [% SET itemavailable = 0 %]
     [% IF onsite_checkout %]
-        [% IF ( OPACShowCheckoutName ) %]
+        [% IF ( Koha.Preference('OPACShowCheckoutName') ) %]
             <span class="item-status checkedout">Currently in local use by [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span>
         [% ELSE %]
             <span class="item-status checkedout">Currently in local use</span>
         [% END %]
     [% ELSE %]
-        [% IF ( OPACShowCheckoutName ) %]
+        [% IF ( Koha.Preference('OPACShowCheckoutName') ) %]
             <span class="item-status checkedout">Checked out to [% checkout_patron.firstname | html %] [% checkout_patron.surname | html %] [% IF ( checkout_patron.cardnumber ) %]([% checkout_patron.cardnumber | html %])[% END %]</span>
         [% ELSE %]
             <span class="item-status checkedout">Checked out</span>
