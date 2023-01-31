@@ -488,10 +488,6 @@ if ($session->param('busc')) {
 }
 }
 
-$template->param(
-    OPACShowCheckoutName => C4::Context->preference("OPACShowCheckoutName"),
-);
-
 $items = Koha::Items->search_ordered(
     [
         'me.biblionumber' => $biblionumber,
