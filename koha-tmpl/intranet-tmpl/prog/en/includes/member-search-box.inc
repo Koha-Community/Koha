@@ -25,21 +25,7 @@
 
             <div class="form-extra-content">
                 <div>
-                    <label for="searchfieldstype" class="control-label">Search fields</label>
-                    <select name="searchfieldstype" id="searchfieldstype" class="form-control">
-                        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' %]
-                        [% default_fields = [ standard, 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
-                        [% search_options = default_fields.merge(standard.split(',')).unique %]
-                        [% FOREACH s_o IN search_options %]
-                            [% display_name = PROCESS patron_fields name=s_o %]
-                            [% NEXT IF !display_name.length %]
-                            [% IF searchfieldstype == s_o %]
-                                <option value="[% s_o | html %]">[% display_name | $raw %]</option>
-                            [% ELSE %]
-                                <option value="[% s_o | html %]">[% display_name | $raw %]</option>
-                            [% END %]
-                        [% END %]
-                    </select>
+                    [% INCLUDE patron_fields_dropdown search_box=1 %]
                 </div>
 
                 <div>
