@@ -58,10 +58,6 @@
                                     <input type="text" id="image_name" name="image_name" size="20" />
                                 </li>
                                 </ol>
-                                <div class="action">
-                                    <input type="hidden" name="op" value="upload" />
-                                    <input class="btn btn-primary" id="uploadsu" type="submit" value="Upload" />
-                                </div>
                                 [% IF ( IMPORT_SUCCESSFUL ) %]
                                     <div class="dialog message">
                                     <h3>Image successfully uploaded</h3>
@@ -70,7 +66,10 @@
                                     </div>
                                 [% END %]
                             </fieldset>
-
+                            <fieldset class="action">
+                                <input type="hidden" name="op" value="upload" />
+                                <input class="btn btn-primary" id="uploadsu" type="submit" value="Upload" />
+                            </fieldset>
                         </form>
                     </div>
                     <div class="col-sm-6">
@@ -118,15 +117,15 @@
                                     [% END %]
                                     [% END %]
                                 </table>
-                                <div class="action">
-                                    <input type="hidden" name="op" value="delete" />
-                                    <input class="btn btn-default btn-default" type="button" id="delete" value="Delete selected" />
-                                </div>
                                 [% IF ( DELETE_SUCCESSFULL ) %]
                                 <div id="dialog" class="dialog message">
                                     <h3>Image(s) successfully deleted</h3>
                                 </div>
                                 [% END %]
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="hidden" name="op" value="delete" />
+                                <input class="btn btn-primary" type="button" id="delete" value="Delete selected" />
                             </fieldset>
                         </form>
                         [% ELSE %]
