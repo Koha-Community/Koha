@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -29,28 +29,50 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'enqueue() tests' => sub {
+subtest 'enqueue' => sub {
 
-    plan tests => 5;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
     # FIXME: Should be an exception
-    my $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue();
+    my $job_id =
+      Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue();
     is( $job_id, undef, 'Nothing enqueued if missing params' );
 
     # FIXME: Should be an exception
-    $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue( { record_ids => undef } );
+    $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue(
+        { record_ids => undef } );
     is( $job_id, undef, "Nothing enqueued if missing 'package_id' param" );
 
-    my $record_ids = [ 1, 2 ];
+    $schema->storage->txn_rollback;
+};
 
-    $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue( { record_ids => $record_ids, package_id => 'thing' } );
-    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+subtest 'process' => sub {
+    plan tests => 1;
 
-    is( $job->size,   scalar @{$record_ids}, 'Size is correct' );
-    is( $job->status, 'new',                 'Initial status set correctly' );
-    is( $job->queue,  'long_tasks',          'BatchUpdateItem should use the long_tasks queue' );
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $package =
+      Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
+
+    my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
+        {
+            status => 'new',
+            type   => 'create_eholdings_from_biblios',
+        }
+    )->store;
+    $job = Koha::BackgroundJobs->find( $job->id );
+    my $data = {
+        record_ids => [ $biblio->biblionumber ],
+        package_id => $package->package_id,
+    };
+    my $json = $job->json->encode($data);
+    $job->data($json)->store;
+    $job->process($data);
+    is( $job->report->{total_success}, 1 );
 
     $schema->storage->txn_rollback;
 };
