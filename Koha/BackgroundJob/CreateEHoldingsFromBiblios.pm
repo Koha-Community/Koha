@@ -124,7 +124,7 @@ sub process {
             my ( $date_first_issue_online, $date_last_issue_online ) =
               $fix_coverage->( $record->subfield( '866', 'a' ) );
             my ( $num_first_vol_online, $num_last_vol_online ) =
-              fix_coverage->( $record->subfield( '863', 'a' ) );
+              $fix_coverage->( $record->subfield( '863', 'a' ) );
             my ( $num_first_issue_online, $num_last_issue_online ) =
               ( '', '' );    # FIXME ?
             my $title_url = $record->subfield( '856', 'u' );
