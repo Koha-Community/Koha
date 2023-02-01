@@ -32,7 +32,7 @@ This helper script ensures that src JS and SCSS files are compiled for packaging
 
 =cut
 
-my $install_command = "yarn install";
+my $install_command = "yarn install --frozen-lockfile";
 system($install_command);
 
 my $build_command = "yarn build:prod";
