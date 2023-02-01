@@ -318,7 +318,7 @@ sub _get_language_dirs {
     my @lang_strings;
     my $dir_h;
     opendir $dir_h, "$htdocs/$theme";
-    for my $lang_string ( readdir $dir_h ) {
+    for my $lang_string ( sort readdir $dir_h ) {
         next if $lang_string =~/^\./;
         next if $lang_string eq 'all';
         next if $lang_string =~/png$/;
