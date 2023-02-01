@@ -120,12 +120,12 @@
           </fieldset>
       [% END %]
       <input type="hidden" name="op" value="show" />
-      <fieldset class="action">
+    </fieldset>
+    <fieldset class="action">
         <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="branch" value="[% branch | html %]" />
         <input type="hidden" name="batch" value="1" />
         <input type="submit" class="btn btn-primary" value="Check out" />
-      </fieldset>
     </fieldset>
   </form>
 
