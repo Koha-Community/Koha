@@ -109,8 +109,10 @@
 		<label for="biblionumber">Select the biblionumber to attach the item to</label>
 			<div class="hint">Enter biblionumber:</div>
 		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" />
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
 	    </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+        </fieldset>
 	    [% ELSE %]
 	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
 	    [% END %]
@@ -120,8 +122,10 @@
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>
 		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
 	    </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+        </fieldset>
 	    [% ELSE %]
 	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
 	    [% END %]
