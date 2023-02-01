@@ -62,6 +62,7 @@ subtest 'process' => sub {
         {
             status => 'new',
             type   => 'create_eholdings_from_biblios',
+            size   => 1,
         }
     )->store;
     $job = Koha::BackgroundJobs->find( $job->id );
