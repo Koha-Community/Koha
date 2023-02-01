@@ -63,8 +63,8 @@
                                       <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
                                     </li>
                                 </ol>
+                                <input type="hidden" name="op" value="show" />
                             </fieldset>
-                            <input type="hidden" name="op" value="show" />
 
                             [% UNLESS del %]
                                 <fieldset class="rows">
@@ -79,8 +79,8 @@
                                 </fieldset>
                             [% END %]
 
-                            [% IF ( del ) %]<input type="hidden" name="del" value="1" />[% END %]
                             <fieldset class="action">
+                                [% IF ( del ) %]<input type="hidden" name="del" value="1" />[% END %]
                                 <input type="submit" class="btn btn-primary" value="Continue" />
                                 <a class="cancel" href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cancel</a>
                             </fieldset>

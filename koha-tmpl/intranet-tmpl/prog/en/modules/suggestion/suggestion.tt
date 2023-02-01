@@ -31,7 +31,8 @@
                 font-size: 80%;
                 text-decoration: none;
             }
-            #limits fieldset.brief {
+            #limits fieldset.brief,
+            #limits fieldset.action {
                 display: none;
             }
             .overlay {
@@ -644,9 +645,8 @@
                     </ol>
                 </fieldset> <!-- /.rows -->
 
-                <input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
-
                 <fieldset class="action">
+                    <input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
                     <input type="hidden" name="op" value="[% op | html %]" />
                     [% IF ( suggestionid ) %]
                         [% IF ( need_confirm ) %]
@@ -948,13 +948,13 @@
 
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
-                                            </fieldset>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
                                         </fieldset>
                                     </div> <!-- /.col-sm-4 -->
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-2">
                                         <fieldset class="brief">
                                             <label id="suggestion_itemtype">
                                                 Update item types with:
@@ -962,9 +962,9 @@
                                             [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
-                                            </fieldset>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
                                         </fieldset>
                                     </div> <!-- /.col-sm-4 -->
 
@@ -976,9 +976,9 @@
                                             <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
-                                            </fieldset>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
                                         </fieldset>
                                     </div> <!-- /.col-sm-2 -->
 
@@ -987,9 +987,9 @@
                                             <span class="label">Delete selected</span>
                                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                             <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="delete">Delete</button>
-                                            </fieldset>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <button type="submit" class="btn btn-primary" value="delete">Delete</button>
                                         </fieldset>
                                     </div> <!-- /.col-sm-2 -->
                                     <div class="col-sm-2">
@@ -1058,17 +1058,17 @@
                                         </select>
                                     </li>
                                 </ol>
-                                <fieldset class="action">
-                                    <input type="submit" class="btn btn-primary" value="Go" />
-                                </fieldset>
                             </fieldset> <!-- /.brief -->
+                            <fieldset class="action">
+                                <input type="submit" class="btn btn-primary" value="Go" />
+                            </fieldset>
 
                             <fieldset class="brief">
                                 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
 
                                 <div id="limits">
                                     <h4 class="local_collapse"><a href="#" data-target="biblio_information">Bibliographic information</a></h4>
-                                    <fieldset class="brief" id="biblio_information">
+                                    <fieldset class="brief biblio_information">
                                         <ol>
                                             <li>
                                                 <label for="title"> Title:</label>
@@ -1095,13 +1095,13 @@
                                                 <input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle | html %]" />
                                             </li>
                                         </ol>
-                                        <fieldset class="action">
-                                            <input type="submit" value="Go" />
-                                        </fieldset>
-                                    </fieldset> <!-- /#biblio_information -->
+                                    </fieldset> <!-- /.biblio_information -->
+                                    <fieldset class="action biblio_information">
+                                        <input type="submit" value="Go" />
+                                    </fieldset>
 
                                     <h4 class="local_collapse"><a href="#" data-target="suggestion_information">Suggestion information</a></h4>
-                                    <fieldset class="brief" id="suggestion_information">
+                                    <fieldset class="brief suggestion_information">
                                         <ol>
                                             <li>
                                                 <label for="archived" style="display: inline;">Include archived:</label>
@@ -1219,15 +1219,15 @@
                                                 <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" class="flatpickr" />
                                             </li>
                                         </ol>
-                                        <fieldset class="action">
-                                            <input type="submit" value="Go" />
-                                        </fieldset>
                                     </fieldset> <!-- /#suggestion_information -->
+                                    <fieldset class="action suggestion_information">
+                                        <input type="submit" value="Go" />
+                                    </fieldset>
 
                                     <h4 class="local_collapse">
                                         <a href="#" data-target="acquisition_information">Acquisition information</a>
                                     </h4>
-                                    <fieldset class="brief" id="acquisition_information">
+                                    <fieldset class="brief acquisition_information">
                                         <ol>
                                             <li>
                                                 <label for="budgetid"> Book fund:</label>
@@ -1248,10 +1248,23 @@
                                                 </select>
                                             </li>
                                         </ol>
-                                        <fieldset class="action">
-                                            <input type="submit" value="Go" />
-                                        </fieldset>
                                     </fieldset> <!-- /#acquisition_information -->
+                                    <fieldset class="action acquisition_information">
+                                        <input type="submit" value="Go" />
+                                    </fieldset>
+
+                                    <div id="filter_archived_information">
+                                        <ol>
+                                            <li>
+                                                <label for="archived" style="display: inline;">Include archived:</label>
+                                                [% IF filter_archived %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
+                                                [% END %]
+                                            </li>
+                                        </ol>
+                                    </div>
                                 </div> <!-- /#limits -->
                             </fieldset> <!-- /.brief -->
                         </form> <!-- /suggestionsfilter -->
@@ -1409,7 +1422,7 @@
                 $("h4.local_collapse a").on("click", function(e){
                     e.preventDefault();
                     const target = $(this).data("target");
-                    $("#" + target).toggle();
+                    $("." + target).toggle();
                 });
 
                 // Note: the selector below passes a second 'context' param - it is not a multiple selector
