@@ -1,6 +1,9 @@
 [%- BLOCK patron_fields -%]
      [%- SWITCH name -%]
      [%- CASE standard -%]<span>Standard</span>
+     [%- CASE full_address -%]<span>Full address</span>
+     [%- CASE all_emails -%]<span>All emails</span>
+     [%- CASE all_phones -%]<span>All phones</span>
      [%- CASE 'borrowernumber' -%]<span>Borrowernumber</span>
      [%- CASE 'cardnumber' -%]<span>Card number</span>
      [%- CASE 'surname' -%]<span>Surname</span>
@@ -72,4 +75,29 @@
      [%- CASE 'checkprevcheckout' -%]<span>Check previous checkout</span>
      [%- CASE DEFAULT -%]
      [%- END -%]
+[%- END -%]
+[%- BLOCK patron_fields_dropdown -%]
+    [% IF search_box %]
+        <label for="searchfieldstype" class="control-label">Search field:</label>
+        <select name="searchfieldstype" id="searchfieldstype" class="form-control">
+    [% ELSE %]
+        <label for="searchfieldstype_filter">Search field:</label>
+        <select name="searchfieldstype" id="searchfieldstype_filter">
+    [% END %]
+        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' %]
+        [% SET full_address = 'streetnumber,streettype,address,address2,city,state,zipcode,country' %]
+        [% SET all_emails = 'email,emailpro,B_email' %]
+        [% SET all_phones = 'phone,phonepro,B_phone,altcontactphone,mobile' %]
+        [% default_fields = [ standard, 'surname', 'cardnumber', all_emails, 'borrowernumber', 'userid', all_phones, full_address, 'dateofbirth', 'sort1', 'sort2' ] %]
+        [% search_options = default_fields.merge(standard.split(',')).unique %]
+        [% FOREACH s_o IN search_options %]
+            [% display_name = PROCESS patron_fields name=s_o %]
+            [% NEXT IF !display_name %]
+            [% IF searchfieldstype == s_o %]
+                <option selected="selected" value=[% s_o | html %]>[% display_name | $raw %]</option>
+            [% ELSE %]
+                <option value=[% s_o | html %]>[% display_name | $raw %]</option>
+            [% END %]
+        [% END %]
+    </select>
 [%- END -%]
