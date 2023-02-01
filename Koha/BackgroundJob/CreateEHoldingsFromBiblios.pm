@@ -71,6 +71,11 @@ sub process {
     my @record_ids = @{ $args->{record_ids} };
     my $package_id = $args->{package_id};
 
+    my $report = {
+        total_records => scalar @record_ids,
+        total_success => 0,
+    };
+
     my $package = Koha::ERM::EHoldings::Packages->find($package_id);
     unless ( $package ) {
         push @messages, {
@@ -78,12 +83,14 @@ sub process {
             code => 'package_do_not_exist',
             package_id => $package_id,
         };
+
+        my $data = $self->decoded_data;
+        $data->{messages} = \@messages;
+        $data->{report} = $report;
+
+        return $self->finish( $data );
     }
 
-    my $report = {
-        total_records => scalar @record_ids,
-        total_success => 0,
-    };
     my $fix_coverage = sub {
         my $coverage = shift || q{};
         my @coverages = split '-', $coverage;

@@ -49,30 +49,72 @@ subtest 'enqueue' => sub {
 };
 
 subtest 'process' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
-    $schema->storage->txn_begin;
+    subtest 'package_do_not_exist' => sub {
+        plan tests => 2;
 
-    my $biblio = $builder->build_sample_biblio;
+        $schema->storage->txn_begin;
 
-    my $package =
-      Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
+        my $biblio = $builder->build_sample_biblio;
+        my $package =
+          Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
 
-    my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
-        {
-            status => 'new',
-            type   => 'create_eholdings_from_biblios',
-        }
-    )->store;
-    $job = Koha::BackgroundJobs->find( $job->id );
-    my $data = {
-        record_ids => [ $biblio->biblionumber ],
-        package_id => $package->package_id,
+        my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
+            {
+                status => 'new',
+                type   => 'create_eholdings_from_biblios',
+                size   => 1,
+            }
+        )->store;
+        $job = Koha::BackgroundJobs->find( $job->id );
+        my $data = {
+            record_ids => [ $biblio->biblionumber ],
+            package_id => $package->package_id,
+        };
+        my $json = $job->json->encode($data);
+        $job->data($json)->store;
+        $package->delete; # Delete the package
+        $job->process($data);
+        is( $job->report->{total_success}, 0 );
+        is_deeply(
+            $job->messages,
+            [
+                {
+                    code       => "package_do_not_exist",
+                    package_id => $package->package_id,
+                    type       => "error"
+                }
+            ]
+        );
     };
-    my $json = $job->json->encode($data);
-    $job->data($json)->store;
-    $job->process($data);
-    is( $job->report->{total_success}, 1 );
 
-    $schema->storage->txn_rollback;
+    subtest 'all good' => sub {
+        plan tests => 1;
+
+        $schema->storage->txn_begin;
+
+        my $biblio = $builder->build_sample_biblio;
+        my $package =
+          Koha::ERM::EHoldings::Package->new( { name => 'a package' } )->store;
+
+        my $job = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new(
+            {
+                status => 'new',
+                type   => 'create_eholdings_from_biblios',
+                size   => 1,
+            }
+        )->store;
+        $job = Koha::BackgroundJobs->find( $job->id );
+        my $data = {
+            record_ids => [ $biblio->biblionumber ],
+            package_id => $package->package_id,
+        };
+        my $json = $job->json->encode($data);
+        $job->data($json)->store;
+        $job->process($data);
+        is( $job->report->{total_success}, 1 );
+
+        $schema->storage->txn_rollback;
+    };
 };
