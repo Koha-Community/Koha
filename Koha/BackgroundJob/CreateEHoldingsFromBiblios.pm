@@ -20,7 +20,6 @@ use JSON qw( decode_json encode_json );
 use Try::Tiny;
 
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string );
 use Koha::ERM::EHoldings::Titles;
 use Koha::ERM::EHoldings::Resources;
 
@@ -61,11 +60,7 @@ sub process {
         return;
     }
 
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)
-        ->progress($job_progress)
-        ->status('started')
-        ->store;
+    $self->start;
 
     my @messages;
     my @record_ids = @{ $args->{record_ids} };
@@ -181,17 +176,15 @@ sub process {
                 error => $_,
             };
         };
-        $self->progress( ++$job_progress )->store;
+        $self->step;
     }
 
-    my $job_data = decode_json $self->data;
-    $job_data->{messages} = \@messages;
-    $job_data->{report} = $report;
 
-    $self->ended_on(dt_from_string)
-        ->data(encode_json $job_data);
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
+    my $data = $self->decoded_data;
+    $data->{messages} = \@messages;
+    $data->{report} = $report;
+
+    $self->finish( $data );
 }
 
 =head3 enqueue
