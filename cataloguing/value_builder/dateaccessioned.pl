@@ -21,13 +21,9 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Koha::DateUtils qw( flatpickr_date_format );
-
 my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
-
-    my $dateformat = flatpickr_date_format();
 
     my $res  = <<END_OF_JS;
 <script>
@@ -35,10 +31,11 @@ my $builder = sub {
 
 \$(document).ready(function(){
     \$("#$function_name").flatpickr({
-        altInput: true,
-        altFormat: "$dateformat",
-        altInputClass: "input_marceditor flatpickr-input",
-        dateFormat: "Y-m-d"
+        onOpen: function(selectedDates, dateStr, instance) {
+            if (dateStr == '') {
+                instance.setDate(new Date());
+            }
+        }
     });
 });
 
