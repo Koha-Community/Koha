@@ -71,6 +71,14 @@ Longer explanation of the group, if necessary
 
 Turn on the feature 'Hide patron's info' for this group
 
+=head2 ft_limit_item_editing
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Turn on the feature "Limit item editing by group" for this group
+
 =head2 ft_search_groups_opac
 
   data_type: 'tinyint'
@@ -126,6 +134,8 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "mediumtext", is_nullable => 1 },
   "ft_hide_patron_info",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "ft_limit_item_editing",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ft_search_groups_opac",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
@@ -246,8 +256,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WOqjMuJNt1Sh2FUvt3NGxA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-01 19:02:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G6Q4trvkAM/xH1skCv+B6g
 
 sub koha_object_class {
     'Koha::Library::Group';
