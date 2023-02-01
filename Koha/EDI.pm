@@ -553,10 +553,10 @@ sub transfer_items {
             $ilink->update;
             --$quantity;
             --$mapped_by_branch{$i_branch};
-            $logger->warn("Transferred item $item->itemnumber");
+            $logger->warn("Transferred item " . $item->itemnumber);
         }
         else {
-            $logger->warn("Skipped item $item->itemnumber");
+            $logger->warn("Skipped item " . $item->itemnumber);
         }
         if ( $quantity < 1 ) {
             last;
