@@ -79,12 +79,12 @@ my $mappings = GetOAISetsMappings;
 # Get all biblionumbers and marcxml
 print "Retrieving biblios... " if $verbose;
 my $query = qq{
-    SELECT biblionumber, metadata
+    SELECT biblionumber, metadata, 0 as "deleted"
     FROM biblio_metadata
     WHERE format='marcxml'
     AND  `schema` = ?
     UNION
-    SELECT biblionumber, metadata
+    SELECT biblionumber, metadata, 1 as "deleted"
     FROM deletedbiblio_metadata
     WHERE format='marcxml'
     AND  `schema` = ?
@@ -140,7 +140,7 @@ foreach my $res (@$results) {
         warn "(biblio $biblionumber) Error while creating record from marcxml: $@";
         next;
     }
-    if($embed_items) {
+    if( $embed_items && !($res->{'deleted'}) ) {
         $record = Koha::Biblio::Metadata->record(
             {
                 record       => $record,
