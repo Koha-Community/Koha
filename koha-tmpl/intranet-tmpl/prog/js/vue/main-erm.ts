@@ -17,7 +17,7 @@ library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
 
 import App from "./components/ERM/Main.vue";
 
-import { routes } from "./routes";
+import { routes } from "./routes/erm";
 
 const router = createRouter({
     history: createWebHistory(),
