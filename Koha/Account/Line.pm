@@ -1035,7 +1035,6 @@ sub renew_item {
             $self->{branchcode},
             undef,
             undef,
-            undef,
             0
         );
         return {

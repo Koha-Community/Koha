@@ -565,10 +565,10 @@ subtest 'Renewal related tests' => sub {
     );
     my $called = 0;
     my $module = Test::MockModule->new('C4::Circulation');
+    $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
     $line->renew_item;
-    my $r = Koha::Checkouts::Renewals->find({ checkout_id => $issue->id });
-    is( $r->seen, 0, "RenewAccruingItemWhenPaid triggers an unseen renewal" );
+    is( $called, 1, 'Attempt to renew succeeds when conditions are met' );
 
     $schema->storage->txn_rollback;
 };
