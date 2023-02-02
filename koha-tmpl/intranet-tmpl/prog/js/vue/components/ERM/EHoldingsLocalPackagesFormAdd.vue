@@ -93,7 +93,7 @@ import {
     createPackage,
     editPackage,
     checkError,
-} from "../../fetch"
+} from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 
 export default {

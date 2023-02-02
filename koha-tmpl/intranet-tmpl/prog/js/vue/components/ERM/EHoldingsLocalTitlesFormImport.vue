@@ -26,7 +26,7 @@
 import { setMessage, setError, setWarning } from "../../messages"
 import { createVNode, render } from "vue"
 import { useDataTable } from "../../composables/datatables"
-import { checkError, fetchLocalPackages } from "../../fetch.js"
+import { checkError, fetchLocalPackages } from "../../fetch/erm.js"
 
 export default {
     setup() {

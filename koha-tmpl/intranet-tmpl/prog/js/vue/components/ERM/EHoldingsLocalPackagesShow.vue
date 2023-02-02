@@ -106,7 +106,7 @@
 <script>
 import { inject } from "vue"
 import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
-import { fetchLocalPackage } from "../../fetch"
+import { fetchLocalPackage } from "../../fetch/erm.js"
 
 export default {
     setup() {

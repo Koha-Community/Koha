@@ -150,7 +150,7 @@ import flatPickr from "vue-flatpickr-component"
 import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLicense, checkError } from "../../fetch"
+import { fetchLicense, checkError } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 
 export default {

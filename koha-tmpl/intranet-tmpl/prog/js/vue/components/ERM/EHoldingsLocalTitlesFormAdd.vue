@@ -388,7 +388,7 @@
 import { inject } from "vue"
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalTitle, checkError } from "../../fetch"
+import { fetchLocalTitle, checkError } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 
 export default {

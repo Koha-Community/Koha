@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { fetchLicenses } from "../../fetch"
+import { fetchLicenses } from "../../fetch/erm.js"
 export default {
     name: "AgreementLicenses",
     data() {

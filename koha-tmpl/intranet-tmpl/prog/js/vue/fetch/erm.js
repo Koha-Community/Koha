@@ -1,4 +1,4 @@
-import { setError } from "./messages";
+import { setError } from "../messages";
 
 export const fetchAgreement = function (agreement_id) {
     if (!agreement_id) return;

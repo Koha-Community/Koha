@@ -95,7 +95,7 @@
 import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import { storeToRefs } from "pinia"
-import { fetchLocalPackages } from "../../fetch"
+import { fetchLocalPackages } from "../../fetch/erm.js"
 
 export default {
     setup() {
