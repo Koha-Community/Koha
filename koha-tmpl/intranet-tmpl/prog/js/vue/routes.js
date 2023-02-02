@@ -1,5 +1,5 @@
 import { h } from "vue";
-import ERMHome from "./components/ERM/ERMHome.vue";
+import Home from "./components/ERM/Home.vue";
 import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
@@ -126,7 +126,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/erm.pl",
-        component: ERMHome,
+        component: Home,
         meta: {
             breadcrumb: () => [breadcrumbs.home, breadcrumbs.erm_home],
         },
