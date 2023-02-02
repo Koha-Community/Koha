@@ -116,7 +116,7 @@
 import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
-import { fetchEBSCOPackage, checkError } from "../../fetch"
+import { fetchEBSCOPackage, checkError } from "../../fetch/erm.js"
 
 export default {
     setup() {

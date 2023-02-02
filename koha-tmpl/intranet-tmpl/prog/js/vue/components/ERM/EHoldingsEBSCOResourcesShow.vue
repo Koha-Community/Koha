@@ -115,9 +115,9 @@
 
 <script>
 import { inject } from "vue"
-import { fetchEBSCOResource } from "../../fetch"
+import { fetchEBSCOResource } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
-import { checkError } from "../../fetch.js"
+import { checkError } from "../../fetch/erm.js"
 
 export default {
     setup() {

@@ -96,7 +96,7 @@
 
 <script>
 import { inject } from "vue"
-import { fetchLocalResource } from "../../fetch"
+import { fetchLocalResource } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 export default {
     setup() {

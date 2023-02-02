@@ -15,7 +15,7 @@
 import Toolbar from "./LicensesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLicenses } from "../../fetch"
+import { fetchLicenses } from "../../fetch/erm.js"
 import { useDataTable } from "../../composables/datatables"
 
 export default {

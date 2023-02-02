@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { fetchLocalPackage, checkError } from "../../fetch"
+import { fetchLocalPackage, checkError } from "../../fetch/erm.js"
 import { setMessage, setError } from "../../messages"
 
 export default {

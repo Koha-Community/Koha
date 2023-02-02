@@ -21,7 +21,7 @@
 import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalTitleCount } from "../../fetch"
+import { fetchLocalTitleCount } from "../../fetch/erm.js"
 import { useDataTable } from "../../composables/datatables"
 
 export default {

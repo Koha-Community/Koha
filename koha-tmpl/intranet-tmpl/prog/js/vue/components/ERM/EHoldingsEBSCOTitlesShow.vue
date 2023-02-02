@@ -245,7 +245,7 @@
 <script>
 import { inject } from "vue"
 import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue"
-import { fetchEBSCOTitle } from "../../fetch"
+import { fetchEBSCOTitle } from "../../fetch/erm.js"
 export default {
     setup() {
         const AVStore = inject("AVStore")

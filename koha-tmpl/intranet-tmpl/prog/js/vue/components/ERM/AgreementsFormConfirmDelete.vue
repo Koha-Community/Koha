@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { fetchAgreement, checkError } from "../../fetch"
+import { fetchAgreement, checkError } from "../../fetch/erm.js"
 import { setMessage, setError } from "../../messages"
 
 export default {

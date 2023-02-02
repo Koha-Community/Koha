@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { fetchPatron } from "../../fetch"
+import { fetchPatron } from "../../fetch/erm.js"
 
 export default {
     name: "UserRoles",

@@ -300,7 +300,7 @@
 
 <script>
 import { inject } from "vue"
-import { fetchAgreement } from "../../fetch"
+import { fetchAgreement } from "../../fetch/erm.js"
 
 export default {
     setup() {

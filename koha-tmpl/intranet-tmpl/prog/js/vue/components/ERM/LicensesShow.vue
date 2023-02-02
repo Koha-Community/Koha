@@ -145,7 +145,7 @@
 
 <script>
 import { inject } from "vue"
-import { fetchLicense } from "../../fetch"
+import { fetchLicense } from "../../fetch/erm.js"
 
 export default {
     setup() {

@@ -187,7 +187,7 @@ import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchAgreement, checkError } from "../../fetch"
+import { fetchAgreement, checkError } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 
 export default {

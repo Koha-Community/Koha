@@ -36,7 +36,7 @@
 
 <script>
 import AgreementsList from "./AgreementsList.vue"
-import { createPackage, editPackage } from "../../fetch"
+import { createPackage, editPackage } from "../../fetch/erm.js"
 import { setWarning, removeMessages } from "../../messages"
 
 export default {

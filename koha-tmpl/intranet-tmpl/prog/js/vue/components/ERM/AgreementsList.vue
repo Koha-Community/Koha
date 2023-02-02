@@ -38,7 +38,7 @@ import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchAgreements } from "../../fetch"
+import { fetchAgreements } from "../../fetch/erm.js"
 import { useDataTable, build_url } from "../../composables/datatables"
 
 export default {

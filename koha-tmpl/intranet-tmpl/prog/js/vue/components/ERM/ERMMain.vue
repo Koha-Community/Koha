@@ -120,9 +120,9 @@
 
 <script>
 import { inject } from "vue"
-import Breadcrumb from "./Breadcrumb.vue"
-import Dialog from "./Dialog.vue"
-import { fetchVendors } from "../../fetch"
+import Breadcrumb from "../../components/Breadcrumb.vue"
+import Dialog from "../../components/Dialog.vue"
+import { fetchVendors } from "../../fetch/erm.js"
 import "vue-select/dist/vue-select.css"
 
 export default {

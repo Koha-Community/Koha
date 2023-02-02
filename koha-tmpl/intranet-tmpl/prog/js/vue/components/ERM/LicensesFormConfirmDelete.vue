@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { fetchLicense, checkError } from "../../fetch"
+import { fetchLicense, checkError } from "../../fetch/erm.js"
 import { setMessage, setError } from "../../messages"
 
 export default {

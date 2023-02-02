@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { fetchAgreements } from "../../fetch"
+import { fetchAgreements } from "../../fetch/erm.js"
 
 export default {
     data() {
