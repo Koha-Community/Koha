@@ -64,7 +64,15 @@ sub list {
     # If necessary, only get those from a specified patron
     my @requests = Koha::Illrequests->search({
         $hidden_statuses
-        ? ( status => { 'not in' => $hidden_statuses } )
+        ? (
+            -and => {
+                status => { 'not in' => $hidden_statuses },
+                status_alias => [ -or =>
+                    { 'not in' => $hidden_statuses },
+                    { '=' => undef }
+                ]
+            }
+        )
         : (),
         $args->{borrowernumber}
         ? ( borrowernumber => $args->{borrowernumber} )
