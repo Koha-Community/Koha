@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE Koha %]
 [% USE AuthorisedValues %]
 [% SET itemavailable = 1 %]
 
