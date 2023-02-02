@@ -376,33 +376,37 @@ sub _build_languages_arrayref {
 
         my %idx = map { $enabled_languages->[$_] => $_ } reverse 0 .. @$enabled_languages-1;
         my @ordered_keys = sort {
-            my $aa = '';
-	    my $bb = '';
-	    my $acount = @{$language_groups->{$a}};
-	    my $bcount = @{$language_groups->{$b}};
-	    if ( $language_groups->{$a}->[0]->{enabled} ) {
+            my $aa     = '';
+            my $bb     = '';
+            my $acount = @{ $language_groups->{$a} };
+            my $bcount = @{ $language_groups->{$b} };
+            if ( $language_groups->{$a}->[0]->{enabled} ) {
                 $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
-	    } elsif ( $acount > 1 ) {
-		for ( my $i=1;$i<$acount;$i++ ) {
+            }
+            elsif ( $acount > 1 ) {
+                for ( my $i = 1 ; $i < $acount ; $i++ ) {
                     if ( $language_groups->{$a}->[$i]->{enabled} ) {
-			$aa = $language_groups->{$a}->[$i]->{rfc4646_subtag};
-			last;
-		    }
-	        }
-	    }
-	    if ( $language_groups->{$b}->[0]->{enabled} ) {
+                        $aa = $language_groups->{$a}->[$i]->{rfc4646_subtag};
+                        last;
+                    }
+                }
+            }
+            if ( $language_groups->{$b}->[0]->{enabled} ) {
                 $bb = $language_groups->{$b}->[0]->{rfc4646_subtag};
-	    } elsif ( $bcount > 1 ) {
-		for ( my $i=1;$i<$bcount;$i++ ) {
-		    if ($language_groups->{$b}->[$i]->{enabled} ) {
+            }
+            elsif ( $bcount > 1 ) {
+                for ( my $i = 1 ; $i < $bcount ; $i++ ) {
+                    if ( $language_groups->{$b}->[$i]->{enabled} ) {
                         $bb = $language_groups->{$b}->[$i]->{rfc4646_subtag};
-			last;
-		    }
-		}
-	    }
-            ( exists $idx{$aa} and exists $idx{$bb} and ( $idx{$aa} cmp $idx{$bb} ) )
-            || ( exists $idx{$aa} and exists $idx{$bb} )
-            || exists $idx{$bb}
+                        last;
+                    }
+                }
+            }
+            (         exists $idx{$aa}
+                  and exists $idx{$bb}
+                  and ( $idx{$aa} cmp $idx{$bb} ) )
+              || ( exists $idx{$aa} and exists $idx{$bb} )
+              || exists $idx{$bb}
         } keys %$language_groups;
 
         for my $key ( @ordered_keys ) {
