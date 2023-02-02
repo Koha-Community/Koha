@@ -764,13 +764,20 @@ sub _batchCommitItems {
 
         my $item = TransformMarcToKoha({ record => $item_marc, kohafields => ['items.barcode','items.itemnumber'] });
 
-        my $duplicate_barcode = exists( $item->{'barcode'} ) && Koha::Items->find({ barcode => $item->{'barcode'} });
+        my $item_match;
+        my $duplicate_barcode = exists( $item->{'barcode'} );
         my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
 
+        # We assume that when replacing items we do not want to move them - the onus is on the importer to
+        # ensure the correct items/records are being updated
         my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ?, import_error = ? WHERE import_items_id = ?");
-        if ( $action eq "replace" && $duplicate_itemnumber ) {
+        if (
+            $action eq "replace" &&
+            $duplicate_itemnumber &&
+            ( $item_match = Koha::Items->find( $item->{itemnumber} ))
+        ) {
             # Duplicate itemnumbers have precedence, that way we can update barcodes by overlaying
-            ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber}, { skip_record_index => 1 } );
+            ModItemFromMarc( $item_marc, $item_match->biblionumber, $item->{itemnumber}, { skip_record_index => 1 } );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
             $updsth->bind_param( 3, undef );
@@ -778,9 +785,12 @@ sub _batchCommitItems {
             $updsth->execute();
             $updsth->finish();
             $num_items_replaced++;
-        } elsif ( $action eq "replace" && $duplicate_barcode ) {
-            my $itemnumber = $duplicate_barcode->itemnumber;
-            ModItemFromMarc( $item_marc, $biblionumber, $itemnumber, { skip_record_index => 1 } );
+        } elsif (
+            $action eq "replace" &&
+            $duplicate_barcode &&
+            ( $item_match = Koha::Items->find({ barcode => $item->{'barcode'} }) )
+        ) {
+            ModItemFromMarc( $item_marc, $item_match->biblionumber, $item_match->itemnumber, { skip_record_index => 1 } );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
             $updsth->bind_param( 3, undef );
@@ -788,7 +798,11 @@ sub _batchCommitItems {
             $updsth->execute();
             $updsth->finish();
             $num_items_replaced++;
-        } elsif ($duplicate_barcode) {
+        } elsif (
+            # We aren't replacing, but the incoming file ahs a barcode, we need to check if it exists
+            $duplicate_barcode &&
+            ( $item_match = Koha::Items->find({ barcode => $item->{'barcode'} }) )
+        ) {
             $updsth->bind_param( 1, 'error' );
             $updsth->bind_param( 2, undef );
             $updsth->bind_param( 3, 'duplicate item barcode' );
