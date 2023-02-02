@@ -1957,9 +1957,9 @@ Note that permanent location is a code, and location may be an authval.
                   posting.fail(function(data) {
                       if ( data.status === 409 ) {
                           var response = data.responseJSON;
-                          if ( response.key === "PRIMARY" ) {
+                          if ( response.error_code === 'already_bundled' ) {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
-                          } else if (response.key === 'checked_out') {
+                          } else if (response.error_code === 'checked_out') {
                               const button = $('<button type="button">')
                                 .addClass('btn btn-xs')
                                 .text(__('Check in and add to bundle'))
@@ -1971,7 +1971,7 @@ Note that permanent location is a code, and location may be an authval.
                                 .attr('class', 'alert alert-warning')
                                 .append(__x('Warning: Item {barcode} is checked out', { barcode }))
                                 .append(' ', button);
-                          } else if (response.key === 'failed_checkin') {
+                          } else if (response.error_code === 'failed_checkin') {
                               $('#addResult')
                                 .empty()
                                 .attr('class', 'alert alert-danger')
@@ -1983,7 +1983,7 @@ Note that permanent location is a code, and location may be an authval.
                           $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
                       } else if ( data.status === 400 ) {
                           var response = data.responseJSON;
-                          if ( response.error === "Bundles cannot be nested" ) {
+                          if ( response.error_code === "failed_nesting" ) {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode)+'</div>');
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');

@@ -290,35 +290,41 @@ sub add_to_bundle {
             return $c->render(
                 status  => 409,
                 openapi => {
-                    error => 'Item is already bundled',
-                    key   => $_->duplicate_id
+                    error      => 'Item is already bundled',
+                    error_code => 'already_bundled',
+                    key        => $_->duplicate_id
+                }
+            );
+        }
+        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' )
+        {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Item is checked out',
+                    error_code => 'checked_out'
+                }
+            );
+        }
+        elsif ( ref($_) eq 'Koha::Exceptions::Checkin::FailedCheckin' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Item cannot be checked in',
+                    error_code => 'failed_checkin'
                 }
             );
         }
         elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::IsBundle' ) {
             return $c->render(
-                status => 400,
+                status  => 400,
                 openapi => {
-                    error => 'Bundles cannot be nested'
+                    error      => 'Bundles cannot be nested',
+                    error_code => 'failed_nesting'
                 }
             );
-        } elsif (ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut') {
-            return $c->render(
-                status  => 409,
-                openapi => {
-                    error => 'Item is checked out',
-                    key   => 'checked_out'
-                }
-            );
-        } elsif (ref($_) eq 'Koha::Exceptions::Checkin::FailedCheckin') {
-            return $c->render(
-                status  => 409,
-                openapi => {
-                    error => 'Item cannot be checked in',
-                    key   => 'failed_checkin'
-                }
-            );
-        } else {
+        }
+        else {
             $c->unhandled_exception($_);
         }
     };
