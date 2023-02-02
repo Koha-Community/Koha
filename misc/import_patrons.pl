@@ -116,7 +116,7 @@ import_patrons.pl - CLI script to import patrons data into Koha
 
 =head1 SYNOPSIS
 
-import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve_field <column>] [--preserve-extended-attributes] [--update-expiration] [--expiration-from-today] [--verbose]
+import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve-field <column>] [--preserve-extended-attributes] [--update-expiration] [--expiration-from-today] [--verbose]
 
 =head1 OPTIONS
 
