@@ -143,7 +143,7 @@ foreach my $res (@$results) {
     if($embed_items) {
         $record = Koha::Biblio::Metadata->record(
             {
-                marc_record  => $record,
+                record       => $record,
                 embed_items  => 1,
                 biblionumber => $biblionumber,
             }
