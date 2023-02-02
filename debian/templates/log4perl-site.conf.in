@@ -38,7 +38,6 @@ log4perl.appender.SIP.layout=PatternLayout
 log4perl.appender.SIP.layout.ConversionPattern=[%d] [%P] [%p] %X{accountid}@%X{peeraddr}: %m %l%n
 log4perl.appender.SIP.utf8=1
 
-
 log4perl.logger.plack-opac = WARN, PLACKOPAC
 log4perl.appender.PLACKOPAC=Log::Log4perl::Appender::File
 log4perl.appender.PLACKOPAC.filename=__LOG_DIR__/plack-opac-error.log
@@ -62,3 +61,11 @@ log4perl.appender.PLACKINTRANET.mode=append
 log4perl.appender.PLACKINTRANET.layout=PatternLayout
 log4perl.appender.PLACKINTRANET.layout.ConversionPattern=[%d] [%p] %m%n
 log4perl.appender.PLACKINTRANET.utf8=1
+
+log4perl.logger.worker = WARN, WORKER
+log4perl.appender.WORKER=Log::Log4perl::Appender::Screen
+log4perl.appender.WORKER.stderr=1
+log4perl.appender.WORKER.mode=append
+log4perl.appender.WORKER.layout=PatternLayout
+log4perl.appender.WORKER.layout.ConversionPattern=[%d] [%p] %m %l%n
+log4perl.appender.WORKER.utf8=1
