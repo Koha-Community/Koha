@@ -111,6 +111,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-17 18:47:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m7bHppTX3UpQY9CfmRPqQA
 
+sub koha_object_class {
+    'Koha::Preservation::Processing';
+}
+sub koha_objects_class {
+    'Koha::Preservation::Processings';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -190,6 +190,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-17 18:47:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ojxQ0wFj2datCPVjeuTBWw
 
+sub koha_object_class {
+    'Koha::Preservation::Train';
+}
+sub koha_objects_class {
+    'Koha::Preservation::Trains';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
