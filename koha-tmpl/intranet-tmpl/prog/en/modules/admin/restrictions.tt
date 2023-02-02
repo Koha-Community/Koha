@@ -4,64 +4,68 @@
 [% PROCESS 'restriction-types.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'[% ELSE %]New restriction[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'[% END %] &rsaquo; Patron restrictions &rsaquo; Administration &rsaquo; Koha
+<title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo; [% ELSE %]New restriction &rsaquo; [% END %][% END %]
+[% IF op == 'delete_confirm' %]Confirm deletion of restriction '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo; [% END %]Patron restrictions &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_restrictions" class="admin">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'patrons-admin-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+[% END %]
 
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-    <li>
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    </li>
-    <li>
-        <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-    </li>
-
-    [% IF op == 'list' %]
+[% WRAPPER 'sub-header.inc' %]
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
         <li>
-            <a href="#" aria-current="page">
-                Patron restrictions
-            </a>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
         </li>
-    [% END %]
-
-    [% IF op == 'add_form' %]
         <li>
-            <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         </li>
-        [% IF restriction %]
+
+        [% IF op == 'list' %]
             <li>
                 <a href="#" aria-current="page">
-                    Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    New restriction
+                    Patron restrictions
                 </a>
             </li>
         [% END %]
-    [% END %]
 
-    [% IF op == 'delete_confirm' %]
-        <li>
-            <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Delete restriction?
-            </a>
-        </li>
-    [% END %]
-    </ol>
-</nav>
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
+            </li>
+            [% IF restriction %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify restriction '[% PROCESS restriction_type_description restriction_type=restriction %]'
+                    </a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="#" aria-current="page">
+                        New restriction
+                    </a>
+                </li>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'delete_confirm' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Delete restriction?
+                </a>
+            </li>
+        [% END %]
+        </ol>
+    </nav>
+[% END %]
+
 
 <div class="main container-fluid">
     <div class="row">
