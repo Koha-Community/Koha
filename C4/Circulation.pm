@@ -824,6 +824,7 @@ sub CanBookBeIssued {
                 borrowernumber => $patron->borrowernumber,
                 ccode          => $item_object->ccode,
                 categorycode   => $patron->categorycode,
+                location       => $item_object->location,
             }
         );
         ModDateLastSeen( $item_object->itemnumber ); # FIXME Move to Koha::Item
