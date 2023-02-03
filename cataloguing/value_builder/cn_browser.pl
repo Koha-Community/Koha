@@ -33,8 +33,9 @@ my $builder = sub {
     my $res = "
 <script>
 
-function Click$function_name(i) {
-    q = document.getElementById('$params->{id}');
+function Click$function_name(ev) {
+    ev.preventDefault();
+    q = document.getElementById(ev.data.id);
     window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
 }
 
