@@ -6,7 +6,7 @@ fieldset {
         color: #696969;
         float: left;
         font-weight: bold;
-        margin-bottom: 0;
+        margin-bottom: .5rem;
 
         ~ * {
             clear: left;
@@ -17,9 +17,7 @@ fieldset {
         box-shadow: none;
         padding: 0;
     }
-}
 
-fieldset {
     &.rows {
         clear: left;
         float: left;
@@ -40,9 +38,8 @@ fieldset {
         &.inputnote {
             clear: left;
             float: left;
-            margin: 1em 0 0 11em;
+            margin: 1em 0 0 9em;
         }
-
 
         &.left {
             label {
@@ -62,18 +59,6 @@ fieldset {
             }
         }
 
-        &.ui-accordion-content {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-
-            table {
-                margin: 0;
-            }
-        }
-
         &.unselected {
             background-color: #FFFFFF;
             border: 0;
@@ -86,7 +71,7 @@ fieldset {
 
         div {
             &.hint {
-                font-size: 105%;
+                font-size: 1.25rem;
                 margin: .5rem 0;
                 margin-left: 11rem;
             }
@@ -113,7 +98,8 @@ fieldset {
 
             &.radio {
                 display: inline-block;
-                margin: 0 1rem 0 0;
+                float: none;
+                margin: 0;
                 padding: 0;
                 width: auto;
             }
@@ -163,14 +149,19 @@ fieldset {
             }
 
             fieldset {
-                margin-left: 7.5em;
+                margin: 0;
+                padding: 0;
+
+                input[type="text"] {
+                    max-width: 70%;
+                }
 
                 label {
                     width: 6em;
                 }
 
                 legend {
-                    font-size: 120%;
+                    font-size: 1.55rem;
                     margin: 0 0 0 1em;
                 }
 
@@ -230,13 +221,13 @@ fieldset {
             }
 
             &.hint {
-                font-size: 105%;
+                font-size: 1.25rem;
             }
         }
 
         table {
             clear: both;
-            font-size: 105%;
+            font-size: 1.25rem;
             margin: 1em 0 1em 1em;
 
             &.dataTable {
