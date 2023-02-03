@@ -29,7 +29,6 @@ my $builder = sub {
     return qq|
 <script>
 function Click$id(event) {
-    event.preventDefault();
     const value = document.getElementById(event.data.id).value;
     const url = new URL('/cgi-bin/koha/cataloguing/plugin_launcher.pl', location);
     url.searchParams.set('plugin_name', 'unimarc_field_146i.pl');
