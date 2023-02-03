@@ -267,7 +267,7 @@
                         [% SET warnMissingCompiledFiles = 1 %]
                     [% END %]
                     [% WRAPPER tab_panel tabname= "sysinfo" %]
-                        [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles%]
+                        [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles%]
                             [% IF (warnIsRootUser) %]
                                 <h2>Warning regarding current user</h2>
                                 <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -382,7 +382,7 @@
                                 Contact your system administrator.
                             [% END # /IF warnConnectBroker %]
 
-                            [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnFastCataloging %]
+                            [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnFastCataloging %]
                                 <h2>Warnings regarding the system configuration</h2>
                                 <table>
                                     <caption>Preferences and parameters</caption>
@@ -524,6 +524,12 @@
                                                 </td>
                                             </tr>
                                         [% END %]
+                                    [% END %]
+
+                                    [% IF weasyprint_missing %]
+                                        <tr><th scope="row"><strong>Warning</strong> </th><td>
+                                        The <strong>weasyprint</strong> tool is not installed.
+                                        </td></tr>
                                     [% END %]
 
                                     [% IF oauth2_missing_deps %]

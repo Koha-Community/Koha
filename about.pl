@@ -25,6 +25,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
 use File::Slurp qw( read_file );
+use IPC::Cmd qw(can_run);
 use List::MoreUtils qw( any );
 use Module::Load::Conditional qw( can_load );
 use Config qw( %Config );
@@ -323,6 +324,9 @@ if ( C4::Context->preference('ILLModule') ) {
     }
 
     $template->param( warnILLConfiguration => $warnILLConfiguration );
+}
+unless ( can_run('weasyprint') ) {
+    $template->param( weasyprint_missing => 1 );
 }
 
 {
