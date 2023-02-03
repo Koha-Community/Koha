@@ -43,8 +43,8 @@ my $builder = sub {
     my ( $params ) = @_;
     my $res="
     <script>
-        function Blur$params->{id}() {
-                var code = document.getElementById('$params->{id}');
+        function Blur$params->{id}(ev) {
+                var code = document.getElementById(ev.data.id);
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber.pl&code=' + code.value;
                 var req = \$.get(url);
                 req.done(function(resp){
