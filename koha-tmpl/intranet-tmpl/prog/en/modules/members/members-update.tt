@@ -128,14 +128,14 @@
                                 <div id="panel_modify_[% pm.borrowernumber | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="panel-header-[% pm.borrowernumber | html %]">
                                     <div class="panel-body">
                                         <div class="btn-toolbar">
-                                            <input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" />
-                                            <label for="approve_modify_[% pm.borrowernumber | html %]">Approve</label>
 
-                                            <input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" />
-                                            <label for="deny_modify_[% pm.borrowernumber | html %]">Deny</label>
+                                            <label for="approve_modify_[% pm.borrowernumber | html %]"><input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" /> Approve</label>
 
-                                            <input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/>
-                                            <label for="ignore_modify_[% pm.borrowernumber | html %]">Ignore</label>
+
+                                            <label for="deny_modify_[% pm.borrowernumber | html %]"><input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" /> Deny</label>
+
+
+                                            <label for="ignore_modify_[% pm.borrowernumber | html %]"><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/> Ignore</label>
                                             | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
                                         </div>
 

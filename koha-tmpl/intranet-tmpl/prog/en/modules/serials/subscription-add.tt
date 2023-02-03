@@ -14,7 +14,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 /* Prevents Bootstrap menus from being hidden inside modal */
 #mana_search_result .modal { overflow: visible; }
 #mana_search_result .modal-body { overflow-y: visible; }
-.inputnote { padding-left: 13rem; padding-top: 1rem; }
+
 fieldset.rows table { clear: none; margin: 0; }
 </style>
 </head>
@@ -107,32 +107,32 @@ fieldset.rows table { clear: none; margin: 0; }
                                         [% END %]
                                     </div>
                                 </li>
-                                <li class="radio">
-                                <label for="creating_record">When receiving this serial:</label>
+                                <li>
+                                    <span class="label">When receiving this serial:</span>
                                     [% IF ( serialsadditems ) %]
                                         <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" />
-                                        <label class="widelabel" for="serialsadditems-yes"> Create an item record</label>
+                                        <label class="radio" for="serialsadditems-yes"> Create an item record</label>
                                         <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" />
-                                        <label class="widelabel" for="serialsadditems-no"> Do not create an item record</label>
+                                        <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
                                     [% ELSE %]
                                         <input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/>
-                                        <label class="widelabel" for="serialsadditems-yes"> Create an item record</label>
+                                        <label class="radio" for="serialsadditems-yes"> Create an item record</label>
                                         <input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" />
-                                        <label class="widelabel" for="serialsadditems-no"> Do not create an item record</label>
+                                        <label class="radio" for="serialsadditems-no"> Do not create an item record</label>
                                     [% END %]
                                 </li>
-                                <li class="radio">
+                                <li>
                                 <label for="irregular_issue">When there is an irregular issue:</label>
                                   [% IF (skip_serialseq) %]
                                       <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" checked="checked" />
-                                      <label for="skip_serialseq_yes">Skip issue number</label>
+                                      <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
                                       <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" />
-                                      <label for="skip_serialseq_no">Keep issue number</label>
+                                      <label class="radio" for="skip_serialseq_no">Keep issue number</label>
                                   [% ELSE %]
                                       <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" />
-                                      <label for="skip_serialseq_yes">Skip issue number</label>
+                                      <label class="radio" for="skip_serialseq_yes">Skip issue number</label>
                                       <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" checked="checked" />
-                                      <label for="skip_serialseq_no">Keep issue number</label>
+                                      <label class="radio" for="skip_serialseq_no">Keep issue number</label>
                                   [% END %]
                                 </li>
                                 <li>

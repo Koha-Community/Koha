@@ -201,15 +201,15 @@
             <legend>Ordering information</legend>
             <ol><li><label for="activestatus">Vendor is:</label>
                     [% IF ( active ) %]
-                        <label class="radio" for="activestatus">Active</label>
                         <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
-                        <label class="radio" for="inactivestatus">Inactive</label>
-                        <input type="radio" id="inactivestatus" name="status" value="0" />
-                    [% ELSE %]
                         <label class="radio" for="activestatus">Active</label>
-                        <input type="radio" id="activestatus" name="status" value="1" />
+                        <input type="radio" id="inactivestatus" name="status" value="0" />
                         <label class="radio" for="inactivestatus">Inactive</label>
+                    [% ELSE %]
+                        <input type="radio" id="activestatus" name="status" value="1" />
+                        <label class="radio" for="activestatus">Active</label>
                         <input type="radio" id="inactivestatus" name="status" value="0" checked="checked" />
+                        <label class="radio" for="inactivestatus">Inactive</label>
                     [% END %]</li>
             <li><label for="list_currency">List prices are: </label>
                 <select name="list_currency" id="list_currency">
