@@ -29,7 +29,7 @@ function checkCodes( new_lettercode, new_branchcode ){
         }
     });
 }
-//This has bug
+
 function confirmOverwrite( new_lettercode, new_branchcode ){
     var letter_exists;
     $.ajax({
