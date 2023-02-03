@@ -33,9 +33,11 @@ my ($dbh,$record,$tagslib,$field_number) = @_;
 my $function_name= $field_number;
 my $res="
 <script>
-function Clic$function_name(i) {
-	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_128b.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_128b\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+function Clic$function_name(event) {
+    event.preventDefault();
+    const id = event.data.id;
+    defaultvalue=document.getElementById(id).value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_128b.pl&index=\" + id + \"&result=\"+defaultvalue,\"unimarc_field_128b\",'width=1000,height=375,toolbar=false,scrollbars=yes');
 
 }
 </script>
