@@ -123,7 +123,7 @@ while (1) {
             my $args = try {
                 $job->json->decode($job->data);
             } catch {
-                Koha::Logger->get->warn(sprintf "Cannot decode data for job id=%s", $job->id);
+                Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Cannot decode data for job id=%s", $job->id);
                 $job->status('failed')->store;
                 return;
             };
