@@ -32,9 +32,10 @@ my ($dbh,$record,$tagslib,$field_number) = @_;
 my $function_name= "106".(int(rand(100000))+1);
 my $res="
 <script>
-function Clic$field_number() {
-        defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_106.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_106\",'width=500,height=400,toolbar=false,scrollbars=yes');
+function Clic$field_number(ev) {
+        ev.preventDefault();
+        defaultvalue=document.getElementById(ev.data.id).value;
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_106.pl&index=\" + ev.data.id + \"&result=\"+defaultvalue,\"unimarc_field_106\",'width=500,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
