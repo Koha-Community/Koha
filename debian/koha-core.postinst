@@ -244,7 +244,6 @@ for site in $(koha-list); do
 log4perl.logger.worker = WARN, WORKER
 log4perl.appender.WORKER=Log::Log4perl::Appender::Screen
 log4perl.appender.WORKER.stderr=1
-log4perl.appender.WORKER.mode=append
 log4perl.appender.WORKER.layout=PatternLayout
 log4perl.appender.WORKER.layout.ConversionPattern=[%d] [%p] %m %l%n
 log4perl.appender.WORKER.utf8=1
