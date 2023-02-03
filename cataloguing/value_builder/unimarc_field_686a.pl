@@ -31,9 +31,10 @@ my ($dbh,$record,$tagslib,$field_number) = @_;
 my $function_name= $field_number;
 my $res  = "
 <script>
-function Clic$function_name(subfield_managed) {
-	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_686a.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value_builder\",'width=700,height=600,toolbar=false,scrollbars=yes');
+function Clic$function_name(event) {
+    event.preventDefault();
+    defaultvalue=document.getElementById(event.data.id).value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_686a.pl&result=\"+defaultvalue+\"&index=\" + event.data.id, \"value_builder\",'width=700,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
