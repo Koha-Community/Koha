@@ -34,7 +34,6 @@ my $builder = sub {
 
 function Focus$function_name(event) {
     document.getElementById(event.data.id).value='$date';
-    return 0;
 }
 
 </script>
