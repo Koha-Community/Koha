@@ -86,14 +86,16 @@ END_OF_JS
 
     my $js  = <<END_OF_JS;
 <script>
-
-function Focus$function_name(id, force) {
+function set_barcode(id, force) {
 $scr
 }
 
-function Click$function_name(id) {
-    Focus$function_name(id, 1);
-    return false;
+function Focus$function_name(event) {
+    set_barcode(event.data.id, false);
+}
+
+function Click$function_name(event) {
+    set_barcode(event.data.id, true);
 }
 </script>
 END_OF_JS
