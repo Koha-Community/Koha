@@ -32,9 +32,10 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $res = "
 <script>
-function Clic$field_number() {
-	defaultvalue=document.getElementById(\"$field_number\").value;
-	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115b.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_115b\",'width=1200,height=600,toolbar=false,scrollbars=yes');
+function Clic$field_number(ev) {
+    ev.preventDefault();
+    defaultvalue=document.getElementById(ev.data.id).value;
+    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115b.pl&index=\" + ev.data.id + \"&result=\"+defaultvalue,\"unimarc_field_115b\",'width=1200,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
