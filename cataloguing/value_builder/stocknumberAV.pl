@@ -47,8 +47,9 @@ my $builder = sub {
     my ( $params ) = @_;
     my $res = qq{
     <script>
-        function Click$params->{id}() {
-                var code = document.getElementById('$params->{id}');
+        function Click$params->{id}(ev) {
+                ev.preventDefault();
+                var code = document.getElementById(ev.data.id);
                 \$.ajax({
                     url: '/cgi-bin/koha/cataloguing/plugin_launcher.pl',
                     type: 'POST',
@@ -57,7 +58,7 @@ my $builder = sub {
                         'code'    : code.value,
                     },
                     success: function(data){
-                        var field = document.getElementById('$params->{id}');
+                        var field = document.getElementById(ev.data.id);
                         field.value = data;
                         return 1;
                     }
