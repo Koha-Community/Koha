@@ -70,7 +70,6 @@ start_worker()
 
         DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
-            --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
@@ -101,7 +100,6 @@ stop_worker()
 
         DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
-            --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
@@ -132,7 +130,6 @@ restart_worker()
 
         DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
-            --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
