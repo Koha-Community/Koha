@@ -29,8 +29,8 @@ sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number) = @_;
     my $res="
     <script>
-        function Blur$field_number() {
-                var isbn = document.getElementById('$field_number');
+        function Blur$field_number(ev) {
+                var isbn = document.getElementById(ev.data.id);
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_010.pl&isbn=' + isbn.value;
                 var req = \$.get(url);
                 req.done(function(resp){
