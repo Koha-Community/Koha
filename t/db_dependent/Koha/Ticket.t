@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Koha::Database;
 
@@ -144,4 +145,85 @@ subtest 'add_update() tests' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'store() tests' => sub {
+    plan tests => 2;
+
+    subtest 'acknowledgement notice trigger' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+        my $biblio = $builder->build_sample_biblio();
+
+        my $new_ticket = Koha::Ticket->new(
+            {
+                reporter_id => $patron->id,
+                title       => "Testing ticket",
+                body        => "Testing ticket message",
+                biblio_id   => $biblio->id
+            }
+        )->store();
+
+        is( ref($new_ticket), 'Koha::Ticket',
+            'Koha::Ticket->store() returned the Koha::Ticket object' );
+        my $notices =
+          Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+        is( $notices->count, 1,
+            'One acknowledgement notice queued for the ticket reporter' );
+        my $THE_notice = $notices->next;
+        isnt( $THE_notice->status, 'pending',
+            'Acknowledgement notice is sent immediately' );
+
+        $new_ticket->set( { title => "Changed title" } )->store();
+        $notices =
+          Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+        is( $notices->count, 1,
+            'Further acknowledgement notices are not queud on subsequent stores'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'cataloger notice trigger' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $catemail = 'catalogers@testmail.com';
+        t::lib::Mocks::mock_preference( 'CatalogerEmails', $catemail );
+
+        my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+        my $biblio = $builder->build_sample_biblio();
+
+        my $new_ticket = Koha::Ticket->new(
+            {
+                reporter_id => $patron->id,
+                title       => "Testing ticket",
+                body        => "Testing ticket message",
+                biblio_id   => $biblio->id
+            }
+        )->store();
+
+        is( ref($new_ticket), 'Koha::Ticket',
+            'Koha::Ticket->store() returned the Koha::Ticket object' );
+        my $notices =
+          Koha::Notice::Messages->search( { to_address => $catemail } );
+        is( $notices->count, 1,
+            'One notification notice queued for the catalogers when ticket reported' );
+        my $THE_notice = $notices->next;
+        isnt( $THE_notice->status, 'pending',
+            'Notification notice is sent immediately' );
+
+        $new_ticket->set( { title => "Changed title" } )->store();
+        $notices =
+          Koha::Notice::Messages->search( { to_address => $catemail } );
+        is( $notices->count, 1,
+            'Further notification notices are not queud on subsequent stores'
+        );
+
+        $schema->storage->txn_rollback;
+    };
 };
