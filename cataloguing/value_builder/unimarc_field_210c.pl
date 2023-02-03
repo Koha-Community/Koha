@@ -43,9 +43,10 @@ my $function_name= $field_number;
 
 my $res  = "
 <script>
-function Clic$function_name(subfield_managed) {
-    defaultvalue=escape(document.getElementById(\"$field_number\").value);
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc_225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
+function Clic$function_name(event) {
+    event.preventDefault();
+    defaultvalue=escape(document.getElementById(event.data.id).value);
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\" + event.data.id, \"unimarc_225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 ";
