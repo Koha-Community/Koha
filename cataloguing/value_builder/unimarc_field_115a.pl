@@ -32,7 +32,9 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $res = "
     <script>
-    function Clic$field_number(i) {
+    function Clic$field_number(event) {
+        event.preventDefault();
+        const i = event.data.id;
         var defaultvalue;
         try {
             defaultvalue = document.getElementById(i).value;
@@ -40,7 +42,7 @@ sub plugin_javascript {
             alert('error when getting '+i);
             return;
         }
-    	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115a.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_115a\",'width=1200,height=600,toolbar=false,scrollbars=yes');
+        window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115a.pl&index=\" + i + \"&result=\"+defaultvalue,\"unimarc_field_115a\",'width=1200,height=600,toolbar=false,scrollbars=yes');
     }
 
     </script>
