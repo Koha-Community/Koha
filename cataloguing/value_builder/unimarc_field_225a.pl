@@ -62,8 +62,9 @@ sub plugin_javascript {
     <script>
     
     
-        function Clic$function_name(index) {
+        function Clic$function_name(event) {
         /* find the 010a value and the 210c. it will be used in the popup to find possibles collections */
+            event.preventDefault();
             var isbn_found   = 0;
             var editor_found = 0;
             
@@ -81,8 +82,8 @@ sub plugin_javascript {
                 }
             }
                     
-            defaultvalue = document.getElementById(\"$field_number\").value;
-            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a.pl&index=\"+index+\"&result=\"+defaultvalue+\"&editor_found=\"+editor_found,\"unimarc225a\",'width=500,height=400,toolbar=false,scrollbars=no');
+            defaultvalue = document.getElementById(event.data.id).value;
+            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a.pl&index=\"+event.data.id+\"&result=\"+defaultvalue+\"&editor_found=\"+editor_found,\"unimarc225a\",'width=500,height=400,toolbar=false,scrollbars=no');
     
         }
     </script>
