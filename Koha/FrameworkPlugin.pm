@@ -316,101 +316,24 @@ sub _process_javascript {
     $script =~ s/\<script[^>]*\>\s*(\/\/\<!\[CDATA\[)?\s*//s;
     $script =~ s/(\/\/\]\]\>\s*)?\<\/script\>//s;
 
-    my $id         = $params->{id} // '';
-    my $bind       = '';
     my $clickfound = 0;
-    my @events     = qw|click focus blur change mouseover mouseout mousedown
-        mouseup mousemove keydown keypress keyup|;
+    my @events     = qw|click focus blur change mousedown mouseup keydown keyup|;
     foreach my $ev (@events) {
         my $scan = $ev eq 'click' && $self->{oldschool} ? 'clic' : $ev;
-        if ( $script =~ /function\s+($scan\w+)\s*\(([^\)]*)\)/is ) {
-            my ( $bl, $sl ) = $self->_add_binding( $1, $2, $ev, $id );
-            $script .= $sl;
-            $bind   .= $bl;
+        if ( $script =~ /function\s+($scan\w+)\s*\(/is ) {
+            my $function_name = $1;
+            $script .= sprintf( 'registerFrameworkPluginHandler("%s", "%s", %s);', $self->name, $ev, $function_name );
             $clickfound = 1 if $ev eq 'click';
         }
     }
-    if ( !$clickfound ) {    # make buttonDot do nothing
-        my ($bl) = $self->_add_binding( 'noclick', '', 'click', $id );
-        $bind .= $bl;
-    }
     $self->{noclick}    = !$clickfound;
-    $self->{javascript} = _merge_script( $id, $script, $bind );
-}
-
-sub _add_binding {
-
-    # adds some jQuery code for event binding:
-    # $bind contains lines for the actual event binding: .click, .focus, etc.
-    # $script contains function definitions (if needed)
-    my ( $self, $fname, $pars, $ev, $id ) = @_;
-    my ( $bind, $script );
-    my $ctl = $ev eq 'click' ? 'buttonDot_' . $id : $id;
-
-    #click event applies to buttonDot
-
-    if ( $pars =~ /^(e|ev|event)$/i ) {    # new style event handler assumed
-        $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, $fname);\n|;    # remove old handler if any
-        $script = q{};
-    } elsif ( $fname eq 'noclick' ) {    # no click: return false, no scroll
-        $bind   = qq|    \$("#$ctl").$ev(function () { return false; });\n|;
-        $script = q{};
-    } else {                             # add real event handler calling the function found
-        $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, ${fname}_handler);\n|;
-        $script = $self->_add_handler( $ev, $fname );
-    }
-    return ( $bind, $script );
-}
-
-sub _add_handler {
-
-    # adds a handler with event parameter
-    # event.data.id is passed to the plugin function in parameters
-    # for the click event we always return false to prevent scrolling
-    my ( $self, $ev, $fname ) = @_;
-    my $first  = $self->_first_item_par($ev);
-    my $prefix = $ev eq 'click' ? ''                    : 'return ';
-    my $suffix = $ev eq 'click' ? "\n    return false;" : '';
-    return <<HERE;
-function ${fname}_handler(event) {
-    $prefix$fname(${first}event.data.id);$suffix
-}
-HERE
-}
-
-sub _first_item_par {
-    my ( $self, $event ) = @_;
-
-    # needed for backward compatibility
-    # js event functions in old style item plugins have an extra parameter
-    # BUT.. not for all events (exceptions provide employment :)
-    if (   $self->{item_style}
-        && $self->{oldschool}
-        && $event =~ /focus|blur|change/ )
-    {
-        return qq/'0',/;
-    }
-    return '';
-}
-
-sub _merge_script {
-
-    # Combine script and event bindings, enclosed in script tags.
-    # The BindEvents function is added to easily repeat event binding;
-    # this is used in additem.js for dynamically created item blocks.
-    my ( $id, $script, $bind ) = @_;
-    chomp( $script, $bind );
-    return <<HERE;
+    $self->{javascript} = <<JS;
 <script>
+\$(document).ready(function () {
 $script
-function BindEvents$id() {
-$bind
-}
-\$(document).ready(function() {
-    BindEvents$id();
 });
 </script>
-HERE
+JS
 }
 
 =head1 AUTHOR

@@ -539,7 +539,7 @@
                         <div class="alert alert-info">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') | html %] and items with blank barcodes will have barcodes generated upon save to database</div>
                     [% END %]
 
-                    <div id="outeritemblock"></div>
+                    <div id="outeritemblock" class="marc_editor"></div>
                 </fieldset>
             [% END %][%# | html UNLESS subscriptionid %]
         [% END %][%# IF (AcqCreateItemOrdering) %]

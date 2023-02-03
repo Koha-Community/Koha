@@ -65,37 +65,19 @@ my $builder = sub {
 <script>
 function Focus$id(event) {
     if( \$('#'+event.data.id).val()=='' ) {
-        \$('#'+event.data.id).val('EXAMPLE:');
+        \$('#'+event.data.id).val('Focus');
     }
 }
 
-function MouseOver$id(event) {
-    return Focus$id(event);
-    /* just redirecting it to Focus for the same effect */
-}
-
-function KeyPress$id(event) {
-    if( event.which == 64 ) { /* at character */
-        var f= \$('#'+event.data.id).val();
-        \$('#'+event.data.id).val( f + 'AT' );
-        return false; /* prevents getting the @ character back too */
+function Blur$id(event) {
+    if( \$('#'+event.data.id).val()=='' ) {
+        \$('#'+event.data.id).val('Blur');
     }
-}
-
-function Change$id(event) {
-    var colors= [ 'rgb(0, 0, 255)', 'rgb(0, 128, 0)', 'rgb(255, 0, 0)' ];
-    var curcol= \$('#'+event.data.id).css('color');
-    var i= Math.floor( Math.random() * 3 );
-    if( colors[i]==curcol ) {
-        i= (i + 1)%3;
-    }
-    var f= \$('#'+event.data.id).css('color',colors[i]);
 }
 
 function Click$id(event) {
     var fieldvalue=\$('#'+event.data.id).val();
     window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=EXAMPLE.pl&index=\"+event.data.id+\"&result=\"+fieldvalue,\"tag_editor\",'width=700,height=700,toolbar=false,scrollbars=yes');
-    return false; /* prevents scrolling */
 }
 </script>|;
 };

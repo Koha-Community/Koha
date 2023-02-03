@@ -329,6 +329,7 @@ sub generate_subfield_form {
                 class      => $class,
                 nopopup    => $plugin->noclick,
                 javascript => $plugin->javascript,
+                plugin     => $plugin->name,
             };
         } else {
             warn $plugin->errstr;

@@ -889,7 +889,7 @@
                         window.close();
                     </script>
                 [% ELSE %]
-                    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
+                    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();" class="marc_editor">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" value="[% IF ( biblionumber ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
                         <input type="hidden" value="" id="current_tab" name="current_tab" />
@@ -1165,7 +1165,7 @@
                                                             [% END %]
 
                                                         [% ELSIF ( mv.type == 'text_complex' ) %]
-                                                            <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
+                                                            <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" data-plugin="[% mv.plugin | html %]" />
                                                             [% mv.javascript | $raw %]
                                                         [% ELSIF ( mv.type == 'hidden' ) %]
                                                             <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
@@ -1217,9 +1217,9 @@
                                                                     <span class="buttonDot tag_editor disabled" tabindex="-1" title="Field autofilled by plugin"></span>
                                                                 [% ELSE %]
                                                                     [% IF mv.plugin == "upload.pl" %]
-                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="tag_editor upload framework_plugin" tabindex="1"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="tag_editor upload framework_plugin" tabindex="1" data-plugin="[% mv.plugin | html %]"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
                                                                     [% ELSE %]
-                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor" data-plugin="[% mv.plugin | html %]">Tag editor</a>
                                                                     [% END %]
                                                                 [% END %]
                                                             </span>

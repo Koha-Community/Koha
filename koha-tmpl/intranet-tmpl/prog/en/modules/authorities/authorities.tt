@@ -449,7 +449,7 @@
         </div>
     [% END # /IF duplicateauthid %]
 
-    <form method="post" id="f" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
+    <form method="post" id="f" name="f" action="/cgi-bin/koha/authorities/authorities.pl" class="marc_editor">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-add" />
         <input type="hidden" name="original_op" value="[% op | html %]" />
@@ -755,7 +755,7 @@
                                                                     [% IF mv.noclick %]
                                                                         <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
                                                                     [% ELSE %]
-                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
+                                                                        <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor" data-plugin="[% mv.plugin | html %]">...</a>
                                                                     [% END %]
                                                                     [% mv.javascript | $raw %]
                                                                 [% END #/IF ( mv.type == 'text1' ) %]

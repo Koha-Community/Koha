@@ -1,5 +1,5 @@
 /* global __ */
-/* exported openAuth ExpandField CloneField CloneSubfield UnCloneField CloneItemSubfield CheckMandatorySubfields */
+/* exported openAuth ExpandField CloneField CloneSubfield UnCloneField CloneItemSubfield CheckMandatorySubfields registerFrameworkPluginHandler */
 
 /*
  * Unified file for catalogue edition
@@ -253,8 +253,6 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
             var inputs = divs[i].getElementsByTagName("input");
             var id_input = "";
-            var olddiv;
-            var oldcontrol;
 
             for (j = 0; j < inputs.length; j++) {
                 if (
@@ -323,11 +321,6 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         }
                     }
                 }
-                if ($(inputs[1]).hasClass("framework_plugin")) {
-                    olddiv = original.getElementsByTagName("li")[i];
-                    oldcontrol = olddiv.getElementsByTagName("input")[1];
-                    AddEventHandlers(oldcontrol, inputs[1], id_input);
-                }
             }
             // when cloning a subfield, re set its label too.
             try {
@@ -380,24 +373,10 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     if (buttonDot) {
                         // 2 possibilities :
                         try {
-                            if ($(buttonDot).hasClass("framework_plugin")) {
-                                olddiv = original.getElementsByTagName("li")[i];
-                                oldcontrol =
-                                    olddiv.getElementsByTagName("a")[0];
-                                AddEventHandlers(
-                                    oldcontrol,
-                                    buttonDot,
-                                    id_input
-                                );
-                            }
-                            try {
-                                // do not copy the script section.
-                                var script =
-                                    spans[0].getElementsByTagName("script")[0];
-                                spans[0].removeChild(script);
-                            } catch (e) {
-                                // do nothing if there is no script
-                            }
+                            // do not copy the script section.
+                            var script =
+                                spans[0].getElementsByTagName("script")[0];
+                            spans[0].removeChild(script);
                         } catch (e) {
                             //
                         }
@@ -493,7 +472,6 @@ function CloneSubfield(index, advancedMARCEditor) {
     var selects = clone.getElementsByTagName("select");
     var textareas = clone.getElementsByTagName("textarea");
     var linkid;
-    var oldcontrol;
 
     // input
     var id_input = "";
@@ -511,12 +489,6 @@ function CloneSubfield(index, advancedMARCEditor) {
             inputs[i].value = "";
         }
         linkid = id_input;
-    }
-
-    // Plugin input
-    if ($(inputs[1]).hasClass("framework_plugin")) {
-        oldcontrol = original.getElementsByTagName("input")[1];
-        AddEventHandlers(oldcontrol, inputs[1], linkid);
     }
 
     // select
@@ -549,13 +521,6 @@ function CloneSubfield(index, advancedMARCEditor) {
             textareas[i].value = "";
         }
         linkid = id_input;
-    }
-
-    // Handle click event on buttonDot for plugin
-    var links = clone.getElementsByTagName("a");
-    if ($(links[0]).hasClass("framework_plugin")) {
-        oldcontrol = original.getElementsByTagName("a")[0];
-        AddEventHandlers(oldcontrol, links[0], linkid);
     }
 
     if (advancedMARCEditor == "0") {
@@ -603,23 +568,6 @@ function CloneSubfield(index, advancedMARCEditor) {
 
     // delete data of cloned subfield
     clone.querySelectorAll("input.input_marceditor").value = "";
-}
-
-function AddEventHandlers(oldcontrol, newcontrol, newinputid) {
-    // This function is a helper for CloneField and CloneSubfield.
-    // It adds the event handlers from oldcontrol to newcontrol.
-    // newinputid is the id attribute of the cloned controlling input field
-    // Note: This code depends on the jQuery data for events; this structure
-    // is moved to _data as of jQuery 1.8.
-    var ev = $._data(oldcontrol, "events");
-    if (typeof ev != "undefined") {
-        $.each(ev, function (prop, val) {
-            $.each(val, function (prop2, val2) {
-                $(newcontrol).off(val2.type);
-                $(newcontrol).on(val2.type, { id: newinputid }, val2.handler);
-            });
-        });
-    }
 }
 
 /**
@@ -849,4 +797,43 @@ $(document).ready(function () {
             return false;
         },
     });
+});
+
+Koha.frameworkPlugins ||= {};
+function registerFrameworkPluginHandler(name, eventType, handler) {
+    // 'focus' and 'blur' events do not bubble,
+    // so we have to use 'focusin' and 'focusout' instead
+    if (eventType === 'focus') eventType = 'focusin';
+    else if (eventType === 'blur') eventType = 'focusout';
+
+    Koha.frameworkPlugins[name] ||= {};
+    Koha.frameworkPlugins[name][eventType] ||= handler;
+}
+$(document).ready(function() {
+    function callClickPluginEventHandler (event) {
+        event.preventDefault();
+        callPluginEventHandler.call(this, event);
+    }
+
+    function callPluginEventHandler (event) {
+        event.stopPropagation();
+
+        const plugin = event.target.getAttribute('data-plugin');
+        if (plugin && plugin in Koha.frameworkPlugins && event.type in Koha.frameworkPlugins[plugin]) {
+            event.data = {};
+            if (event.target.classList.contains('buttonDot')) {
+                event.data.id = event.target.closest('.subfield_line').querySelector('input.input_marceditor').id;
+            } else {
+                event.data.id = event.target.id;
+            }
+
+            Koha.frameworkPlugins[plugin][event.type].call(this, event);
+        }
+    }
+
+    // We use delegated event handlers here so that dynamically added elements
+    // (like when cloning a field or a subfield) respond to these events
+    // without having to re-attach events manually
+    $('.marc_editor').on('click', '.buttonDot', callClickPluginEventHandler);
+    $('.marc_editor').on('focusin focusout change mousedown mouseup keydown keyup', 'input.input_marceditor.framework_plugin', callPluginEventHandler);
 });

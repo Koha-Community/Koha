@@ -1608,7 +1608,7 @@ sub PrepareItemrecordDisplay {
                         my $class = $plugin->noclick ? ' disabled' : '';
                         my $title = $plugin->noclick ? 'No popup'  : 'Tag editor';
                         $subfield_data{marc_value} =
-                            qq[<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" /><a href="#" id="buttonDot_$subfield_data{id}" class="buttonDot $class" title="$title">...</a>\n]
+                            qq[<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor framework_plugin" size="50" maxlength="$maxlength" value="$defaultvalue" data-plugin="$plugin->{name}" /><a href="#" id="buttonDot_$subfield_data{id}" class="buttonDot $class" title="$title" data-plugin="$plugin->{name}">...</a>\n]
                             . $plugin->javascript;
                     } else {
                         warn $plugin->errstr;

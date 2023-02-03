@@ -225,7 +225,7 @@
         <div class="row">
             <div class="col-md-2 order-sm-2 order-md-1"> [% INCLUDE 'biblio-view-menu.inc' %] </div>
             <div class="col-md-10 order-md-2 order-sm-1">
-                <div id="cataloguing_additem_newitem" class="item_edit_form page-section">
+                <div id="cataloguing_additem_newitem" class="item_edit_form page-section marc_editor">
                     <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | html %]" name="f">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="[% op | html %]" />
