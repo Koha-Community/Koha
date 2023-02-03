@@ -46,9 +46,10 @@ sub plugin_javascript {
     my $function_name = $field_number;
     my $res           = "
     <script>
-        function Clic$function_name(i) {
-            defaultvalue=document.getElementById(\"$field_number\").value;
-            window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&index=\" + i + \"&result=\"+defaultvalue,\"unimarc_field_4\"+i+\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
+        function Clic$function_name(event) {
+            event.preventDefault();
+            defaultvalue=document.getElementById(event.data.id).value;
+            window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&index=\" + event.data.id + \"&result=\"+defaultvalue,\"unimarc_field_4\"+event.data.id+\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
 
         }
     </script>
