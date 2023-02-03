@@ -39,15 +39,19 @@ my $builder = sub {
     my $js  = <<END_OF_JS;
 <script>
 
-function Focus$function_name(id, force) {
+function set_stocknumber(id, force) {
     if (\$('#' + id).val() == '' || force) {
         \$('#' + id).val('$nextnum');
     }
 }
 
+function Focus$function_name(event) {
+    set_stocknumber(event.data.id, false);
+}
+
 function Click$function_name(event) {
-    Focus$function_name(event.data.id, 1);
-    return false;
+    event.preventDefault();
+    set_stocknumber(event.data.id, true);
 }
 </script>
 END_OF_JS
