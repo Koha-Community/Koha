@@ -11,11 +11,6 @@ return {
                 ALTER TABLE `background_jobs` ADD INDEX `borrowernumber` (`borrowernumber`)
             });
         }
-        unless ( index_exists('background_jobs', 'queue') ) {
-            $dbh->do(q{
-                ALTER TABLE `background_jobs` ADD INDEX `queue` (`queue`)
-            });
-        }
         unless ( index_exists('background_jobs', 'status') ) {
             $dbh->do(q{
                 ALTER TABLE `background_jobs` ADD INDEX `status` (`status`)
