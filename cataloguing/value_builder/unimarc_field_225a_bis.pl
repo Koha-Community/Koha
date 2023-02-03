@@ -35,8 +35,9 @@ sub plugin_javascript {
     my $function_name = $field_number;
     my $res           = "
     <script>
-        function Clic$function_name(index) {
-            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a_bis.pl&index=\"+index,\"unimarc225a\",'width=500,height=400,toolbar=false,scrollbars=no');
+        function Clic$function_name(event) {
+            event.preventDefault();
+            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a_bis.pl&index=\"+event.data.id,\"unimarc225a\",'width=500,height=400,toolbar=false,scrollbars=no');
         }
     </script>
 ";
