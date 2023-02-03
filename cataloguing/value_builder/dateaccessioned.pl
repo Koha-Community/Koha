@@ -44,7 +44,6 @@ function Focus$function_name(event) {
 }
 
 function Click$function_name(event) {
-    event.preventDefault();
     set_to_today(event.data.id, 1);
 }
 
