@@ -30,7 +30,9 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number ) = @_;
     my $res           = "
         <script>
-            function Clic$field_number(i) {
+            function Clic$field_number(event) {
+                event.preventDefault();
+                const i = event.data.id;
                 var defaultvalue;
                 try {
                     defaultvalue = document.getElementById(i).value;
