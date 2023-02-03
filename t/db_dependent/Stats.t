@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Stats qw( UpdateStats );
 use Koha::Database;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 
 BEGIN {
     use_ok('C4::Stats', qw( UpdateStats ));
@@ -33,6 +33,7 @@ my $params = {
               itemtype => "BK",
               location => "LOC",
               ccode => "CODE",
+              interface => "INTERFACE",
 };
 my $return_error;
 
@@ -105,7 +106,8 @@ $params = {
               itemtype => "BK",
               location => "LOC",
               ccode => "CODE",
-              type => "return"
+              type => "return",
+              interface => "INTERFACE",
 };
 UpdateStats ($params);
 my $sth = $dbh->prepare("SELECT * FROM statistics");
@@ -119,6 +121,7 @@ is ($params->{other},          $line->{other},          "UpdateStats save other 
 is ($params->{itemtype},       $line->{itemtype},       "UpdateStats save itemtype param in itemtype field of statistics table");
 is ($params->{location},       $line->{location},       "UpdateStats save location param in location field of statistics table");
 is ($params->{ccode},          $line->{ccode},          "UpdateStats save ccode param in ccode field of statistics table");
+is ($params->{interface},      $line->{interface},      "UpdateStats save interface param in interface field of statistics table");
 
 $dbh->do(q|DELETE FROM statistics|);
 $params = {
@@ -129,7 +132,8 @@ $params = {
     other          => "bla",
     itemtype       => "BK",
     ccode          => "CODE",
-    type           => "return"
+    type           => "return",
+    interface      => "INTERFACE",
 };
 UpdateStats($params);
 $sth = $dbh->prepare("SELECT * FROM statistics");
@@ -148,7 +152,8 @@ $params = {
     itemtype       => "BK",
     location       => undef,
     ccode          => "CODE",
-    type           => "return"
+    type           => "return",
+    interface      => "interface"
 };
 UpdateStats($params);
 $sth = $dbh->prepare("SELECT * FROM statistics");

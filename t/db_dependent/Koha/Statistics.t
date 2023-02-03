@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::Statistics;
+use C4::Context;
 use C4::Stats qw( UpdateStats );
 
 use t::lib::TestBuilder;
@@ -43,6 +44,7 @@ C4::Stats::UpdateStats(
         itemtype       => $item->effective_itemtype,
         location       => $item->location,
         ccode          => $item->ccode,
+        interface      => C4::Context->interface
     }
 );
 
@@ -52,5 +54,6 @@ is( $stat->borrowernumber, $patron->borrowernumber, 'Patron is there' );
 is( $stat->branch,         $library->branchcode,    'Library is there' );
 is( ref( $stat->item ), 'Koha::Item', '->item returns a Koha::Item object' );
 is( $stat->item->itemnumber, $item->itemnumber, '->item works great' );
+is( $stat->interface, 'opac', 'Interface is recorded successfully' );
 
 $schema->storage->txn_rollback;
