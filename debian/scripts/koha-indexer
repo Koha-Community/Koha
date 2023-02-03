@@ -64,7 +64,6 @@ start_indexer()
 
         DAEMONOPTS="--name=$name-koha-indexer \
             --errlog=/var/log/koha/$name/indexer-error.log \
-            --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
@@ -92,7 +91,6 @@ stop_indexer()
 
         DAEMONOPTS="--name=$name-koha-indexer \
             --errlog=/var/log/koha/$name/indexer-error.log \
-            --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
@@ -120,7 +118,6 @@ restart_indexer()
 
         DAEMONOPTS="--name=$name-koha-indexer \
             --errlog=/var/log/koha/$name/indexer-error.log \
-            --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
             --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
