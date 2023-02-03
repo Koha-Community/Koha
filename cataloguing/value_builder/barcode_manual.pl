@@ -66,7 +66,8 @@ END_OF_JS
     my $js  = <<END_OF_JS;
     <script>
 
-    function Click$function_name(id) {
+    function Click$function_name(event) {
+        const id = event.data.id;
         $scr
             return false;
     }
