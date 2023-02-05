@@ -86,7 +86,12 @@
         <fieldset class="rows">
         <ol>
         <li><label for="name" class="required">Server name: </label>
-            <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" /> <span class="required">Required</span>
+            [% IF server.servername %]
+                <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+            [% ELSE %]
+                <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
+            [% END %]
+             <span class="required">Required</span>
         </li>
 
         <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host | html %]" required="required" /> <span class="required">Required</span>
