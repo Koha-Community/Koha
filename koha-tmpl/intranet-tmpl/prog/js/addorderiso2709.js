@@ -67,7 +67,7 @@ $(document).ready(function() {
 
         error = checkOrderBudgets();
         if ( error > 0 ) {
-            alert( __("Some budgets are not defined in item records") );
+            alert( __("Some funds are not defined in item records") );
             return false;
         }
 
