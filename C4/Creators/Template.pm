@@ -146,7 +146,7 @@ sub delete {
         push @query_params, $opts{'template_id'}, $opts{'creator'};
     }
     if (scalar(@query_params) < 2) {   # If there is no template id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete template as the template id is invalid or non-existent.', $call_type) if !$query_params[0];
+        warn sprintf('%s : Cannot delete template as the template ID is invalid or non-existent.', $call_type) if !$query_params[0];
         warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existent.', $call_type) if !$query_params[1];
         return -1;
     }
