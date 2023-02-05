@@ -147,7 +147,7 @@
                     [% IF !whole.stage || whole.stage == 'form' %]
                         <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
-                        <div class="alert">This item cannot be issued as it has no biblio record associated with it</div>
+                        <div class="alert">This item cannot be checked out out as there is no bibliographic record associated with it</div>
                         [% END %]
                         [% IF whole.value.errors.itemcount %]
                         <div class="alert">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
@@ -243,7 +243,7 @@
                                                 [% END %]
                                             [% END %]
                                             [% IF whole.value.errors.branchcode %]
-                                            <span class="required">You must choose a branch</span>
+                                            <span class="required">You must choose a library</span>
                                             [% END %]
                                         </li>
                                         <li class="ill_checkout_due_date">
@@ -614,7 +614,7 @@
                                     <li class="borrowernumber">
                                         <span class="label borrowernumber">Patron:</span>
                                         [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                        <a href="[% borrowerlink | url %]" title="View borrower details">
+                                        <a href="[% borrowerlink | url %]" title="View patron details">
                                         [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                         </a>
                                     </li>
@@ -668,7 +668,7 @@
                                         <p>[% request.notesstaff | html %]</p>
                                     </li>
                                     <li class="notesopac">
-                                        <span class="label notes_opac">Notes:</span>
+                                        <span class="label notes_opac">OPAC notes:</span>
                                         <p>[% request.notesopac | html %]</p>
                                     </li>
                                 </ol>
@@ -744,7 +744,7 @@
                                 [% FOREACH comment IN request.illcomments %]
                                     <div class="rows comment_[% comment.patron.categorycode | html %]">
                                     <h5>Comment by:
-                                    <a href="[% borrowerlink | url %]" title="View borrower details">
+                                    <a href="[% borrowerlink | url %]" title="View patron details">
                                     [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
                                     [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
                                     <p>[% comment.comment | html %]</p>
