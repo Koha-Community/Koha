@@ -147,6 +147,7 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-24 18:31:28
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8YG3jhlqbHWptc28pvBmrg
 
+__PACKAGE__->add_columns( '+public' => { is_boolean => 1 }, );
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
