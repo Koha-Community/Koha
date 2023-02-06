@@ -66,7 +66,7 @@
                     <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
                         [% WRAPPER tabs id= "tabs" %]
                             [% WRAPPER tabs_nav %]
-                                [% WRAPPER tab_item tabname= "records_to_import" active= 1 %] Select to import [% END %]
+                                [% WRAPPER tab_item tabname= "records_to_import" bt_active= 1 %] Select to import [% END %]
                                 [% IF items %]
                                     [% WRAPPER tab_item tabname= "items_info" %] Item information [% END %]
                                 [% END %]
@@ -74,7 +74,7 @@
                             [% END %]
 
                             [% WRAPPER tab_panels %]
-                                [% WRAPPER tab_panel tabname= "records_to_import" active= 1 %]
+                                [% WRAPPER tab_panel tabname= "records_to_import" bt_active= 1 %]
                                     <div id="searchheader" class="searchheader">
                                         <div>
                                             <span class="checkall"><a id="checkAll" href="#">Select all</a></span>
