@@ -41,6 +41,7 @@
                                             <th>Status</th>
                                             <th>Due date</th>
                                             <th class="nosort">&nbsp;</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -120,6 +121,7 @@
                                                         [% END %]
                                                     </td>
                                                 [% END %]
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -146,10 +148,14 @@
                     return confirmDelete(_("Are you sure you want to remove this recall?"));
                 });
                 $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "responsive": {
+                        "details": { "type": 'column', "target": -1 }
+                    },
                     "aoColumnDefs": [
                         { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
                         { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                        { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                        { "className": "dtr-control", "orderable": false, "targets": -1 }
                     ]
                 }));
             });

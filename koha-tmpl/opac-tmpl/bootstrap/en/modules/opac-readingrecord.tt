@@ -112,6 +112,7 @@
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th class="NoSort noExport">Links</th>
                                                 [% END %]
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -189,6 +190,7 @@
                                                 [% IF OPACMySummaryHTML %]
                                                     <td>[% issue.MySummaryHTML | $raw %]</td>
                                                 [% END %]
+                                                <td></td>
                                                 </tr>
                                             [% END # / FOREACH issue %]
                                         </tbody>
@@ -224,7 +226,15 @@
             "language": {
                 "search": "_INPUT_",
                 "searchPlaceholder": _("Search")
-            }
+            },
+            "responsive": {
+                "details": {"type": 'column',"target": -1}
+            },
+            "aoColumnDefs": [
+                { "className": "dtr-control","orderable": false,"targets": [-1] },
+                { "visible": false, "targets": [0]},
+                { "orderable": false, "targets": [1]}
+            ],
         }, columns_settings);
 
         $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
