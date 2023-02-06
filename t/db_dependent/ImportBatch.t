@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -360,8 +360,50 @@ subtest "BatchCommitRecords overlay into framework" => sub {
     is( $biblio->frameworkcode, "QQ", "Framework set on overlay" );
 };
 
+subtest "Do not adjust biblionumber when replacing items during import" => sub {
+    plan tests => 6;
 
+    my $item1 = $builder->build_sample_item;
+    my $item2 = $builder->build_sample_item;
 
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $import_item = $builder->build_object({ class => 'Koha::Import::Record::Items', value => {
+        marcxml => qq{<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+
+<record>
+  <leader>00000    a              </leader>
+  <datafield tag="952" ind1=" " ind2=" ">
+    <subfield code="a">${\($library->branchcode)}</subfield>
+    <subfield code="b">${\($library->branchcode)}</subfield>
+    <subfield code="c">GEN</subfield>
+    <subfield code="p">${\($item1->barcode)}</subfield>
+    <subfield code="y">BK</subfield>
+  </datafield>
+</record>
+</collection>
+        },
+    }});
+
+    isnt( $item1->homebranch, $library->branchcode, "Item's homebranch is currently not the same as our created branch's branchcode" );
+
+    my ( $num_items_added, $num_items_replaced, $num_items_errored ) =
+        C4::ImportBatch::_batchCommitItems( $import_item->import_record_id, $item2->biblionumber, 'replace' );
+
+    $item1->discard_changes();
+
+    is( $num_items_errored, 0, 'Item was replaced' );
+    $import_item->discard_changes();
+    is( $import_item->status, 'imported', 'Import was successful');
+    is( $import_item->import_error, undef, 'No error was reported' );
+
+    is( $item1->biblionumber, $item1->biblioitemnumber, "Item's biblionumber and biblioitemnumber match" );
+    is( $item1->homebranch, $library->branchcode, "Item was overlaid successfully" );
+};
 
 sub get_import_record {
     my $id_import_batch = shift;
