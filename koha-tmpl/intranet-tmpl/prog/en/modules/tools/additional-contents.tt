@@ -371,7 +371,7 @@
                             <td>
                                 [% IF c.category == 'news' || c.category == 'pages' %]
                                     [% IF c.location == 'staff_and_opac' %]<span>All</span>
-                                    [% ELSIF c.location == 'staff_only' %]<span>Librarian interface</span>
+                                    [% ELSIF c.location == 'staff_only' %]<span>Staff interface</span>
                                     [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
                                     [% ELSIF c.location == 'slip' %]<span>Slip</span>
                                     [% ELSE %]<span>Unknown ('[% location | html %]')</span>
@@ -401,10 +401,10 @@
                                     [% END %]
                                     [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
                                         [% IF c.location == 'staff_and_opac' %]<br/>[% END %]
-                                        <strong>Librarian interface</strong>:
-                                        <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | url %]" title="View on librarian interface">Default</a>
+                                        <strong>Staff interface</strong>:
+                                        <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.idnew | url %]" title="View on staff interface">Default</a>
                                         OR
-                                        <a href="/cgi-bin/koha/tools/page.pl?code=[% c.code | url %]" title="View on librarian interface">Current language</a>
+                                        <a href="/cgi-bin/koha/tools/page.pl?code=[% c.code | url %]" title="View on staff interface">Current language</a>
                                     [% END %]
                                 </td>
                             [% END %]
@@ -468,15 +468,15 @@
 [% BLOCK locations_options %]
     [% IF category == 'news' || category == 'pages' %]
         [% IF location == "staff_and_opac" %]
-            <option value="staff_and_opac" selected="selected">Librarian and OPAC interfaces</option>
+            <option value="staff_and_opac" selected="selected">Staff interface and OPAC</option>
         [% ELSE %]
-            <option value="staff_and_opac">Librarian and OPAC interfaces</option>
+            <option value="staff_and_opac">Staff interface and OPAC</option>
         [% END %]
 
         [% IF location == "staff_only" %]
-            <option value="staff_only" selected="selected">Librarian interface</option>
+            <option value="staff_only" selected="selected">Staff interface</option>
         [% ELSE %]
-            <option value="staff_only">Librarian interface</option>
+            <option value="staff_only">Staff interface</option>
         [% END %]
 
         [% IF location == "opac_only" %]
