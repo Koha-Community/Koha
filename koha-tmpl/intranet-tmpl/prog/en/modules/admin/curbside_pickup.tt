@@ -20,8 +20,9 @@
 </head>
 
 <body id="admin_curbside_pickup" class="admin">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cities-admin-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+[% END %]
 
 [% USE format_minutes = format('%02d') %]
 [% MACRO minutes_format BLOCK %][% IF m != "" %][% format_minutes(m) | html %][% END %][% END %]
