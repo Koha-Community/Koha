@@ -31,6 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 0 );
 
 subtest 'list_updates() tests' => sub {
 
@@ -117,7 +118,7 @@ subtest 'list_updates() tests' => sub {
 
 subtest 'add_update() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 34;
 
     $schema->storage->txn_begin;
 
@@ -141,7 +142,12 @@ subtest 'add_update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $ticket    = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $ticket = $builder->build_object(
+        {
+            class => 'Koha::Tickets',
+            value => { reporter_id => $patron->id }
+        }
+    );
     my $ticket_id = $ticket->id;
 
     my $update = {
@@ -165,6 +171,12 @@ subtest 'add_update() tests' => sub {
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
 
+    # Check that notice trigger didn't fire for non-public update
+    my $notices =
+      Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+    is( $notices->count, 0,
+        'No notices queued when the update is marked as not public' );
+
     # Authorized attempt to create with null id
     $update->{update_id} = undef;
     $t->post_ok(
@@ -183,6 +195,7 @@ subtest 'add_update() tests' => sub {
             }
         ]
           );
+    delete $update->{update_id};
 
     # Authorized attempt to write missing data
     my $update_with_missing_field = { message => "Another ticket update" };
@@ -197,6 +210,48 @@ subtest 'add_update() tests' => sub {
             }
         ]
           );
+
+    # Check that notice trigger fired for public update
+    $update->{public} = Mojo::JSON->true;
+    $update_id =
+      $t->post_ok(
+        "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
+          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        Location => qr|^\/api\/v1\/tickets/\d*|,
+        'SWAGGER3.4.1'
+    )->json_is( '/message' => $update->{message} )
+      ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+
+    $notices =
+      Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+    is( $notices->count, 1,
+        'One notice queued when the update is marked as public' );
+    my $THE_notice = $notices->next;
+    is( $THE_notice->letter_code, 'TICKET_UPDATE',
+        'Notice queued was a TICKET_UPDATE for non-status changing update'
+    );
+    $THE_notice->delete;
+
+    $update->{state} = 'resolved';
+    $update_id =
+      $t->post_ok(
+        "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
+          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        Location => qr|^\/api\/v1\/tickets/\d*|,
+        'SWAGGER3.4.1'
+    )->json_is( '/message' => $update->{message} )
+      ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+
+    $notices =
+      Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
+    is( $notices->count, 1,
+        'One notice queued when the update is marked as public' );
+    $THE_notice = $notices->next;
+    is( $THE_notice->letter_code, 'TICKET_RESOLVE',
+        'Notice queued was a TICKET_RESOLVED for status changing update'
+    );
 
     $schema->storage->txn_rollback;
 };
