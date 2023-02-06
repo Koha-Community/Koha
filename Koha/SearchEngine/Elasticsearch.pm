@@ -657,7 +657,10 @@ sub marc_records_to_documents {
                             $mappings = [@{$mappings}, @{$wildcard_mappings}];
                         }
                         if (@{$mappings}) {
-                            $self->_process_mappings($mappings, $data, $record_document, {
+                            # NOTE - dla 710 chcemy modyfikacji - nie chcemy wlaczac do faset wydawcow ($4)
+                            my @mappings = @{ $mappings };
+				            @mappings = grep { $_->[0] !~ /__facet$/ } @mappings if $field->tag eq '710' && $field->subfield('4');
+                            $self->_process_mappings(\@mappings, $data, $record_document, {
                                     altscript => $altscript,
                                     data_source => 'subfield',
                                     code => $code,
@@ -674,7 +677,10 @@ sub marc_records_to_documents {
                             $data_field->delete_subfield(match => qr/^$/); #remove empty subfields, otherwise they are printed as a space
                             my $data = $data_field->as_string( $subfields_group ); #get values for subfields as a combined string, preserving record order
                             if ($data) {
-                                $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document, {
+				                # NOTE - dla 710 chcemy modyfikacji - nie chcemy wlaczac do faset wydawcow ($4)
+                                my @mappings = @{ $subfields_join_mappings->{$subfields_group} };
+				                @mappings = grep { $_->[0] !~ /__facet$/ } @mappings if $field->tag eq '710' && $field->subfield('4');
+                                $self->_process_mappings(\@mappings, $data, $record_document, {
                                         altscript => $altscript,
                                         data_source => 'subfields_group',
                                         codes => $subfields_group,
