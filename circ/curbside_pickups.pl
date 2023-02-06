@@ -155,7 +155,8 @@ $template->param(
     curbside_pickups => Koha::CurbsidePickups->search(
         {
             branchcode => $branchcode,
-        }
+        },
+        { order_by => [ { -desc => 'delivered_datetime' }, 'arrival_datetime', 'scheduled_pickup_datetime' ], }
       )->filter_by_scheduled_today,
 );
 
