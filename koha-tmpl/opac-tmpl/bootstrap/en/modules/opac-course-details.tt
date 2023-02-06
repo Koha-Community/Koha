@@ -74,6 +74,7 @@
                                     <th>Date due</th>
                                     <th>Notes</th>
                                     <th>Link</th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
@@ -105,6 +106,7 @@
                                                 <a href="[% cr.biblioitem.url | url %]">Record URL</a>
                                             [% END %]
                                         </td>
+                                        <td></td>
                                     </tr>
                                 [% END %]
                             </tbody>
@@ -134,7 +136,13 @@
                 "language": {
                     "search": "_INPUT_",
                     "searchPlaceholder": _("Search course reserves")
-                }
+                },
+                "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                },
+                "aoColumnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 },
+                ],
             }, columns_settings );
         });
     </script>

@@ -99,6 +99,10 @@ $( document ).ready(function() {
          "responsive": true,
     } ));
 
+    $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
+        "responsive": true
+    } ));
+
     $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
     $('#filter_paid').click(function(e) {
         e.preventDefault();

@@ -12,6 +12,7 @@
                 <th>Description</th>
                 <th>Date enrolled</th>
                 <th>&nbsp;</th>
+                <th></th>
             </tr>
         </thead>
 
@@ -30,6 +31,7 @@
                             Contact your library to be disenrolled from this club.
                         [% END %]
                     </td>
+                    <td></td>
                 </tr>
             [% END %]
         </tbody>
@@ -46,6 +48,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>&nbsp;</th>
+                <th></th>
             </tr>
         </thead>
 
@@ -63,6 +66,7 @@
                             <span class="hint">You must have an email address to enroll</span>
                         [% END %]
                     </td>
+                    <td></td>
                 </tr>
             [% END %]
         </tbody>
@@ -98,4 +102,19 @@ function cancelEnrollment( id ) {
     });
     return false;
 }
+var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
+Tables.each(function(){
+    $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+        "searching": false,
+        "paging": false,
+        "info": false,
+        "autoWidth": false,
+        "responsive": {
+            "details": { "type": 'column',"target": -1 }
+        },
+        "columnDefs": [
+            { "className": 'dtr-control', "orderable": false, "targets": -1 }
+        ],
+    }));
+});
 </script>

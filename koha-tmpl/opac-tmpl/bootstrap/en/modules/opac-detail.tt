@@ -756,6 +756,7 @@
                                                         <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
                                                         <th id="serial_status" data-colname="serial_status">Status</th>
                                                         <th id="serial_notes" data-colname="serial_notes">Note</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -779,6 +780,7 @@
                                                                 [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
                                                             </td>
                                                             <td class="serial_notes">[% latestserial.notes | html %]</td>
+                                                            <td></td>
                                                         </tr>
                                                     [% END # / FOREACH latestserials %]
                                                 </tbody>
@@ -1744,31 +1746,26 @@
 
             KohaTable("#holdingst", {
                 dom: '<"clearfix">t',
-                "columnDefs": [
-                    { "targets": [ -1 ], "sortable": false, "searchable": false },
-                    ],
+                "aoColumnDefs": [
+                    { "className": "dtr-control", "orderable": false, "targets": -1 }
+                ],
                 "bKohaColumnsUseNames": true,
                 "autoWidth": false,
                 "responsive": {
-                    "details": {
-                        "type": 'column',
-                        "target": -1
-                    }
-                },
-                aoColumnDefs: [ {
-                    className:"dtr-control",
-                    orderable: false,
-                    targets:   [-1],
-                } ],
+                    "details": { "type": 'column', "target": -1 }
+                }
             }, columns_settings);
 
             KohaTable("#otherholdingst", {
                 dom: '<"clearfix">t',
-                "columnDefs": [
-                    { "targets": [ -1 ], "sortable": false, "searchable": false },
-                    ],
+                "aoColumnDefs": [
+                    { "className": "dtr-control", "orderable": false, "targets": -1 }
+                ],
                 "bKohaColumnsUseNames": true,
-                "autoWidth": false
+                "autoWidth": false,
+                "responsive": {
+                    "details": { "type": 'column', "target": -1 }
+                }
             }, columns_settings);
 
             var serial_column_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
@@ -1777,8 +1774,19 @@
                 dom: '<"clearfix">t',
                 "sorting": [[ 1, "desc" ]],
                 "autoWidth": false,
-                "bKohaColumnsUseNames": true
+                "bKohaColumnsUseNames": true,
+                "responsive": {
+                    "details": { "type": 'column', "target": -1 }
+                },
+                "aoColumnDefs": [
+                    { "className": "dtr-control", "orderable": false, "targets": -1 }
+                ],
             }, serial_column_settings);
+
+            var dTables = $("#holdingst,#subscriptionst,#otherholdingst");
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+                dTables.DataTable().responsive.recalc();
+            } );
 
             [% IF ( TagsInputEnabled && loggedinusername ) %]
                     $(".tag_add").click(function(){

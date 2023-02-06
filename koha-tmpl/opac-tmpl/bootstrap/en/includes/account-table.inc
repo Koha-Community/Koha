@@ -1,7 +1,7 @@
 [% PROCESS 'accounts.inc' %]
 <form method="post" action="opac-account-pay.pl" class="form-horizontal">
     [% IF ( ACCOUNT_LINES ) %]
-        <table class="table table-bordered table-striped" id="finestable">
+        <table class="table table-bordered table-striped finestable" id="finestable">
             <caption class="sr-only">Your charges</caption>
             <thead>
                 <tr>
@@ -88,7 +88,7 @@
     [% FOREACH r IN relatives %]
         <h3 id="g[% r.patron.id | html %]">[% r.patron.firstname | html %] [% r.patron.surname | html %]'s fines and charges</h3>
 
-        <table class="table table-bordered table-striped" id="finestable-[% r.id | html %]">
+        <table class="table table-bordered table-striped finestable" id="finestable-[% r.id | html %]">
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]

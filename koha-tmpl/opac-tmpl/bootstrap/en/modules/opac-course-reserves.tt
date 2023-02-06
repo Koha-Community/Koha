@@ -45,6 +45,7 @@
                                 <th>[% tp('Semester', 'Term') | html %]</th>
                                 <th>Instructors</th>
                                 <th>Notes</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -62,6 +63,7 @@
                                       [% END %]
                                     </td>
                                     <td>[% c.public_note | $raw %]</td>
+                                    <td></td>
                             [% END %]
                         </tbody>
                     </table>
@@ -87,7 +89,13 @@
                 "language": {
                     "search": "_INPUT_",
                     "searchPlaceholder": _("Search courses")
-                }
+                },
+                "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                },
+                "aoColumnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 },
+                ],
             }, columns_settings );
         });
     </script>

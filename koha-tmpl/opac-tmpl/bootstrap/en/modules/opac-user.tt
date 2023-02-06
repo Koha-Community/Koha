@@ -844,6 +844,7 @@
                                                 <th>Pickup location</th>
                                                 <th>Status</th>
                                                 <th class="nosort">&nbsp;</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -899,6 +900,7 @@
                                                     [% END %]
                                                 </td>
                                             [% END %]
+                                            <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -927,6 +929,7 @@
                                                     <th class="article-request-status">Status</th>
                                                     <th class="article-request-branchcode">Pickup library</th>
                                                     <th class="nosort article-request-cancel">&nbsp;</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
 
@@ -1003,6 +1006,7 @@
                                                             <td class="article-request-cancel">
                                                                 <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
                                                             </td>
+                                                            <td></td>
                                                         </tr>
                                                     [% END %]
                                             </tbody>
@@ -1199,7 +1203,8 @@
                     "columnDefs": [
                         { "targets": [ "nosort" ],"sortable": false,"searchable": false },
                         { "type": "anti-the", "targets" : [ "anti-the" ] },
-                        { "visible": false, "targets" : [ "hidden" ] }
+                        { "visible": false, "targets" : [ "hidden" ] },
+                        { "className": 'dtr-control', "orderable": false, "targets": -1 }
                     ],
                     "language": {
                         "search": "_INPUT_",
@@ -1212,11 +1217,6 @@
                             target: -1
                         }
                     },
-                    "columnDefs": [ {
-                        className: 'dtr-control',
-                        orderable: false,
-                        targets:   -1
-                    } ],
                     buttons: [
                         /* Override default button set so that we can extend the options of print and csv */
                         'clearFilter', 'copy',
@@ -1238,8 +1238,24 @@
                 }));
             });
 
+            var dataTables = $("#recalls-table,#article-requests-table");
+            dataTables.each(function(){
+                $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "searching": false,
+                    "paging": false,
+                    "info": false,
+                    "autoWidth": false,
+                    "responsive": {
+                        "details": { "type": 'column',"target": -1 }
+                    },
+                    "columnDefs": [
+                        { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                    ],
+                }));
+            });
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();
+                dataTables.DataTable().responsive.recalc();
             } );
 
             $("body").on("click", "#buttons-ics", function(){
