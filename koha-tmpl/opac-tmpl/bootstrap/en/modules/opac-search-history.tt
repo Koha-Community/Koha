@@ -289,7 +289,7 @@
             "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
             "columnDefs": [
                 { "targets": [ 0 ], "sortable": false, "searchable": false },
-                {"className": 'dtr-control',"orderable": false,"targets":   -1}
+                { "className": 'dtr-control', "orderable": false, "targets": -1 }
             ],
             "language": {
                 "search": "_INPUT_",
@@ -297,13 +297,13 @@
             },
             "autoWidth": false,
             "responsive": {
-                details: {
-                    type: 'column',
-                    target: -1
-                }
+                "details": { "type": 'column',"target": -1 }
             },
         }));
 
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $(".historyt").DataTable().responsive.recalc();
+        });
         $(".CheckNone").click(function(e){
             e.preventDefault();
             var form = $(this).parents("form").get(0);

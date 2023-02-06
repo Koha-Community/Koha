@@ -56,6 +56,7 @@
                                             [% IF Koha.Preference('PhoneNotification') %]<th>Phone</th>[% END %]
                                             <th>Email</th>
                                             <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -171,6 +172,7 @@
                                             [% ELSE %]
                                             <td>-</td>
                                             [% END %]
+                                            <td></td>
 
                                         </tr>
                                     [% END # / FOREACH messaging_preferences%]
@@ -254,6 +256,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+    [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function(){
             $("#info_digests").tooltip();
@@ -310,5 +313,16 @@
                 }, 100);
             });
         }
+        $('.table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "responsive": {
+                "details": { "type": 'column',"target": -1 }
+            },
+            "columnDefs": [
+                { "className": 'dtr-control', "orderable": false, "targets": -1 }
+            ],
+        }));
     </script>
 [% END %]

@@ -96,11 +96,13 @@
                                     <caption class="sr-only">Authority search results</caption>
                                     <thead>
                                         <tr>
-                                            <th colspan="2">Authorized headings</th>
+                                            <th>Authorized headings</th>
+                                            <th></th>
                                             <th>Type of heading</th>
                                             [% UNLESS ( isEDITORS ) %]
                                                 <th>Records</th>
                                             [% END %]
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,6 +126,7 @@
                                                         [% END %]
                                                     </td>
                                                 [% END %]
+                                                <td></td>
                                             </tr>
                                         [% END %]
                                     </tbody>
@@ -140,4 +143,22 @@
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/JavaScript">
+        $(document).ready(function(){
+            $('.table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "searching": false,
+                "paging": false,
+                "info": false,
+                "autoWidth": false,
+                "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                },
+                "columnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                ],
+            }));
+        });
+    </script>
+[% END %]
