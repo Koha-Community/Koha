@@ -235,7 +235,7 @@
                .filter(d => d in slots_per_day)
                .map( day => {
                     let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
-                    slots_per_day[day].forEach(function(slot) {
+                    slots_per_day[day].sort().forEach(function(slot) {
                         let span_node = $('<span class="pickup-slot"></span>');
                         span_node.append('<input type="hidden" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
                         span_node.append('<span>'+format_slot(slot)+'</span>');

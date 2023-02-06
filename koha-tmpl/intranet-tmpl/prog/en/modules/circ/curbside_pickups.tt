@@ -572,7 +572,7 @@
                     return;
                 }
 
-                slots_per_day[dow].forEach(function(slot){
+                slots_per_day[dow].sort((a, b) => a.start_hour - b.start_hour).forEach(function(slot){
                     let pickup_interval = policy.pickup_interval;
                     if (!pickup_interval) {
                         $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
