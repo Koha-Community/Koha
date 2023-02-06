@@ -56,7 +56,7 @@ use C4::Suggestions;
 
 =head1 DESCRIPTION
 
-The functions in this module deal with the aqorders in OPAC and in librarian interface
+The functions in this module deal with the aqorders in OPAC and in staff interface
 
 A suggestion is done in the OPAC. It has the status "ASKED"
 
