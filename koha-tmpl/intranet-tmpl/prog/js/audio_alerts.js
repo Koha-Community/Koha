@@ -25,7 +25,9 @@ $( document ).ready(function() {
 
     $("#newalert").on("click",function(e){
         e.preventDefault();
-        $("#new-alert-form").show();
+        $("#new-alert-form").show( 0, function(){
+            $("#selector").focus();
+        });
         $("#toolbar, #delete-alert-form").hide();
     });
 
