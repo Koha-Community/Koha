@@ -56,7 +56,7 @@ my $policy = Koha::CurbsidePickupPolicy->new(
         branchcode              => $library->branchcode,
         enabled                 => 1,
         enable_waiting_holds_only => 0,
-        pickup_interval         => 30,
+        pickup_interval         => 15,
         patrons_per_interval    => 2,
         patron_scheduled_pickup => 1
     }
@@ -73,12 +73,12 @@ my $policy_disabled = Koha::CurbsidePickupPolicy->new(
 )->store;
 
 # Open Mondays from 12 to 18
-$policy->add_opening_slot('1-12:00-18:00');
+$policy->add_opening_slot('1-12:00-18:45');
 
 my $today = dt_from_string;
 
 subtest 'Create a pickup' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     # Day and datetime are ok
     my $next_monday =
@@ -99,7 +99,9 @@ subtest 'Create a pickup' => sub {
     'Koha::Exceptions::CurbsidePickup::NotEnabled',
       'Cannot create pickup if the policy does not allow it';
 
-    $policy->enable_waiting_holds_only(1)->store;
+   $policy->enabled(1)->store;
+
+   $policy->enable_waiting_holds_only(1)->store;
     throws_ok {
         Koha::CurbsidePickup->new($params)->store;
     }
@@ -117,6 +119,11 @@ subtest 'Create a pickup' => sub {
     'Koha::Exceptions::CurbsidePickup::TooManyPickups',
       'Cannot create 2 pickups for the same patron';
 
+    $cp->delete;
+
+    $schedule_dt = $next_monday->set_hour(18)->set_minute(15)->set_second(00);
+    $cp          = Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
+    ok($cp);
     $cp->delete;
 
     # Day is not ok
@@ -137,8 +144,8 @@ subtest 'Create a pickup' => sub {
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
       'Cannot create a pickup on a time without opening slots defined';
 
-    # Day ok, datetime inside the opening slot, but wrong (15:15 for instance)
-    $schedule_dt = $next_monday->set_hour(15)->set_minute(15)->set_second(00);
+    # Day ok, datetime inside the opening slot, but wrong (15:07 for instance)
+    $schedule_dt = $next_monday->set_hour(15)->set_minute(07)->set_second(00);
     throws_ok {
         Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
     }
