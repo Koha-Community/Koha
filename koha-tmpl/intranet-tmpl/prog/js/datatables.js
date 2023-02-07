@@ -496,7 +496,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         alert(__("Something went wrong when loading the table.\n%s: %s. \n%s").format(
             settings.jqXHR.status,
             settings.jqXHR.statusText,
-            settings.jqXHR.responseJSON.errors ? settings.jqXHR.responseJSON.errors.map(m => m.message).join("\n") : ''
+            ( settings.jqXHR.responseJSON && settings.jqXHR.responseJSON.errors ) ? settings.jqXHR.responseJSON.errors.map(m => m.message).join("\n") : ''
         ));
     } else {
         alert(__("Something went wrong when loading the table."));
