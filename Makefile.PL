@@ -670,8 +670,8 @@ $file_map->{'koha-tmpl/intranet-tmpl/prog/css/holds.css'} = 'blib/INTRANET_TMPL_
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/installer.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/installer.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/mainpage.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/mainpage.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/staff-global.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/staff-global.css';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/main.js';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js.LICENSE.txt'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/main.js.LICENSE.txt';
+$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/erm.js'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/erm.js';
+$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/erm.js.LICENSE.txt'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/erm.js.LICENSE.txt';
 #OPAC_TMPL_DIR
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/opac.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/opac.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/opac-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/opac-rtl.css';

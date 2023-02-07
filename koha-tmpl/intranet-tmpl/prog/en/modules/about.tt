@@ -266,6 +266,10 @@
                         </table>
                     [% END # /WRAPPER tab_item perl %]
 
+                    [% IF Asset.css("css/staff-global.css") == ""
+                       || Asset.js("js/vue/dist/erm.js") == "" %]
+                        [% SET warnMissingCompiledFiles = 1 %]
+                    [% END %]
                     [% WRAPPER tab_panel tabname= "sysinfo" %]
                         [% IF warnRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing %]
                             [% IF (warnIsRootUser) %]
