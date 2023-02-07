@@ -262,6 +262,7 @@ my $total_quantity = 0;
 my $total_tax_excluded = 0;
 my $total_tax_included = 0;
 my $total_tax_value = 0;
+my $has_invoice_unitprice;
 foreach my $order (@$orders) {
     my $line = get_infos( $order, $bookseller);
 
@@ -282,6 +283,7 @@ foreach my $order (@$orders) {
     $total_tax_included += get_rounded_price($$line{total_tax_included});
 
     $line->{orderline} = $line->{parent_ordernumber};
+    $has_invoice_unitprice = 1 if defined $line->{invoice_unitprice};
     push @orders_loop, $line;
 }
 
@@ -344,6 +346,7 @@ $template->param(
     currency                    => Koha::Acquisition::Currencies->get_active,
     budgets                     => $budget_loop,
     budget                      => GetBudget( $shipmentcost_budgetid ),
+    has_invoice_unitprice       => $has_invoice_unitprice,
 );
 
 defined( $invoice_files ) && $template->param( files => $invoice_files->GetFilesInfo() );

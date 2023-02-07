@@ -317,6 +317,9 @@
                                 <tr>
                                     <th class="anti-the">Summary</th>
                                     <th>Library</th>
+                                    [% IF has_invoice_unitprice %]
+                                        <th>Invoice price</th>
+                                    [% END %]
                                     <th class="tax_excluded">Actual cost tax exc.</th>
                                     <th class="tax_included">Actual cost tax inc.</th>
                                     <th class="replacementprice">Replacement price</th>
@@ -349,6 +352,13 @@
                                         </td>
                                         <td>
                                             <p>[% order.branchcode | html %]</p>
+                                            [% IF has_invoice_unitprice %]
+                                                <td>
+                                                    [% IF order.invoice_unitprice %]
+                                                        [% order.invoice_unitprice | $Price %] [% order.invoice_currency | html %]
+                                                    [% END %]
+                                                </td>
+                                            [% END %]
                                         </td>
                                         <td class="number tax_excluded">
                                             [% order.unitprice_tax_excluded | $Price %]
@@ -388,6 +398,9 @@
                                 [% FOR tf IN foot_loop %]
                                     <tr>
                                         <th colspan="2">Total (GST [% tf.tax_rate * 100 | html %] %)</th>
+                                        [% IF has_invoice_unitprice %]
+                                            <th></th>
+                                        [% END %]
                                         <th class="tax_excluded"></th>
                                         <th class="tax_included"></th>
                                         <th class="replacementprice"/>
@@ -401,6 +414,9 @@
                                 [% END # /FOR tf %]
                                 <tr>
                                     <th colspan="2">Total ([% currency.symbol | html %])</th>
+                                    [% IF has_invoice_unitprice %]
+                                        <th></th>
+                                    [% END %]
                                     <th class="tax_excluded"></th>
                                     <th class="tax_included"></th>
                                     <th class="replacementprice"/>
@@ -413,6 +429,9 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2">Total + adjustments + shipment cost ([% currency.symbol | html %])</th>
+                                    [% IF has_invoice_unitprice %]
+                                        <th></th>
+                                    [% END %]
                                     <th class="tax_excluded"></th>
                                     <th class="tax_included"></th>
                                     <th class="replacementprice"/>
