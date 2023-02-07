@@ -49,7 +49,7 @@ describe("License CRUD operations", () => {
 
     it("List license", () => {
         // GET license returns 500
-        cy.intercept("GET", "/api/v1/erm/licenses", {
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 500,
             error: "Something went wrong",
         });

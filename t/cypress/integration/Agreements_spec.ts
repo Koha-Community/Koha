@@ -133,7 +133,7 @@ describe("Agreement CRUD operations", () => {
 
     it("List agreements", () => {
         // GET agreements returns 500
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -167,11 +167,11 @@ describe("Agreement CRUD operations", () => {
 
     it("Add agreement", () => {
         // No agreement, no license yet
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: [],
         });
-        cy.intercept("GET", "/api/v1/erm/licenses", {
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: [],
         });
@@ -299,7 +299,7 @@ describe("Agreement CRUD operations", () => {
             "Agreement created"
         );
 
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: [{ agreement_id: 1, description: "an existing agreement" }],
         });
@@ -307,7 +307,7 @@ describe("Agreement CRUD operations", () => {
         // Add new license
         let licenses_to_relate = get_licenses_to_relate();
         let related_license = agreement.agreement_licenses[0];
-        cy.intercept("GET", "/api/v1/erm/licenses", {
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: licenses_to_relate,
         });
@@ -331,7 +331,7 @@ describe("Agreement CRUD operations", () => {
 
         // Add new related agreement
         let related_agreement = agreement.agreement_relationships[0];
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: cy.get_agreements_to_relate(),
         });
@@ -358,7 +358,7 @@ describe("Agreement CRUD operations", () => {
         cy.intercept(
             {
                 method: "GET",
-                url: "/api/v1/erm/agreements",
+                url: "/api/v1/erm/agreements*",
                 times: 1
             },
             {
@@ -382,12 +382,12 @@ describe("Agreement CRUD operations", () => {
             "get-agreement"
         );
         // Intercept related licenses request after entering agreement edit
-        cy.intercept("GET", "/api/v1/erm/licenses", {
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: licenses_to_relate,
         }).as("get-related-licenses");
         // Intercept related agreements request after entering agreement edit
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: cy.get_agreements_to_relate(),
         }).as("get-related-agreements");
