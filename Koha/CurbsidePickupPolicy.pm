@@ -103,7 +103,7 @@ sub is_valid_pickup_datetime {
         my $start = $datetime->clone->set_hour( $opening_slot->start_hour )
           ->set_minute( $opening_slot->start_minute );
         my $end = $datetime->clone->set_hour( $opening_slot->end_hour )
-          ->set_minute( $opening_slot->start_minute );
+          ->set_minute( $opening_slot->end_minute );
         my $keep_going = 1;
         my $slot_start = $start->clone;
         my $slot_end = $slot_start->clone->add(minutes => $self->pickup_interval);
