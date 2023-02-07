@@ -92,7 +92,7 @@ describe("Title CRUD operations", () => {
         cy.contains("Save").click();
 
         // First attempt to import list has no packages
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
             body: []
         }).as("get-empty-packages");
@@ -103,7 +103,7 @@ describe("Title CRUD operations", () => {
         cy.get("#package_list .vs__selected").should('not.exist');
 
         // Make sure packages are returned
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
             body: get_packages_to_relate(),
         }).as("get-related-packages");
@@ -123,7 +123,7 @@ describe("Title CRUD operations", () => {
 
     it("List title", () => {
         // GET title returns 500
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -163,7 +163,7 @@ describe("Title CRUD operations", () => {
 
         cy.intercept({
             method: "GET",
-            url: "/api/v1/erm/eholdings/local/packages",
+            url: "/api/v1/erm/eholdings/local/packages*",
             times: 1
         },
         {
@@ -236,7 +236,7 @@ describe("Title CRUD operations", () => {
 
         // Add new related package (resource)
         let related_package = erm_title.resources[0];
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
             body: get_packages_to_relate(),
         }).as('get-related-packages');
@@ -268,7 +268,7 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         // Intercept related packages request after entering title edit
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
             body: get_packages_to_relate(),
         }).as('get-related-packages');

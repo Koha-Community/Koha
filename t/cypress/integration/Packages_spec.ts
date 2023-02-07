@@ -40,7 +40,7 @@ describe("Package CRUD operations", () => {
 
     it("List package", () => {
         // GET package returns 500
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -78,7 +78,7 @@ describe("Package CRUD operations", () => {
 
     it("Add package", () => {
 
-        cy.intercept("GET", "/api/v1/erm/agreements", []);
+        cy.intercept("GET", "/api/v1/erm/agreements*", []);
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
@@ -127,7 +127,7 @@ describe("Package CRUD operations", () => {
 
         // Add new related agreement
         let related_agreement = erm_package.package_agreements[0];
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: cy.get_agreements_to_relate(),
         });
@@ -159,7 +159,7 @@ describe("Package CRUD operations", () => {
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         // Intercept related agreements request after entering agreement edit
-        cy.intercept("GET", "/api/v1/erm/agreements", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: cy.get_agreements_to_relate(),
         }).as("get-related-agreements");
