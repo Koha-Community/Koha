@@ -60,9 +60,9 @@ subtest 'Basics' => sub {
     is($config->backend_dir, "/tmp/", "backend_dir: setter is persistent.");
 
     # partner_code:
-    is($config->partner_code, "ILLLIBS", "partner_code: Undefined partner_code is undefined.");
-    is($config->partner_code("ILLLIBSTST"), "ILLLIBSTST", "partner_code: setter works.");
-    is($config->partner_code, "ILLLIBSTST", "partner_code: setter is persistent.");
+    is($config->partner_code, "IL", "partner_code: Undefined partner_code is undefined.");
+    is($config->partner_code("ILTST"), "ILTST", "partner_code: setter works.");
+    is($config->partner_code, "ILTST", "partner_code: setter is persistent.");
 
     # limits:
     is_deeply($config->limits, {}, "limits: Undefined limits is empty hash.");
@@ -211,7 +211,7 @@ subtest '_load_configuration' => sub {
             limits             => {},
             digital_recipients => {},
             prefixes           => {},
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => {},
         },
         "load_configuration: return the base configuration."
@@ -229,7 +229,7 @@ subtest '_load_configuration' => sub {
             limits             => {},
             digital_recipients => {},
             prefixes           => {},
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => { backend_directory => '/tmp/' },
         },
         "load_configuration: return the correct backend_dir."
@@ -255,7 +255,7 @@ subtest '_load_configuration' => sub {
             limits             => { branch => { 1 => { method => 'annual', count => 1 } } },
             digital_recipients => { branch => { 3 => 'branch' } },
             prefixes           => { branch => { 2 => '2-prefix' } },
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: multi branch config parsed correctly."
@@ -281,7 +281,7 @@ subtest '_load_configuration' => sub {
             limits             => { branch => { 1 => { method => 'annual', count => 1 } } },
             digital_recipients => { branch => { 1 => 'branch' } },
             prefixes           => { branch => { 1 => '2-prefix' } },
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: single branch config parsed correctly."
@@ -307,7 +307,7 @@ subtest '_load_configuration' => sub {
             limits             => { brw_cat => { A => { method => 'annual', count => 1 } } },
             digital_recipients => { brw_cat => { C => 'branch' } },
             prefixes           => { brw_cat => { B => '2-prefix' } },
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: multi borrower_category config parsed correctly."
@@ -333,7 +333,7 @@ subtest '_load_configuration' => sub {
             limits             => { brw_cat => { 1 => { method => 'annual', count => 1 } } },
             digital_recipients => { brw_cat => { 1 => 'branch' } },
             prefixes           => { brw_cat => { 1 => '2-prefix' } },
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: single borrower_category config parsed correctly."
@@ -357,7 +357,7 @@ subtest '_load_configuration' => sub {
             limits             => { default => { method => 'annual', count => 1 } },
             digital_recipients => { default => 'branch' },
             prefixes           => { default => '2-prefix' },
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: parse the default configuration."
@@ -380,7 +380,7 @@ subtest '_load_configuration' => sub {
             limits             => {},
             digital_recipients => {},
             prefixes           => {},
-            partner_code       => 'ILLLIBS',
+            partner_code       => 'IL',
             raw_config         => $xml_config,
         },
         "load_configuration: parse censorship settings configuration."

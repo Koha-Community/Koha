@@ -255,7 +255,7 @@ sub _load_configuration {
         limits             => {},
         digital_recipients => {},
         prefixes           => {},
-        partner_code       => 'ILLLIBS',
+        partner_code       => 'IL',
         raw_config         => $xml_config,
     };
 
@@ -319,7 +319,7 @@ sub _load_configuration {
         if ( $reply_date && 'hide' eq $reply_date );
 
     # ILL Partners
-    $configuration->{partner_code} = $xml_config->{partner_code} || 'ILLLIBS';
+    $configuration->{partner_code} = $xml_config->{partner_code} || 'IL';
 
     return $configuration;
 }
