@@ -386,7 +386,7 @@
                                         <li>
                                             <span class="label">Last seen:</span>
                                             [% IF ( ITEM_DAT.datelastseen ) %]
-                                                [% ITEM_DAT.datelastseen | $KohaDates %]
+                                                [% ITEM_DAT.datelastseen | $KohaDates with_hours => 1 %]
                                             [%END %]
                                         </li>
                                         <li>

@@ -403,6 +403,7 @@ The last optional parameter allows for passing skip_record_index through to the 
 
 sub ModDateLastSeen {
     my ( $itemnumber, $leave_item_lost, $params ) = @_;
+    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 0 });
 
     my $item = Koha::Items->find($itemnumber);
     $item->datelastseen(dt_from_string->ymd);
@@ -587,6 +588,7 @@ sub GetItemsForInventory {
     }
 
     if ($datelastseen) {
+        $datelastseen = output_pref({ str => $datelastseen, dateformat => 'iso', dateonly => 0 });
         push @where_strings, '(datelastseen < ? OR datelastseen IS NULL)';
         push @bind_params, $datelastseen;
     }

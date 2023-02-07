@@ -41,7 +41,7 @@
             <main>
 
     <h1>Inventory</h1>
-    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount | html %] items modified : datelastseen set to [% date | $KohaDates %]</div>
+    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount | html %] items modified : datelastseen set to [% date | $KohaDates with_hours => 1 %]</div>
     <div class="dialog alert">Number of potential barcodes read: [% LinesRead | html %]</div>[% END %]
     [% IF (errorfile) %]<div class="dialog alert">[% errorfile | html %] can't be opened</div>[% END %]
     [% IF (err_length && err_length==1) %]<div class="dialog alert">There was 1 barcode that was too long.</div>[% END %]
@@ -304,7 +304,7 @@
             [% result.withdrawn | html %]
             </td>
             <td data-order="[% result.datelastseen | html %]">
-                [% result.datelastseen | $KohaDates%]
+                [% result.datelastseen | $KohaDates with_hours => 1 %]
             </td>
             <td>
             [% FOREACH problem IN result.problems %]

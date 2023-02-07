@@ -119,7 +119,7 @@
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.barcode | html %]</a>
                         </td>
                         <td>[% item.itemcallnumber | html %]</td>
-                        <td data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
+                        <td data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates with_hours => 1 %]</td>
                         <td>[% item.price | $Price %]</td>
                         <td>[% item.replacementprice | $Price %]</td>
                         <td>[% Branches.GetName(item.homebranch) | html %]</td>

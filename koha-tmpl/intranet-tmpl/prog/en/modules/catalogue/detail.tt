@@ -556,7 +556,7 @@
                         [% END %]
 
                     </td>
-                    <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
+                    <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates with_hours => 1 %]</td>
                     <td class="issues" data-order="[% item.issues || 0 | html %]">[% item.issues || 0 | html %]</td>
                     <td class="renewals" data-order="[% item.renewals || 0 | html %]">[% item.renewals || 0 | html %]</td>
                     <td class="dateaccessioned" data-order="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</td>
