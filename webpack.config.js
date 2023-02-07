@@ -5,7 +5,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    erm: "./koha-tmpl/intranet-tmpl/prog/js/vue/main-erm.ts",
+    erm: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/erm.ts",
   },
   output: {
     filename: "[name].js",

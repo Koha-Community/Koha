@@ -15,9 +15,9 @@ import vSelect from "vue-select";
 
 library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
 
-import App from "./components/ERM/Main.vue";
+import App from "../components/ERM/Main.vue";
 
-import { routes } from "./routes/erm";
+import { routes } from "../routes/erm";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -25,9 +25,9 @@ const router = createRouter({
     routes,
 });
 
-import { useMainStore } from "./stores/main";
-import { useVendorStore } from "./stores/vendors";
-import { useAVStore } from "./stores/authorised_values";
+import { useMainStore } from "../stores/main";
+import { useVendorStore } from "../stores/vendors";
+import { useAVStore } from "../stores/authorised_values";
 
 const pinia = createPinia();
 
