@@ -45,6 +45,11 @@ Interlibrary loans:
               class: multi
             - "(separated with |). e.g. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices will be sent."
         -
+            - "Use patrons from category"
+            - pref: ILLPartnerCode
+              choices: patron-categories
+            - "as partners to place ILL requests with."
+        -
             - "Fallback email address for staff ILL notices to be sent to in the absence of a library address:"
             - pref: ILLDefaultStaffEmail
               class: email

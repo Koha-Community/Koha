@@ -293,6 +293,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ILLModuleCopyrightClearance','','70|10','Enter text to enable the copyright clearance stage of request creation. Text will be displayed','Textarea'),
 ('ILLModuleUnmediated','0','','If enabled, try to immediately progress newly placed ILL requests.','YesNo'),
 ('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),
+('ILLPartnerCode','IL','','Patrons from this patron category will be used as partners to place ILL requests with','free'),
 ('ILLSendStaffNotices', NULL, NULL, 'Send these ILL notices to staff', 'multiple'),
 ('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
 ('ILS-DI:AuthorizedIPs','','Restricts usage of ILS-DI to some IPs','.','Free'),

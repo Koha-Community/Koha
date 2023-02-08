@@ -306,13 +306,16 @@ if ( C4::Context->preference('ILLModule') ) {
         $warnILLConfiguration = 1;
     }
 
-    # Check partner_code
-    if ( !Koha::Patron::Categories->find($ill_config->partner_code) ) {
-        $template->param( ill_partner_code_doesnt_exist => $ill_config->partner_code );
+    # Check ILLPartnerCode sys pref
+    if ( !Koha::Patron::Categories->find( C4::Context->preference('ILLPartnerCode') ) ) {
+        $template->param( ill_partner_code_doesnt_exist => C4::Context->preference('ILLPartnerCode') );
+        $warnILLConfiguration = 1;
+    } elsif ( !Koha::Patrons->search( { categorycode => C4::Context->preference('ILLPartnerCode') } )->count ) {
+        $template->param( ill_partner_code_no_patrons => C4::Context->preference('ILLPartnerCode') );
         $warnILLConfiguration = 1;
     }
 
-    if ( !$ill_config_from_file->{partner_code} ) {
+    if ( !C4::Context->preference('ILLPartnerCode') ) {
         # partner code not defined
         $template->param( ill_partner_code_not_defined => 1 );
         $warnILLConfiguration = 1;

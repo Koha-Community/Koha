@@ -319,7 +319,7 @@ sub _load_configuration {
         if ( $reply_date && 'hide' eq $reply_date );
 
     # ILL Partners
-    $configuration->{partner_code} = $xml_config->{partner_code} || 'IL';
+    $configuration->{partner_code} = C4::Context->preference('ILLPartnerCode') || 'IL';
 
     return $configuration;
 }

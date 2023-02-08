@@ -515,7 +515,15 @@
                                             <tr>
                                                 <th scope="row"><strong>Warning</strong> </th>
                                                 <td>
-                                                    The ILL module is enabled, but no 'partner_code' defined in koha-conf.xml. Falling back to the hardcoded 'IL'.
+                                                    The ILL module is enabled, but ILLPartnerCode system preference is empty. Falling back to the hardcoded 'IL'.
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                        [% IF ill_partner_code_no_patrons %]
+                                            <tr>
+                                                <th scope="row"><strong>Warning</strong> </th>
+                                                <td>
+                                                    The ILL module is enabled and ILLPartnerCode system preference configured, but there are no patrons in [% ill_partner_code_no_patrons | html %] category.
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -531,7 +539,7 @@
                                             <tr>
                                                 <th scope="row"><strong>Warning</strong> </th>
                                                 <td>
-                                                    The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist | html %]) is not defined on the system.
+                                                    The ILL module is enabled, but the configured ILLPartnerCode ([% ill_partner_code_doesnt_exist | html %]) is not defined on the system.
                                                 </td>
                                             </tr>
                                         [% END %]
