@@ -268,19 +268,20 @@
         </fieldset>
 
         [% IF languages.size %]
-            <div id="tabs" class="toptabs">
-                <ul class="nav nav-tabs" role="tablist">
+            [% WRAPPER tabs id= "tabs" %]
+                [% WRAPPER tabs_nav %]
                     [% FOR language IN languages %]
                         [% IF language.lang == 'default' %]
-                            <li role="presentation"><a href="#lang_default" aria-controls="lang_default" role="tab" data-toggle="tab">Default</a></li>
+                            [% WRAPPER tab_item tabname= "lang_default" %] <span>Default</span> [% END %]
                         [% ELSE %]
-                            <li role="presentation"><a href="#lang_[% language.lang | uri %]" aria-controls="lang_[% language.lang | uri %]" role="tab" data-toggle="tab">[% language.description | html %]</a></li>
+                            [% WRAPPER tab_item tabname= "lang_${language.lang}" %] [% language.description | html %] [% END %]
                         [% END %]
                     [% END %]
-                </ul>
-                <div class="tab-content">
+                [% END # /WRAPPER tabs_nav %]
+
+                [% WRAPPER tab_panels %]
                     [% FOR language IN languages %]
-                        <div id="lang_[% language.lang | uri %]" class="lang clearfix tab-pane" data-lang="[% language.description | html %]">
+                        [% WRAPPER tab_panel tabname="lang_${language.lang}" %]
                             <fieldset>
                                 <ol>
                                     <li>
@@ -294,17 +295,17 @@
                                     </li>
                                 </ol>
                             </fieldset>
-                        </div>
-                    [% END %]
-                </div> <!-- /.tab-content -->
-            </div>
+                        [% END # /WRAPPER tab_panel#lang %]
+                    [% END # /FOR language %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
         [% ELSE %]
             <div id="lang_default">
                 <div class="clearfix">
                     <textarea name="content" id="content_default" data-lang="[% language.lang | html %]"  cols="75" rows="10">[% additional_content.content | html %]</textarea>
                 </div>
             </div>
-        [% END %]
+        [% END # /IF languages.size %]
     </form>
 [% END %]
 
