@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { fetchLocalPackage } from "../../fetch"
+import { fetchLocalPackage, checkError } from "../../fetch"
 import { setMessage, setError } from "../../messages"
 
 export default {
@@ -67,6 +67,7 @@ export default {
             }
 
             fetch(apiUrl, options)
+                .then(response => checkError(response, 1))
                 .then(response => {
                     if (response.status == 204) {
                         setMessage(this.$__("Package deleted"))

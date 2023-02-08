@@ -1,10 +1,10 @@
 <template>
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
-        <div v-else-if="packages" id="packages_list">
+        <div v-else-if="package_count" id="packages_list">
             <Toolbar />
             <div
-                v-if="packages.length"
+                v-if="package_count > 0"
                 id="package_list_result"
                 class="page-section"
             >
@@ -21,7 +21,7 @@
 import Toolbar from "./EHoldingsLocalPackagesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalPackages } from "../../fetch"
+import { fetchLocalPackageCount } from "../../fetch"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -44,7 +44,7 @@ export default {
     },
     data: function () {
         return {
-            packages: [],
+            package_count: [],
             initialized: false,
             filters: {
                 package_name: this.$route.query.package_name || "",
@@ -54,13 +54,12 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getPackages().then(() => vm.build_datatable())
+            vm.getPackageCount().then(() => vm.build_datatable())
         })
     },
     methods: {
-        async getPackages() {
-            const packages = await fetchLocalPackages()
-            this.packages = packages
+        async getPackageCount() {
+            this.package_count = await fetchLocalPackageCount()
             this.initialized = true
         },
         show_package: function (package_id) {

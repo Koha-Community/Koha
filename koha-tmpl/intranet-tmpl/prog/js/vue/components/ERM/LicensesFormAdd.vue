@@ -150,7 +150,7 @@ import flatPickr from "vue-flatpickr-component"
 import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLicense } from "../../fetch"
+import { fetchLicense, checkError } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -265,6 +265,7 @@ export default {
             }
 
             fetch(apiUrl, options)
+                .then(response => checkError(response, 1))
                 .then(
                     response => {
                         if (response.status == 200) {

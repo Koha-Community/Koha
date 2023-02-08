@@ -134,7 +134,14 @@ describe("Title CRUD operations", () => {
         );
 
         // GET titles returns empty list
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", []);
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
+            statusCode: 200,
+            body: [],
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
+        });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.get("#titles_list").contains("There are no titles defined");
 
@@ -223,7 +230,7 @@ describe("Title CRUD operations", () => {
         });
         cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -314,7 +321,7 @@ describe("Title CRUD operations", () => {
         });
         cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -431,7 +438,7 @@ describe("Title CRUD operations", () => {
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
