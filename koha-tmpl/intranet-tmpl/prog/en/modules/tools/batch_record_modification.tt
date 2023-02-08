@@ -81,33 +81,26 @@
 
                             <br><br>
 
-                            <div id="batch_mod_form" class="toptabs" style="clear:both">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active">
-                                        <a href="#uploadfile_tab" aria-controls="uploadfile_tab" role="tab" data-toggle="tab">Upload a file</a>
-                                    </li>
+                            [% WRAPPER tabs id= "batch_mod_form" %]
+                                [% WRAPPER tabs_nav %]
+                                    [% WRAPPER tab_item tabname= "uploadfile_tab" bt_active= 1 %] <span>Upload a file</span> [% END %]
                                     [% IF lists.count %]
-                                        <li id="show_list_option">
-                                            <a href="#shelves_tab" aria-controls="shelves_tab" role="tab" data-toggle="tab">Select a list of records</a>
-                                        </li>
+                                        [% WRAPPER tab_item tabname= "shelves_tab" %] <span>Select a list of records</span> [% END %]
+                                        <!-- <li id="show_list_option"> -->
                                     [% END %]
-                                    <li role="presentation">
-                                        <a href="#enterlist_tab" aria-controls="enterlist_tab" role="tab" data-toggle="tab">Enter a list of record numbers</a>
-                                    </li>
-                                </ul>
-
-                                <div class="tab-content">
-                                    <div id="uploadfile_tab" role="tabpanel" class="tab-pane active">
+                                    [% WRAPPER tab_item tabname= "enterlist_tab" %] <span>Enter a list of record numbers</span> [% END %]
+                                [% END # /WRAPPER tabs_nav %]
+                                [% WRAPPER tab_panels %]
+                                    [% WRAPPER tab_panel tabname="uploadfile_tab" bt_active= 1 %]
                                         <fieldset class="rows">
                                             <ol>
                                                 <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
                                             </ol>
                                         </fieldset>
-                                        &nbsp;
-                                    </div>
+                                    [% END # /tab_panel %]
 
                                     [% IF lists.count %]
-                                        <div id="shelves_tab" role="tabpanel" class="tab-pane">
+                                        [% WRAPPER tab_panel tabname="shelves_tab" %]
                                             <fieldset class="rows">
                                                 <ol>
                                                     <li>
@@ -117,16 +110,13 @@
                                                             [% FOREACH list IN lists %]
                                                             <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
                                                             [% END %]
-                                                            </option>
                                                         </select>
                                                     </li>
                                                 </ol>
                                             </fieldset>
-                                            &nbsp;
-                                        </div>
+                                        [% END # /tab_panel %]
                                     [% END %]
-
-                                    <div id="enterlist_tab" role="tabpanel" class="tab-pane">
+                                    [% WRAPPER tab_panel tabname="enterlist_tab" %]
                                         <fieldset class="rows">
                                             <ol>
                                                 <li>
@@ -136,10 +126,9 @@
                                                 </li>
                                             </ol>
                                         </fieldset>
-                                        &nbsp;
-                                    </div>
-                                </div> <!-- /.tab-content -->
-                            </div> <!-- /#batch_mod_form -->
+                                    [% END # /tab_panel %]
+                                [% END # /WRAPPER tab_panels %]
+                            [% END # /WRAPPER tabs %]
 
                             <fieldset class="rows">
                                 <legend>MARC modification template</legend>
@@ -300,9 +289,9 @@
 
             $("input[type='radio']").click(function() {
                 if ($(this).attr('id') == 'authority_type') {
-                    $("#show_list_option").hide();
+                    $("a[href='#shelves_tab_panel']").parent().hide();
                 } else if ($(this).attr('id') == 'biblio_type') {
-                    $("#show_list_option").show();
+                    $("a[href='#shelves_tab_panel']").parent().show();
                 }
             });
 
@@ -356,10 +345,10 @@
 
             $("#record_ids_selection").on("submit", function(e) {
                 var tab = $(this).find('#batch_mod_form li.active:first a').attr('href');
-                if (tab == '#uploadfile_tab') {
+                if (tab == '#uploadfile_tab_panel') {
                     $("#shelf_number").empty('');
                     $("#recordnumber_list").val('');
-                } else if (tab == '#shelves_tab') {
+                } else if (tab == '#shelves_tab_panel') {
                     $("#uploadfile").val('')
                     $("#recordnumber_list").val('');
                 } else { // enterlist
