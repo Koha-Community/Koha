@@ -64,65 +64,55 @@
         </ol>
       </fieldset>
 
-      <div id="batch_del_form" class="toptabs">
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
-              <a href="#uploadfile_tab" aria-controls="uploadfile_tab" role="tab" data-toggle="tab">Upload a file</a>
-          </li>
-          [% IF lists.count %]
-            <li id="show_list_option" role="presentation">
-                <a href="#shelves_tab" aria-controls="shelves_tab" role="tab" data-toggle="tab">Select a list of records</a>
-            </li>
-          [% END %]
-          <li role="presentation">
-            <a href="#enterlist_tab" aria-controls="enterlist_tab" role="tab" data-toggle="tab">Enter a list of record numbers</a>
-          </li>
-        </ul>
+        [% WRAPPER tabs id= "batch_del_form" %]
+            [% WRAPPER tabs_nav %]
+                [% WRAPPER tab_item tabname= "uploadfile_tab" bt_active= 1 %] <span>Upload a file</span> [% END %]
+                [% IF lists.count %]
+                    [% WRAPPER tab_item tabname= "shelves_tab" %] <span>Select a list of records</span> [% END %]
+                [% END %]
+                [% WRAPPER tab_item tabname= "enterlist_tab" %] <span>Enter a list of record numbers</span> [% END %]
+            [% END # /WRAPPER tabs_nav %]
 
-    <div class="tab-content">
-        <div id="uploadfile_tab" role="tabpanel" class="tab-pane active">
-          <fieldset class="rows">
-            <ol>
-              <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-            </ol>
-          </fieldset>
-          &nbsp;
-        </div>
+            [% WRAPPER tab_panels %]
+                [% WRAPPER tab_panel tabname="uploadfile_tab" bt_active= 1 %]
+                    <fieldset class="rows">
+                        <ol>
+                        <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
+                        </ol>
+                    </fieldset>
+                [% END # /WRAPPER tab_panel %]
 
-        [% IF lists.count %]
-            <div id="shelves_tab" role="tabpanel" class="tab-pane">
-              <fieldset class="rows">
-                <ol>
-                  <li>
-                    <label for="shelf_number">List: </label>
-                    <select name="shelf_number" id="shelf_number">
-                      <option value="">Select a list</option>
-                        [% FOREACH list IN lists %]
-                          <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
-                        [% END %]
-                    </select>
-                  </li>
-                </ol>
-              </fieldset>
-              &nbsp;
-            </div>
-        [% END %]
+                [% IF lists.count %]
+                    [% WRAPPER tab_panel tabname="shelves_tab" %]
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label for="shelf_number">List: </label>
+                                    <select name="shelf_number" id="shelf_number">
+                                        <option value="">Select a list</option>
+                                        [% FOREACH list IN lists %]
+                                            <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    [% END # /WRAPPER tab_panel %]
+                [% END # /IF lists.count %]
 
-        <div id="enterlist_tab" role="tabpanel" class="tab-pane">
-          <fieldset class="rows">
-            <ol>
-              <li>
-                <label for="recordnumber_list">IDs: </label>
-                <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
-                <div class="hint">Enter a list of biblionumbers or authority IDs, one per line.</div>
-              </li>
-            </ol>
-          </fieldset>
-          &nbsp;
-        </div>
-
-      </div> <!-- /.tab-content -->
-    </div>
+                [% WRAPPER tab_panel tabname="enterlist_tab" %]
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label for="recordnumber_list">IDs: </label>
+                                <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
+                                <div class="hint">Enter a list of biblionumbers or authority IDs, one per line.</div>
+                            </li>
+                        </ol>
+                    </fieldset>
+                [% END # /WRAPPER tab_panel %]
+            [% END # /WRAPPER tab_panels %]
+        [% END # /WRAPPER tabs %]
 
       <fieldset class="action">
         <input type="hidden" name="op" value="list" />
@@ -233,13 +223,14 @@
         var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
         $(document).ready(function() {
 
-          $("input[type='radio']").click(function(){
-            if ($(this).attr('id') == 'authority_type') {
-              $("#show_list_option").hide();
-            } else if ($(this).attr('id') == 'biblio_type') {
-              $("#show_list_option").show();
-            }
-          });
+            $("input[type='radio']").click(function() {
+                if ($(this).attr('id') == 'authority_type') {
+                    $("a[href='#shelves_tab_panel']").parent().hide();
+                } else if ($(this).attr('id') == 'biblio_type') {
+                    $("a[href='#shelves_tab_panel']").parent().show();
+                }
+            });
+
             $("#selectall").click(function(e){
                 e.preventDefault();
                 $(".records input[type='checkbox']:not(:disabled)").each(function(){
