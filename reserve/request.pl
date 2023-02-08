@@ -68,7 +68,12 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 my $showallitems = $input->param('showallitems');
 my $pickup = $input->param('pickup');
 
-my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+my $itemtypes = {
+    map {
+        $_->itemtype =>
+          { %{ $_->unblessed }, image_location => $_->image_location('intranet'), notforloan => $_->notforloan }
+    } Koha::ItemTypes->search_with_localization->as_list
+};
 
 # Select borrowers infos
 my $findborrower = $input->param('findborrower');
