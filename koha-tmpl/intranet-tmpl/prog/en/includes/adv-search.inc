@@ -26,7 +26,7 @@
         [% END %]
         [% IF ( CAN_user_borrowers_edit_borrowers ) %]
             <li role="presentation">
-                <a title="Search patrons" href="#patron_search" aria-controls="patron_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> <span class="tab-title">Search patrons</span></a>
+                <a title="Search patrons" href="#patron_search" aria-controls="patron_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card"></i> <span class="tab-title">Search patrons</span></a>
             </li>
         [% END %]
     </ul>

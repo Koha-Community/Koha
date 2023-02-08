@@ -27,7 +27,7 @@
     </div> <!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search patron categories" href="#patron_category_search" aria-controls="patron_category_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> <span class="tab-title">Search patron categories</span></a>
+            <a title="Search patron categories" href="#patron_category_search" aria-controls="patron_category_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card"></i> <span class="tab-title">Search patron categories</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

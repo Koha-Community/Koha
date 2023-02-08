@@ -179,9 +179,9 @@
                                         <td>[%- PROCESS debit_type_description debit_type = debit_type -%]</td>
                                         <td>[% debit_type.default_amount | $Price %]</td>
                                         <td>[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
-                                            <i class="fa fa-id-card-o"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
+                                            <i class="fa fa-id-card"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
                                             [% ELSIF debit_type.can_be_invoiced %]
-                                            <i class="fa fa-id-card-o"></i> Invoicing
+                                            <i class="fa fa-id-card"></i> Invoicing
                                             [% ELSIF debit_type.can_be_sold %]
                                             <i class="fa fa-shopping-cart"></i> Sale
                                             [% END %]

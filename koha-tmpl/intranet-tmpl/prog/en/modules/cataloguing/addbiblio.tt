@@ -331,7 +331,7 @@ function updateHeadingLinks(links) {
         subfield.val(heading.authid);
 
         // Add the new status
-        var image = '<i class="fa fa-close subfield_status no_matching_authority" </i> ';
+        var image = '<i class="fa fa-xmark subfield_status no_matching_authority" </i> ';
         var message = '';
         var field_class = 'no_matching_authority_field';
         switch(heading.status) {
@@ -509,11 +509,11 @@ function PopupMARCFieldDoc(field) {
         if( flag === true ){
             $(".marcdocs").show();
             Cookies.set("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
-            $("#marcDocsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+            $("#marcDocsSelect i").addClass('fa-check-square').removeClass('fa-square');
         } else {
             $(".marcdocs").hide();
             Cookies.set("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
-            $("#marcDocsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+            $("#marcDocsSelect i").removeClass('fa-check-square').addClass('fa-square');
         }
     }
 
@@ -522,12 +522,12 @@ function PopupMARCFieldDoc(field) {
             $(".tagnum").show();
             $(".subfieldcode").show();
             Cookies.set("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
-            $("#marcTagsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+            $("#marcTagsSelect i").addClass('fa-check-square').removeClass('fa-square');
         } else {
             $(".tagnum").hide();
             $(".subfieldcode").hide();
             Cookies.set("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
-            $("#marcTagsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+            $("#marcTagsSelect i").removeClass('fa-check-square').addClass('fa-square');
         }
     }
 
@@ -910,9 +910,9 @@ function PopupMARCFieldDoc(field) {
                             [% END %]
                             [% UNLESS advancedMARCEditor %]
                                 <li>
-                                    <a href="#" id="marcDocsSelect"><i class="fa fa-check-square-o"></i> Show MARC tag documentation links</a>
+                                    <a href="#" id="marcDocsSelect"><i class="fa fa-check-square"></i> Show MARC tag documentation links</a>
                                 <li>
-                                    <a href="#" id="marcTagsSelect"><i class="fa fa-check-square-o"></i> Show tags</a>
+                                    <a href="#" id="marcTagsSelect"><i class="fa fa-check-square"></i> Show tags</a>
                                 </li>
                             [% END %]
                             <li class="dropdown-header">Change framework</li>

@@ -166,7 +166,7 @@ export default {
                         if (row.is_selected) {
                             node +=
                                 " " +
-                                '<i class="fa fa-check-square-o" style="color: green; float: right;" title="' +
+                                '<i class="fa fa-check-square" style="color: green; float: right;" title="' +
                                 __("Is selected") +
                                 '" />'
                         }

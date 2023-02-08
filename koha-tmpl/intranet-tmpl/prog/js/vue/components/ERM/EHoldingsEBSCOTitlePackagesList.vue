@@ -145,7 +145,7 @@ export default {
                                         n,
                                         " ",
                                         createVNode("i", {
-                                            class: "fa fa-check-square-o",
+                                            class: "fa fa-check-square",
                                             style: {
                                                 color: "green",
                                                 float: "right",

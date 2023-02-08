@@ -218,14 +218,14 @@
                 <fieldset class="action">
                     [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
                         [% IF searchid %]
-                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]"><i class="fa fa-check-square"></i> Return to the record</a>
                         [% ELSE %]
-                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square"></i> Return to the record</a>
                         [% END %]
                     [% ELSIF src %]
-                        <a class="btn btn-default" href="[% src | url %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
+                        <a class="btn btn-default" href="[% src | url %]"><i class="fa fa-check-square"></i> Return to where you were</a>
                     [% ELSE %]
-                        <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square-o"></i> Return to batch item modification</a>
+                        <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square"></i> Return to batch item modification</a>
                     [% END %]
                 </fieldset> <!-- /.action -->
             [% END %]
