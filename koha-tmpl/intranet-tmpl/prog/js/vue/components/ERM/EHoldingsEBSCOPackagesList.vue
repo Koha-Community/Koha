@@ -62,7 +62,7 @@
 <script>
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchCountLocalPackages } from "./../../fetch"
+import { fetchLocalPackageCount } from "./../../fetch"
 import {
     useDataTable,
     build_url_params,
@@ -136,7 +136,7 @@ export default {
                 .DataTable()
                 .draw()
             if (this.erm_providers.includes("local")) {
-                this.local_count_packages = await fetchCountLocalPackages(
+                this.local_count_packages = await fetchLocalPackageCount(
                     this.filters
                 )
             }

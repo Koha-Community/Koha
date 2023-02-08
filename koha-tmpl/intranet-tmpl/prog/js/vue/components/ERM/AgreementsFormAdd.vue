@@ -190,7 +190,7 @@ import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchAgreement } from "../../fetch"
+import { fetchAgreement, checkError } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -384,6 +384,7 @@ export default {
             }
 
             fetch(apiUrl, options)
+                .then(response => checkError(response, 1))
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")

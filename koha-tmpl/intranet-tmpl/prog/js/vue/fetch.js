@@ -3,113 +3,47 @@ import { setError } from "./messages";
 export const fetchAgreement = async function (agreement_id) {
     if (!agreement_id) return;
     const apiUrl = "/api/v1/erm/agreements/" + agreement_id;
-    let agreement;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed":
                 "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                agreement = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return agreement;
+    });
 };
 
 export const fetchAgreements = async function () {
     const apiUrl = "/api/v1/erm/agreements?_per_page=-1";
-    let agreements;
-    await fetch(apiUrl)
-        .then(checkError)
-        .then(
-            (result) => {
-                agreements = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return agreements;
+    return await myFetch(apiUrl);
 };
 
 export const fetchLicense = async function (license_id) {
     if (!license_id) return;
     const apiUrl = "/api/v1/erm/licenses/" + license_id;
-    let license;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "user_roles,user_roles.patron,vendor,documents",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                license = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return license;
+    });
 };
 
 export const fetchLicenses = async function () {
     const apiUrl = "/api/v1/erm/licenses?_per_page=-1";
-    let licenses;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "vendor.name",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                licenses = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return licenses;
+    });
 };
 
 export const fetchPatron = async function (patron_id) {
     if (!patron_id) return;
     const apiUrl = "/api/v1/patrons/" + patron_id;
-    let patron;
-    await fetch(apiUrl)
-        .then(checkError)
-        .then(
-            (result) => {
-                patron = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return patron;
+    return await myFetch(apiUrl);
 };
 
 export const fetchVendors = async function () {
     const apiUrl = "/api/v1/acquisitions/vendors?_per_page=-1";
-    let vendors;
-    await fetch(apiUrl)
-        .then(checkError)
-        .then(
-            (result) => {
-                vendors = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return vendors;
+    return await myFetch(apiUrl);
 };
 
 const _createEditPackage = async function (method, erm_package) {
@@ -136,20 +70,7 @@ const _createEditPackage = async function (method, erm_package) {
         },
     };
 
-    let r;
-    await fetch(apiUrl, options)
-        .then(
-            (response) => {
-                r = response;
-            },
-            (error) => {
-                setError(error);
-            }
-        )
-        .catch((e) => {
-            console.log(e);
-        });
-    return r;
+    return await myFetch(apiUrl, options, 1);
 };
 
 export const createPackage = function (erm_package) {
@@ -161,23 +82,12 @@ export const editPackage = function (erm_package) {
 
 const _fetchPackage = async function (apiUrl, package_id) {
     if (!package_id) return;
-    let erm_package;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed":
                 "package_agreements,package_agreements.agreement,resources+count,vendor",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                erm_package = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return erm_package;
+    });
 };
 export const fetchLocalPackage = function (package_id) {
     const apiUrl = "/api/v1/erm/eholdings/local/packages/" + package_id;
@@ -190,21 +100,11 @@ export const fetchEBSCOPackage = function (package_id) {
 
 export const _fetchPackages = async function (apiUrl) {
     let packages;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "resources+count,vendor.name",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                packages = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return packages;
+    });
 };
 export const fetchLocalPackages = function () {
     const apiUrl = "/api/v1/erm/eholdings/local/packages?_per_page=-1";
@@ -215,48 +115,32 @@ export const fetchEBSCOPackages = function () {
     return _fetchPackages(apiUrl);
 };
 
-export const fetchCountLocalPackages = async function (filters) {
-    const q = {
-        "me.name": { like: "%" + filters.package_name + "%" },
-        ...(filters.content_type
-            ? { "me.content_type": filters.content_type }
-            : {}),
-    };
+export const fetchLocalPackageCount = async function (filters) {
+    const q = filters
+        ? {
+              "me.name": { like: "%" + filters.package_name + "%" },
+              ...(filters.content_type
+                  ? { "me.content_type": filters.content_type }
+                  : {}),
+          }
+        : {};
 
     const params = {
         _page: 1,
         _per_page: 1,
         q: JSON.stringify(q),
     };
-    let count_local_packages;
     var apiUrl = "/api/v1/erm/eholdings/local/packages";
-    await fetch(apiUrl + "?" + new URLSearchParams(params))
-        //.then(checkError)
-        .then(
-            (response) =>
-                (count_local_packages = response.headers.get("X-Total-Count"))
-        );
-    return count_local_packages;
+    return await myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
 };
 
 export const _fetchTitle = async function (apiUrl, title_id) {
     if (!title_id) return;
-    let title;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "resources,resources.package",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                title = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return title;
+    });
 };
 export const fetchLocalTitle = function (title_id) {
     const apiUrl = "/api/v1/erm/eholdings/local/titles/" + title_id;
@@ -287,35 +171,17 @@ export const fetchLocalTitleCount = async function (filters) {
         _per_page: 1,
         ...(q ? { q: JSON.stringify(q) } : {}),
     };
-    let count_local_titles;
     var apiUrl = "/api/v1/erm/eholdings/local/titles";
-    await fetch(apiUrl + "?" + new URLSearchParams(params))
-        //.then(checkError)
-        .then(
-            (response) =>
-                (count_local_titles = response.headers.get("X-Total-Count"))
-        );
-    return count_local_titles;
+    return await myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
 };
 
 export const _fetchResource = async function (apiUrl, resource_id) {
     if (!resource_id) return;
-    let resource;
-    await fetch(apiUrl, {
+    return await myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "title,package,vendor",
         },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                resource = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return resource;
+    });
 };
 export const fetchLocalResource = function (resource_id) {
     const apiUrl = "/api/v1/erm/eholdings/local/resources/" + resource_id;
@@ -327,18 +193,7 @@ export const fetchEBSCOResource = function (resource_id) {
 };
 
 export const _fetchResources = async function (apiUrl) {
-    let resources;
-    await fetch(apiUrl)
-        .then(checkError)
-        .then(
-            (result) => {
-                resources = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return resources;
+    return await myFetch(apiUrl);
 };
 
 export const fetchLocalResources = function () {
@@ -350,12 +205,44 @@ export const fetchEBSCOResources = function () {
     return _fetchResources(apiUrl);
 };
 
-export const checkError = function (response) {
+export const myFetch = async function (url, options, return_response) {
+    let r;
+    await fetch(url, options || {})
+        .then((response) => checkError(response, return_response))
+        .then(
+            (result) => {
+                r = result;
+            },
+            (error) => {
+                setError(error.toString());
+            }
+        )
+        .catch((error) => {
+            setError(error);
+        });
+    return r;
+};
+export const myFetchTotal = async function (url, options) {
+    let r;
+    await myFetch(url, options, 1).then(
+        (response) => {
+            if (response) {
+                r = response.headers.get("X-Total-Count");
+            }
+        },
+        (error) => {
+            setError(error.toString());
+        }
+    );
+    return r;
+};
+
+export const checkError = function (response, return_response) {
     if (response.status >= 200 && response.status <= 299) {
-        return response.json();
+        return return_response ? response : response.json();
     } else {
         console.log("Server returned an error:");
         console.log(response);
-        setError("%s (%s)".format(response.statusText, response.status));
+        throw Error("%s (%s)".format(response.statusText, response.status));
     }
 };

@@ -388,7 +388,7 @@
 import { inject } from "vue"
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalTitle } from "../../fetch"
+import { fetchLocalTitle, checkError } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -506,19 +506,20 @@ export default {
             }
 
             fetch(apiUrl, options)
+                .then(response => checkError(response, 1))
                 .then(
                     response => {
-                        if (response.status == 200) {
+                        if (response && response.status == 200) {
                             this.$router.push(
                                 "/cgi-bin/koha/erm/eholdings/local/titles"
                             )
                             setMessage(this.$__("Title updated"))
-                        } else if (response.status == 201) {
+                        } else if (response && response.status == 201) {
                             this.$router.push(
                                 "/cgi-bin/koha/erm/eholdings/local/titles"
                             )
                             setMessage(this.$__("Title created"))
-                        } else {
+                        } else if (response) {
                             setError(response.message || response.statusText)
                         }
                     },

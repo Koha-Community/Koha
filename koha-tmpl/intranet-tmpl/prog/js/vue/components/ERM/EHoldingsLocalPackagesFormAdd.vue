@@ -88,7 +88,12 @@
 import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalPackage, createPackage, editPackage } from "../../fetch"
+import {
+    fetchLocalPackage,
+    createPackage,
+    editPackage,
+    checkError,
+} from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -165,23 +170,23 @@ export default {
 
             if (erm_package.package_id) {
                 editPackage(erm_package).then(response => {
-                    if (response.status == 200) {
+                    if (response && response.status == 200) {
                         this.$router.push(
                             "/cgi-bin/koha/erm/eholdings/local/packages"
                         )
                         setMessage(this.$__("Package updated"))
-                    } else {
+                    } else if (response) {
                         setError(response.message || response.statusText)
                     }
                 })
             } else {
                 createPackage(erm_package).then(response => {
-                    if (response.status == 201) {
+                    if (response && response.status == 201) {
                         this.$router.push(
                             "/cgi-bin/koha/erm/eholdings/local/packages"
                         )
                         setMessage(this.$__("Package created"))
-                    } else {
+                    } else if (response) {
                         setError(response.message || response.statusText)
                     }
                 })

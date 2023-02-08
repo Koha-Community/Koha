@@ -3,8 +3,12 @@
         <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else-if="title_count" id="titles_list">
             <Toolbar />
-            <div v-if="title_count" id="title_list_result" class="page-section">
-                <table v-if="title_count" :id="table_id"></table>
+            <div
+                v-if="title_count > 0"
+                id="title_list_result"
+                class="page-section"
+            >
+                <table :id="table_id"></table>
             </div>
             <div v-else-if="initialized" class="dialog message">
                 {{ $__("There are no titles defined") }}

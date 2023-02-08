@@ -51,7 +51,14 @@ describe("Package CRUD operations", () => {
         );
 
         // GET packages returns empty list
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", []);
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
+            statusCode: 200,
+            body: [],
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
+        });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.get("#packages_list").contains("There are no packages defined");
 
@@ -114,7 +121,7 @@ describe("Package CRUD operations", () => {
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -183,7 +190,7 @@ describe("Package CRUD operations", () => {
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -298,7 +305,7 @@ describe("Package CRUD operations", () => {
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Internal Server Error"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
