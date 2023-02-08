@@ -405,8 +405,8 @@
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
                             [% SET itemtype = item.itemtype %]
-                            [% IF !noItemTypeImages && itemtype.image_location %]
-                                <img src="[% itemtype.image_location | html %]" alt="[% itemtype.translated_description | html %]" title="[% itemtype.translated_description | html %]" />
+                            [% IF !noItemTypeImages && itemtype.image_location('intranet') %]
+                                <img src="[% itemtype.image_location('intranet') | html %]" alt="[% itemtype.translated_description | html %]" title="[% itemtype.translated_description | html %]" />
                             [% END %]
                             <span class="itypedesc itypetext">[% itemtype.translated_description | html %]</span>
                         </td>
