@@ -494,6 +494,7 @@ export default {
 #agreement_list {
     display: table;
 }
+.filters > label[for="by_mine_filter"],
 .filters > input[type="checkbox"],
 .filters > input[type="button"] {
     margin-left: 1rem;
