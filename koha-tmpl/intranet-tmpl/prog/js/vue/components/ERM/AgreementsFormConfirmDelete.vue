@@ -18,7 +18,7 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <ButtonSubmit :text="$__('Yes, delete')"/>
+                    <ButtonSubmit :text="$__('Yes, delete')" />
                     <router-link
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
