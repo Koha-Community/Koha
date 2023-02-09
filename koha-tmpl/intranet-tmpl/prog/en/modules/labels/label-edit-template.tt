@@ -194,7 +194,7 @@
     <script>
         $(document).ready(function(){
             $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
-            var selectedUnit = $("#units option:selected").attr("value");
+            var selectedUnit = $("#units option:selected").val();
             var unitfields = $("#page_height,#page_width,#label_width,#label_height,#top_margin,#left_margin,#top_text_margin,#left_text_margin,#col_gap,#row_gap");
             $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
             $("#units").change(function(){
