@@ -22,3 +22,13 @@ export const removeMessages = function () {
     const { removeMessages } = mainStore;
     removeMessages();
 };
+export const isSubmitting = function () {
+    const mainStore = useMainStore();
+    const { isSubmitting } = mainStore;
+    isSubmitting();
+};
+export const submitted = function () {
+    const mainStore = useMainStore();
+    const { submitted } = mainStore;
+    submitted();
+};

@@ -8,6 +8,7 @@ export const useMainStore = defineStore("main", {
         previousMessage: null,
         previousError: null,
         displayed_already: false,
+        is_submitting: false,
     }),
     actions: {
         setMessage(message) {
@@ -33,6 +34,12 @@ export const useMainStore = defineStore("main", {
                 this.message = null;
             }
             this.displayed_already = true;
+        },
+        isSubmitting(){
+            this.is_submitting = true;
+        },
+        submitted(){
+            this.is_submitting = false;
         },
     },
 });
