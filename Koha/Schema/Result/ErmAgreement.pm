@@ -270,6 +270,13 @@ __PACKAGE__->many_to_many("packages", "erm_eholdings_packages_agreements", "pack
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-11 11:52:09
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N93LnvdKirtuV6BSrTGzVg
 
+__PACKAGE__->has_many(
+  "user_roles",
+  "Koha::Schema::Result::ErmUserRole",
+  { "foreign.agreement_id" => "self.agreement_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->add_columns(
     '+is_perpetual' => { is_boolean => 1 }
 );
