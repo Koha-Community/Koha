@@ -315,10 +315,10 @@
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                         [% IF moremember %]
                             <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa fa-edit"></i> Edit</a>
-                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash-can"></i> Delete</a>
                         [% ELSE %]
                             <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa fa-edit"></i> Edit</a>
-                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                         [% END %]
                     [% END %]
                 </li>

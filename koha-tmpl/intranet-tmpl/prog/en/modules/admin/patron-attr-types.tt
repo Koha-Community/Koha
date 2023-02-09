@@ -250,7 +250,7 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>
         </form>
         <form action="[% script_name | html %]" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -335,8 +335,8 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                 </td>
                 <td class="actions">
-                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                  <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                 </td>
               </tr>
             [% END %]

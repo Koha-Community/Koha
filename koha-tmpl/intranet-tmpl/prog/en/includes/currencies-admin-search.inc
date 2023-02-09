@@ -26,7 +26,7 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search currencies" href="#currency_search" aria-controls="currency_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-dollar"></i> <span class="tab-title">Search currencies</span></a>
+            <a title="Search currencies" href="#currency_search" aria-controls="currency_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-dollar-sign"></i> <span class="tab-title">Search currencies</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

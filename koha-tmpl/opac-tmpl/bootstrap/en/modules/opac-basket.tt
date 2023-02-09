@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
 
-                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash" aria-hidden="true"></i> Empty and close</a>
+                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash-can" aria-hidden="true"></i> Empty and close</a>
                                 <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i> Hide window</a>
                                 [% IF ( verbose ) %]
                                     <a class="btn btn-link btn-sm print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
@@ -57,7 +57,7 @@
                                 </div>
                                 <span class="links" id="tag_hides">
                                     <span class="selections">Select titles to: </span>
-                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled" aria-disabled="true"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
+                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled" aria-disabled="true"><i class="fa fa-times" aria-hidden="true"></i> Remove</a>
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
                                             <a href="#" class="btn btn-link btn-sm newshelf disabled" aria-disabled="true"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>

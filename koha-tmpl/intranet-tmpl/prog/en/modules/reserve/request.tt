@@ -295,26 +295,26 @@
                                     [% END %]
                                     [% IF ( patron.is_expired ) %]
                                         <div>
-                                            <i class="fa fa-warning"></i>
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
                                             <strong>Account has expired</strong>
                                         </div>
                                     [% END %]
                                     [% IF patron.is_debarred %]
                                         <div>
-                                            <i class="fa fa-warning"></i>
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
                                             <strong>Patron has restrictions</strong>
                                         </div>
                                     [% END %]
                                     [% IF member.amount_outstanding && Koha.Preference('maxoutstanding') && member.amount_outstanding > Koha.Preference('maxoutstanding') %]
                                         <div>
-                                            <i class="fa fa-warning"></i>
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
                                             <strong>Patron has outstanding fines: [% member.amount_outstanding | $Price %]</strong>
                                         </div>
                                     [% END %]
 
                                     [% IF ( member.diffbranch ) %]
                                         <div>
-                                            <i class="fa fa-warning"></i>
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
                                             <strong>Pickup library is different.</strong> Patron's home library: ([% Branches.GetName(patron.branchcode) | html %] / [% patron.branchcode | html %] )
                                         </div>
                                     [% END %]

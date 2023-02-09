@@ -89,7 +89,7 @@
                                 [% HOLD.branch.branchname | html %]
                                 [% IF ( HOLD.can_update_pickup_location_opac ) %]
                                     <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i> Change
+                                        <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change
                                     </button>
                                     <!-- Change pickup location modal -->
                                     <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">
@@ -113,7 +113,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                                     </div>
                                                 </div> <!-- /.modal-content -->
                                             </form>
@@ -191,14 +191,14 @@
                                     <form id="delete_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                         <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                         <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
+                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
                                     </form>
                                 [% ELSIF HOLD.is_waiting && HOLD.cancellation_requestable_from_opac %]
                                     <form id="req_cancel_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                         <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                         <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                         <input type="hidden" name="cancellation_request" value="1" />
-                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
+                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
                                     </form>
                                 [% END %]
                             </td>

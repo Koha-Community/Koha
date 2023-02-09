@@ -84,10 +84,10 @@
 
 <div class="checkexpiration-table_table_controls">
     <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
-    <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+    <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
     <span class="itemselection_actions">
       | Actions:
-          <a class="itemselection_action_renew" title="Renew selected subscriptions"><i class="fa fa-refresh"></i> Renew selected subscriptions</a>
+          <a class="itemselection_action_renew" title="Renew selected subscriptions"><i class="fa-solid fa-rotate"></i> Renew selected subscriptions</a>
     </span>
 </div>
 
@@ -131,8 +131,8 @@
                 [% subscriptions_loo.expirationdate | $KohaDates %]
             </td>
             <td class="actions">
-                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
+                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt"></i> Edit</a>
+                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa-solid fa-rotate"></i> Renew</a>
             </td>
         </tr>
     [% END %]

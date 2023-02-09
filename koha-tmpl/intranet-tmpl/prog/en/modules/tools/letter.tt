@@ -233,16 +233,16 @@
                                                         [% ELSE %]
                                                             [% select_for_copy | $raw %]
                                                         [% END %]
-                                                        <button class="btn btn-default btn-xs"><i class="fa fa-clone"></i> Copy</button>
+                                                        <button class="btn btn-default btn-xs"><i class="fa-solid fa-copy"></i> Copy</button>
                                                     </form>
                                                 [% END # /IF !independent_branch %]
                                             </td>
                                             <td class="actions">
                                                 [% IF can_edit %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
                                                 [% END %]
                                                 [% IF !lette.protected && can_edit %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -280,7 +280,7 @@
                                 <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
                             </ul>
                         </div>
-                        <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-remove"></i> Cancel</a>
+                        <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-times"></i> Cancel</a>
                     </div> <!-- /#toolbar -->
 
                     <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
@@ -603,7 +603,7 @@
                                                 </select>
                                             </td>
                                             <td class="actions">
-                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
+                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long"></i></button>
                                             </td>
                                             <td>
                                                 <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea>
@@ -613,7 +613,7 @@
                                 </li>
                                 [% IF preview_is_available %]
                                     <li>
-                                        <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa fa-eye"></i> Preview</a>
+                                        <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa-solid fa-eye"></i> Preview</a>
                                     </li>
                                 [% END %]
                             </ol>

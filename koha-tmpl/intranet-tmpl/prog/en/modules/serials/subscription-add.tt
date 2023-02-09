@@ -84,7 +84,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
-                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa fa-pencil"></i> Edit record</a>
+                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa fa-pencil-alt"></i> Edit record</a>
                                             [% ELSE %]
                                             | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
                                             [% END %]
@@ -266,7 +266,7 @@ fieldset.rows table { clear: none; margin: 0; }
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <button type="button" class="btn btn-primary" id="subscription_add_next" style="float:right;">Next <i class="fa fa-long-arrow-right"></i></button>
+                            <button type="button" class="btn btn-primary" id="subscription_add_next" style="float:right;">Next <i class="fa-solid fa-right-long"></i></button>
                         </fieldset>
                     </div> <!-- /.col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 -->
                 </div> <!-- /.row#page_1 -->
@@ -514,7 +514,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </li>
                                     <li>
                                         <span class="label">&nbsp;</span>
-                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa fa-pencil"></i> Modify pattern</a>
+                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa fa-pencil-alt"></i> Modify pattern</a>
                                         <button type="button" class="btn btn-default btn-xs" id="saveadvancedpatternbutton" style="display:none"><i class="fa fa-save"></i> Save as new pattern</button>
                                         <a class="cancel" href="#" id="restoreadvancedpatternbutton" style="display:none">Cancel modifications</a>
                                     </li>
@@ -538,7 +538,7 @@ fieldset.rows table { clear: none; margin: 0; }
                             <input type="hidden" id="unitsperissue"  name="unitsperissue" value=""/>
                             <input type="hidden" id="issuesperunit"  name="issuesperunit" value=""/>
                             <fieldset class="action">
-                                <button type="button" class="btn btn-default" id="subscription_add_previous" style="float:left"><i class="fa fa-long-arrow-left"></i> Previous</button>
+                                <button type="button" class="btn btn-default" id="subscription_add_previous" style="float:left"><i class="fa-solid fa-left-long"></i> Previous</button>
                                 <input id="save-subscription" class="btn btn-primary" type="submit" value="Save subscription" style="float:right;" accesskey="w"/>
                             </fieldset>
                         </div>

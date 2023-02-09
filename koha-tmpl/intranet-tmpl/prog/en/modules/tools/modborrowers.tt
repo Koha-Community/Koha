@@ -196,7 +196,7 @@
                     <form name="f" action="modborrowers.pl" method="post">
                         <input type="hidden" name="op" value="do" />
                         [% IF ( borrowers ) %]
-                            <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a></div>
+                            <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a></div>
                         [% END %]
                     [% END %]
                         [% IF borrowers %]
@@ -349,7 +349,7 @@
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name | html %]" id="[% field.name | html %]" value="" size="10" maxlength="10" class="flatpickr" />
-                                                <a href="#"  class="clear-date" id="clear-date-[% field.name | html %]" ><i class="fa fa-fw fa-trash"></i> Clear</a>
+                                                <a href="#"  class="clear-date" id="clear-date-[% field.name | html %]" ><i class="fa fa-fw fa-trash-can"></i> Clear</a>
                                             [% END %]
                                             [% IF field.mandatory %]
                                                 <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name | html %]" disabled="disabled" readonly="readonly" />
@@ -540,7 +540,7 @@
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.del_attributes").length == 0 ) {
                 var add_attributes = $(li_clone).find("a.add_attributes")
-                $(add_attributes).after('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash"></i> ' + _("Delete") + '</a>');
+                $(add_attributes).after('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash-can"></i> ' + _("Delete") + '</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);

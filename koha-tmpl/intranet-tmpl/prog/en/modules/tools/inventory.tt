@@ -197,7 +197,7 @@
         <li>
             <label>Item types: </label>
             <div class="branchselector">
-                <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-remove"></i> Clear all</a></p>
+                <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-times"></i> Clear all</a></p>
                 <div class="branchgridrow">
                     [% FOREACH itemtype IN itemtypes %]
                         <div class="branchgriditem">
@@ -243,7 +243,7 @@
     <input type="hidden" name="ccode" value="[% ccode | html %]" />
 
     [% UNLESS uploadedbarcodesflag %]
-      <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
+      <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
     [% END %]
 
     <div class="page-section">
@@ -331,7 +331,7 @@
 
     <div class="spacer"></div>
     [% UNLESS uploadedbarcodesflag %]
-      <div style="padding : .3em 0"><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
+      <div style="padding : .3em 0"><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
       <input type="submit" id="markseenandquit" class="btn btn-primary" value="Mark seen and quit" />
       <input type="submit" value="Mark seen and continue &gt;&gt;" id="markseenandcontinuebutton" />
       <input type="submit" value="Continue without marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />

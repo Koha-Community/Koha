@@ -118,7 +118,7 @@
                                         <p>
                                             <a tabindex="-1" role="menuitem" class="login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
                                             <span class="divider-vertical"></span>
-                                            <a class="clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash" aria-hidden="true"></i> Clear</a>
+                                            <a class="clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash-can" aria-hidden="true"></i> Clear</a>
                                         </p>
                                     [% END %]
                                     <a tabindex="-1" role="menuitem" class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log out</a>
@@ -133,7 +133,7 @@
                             </li>
                             <li class="divider-vertical"></li>
                             <li class="nav-item">
-                                <a class="nav-link logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash" aria-hidden="true"></i> Clear</a>
+                                <a class="nav-link logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash-can" aria-hidden="true"></i> Clear</a>
                             </li>
                         [% END %]
                     [% END %]
@@ -367,7 +367,7 @@
                     <input type="hidden" name="has-search-query" id="has-search-query" value="" />
                     <div class="modal-body">
                         [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa fa-google" aria-hidden="true"></i> Log in with Google</a>
+                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
                             <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
                         [% END # /IF GoogleOpenIDConnect %]
                         [% IF ( shibbolethAuthentication ) %]

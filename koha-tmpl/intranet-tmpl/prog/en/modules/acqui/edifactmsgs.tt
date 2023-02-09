@@ -77,7 +77,7 @@
 
 <td class="actions">
     <a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id | html %]"><i class="fa fa-search"></i> View message</a>
-    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id | html %]"><i class="fa fa-trash"></i> Delete</a>
+    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
     [% IF msg.status == 'new' %]
         <a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id=[% msg.id | html %]"><i class="fa fa-cog"></i> Import</a>
     [% END %]

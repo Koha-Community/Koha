@@ -73,9 +73,9 @@
                         <input type="hidden" name="tbr" value="[% reserveloo.item.homebranch | html %]" />
                         <input type="hidden" name="tab" value="[% tab | html %]">
                         [% IF ( reserveloo.item.homebranch != reserveloo.item.holdingbranch ) %]
-                            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Cancel hold and return to: [% Branches.GetName( reserveloo.item.homebranch ) | html %]</button>
+                            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel hold and return to: [% Branches.GetName( reserveloo.item.homebranch ) | html %]</button>
                         [% ELSE %]
-                            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Cancel hold</button>
+                            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel hold</button>
                         [% END %]
                    </form>
                 </td>

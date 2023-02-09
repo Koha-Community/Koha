@@ -218,7 +218,7 @@
                                     [% IF ( filters.keyword ) %]
                                         <span class="filter_keyword"><strong>Keyword:</strong> [% filters.keyword | html %]</span>
                                     [% END %]
-                                    <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1"><i class="fa fa-remove"></i> Clear</a>
+                                    <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1"><i class="fa fa-times"></i> Clear</a>
                                 </span>
                             </p>
                         [% END %]
@@ -351,7 +351,7 @@
                                                         <td>
                                                             [% IF savedreport.seems_obsolete %]
                                                                 This report seems obsolete, it uses biblioitems.marcxml field.
-                                                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
+                                                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa-solid fa-eye"></i> Update SQL</a>
                                                             [% END %]
                                                         </td>
                                                         <td>
@@ -366,19 +366,19 @@
                                                                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> View</a></li>
                                                                     <li>
                                                                         <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&phase=Show%20SQL" class="preview_sql" data-reportid="[% savedreport.id | html %]">
-                                                                            <i class="fa fa-eye"></i> Preview SQL
+                                                                            <i class="fa-solid fa-eye"></i> Preview SQL
                                                                         </a>
                                                                     </li>
                                                                     [% IF ( CAN_user_reports_create_reports ) %]
-                                                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
+                                                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil-alt"></i> Edit</a></li>
                                                                         <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
                                                                     [% END %]
                                                                     [% IF (Koha.Preference('Mana') == 1) %]
                                                                         <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
                                                                     [% END %]
-                                                                    <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
+                                                                    <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa-solid fa-clock"></i> Schedule</a></li>
                                                                     [% IF ( CAN_user_reports_delete_reports ) %]
-                                                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
+                                                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash-can"></i> Delete</a></li>
                                                                     [% END %]
                                                                 </ul>
                                                             </div>
@@ -421,7 +421,7 @@
                                         <input type="hidden" name="phase" value="Use saved" />
                                         <input type="hidden" name="filter_set" value="1" />
                                         <input type="hidden" name="filter_keyword" value="" />
-                                        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> Cancel filter</button>
+                                        <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> Cancel filter</button>
                                     </form>
                                 [% END %]
                             [% ELSE %]
@@ -820,7 +820,7 @@
                         </form>
                         <!-- Go back to editing -->
                         <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-                            <button type="button" class="new goback"><i class="fa fa-fw fa-pencil"></i> Edit SQL</button>
+                            <button type="button" class="new goback"><i class="fa fa-fw fa-pencil-alt"></i> Edit SQL</button>
                         </form>
                     </div>
                 [% END # /IF ( warn_authval_problem )%]
@@ -909,8 +909,8 @@
                         </div>
 
                         <div>
-                            <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa fa-eye-slash"></i> Hide chart</a>
-                            <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa fa fa-eye"></i> Show chart</a>
+                            <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye-slash"></i> Hide chart</a>
+                            <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa fa-solid fa-eye"></i> Show chart</a>
                         </div>
                         <div id="chart" class="clearfix"></div>
 
@@ -1081,8 +1081,8 @@
 
                                         [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                                             <a href="#" class="btn btn-link" id="toggle_auto_links">
-                                                <i class="fa fa-eye autolink" style="display:none"></i>
-                                                <i class="fa fa-eye-slash autolink"></i>
+                                                <i class="fa-solid fa-eye autolink" style="display:none"></i>
+                                                <i class="fa-solid fa-eye-slash autolink"></i>
                                                 <span class="autolink" style="display:none">Show data menus</span>
                                                 <span class="autolink">Hide data menus</span>
                                             </a>
@@ -1126,7 +1126,7 @@
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-pencil"></i> Edit record</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-pencil-alt"></i> Edit record</a></li>
                                                                 <li role="separator" class="divider"></li>
                                                                 <li><a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye"></i> View record</a></li>
                                                             </ul>
@@ -1137,9 +1137,9 @@
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit record</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-pencil-alt"></i> Edit record</a></li>
                                                                 <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View record</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye"></i> View record</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -1148,9 +1148,9 @@
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-eye"></i> View patron</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye"></i> View patron</a></li>
                                                                 <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-pencil"></i> Edit patron</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-pencil-alt"></i> Edit patron</a></li>
                                                                 <li role="separator" class="divider"></li>
                                                                 <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
                                                             </ul>
@@ -2168,7 +2168,7 @@
             // Mana KB
             $("body").on("click", ".mana-use", function(e) {
                 e.preventDefault();
-                $(this).find("i").attr("class","fa fa-refresh fa-spin");
+                $(this).find("i").attr("class","fa-solid fa-rotate fa-spin");
                 mana_use( $(this).data("report_id") );
             });
 
@@ -2366,12 +2366,12 @@
                         <div class="modal-body"><textarea id="code' + reportid + '">' + message + '</textarea>\
                         </div>\
                         <div class="modal-footer">\
-                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> ' + _("Edit") + '</a>\
+                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Edit%20SQL"><i class="fa fa-pencil-alt"></i> ' + _("Edit") + '</a>\
                             <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=' + reportid + '"><i class="fa fa-copy"></i> ' + _("Duplicate") + '</a>\
-                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa fa-clock-o"></i> ' + _("Schedule") + '</a>\
-                            <a id="preview-modal-delete" class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> ' + _("Delete") + '</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa-solid fa-clock"></i> ' + _("Schedule") + '</a>\
+                            <a id="preview-modal-delete" class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Delete%20Saved"><i class="fa fa-trash-can"></i> ' + _("Delete") + '</a>\
                             <a id="preview-modal-runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> ' + _("Run report") + '</a>\
-                            <a href="#" id="preview-sql-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove" aria-hidden="true"></i> ' + _("Close") + '</a>\
+                            <a href="#" id="preview-sql-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-times" aria-hidden="true"></i> ' + _("Close") + '</a>\
                         </div>\
                     </div>\
                 </div>\

@@ -86,7 +86,7 @@
 
                 <div class="form-content">
                     <input id="value_mainentry" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading ($a only)" />
-                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
@@ -113,7 +113,7 @@
 
                 <div class="form-content">
                     <input id="value_mainheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
-                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
@@ -138,7 +138,7 @@
 
                 <div class="form-content">
                     <input id="value_matchheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any heading" />
-                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
@@ -165,7 +165,7 @@
 
                 <div class="form-content">
                     <input id="value_anywhere" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any authority field" />
-                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
@@ -190,7 +190,7 @@
             <a title="Search all headings" href="#matchheading_search" aria-controls="matchheading_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-align-center"></i> <span class="tab-title">All headings</span></a>
         </li>
         <li role="presentation">
-            <a title="Search entire record" href="#entire_record" aria-controls="entire_record" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-folder-open-o"></i> <span class="tab-title">Entire record</span></a>
+            <a title="Search entire record" href="#entire_record" aria-controls="entire_record" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-folder-open"></i> <span class="tab-title">Entire record</span></a>
         </li>
         <li role="presentation">
     </ul>

@@ -36,7 +36,7 @@
                             <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default"><i class="fa fa-upload"></i> Upload plugin</a>
 
                             <div class="btn-group">
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-eye"></i> View plugins by class <span class="caret"></span></button>
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-eye"></i> View plugins by class <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">View all plugins</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=report">View report plugins</a></li>
@@ -199,7 +199,7 @@
                                                             [% END %]
                                                         [% END %]
                                                         [% IF ( CAN_user_plugins_manage ) %]
-                                                                <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash fa-fw"></i> Uninstall</a></li>
+                                                                <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash-can fa-fw"></i> Uninstall</a></li>
                                                             [% IF ( plugin.is_enabled ) %]
                                                                     <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
                                                             [% ELSE %]

@@ -55,7 +55,7 @@
                                     <legend>
                                         Column [% column | html %]
                                         <a class="chart-column-delete" href="#" data-column="[% column | html %]">
-                                            <i class="fa fa-remove error"></i>
+                                            <i class="fa fa-times error"></i>
                                         </a>
                                     </legend>
                                     <div>

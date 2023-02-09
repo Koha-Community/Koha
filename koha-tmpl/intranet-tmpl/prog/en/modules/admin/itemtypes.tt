@@ -184,7 +184,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     <label for="description" class="required">Description: </label>
                     <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
                     [% IF can_be_translated %]
-                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | uri %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
+                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | uri %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil-alt"></i> Translate into other languages</a>
                     [% END %]
                 </li>
                 <li>
@@ -371,7 +371,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
         </form>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -497,8 +497,8 @@ Item types &rsaquo; Administration &rsaquo; Koha
             </td>
             <td>[% IF ( itemtype.automatic_checkin ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td class="actions">
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt"></i> Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
             </td>
           </tr>
           [% END %]

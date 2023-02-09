@@ -110,11 +110,11 @@
                             <div id="batch-manage" class="btn-toolbar">
                                 <a class="btn btn-default" id="additems" href="#"><i class="fa fa-plus"></i> Add item(s)</a>[% IF ( table_loop ) %]
                                 <a class="btn btn-default" id="savedesc" href="#" data-batch_id="[% batch_id | html %]"><i class="fa fa-save"></i> Save description</a>
-                                <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash"></i> Remove selected items</a>
+                                <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash-can"></i> Remove selected items</a>
                                 <a class="btn btn-default" id="deletebatch" href="#"><i class="fa fa-minus-square"></i> Delete batch</a>
                                 <a class="btn btn-default" id="deduplicate" href="#"><i class="fa fa-minus"></i> Remove duplicates</a>
-                                <a class="btn btn-default" id="exportitems" href="#"><i class="fa fa-share-square-o"></i> Export selected items</a>
-                                <a class="btn btn-default" id="exportbatch" href="#"><i class="fa fa-share-square-o"></i> Export full batch</a>[% END %]
+                                <a class="btn btn-default" id="exportitems" href="#"><i class="fa-solid fa-share-from-square"></i> Export selected items</a>
+                                <a class="btn btn-default" id="exportbatch" href="#"><i class="fa-solid fa-share-from-square"></i> Export full batch</a>[% END %]
                             </div>
                             [% IF ( table_loop ) %]
                                 <form name="items">
@@ -152,8 +152,8 @@
                                                             [% FOREACH text_field IN table_loo.text_fields %]
                                                                 [% IF ( text_field.select_field ) %]
                                                                     <td>
-                                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id |url %]&amp;label_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
-                                                                        <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-share-square-o"></i> Export</a>
+                                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id |url %]&amp;label_id=[% text_field.field_value |url %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                                        <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa-solid fa-share-from-square"></i> Export</a>
                                                                     </td>
                                                                     <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]"></td>
                                                                 [% ELSE %]

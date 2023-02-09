@@ -18,7 +18,7 @@
     <h5>
 [% END %]
         [% IF ( patron_is_staff ) %]
-            <i class="fa fa-shield fa-fw" title="Staff patron"></i>
+            <i class="fa-solid fa-shield fa-fw" title="Staff patron"></i>
         [% END %]
         [% IF ( patron_is_superlibrarian ) %]
             <i class="fa fa-bolt fa-fw" title="Superlibrarian patron"></i>
@@ -38,7 +38,7 @@
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
                 [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
                     <div class="patronimage-controls">
-                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
+                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil-alt"></i> Edit</a></div>
                     </div>
                 [% END %]
             [% ELSE %]
@@ -224,7 +224,7 @@
                             [% IF ( patron.image ) %]
                                 <a id="delpicture"
                                     href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;csrf_token=[% csrf_token | html %]"
-                                    class="btn btn-default btn-xs delete"><i class="fa fa-trash"></i> Delete</a>
+                                    class="btn btn-default btn-xs delete"><i class="fa fa-trash-can"></i> Delete</a>
                             [% END %]
                         </div>
                     </form>
@@ -237,13 +237,13 @@
                                 <button class="btn btn-default" id="takebutton"><i class="fa fa-camera"></i> Take photo</button>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-default" id="retakebutton" style="display:none;"><i class="fa fa-refresh"></i> Retake photo</button>
+                                <button class="btn btn-default" id="retakebutton" style="display:none;"><i class="fa-solid fa-rotate"></i> Retake photo</button>
                             </div>
                             <div class="btn-group">
                                 <a id="downloadbutton" href="#" class="btn btn-default" style="display:none;"><i class="fa fa-download"></i> Download photo</a>
                             </div>
                             <div class="btn-group">
-                                <button id="savebutton" type="submit" class="btn btn-default" style="display:none;"><i class="fa fa-hdd-o"></i> Upload</button>
+                                <button id="savebutton" type="submit" class="btn btn-default" style="display:none;"><i class="fa-solid fa-hard-drive"></i> Upload</button>
                             </div>
                         </div>
                         <div id="camera">

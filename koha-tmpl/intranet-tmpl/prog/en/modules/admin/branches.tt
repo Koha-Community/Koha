@@ -105,7 +105,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     <div id="toolbar" class="btn-toolbar">
         <a class="btn btn-default" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
         [% IF op == 'view' && library %]
-            <a class="btn btn-default" id="editbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form&branchcode=[% library.branchcode | uri %]"><i class="fa fa-pencil"></i> Edit library</a>
+            <a class="btn btn-default" id="editbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form&branchcode=[% library.branchcode | uri %]"><i class="fa fa-pencil-alt"></i> Edit library</a>
         [% END %]
     </div>
 [% END %]
@@ -294,7 +294,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/admin/branches.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -590,11 +590,11 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     {
                         "data": function( row, type, val, meta ) {
 
-                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode='+encodeURIComponent(row.library_id)+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode='+encodeURIComponent(row.library_id)+'" role="button"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>';
                             result += '<form action="/cgi-bin/koha/admin/branches.pl" method="post">';
                             result += '<input type="hidden" name="branchcode" value="'+row.library_id.escapeHtml()+'" />'+"\n";
                             result += '<input type="hidden" name="op" value="delete_confirm" />';
-                            result += '<button type="submit" id="delete_library_'+row.library_id.escapeHtml()+'" class="btn btn-default btn-xs" role="button"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</button></form>';
+                            result += '<button type="submit" id="delete_library_'+row.library_id.escapeHtml()+'" class="btn btn-default btn-xs" role="button"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</button></form>';
 
                             return result;
 

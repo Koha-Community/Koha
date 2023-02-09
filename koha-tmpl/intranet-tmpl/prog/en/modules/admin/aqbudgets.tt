@@ -207,11 +207,11 @@
                    Actions <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
-                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has sub funds."><i class="fa fa-trash"></i> Delete</a></li>
+                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has sub funds."><i class="fa fa-trash-can"></i> Delete</a></li>
                     [% ELSE %]
-                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                     [% END %]
                     <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add sub fund</a></li>
                 </ul>
@@ -292,7 +292,7 @@
             <span  id="budget_owner_name"></span>
         [% END %]
         <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
-        <a id="remove_owner" href="#"><i class="fa fa-trash"></i> Remove owner</a>
+        <a id="remove_owner" href="#"><i class="fa fa-trash-can"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
             value="[% budget_owner.borrowernumber | html %]" />
     </li>
@@ -316,7 +316,7 @@
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% user.borrowernumber | uri %]">
                         [% user.firstname | html %] [% user.surname | html %]
                     </a>
-                    &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber | html %]"><i class="fa fa-trash"></i> Remove</a>
+                    &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Remove</a>
                 </li>
             [% END %]
             <li><a href="#" id="add_user_button"><i class="fa fa-plus"></i> Add users</a></li>
@@ -420,7 +420,7 @@
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this fund</button>
         </form>
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -526,7 +526,7 @@
                     var li = '<li id="user_' + borrowernumber + '">'
                         + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
                         + borrowernumber + '">' + borrowername + '</a> '
-                        + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> '+_("Remove")+'</a> '
+                        + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash-can"></i> '+_("Remove")+'</a> '
                         + '</li>';
                     $("#budget_users").prepend(li);
                     ids.push(borrowernumber);

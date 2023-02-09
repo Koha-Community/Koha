@@ -92,12 +92,12 @@
                                 [% IF CAN_user_clubs_edit_clubs %]
                                     <li>
                                         <a href="clubs-add-modify.pl?id=[% c.id | uri %]">
-                                            <i class="fa fa-pencil"></i> Edit
+                                            <i class="fa fa-pencil-alt"></i> Edit
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="delete_club" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
-                                            <i class="fa fa-trash"></i> Delete
+                                            <i class="fa fa-trash-can"></i> Delete
                                         </a>
                                     </li>
                                 [% END %]

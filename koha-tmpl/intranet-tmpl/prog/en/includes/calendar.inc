@@ -60,7 +60,7 @@
                         e.preventDefault();
                         instance.clear();
                     })
-                    .addClass("fa fa-fw fa-remove")
+                    .addClass("fa fa-fw fa-times")
                     .attr("aria-hidden", true)
                     .attr("aria-label", _("Clear date") )
                 ).keydown(function(e) {

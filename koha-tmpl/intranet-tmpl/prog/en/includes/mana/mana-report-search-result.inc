@@ -67,11 +67,11 @@
                                         <td title="[% report.savedsql | html %]">
                                             [% IF report.notes.length > 200 %]
                                                 <div>
-                                                    [% report.notes.substr(0,200) | html %]... <a href="#" class="btn btn-link btn-sm showbutton"><i class="fa fa-plus-square-o"></i> Show more</a>
+                                                    [% report.notes.substr(0,200) | html %]... <a href="#" class="btn btn-link btn-sm showbutton"><i class="fa-solid fa-square-plus"></i> Show more</a>
                                                 </div>
                                                 <div style="display:none">
                                                     [% report.notes | html %]
-                                                    <a href="#" class="btn btn-link btn-sm hidebutton"><i class="fa fa-minus-square-o"></i> Show less</a>
+                                                    <a href="#" class="btn btn-link btn-sm hidebutton"><i class="fa-solid fa-square-minus"></i> Show less</a>
                                                 </div>
                                             [% ELSE %]
                                                 [% report.notes | html %]

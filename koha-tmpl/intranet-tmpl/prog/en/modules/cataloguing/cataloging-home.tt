@@ -26,7 +26,7 @@
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                 <div id="toolbar" class="btn-toolbar">
                     [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
-                        <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
+                        <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil-alt"></i> Advanced editor</a>
                     [% END %]
                     <div class="btn-group">
                         <button class="btn btn-default" id="newRecord"><i class="fa fa-plus"></i> New record</button>
@@ -91,7 +91,7 @@
                         <ul class="buttons-list">
                             [% IF ( CAN_user_tools_inventory ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/inventory.pl"><i class="fa fa-line-chart"></i> Inventory</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/inventory.pl"><i class="fa-solid fa-chart-line"></i> Inventory</a>
                             </li>
                             [% END %]
 
@@ -123,22 +123,22 @@
                         <ul class="buttons-list">
                             [% IF ( CAN_user_tools_items_batchmod ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-pencil"></i> Batch item modification</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-pencil-alt"></i> Batch item modification</a>
                             </li>
                             [% END %]
                             [% IF ( CAN_user_tools_items_batchdel ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl?del=1"><i class="fa fa-trash"></i> Batch item deletion</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl?del=1"><i class="fa fa-trash-can"></i> Batch item deletion</a>
                             </li>
                             [% END %]
                             [% IF CAN_user_tools_records_batchmod %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_record_modification.pl"><i class="fa fa-pencil"></i> Batch record modification</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_record_modification.pl"><i class="fa fa-pencil-alt"></i> Batch record modification</a>
                             </li>
                             [% END %]
                             [% IF CAN_user_tools_records_batchdel %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_delete_records.pl"><i class="fa fa-trash"></i> Batch record deletion</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_delete_records.pl"><i class="fa fa-trash-can"></i> Batch record deletion</a>
                             </li>
                             [% END %]
 
@@ -155,12 +155,12 @@
                         <ul class="buttons-list">
                             [% IF ( CAN_user_tools_items_batchmod ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl"><i class="fa fa-calendar"></i> Item modifications by age</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl"><i class="fa-solid fa-calendar-days"></i> Item modifications by age</a>
                             </li>
                             [% END %]
                             [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa fa-refresh"></i> Stock rotation</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa-solid fa-rotate"></i> Stock rotation</a>
                             </li>
                             [% END %]
                         </ul>

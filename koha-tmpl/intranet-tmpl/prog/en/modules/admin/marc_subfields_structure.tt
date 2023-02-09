@@ -214,7 +214,7 @@
                                                                 <option value="10">items (10)</option>
                                                             [%- END -%]
                                                             </select>
-                                                            <div class="hint"><i class="fa fa-warning"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div>
+                                                            <div class="hint"><i class="fa-solid fa-triangle-exclamation"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div>
                                                         </li>
                                                     </ol>
                                                 </fieldset> <!-- /.rows -->
@@ -356,7 +356,7 @@
                                 <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
                                 <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
-                                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                                <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                             </form>
                         </div> <!-- /.dialog.alert -->
                     [% END # /IF ( delete_confirm ) %]
@@ -411,8 +411,8 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions">
-                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                                <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         </tr>
                                     [% END %]

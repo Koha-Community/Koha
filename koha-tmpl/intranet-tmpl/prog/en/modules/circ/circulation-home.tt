@@ -64,7 +64,7 @@
                     [% END %]
                     [% IF Koha.Preference('OnSiteCheckouts') %]
                         <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl"><i class="fa fa-map-marker"></i> Pending on-site checkouts</a>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl"><i class="fa-solid fa-location-dot"></i> Pending on-site checkouts</a>
                         </li>
                     [% END %]
                 </ul>
@@ -78,18 +78,18 @@
                         <a class="circ-button" href="/cgi-bin/koha/circ/view_holdsqueue.pl"><i class="fa fa-tasks"></i> Holds queue</a>
                     </li>
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/pendingreserves.pl"><i class="fa fa-hand-grab-o"></i> Holds to pull</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/pendingreserves.pl"><i class="fa-solid fa-hand-back-fist"></i> Holds to pull</a>
                     </li>
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/waitingreserves.pl"><i class="fa fa-calendar"></i> Holds awaiting pickup</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/waitingreserves.pl"><i class="fa-solid fa-calendar-days"></i> Holds awaiting pickup</a>
                     </li>
                     [% IF ( Koha.Preference('CurbsidePickup') && CAN_user_circulate_manage_curbside_pickups ) %]
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/curbside_pickups.pl"><i class="fa fa-refresh"></i> Curbside pickups</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/curbside_pickups.pl"><i class="fa-solid fa-rotate"></i> Curbside pickups</a>
                     </li>
                     [% END %]
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa fa-line-chart"></i> Hold ratios</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa-solid fa-chart-line"></i> Hold ratios</a>
                     </li>
                 </ul>
 
@@ -98,9 +98,9 @@
 
                     <ul class="buttons-list">
                         <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa fa-tasks"></i> Recalls queue</a></li>
-                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting"><i class="fa fa-hand-grab-o"></i> Recalls to pull</a></li>
-                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa fa-clock-o"></i> Overdue recalls</a></li>
-                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa fa-calendar"></i> Recalls awaiting pickup</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting"><i class="fa-solid fa-hand-back-fist"></i> Recalls to pull</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa-solid fa-clock"></i> Overdue recalls</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa-solid fa-calendar-days"></i> Recalls awaiting pickup</a></li>
                         <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls"><i class="fa fa-tasks"></i> Old recalls</a></li>
                     </ul>
                 [% END %]
@@ -114,7 +114,7 @@
                     <h3>Patron request</h3>
                     <ul class="buttons-list">
                         <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests"><i class="fa fa-newspaper-o"></i> Article requests</a>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests"><i class="fa-solid fa-newspaper"></i> Article requests</a>
                         </li>
                     </ul>
                 [% END %]
@@ -124,14 +124,14 @@
                 <ul class="buttons-list">
                     [% IF !Koha.Preference('IndependentBranchesTransfers') || CAN_user_superlibrarian %]
                         <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa fa-exchange"></i> Transfer</a>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa-solid fa-right-left"></i> Transfer</a>
                         </li>
                     [% END %]
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/transfers_to_send.pl"><i class="fa fa-sign-out"></i> Transfers to send</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/transfers_to_send.pl"><i class="fa-solid fa-right-from-bracket"></i> Transfers to send</a>
                     </li>
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/transferstoreceive.pl"><i class="fa fa-sign-in"></i> Transfers to receive</a>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/transferstoreceive.pl"><i class="fa-solid fa-right-to-bracket"></i> Transfers to receive</a>
                     </li>
                 </ul>
 
@@ -143,14 +143,14 @@
                             <a class="circ-button"
                                 href="/cgi-bin/koha/circ/overdue.pl"
                                 title="Warning: This report is very resource intensive on systems with large numbers of overdue items."
-                            ><i class="fa fa-clock-o"></i> Overdues</a>
+                            ><i class="fa-solid fa-clock"></i> Overdues</a>
                         </li>
                     [% END %]
                     <li>
                         <a class="circ-button"
                             href="/cgi-bin/koha/circ/branchoverdues.pl"
                             title="Limited to your library.  See report help for other details."
-                        ><i class="fa fa-clock-o"></i> Overdues with fines</a>
+                        ><i class="fa-solid fa-clock"></i> Overdues with fines</a>
                     </li>
                 </ul>
             </div>
@@ -171,8 +171,8 @@
                        <p><a href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a></p>
                     </div>
                     <div class="col-sm-5 col-md-3">
-                    <p><a href="https://github.com/bywatersolutions/koha-offline-circulation/releases"><i class="fa fa-window-maximize"></i> Get desktop application</a></p>
-                    <p><a href="https://addons.mozilla.org/[% lang | uri %]/firefox/addon/koct/"><i class="fa fa-firefox"></i> Get Firefox add-on</a></p>
+                    <p><a href="https://github.com/bywatersolutions/koha-offline-circulation/releases"><i class="fa-solid fa-window-maximize"></i> Get desktop application</a></p>
+                    <p><a href="https://addons.mozilla.org/[% lang | uri %]/firefox/addon/koct/"><i class="fa-brands fa-firefox"></i> Get Firefox add-on</a></p>
                     </div>
             </div>
         </div>

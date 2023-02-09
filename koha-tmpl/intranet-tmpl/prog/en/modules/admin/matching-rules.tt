@@ -424,7 +424,7 @@
                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete record matching rule</button>
                         </form>
                         <form action="[% script_name | html %]" method="get">
-                            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
                 [% END # /IF ( delete_matching_rule_form ) %]
@@ -461,8 +461,8 @@
                                         <td>[% available_matching_rule.code | html %]</td>
                                         <td>[% available_matching_rule.description | html %]</td>
                                         <td class="actions">
-                                            <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                                            <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                            <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                                         </td>
                                     </tr>
                                 [% END %]

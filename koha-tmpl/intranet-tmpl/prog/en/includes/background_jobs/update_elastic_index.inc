@@ -23,7 +23,7 @@
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]
-                <i class="fa fa-warning warn"></i>
+                <i class="fa-solid fa-triangle-exclamation warn"></i>
             [% ELSIF m.type == 'error' %]
                 <i class="fa fa-exclamation error"></i>
             [% END %]

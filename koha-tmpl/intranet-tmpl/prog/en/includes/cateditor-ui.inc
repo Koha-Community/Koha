@@ -1132,7 +1132,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     }
                 } );
 
-                $( '#save-record' ).find('i').attr( 'class', 'fa fa-hdd-o' );
+                $( '#save-record' ).find('i').attr( 'class', 'fa-solid fa-hard-drive' );
 
                 if ( result.error ) {
                     // Reset backend info

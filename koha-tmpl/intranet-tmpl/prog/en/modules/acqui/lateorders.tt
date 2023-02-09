@@ -62,7 +62,7 @@
     [% SET total = 0 %]
     [% SET total_quantity = 0 %]
     [% IF bookseller_filter %]
-        <p><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Uncheck all</a></p>
+        <p><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-times"></i> Uncheck all</a></p>
     [% END %]
     <table id="late_orders">
       <thead>
@@ -109,7 +109,7 @@
                     <span>[% estimated_delivery_date | $KohaDates %]</span>
                     [% IF CAN_user_acquisition_order_manage %]
                         <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-delivery_date="[% estimated_delivery_date | html %]" id="delivery_date_[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
-                            <i class="fa fa-pencil"></i> Edit
+                            <i class="fa fa-pencil-alt"></i> Edit
                         </a>
                     [% END %]
                 </p>
@@ -169,7 +169,7 @@
                     <p class="ordernote">
                         <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.order_internalnote | html %]</span>
                         <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
-                            <i class="fa fa-pencil"></i> Edit internal note
+                            <i class="fa fa-pencil-alt"></i> Edit internal note
                         </a>
                     </p>
                 [% ELSE %]
@@ -183,7 +183,7 @@
                     <p class="ordernote">
                         <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.order_vendornote | html %]</span>
                         <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
-                            <i class="fa fa-pencil"></i> Edit vendor note
+                            <i class="fa fa-pencil-alt"></i> Edit vendor note
                         </a>
                     </p>
                 [% ELSE %]

@@ -129,7 +129,7 @@
                                         [% ELSE %]
                                             <a class="btn btn-default btn-xs" disabled>
                                         [% END %]
-                                            <i class="fa fa-trash"></i>
+                                            <i class="fa fa-trash-can"></i>
                                             Remove from rota
                                         </a>
                                     [% ELSE %]
@@ -163,7 +163,7 @@
             <h3>Are you sure you want to remove this item from it's rota?</h3>
             <p>
                 <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;stage_id=[% stage_id | uri %]&amp;item_id=[% item_id | uri %]&amp;biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
-                <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-remove"></i>No</a>
+                <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-times"></i>No</a>
             </p>
         </div>
     [% END %]

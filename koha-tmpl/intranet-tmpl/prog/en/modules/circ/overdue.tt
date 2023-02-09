@@ -222,11 +222,11 @@
 			[% IF ( patron_attr_filter_loo.repeatable ) %]
                 <a href="#" class="btn btn-link clone-attribute" data-original-id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]"><i class="fa fa-plus"></i> Add</a>
                 [% IF ( patron_attr_filter_loo.isclone ) %]
-                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-remove"></i> Delete</a>
+                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-times"></i> Delete</a>
                 [% ELSIF ( patron_attr_filter_loo.ismany ) %]
-                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-remove"></i> Delete</a>
+                    <a href="#" class="btn btn-link delete_clone"><i class="fa fa-times"></i> Delete</a>
                 [% ELSE %]
-                    <a href="#" class="btn btn-link delete_clone" style="display:none"><i class="fa fa-remove"></i> Delete</a>
+                    <a href="#" class="btn btn-link delete_clone" style="display:none"><i class="fa fa-times"></i> Delete</a>
                 [% END %]
 			[% END %]
 		</li>

@@ -96,7 +96,7 @@
                     <div class="searchheader" id="searchheader">
                         <div id="selection_ops">
                             <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
-                            <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                            <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-times"></i> Clear all</a>
                             |
                             [% IF Koha.Preference("StaffHighlightedWords") == 1 %]
                                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
@@ -158,7 +158,7 @@
                             [% IF ( CAN_user_reserveforothers_place_holds && DisplayMultiPlaceHold ) %]
                                 [% IF ( holdfor or holdforclub ) %]
                                     <div id="placeholdc" class="btn-group">
-                                        <button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button>
+                                        <button class="btn btn-default btn-xs placehold"><i class="fa-solid fa-bookmark"></i> Place hold</button>
                                         <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         </button>
@@ -178,14 +178,14 @@
                                     </div>
                                 [% ELSE %]
                                     <div id="placeholdc" class="btn-group">
-                                        <a class="btn btn-default btn-xs placehold" href="#"><i class="fa fa-sticky-note-o"></i> Place hold</a>
+                                        <a class="btn btn-default btn-xs placehold" href="#"><i class="fa-solid fa-bookmark"></i> Place hold</a>
                                     </div>
                                 [% END # /IF holfor %]
                             [% END # /IF CAN_user_reserveforothers_place_holds %]
 
                             [% IF Koha.Preference('BrowseResultSelection') %]
                                 <div id="browse_selection" class="btn-group">
-                                    <a class="btn btn-default btn-xs browse_selection" href="#"><i class="fa fa-sticky-note-o"></i> Browse selected records</a>
+                                    <a class="btn btn-default btn-xs browse_selection" href="#"><i class="fa-solid fa-note-sticky"></i> Browse selected records</a>
                                 </div>
                             [% END %]
 
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" id="results_batch_ops" class="btn btn-default btn-xs dropdown-toggle disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
+                                        <i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span>
                                     </button>
                                     [% IF ( CAN_user_tools_records_batchmod || CAN_user_tools_records_batchdel || CAN_user_editcatalogue_edit_catalogue ) %]
                                     <ul class="dropdown-menu">

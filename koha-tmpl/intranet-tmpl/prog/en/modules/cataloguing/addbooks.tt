@@ -43,7 +43,7 @@
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                     <div id="toolbar" class="btn-toolbar">
                         [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
-                            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
+                            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil-alt"></i> Advanced editor</a>
                         [% END %]
                         <div class="btn-group">
                             <button class="btn btn-default" id="newRecord"><i class="fa fa-plus"></i> New record</button>
@@ -166,10 +166,10 @@
                                                     Actions <b class="caret"></b>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% resultsloo.biblionumber | html %]">
-                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
+                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> Card preview</a></li>
                                                     [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                                                        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-pencil"></i> Edit record</a></li>
+                                                        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-pencil-alt"></i> Edit record</a></li>
                                                     [% END %]
                                                     [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                                         <li><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-plus"></i> Add/Edit items</a></li>
@@ -227,8 +227,8 @@
                                                         Actions <b class="caret"></b>
                                                     </a>
                                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reservoirsearchactions[% breeding_loo.id | html %]">
-                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
+                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> Card preview</a></li>
                                                         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                                                             <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id | uri %]"><i class="fa fa-plus"></i> Add biblio</a></li>
                                                         [% END %]

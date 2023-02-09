@@ -72,12 +72,12 @@
                 <div class="dialog alert" id="del-bib-alert">
                     <div id="del-bib-action">
                         The record <em><a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% from_biblio.id | html %]">[% from_biblio.title | html %]</a></em> has [% from_biblio.items.count | html %] attached items.
-                        <p><button id="delete-biblio-btn" data-biblionumber="[% from_biblio.id | html %]"><i id="del-bib-spn" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i><i class="fa fa-fw fa-trash"></i> Delete record
+                        <p><button id="delete-biblio-btn" data-biblionumber="[% from_biblio.id | html %]"><i id="del-bib-spn" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i><i class="fa fa-fw fa-trash-can"></i> Delete record
                         </button></p>
                     </div>
                     <p id="del-bib-result">
                         <span id="del-bib-success" style="display:none"><i class="fa fa-check success"></i> Record deleted</span>
-                        <span id="del-bib-failure" style="display:none"><i class="fa fa-warning"></i> Attempt to delete record failed.</span>
+                        <span id="del-bib-failure" style="display:none"><i class="fa-solid fa-triangle-exclamation"></i> Attempt to delete record failed.</span>
                     </p>
                 </div>
             [% END %]

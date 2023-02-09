@@ -119,8 +119,8 @@ legend:hover {
                         [% IF ( check_member ) %]
                             <div class="dialog alert">
                                 <h3>Duplicate patron record?</h3>
-                                <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa fa-window-restore"></i> View existing record</a></p>
-                                <button id="duplicate" type="submit" class="new"> <i class="fa fa-pencil"></i> It is a duplicate. Edit existing record </button>
+                                <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
+                                <button id="duplicate" type="submit" class="new"> <i class="fa fa-pencil-alt"></i> It is a duplicate. Edit existing record </button>
                                 <button type="submit" id="not-duplicate" class="new"> <i class="fa fa-plus"></i> Not a duplicate. Save as new record </button>
                             </div>
                         [% END %]
@@ -521,7 +521,7 @@ legend:hover {
 
                                                             <li>
                                                                 <label for="guarantor_cancel">&nbsp;</label>
-                                                                <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></span>
+                                                                <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash-can" aria-hidden="true"></i> Remove</a></span>
                                                             </li>
                                                         </ol>
                                                     </fieldset>
@@ -565,7 +565,7 @@ legend:hover {
 
                                                     <li>
                                                         <label for="guarantor_cancel">&nbsp;</label>
-                                                        <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash"></i> Remove</a></span>
+                                                        <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash-can"></i> Remove</a></span>
                                                     </li>
                                                 </ol>
                                             </fieldset>
@@ -1567,7 +1567,7 @@ legend:hover {
                                                                 [% END %]
                                                             [% END # /IF ( patron_attribute.use_dropdown ) %]
                                                             <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
-                                                            <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash"></i> Clear</a>
+                                                            <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash-can"></i> Clear</a>
                                                             [% IF ( patron_attribute.repeatable ) %]
                                                                 <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                                                             [% END %]

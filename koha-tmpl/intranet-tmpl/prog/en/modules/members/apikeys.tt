@@ -98,7 +98,7 @@
                                                 <input type="hidden" name="key" value="[% key.id | html %]" />
                                                 <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                                                 <input type="hidden" name="op" value="delete" />
-                                                <button class="btn btn-default btn-xs delete" type="submit"><i class="fa fa-trash"></i> Delete</button>
+                                                <button class="btn btn-default btn-xs delete" type="submit"><i class="fa fa-trash-can"></i> Delete</button>
                                             </form>
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                                                 <input type="hidden" name="patron_id" value="[% patron.id | html %]" />
@@ -106,7 +106,7 @@
                                                 <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                                                 [% IF key.active %]
                                                     <input type="hidden" name="op" value="revoke" />
-                                                    <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-remove"></i> Revoke</button>
+                                                    <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-times"></i> Revoke</button>
                                                 [% ELSE %]
                                                     <input type="hidden" name="op" value="activate" />
                                                     <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-play"></i> Activate</button>

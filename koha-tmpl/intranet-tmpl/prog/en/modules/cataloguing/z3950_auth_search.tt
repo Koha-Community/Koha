@@ -43,7 +43,7 @@
                         <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" /></li>
                         <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
                         <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
-                        <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
+                        <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a></li>
                     </ol>
                     </fieldset>
                 </div>
@@ -51,7 +51,7 @@
                 <div class="row">
                     <h2>Search targets</h2>
                     <div id="z3950_search_targets_auth">
-                        <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></span>
+                        <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span></span>
                     [% FOREACH serverloo IN serverloop %]
                         <p>
                         [% IF ( serverloo.checked ) %]
@@ -93,7 +93,7 @@
                 <div class="btn-group dropup">
                     <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a><button class="btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
                         <li><a href="/cgi-bin/koha/authorities/authorities.pl?breedingid=[% breeding_loo.breedingid | uri %]&authtypecode=[% breeding_loo.heading_code | uri %]&authid=[% breeding_loo.authid | uri %]&index=[% index | uri %]" class="chosen" title="Import" data-action="import"><i class="fa fa-download"></i> Import</a></li>
                     </ul>
                 </div>

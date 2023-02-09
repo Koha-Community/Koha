@@ -979,7 +979,7 @@ $(document).ready(function() {
                                 notes += oObj.notes;
                             }
                             notes += '</span>';
-                            notes += '<i style="float:right" class="fa fa-pencil-square-o" title="' + __("Double click to edit") + '"></i>';
+                            notes += '<i style="float:right" class="fa-solid fa-pen-to-square" title="' + __("Double click to edit") + '"></i>';
                             return notes;
                         }
                     },
@@ -1012,7 +1012,7 @@ $(document).ready(function() {
                     {
                         "mDataProp": function ( oObj ) {
                             let delete_html = oObj.resolved_on
-                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash"></i> ' + __("Delete") + '</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash-can"></i> ' + __("Delete") + '</a></li>'
                                 : "";
                             let resolve_html = ! oObj.resolution
                                 ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '" data-current-lost-status="' + escape_str(oObj.itemlost) + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'

@@ -32,7 +32,7 @@
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     <div class="btn-group">
-    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
             <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>
@@ -179,7 +179,7 @@
         [% IF ( holdfor ) %]
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-sticky-note-o"></i>
+                    <i class="fa-solid fa-bookmark"></i>
                     Place hold
                     <span class="caret"></span>
                 </button>
@@ -189,13 +189,13 @@
                 </ul>
             </div>
         [% ELSE %]
-            <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
+            <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]"><i class="fa-solid fa-bookmark"></i> Place hold</a></div>
         [% END %]
     [% END %]
 [% END %]
 
 [% IF Koha.Preference('ArticleRequests') %]
-    <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
+    <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa-solid fa-file-lines"></i> Request article</a></div>
 [% END %]
 
 [% IF ( CAN_user_acquisition_order_manage ) %]

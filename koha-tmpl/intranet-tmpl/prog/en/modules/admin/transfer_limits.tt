@@ -68,7 +68,7 @@
                 <fieldset>
                     <a id="check-all" class="limit-action" href="#"><i class="fa fa-check"></i> Check all</a>
                     |
-                    <a id="uncheck-all" class="limit-action" href="#"><i class="fa fa-remove"></i> Uncheck all</a>
+                    <a id="uncheck-all" class="limit-action" href="#"><i class="fa fa-times"></i> Uncheck all</a>
                     |
                     <a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Switch to basic editor</a>
                 </fieldset>
@@ -82,7 +82,7 @@
                             [% FOREACH to IN branches %]
                                 <td>
                                     <p><a class="btn btn-default btn-xs check-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
-                                    <p><a class="btn btn-default btn-xs uncheck-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-remove"></i> Uncheck</a></p>
+                                    <p><a class="btn btn-default btn-xs uncheck-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p>
                                 </td>
                             [% END %]
                         </tr>
@@ -101,7 +101,7 @@
                             <tr>
                                 <td>
                                     <p><a class="btn btn-default btn-xs check-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
-                                    <p><a class="btn btn-default btn-xs uncheck-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-remove"></i> Uncheck</a></p>
+                                    <p><a class="btn btn-default btn-xs uncheck-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-times"></i> Uncheck</a></p>
                                 </td>
                                 <th>[% from.branchname | html %]</th>
                                 [% FOREACH to IN branches %]

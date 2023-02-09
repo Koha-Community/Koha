@@ -96,8 +96,8 @@
                 <div class="col-md-8 col-md-offset-2">
 
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                     </div>
 
                     <fieldset class="rows">
@@ -557,7 +557,7 @@
                                 <br />
                                 <a id="edit_manager" class="new_window" href="#"><i class="fa fa-search"></i> Select manager</a>
                                 [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
-                                    <a id="restore_previous_manager" href="#"><i class="fa fa-trash"></i> Keep existing manager</a>
+                                    <a id="restore_previous_manager" href="#"><i class="fa fa-trash-can"></i> Keep existing manager</a>
                                 [% END %]
                                 <input type="hidden" name="managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
 
@@ -841,9 +841,9 @@
                                                     </td>
                                                     <td class="actions">
                                                         <div class="btn-group dropup">
-                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil-alt"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
-                                                                <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                                                                <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                                                                 [% UNLESS s.archived %]
                                                                     <li><a class="archivesuggestion" href="suggestion.pl?op=archive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Archive</a></li>
                                                                 [% ELSE %]

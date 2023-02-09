@@ -1,6 +1,6 @@
 <p>
-    <a id="show_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#"><i class="fa fa-plus-square-o"></i> Show coded information filters</a>
-    <a id="hide_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#" style="display:none;"><i class="fa fa-minus-square-o"></i> Hide coded information filters</a>
+    <a id="show_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#"><i class="fa-solid fa-square-plus"></i> Show coded information filters</a>
+    <a id="hide_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#" style="display:none;"><i class="fa-solid fa-square-minus"></i> Hide coded information filters</a>
 </p>
 <div style="display:none;" id="Coded_Fields">
 <!-- SUBTYPE LIMITS -->

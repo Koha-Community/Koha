@@ -80,7 +80,7 @@
                             <li>
                                 <label>setDescription: </label>
                                 <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description | html %]</textarea>
-                                <a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>
+                                <a class="remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i> Remove</a>
                             </li>
                         [% END %]
                         <li id="adddescription"><span class="label">&nbsp;</span><a href="#" class="add_description"><i class="fa fa-fw fa-plus"></i> Add description</a></li>
@@ -130,8 +130,8 @@
                                     <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id | html %]" role="button" data-toggle="dropdown" href="#">
                                     Actions <b class="caret"></b></a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
-                                    <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
-                                    <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+                                    <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa fa-fw fa-pencil-alt"></i> Edit</a></li>
+                                    <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash-can"></i> Delete</a></li>
                                     <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | uri %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
                                     </ul>
                                 </div>
@@ -163,7 +163,7 @@
             $("#adddescription").before(
                 '<li><label>' + _("setDescription: ") + '</label>' +
                 '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
-                '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i>' + _(" Remove") + '</a>' +
+                '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i>' + _(" Remove") + '</a>' +
                 '</li>'
             );
         }

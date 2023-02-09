@@ -62,7 +62,7 @@
             <a id="package_search_tab" title="Search packages" href="#package_search" aria-controls="package_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-archive"></i> <span class="tab-title">Search packages</span></a>
         </li>
         <li role="presentation">
-            <a id="title_search_tab" title="Search titles" href="#title_search" aria-controls="title_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-sort-alpha-asc"></i> <span class="tab-title">Search titles</span></a>
+            <a id="title_search_tab" title="Search titles" href="#title_search" aria-controls="title_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-arrow-down-a-z"></i> <span class="tab-title">Search titles</span></a>
         </li>
     </ul>
 </div><!-- /#header_search -->

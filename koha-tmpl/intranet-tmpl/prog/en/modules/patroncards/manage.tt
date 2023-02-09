@@ -91,8 +91,8 @@
                                                     [% IF ( text_field.select_field ) %]
                                                         <td>
                                                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/edit-[% card_element | html %].pl?op=edit&element_id=[% text_field.field_value | html %]"><i class="fa fa-edit"></i> Edit</a>
-                                                        [% IF ( print ) %]<a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa fa-share-square-o"></i> Export</a>[% END %]
-                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element | html %]&element_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                        [% IF ( print ) %]<a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa-solid fa-share-from-square"></i> Export</a>[% END %]
+                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element | html %]&element_id=[% text_field.field_value | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                         </td>
                                                         [% IF ( print ) %]<td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
                                                     [% ELSIF ( text_field.field_value ) %]

@@ -13,7 +13,7 @@
         [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
             [% UNLESS ( cannotedit ) %]
                 <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             [% IF ( CAN_user_serials_edit_subscription ) %]
                                 <li>
@@ -51,14 +51,14 @@
 
         [% IF not cannotedit or CAN_user_serials_receive_serials %]
             [% IF CAN_user_serials_renew_subscription and not closed %]
-                <div class="btn-group"><a id="renew" class="btn btn-default" href="#"><i class="fa fa-refresh"></i> Renew</a></div>
+                <div class="btn-group"><a id="renew" class="btn btn-default" href="#"><i class="fa-solid fa-rotate"></i> Renew</a></div>
             [% END %]
             [% IF CAN_user_serials_receive_serials and not closed %]
                 <div class="btn-group"><a id="receive" class="btn btn-default" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscriptionid | html %]&amp;serstatus=1,3"><i class="fa fa-inbox"></i> Receive</a></div>
             [% END %]
             [% UNLESS cannotedit %]
                 [% IF closed %]
-                    <div class="btn-group"><a id="reopen" class="btn btn-default" href="#"><i class="fa fa-repeat"></i> Reopen</a></div>
+                    <div class="btn-group"><a id="reopen" class="btn btn-default" href="#"><i class="fa-solid fa-arrow-rotate-right"></i> Reopen</a></div>
                 [% ELSE %]
                     <div class="btn-group"><a id="close" class="btn btn-default" href="#"><i class="fa fa-times-circle"></i> Close</a></div>
                 [% END %]

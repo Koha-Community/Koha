@@ -476,7 +476,7 @@
                             <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
                             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                         </form>
-                        <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
+                        <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-times"></i>No, do not delete</a>
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
@@ -521,7 +521,7 @@
                     <h1>Manage ILL request</h1>
                     <div id="request-toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
-                        <span class="fa fa-pencil"></span>
+                        <span class="fa fa-pencil-alt"></span>
                         Edit request
                         </a>
                         [% FOREACH action IN request.available_actions %]
@@ -581,7 +581,7 @@
                         [% END %]
                         <div class="dropdown btn-group">
                             <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <i class="fa fa-envelope"></i> Send notice to patron <span class="caret"></span>
+                                <i class="fa-solid fa-envelope"></i> Send notice to patron <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
                                 [% FOREACH notice IN notices %]
@@ -590,11 +590,11 @@
                             </ul>
                         </div>
                         <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-default pull-right" href="#">
-                            <span class="fa fa-eye"></span>
+                            <span class="fa-solid fa-eye"></span>
                             Display supplier metadata
                         </a>
                         <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
-                            <span class="fa fa-calendar"></span>
+                            <span class="fa-solid fa-calendar-days"></span>
                             ILL request log
                         </a>
                     </div>

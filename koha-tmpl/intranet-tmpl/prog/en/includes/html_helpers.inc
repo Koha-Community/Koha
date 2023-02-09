@@ -222,7 +222,7 @@
     [% IF display_columns_selection %][%# Needs js/pages/batchMod.js %]
         [% IF checkboxes_edit OR checkboxes_delete %]
             <div class="btn-toolbar selections-toolbar">
-                <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+                <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
             </div>
         [% END %]
 

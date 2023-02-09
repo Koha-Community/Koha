@@ -422,8 +422,8 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&amp;smtp_server_id='+ encodeURIComponent(row.smtp_server_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-smtp-server-id="'+ encodeURIComponent(row.smtp_server_id) +'" data-smtp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash" aria-hidden="true"></i>'+_("Delete")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&amp;smtp_server_id='+ encodeURIComponent(row.smtp_server_id) +'"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-smtp-server-id="'+ encodeURIComponent(row.smtp_server_id) +'" data-smtp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i>'+_("Delete")+'</a>';
                             return result;
                         },
                         "searchable": false,

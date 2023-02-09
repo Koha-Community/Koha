@@ -193,7 +193,7 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="[% script_name | html %]" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -275,9 +275,9 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
                     <a class="btn btn-default btn-xs dropdown-toggle" id="authtagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtagactions[% loo.tagfield | html %]">
-                        <li><a href="auth_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                        <li><a href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="auth_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa-solid fa-eye"></i> Subfields</a></li>
+                        <li><a href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                        <li><a href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>

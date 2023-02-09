@@ -56,7 +56,7 @@
             [% END %]
             <input type="hidden" class="contact_claimissues_hidden" name="contact_claimissues" value="[% contact.claimissues | html %]"></input>
         </li>
-        [% IF contact.id %]<li><button class="btn btn-default delete-contact"><i class="fa fa-trash"></i> Delete contact</li>[% END %]
+        [% IF contact.id %]<li><button class="btn btn-default delete-contact"><i class="fa fa-trash-can"></i> Delete contact</li>[% END %]
     </ol>
 [% END %]
 
@@ -151,7 +151,7 @@ div.rows { padding: 1rem; }
                 <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
             [% ELSE %]
                 <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
-            [% END %] <i class="fa fa-remove"></i> Cancel</a>
+            [% END %] <i class="fa fa-times"></i> Cancel</a>
         </div>
 
         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
@@ -435,8 +435,8 @@ div.rows { padding: 1rem; }
                         <td data-order="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</td>
                         [% IF CAN_user_acquisition_contracts_manage %]
                             <td class="actions">
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                             </td>
                         [% END %]
                         </tr>

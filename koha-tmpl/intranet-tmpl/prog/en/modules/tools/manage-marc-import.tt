@@ -366,7 +366,7 @@
                                                     <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id | html %]" id="delete_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_delete">
                                                         <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
                                                         <input type="hidden" name="op" value="delete-batch" />
-                                                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
+                                                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
                                                     </form>
                                                 [% END %]
                                             </td>
@@ -567,10 +567,10 @@
                         if (aData['matched']) {
                             $('td:eq(6)', nRow).html(
                                 '<a class="btn btn-default btn-xs" target="_blank" href="' + record_details_url
-                                + aData['matched'] + '"><i class="fa fa-eye"></i> ' + _("View") + '</a> '
+                                + aData['matched'] + '"><i class="fa-solid fa-eye"></i> ' + _("View") + '</a> '
                                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                                     + '<a class="btn btn-default btn-xs" target="_blank" href="' + record_edit_url
-                                    + aData['matched'] + '"><i class="fa fa-pencil"></i> ' + _("Edit") + '</a>'
+                                    + aData['matched'] + '"><i class="fa fa-pencil-alt"></i> ' + _("Edit") + '</a>'
                                 [% END %]
                             );
                         }

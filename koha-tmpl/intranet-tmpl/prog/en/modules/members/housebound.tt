@@ -374,7 +374,7 @@
                 <div class="page-section">
                     [% PROCESS 'homebound-details' %]
                     <div class="action">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]&method=update_or_create"><i class="fa fa-pencil-alt"></i> Edit</a>
                     </div>
                 </div> <!-- /.page-section -->
 
@@ -401,8 +401,8 @@
                                         </a>
                                     </td>
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                             [% END %]

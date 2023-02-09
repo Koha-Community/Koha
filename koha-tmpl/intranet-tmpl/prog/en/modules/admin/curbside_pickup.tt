@@ -235,7 +235,7 @@
                         span_node.append('<input type="hidden" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
                         span_node.append('<span>'+format_slot(slot)+'</span>');
 
-                        let delete_link = $('<a href="#" on> <i class="fa fa-trash" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on('click', function(e){ e.preventDefault(); delete_slot($(this).closest('li'), branchcode); });
+                        let delete_link = $('<a href="#" on> <i class="fa fa-trash-can" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on('click', function(e){ e.preventDefault(); delete_slot($(this).closest('li'), branchcode); });
                         span_node.append(delete_link);
 
                         span_node.appendTo(li_node);

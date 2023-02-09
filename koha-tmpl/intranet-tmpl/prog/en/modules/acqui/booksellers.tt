@@ -188,7 +188,7 @@
                                                     <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a><a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="basketactions[% basketn.basketno | html %]">
                                                         [% IF basket.uncertainprices %]
-                                                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa fa-usd"></i> Uncertain prices</a></li>
+                                                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa-solid fa-dollar-sign"></i> Uncertain prices</a></li>
                                                         [% ELSIF basket.total_items && !basket.is_standing %]
                                                         <li><a href="/cgi-bin/koha/acqui/basket.pl?op=close&basketno=[% basket.basketno | uri %]&booksellerid=[% basket.booksellerid | uri %]"><i class="fa fa-times-circle"></i> Close this basket</a></li>
                                                         [% END %]

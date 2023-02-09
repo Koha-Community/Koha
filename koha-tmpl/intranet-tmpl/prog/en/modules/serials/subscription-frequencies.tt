@@ -126,7 +126,7 @@
                     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                 </form>
                 <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" method="get">
-                    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                    <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                 </form>
             </div>
         [% END %]
@@ -153,8 +153,8 @@
                                 <td>[% frequency.unitsperissue | html %]</td>
                                 <td>[% frequency.displayorder | html %]</td>
                                 <td class="actions">
-                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                                    <a class="delete_frequency btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                    <a class="delete_frequency btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 </td>
                             </tr>
                         [% END %]

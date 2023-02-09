@@ -36,7 +36,7 @@ var dataTablesDefaults = {
         className: "dt_button_clear_filter",
         titleAttr: __('Clear filter'),
         enabled: false,
-        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __('Clear filter') + '</span>',
+        text: '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' + __('Clear filter') + '</span>',
         available: function ( dt ) {
             // The "clear filter" button is made available if this test returns true
             if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form

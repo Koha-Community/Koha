@@ -43,7 +43,7 @@
     <div id="toolbar" class="btn-toolbar">
         <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
         <div class="btn-group">
-            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
+            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             </button>
@@ -89,8 +89,8 @@
             </ul>
         </div>
         <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
-        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
-        <button class="btn btn-default hide" id="set-keyboard-layout" data-target="#keyboard-layout" data-toggle="modal" title="Set virtual keyboard layout"><i class="fa fa-keyboard-o"></i> Keyboard layout </button>
+        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts <span class="caret"></span></button>
+        <button class="btn btn-default hide" id="set-keyboard-layout" data-target="#keyboard-layout" data-toggle="modal" title="Set virtual keyboard layout"><i class="fa-solid fa-keyboard"></i> Keyboard layout </button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -152,7 +152,7 @@
     <div class="col-md-9">
         <div id="toolbar" class="btn-toolbar">
             <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
-            <button class="btn btn-default" type="reset"><i class="fa fa-trash"></i> <span>Clear</span></button>
+            <button class="btn btn-default" type="reset"><i class="fa fa-trash-can"></i> <span>Clear</span></button>
         </div>
         <ul id="advanced-search-fields">
             <li>
@@ -274,7 +274,7 @@
     <div class="col-md-9" id="macro-editor">
         <div id="macro-toolbar" class="btn-toolbar">
             <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
-            <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash"></i> Delete macro</button>
+            <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash-can"></i> Delete macro</button>
             <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
             [% IF CAN_user_editcatalogue_create_shared_macros %]
                 <input class="macro_shared" type="checkbox" name="public" style="display:none;"/>

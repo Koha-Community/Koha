@@ -51,7 +51,7 @@
 
                     [% IF CAN_user_cash_management_cashup %]
                     <div id="toolbar" class="btn-toolbar">
-                        <button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button>
+                        <button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa-solid fa-money-bill-1"></i> Cashup all</button>
                     </div>
                     [% END %]
 
@@ -115,7 +115,7 @@
                                     </td>
                                     [% IF CAN_user_cash_management_cashup %]
                                     <td>
-                                        <button type="button" class="cashup_individual btn btn-xs btn-default" data-toggle="modal" data-target="#confirmCashupModal" data-register="[% register.description | html %]" data-bankable="[% rbankable | $Price %]" data-float="[% register.starting_float | $Price %]" data-registerid="[% register.id | html %]"><i class="fa fa-money"></i> Record cashup</button>
+                                        <button type="button" class="cashup_individual btn btn-xs btn-default" data-toggle="modal" data-target="#confirmCashupModal" data-register="[% register.description | html %]" data-bankable="[% rbankable | $Price %]" data-float="[% register.starting_float | $Price %]" data-registerid="[% register.id | html %]"><i class="fa-solid fa-money-bill-1"></i> Record cashup</button>
                                     </td>
                                     [% END %]
                                 </tr>
@@ -129,7 +129,7 @@
                                     <td>[% dtotal | $Price %] ([% cdtotal | $Price %])</td>
                                     [% IF CAN_user_cash_management_cashup %]
                                     <td>
-                                        <button type="button" class="cashup_all btn btn-xs btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button>
+                                        <button type="button" class="cashup_all btn btn-xs btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa-solid fa-money-bill-1"></i> Cashup all</button>
                                     </td>
                                     [% END %]
                                 </tr>

@@ -1,6 +1,6 @@
 [%# To select all include with selectall = 1 %]
 <div class="branchselector">
-    <p><a href="#" id="checkall"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknone"> <i class="fa fa-remove"></i> Clear all</a></p>
+    <p><a href="#" id="checkall"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknone"> <i class="fa fa-times"></i> Clear all</a></p>
     <div class="branchgridrow">
     [% FOREACH branch IN branches %]
         <div class="branchgriditem">

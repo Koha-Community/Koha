@@ -68,6 +68,8 @@
 [% Asset.js('js/Gettext.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
 
-[% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% PROCESS 'html_helpers.inc' %]
 [% KohaPlugins.get_plugins_opac_head | $raw %]

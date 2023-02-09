@@ -55,7 +55,7 @@ var indeterminate_test = function(tag){
 
 var success_test_call = function() {
     $('#test_button').prop('disabled', false);
-    $('#test_button').html("<i class='fa fa-check-square-o' aria-hidden='true'></i>" +__(" Test"));
+    $('#test_button').html("<i class='fa fa-check-square' aria-hidden='true'></i>" +__(" Test"));
 };
 
 $(document).ready(function() {
@@ -68,7 +68,7 @@ $(document).ready(function() {
         "sPaginationType": "full"
     }));
     $('.ajax_buttons' ).css({visibility:"visible"});
-    $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\" aria-hidden=\"false\"><\/i> " + __("Select all") + "<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\" aria-hidden=\"false\"><\/i> " + __("Clear all") + "<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> " + __("Select all pending") + "<\/a><\/div>");
+    $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\" aria-hidden=\"false\"><\/i> " + __("Select all") + "<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-times\" aria-hidden=\"false\"><\/i> " + __("Clear all") + "<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> " + __("Select all pending") + "<\/a><\/div>");
 
     $("#CheckAll").on("click", function (e) {
         e.preventDefault();
@@ -109,7 +109,7 @@ $(document).ready(function() {
                 success: count_approve // success_approve
             }));
             $(event.target).next(".rej").prop('disabled', false).css("color","#000");
-            $(event.target).next(".rej").html("<i class='fa fa-remove' aria-hidden='false'></i> " + __("Reject"));
+            $(event.target).next(".rej").html("<i class='fa fa-times' aria-hidden='false'></i> " + __("Reject"));
             $(event.target).prop('disabled', true).css("color","#666");
             $(event.target).html("<i class='fa fa-check' aria-hidden='false'></i> " + __("Approved") );
             getelement = $(event.target).data("num");
@@ -132,7 +132,7 @@ $(document).ready(function() {
             $(event.target).prev(".ok").prop('disabled', false).css("color","#000");
             $(event.target).prev(".ok").html("<i class='fa fa-check' aria-hidden='false'></i> " + __("Approve"));
             $(event.target).prop('disabled', true).css("color","#666");
-            $(event.target).html("<i class='fa fa-remove' aria-hidden='false'></i> " + __("Rejected"));
+            $(event.target).html("<i class='fa fa-times' aria-hidden='false'></i> " + __("Rejected"));
             getelement = $(event.target).data("num");
             gettitle = ".status" + getelement;
             $(gettitle).text(__("Rejected"));

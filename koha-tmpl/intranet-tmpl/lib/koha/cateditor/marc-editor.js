@@ -761,7 +761,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             if ( found ) return;
 
-            var node = $( '<div class="structure-error"><i class="fa fa-remove"></i> ' + error + '</div>' )[0];
+            var node = $( '<div class="structure-error"><i class="fa fa-times"></i> ' + error + '</div>' )[0];
             var widget = this.cm.addLineWidget( line, node, options );
 
             widget.node = node;

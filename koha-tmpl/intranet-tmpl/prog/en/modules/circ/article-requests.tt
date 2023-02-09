@@ -168,7 +168,7 @@
                         [% END %]
                     </select>
                     <button type="submit" class="btn btn-default btn-xs">
-                        <i class="fa fa-refresh"></i> Update
+                        <i class="fa-solid fa-rotate"></i> Update
                     </button>
                 </form>
 
@@ -188,7 +188,7 @@
                     [% WRAPPER tab_panels %]
                         [% WRAPPER tab_panel tabname="article-requests-requested" bt_active= 1 %]
                             <div class="article-requests-requested_table_controls">
-                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-requested' id_arg=0 pull_right='' aria_menu='table_controls' %]
                             </div>
 
@@ -295,7 +295,7 @@
 
                         [% WRAPPER tab_panel tabname="article-requests-pending" %]
                             <div class="article-requests-pending_table_controls">
-                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-pending' id_arg=0 pull_right='' aria_menu='table_controls' %]
                             </div>
 
@@ -402,7 +402,7 @@
 
                         [% WRAPPER tab_panel tabname="article-requests-processing" %]
                             <div class="article-requests-processing_table_controls">
-                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                                <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-processing' id_arg=0 pull_right='' aria_menu='table_controls' %]
                             </div>
                             <table id="article-requests-processing-table">

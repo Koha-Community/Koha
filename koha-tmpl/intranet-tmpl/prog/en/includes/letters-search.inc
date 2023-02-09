@@ -26,7 +26,7 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search notices" href="#notices_search" aria-controls="notices_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-commenting-o"></i> <span class="tab-title">Search notices</span></a>
+            <a title="Search notices" href="#notices_search" aria-controls="notices_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-comment-dots"></i> <span class="tab-title">Search notices</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

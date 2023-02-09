@@ -15,7 +15,7 @@
                 <div class="form-content">
                     <input class="query form-control" type="text" name="filter_budgetname" id="filter_budgetname" value="[% filter_budgetname | html %]" placeholder="Search funds" />
 
-                    <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-folder-open"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
@@ -47,7 +47,7 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search funds" href="#budgets_search" aria-controls="budgets_search" aria-expanded="true" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-credit-card"></i> <span class="tab-title">Search funds</span></a>
+            <a title="Search funds" href="#budgets_search" aria-controls="budgets_search" aria-expanded="true" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-credit-card"></i> <span class="tab-title">Search funds</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

@@ -248,7 +248,7 @@
                         Are you sure you want to delete <span id="delete-group-modal-title" class="name"></span>?
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-can"></i> Delete</button>
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                         Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"></span>?
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Remove</button>
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-can"></i> Remove</button>
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
                 </div>
@@ -431,7 +431,7 @@
         </td>
         <td>
             [% IF group.branchcode %]
-                <button class="btn btn-default btn-xs remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash"></i> Remove from group</button>
+                <button class="btn btn-default btn-xs remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash-can"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
@@ -444,13 +444,13 @@
 
                         <li>
                             <a class="edit-group" id="edit-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" data-group-ft_local_hold_group="[% group.ft_local_hold_group | html %]" data-group-ft_limit_item_editing="[% group.ft_limit_item_editing | html %]" >
-                                <i class="fa fa-pencil"></i> Edit
+                                <i class="fa fa-pencil-alt"></i> Edit
                             </a>
                        </li>
 
                         <li>
                             <a class="delete-group" id="delete-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
-                                <i class="fa fa-trash"></i> Delete
+                                <i class="fa fa-trash-can"></i> Delete
                             </a>
                        </li>
                     </ul>

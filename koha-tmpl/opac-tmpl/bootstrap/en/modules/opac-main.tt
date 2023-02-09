@@ -189,7 +189,7 @@
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>
                                         [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa fa-google" aria-hidden="true"></i> Log in with Google</a>
+                                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
                                             <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
                                         [% END # /IF GoogleOpenIDConnect %]
                                         [% SET identity_providers = AuthClient.get_providers('opac') %]

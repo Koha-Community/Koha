@@ -130,10 +130,10 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
                         [% IF ( tagloo.approved == -1 ) %]
                             <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-times"></i> Rejected</button>
                         [% ELSE %]
                             <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
-                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-times"></i> Reject</button>
                         [% END %]
                         </span>
                     </td>
@@ -142,7 +142,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     [% ELSE %]
                     <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
                         <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                        <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                        <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-times"></i> Reject</button>
                         </span>
                     </td>
                     [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
@@ -158,7 +158,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
    <button type="submit" value="Approve" class="btn btn-default" id="approve_button" name="op-approve"><i class="fa fa-check"></i> Approve</button>
-   <button type="submit" value="Reject" class="btn btn-default"  id="reject_button" name="op-reject"><i class="fa fa-remove"></i> Reject</button>
+   <button type="submit" value="Reject" class="btn btn-default"  id="reject_button" name="op-reject"><i class="fa fa-times"></i> Reject</button>
   </fieldset>[% END %]
   </form>
 </div>
@@ -187,7 +187,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
    <input type="text" size="14" name="test" id="test" />
-   <fieldset class="action"><button type="submit" value="Test" class="approval_btn btn btn-default btn-sm" id="test_button" name="op-test"><i class="fa fa-check-square" aria-hidden="true"></i> Test</button></fieldset>
+   <fieldset class="action"><button type="submit" value="Test" class="approval_btn btn btn-default btn-sm" id="test_button" name="op-test"><i class="fas fa-check-square" aria-hidden="true"></i> Test</button></fieldset>
    <div id="verdict">
     [% IF ( test_term ) %]
     [% IF ( verdict_ok ) %]

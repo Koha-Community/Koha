@@ -224,7 +224,7 @@
                                         [% END # /IF adjustment.encumber_open  %]
                                         [% UNLESS readonly %]
                                             <td>
-                                                <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         [% END %]
                                     </tr>
@@ -287,7 +287,7 @@
                         <fieldset class="action" id="submit_invoice_adjustment" style="display:none">
                             <input type="hidden" name="op" value="mod_adj" />
                             <input type="submit" class="btn btn-primary" value="Update adjustments" />
-                            <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment cancel" style="display:none"><i class="fa fa-remove"></i> Cancel</a>
+                            <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment cancel" style="display:none"><i class="fa fa-times"></i> Cancel</a>
                         </fieldset>
                     [% END #/UNLESS readonly %]
                 </form>

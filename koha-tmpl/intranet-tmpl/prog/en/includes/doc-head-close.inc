@@ -22,7 +22,7 @@
 [% Asset.css("lib/bootstrap/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/bootstrap/bootstrap-theme.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
-[% Asset.css("lib/fontawesome/css/brands.min.css.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% Asset.css("lib/datatables/datatables.min.css") | $raw %]
 [% Asset.css("css/print.css", { media = "print" }) | $raw %]

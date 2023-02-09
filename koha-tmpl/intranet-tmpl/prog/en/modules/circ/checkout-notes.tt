@@ -57,13 +57,13 @@
             [% IF ( notes.count ) %]
                 <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
                     <div id="toolbar" class="btn-toolbar">
-                        <button type="submit" class="btn btn-default markseen" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
-                        <button type="submit" class="btn btn-default markseen" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa-solid fa-eye-slash"></i> Mark not seen</button>
                     </div>
 
                     <div class="btn-toolbar selections-toolbar">
                         <a class="SelectAll"><i class="fa fa-check"></i> Select all</a>
-                        | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                        | <a class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
                         | <a class="HideSeen"><i class="fa fa-minus-square"></i> Hide seen</a>
                         | <a class="ShowAll"><i class="fa fa-bars"></i> Show all</a>
                     </div>
@@ -98,9 +98,9 @@
                                         </td>
                                         <td class="actions">
                                             [% IF ( note.noteseen == 1 ) %]
-                                                <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                                <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs"><i class="fa-solid fa-eye-slash"></i> Mark not seen</button>
                                             [% ELSIF ( note.noteseen == 0 ) %]
-                                                <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                                <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs"><i class="fa-solid fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa-solid fa-eye-slash"></i> Mark not seen</button>
                                             [% END %]
                                         </td>
                                     </tr>

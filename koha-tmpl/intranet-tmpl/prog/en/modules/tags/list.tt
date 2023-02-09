@@ -74,7 +74,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                         </li>
                         [% END %]</ul>[% ELSE %]This record has no items.[% END %]
                     </td>
-                    <td><form method="post" action="/cgi-bin/koha/tags/list.pl"><input type="hidden" name="op" value="del" /><input type="hidden" name="tag" value="[% tag | html %]" /><input type="hidden" name="tag_id" value="[% title.tag_id | html %]" /><button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash"></i> Remove tag</button></form></td>
+                    <td><form method="post" action="/cgi-bin/koha/tags/list.pl"><input type="hidden" name="op" value="del" /><input type="hidden" name="tag" value="[% tag | html %]" /><input type="hidden" name="tag_id" value="[% title.tag_id | html %]" /><button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Remove tag</button></form></td>
                     </tr>
                 [% END %]
             </table>

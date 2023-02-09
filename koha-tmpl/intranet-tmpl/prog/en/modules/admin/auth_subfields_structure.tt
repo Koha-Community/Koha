@@ -155,7 +155,7 @@
                                     [%- END -%]
                                 [%- END -%]
                                 </select>
-                                <div class="hint"><i class="fa fa-warning"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div>
+                                <div class="hint"><i class="fa-solid fa-triangle-exclamation"></i> <span>Ignore means that the subfield does not display in the record editor and that its value, if any, is deleted from the record</span></div>
                             </li>
                             <li>
                                 <fieldset>
@@ -294,7 +294,7 @@
             <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
             <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
             <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </form></div>
 [% END %]
@@ -349,8 +349,8 @@
             [% END %]
         </td>
         <td class="actions">
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;authtypecode=[% authtypecode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt" aria-hidden="true"></i> Edit</a>
+            <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;authtypecode=[% authtypecode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a>
         </td>
     </tr>
     [% END %]

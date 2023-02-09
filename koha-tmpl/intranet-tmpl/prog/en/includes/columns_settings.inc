@@ -124,7 +124,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
             className: "dt_button_clear_filter",
             titleAttr: _("Clear filter"),
             enabled: false,
-            text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+            text: '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
             action: function ( e, dt, node, config ) {
                 dt.search( "" ).draw("page");
                 node.addClass("disabled");

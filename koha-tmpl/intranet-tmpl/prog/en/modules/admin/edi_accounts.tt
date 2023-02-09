@@ -284,7 +284,7 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" method="get">
-    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+    <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
 </form>
 </div>
 [% END %]
@@ -360,7 +360,7 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
          <td>No</td>
       [% END %]
       <td class="actions">
-          <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash"></i> Delete</a>
+          <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa fa-pencil-alt"></i> Edit</a> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
       </td>
     </tr>
     [% END %]

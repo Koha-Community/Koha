@@ -258,10 +258,10 @@
                                     <span class="addto">| </span>
                                     &nbsp;
                                     [% IF CAN_user_reserveforothers && Koha.Preference('DisplayMultiPlaceHold') %]
-                                        <div class="btn-group"><button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button></div>
+                                        <div class="btn-group"><button class="btn btn-default btn-xs placehold"><i class="fa-solid fa-bookmark"></i> Place hold</button></div>
                                     [% END %]
                                     [% IF can_remove_biblios %]
-                                        <div class="btn-group"><button type="submit" class="btn btn-default btn-xs list-remove"><i class="fa fa-trash"></i> Remove selected</button></div>
+                                        <div class="btn-group"><button type="submit" class="btn btn-default btn-xs list-remove"><i class="fa fa-trash-can"></i> Remove selected</button></div>
                                     [% END %]
                                     [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                                         <div class="btn-group"><button type="submit" class="btn btn-default btn-xs merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
@@ -716,7 +716,7 @@
                     stickTo: "#listform",
                     stickyClass: "floating"
                 });
-                $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
+                $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-times\"></i>"+_(" Clear all")+"<\/a>");
                 $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-check\"></i>"+_(" Select all")+"<\/a>");
                 $("#CheckAll").click(function(e){
                     e.preventDefault();

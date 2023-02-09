@@ -91,7 +91,7 @@
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/tools/quotes.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -199,11 +199,11 @@
                     {
                         "data": function( row, type, val, meta ) {
 
-                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/quotes.pl?op=add_form&amp;id='+encodeURIComponent(row.quote_id)+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/quotes.pl?op=add_form&amp;id='+encodeURIComponent(row.quote_id)+'" role="button"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>';
                             result += '<form action="/cgi-bin/koha/tools/quotes.pl" method="post">';
                             result += '<input type="hidden" name="id" value="'+row.quote_id.escapeHtml()+'" />'+"\n";
 
-                            result += '<a class="btn btn-default btn-xs delete_quote" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-quote-id="'+ encodeURIComponent(row.quote_id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            result += '<a class="btn btn-default btn-xs delete_quote" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-quote-id="'+ encodeURIComponent(row.quote_id) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
 
                             return result;
                         },

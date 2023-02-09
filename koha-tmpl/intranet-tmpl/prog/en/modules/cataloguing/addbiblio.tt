@@ -695,7 +695,7 @@ function PopupMARCFieldDoc(field) {
         }
         StrAlert += "</div>";
         if ( flag ) {
-            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa fa-warning"></i> ' + _("Errors") + '</span>');
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + '</span>');
             return StrAlert;
         } else {
             return flag;
@@ -831,11 +831,11 @@ function PopupMARCFieldDoc(field) {
                     [% IF ( duplicatebiblionumber ) %]
                         <div class="dialog alert">
                             <h3>Duplicate record suspected</h3>
-                            <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle | html %] <i class="fa fa-window-restore"></i></a> ?</p>
+                            <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle | html %] <i class="fa-solid fa-window-restore"></i></a> ?</p>
                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                 <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber | html %]" />
-                                    <button type="submit" class="new"><i class="fa fa-fw fa-pencil"></i> Yes, edit existing items</button>
+                                    <button type="submit" class="new"><i class="fa fa-fw fa-pencil-alt"></i> Yes, edit existing items</button>
                                 </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
@@ -898,7 +898,7 @@ function PopupMARCFieldDoc(field) {
                             <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
                         [% END %]
                         [% IF ( CAN_user_editauthorities ) %]
-                            <div class="btn-group"><a class="btn btn-default" href="#" id="linkerbutton"><i class="fa fa-refresh"></i> Link authorities automatically</a></div>
+                            <div class="btn-group"><a class="btn btn-default" href="#" id="linkerbutton"><i class="fa-solid fa-rotate"></i> Link authorities automatically</a></div>
                         [% END %]
                     [% END %]
 

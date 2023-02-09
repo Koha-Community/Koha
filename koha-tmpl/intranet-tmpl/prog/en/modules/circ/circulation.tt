@@ -391,7 +391,7 @@
 
                             [% IF ( RESERVED || ISSUED_TO_ANOTHER || RECALLED ) && (CAN_user_reserveforothers_place_holds ) %]
                                 [% UNLESS noissues %]
-                                    <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber | html %]&borrowernumber=[% patron.borrowernumber | html %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
+                                    <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber | html %]&borrowernumber=[% patron.borrowernumber | html %]'"><i class="fa-solid fa-note-sticky"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
                                 [% END %]
                             [% END %]
                         </div> <!-- /#circ_needsconfirmation -->
@@ -552,7 +552,7 @@
                                                     [% FOREACH item IN options %]
                                                         <tr>
                                                             <td>
-                                                                <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]">[% item.biblio.title | html %] <i class="fa fa-window-restore"></i></a>
+                                                                <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]">[% item.biblio.title | html %] <i class="fa-solid fa-window-restore"></i></a>
                                                                 [% IF item.onloan %]<span style="float: right; color: red; margin-left:5px;">Checked out</span>[% END %]
                                                             </td>
                                                             <td>
@@ -661,7 +661,7 @@
                                         [% END %]
 
                                         <div id="show-circ-settings">
-                                            <a href="#" title="Checkout settings"><i class="fa fa-sliders"></i></a>
+                                            <a href="#" title="Checkout settings"><i class="fa-solid fa-sliders"></i></a>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary">Check out</button>

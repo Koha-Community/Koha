@@ -70,7 +70,7 @@
 [% IF ( accounts ) %]
     <form action="/cgi-bin/koha/members/pay.pl" method="post" id="pay-fines-form">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-<p><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></p>
+<p><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span></p>
 <table id="finest">
 <thead>
 <tr>
@@ -162,7 +162,7 @@
     </td>
     <td class="actions">
         <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
-        <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-remove"></i></a></span>
+        <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-times"></i></a></span>
     </td>
     <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
     <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>

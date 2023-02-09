@@ -6,7 +6,7 @@
 [% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
-        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-pencil"></i> Edit</a>
+        <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
@@ -39,10 +39,10 @@
         <a id="searchtohold" class="btn btn-default" href="#"><i class="fa fa-search"></i> Search to hold</a>
     [% END %]
 
-    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa fa-comment-o"></i> Add message</a>
+    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
 
     [% IF Koha.Preference('CurbsidePickup') %]
-        <a id="curbsidePickupLabel" href="/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=[% patron.borrowernumber | html %]" class="btn btn-default"><i class="fa fa-refresh"></i> Schedule pickup</a>
+        <a id="curbsidePickupLabel" href="/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=[% patron.borrowernumber | html %]" class="btn btn-default"><i class="fa-solid fa-rotate"></i> Schedule pickup</a>
     [% END %]
 
          <div class="btn-group">

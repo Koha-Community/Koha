@@ -443,7 +443,7 @@ function mana_search() {
                 ]
             }));
             if( $("#mana_results_datatable").length && $("td.dataTables_empty").length == 0){
-                $("#mana_search").html("<p>" + __("Subscription found on Mana Knowledge Base:") + "</p><p> <a href=\"#\" data-toggle=\"modal\" data-target=\"#mana_search_result\"><i class=\"fa fa-window-maximize\"></i> " + __("Show Mana results") + "</a></p>");
+                $("#mana_search").html("<p>" + __("Subscription found on Mana Knowledge Base:") + "</p><p> <a href=\"#\" data-toggle=\"modal\" data-target=\"#mana_search_result\"><i class=\"fa-solid fa-window-maximize\"></i> " + __("Show Mana results") + "</a></p>");
             }
             else if ( $("#mana_results_datatable").length ){
                 $("#mana_search").html("<p>" + __("No subscription found on Mana Knowledge Base") + "</p><p>" + __("Please feel free to share your pattern with all others librarians once you are done") + "</p>");
@@ -709,7 +709,7 @@ $(document).ready(function() {
 
     $("body").on("click", ".mana-use", function(e) {
         e.preventDefault();
-        $(this).find("i").attr("class","fa fa-refresh fa-spin");
+        $(this).find("i").attr("class","fa-solid fa-rotate fa-spin");
         var subscription_id = $(this).data("subscription_id");
         mana_use( subscription_id );
     });

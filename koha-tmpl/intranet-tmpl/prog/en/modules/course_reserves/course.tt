@@ -113,7 +113,7 @@
                             <div id="course_instructors">
                                  <div id="instructors">
                                     [% FOREACH i IN instructors %]
-                                        <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash"></i> Remove </a> )
+                                        <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a> )
                                              <input type='hidden' name='instructors' value='[% i.borrowernumber | html %]' />
                                          </div>
                                      [% END %]
@@ -201,7 +201,7 @@
             });
 
             function AddInstructor( name, borrowernumber ) {
-                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + ( name ? name.escapeHtml() : "" ) + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
+                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + ( name ? name.escapeHtml() : "" ) + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash-can'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
                 $('#instructors').append( div );
 
                 $('#find_instructor').val('').focus();

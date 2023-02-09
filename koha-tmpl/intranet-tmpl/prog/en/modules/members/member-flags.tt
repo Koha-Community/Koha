@@ -45,18 +45,18 @@
     <div id="permissionstree">
         <div id="permissions_toolbar" class="btn-toolbar">
             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-            <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-remove"></i> Cancel</a>
-            <a class="toggleall toggleall_on btn btn-link" href="#"><i class="fa fa-plus-square-o"></i> Show all</a>
-            <a class="toggleall toggleall_off btn btn-link" href="#"><i class="fa fa-minus-square-o"></i> Hide all</a>
+            <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-times"></i> Cancel</a>
+            <a class="toggleall toggleall_on btn btn-link" href="#"><i class="fa-solid fa-square-plus"></i> Show all</a>
+            <a class="toggleall toggleall_off btn btn-link" href="#"><i class="fa-solid fa-square-minus"></i> Hide all</a>
             <a id="CheckAllFlags" class="btn btn-link" href="#">
                 <i class="fa fa-check"></i> Select all
             </a>
             <a id="UncheckAllFlags" class="btn btn-link" href="#">
-                <i class="fa fa-remove"></i> Clear all
+                <i class="fa fa-times"></i> Clear all
             </a>
             <div class="btn-group pull-right">
                 Filter: <input type="text" name="permissions_filter" id="permissions_filter" size="20" />
-                <a href="#" id="clear_filter" style="display:none"><i class="fa fa-remove"></i></a>
+                <a href="#" id="clear_filter" style="display:none"><i class="fa fa-times"></i></a>
             </div>
         </div>
         <div class="permissions">
@@ -85,8 +85,8 @@
                     </label>
                     [% IF ( loo.flag == "superlibrarian" ) %]<div class="hint superlibrarian-hint">This permission grants access to all areas. If selected, specific sub-permissions cannot be selected.</div>[% END %]
                 [% IF ( loo.sub_perm_loop ) %]
-                    <a class="toggle-[% loo.bit | html %] togglechildren_off" href="#" data-bit="[% loo.bit | html %]"><i class="fa fa-minus-square-o"></i> Hide details</a>
-                    <a class="toggle-[% loo.bit | html %] togglechildren_on" href="#" data-bit="[% loo.bit | html %]"><i class="fa fa-plus-square-o"></i> Show details</a>
+                    <a class="toggle-[% loo.bit | html %] togglechildren_off" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-minus"></i> Hide details</a>
+                    <a class="toggle-[% loo.bit | html %] togglechildren_on" href="#" data-bit="[% loo.bit | html %]"><i class="fa-solid fa-square-plus"></i> Show details</a>
                     <div class="children" id="flag-[% loo.bit | html %]-children">
                         [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
                             <div class="child-flags">

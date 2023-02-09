@@ -17,7 +17,7 @@
         [% IF ( CAN_user_reports_delete_reports && !CAN_user_reports_create_reports ) %]
             <div class="btn-group">
                 <a class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
-                    <i class="fa fa-trash"></i> Delete
+                    <i class="fa fa-trash-can"></i> Delete
                 </a>
             </div>
         [% ELSE %]
@@ -25,7 +25,7 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
+                        <i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                         [% IF ( CAN_user_reports_create_reports ) %]
@@ -65,7 +65,7 @@
             </div>
             <div class="btn-group">
                 <a class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id | html %]">
-                    <i class="fa fa-clock-o"></i> Schedule
+                    <i class="fa-solid fa-clock"></i> Schedule
                 </a>
             </div>
         [% END %]
@@ -123,16 +123,16 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <button type="button" id="toggle_sql" class="btn btn-default toggle_sql" data-complete-text="<i class='fa fa-eye-slash'></i> [% t('Hide SQL code') | html %]" data-toggle="button" aria-pressed="false" autocomplete="off">
-                    <i class="fa fa-eye"></i> Show SQL code
+                <button type="button" id="toggle_sql" class="btn btn-default toggle_sql" data-complete-text="<i class='fa-solid fa-eye-slash'></i> [% t('Hide SQL code') | html %]" data-toggle="button" aria-pressed="false" autocomplete="off">
+                    <i class="fa-solid fa-eye"></i> Show SQL code
                 </button>
             </div>
             <div class="btn-group">
                 [% IF allresults.size %]
-                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
+                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
                 [% ELSE %]
-                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
-                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run this report&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"><i class="fa fa-bar-chart"></i> Fetch all data for chart</a>
+                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
+                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run this report&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"><i class="fa fa-chart-bar"></i> Fetch all data for chart</a>
                 [% END %]
 
             </div>

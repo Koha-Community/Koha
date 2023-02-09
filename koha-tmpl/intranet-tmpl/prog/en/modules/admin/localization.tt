@@ -77,7 +77,7 @@
             <td>[% t.code | html %]</td>
             <td class="lang">[% t.lang | html %]</td>
             <td class="translation" contenteditable="true">[% t.translation | html %]</td>
-            <td class="actions"><a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a></td>
+            <td class="actions"><a href="#" class="delete"><i class="fa fa-trash-can"></i> Delete</a></td>
         </tr>
         [% END %]
     </tbody>
@@ -261,7 +261,7 @@
                         if ( data.error ) {
                             show_message({ type: 'error_on_insert', data: data });
                         } else {
-                            var new_row = table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash\"></i> Delete</a>" ] ).draw().node();
+                            var new_row = table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
                             $( new_row ).attr("id", "row_id_" + data.id ).data("id", data.id );
                             show_message({ type: 'success_on_insert', data: data });
                         }

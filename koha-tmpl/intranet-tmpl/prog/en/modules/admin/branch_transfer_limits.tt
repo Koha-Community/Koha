@@ -42,7 +42,7 @@
     [% IF ( limitType == 'ccode' ) %]<strong>For all collection codes: </strong>[% ELSE %]<strong>For all item types: </strong>[% END %]
     <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a>
     |
-    <a id="UncheckAll" href="#"><i class="fa fa-remove"></i> Clear all</a>
+    <a id="UncheckAll" href="#"><i class="fa fa-times"></i> Clear all</a>
     |
     <a href="/cgi-bin/koha/admin/transfer_limits.pl">Switch to advanced editor</a>
 </fieldset>
@@ -62,7 +62,7 @@
                 [% WRAPPER tab_panel tabname=codes_loo.code %]
                     <h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
 
-                    <p><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
+                    <p><a id="CheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" data-cb="[% codes_loo.code | html %]" class="uncheckall" href="#"><i class="fa fa-times"></i> Clear all</a></p>
 
                     <table id="[% codes_loo.code | html %]table" class="sorted">
                         <thead>

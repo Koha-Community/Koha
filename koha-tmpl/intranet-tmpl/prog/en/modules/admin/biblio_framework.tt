@@ -141,7 +141,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this framework</button>
             </form>
             <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
-                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
             </form>
         [% END %]
     </div>
@@ -168,7 +168,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
               Actions <b class="caret"></b>
             </a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode | html %]">
-              <li><a href="marctagstructure.pl?frameworkcode="><i class="fa fa-eye"></i> MARC structure</a></li>
+              <li><a href="marctagstructure.pl?frameworkcode="><i class="fa-solid fa-eye"></i> MARC structure</a></li>
               <!-- Trigger modal -->
               <li><a href="#" data-toggle="modal" data-target="#exportModal_default" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv or .ods)"><i class="fa fa-upload"></i> Export</a></li>
               <!-- Trigger modal -->
@@ -236,9 +236,9 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                   Actions <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode | html %]">
-                  <li><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-eye"></i> MARC structure</a></li>
-                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
+                  <li><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa-solid fa-eye"></i> MARC structure</a></li>
+                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                   <!-- Trigger modal -->
                   <li><a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv or .ods)"><i class="fa fa-upload"></i> Export</a></li>
                   <!-- Trigger modal -->

@@ -90,7 +90,7 @@ function constructTrNode(index, unique_item_fields) {
     var edit_link = "<a href='#itemfieldset' style='text-decoration:none' onclick='showItem(\"" + index + "\");' class='btn btn-default btn-xs'><i class='fa fa-pencil'></i> "
         + ( __("Edit") ) + "</a>";
     var del_link = "<a style='cursor:pointer' "
-        + "onclick='deleteItemBlock(this, \"" + index + "\", \"" + unique_item_fields + "\");' class='btn btn-default btn-xs'><i class='fa fa-trash'></i> "
+        + "onclick='deleteItemBlock(this, \"" + index + "\", \"" + unique_item_fields + "\");' class='btn btn-default btn-xs'><i class='fa fa-trash-can'></i> "
         + ( __("Delete") ) + "</a>";
     result += "<td class='actions'>" + edit_link + " " + del_link + "</td>";
     for(var i in fields) {

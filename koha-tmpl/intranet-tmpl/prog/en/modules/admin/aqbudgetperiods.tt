@@ -10,15 +10,15 @@
         </a>
         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
               <li>
-                  <a href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
               </li>
               [% IF block_budget.count %]
                   <li class="disabled">
-                      <a data-toggle="tooltip" data-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget." href="#"><i class="fa fa-trash"></i> Delete</a>
+                      <a data-toggle="tooltip" data-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget." href="#"><i class="fa fa-trash-can"></i> Delete</a>
                   </li>
               [% ELSE %]
                   <li>
-                      <a href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                      <a href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                   </li>
               [% END %]
               <li>
@@ -314,7 +314,7 @@
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
     <form action="[% script_name | html %]" method="post">
-        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
     </form>
     [% END %]
 

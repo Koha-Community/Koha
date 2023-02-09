@@ -125,7 +125,7 @@
       [% IF recordtype == 'biblio' %]
         <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
-          | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
+          | <a id="clearall" href="#"><i class="fa fa-times"></i> Clear all</a>
           | <a id="selectwithoutitems" href="#">Select without items</a>
           | <a id="selectnotreserved" href="#">Select without holds</a>
           | <a id="selectwithoutsubscriptions" href="#">Select without subscriptions</a>
@@ -161,7 +161,7 @@
       [% ELSE %]
         <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
-          | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
+          | <a id="clearall" href="#"><i class="fa fa-times"></i> Clear all</a>
           | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
         </div>
         <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectauths">

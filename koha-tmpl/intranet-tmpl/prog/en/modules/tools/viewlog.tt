@@ -66,38 +66,38 @@
 
 [% BLOCK translate_log_module %]
 [%    SWITCH module %]
-[%        CASE 'AUTH'         %]<span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'CATALOGUING'  %]<span>Catalog</span>[% UNLESS Koha.Preference('CataloguingLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'AUTH'         %]<span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
+[%        CASE 'CATALOGUING'  %]<span>Catalog</span>[% UNLESS Koha.Preference('CataloguingLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'AUTHORITIES'  %]<span>Authorities</span>[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'AUTHORITIES'  %]<span>Authorities</span>[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'MEMBERS'      %]<span>Patrons</span>[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'MEMBERS'      %]<span>Patrons</span>[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'ACQUISITIONS' %]<span>Acquisitions</span>[% UNLESS Koha.Preference('AcquisitionLog') %]<i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'ACQUISITIONS' %]<span>Acquisitions</span>[% UNLESS Koha.Preference('AcquisitionLog') %]<i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'SERIAL'       %]<span>Serials</span>[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'SERIAL'       %]<span>Serials</span>[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'HOLDS'        %]<span>Holds</span>[% UNLESS Koha.Preference('HoldsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'HOLDS'        %]<span>Holds</span>[% UNLESS Koha.Preference('HoldsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'ILL'          %]<span>Interlibrary loans</span>[% UNLESS Koha.Preference('IllLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'ILL'          %]<span>Interlibrary loans</span>[% UNLESS Koha.Preference('IllLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'CIRCULATION'  %]<span>Circulation</span>[% UNLESS Koha.Preference('IssueLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CIRCULATION'  %]<span>Circulation</span>[% UNLESS Koha.Preference('IssueLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'CLAIMS'       %]<span>Claims</span>[% UNLESS Koha.Preference('ClaimsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CLAIMS'       %]<span>Claims</span>[% UNLESS Koha.Preference('ClaimsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'FINES'        %]<span>Fines</span>[% UNLESS Koha.Preference('FinesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'FINES'        %]<span>Fines</span>[% UNLESS Koha.Preference('FinesLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
 [%        CASE 'SYSTEMPREFERENCE' %]<span>System preferences</span>
 
-[%        CASE 'CRONJOBS' %]<span>Cron jobs</span>[% UNLESS Koha.Preference('CronjobLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CRONJOBS' %]<span>Cron jobs</span>[% UNLESS Koha.Preference('CronjobLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
-[%        CASE 'REPORTS'      %]<span>Reports</span>[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'REPORTS'      %]<span>Reports</span>[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
 [%        CASE 'SEARCHENGINE' %]<span>Search engine</span>
 
-[%        CASE 'NOTICES'      %]<span>Notices</span>[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'NEWS'      %]<span>News</span>[% UNLESS Koha.Preference('NewsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
-[%        CASE 'RECALLS'      %]<span>Recalls</span>[% UNLESS Koha.Preference('RecallsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'NOTICES'      %]<span>Notices</span>[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
+[%        CASE 'NEWS'      %]<span>News</span>[% UNLESS Koha.Preference('NewsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
+[%        CASE 'RECALLS'      %]<span>Recalls</span>[% UNLESS Koha.Preference('RecallsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
 [%        CASE %][% module | html %]
 [%    END %]
@@ -312,7 +312,7 @@
                     [% IF ( total ) %]
                         <h3>Log entries</h3>
                         <div id="toolbar" class="btn-toolbar">
-                            <a href="#" id="select_none" class="btn btn-link disabled"><i class="fa fa-remove"></i> Check none</a>
+                            <a href="#" id="select_none" class="btn btn-link disabled"><i class="fa fa-times"></i> Check none</a>
                             <button class="btn btn-link disabled compare_link"><i class="fa fa-columns"></i> Compare selected</button>
                         </div>
                         <div class="page-section">

@@ -35,7 +35,7 @@
                         [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>
                                 <a class="remove_restriction btn btn-default btn-xs" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;borrower_debarment_id=[% restriction.borrower_debarment_id | html %]&amp;action=del">
-                                    <i class="fa fa-trash"></i> Remove
+                                    <i class="fa fa-trash-can"></i> Remove
                                 </a>
                             </td>
                         [% END %]

@@ -289,13 +289,13 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
                     [% FOR re IN split_rule.regexs %]
                         <div class="split_regex">
                             <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
-                            <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash"></i>Delete</a>
+                            <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
                         </div>
                     [% END %]
                 [% ELSE %]
                     <div class="split_regex">
                         <input type="text" name="split_regex" id="split_regex" value="" />
-                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash"></i>Delete</a>
+                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
                     </div>
                 [% END %]
             </div>
@@ -346,8 +346,8 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
     <td>[% class_source.class_sort_rule | html %]</td>
     <td>[% class_source.class_split_rule | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=add_source&amp;cn_source=[% class_source.cn_source | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs delete_class_source" href="[% script_name | url %]?op=delete_source_confirmed&amp;cn_source=[% class_source.cn_source | uri%]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=add_source&amp;cn_source=[% class_source.cn_source | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+      <a class="btn btn-default btn-xs delete_class_source" href="[% script_name | url %]?op=delete_source_confirmed&amp;cn_source=[% class_source.cn_source | uri%]"><i class="fa fa-trash-can"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -369,8 +369,8 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
     <td>[% rule.description |html | html %]</td>
     <td>[% rule.sort_routine | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% script_name | html %]?op=add_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs delete_sort_rule" href="[% script_name | html %]?op=delete_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% script_name | html %]?op=add_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+      <a class="btn btn-default btn-xs delete_sort_rule" href="[% script_name | html %]?op=delete_sort_rule&amp;class_sort_rule=[% rule.class_sort_rule |url %]"><i class="fa fa-trash-can"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -392,8 +392,8 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
     <td>[% rule.description | html %]</td>
     <td>[% rule.split_routine | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=add_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs delete_split_rule" href="[% script_name | url %]?op=delete_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=add_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+      <a class="btn btn-default btn-xs delete_split_rule" href="[% script_name | url %]?op=delete_split_rule&amp;class_split_rule=[% rule.class_split_rule | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
     </td>
   </tr>
   [% END %]

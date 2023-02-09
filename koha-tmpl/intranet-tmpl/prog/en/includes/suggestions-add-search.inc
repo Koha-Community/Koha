@@ -31,7 +31,7 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search suggestions" href="#suggestions_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-comment-o"></i> <span class="tab-title">Search suggestions</span></a>
+            <a title="Search suggestions" href="#suggestions_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-comment"></i> <span class="tab-title">Search suggestions</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

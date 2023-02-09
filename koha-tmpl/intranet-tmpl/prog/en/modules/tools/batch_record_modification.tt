@@ -47,7 +47,7 @@
                                 [% IF message.type == 'success' %]
                                     <div><i class="fa fa-check success"></i>
                                 [% ELSIF message.type == 'warning' %]
-                                    <div><i class="fa fa-warning warn"></i>
+                                    <div><i class="fa-solid fa-triangle-exclamation warn"></i>
                                 [% ELSIF message.type == 'error' %]
                                     <div><i class="fa fa-exclamation error"></i>
                                 [% END %]
@@ -183,7 +183,7 @@
                                 [% IF recordtype == 'biblio' %]
                                     <div class="btn-toolbar selections-toolbar">
                                         <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
-                                        | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
+                                        | <a id="clearall" href="#"><i class="fa fa-times"></i> Clear all</a>
                                     </div>
                                     <div class="page-section">
                                         <table id="biblios" class="records">
@@ -202,7 +202,7 @@
                                                         <td>[% biblio.biblionumber | html %]</td>
                                                         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></td>
                                                         <td class="actions">
-                                                            <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | uri %]&mmtid=[% mmtid | uri %]&overlay_context=batchmod" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
+                                                            <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | uri %]&mmtid=[% mmtid | uri %]&overlay_context=batchmod" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa-solid fa-eye"></i> Show MARC</a>
                                                         </td>
                                                     </tr>
                                                 [% END %]
@@ -213,7 +213,7 @@
                                 [% ELSE %]
                                     <div class="btn-toolbar selections-toolbar">
                                         <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
-                                        | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
+                                        | <a id="clearall" href="#"><i class="fa fa-times"></i> Clear all</a>
                                     </div>
                                     <div class="page-section">
                                         <table id="authorities" class="records">

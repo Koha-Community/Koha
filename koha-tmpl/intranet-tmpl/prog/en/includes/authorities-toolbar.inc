@@ -27,7 +27,7 @@
             [% IF ( CAN_user_editauthorities ) %]
                 <div class="btn-group">
                     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
+                        <i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li><a id="editAuth" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% authid | html %]">Edit record</a></li>

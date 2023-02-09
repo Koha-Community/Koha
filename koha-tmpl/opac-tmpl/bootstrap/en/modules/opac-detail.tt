@@ -156,9 +156,9 @@
                     [% END %]
 
                     <div id="views">
-                        <span class="view current-view"><span id="Normalview"><i class="fa fa-file-text-o" aria-hidden="true"></i> Normal view</span></span>
+                        <span class="view current-view"><span id="Normalview"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Normal view</span></span>
                         <span class="view">
-                            <a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-alt" aria-hidden="true"></i> MARC view</a>
+                            <a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-rectangle-list" aria-hidden="true"></i> MARC view</a>
                         </span>
                         [% IF ( ISBD ) %]
                             <span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</a></span>
@@ -333,10 +333,10 @@
 
                                 [% IF my_rating %]
                                     <span id="rating_value_text" class="rating_value_text">Your rating: [% my_rating.rating_value | html %].</span>
-                                    <span id="cancel_rating_text" class="cancel_rating_text"><a href="#" data-context="star_rating"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating.</a></span>
+                                    <span id="cancel_rating_text" class="cancel_rating_text"><a href="#" data-context="star_rating"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating.</a></span>
                                 [% ELSE %]
                                     <span id="rating_value_text" class="rating_value_text"></span>
-                                    <span id="cancel_rating_text" class="cancel_rating_text" style="display: none;"><a href="#" data-context="star_rating"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating.</a></span>
+                                    <span id="cancel_rating_text" class="cancel_rating_text" style="display: none;"><a href="#" data-context="star_rating"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating.</a></span>
                                 [% END %]
 
                                 <span id="rating_text" class="rating_text">Average rating: [% rating_avg | html %] ([% ratings.count | html %] votes)</span>
@@ -1004,7 +1004,7 @@
                                 [% ELSE %]
                                     <span><i class="fa fa-bars" aria-hidden="true"></i> Browse results</span>
                                 [% END %]
-                                <a href="#" class="close_pagination"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>
+                                <a href="#" class="close_pagination"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
                             </div>
 
                             <div class="pg_menu">
@@ -1067,7 +1067,7 @@
                                 </div> <!-- /.results-pagination -->
                             [% END # /IF ( listResults ) %]
                             <div class="pagination_footer">
-                                <a href="#" class="close_pagination"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>
+                                <a href="#" class="close_pagination"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
                             </div>
                         </div> <!-- /.nav_results -->
                     [% END # / IF OpacBrowseResults && busc %]
@@ -1095,7 +1095,7 @@
                             [% FOREACH network IN SocialNetworks.split(",") %]
                                 [% SWITCH network -%]
                                     [% CASE "facebook" -%]
-                                        <div><a id="facebook" href="https://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a></div>
+                                        <div><a id="facebook" href="https://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a></div>
                                     [% CASE "linkedin" -%]
                                         <div><a id="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a></div>
                                     [% CASE "email" -%]
@@ -1138,7 +1138,7 @@
                 </div>
                 <div class="modal-body">
                     <a href="#" class="check_all btn btn-link btn-sm"><i class="fa fa-check" aria-hidden="true"></i> Select all</a> <span class="sep">|</span>
-                    <a href="#" class="check_none btn btn-link btn-sm"><i class="fa fa-remove" aria-hidden="true"></i> Select none</a>
+                    <a href="#" class="check_none btn btn-link btn-sm"><i class="fa fa-times" aria-hidden="true"></i> Select none</a>
                     <ul id="termsList">
                     </ul>
                 </div>
@@ -1474,7 +1474,7 @@
         window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
         assetsPath: '[% interface | html %]/lib/emoji-picker/img/',
-        popupButtonClasses: 'fa fa-smile-o'
+        popupButtonClasses: 'fa-solid fa-face-smile'
         });
         window.emojiPicker.discover();
 

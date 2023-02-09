@@ -14,7 +14,7 @@
         <input type='hidden' name='public' value='[% public | html %]' />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
         <button type="submit" class="btn btn-link remove deleteshelf" data-shelfnumber="[% shelf.shelfnumber | html %]" data-shelfname="[% shelf.shelfname | html %]" data-shared="[% shelf.is_shared | html %]" data-count="[% contents.count | html %]">
-            <i class="fa fa-remove" aria-hidden="true"></i>
+            <i class="fa fa-times" aria-hidden="true"></i>
             [% IF ( context == "list" ) %]
                 Delete
             [% ELSE %]
@@ -267,7 +267,7 @@
                                                 <input type='hidden' name='public' value='[% public | html %]' />
                                                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                                 <button type="submit" class="btn btn-link remove remove_share" data-shelfname="[% shelf.shelfname | html %]" data-shelfnumber="[% shelf.shelfnumber | html %]">
-                                                    <i class="fa fa-remove" aria-hidden="true"></i> Remove share
+                                                    <i class="fa fa-times" aria-hidden="true"></i> Remove share
                                                 </button>
                                             </form>
                                         [% END # /IF can_manage_shelf %]
@@ -999,7 +999,7 @@ $(function() {
                 return false;
             }
         });
-        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-remove\" aria-hidden=\"true\"></i> "+_("Remove from list")+"</a>")
+        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-times\" aria-hidden=\"true\"></i> "+_("Remove from list")+"</a>")
         .click(function(){
             $("#myform").submit();
             return false;

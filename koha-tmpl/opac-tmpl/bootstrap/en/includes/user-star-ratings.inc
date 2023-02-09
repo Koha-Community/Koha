@@ -42,11 +42,11 @@
     [% IF item.my_rating %]
         <div>
             <span class="rating_value_text">Your rating: [% item.my_rating.rating_value | html %].</span>
-            <span class="cancel_rating_text js-show"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating</a>.</span>
+            <span class="cancel_rating_text js-show"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span>
         </div>
     [% ELSE %]
         <span class="rating_value_text"></span>
-        <span class="cancel_rating_text" style="display:none;"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating</a>.</span>
+        <span class="cancel_rating_text" style="display:none;"><a href="#" data-context="star_rating-[% item.itemnumber | html %]"><i class="fa fa-times" aria-hidden="true"></i> Cancel rating</a>.</span>
     [% END %]
 
     <div class="rating_text">Average rating: [% rating_avg | html %] ([% item.ratings.count | html %] votes)</div>

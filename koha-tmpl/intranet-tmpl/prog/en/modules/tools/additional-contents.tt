@@ -192,11 +192,11 @@
             </ul>
         </div>
         [% IF category == 'news' %]
-            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-remove"></i> Cancel</a>
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-times"></i> Cancel</a>
         [% ELSIF category == 'pages' %]
-            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages"><i class="fa fa-remove"></i> Cancel</a>
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages"><i class="fa fa-times"></i> Cancel</a>
         [% ELSE %]
-            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations"><i class="fa fa-remove"></i> Cancel</a>
+            <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations"><i class="fa fa-times"></i> Cancel</a>
         [% END %]
     </div>
 
@@ -409,7 +409,7 @@
                             [% END %]
                             <td>
                                 <div class="btn-group">
-                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
+                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa-solid fa-eye aria-hidden="true"></i> Preview content</a>
                                 </div>
                                 <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
                                     <div class="modal-dialog" role="document">
@@ -428,21 +428,21 @@
                             </td>
                             <td class="actions">
                                 <div class="btn-group dropup">
-                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil-alt"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
                                         <li>
                                             [% IF ( wysiwyg ) %]
-                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa fa-pencil"></i> Edit with text editor</a>
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa fa-pencil-alt"></i> Edit with text editor</a>
                                             [% ELSE %]
-                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil"></i> Edit with WYSIWYG editor</a>
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil-alt"></i> Edit with WYSIWYG editor</a>
                                             [% END %]
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="btn-group">
-                                    <a href="#" class="delete_news btn btn-default btn-xs" data-idnew="[% c.idnew | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                    <a href="#" class="delete_news btn btn-default btn-xs" data-idnew="[% c.idnew | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 </div>
                             </td>
                         </tr>

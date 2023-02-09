@@ -26,7 +26,7 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search contracts" href="#contract_description_search" aria-controls="contract_description_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-pencil-square-o"></i> <span class="tab-title">Search contracts</span></a>
+            <a title="Search contracts" href="#contract_description_search" aria-controls="contract_description_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-pen-to-square"></i> <span class="tab-title">Search contracts</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">

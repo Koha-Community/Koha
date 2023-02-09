@@ -77,7 +77,7 @@
                                     <label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="[% stdid | html %]" />
                                 </li>
                                 <li>
-                                    <a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a>
+                                    <a id="resetZ3950Search" href="#"><i class="fa fa-trash-can"></i> Clear search form</a>
                                 </li>
                             </ol>
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
@@ -90,7 +90,7 @@
                         <div id="z3950_search_targets">
                             <span class="z3950checks">
                                 <span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> |
-                                <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span>
+                                <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a></span>
                             </span>
                             [% FOREACH serverloo IN serverloop %]
                                 <p>
@@ -194,8 +194,8 @@
                                                     <div class="btn-group dropup">
                                                         <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a><button class="btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                                                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa fa-eye"></i> MARC preview</a></li>
-                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData" data-action="show_card"><i class="fa fa-eye"></i> Card preview</a></li>
+                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
+                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData" data-action="show_card"><i class="fa-solid fa-eye"></i> Card preview</a></li>
                                                             <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% breeding_loo.biblionumber | uri %]&z3950=1&frameworkcode=[% frameworkcode | uri %]&breedingid=[% breeding_loo.breedingid | uri %]" class="chosen" title="Import" data-action="import"><i class="fa fa-download"></i> Import</a></li>
                                                         </ul>
                                                     </div>

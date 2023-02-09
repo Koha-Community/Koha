@@ -12,7 +12,7 @@
     [% END %]
 
     [% IF Koha.Preference('UseRecalls') %]
-        <li><a class="recall btn btn-link btn-lg" href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark-o" aria-hidden="true"></i>
+        <li><a class="recall btn btn-link btn-lg" href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa-solid fa-fw fa-book-bookmark" aria-hidden="true"></i>
         Place recall</a></li>
     [% END %]
 
@@ -48,8 +48,8 @@
 
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Unhighlight</a>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Highlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil-alt" aria-hidden="true"></i> Unhighlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil-alt" aria-hidden="true"></i> Highlight</a>
     </li>
     [% END %]
 

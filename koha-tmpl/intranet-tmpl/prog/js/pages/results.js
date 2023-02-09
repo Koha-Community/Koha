@@ -359,7 +359,7 @@ function forgetPatronAndClub(){
     Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
     Cookies.remove("holdforclub", { path: '/', SameSite: 'Lax' });
     $(".holdforlink").remove();
-    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> " + __("Place hold") + "</a>");
+    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa-solid fa-bookmark\"></i> " + __("Place hold") + "</a>");
 }
 
 function browse_selection () {

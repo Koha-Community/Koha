@@ -18,7 +18,7 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&amp;budget_period_id=[% budget_period_id | uri %]">Edit budget [% budget_period_description | html %]</a></li>
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&amp;budget_period_id=[% budget_period_id | uri %]">Duplicate budget [% budget_period_description | html %]</a></li>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Planning <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Planning <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     [% IF ( CAN_user_acquisition_planning_manage ) %]
                     <li>

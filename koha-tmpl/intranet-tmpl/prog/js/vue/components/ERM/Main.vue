@@ -57,7 +57,7 @@
                                                     class="disabled"
                                                 >
                                                     <i
-                                                        class="fa fa-map-marker"
+                                                        class="fa-solid fa-location-dot"
                                                     ></i>
                                                     {{
                                                         $__("Local")
@@ -93,7 +93,7 @@
                                                             :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
                                                         >
                                                             <i
-                                                                class="fa fa-sort-alpha-asc"
+                                                                class="fa-solid fa-arrow-down-a-z"
                                                             ></i>
                                                             {{
                                                                 $__("Titles")

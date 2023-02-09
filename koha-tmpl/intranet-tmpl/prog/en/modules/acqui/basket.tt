@@ -77,13 +77,13 @@
                                         [% IF active %]
                                             <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                                         [% END %]
-                                        <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
+                                        <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa fa-pencil-alt"></i> Edit basket</a></div>
                                         [% IF CAN_user_acquisition_delete_baskets %]
-                                            <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete basket</a></div>
+                                            <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash-can"></i> Delete basket</a></div>
                                         [% END %]
                                         [% IF ( unclosable ) %]
                                         [% ELSIF ( uncertainprices ) %]
-                                            <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | uri %]&amp;owner=1" class="btn btn-default" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
+                                            <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | uri %]&amp;owner=1" class="btn btn-default" id="uncertpricesbutton"><i class="fa-solid fa-dollar-sign"></i> Uncertain prices</a></div>
                                             <div title="Can not close baskets that have items with uncertain prices in them." class="btn-group">
                                                 <a href="" class="btn btn-default disabled" id="closebutton"><i class="fa fa-times-circle"></i> Close basket</a>
                                             </div>
@@ -104,7 +104,7 @@
                                                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                     <input type="hidden" name="op" value="email" />
                                                     <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                                                    <button type="submit" class="btn btn-default" id="emailvendorbutton"><i class="fa fa-envelope"></i> E-mail order</button>
+                                                    <button type="submit" class="btn btn-default" id="emailvendorbutton"><i class="fa-solid fa-envelope"></i> E-mail order</button>
                                                 </form>
                                             </div>
                                         [% END %]
@@ -168,10 +168,10 @@
                                 <div id="toolbar" class="btn-toolbar">
                                     [% IF grouped %]
                                         <div title="Can not reopen baskets that are part of a basket group." class="btn-group">
-                                            <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen basket</a></div>
+                                            <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa-solid fa-rotate"></i> Reopen basket</a></div>
                                         </div>
                                     [% ELSE %]
-                                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen basket</a></div>
+                                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa-solid fa-rotate"></i> Reopen basket</a></div>
 
                                         [% PROCESS csv_export %]
                                     [% END %]
@@ -311,7 +311,7 @@
                                                                         [% FOREACH user IN users %]
                                                                             <li id="user_[% user.borrowernumber | html %]">
                                                                                 [% user.firstname | html %] [% user.surname | html %]
-                                                                                <a href="#" data-borrowernumber="[% user.borrowernumber | html %]" class="del_user"><i class="fa fa-trash"></i> Delete user</a>
+                                                                                <a href="#" data-borrowernumber="[% user.borrowernumber | html %]" class="del_user"><i class="fa fa-trash-can"></i> Delete user</a>
                                                                             </li>
                                                                         [% END %]
                                                                         <li>
@@ -332,10 +332,10 @@
                                                             <span class="label">Managing library:</span>
                                                             [% IF basketbranchcode %]
                                                                 [% Branches.GetName( basketbranchcode ) | html %]
-                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Change library</a>
+                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil-alt"></i> Change library</a>
                                                             [% ELSE %]
                                                                 No library
-                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil"></i> Set library</a>
+                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil-alt"></i> Set library</a>
                                                             [% END %]
                                                         </li> <!-- /#branch -->
                                                         [% IF branches_loop.size %]
@@ -389,10 +389,10 @@
                                                                             <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">
                                                                                 [% basketgroup.name | html %]
                                                                             </a>
-                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Change basket group</a>
+                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil-alt"></i> Change basket group</a>
                                                                         [% ELSE %]
                                                                             No group
-                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Set basket group</a>
+                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil-alt"></i> Set basket group</a>
                                                                         [% END %]
                                                                     [% END %]
                                                                 [% END %]
@@ -446,7 +446,7 @@
                                 [% IF ( duplinbatch ) %]
                                     <div class="dialog alert">
                                         <h4>Duplicate warning</h4>
-                                        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" style="margin-left:10px"><i class="fa fa-window-restore"></i> Display them</a></p>
+                                        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" style="margin-left:10px"><i class="fa-solid fa-window-restore"></i> Display them</a></p>
                                     </div>
                                 [% END %]
 
@@ -573,12 +573,12 @@
                                                                 [% END %]
                                                             </p>
                                                             [% IF ( books_loo.order_internalnote ) %]
-                                                                <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil"></i> Edit internal note</a></p>
+                                                                <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil-alt"></i> Edit internal note</a></p>
                                                             [% ELSE %]
                                                                 <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
                                                             [% END %]
                                                             [% IF ( books_loo.order_vendornote ) %]
-                                                                <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil"></i> Edit vendor note</a></p>
+                                                                <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil-alt"></i> Edit vendor note</a></p>
                                                             [% ELSE %]
                                                                 <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
                                                             [% END %]
@@ -647,7 +647,7 @@
                                                             [% books_loo.estimated_delivery_date | $KohaDates %]
                                                             [% IF CAN_user_acquisition_order_manage %]
                                                                     <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]" id="delivery_date_[% books_loo.ordernumber | html %]" data-delivery_date="[% books_loo.estimated_delivery_date | html %]">
-                                                                    <i class="fa fa-pencil"></i> Edit</a>
+                                                                    <i class="fa fa-pencil-alt"></i> Edit</a>
                                                             [% END %]
                                                         </td>
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
@@ -834,7 +834,7 @@
                             </form>
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                                <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
+                                <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-times"></i> No, don't close (N)</button>
                             </form>
                         </div>
                     [% END # /IF ( confirm_close ) %]
@@ -859,7 +859,7 @@
                             </form>
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                                <button type="submit" class="deny" accesskey="N"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
+                                <button type="submit" class="deny" accesskey="N"><i class="fa fa-fw fa-times"></i> No, don't close (N)</button>
                             </form>
                         </div> <!-- /#closebasket_needsconfirmation -->
                     [% END # /IF edi_confirm %]
@@ -1145,7 +1145,7 @@
                 ids.push(borrowernumber);
                 $("#users_ids").val(ids.join(':'));
                 var li = '<li id="user_'+borrowernumber+'">'+borrowername
-                + ' <a href="#" data-borrowernumber="'+borrowernumber+'" class="del_user"><i class="fa fa-trash"></i> '
+                + ' <a href="#" data-borrowernumber="'+borrowernumber+'" class="del_user"><i class="fa fa-trash-can"></i> '
                     + _("Delete user") + '</a></li>';
                 $("#users_names").prepend(li);
                 $("#add_user_submit").show();

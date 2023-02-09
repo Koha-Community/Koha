@@ -903,7 +903,7 @@
                                                             <input type="hidden" name="op" value="cancel">
                                                             <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
                                                             <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
-                                                            <button type="submit" name="submit" class="btn btn-sm btn-danger cancel_recall"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                                            <button type="submit" name="submit" class="btn btn-sm btn-danger cancel_recall"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                                         </form>
                                                     [% END %]
                                                 </td>
@@ -1012,7 +1012,7 @@
                                                             </td>
 
                                                             <td class="article-request-cancel">
-                                                                <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                                                <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                                             </td>
                                                             <td></td>
                                                         </tr>
@@ -1060,7 +1060,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
-                    <button data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-remove" aria-hidden="true"></i> Do not suspend</button>
+                    <button data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> Do not suspend</button>
                 </div>
             </form>
         </div> <!-- /.modal-content -->

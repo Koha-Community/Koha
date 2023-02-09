@@ -47,7 +47,7 @@
 
         [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
         <div class="dialog alert audio-alert-action">
-            Payment received: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a> <a type="button" data-toggle="modal" data-target="#emailReceiptModal" class="btn btn-default btn-xs"><i class="fa fa-envelope"></i> Email receipt</a>
+            Payment received: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a> <a type="button" data-toggle="modal" data-target="#emailReceiptModal" class="btn btn-default btn-xs"><i class="fa-solid fa-envelope"></i> Email receipt</a>
         </div>
         [% END %]
 
@@ -286,7 +286,7 @@
         defaultPrice.value,
         1,
         null,
-        '<button class="btn btn-default btn-xs drop" type="button"><i class="fa fa-trash"></i> ' + _("Remove") + '</button>',
+        '<button class="btn btn-default btn-xs drop" type="button"><i class="fa fa-trash-can"></i> ' + _("Remove") + '</button>',
         invoiceCode
         ]
       );

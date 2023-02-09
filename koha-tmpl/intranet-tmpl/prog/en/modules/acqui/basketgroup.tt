@@ -73,7 +73,7 @@
         $("#basketgroupcolumns").on("click", ".addtogroup", function(){
             const row = $("#" + $(this).data("basketid") );
             if( row ){
-                $(this).removeClass("addtogroup").addClass("removefromgroup").html("<i class=\"fa fa-trash\" aria-hidden=\"true\"></i> " + _("Remove") );
+                $(this).removeClass("addtogroup").addClass("removefromgroup").html("<i class=\"fa fa-trash-can\" aria-hidden=\"true\"></i> " + _("Remove") );
                 row.removeClass("ungrouped").addClass("grouped");
                 ungrouped.row( row ).remove().draw();
                 grouped.row.add( row ).draw();
@@ -290,7 +290,7 @@
                                                             [% IF ( closedbg ) %]
                                                             [% ELSE %]
                                                                 <a class="removefromgroup btn btn-default btn-xs" data-basketid="b-[% selectedbasket.basketno | html %]" id="addtogroup[% selectedbasket.basketno | html %]">
-                                                                    <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                                                                    <i class="fa fa-trash-can" aria-hidden="true"></i> Remove
                                                                 </a>
                                                             [% END %]
                                                         </td>

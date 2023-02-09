@@ -66,7 +66,7 @@
                         </form>
                         <form action="/cgi-bin/koha/serials/serials-collection.pl">
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-                            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
                 [% END # /IF delete %]
@@ -117,13 +117,13 @@
                                 [% UNLESS subscription.closed %]
                                     [% IF ( routing && CAN_user_serials_routing ) %]
                                         [% IF ( subscription.hasRouting ) %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-pencil"></i> Edit routing list</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-pencil-alt"></i> Edit routing list</a>
                                         [% ELSE %]
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;op=new"><i class="fa fa-plus"></i> Create routing list</a>
                                         [% END %]
                                     [% END %]
                                     [% IF ( subscription.abouttoexpire || subscription.subscriptionexpired) %]
-                                        <a class="btn btn-default btn-xs subscription_renew" data-subscriptionid="[% subscription.subscriptionid | html %]" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-refresh"></i> Renew</a>
+                                        <a class="btn btn-default btn-xs subscription_renew" data-subscriptionid="[% subscription.subscriptionid | html %]" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa-solid fa-rotate"></i> Renew</a>
                                     [% END %]
                                 [% ELSE %]
                                     &nbsp;

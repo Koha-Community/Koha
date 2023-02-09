@@ -60,7 +60,7 @@
 
             [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
-                <button id="pos_cashup" type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
+                <button id="pos_cashup" type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa-solid fa-money-bill-1"></i> Record cashup</button>
             </div>
             [% END %]
 
@@ -124,9 +124,9 @@
                                     <td></td>
                                     <td>
                                         [% IF CAN_user_cash_management_anonymous_refund && !(credit.debit.status == 'REFUNDED') && !(credit.debit.debit_type_code == 'PAYOUT') %]
-                                        <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                        <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa-solid fa-money-bill-1"></i> Issue refund</button>
                                         [% ELSIF CAN_user_updatecharges_refund && !(credit.debit.status == 'REFUNDED') && credit.debit.borrowernumber && !(credit.debit.debit_type_code == 'PAYOUT') %]
-                                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa-solid fa-money-bill-1"></i> Issue refund</button>
                                         [% END %]
                                     </td>
                                 </tr>
@@ -219,9 +219,9 @@
                                         <td></td>
                                         <td>
                                             [% IF CAN_user_cash_management_anonymous_refund && !(credit.debit.status == 'REFUNDED') && !(credit.debit.debit_type_code == 'PAYOUT') %]
-                                            <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                            <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa-solid fa-money-bill-1"></i> Issue refund</button>
                                             [% ELSIF CAN_user_updatecharges_refund && !(credit.debit.status == 'REFUNDED') && credit.debit.borrowernumber && !(credit.debit.debit_type_code == 'PAYOUT') %]
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-amountoutstanding="[% credit.debit.amountoutstanding | $Price %]" data-member="[% credit.debit.borrowernumber | html %]"><i class="fa-solid fa-money-bill-1"></i> Issue refund</button>
                                             [% END %]
                                         </td>
                                     </tr>
@@ -470,7 +470,7 @@
                 },
                 {
                     "data": function( row, type, val, meta ) {
-                        var result = '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-cashup="'+encodeURIComponent(row.cashup_id)+'" data-register="[% register.description | html %]" href="#cashupSummaryModal"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Summary")+'</a>\n';
+                        var result = '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-cashup="'+encodeURIComponent(row.cashup_id)+'" data-register="[% register.description | html %]" href="#cashupSummaryModal"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Summary")+'</a>\n';
                         return result;
                     },
                     "searchable": false,

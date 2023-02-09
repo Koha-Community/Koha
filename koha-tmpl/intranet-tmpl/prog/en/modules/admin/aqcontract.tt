@@ -154,7 +154,7 @@
                         <form action="/cgi-bin/koha/admin/aqcontract.pl" method="get">
                             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                             <input type="hidden" name="contractnumber" value="[% contractnumber | html %]" />
-                            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
             [% END %]
@@ -186,8 +186,8 @@
                                     <td>[% loo.contractstartdate | html %]</td>
                                     <td>[% loo.contractenddate | html %]</td>
                                     <td class="actions">
-                                        <a href="[% loo.script_name | url %]?op=add_form&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                        <a href="[% loo.script_name | url %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                        <a href="[% loo.script_name | url %]?op=add_form&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                        <a href="[% loo.script_name | url %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                             [% END %]

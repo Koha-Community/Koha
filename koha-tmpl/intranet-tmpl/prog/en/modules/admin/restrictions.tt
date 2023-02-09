@@ -174,9 +174,9 @@
                                 [% IF restriction.is_default %]Yes[% END %]
                             </td>
                             <td class="actions">
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
                                 [% IF !restriction.is_system && !restriction.is_default %]
-                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 [% END %]
                                 [% IF !restriction.is_system && !restriction.is_default %]
                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=make_default&amp;code=[% restriction.code | uri %]"><i class="fa fa-archive"></i> Make default</a>

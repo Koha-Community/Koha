@@ -65,7 +65,7 @@
                     <p>Are you sure you want to remove the selected rule(s)?</p>
 
                     <form action="/cgi-bin/koha/admin/marc-overlay-rules.pl" method="GET">
-                        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
+                        <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not remove</button>
                     </form>
                     <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
                 </div>
@@ -135,7 +135,7 @@
                                     </select>
                                 </th>
                                 <th><button class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
-                                <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
+                                <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash-can"></i> Delete selected</button></th>
                             </tr>
                         </tfoot>
                         [% END %]
@@ -235,8 +235,8 @@
                                     <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
                                     <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                                     <td class="actions">
-                                        <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
-                                        <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil-alt"></i> Edit</a>
                                     </td>
                                     <td>
                                         [% IF rule.removemarked %]

@@ -6,13 +6,13 @@
 
     [% IF ( colId ) %]
         <div class="btn-group">
-            <a class="btn btn-default" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% colId | html %]"><i class="fa fa-exchange"></i> Transfer</a>
+            <a class="btn btn-default" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% colId | html %]"><i class="fa-solid fa-right-left"></i> Transfer</a>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% colId | html %]"><i class="fa fa-pencil"></i> Edit</a>
+            <a class="btn btn-default" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% colId | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% colId | html %]"><i class="fa fa-trash"></i> Delete</a>
+            <a class="btn btn-default confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% colId | html %]"><i class="fa fa-trash-can"></i> Delete</a>
         </div>
     [% END %]
 </div>

@@ -34,7 +34,7 @@
                 </li>
                 <li class="nav-item">
                     <a id="sci_logout" href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1" class="nav-link logout">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i> Log out
+                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log out
                     </a>
                 </li>
             </ul>
