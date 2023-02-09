@@ -1517,7 +1517,7 @@ subtest 'Custom statuses' => sub {
 
     my $cat = Koha::AuthorisedValueCategories->search(
         {
-            category_name => 'ILLSTATUS'
+            category_name => 'ILL_STATUS_ALIAS'
         }
     );
 
@@ -1526,7 +1526,7 @@ subtest 'Custom statuses' => sub {
             {
                 class => 'Koha::AuthorisedValueCategory',
                 value => {
-                    category_name => 'ILLSTATUS'
+                    category_name => 'ILL_STATUS_ALIAS'
                 }
             }
         );
@@ -1536,12 +1536,12 @@ subtest 'Custom statuses' => sub {
         {
             class => 'Koha::AuthorisedValues',
             value => {
-                category => 'ILLSTATUS'
+                category => 'ILL_STATUS_ALIAS'
             }
         }
     );
 
-    is($av->category, 'ILLSTATUS',
+    is($av->category, 'ILL_STATUS_ALIAS',
        "Successfully created authorised value for custom status");
 
     my $ill_req = $builder->build_object(

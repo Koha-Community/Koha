@@ -422,7 +422,7 @@
                                         [% END %]
                                             [% request.capabilities.$stat.name | html %]
                                         </option>
-                                        [% FOREACH alias IN AuthorisedValues.Get('ILLSTATUS') %]
+                                        [% FOREACH alias IN AuthorisedValues.Get('ILL_STATUS_ALIAS') %]
                                             [% IF alias.authorised_value == current_alias %]
                                             <option value="[% alias.authorised_value | html %]" selected>
                                             [% ELSE %]
