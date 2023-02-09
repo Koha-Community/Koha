@@ -252,7 +252,7 @@ sub get_request_logs {
         $notice_hash->{$notice->{code}} = $notice;
     }
     # Populate a lookup table for status aliases
-    my $aliases = C4::Koha::GetAuthorisedValues('ILLSTATUS');
+    my $aliases = C4::Koha::GetAuthorisedValues('ILL_STATUS_ALIAS');
     my $alias_hash;
     foreach my $alias(@{$aliases}) {
         $alias_hash->{$alias->{authorised_value}} = $alias;

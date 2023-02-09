@@ -158,11 +158,11 @@ sub statusalias {
     my ( $self ) = @_;
     return unless $self->status_alias;
     # We can't know which result is the right one if there are multiple
-    # ILLSTATUS authorised values with the same authorised_value column value
+    # ILL_STATUS_ALIAS authorised values with the same authorised_value column value
     # so we just use the first
     return Koha::AuthorisedValues->search(
         {
-            category         => 'ILLSTATUS',
+            category         => 'ILL_STATUS_ALIAS',
             authorised_value => $self->SUPER::status_alias
         },
         {},
@@ -256,11 +256,11 @@ sub status_alias {
         return $ret;
     }
     # We can't know which result is the right one if there are multiple
-    # ILLSTATUS authorised values with the same authorised_value column value
+    # ILL_STATUS_ALIAS authorised values with the same authorised_value column value
     # so we just use the first
     my $alias = Koha::AuthorisedValues->search(
         {
-            category         => 'ILLSTATUS',
+            category         => 'ILL_STATUS_ALIAS',
             authorised_value => $self->SUPER::status_alias
         },
         {},
