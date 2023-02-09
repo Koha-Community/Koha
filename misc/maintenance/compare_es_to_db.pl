@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 #
 # This compares record counts from a Koha database to Elasticsearch
 
