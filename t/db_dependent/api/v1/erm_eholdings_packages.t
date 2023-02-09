@@ -182,8 +182,8 @@ subtest 'get() tests' => sub {
     # Return one EHoldings package with embed
     $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/packages/"
           . $ehpackage->package_id =>
-          { 'x-koha-embed' => 'resources,resources.package' } )->status_is(200)
-      ->json_is( { %{ $ehpackage->to_api }, resources => [] } );
+          { 'x-koha-embed' => 'resources+count' } )->status_is(200)
+      ->json_is( { %{ $ehpackage->to_api }, resources_count => 0 } );
 
     # Unauthorized access
     $t->get_ok(

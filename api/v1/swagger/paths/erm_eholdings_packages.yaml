@@ -69,8 +69,9 @@
         items:
           type: string
           enum:
-            - vendors
+            - vendor.name
             - resources+count
+            - resources
         collectionFormat: csv
     responses:
       200:
@@ -180,8 +181,10 @@
         items:
           type: string
           enum:
-            - agreements
-            - resources
+            - package_agreements
+            - package_agreements.agreement
+            - resources+count
+            - vendor
         collectionFormat: csv
     responses:
       200:
