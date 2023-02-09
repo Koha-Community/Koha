@@ -56,22 +56,11 @@ Patrons:
            class: integer
          - results per page in the staff interface.
      -
-         - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option in the patrons or circulation module:"
+         - "Pipe separated list defining the default fields to be used during a patron search using the \"standard\" option in the patrons or circulation module:"
          - pref: DefaultPatronSearchFields
-           multiple:
-             firstname: "First name"
-             middle_name: "Middle name"
-             surname: "Last name"
-             othernames: "Other names"
-             cardnumber: "Cardnumber"
-             userid: "Username"
-             email: "Primary email"
-             emailpro: "Secondary email"
-             phone: "Primary phone"
-             phonepro: "Secondary phone"
-             mobile: "Mobile phone"
-             smsalertnumber: "Secondary mobile phone"
-             zipcode: "ZIP/Postal code"
+           type: modalselect
+           source: borrowers
+           exclusions: anonymized|auth_method|autorenew_checkouts|date_renewed|dateenrolled|dateexpiry|lang|lastseen|login_attempts|overdrive_auth_token|password|password_expiration_date|primary_contact_method|gonenoaddress|lost|debarred|debarredcomment|branchcode|categorycode|flags|guarantorid|relationship|privacy|privacy_guarantor_checkouts|privacy_guarantor_fines|pronouns|secret|sms_provider_id|updated_on|checkprevcheckout
          - "If empty Koha will default to \"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
      -
          - pref: DefaultPatronSearchMethod
