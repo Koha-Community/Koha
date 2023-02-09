@@ -42,6 +42,8 @@
 
         const logged_in_user_lists = [% To.json(logged_in_user.virtualshelves.unblessed) | $raw %];
 
+        const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+
     </script>
 
     [% Asset.js("js/vue/dist/erm.js") | $raw %]

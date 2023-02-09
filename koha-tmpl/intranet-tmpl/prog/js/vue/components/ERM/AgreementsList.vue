@@ -17,6 +17,14 @@
                 :config="fp_config"
             />
 
+            <label for="by_mine_filter">{{ $__("Show mine only") }}:</label>
+            <input
+                type="checkbox"
+                id="by_mine_filter"
+                v-model="filters.by_mine"
+                @keyup.enter="filter_table"
+            />
+
             <input
                 @click="filter_table"
                 id="filter_table"
@@ -61,6 +69,7 @@ export default {
             table_id,
             setConfirmationDialog,
             setMessage,
+            logged_in_user,
         }
     },
     data: function () {
@@ -72,6 +81,7 @@ export default {
                 by_expired: this.$route.query.by_expired || false,
                 max_expiration_date:
                     this.$route.query.max_expiration_date || "",
+                by_mine: this.$route.query.by_mine || false,
             },
             before_route_entered: false,
             building_table: false,
@@ -178,7 +188,9 @@ export default {
             let datatable_url = this.datatable_url
             let default_search = this.$route.query.q
             let actions = this.before_route_entered ? "edit_delete" : "select"
+            let filters = this.filters
             let table_id = this.table_id
+            let logged_in_user = this.logged_in_user
 
             window["vendors"] = this.vendors.map(e => {
                 e["_id"] = e["id"]
@@ -203,11 +215,17 @@ export default {
                 { _id: 1, _str: _("Yes") },
             ]
 
+            let additional_filters = {
+                "user_roles.user_id": function () {
+                    return filters.by_mine ? logged_in_user.borrowernumber : ""
+                },
+            }
             const table = $("#" + table_id).kohaTable(
                 {
                     ajax: {
                         url: datatable_url,
                     },
+                    embed: ["user_roles"],
                     order: [[0, "asc"]],
                     autoWidth: false,
                     search: { search: default_search },
@@ -455,7 +473,8 @@ export default {
                     },
                 },
                 agreement_table_settings,
-                1
+                1,
+                additional_filters
             )
         },
     },
