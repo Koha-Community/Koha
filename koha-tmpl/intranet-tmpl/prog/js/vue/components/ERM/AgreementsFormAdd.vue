@@ -169,7 +169,7 @@
                 />
                 <Documents :documents="agreement.documents" />
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <ButtonSubmit />
                     <router-link
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
@@ -189,6 +189,7 @@ import UserRoles from "./UserRoles.vue"
 import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
+import ButtonSubmit from "../ButtonSubmit.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
@@ -405,6 +406,7 @@ export default {
         AgreementLicenses,
         AgreementRelationships,
         Documents,
+        ButtonSubmit,
     },
     name: "AgreementsFormAdd",
 }

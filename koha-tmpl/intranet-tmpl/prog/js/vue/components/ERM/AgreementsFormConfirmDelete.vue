@@ -18,11 +18,7 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <input
-                        type="submit"
-                        variant="primary"
-                        :value="$__('Yes, delete')"
-                    />
+                    <ButtonSubmit :text="$__('Yes, delete')"/>
                     <router-link
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
@@ -38,6 +34,7 @@
 <script>
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage } from "../../messages"
+import ButtonSubmit from "../ButtonSubmit.vue"
 
 export default {
     data() {
@@ -71,6 +68,9 @@ export default {
                 error => {}
             )
         },
+    },
+    components: {
+        ButtonSubmit,
     },
     name: "AgreementsFormConfirmDelete",
 }
