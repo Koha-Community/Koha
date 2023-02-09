@@ -871,10 +871,11 @@
                                         [% END %])
                                     </a>
                                 [% ELSE %]
+                                    [% no_claims = 0 %]
                                     <a href="#return-claims" id="return-claims-tab" aria-controls="return-claims" role="tab" data-toggle="tab">
                                         Claims
-                                        (<span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">0</span>
-                                        <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">0</span>)
+                                        (<span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% no_claims %]</span>
+                                        <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% no_claims %]</span>)
                                     </a>
                                 [% END %]
                             </li>
