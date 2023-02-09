@@ -24,6 +24,14 @@
         }
     }
 
+    function closeandprint(bg){
+        if(document.location = '/cgi-bin/koha/acqui/basketgroup.pl?op=closeandprint&amp;basketgroupid=' + bg ){
+            setTimeout("window.location.reload();", 3000);
+        } else {
+            alert(MSG_FILE_DOWNLOAD_ERROR);
+        }
+    }
+
     $(document).ready(function() {
         [% IF ( listclosed) %]
             $("#basket_groups a[href='#closed']").tab("show");
