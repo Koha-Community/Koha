@@ -251,6 +251,17 @@
         required: true
         type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - resources
+            - resources.package
+        collectionFormat: csv
     responses:
       200:
         description: An eHolding title
@@ -282,9 +293,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - resources
-      - resources.package
   put:
     x-mojo-to: ERM::EHoldings::Titles#update
     operationId: updateErmEHoldingsTitles
@@ -303,6 +311,17 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - resources
+            - resources.package
+        collectionFormat: csv
     responses:
       200:
         description: A successfully updated title
@@ -338,9 +357,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - resources
-      - resources.package
   delete:
     x-mojo-to: ERM::EHoldings::Titles#delete
     operationId: deleteErmEHoldingsTitles

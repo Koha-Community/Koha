@@ -61,6 +61,17 @@
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - vendors
+            - resources+count
+        collectionFormat: csv
     responses:
       200:
         description: A list of package
@@ -89,9 +100,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - vendors
-      - resources+count
   post:
     x-mojo-to: ERM::EHoldings::Packages#add
     operationId: addErmEHoldingsPackages
@@ -164,6 +172,17 @@
         required: true
         type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - agreements
+            - resources
+        collectionFormat: csv
     responses:
       200:
         description: A package
@@ -195,9 +214,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - agreements
-      - resources
   put:
     x-mojo-to: ERM::EHoldings::Packages#update
     operationId: updateErmEHoldingsPackages
@@ -216,6 +232,17 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - agreements
+            - resources
+        collectionFormat: csv
     responses:
       200:
         description: A successfully updated package
@@ -251,9 +278,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - agreements
-      - resources
   delete:
     x-mojo-to: ERM::EHoldings::Packages#delete
     operationId: deleteErmEHoldingsPackages

@@ -165,6 +165,25 @@
       - application/json
     parameters:
       - $ref: "../swagger.yaml#/parameters/agreement_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - periods
+            - user_roles
+            - user_roles.patron
+            - agreement_licenses
+            - agreement_licenses.license
+            - agreement_relationships
+            - agreement_relationships.agreement
+            - agreement_relationships.related_agreement
+            - documents
+            - packages
+        collectionFormat: csv
     responses:
       200:
         description: An agreement
@@ -196,17 +215,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - periods
-      - user_roles
-      - user_roles.patron
-      - agreement_licenses
-      - agreement_licenses.license
-      - agreement_relationships
-      - agreement_relationships.agreement
-      - agreement_relationships.related_agreement
-      - documents
-      - packages
   put:
     x-mojo-to: ERM::Agreements#update
     operationId: updateErmAgreements
@@ -225,7 +233,20 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/erm_agreement"
-
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - periods
+            - user_roles
+            - agreement_licenses
+            - agreement_relationships
+            - documents
+        collectionFormat: csv
     responses:
       200:
         description: A successfully updated agreement
@@ -265,12 +286,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - periods
-      - user_roles
-      - agreement_licenses
-      - agreement_relationships
-      - documents
   delete:
     x-mojo-to: ERM::Agreements#delete
     operationId: deleteErmAgreements

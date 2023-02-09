@@ -12,6 +12,16 @@
       description: Internal identifier for the parent bibliographic record
       required: true
       type: string
+    - name: x-koha-embed
+      in: header
+      required: false
+      description: Embed list sent as a request header
+      type: array
+      items:
+        type: string
+        enum:
+          - items
+      collectionFormat: csv
     - "$ref": "../swagger.yaml#/parameters/match"
     - "$ref": "../swagger.yaml#/parameters/order_by"
     - "$ref": "../swagger.yaml#/parameters/page"
@@ -47,8 +57,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "manage_item_groups"
-    x-koha-embed:
-    - items
   post:
     x-mojo-to: Biblios::ItemGroups#add
     operationId: addItemGroup
@@ -131,6 +139,16 @@
       description: Internal identifier for the item_group
       required: true
       type: string
+    - name: x-koha-embed
+      in: header
+      required: false
+      description: Embed list sent as a request header
+      type: array
+      items:
+        type: string
+        enum:
+          - items
+      collectionFormat: csv
     produces:
     - application/yaml
     responses:
@@ -154,8 +172,6 @@
         description: Under maintenance
         schema:
           "$ref": "../swagger.yaml#/definitions/error"
-    x-koha-embed:
-    - items
     x-koha-authorization:
       permissions:
         catalogue: "manage_item_groups"
@@ -190,6 +206,16 @@
             type: integer
             description: Position in waiting queue
         additionalProperties: false
+    - name: x-koha-embed
+      in: header
+      required: false
+      description: Embed list sent as a request header
+      type: array
+      items:
+        type: string
+        enum:
+          - items
+      collectionFormat: csv
     produces:
     - application/yaml
     responses:
@@ -224,8 +250,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "manage_item_groups"
-    x-koha-embed:
-    - items
   delete:
     x-mojo-to: Biblios::ItemGroups#delete
     operationId: deleteItemGroup
@@ -302,6 +326,16 @@
             type: integer
             description: Internal identifier for an item to be linked
         additionalProperties: false
+    - name: x-koha-embed
+      in: header
+      required: false
+      description: Embed list sent as a request header
+      type: array
+      items:
+        type: string
+        enum:
+          - items
+      collectionFormat: csv
     produces:
     - application/yaml
     responses:
@@ -334,8 +368,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "manage_item_groups"
-    x-koha-embed:
-    - items
 "/biblios/{biblio_id}/item_groups/{item_group_id}/items/{item_id}":
   delete:
     x-mojo-to: Biblios::ItemGroups::Items#delete
