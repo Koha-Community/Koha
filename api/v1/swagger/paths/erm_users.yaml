@@ -15,6 +15,16 @@
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - extended_attributes
+        collectionFormat: csv
     produces:
       - application/json
     responses:
@@ -46,6 +56,4 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - extended_attributes
 

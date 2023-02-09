@@ -235,8 +235,6 @@
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
-    x-koha-embed:
-        - renewer
 "/checkouts/{checkout_id}/allows_renewal":
   get:
     x-mojo-to: Checkouts#allows_renewal

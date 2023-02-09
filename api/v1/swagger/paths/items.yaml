@@ -221,6 +221,20 @@
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - biblio
+            - checkout
+            - return_claims
+            - return_claim
+            - return_claim.patron
+        collectionFormat: csv
     consumes:
       - application/json
     produces:
@@ -251,12 +265,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
-    x-koha-embed:
-      - biblio
-      - checkout
-      - return_claims
-      - return_claim
-      - return_claim.patron
 "/items/{item_id}/bundled_items/{bundled_item_id}":
   delete:
     x-mojo-to: Items#remove_from_bundle

@@ -150,6 +150,18 @@
       - application/json
     parameters:
       - $ref: "../swagger.yaml#/parameters/license_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - user_roles
+            - user_roles.patron
+            - documents
+        collectionFormat: csv
     responses:
       200:
         description: license
@@ -181,10 +193,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - user_roles
-      - user_roles.patron
-      - documents
   put:
     x-mojo-to: ERM::Licenses#update
     operationId: updateERMlicenses
@@ -203,7 +211,17 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/erm_license"
-
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - user_roles
+            - documents
+        collectionFormat: csv
     responses:
       200:
         description: a successfully updated license
@@ -243,9 +261,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-    x-koha-embed:
-      - user_roles
-      - documents
   delete:
     x-mojo-to: ERM::Licenses#delete
     operationId: deleteERMlicenses
