@@ -397,7 +397,7 @@ Acquisitions &rsaquo; Koha
             $("#batch_edit_form").on("submit", function(e){
                 var budget_value_will_be_reused = $("input[name='copy_existing_value'][value='budget_id']").is(':checked');
                 if ( ! budget_value_will_be_reused ) {
-                    if ($("#all_budget_id").find("option:selected").attr("value") == "" ) {
+                    if ($("#all_budget_id").find("option:selected").val() == "" ) {
                         alert(MSG_NO_FUND_SELECTED);
                         e.preventDefault();
                     }

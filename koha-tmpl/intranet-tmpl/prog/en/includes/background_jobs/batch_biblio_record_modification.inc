@@ -54,7 +54,7 @@
         $("#add_bibs_to_list").change(function(){
             var selected = $("#add_bibs_to_list").find("option:selected");
             if ( selected.attr("class") == "shelf" ){
-                var shelfnumber = selected.attr("value");
+                var shelfnumber = selected.val();
                 var bibs = new Array();
                 [% FOREACH message IN job.messages %]
                     [% IF message.code == 'biblio_modified' %]

@@ -774,24 +774,24 @@
         function cartList(){
             var checkboxes = $("#searchresults").find(":checkbox");
             var vshelf = vShelfAdd(checkboxes);
-            if($("#addto").find("option:selected").attr("value") == "addtolist"){
+            if($("#addto").find("option:selected").val() == "addtolist"){
                 var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
                 if (vshelf) {
                      openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf,'popup',500,500);
                 }
                 return false;
-            } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+            } else if($("#addto").find("option:selected").val() == "newlist"){
                 if (vshelf) {
                     openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf,'popup',500,500);
                 }
                 return false;
-            } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+            } else if($("#addto").find("option:selected").val() == "morelists"){
                 if (vshelf) {
                     openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf,'popup',500,500);
                 }
                 return false;
             }
-            if($("#addto").find("option:selected").attr("value") == "addtocart"){
+            if($("#addto").find("option:selected").val() == "addtocart"){
                 addMultiple(checkboxes);
                 return false;
             }

@@ -148,7 +148,7 @@ $(document).ready(function() {
             $(event.target).text( __("Testing...") ).prop('disabled', true);
             $.ajax({
                 data: {
-                    test: $('#test').attr("value")
+                    test: $('#test').val()
                 },
                 success: success_test_call // success_reject
             });
