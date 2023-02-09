@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 #
 # Copyright 2007 LibLime
 # Copyright 2018 Koha Development Team

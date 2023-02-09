@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 # Copyright 2006 SAN OUEST-PROVENCE et Paul POULAIN
 # Copyright 2015 Koha Development Team

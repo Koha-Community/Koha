@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 ## EXTRACTED USING THIS:
 # grep -Pnir "'notforloan' => '6'" 01_items0* | grep -Po "'id' => '-?(\d+)'" | grep -Po "\d+" > itemnumbers_notforloan_6.txt
