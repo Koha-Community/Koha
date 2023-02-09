@@ -42,10 +42,12 @@ GetOptions(
 my $commenter = Koha::Database::Commenter->new({ database => delete $cmd_args->{database}, dbh => C4::Context->dbh });
 if( $cmd_args->{help} ) {
     pod2usage( -verbose => 2 );
-} elsif( delete $cmd_args->{clear} ) { # clear overrules reset
+} elsif( ($cmd_args->{clear}||0) + ($cmd_args->{renumber}||0) + ($cmd_args->{reset}||0) > 1 ) {
+    print "You cannot pass the clear, renumber and reset flags together\n";
+} elsif( delete $cmd_args->{clear} ) {
     alert_dry_run( $cmd_args->{dry_run} );
     $commenter->clear( $cmd_args );
-} elsif( delete $cmd_args->{reset} ) { # reset overrules renumber
+} elsif( delete $cmd_args->{reset} ) {
     alert_dry_run( $cmd_args->{dry_run} );
     $commenter->reset_to_schema( $cmd_args );
 } elsif( delete $cmd_args->{renumber} ) {
@@ -106,8 +108,7 @@ misc/maintenance/sync_db_comments.pl
     The script is just a wrapper around the module Koha::Database::Commenter.
     A test script is provided in t/db_dependent/Koha/Database/Commenter.t.
 
-    The flags -clear, -reset and -renumber are mutually exclusive. Clear ignores
-    the other two, reset ignores renumber.
+    The flags -clear, -reset and -renumber are mutually exclusive.
 
     The renumber option has been helpful in verifying that the alter table
     operations work on the complete Koha database. It is not recommended to run
