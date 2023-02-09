@@ -1352,7 +1352,8 @@ subtest 'notify_library_of_registration()' => sub {
 };
 
 subtest 'get_savings tests' => sub {
-    plan tests => 2;
+
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -1364,6 +1365,13 @@ subtest 'get_savings tests' => sub {
     my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
     my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
     my $item2 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
+
+    is( $patron->get_savings, 0, 'No checkouts, no savings' );
+
+    # Add an old checkout with deleted itemnumber
+    $builder->build_object({ class => 'Koha::Old::Checkouts', value => { itemnumber => undef, borrowernumber => $patron->id } });
+
+    is( $patron->get_savings, 0, 'No checkouts with itemnumber, no savings' );
 
     AddIssue( $patron->unblessed, $item1->barcode );
     AddIssue( $patron->unblessed, $item2->barcode );

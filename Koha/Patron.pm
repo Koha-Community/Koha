@@ -2437,27 +2437,16 @@ Use the replacement price of patron's old and current issues to calculate how mu
 =cut
 
 sub get_savings {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $savings = 0;
+    my @itemnumbers = grep { defined $_ } ( $self->old_checkouts->get_column('itemnumber'), $self->checkouts->get_column('itemnumber') );
 
-    # get old checkouts
-    my @old_checkouts = $self->old_checkouts->as_list;
-    foreach my $old_checkout ( @old_checkouts ) {
-        if ( $old_checkout->item ) {
-            $savings += $old_checkout->item->replacementprice;
+    return Koha::Items->search(
+        { itemnumber => { -in => \@itemnumbers } },
+        {   select => [ { sum => 'me.replacementprice' } ],
+            as     => ['total_savings']
         }
-    }
-
-    # get current checkouts
-    my @checkouts = $self->checkouts->as_list;
-    foreach my $checkout ( @checkouts ) {
-        if ( $checkout->item ) {
-            $savings += $checkout->item->replacementprice;
-        }
-    }
-
-    return $savings;
+    )->next->get_column('total_savings') // 0;
 }
 
 =head2 Internal methods
