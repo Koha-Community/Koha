@@ -127,7 +127,7 @@
 [% MACRO jsinclude BLOCK %]
     <script>
         $(document).ready(function(){
-            var selectedUnit = $("#units option:selected").attr("value");
+            var selectedUnit = $("#units option:selected").val();
             var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
             $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
             $("#units").change(function(){

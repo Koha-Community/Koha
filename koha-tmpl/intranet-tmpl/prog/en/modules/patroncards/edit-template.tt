@@ -182,7 +182,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function(){
-            var selectedUnit = $("#units option:selected").attr("value");
+            var selectedUnit = $("#units option:selected").val();
             var unitfields = $("#page_height,#page_width,#card_width,#card_height,#top_margin,#left_margin,#col_gap,#row_gap");
             $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
             $("#units").change(function(){
