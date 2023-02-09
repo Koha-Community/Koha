@@ -336,7 +336,7 @@ $(document).ready(function() {
                         title += " " + oObj.part_number + " " + oObj.part_name;
 
                         if ( oObj.enumchron ) {
-                            title += " (" + oObj.enumchron.escapeHtml() + ")";
+                            title += " <span class='item_enumeration'>(" + oObj.enumchron.escapeHtml() + ")</span>";
                         }
 
                         title += "</a></span>";
