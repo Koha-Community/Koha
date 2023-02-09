@@ -175,6 +175,7 @@
                                             <li class="dateinsert">
                                                 <strong>To date: </strong>
                                                 <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" class="flatpickr" />
+                                                <div class="hint">This field only applies when holidays are added on a range.</div>
                                             </li>
                                             <li>
                                                 <label for="title">Title: </label>
@@ -578,7 +579,7 @@
 
         $(document).ready(function() {
 
-            $(".hint").hide();
+            $(".helptext + .hint").hide();
             $("#branch").change(function(){
                 changeBranch();
             });
@@ -606,7 +607,7 @@
             });
 
             $("a.helptext").click(function(){
-                $(this).parent().find(".hint").toggle(); return false;
+                $(this).parent().find(".helptext + .hint").toggle(); return false;
             });
 
             const dateofrange = document.querySelector("#dateofrange")._flatpickr;
