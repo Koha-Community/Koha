@@ -65,7 +65,7 @@
                     [% bookselleraddress4 | html %]
                 </p>
                 <p><strong>Phone: </strong>
-                    [% booksellerphone | html %] / Fax:
+                    [% booksellerphone | html %]
                 <dl>
                     [% FOREACH contact IN contacts %]
                         <dt><strong>Contact: </strong></dt>
@@ -85,9 +85,8 @@
             </div> <!-- /.page-section -->
         [% END %]
 
-        <h1>Orders with uncertain prices</h1>
-
         <div class="page-section">
+            <h2>Order lines with uncertain prices</h2>
             <form action="[% scriptname | html %]" method="post">
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 <label for="owner">Orders from:</label>
