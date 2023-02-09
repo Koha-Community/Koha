@@ -15,7 +15,7 @@ $(document).ready(function(){
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
     /* Inline edit/delete links */
-    var biblionumber = $("input[name='biblionumber']").attr("value");
+    var biblionumber = $("input[name='biblionumber']").val();
     $("tr.editable").each(function(){
         $(this).find("td:not(:first)").on('click', function(){
             var rowid = $(this).parent().attr("id");
