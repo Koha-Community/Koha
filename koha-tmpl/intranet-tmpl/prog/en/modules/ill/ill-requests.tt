@@ -594,10 +594,12 @@
                             <span class="fa fa-eye"></span>
                             Display supplier metadata
                         </a>
-                        <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
-                            <span class="fa fa-calendar"></span>
-                            ILL request log
-                        </a>
+                        [% IF Koha.Preference('IllLog') %]
+                            <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
+                                <span class="fa fa-calendar"></span>
+                                ILL request log
+                            </a>
+                        [% END %]
                     </div>
                     <div class="ill-view-panel panel panel-default">
                         <div class="panel-heading">
