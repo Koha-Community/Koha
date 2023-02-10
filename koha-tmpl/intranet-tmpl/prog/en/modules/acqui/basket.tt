@@ -386,14 +386,16 @@
                                                                     [% END %]
                                                                 [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
                                                                     [%- IF basketgroup.id -%]
-                                                                [% basketgroup.name | html %]
+                                                                        [% basketgroup.name | html %]
                                                                     [%- ELSE -%]
                                                                         <span>No group</span>
                                                                     [%- END -%]
                                                                 [% ELSE %]
                                                                     [% IF ( CAN_user_acquisition_group_manage ) %]
                                                                         [% IF ( basketgroup.id ) %]
-                                                                            [% basketgroup.name | html %]
+                                                                            <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">
+                                                                                [% basketgroup.name | html %]
+                                                                            </a>
                                                                             <a href="#" id="set_basket_group"><i class="fa fa-pencil"></i> Change basket group</a>
                                                                         [% ELSE %]
                                                                             No group
