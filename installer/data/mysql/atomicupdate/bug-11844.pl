@@ -13,5 +13,6 @@ return {
                 ADD COLUMN marcfield_mode ENUM('get', 'set') NOT NULL DEFAULT 'get' COMMENT 'mode of operation (get or set) for marcfield' AFTER marcfield
             });
         }
+        say $out "Added column 'additional_fields.marcfield";
     },
 };
