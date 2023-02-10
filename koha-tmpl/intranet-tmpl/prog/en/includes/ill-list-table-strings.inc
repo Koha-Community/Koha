@@ -1,7 +1,7 @@
 <!-- ill-list-table-strings.inc -->
 <script>
-    var ill_borrower_details = _("View borrower details");
-    var ill_biblio_details = _("View biblio details");
+    var ill_borrower_details = _("View patron details");
+    var ill_biblio_details = _("View bibliographic record");
     var ill_statuses = {
         new: _("New request"),
         req: _("Requested"),
