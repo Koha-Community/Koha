@@ -48,6 +48,9 @@
                     <li>
                         <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket">Manage order basket fields</a>
                     </li>
+                    <li>
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqorders">Manage order line fields</a>
+                    </li>
                 [% END %]
             </ul>
         [% END %]
