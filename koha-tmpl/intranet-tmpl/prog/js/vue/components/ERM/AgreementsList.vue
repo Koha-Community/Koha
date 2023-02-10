@@ -37,8 +37,8 @@
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
 import { inject, createVNode, render } from "vue"
+import { ERMAPIClient } from "../../fetch/erm-api-client.js"
 import { storeToRefs } from "pinia"
-import { fetchAgreements } from "../../fetch/erm.js"
 import { useDataTable, build_url } from "../../composables/datatables"
 
 export default {
@@ -93,7 +93,8 @@ export default {
     },
     methods: {
         async getAgreements() {
-            const agreements = await fetchAgreements()
+            const client = new ERMAPIClient()
+            const agreements = await client.agreements.getAll()
             this.agreements = agreements
             this.initialized = true
         },

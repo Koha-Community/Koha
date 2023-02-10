@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { fetchAgreement, checkError } from "../../fetch/erm.js"
+import { ERMAPIClient } from "../../fetch/erm-api-client.js"
 import { setMessage, setError } from "../../messages"
 
 export default {
@@ -53,35 +53,30 @@ export default {
     },
     methods: {
         async getAgreement(agreement_id) {
-            const agreement = await fetchAgreement(agreement_id)
-            this.agreement = agreement
-            this.initialized = true
+            const client = new ERMAPIClient()
+            try {
+                await client.agreements.get(agreement_id).then(data => {
+                    this.agreement = data
+                    this.initialized = true
+                })
+            } catch (err) {
+                setError(err.message || err.statusText)
+            }
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = "/api/v1/erm/agreements/" + this.agreement.agreement_id
-
-            const options = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(response => {
-                    if (response.status == 204) {
-                        setMessage(this.$__("Agreement deleted"))
-                        this.$router.push("/cgi-bin/koha/erm/agreements")
-                    } else {
-                        setError(response.message || response.statusText)
-                    }
-                })
-                .catch(error => {
-                    setError(error)
-                })
+            const client = new ERMAPIClient()
+            ;(async () => {
+                try {
+                    await client.agreements
+                        .delete(this.agreement.agreement_id)
+                        .then(setMessage(this.$__("Agreement deleted")))
+                    this.$router.push("/cgi-bin/koha/erm/agreements")
+                } catch (err) {
+                    setError(err)
+                }
+            })()
         },
     },
     name: "AgreementsFormConfirmDelete",
