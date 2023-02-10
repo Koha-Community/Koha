@@ -86,7 +86,8 @@
         <label for="searchfieldstype_filter">Search field:</label>
         <select name="searchfieldstype" id="searchfieldstype_filter">
     [% END %]
-        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' %]
+        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname|middle_name|surname|othernames|cardnumber|userid' %]
+        [% standard.replace('|', ',') %]
         [% SET full_address = 'streetnumber,streettype,address,address2,city,state,zipcode,country' %]
         [% SET all_emails = 'email,emailpro,B_email' %]
         [% SET all_phones = 'phone,phonepro,B_phone,altcontactphone,mobile' %]

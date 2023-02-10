@@ -69,7 +69,7 @@
 [% END %]
 
 <script>
-    var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
+    var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname|middle_name|surname|othernames|cardnumber|userid' | html %]";
     var defaultPatronSearchMethod = "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]";
     var extendedPatronAttributes = "[% Koha.Preference('ExtendedPatronAttributes') | html %]";
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';

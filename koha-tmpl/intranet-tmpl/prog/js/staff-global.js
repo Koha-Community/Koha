@@ -560,7 +560,7 @@ function buildPatronSearchQuery(term, options) {
     let pattern_subquery_and = [];
     patterns.forEach(function (pattern, i) {
             let pattern_subquery_or = [];
-            search_fields.split(',').forEach(function (field, i) {
+            search_fields.split('|').forEach(function (field, i) {
                 pattern_subquery_or.push(
                     { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
                 );
@@ -579,7 +579,7 @@ function buildPatronSearchQuery(term, options) {
 
     // Add full search term for each search field
     let term_subquery_or = [];
-    search_fields.split(',').forEach(function (field, i) {
+    search_fields.split('|').forEach(function (field, i) {
         term_subquery_or.push(
             { ["me." + field]: { 'like': leading_wildcard + term + '%' } }
         );
