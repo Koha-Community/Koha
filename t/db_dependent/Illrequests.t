@@ -29,7 +29,7 @@ use Koha::Patrons;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::MessageAttributes;
+use Koha::Patron::MessagePreference::Attributes;
 use Koha::Notice::Templates;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
@@ -1004,7 +1004,7 @@ subtest 'Helpers' => sub {
     is($illrq_obj->requires_moderation, 'CANCREQ', "requires_moderation: Yes.");
 
     #send_patron_notice
-    my $attr = Koha::MessageAttributes->find({ message_name => 'Ill_ready' });
+    my $attr = Koha::Patron::MessagePreference::Attributes->find({ message_name => 'Ill_ready' });
     C4::Members::Messaging::SetMessagingPreference({
         borrowernumber => $patron->{borrowernumber},
         message_attribute_id => $attr->message_attribute_id,
@@ -1024,7 +1024,7 @@ subtest 'Helpers' => sub {
     is($notice, 'ILL_PICKUP_READY' ,"Notice is correctly created");
 
     # ill update notice, passes additional text parameter
-    my $attr_update = Koha::MessageAttributes->find({ message_name => 'Ill_update' });
+    my $attr_update = Koha::Patron::MessagePreference::Attributes->find({ message_name => 'Ill_update' });
     C4::Members::Messaging::SetMessagingPreference({
         borrowernumber => $patron->{borrowernumber},
         message_attribute_id => $attr_update->message_attribute_id,
