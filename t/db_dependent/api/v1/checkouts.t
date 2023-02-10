@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 98;
+use Test::More tests => 99;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -182,10 +182,14 @@ my $expected_datedue = $date_due
     ->set_time_zone('local')
     ->add(days => 7)
     ->set(hour => 23, minute => 59, second => 0);
+
 $t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(201)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) )
   ->header_is(Location => "/api/v1/checkouts/" . $issue1->issue_id . "/renewal");
+
+my $renewal = $issue1->renewals->last;
+is( $renewal->renewal_type, 'Manual', 'Manual renewal recorded' );
 
 $t->get_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewals" )
   ->status_is(200)
