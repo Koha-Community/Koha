@@ -190,7 +190,7 @@ import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchAgreement, checkError } from "../../fetch/erm.js"
+import { ERMAPIClient } from "../../fetch/erm-api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -245,7 +245,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (to.params.agreement_id) {
-                vm.agreement = vm.getAgreement(to.params.agreement_id)
+                vm.getAgreement(to.params.agreement_id)
             } else {
                 vm.initialized = true
             }
@@ -253,9 +253,15 @@ export default {
     },
     methods: {
         async getAgreement(agreement_id) {
-            const agreement = await fetchAgreement(agreement_id)
-            this.agreement = agreement
-            this.initialized = true
+            const client = new ERMAPIClient()
+            try {
+                await client.agreements.get(agreement_id).then(data => {
+                    this.agreement = data
+                    this.initialized = true
+                })
+            } catch (err) {
+                setError(err.message || err.statusText)
+            }
         },
         checkForm(agreement) {
             let errors = []
@@ -326,18 +332,12 @@ export default {
 
             //let agreement= Object.assign( {} ,this.agreement); // copy
             let agreement = JSON.parse(JSON.stringify(this.agreement)) // copy
+            let agreement_id = agreement.agreement_id
 
             if (!this.checkForm(agreement)) {
                 return false
             }
 
-            let apiUrl = "/api/v1/erm/agreements"
-
-            let method = "POST"
-            if (agreement.agreement_id) {
-                method = "PUT"
-                apiUrl += "/" + agreement.agreement_id
-            }
             delete agreement.agreement_id
             delete agreement.vendor
             agreement.is_perpetual = agreement.is_perpetual ? true : false
@@ -375,30 +375,23 @@ export default {
 
             delete agreement.agreement_packages
 
-            const options = {
-                method: method,
-                body: JSON.stringify(agreement),
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(response => {
-                    if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage(this.$__("Agreement updated"))
-                    } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage(this.$__("Agreement created"))
+            const client = new ERMAPIClient()
+            ;(async () => {
+                try {
+                    if (agreement_id) {
+                        await client.agreements
+                            .update(agreement, agreement_id)
+                            .then(setMessage(this.$__("Agreement updated")))
                     } else {
-                        setError(response.message || response.statusText)
+                        await client.agreements
+                            .create(agreement)
+                            .then(setMessage(this.$__("Agreement created")))
                     }
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                    this.$router.push("/cgi-bin/koha/erm/agreements")
+                } catch (err) {
+                    setError(err.message || err.statusText)
+                }
+            })()
         },
         onStatusChanged(e) {
             if (e.authorised_value != "closed") {

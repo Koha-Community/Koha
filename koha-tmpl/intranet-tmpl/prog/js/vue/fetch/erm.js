@@ -1,20 +1,6 @@
 import { setError } from "../messages";
 
-export const fetchAgreement = function (agreement_id) {
-    if (!agreement_id) return;
-    const apiUrl = "/api/v1/erm/agreements/" + agreement_id;
-    return myFetch(apiUrl, {
-        headers: {
-            "x-koha-embed":
-                "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
-        },
-    });
-};
-
-export const fetchAgreements = function () {
-    const apiUrl = "/api/v1/erm/agreements?_per_page=-1";
-    return myFetch(apiUrl);
-};
+//TODO: all of these functions should be deleted and reimplemented in the components using ERMAPIClient
 
 export const fetchLicense = function (license_id) {
     if (!license_id) return;
