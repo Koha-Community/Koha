@@ -212,7 +212,7 @@ If record level hold, the optional itemtype of the item the patron is requesting
   default_value: 0
   is_nullable: 0
 
-Is the hpld placed at item level
+Is the hold placed at item level
 
 =head2 non_priority
 
@@ -456,8 +456,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vYS5THhVu6Sox6Luz4EJbg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-10 14:01:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NO6FSSL1Hw3wBRGG6B5BnQ
 
 __PACKAGE__->belongs_to(
   "item",
