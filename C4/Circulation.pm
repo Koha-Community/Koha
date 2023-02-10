@@ -3208,11 +3208,11 @@ sub AddRenewal {
         # Add renewal record
         my $renewal = Koha::Checkouts::Renewal->new(
             {
-                checkout_id => $issue->issue_id,
-                renewer_id  => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
-                seen        => $seen,
-                interface   => C4::Context->interface,
-                renewal_type => $renewal_type
+                checkout_id  => $issue->issue_id,
+                interface    => C4::Context->interface,
+                renewal_type => $renewal_type,
+                renewer_id   => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                seen         => $seen,
             }
         )->store();
 
