@@ -59,9 +59,9 @@
                 [% END %]
 
                 [% IF field.marcfield && field.marcfield_mode == 'get' %]
-                    This value will be filled with the [% field.marcfield | html %] subfield of the selected biblio.
+                    This value will be filled with the [% field.marcfield | html %] subfield of the selected bibliographic record.
                 [% ELSIF field.marcfield && field.marcfield_mode == 'set' %]
-                    This value will be saved to the [% field.marcfield | html %] subfield of the selected biblio.
+                    This value will be saved to the [% field.marcfield | html %] subfield of the selected bibliographic record.
                 [% END %]
             </li>
         [% END %]
