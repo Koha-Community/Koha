@@ -19,12 +19,12 @@
     [% FOREACH messaging_preference IN messaging_preferences %]
     [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
     [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
-    <tr>
-      <td>[% IF ( messaging_preference.Item_Due ) %]Item due
-          [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
-          [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
-          [% ELSIF ( messaging_preference.Hold_Reminder ) %]Hold reminder
-          [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
+    <tr id="[% messaging_preference.message_name _ "_message" | lower %]">
+      <td>[% IF ( messaging_preference.Item_Due ) %]<span>Item due</span>
+          [% ELSIF ( messaging_preference.Advance_Notice ) %]<span>Advance notice</span>
+          [% ELSIF ( messaging_preference.Hold_Filled ) %]<span>Hold filled</span>
+          [% ELSIF ( messaging_preference.Hold_Reminder ) %]<span>Hold reminder</span>
+          [% ELSIF ( messaging_preference.Item_Check_in ) %]<span>Item check-in</span>
           [% ELSIF ( messaging_preference.Item_Checkout ) %]
             [% IF Koha.Preference( 'RenewalSendNotice' ) %]
                 Item checkout and renewal
