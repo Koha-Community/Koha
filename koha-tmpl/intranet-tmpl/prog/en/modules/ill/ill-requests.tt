@@ -450,7 +450,7 @@
                                     <input name="price_paid" id="price_paid" type="text" value="[% request.price_paid | html %]">
                                 </li>
                                 <li class="req_id">
-                                    <label class="req_id">Request number:</label>
+                                    <label class="req_id">Request ID:</label>
                                     [% request.id_prefix _ request.illrequest_id | html %]
                                 </li>
                                 <li class="notesstaff">
@@ -667,7 +667,7 @@
                                         [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                     </li>
                                     <li class="req_id">
-                                        <span class="label req_id">Request number:</span>
+                                        <span class="label req_id">Request ID:</span>
                                         [% request.id_prefix _ request.illrequest_id | html %]
                                     </li>
                                     <li class="notesstaff">
