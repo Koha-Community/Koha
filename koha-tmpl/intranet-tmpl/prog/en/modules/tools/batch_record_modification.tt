@@ -269,8 +269,11 @@
                     [% ELSIF view == 'errors' %]
                         [% FOR error IN errors %]
                             [% IF error == 'no_template_defined' %]
-                                <div class="dialog alert">
-                                    No MARC modification template is defined. You have <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">to create</a> at least one template for using this tool.
+                                <div class="dialog message">
+                                    <p>No MARC modification template is defined. You have to create at least one template in order to use this tool.</p>
+                                    [% IF ( CAN_user_tools_marc_modification_templates ) %]
+                                        <a class="btn btn-default" href="/cgi-bin/koha/tools/marc_modification_templates.pl"><i class="fa fa-plus"></i> Create a new MARC modification template</a>
+                                    [% END %]
                                 </div>
                             [% END %]
                         [% END %]
