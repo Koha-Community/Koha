@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 21;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
@@ -23,6 +23,7 @@ my $dbh = C4::Context->dbh;
 isnt(C4::Languages::_get_themes(), undef, 'testing _get_themes doesnt return undef');
 
 ok(C4::Languages::_get_language_dirs(), 'test getting _get_language_dirs');
+
 
 my $result;
 warning_is { $result = C4::Languages::accept_language(); }
@@ -61,6 +62,16 @@ warnings_are { $translatedlanguages2 = C4::Languages::getTranslatedLanguages('op
 my @currentcheck2 = map { $_->{current} } @$translatedlanguages2;
 $onlyzeros = first { $_ != 0 } @currentcheck2;
 ok($onlyzeros, "There is a $onlyzeros\n");
+
+# Bug 32775
+my @languages = ('de-DE', 'en', 'en-NZ', 'mi-NZ');
+my @enabledlanguages = ('de-DE', 'en-NZ', 'mi-NZ');
+my $translatedlanguages3;
+$translatedlanguages3 = C4::Languages::_build_languages_arrayref(\@languages,'en',\@enabledlanguages);
+is( $translatedlanguages3->[0]->{rfc4646_subtag}, 'de-DE', '_build_languages_arrayref() returns first language of "de-DE"' );
+is( $translatedlanguages3->[1]->{rfc4646_subtag}, 'en', '_build_languages_arrayref() returns second language of "en"');
+is( $translatedlanguages3->[2]->{rfc4646_subtag}, 'mi-NZ', '_build_languages_arrayref() returns third language of "mi-NZ"');
+
 
 # Language Descriptions
 my $sth = $dbh->prepare("SELECT DISTINCT subtag,type,lang,description from language_descriptions;");
