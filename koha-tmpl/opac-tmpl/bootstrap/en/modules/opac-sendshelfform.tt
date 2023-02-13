@@ -31,13 +31,13 @@
                                 <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid | html %]">Back to lists</a></p>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/opac-sendshelf.pl" method="post" id="sendshelfform">
-                                    <legend><h1>Sending your list</h1></legend>
-                                    <fieldset>
+                                    <fieldset class="brief">
+                                        <legend><h1>Sending your list</h1></legend>
                                         <label for="email">Email address:</label>
-                                        <input type="text" id="email" name="email" size="43" class="focus" />
+                                        <input type="text" id="email" name="email" size="43" class="focus form-control" />
 
                                         <label for="comment">Comment:</label>
-                                        <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+                                        <textarea id="comment" name="comment" rows="4" cols="40" class="form-control"></textarea>
 
                                         <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
                                     </fieldset>
