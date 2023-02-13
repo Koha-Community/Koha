@@ -19,7 +19,7 @@
     [% FOREACH messaging_preference IN messaging_preferences %]
     [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
     [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
-    <tr id="[% messaging_preference.message_name _ "_message" | lower %]">
+    <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
       <td>[% IF ( messaging_preference.Item_Due ) %]<span>Item due</span>
           [% ELSIF ( messaging_preference.Advance_Notice ) %]<span>Advance notice</span>
           [% ELSIF ( messaging_preference.Hold_Filled ) %]<span>Hold filled</span>
