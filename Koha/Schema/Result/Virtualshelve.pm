@@ -237,5 +237,9 @@ __PACKAGE__->add_columns(
     '+allow_change_from_staff' => { is_boolean => 1 },
 );
 
+__PACKAGE__->add_columns(
+    '+allow_change_from_permitted_staff' => { is_boolean => 1 },
+);
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
