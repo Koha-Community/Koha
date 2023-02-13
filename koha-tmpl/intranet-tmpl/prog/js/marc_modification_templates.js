@@ -68,9 +68,10 @@ $(document).ready(function() {
         updateAllEvery();
     });
 
-    $("#new_action").on("click",function(e){
+    $(".new_action").on("click",function(e){
         e.preventDefault();
         cancelEditAction();
+        $("#no_defined_actions").hide();
         $("#add_action").show();
         $("#action").focus();
     });
@@ -350,6 +351,11 @@ function cancelEditAction() {
 
     document.getElementById('modaction_legend').innerHTML = window.modaction_legend_innerhtml;
     document.getElementById('action_submit').value = window.action_submit_value;
+
+    if( $("#template_actions").length < 1 ){
+        $("#no_defined_actions").show();
+    }
+
     $("#add_action").hide();
 }
 
