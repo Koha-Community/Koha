@@ -97,7 +97,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -132,6 +132,11 @@ subtest 'get() tests' => sub {
     $t->get_ok(
         "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )
       ->status_is(200)->json_is( $suggestion->to_api );
+
+    $suggestion->STATUS('FREDERIC')->store->discard_changes;
+
+    $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )->status_is(200)
+        ->json_is( $suggestion->to_api );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/suggestions/"
           . $suggestion->id )->status_is(403);
