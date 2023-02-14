@@ -26,7 +26,7 @@ use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
 
@@ -87,7 +87,7 @@ sub list {
 }
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my ( $vendor_id, $package_id ) = split '-',
@@ -119,7 +119,7 @@ sub get {
 }
 
 sub edit {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $body        = $c->validation->param('body');

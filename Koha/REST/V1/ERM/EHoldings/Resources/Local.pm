@@ -33,7 +33,7 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $package_id = $c->validation->param('package_id');
@@ -57,7 +57,7 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Resou
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $resource_id = $c->validation->param('resource_id');

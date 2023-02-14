@@ -34,7 +34,7 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $titles_set = Koha::ERM::EHoldings::Titles->new;
@@ -54,7 +54,7 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Title
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $title_id = $c->validation->param('title_id');
@@ -84,7 +84,7 @@ Controller function that handles adding a new Koha::ERM::EHoldings::Title object
 =cut
 
 sub add {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -150,7 +150,7 @@ Controller function that handles updating a Koha::ERM::EHoldings::Title object
 =cut
 
 sub update {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     my $title_id = $c->validation->param('title_id');
     my $title = Koha::ERM::EHoldings::Titles->find( $title_id );
@@ -217,7 +217,7 @@ sub update {
 =cut
 
 sub delete {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     my $title = Koha::ERM::EHoldings::Titles->find( $c->validation->param('title_id') );
     unless ($title) {
@@ -244,7 +244,7 @@ sub delete {
 =cut
 
 sub import_from_list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     my $body       = $c->validation->param('body');
     my $list_id    = $body->{list_id};
