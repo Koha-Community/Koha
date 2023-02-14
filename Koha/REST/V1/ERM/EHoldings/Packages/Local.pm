@@ -33,7 +33,7 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
     return try {
         my $packages_set =
           Koha::ERM::EHoldings::Packages->search( { 'me.external_id' => undef } );
@@ -50,7 +50,7 @@ sub list {
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $package_id = $c->validation->param('package_id');
@@ -81,7 +81,7 @@ Controller function that handles adding a new Koha::ERM::EHoldings::Package obje
 =cut
 
 sub add {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -147,7 +147,7 @@ Controller function that handles updating a Koha::ERM::EHoldings::Package object
 =cut
 
 sub update {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     my $package_id = $c->validation->param('package_id');
     my $package = Koha::ERM::EHoldings::Packages->find( $package_id );
@@ -217,7 +217,7 @@ sub update {
 =cut
 
 sub delete {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     my $package = Koha::ERM::EHoldings::Packages->find( $c->validation->param('package_id') );
     unless ($package) {

@@ -34,7 +34,7 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
 
@@ -114,7 +114,7 @@ sub list {
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $title_id = $c->validation->param('title_id');

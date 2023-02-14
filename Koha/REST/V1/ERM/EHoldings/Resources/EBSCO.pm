@@ -34,7 +34,7 @@ use Try::Tiny;
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
 
@@ -121,7 +121,7 @@ sub list {
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
@@ -177,7 +177,7 @@ sub get {
 =cut
 
 sub edit {
-    my $c = shift->openapi->valid_input or return;
+    my $c = shift or return;
 
     return try {
         my $body        = $c->validation->param('body');
