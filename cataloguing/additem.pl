@@ -268,6 +268,7 @@ if ($op eq "additem") {
     }
 
     # if autoBarcode is set to 'incremental', calculate barcode...
+    my $submitted_barcode = $item->barcode;
     if ( ! defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
         my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $item->barcode($barcode);
@@ -280,13 +281,16 @@ if ($op eq "additem") {
         my $template_is_shared  = $input->param('template_is_shared');
         my $replace_template_id = $input->param('replace_template_id');
 
+        my $contents = $item->unblessed;
+        $contents->{barcode} = $submitted_barcode; # Don't save the autobarcode in the template
+
         if ($replace_template_id) {
             my $template = Koha::Item::Templates->find($replace_template_id);
             $template->update(
                 {
                     id             => $replace_template_id,
                     is_shared      => $template_is_shared ? 1 : 0,
-                    contents       => $item->unblessed,
+                    contents       => $contents,
                 }
             ) if $template && (
                 $template->patron_id eq $loggedinuser
@@ -300,7 +304,7 @@ if ($op eq "additem") {
                     name      => $template_name,
                     patron_id => $loggedinuser,
                     is_shared => $template_is_shared ? 1 : 0,
-                    contents  => $item->unblessed,
+                    contents  => $contents,
                 }
             )->store();
         }
