@@ -325,13 +325,13 @@ OPAC:
             - pref: OPACResultsMaxItems
             - (available) individual items on the OPAC XSLT search results, and show no more than
             - pref: OPACResultsMaxItemsUnavailable
-            - "(unavailable) individual items for categories like Checked out, Damaged, On Hold, but only when you group them by branch.<br>"
+            - '(unavailable) individual items for categories like Checked out, Damaged, On hold, but only if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACResultsUnavailableGroupingBy">OPACResultsUnavailableGroupingBy</a> is set to "library and substatus".<br>'
             - Group unavailable items by
             - pref: OPACResultsUnavailableGroupingBy
               choices:
-                  branch: "branch and substatus"
+                  branch: "library and substatus"
                   substatus: "substatus only"
-                  branchonly: "branch only"
+                  branchonly: "library only"
             - ". (NOTE: For large consortia we recommend to group unavailable items by substatus, listing item counts only.)"
 
     Features:
