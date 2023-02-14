@@ -1,9 +1,9 @@
 import { setError } from "./messages";
 
-export const fetchAgreement = async function (agreement_id) {
+export const fetchAgreement = function (agreement_id) {
     if (!agreement_id) return;
     const apiUrl = "/api/v1/erm/agreements/" + agreement_id;
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed":
                 "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
@@ -11,42 +11,42 @@ export const fetchAgreement = async function (agreement_id) {
     });
 };
 
-export const fetchAgreements = async function () {
+export const fetchAgreements = function () {
     const apiUrl = "/api/v1/erm/agreements?_per_page=-1";
-    return await myFetch(apiUrl);
+    return myFetch(apiUrl);
 };
 
-export const fetchLicense = async function (license_id) {
+export const fetchLicense = function (license_id) {
     if (!license_id) return;
     const apiUrl = "/api/v1/erm/licenses/" + license_id;
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "user_roles,user_roles.patron,vendor,documents",
         },
     });
 };
 
-export const fetchLicenses = async function () {
+export const fetchLicenses = function () {
     const apiUrl = "/api/v1/erm/licenses?_per_page=-1";
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "vendor.name",
         },
     });
 };
 
-export const fetchPatron = async function (patron_id) {
+export const fetchPatron = function (patron_id) {
     if (!patron_id) return;
     const apiUrl = "/api/v1/patrons/" + patron_id;
-    return await myFetch(apiUrl);
+    return myFetch(apiUrl);
 };
 
-export const fetchVendors = async function () {
+export const fetchVendors = function () {
     const apiUrl = "/api/v1/acquisitions/vendors?_per_page=-1";
-    return await myFetch(apiUrl);
+    return myFetch(apiUrl);
 };
 
-const _createEditPackage = async function (method, erm_package) {
+const _createEditPackage = function (method, erm_package) {
     let apiUrl = "/api/v1/erm/eholdings/local/packages";
 
     if (method == "PUT") {
@@ -70,7 +70,7 @@ const _createEditPackage = async function (method, erm_package) {
         },
     };
 
-    return await myFetch(apiUrl, options, 1);
+    return myFetch(apiUrl, options, 1);
 };
 
 export const createPackage = function (erm_package) {
@@ -80,9 +80,9 @@ export const editPackage = function (erm_package) {
     return _createEditPackage("PUT", erm_package);
 };
 
-const _fetchPackage = async function (apiUrl, package_id) {
+const _fetchPackage = function (apiUrl, package_id) {
     if (!package_id) return;
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed":
                 "package_agreements,package_agreements.agreement,resources+count,vendor",
@@ -98,9 +98,8 @@ export const fetchEBSCOPackage = function (package_id) {
     return _fetchPackage(apiUrl, package_id);
 };
 
-export const _fetchPackages = async function (apiUrl) {
-    let packages;
-    return await myFetch(apiUrl, {
+export const _fetchPackages = function (apiUrl) {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "resources+count,vendor.name",
         },
@@ -115,7 +114,7 @@ export const fetchEBSCOPackages = function () {
     return _fetchPackages(apiUrl);
 };
 
-export const fetchLocalPackageCount = async function (filters) {
+export const fetchLocalPackageCount = function (filters) {
     const q = filters
         ? {
               "me.name": { like: "%" + filters.package_name + "%" },
@@ -131,12 +130,12 @@ export const fetchLocalPackageCount = async function (filters) {
         q: JSON.stringify(q),
     };
     var apiUrl = "/api/v1/erm/eholdings/local/packages";
-    return await myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
+    return myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
 };
 
-export const _fetchTitle = async function (apiUrl, title_id) {
+export const _fetchTitle = function (apiUrl, title_id) {
     if (!title_id) return;
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "resources,resources.package",
         },
@@ -151,7 +150,7 @@ export const fetchEBSCOTitle = function (title_id) {
     return _fetchTitle(apiUrl, title_id);
 };
 
-export const fetchLocalTitleCount = async function (filters) {
+export const fetchLocalTitleCount = function (filters) {
     const q = filters
         ? {
               ...(filters.publication_title
@@ -172,12 +171,12 @@ export const fetchLocalTitleCount = async function (filters) {
         ...(q ? { q: JSON.stringify(q) } : {}),
     };
     var apiUrl = "/api/v1/erm/eholdings/local/titles";
-    return await myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
+    return myFetchTotal(apiUrl + "?" + new URLSearchParams(params));
 };
 
-export const _fetchResource = async function (apiUrl, resource_id) {
+export const _fetchResource = function (apiUrl, resource_id) {
     if (!resource_id) return;
-    return await myFetch(apiUrl, {
+    return myFetch(apiUrl, {
         headers: {
             "x-koha-embed": "title,package,vendor",
         },
