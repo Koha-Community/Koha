@@ -177,7 +177,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
                             [% pref_ILLDefaultStaffEmail_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>[% END %]
-                            Default: [% pref_ILLDefaultStaffEmail_link | $KohaSpan %] system preference
+                            Default: [% pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ILLDefaultStaffEmail system preference
                         [% END %]
@@ -190,7 +190,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
                             [% pref_ReplyToDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>[% END %]
-                            Default: [% pref_ReplyToDefault_link | $KohaSpan %] system preference
+                            Default: [% pref_ReplyToDefault_link | $raw | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ReplyToDefault system preference
                         [% END %]
@@ -202,7 +202,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <div class="hint">
                          [% IF ( CAN_user_parameters_manage_sysprefs ) %]
                             [% pref_ReturnpathDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>[% END %]
-                            Default: [% pref_ReturnpathDefault_link | $KohaSpan %] system preference
+                            Default: [% pref_ReturnpathDefault_link | $raw | $KohaSpan %] system preference
                         [% ELSE %]
                             Default: ReturnpathDefault system preference
                         [% END %]
@@ -237,7 +237,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
                             [% pref_MARCOrgCode_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>[% END %]
-                            If not filled in defaults to system preference [% pref_MARCOrgCode_link | $KohaSpan %].
+                            If not filled in defaults to system preference [% pref_MARCOrgCode_link | $raw | $KohaSpan %].
                         [% ELSE %]
                             If not filled in defaults to system preference MARCOrgCode.
                         [% END %]
