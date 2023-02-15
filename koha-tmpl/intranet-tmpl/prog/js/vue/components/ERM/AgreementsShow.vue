@@ -300,7 +300,7 @@
 
 <script>
 import { inject } from "vue"
-import { ERMAPIClient } from "../../fetch/erm-api-client.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { setError } from "../../messages"
 
 export default {
@@ -347,7 +347,7 @@ export default {
     },
     methods: {
         async getAgreement(agreement_id) {
-            const client = new ERMAPIClient()
+            const client = APIClient.erm
             try {
                 await client.agreements.get(agreement_id).then(data => {
                     this.agreement = data

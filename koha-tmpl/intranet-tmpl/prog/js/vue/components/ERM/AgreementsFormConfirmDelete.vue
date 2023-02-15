@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ERMAPIClient } from "../../fetch/erm-api-client.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setError } from "../../messages"
 
 export default {
@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         async getAgreement(agreement_id) {
-            const client = new ERMAPIClient()
+            const client = APIClient.erm
             try {
                 await client.agreements.get(agreement_id).then(data => {
                     this.agreement = data
@@ -66,7 +66,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            const client = new ERMAPIClient()
+            const client = APIClient.erm
             ;(async () => {
                 try {
                     await client.agreements
