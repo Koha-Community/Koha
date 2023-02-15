@@ -26,6 +26,8 @@ use Pod::Usage qw( pod2usage );
 use C4::Context;
 use Koha::Database::Commenter;
 
+sub alert_dry_run { print "-- DRY RUN\n" if $_[0]->{dry_run}; }
+
 my $cmd_args = {};
 GetOptions(
   'clear'      => \$cmd_args->{clear},
@@ -40,24 +42,24 @@ GetOptions(
 $cmd_args->{dry_run} = !$cmd_args->{commit};
 
 my $commenter = Koha::Database::Commenter->new({ database => delete $cmd_args->{database}, dbh => C4::Context->dbh });
+my $messages = $cmd_args->{verbose} || $cmd_args->{dry_run} ? [] : undef;
 if( $cmd_args->{help} ) {
     pod2usage( -verbose => 2 );
 } elsif( ($cmd_args->{clear}||0) + ($cmd_args->{renumber}||0) + ($cmd_args->{reset}||0) > 1 ) {
     print "You cannot pass the clear, renumber and reset flags together\n";
 } elsif( delete $cmd_args->{clear} ) {
     alert_dry_run( $cmd_args );
-    $commenter->clear( $cmd_args );
+    $commenter->clear( $cmd_args, $messages );
 } elsif( delete $cmd_args->{reset} ) {
     alert_dry_run( $cmd_args );
-    $commenter->reset_to_schema( $cmd_args );
+    $commenter->reset_to_schema( $cmd_args, $messages );
 } elsif( delete $cmd_args->{renumber} ) {
     alert_dry_run( $cmd_args );
-    $commenter->renumber( $cmd_args );
+    $commenter->renumber( $cmd_args, $messages );
 } else {
     pod2usage( -verbose => 1 );
 }
-
-sub alert_dry_run { print "-- DRY RUN\n" if $_[0]->{dry_run}; }
+print join("\n", @$messages), "\n" if $messages && @$messages;
 
 __END__
 

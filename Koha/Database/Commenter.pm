@@ -54,22 +54,21 @@ Koha::Database::Commenter - Manage column comments in database
 =head2 new
 
     $mgr = Koha::Database::Commenter->new({
-        dbh => $dbh, database => $d, fh => $fh, schema_file => $s
+        dbh => $dbh, database => $d, schema_file => $s
     });
 
     Object constructor.
-    Param dbh is mandatory. Params database, fh and schema_file are
+    Param dbh is mandatory. Params database and schema_file are
     optional.
     Param database can be used to move away from current database of
     db handle.
-    Param fh can be used to redirect output.
     Param schema_file is needed for resetting to schema. Falls back to
     the constant for Koha structure file.
 
 =cut
 
 sub new {
-    my ( $class, $params ) = @_; # params: database, dbh, fh, schema_file
+    my ( $class, $params ) = @_; # params: database, dbh, schema_file
     my $self = bless $params // {}, $class;
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'dbh' ) unless $self->{dbh};
@@ -77,7 +76,6 @@ sub new {
         unless ref($self->{dbh}) eq DBI_HANDLE_CLASS;
 
     $self->{database} //= ( $self->{dbh}->selectrow_array('SELECT DATABASE()') )[0];
-    $self->{fh} //= *STDOUT;
     $self->{schema_file} //= KOHA_STRUCTURE;
     $self->{schema_info} = {};
 
@@ -86,68 +84,68 @@ sub new {
 
 =head2 clear
 
-    $object->clear({ dry_run => 0, table => $table, verbose => 0 });
+    $object->clear({ dry_run => 0, table => $table }, $messages );
 
     Clears all current column comments in storage.
     If table is passed, only that table is changed.
-    Dry run only prints sql statements.
+    Dry run only returns sql statements in $messages (arrayref).
 
 =cut
 
 sub clear {
-    my ( $self, $params ) = @_; # dry_run, table, verbose
+    my ( $self, $params, $messages ) = @_; # dry_run, table
     my $cols = $self->_fetch_stored_comments($params);
     foreach my $col ( @$cols ) {
         next if !$col->{column_comment};
         next if $params->{table} && $col->{table_name} ne $params->{table};
-        $self->_change_column( $col->{table_name}, $col->{column_name}, undef, $params ); # undef clears
+        $self->_change_column( $col->{table_name}, $col->{column_name}, undef, $params, $messages ); # undef clears
     }
 }
 
 =head2 reset_to_schema
 
-    $object->reset_to_schema({ dry_run => 0, table => $table, verbose => 0 });
+    $object->reset_to_schema({ dry_run => 0, table => $table }, $messages );
 
     Resets column comments in storage to schema definition.
     Other column comments are cleared.
     When you pass table, only that table is changed.
-    Dry run only prints sql statements.
+    Dry run only returns sql statements in $messages (arrayref).
 
 =cut
 
 sub reset_to_schema {
-    my ( $self, $params ) = @_; # dry_run, table, verbose
-    $self->clear($params);
+    my ( $self, $params, $messages ) = @_; # dry_run, table
+    $self->clear( $params, $messages );
     my $schema_comments = $self->_fetch_schema_comments;
     foreach my $table ( sort keys %$schema_comments ) {
         next if $params->{table} && $table ne $params->{table};
         foreach my $col ( sort keys %{$schema_comments->{$table}} ) {
-            $self->_change_column( $table, $col, $schema_comments->{$table}->{$col}, $params );
+            $self->_change_column( $table, $col, $schema_comments->{$table}->{$col}, $params, $messages );
         }
     }
 }
 
 =head2 renumber
 
-    $object->renumber({ dry_run => 0, table => $table, verbose => 0 });
+    $object->renumber({ dry_run => 0, table => $table }, $messages );
 
     This is primarily meant for testing purposes (verifying results across
     whole database).
     It adds comments like Comment_1, Comment_2 etc.
     When you pass table, only that table is changed. Otherwise all tables
     are affected; note that the column counter does not reset by table.
-    Dry run only prints sql statements.
+    Dry run only returns sql statements in $messages (arrayref).
 
 =cut
 
 sub renumber {
-    my ( $self, $params ) = @_; # dry_run, table, verbose
+    my ( $self, $params, $messages ) = @_; # dry_run, table
     my $cols = $self->_fetch_stored_comments($params);
     my $i = 0;
     foreach my $col ( @$cols ) {
         next if $params->{table} && $col->{table_name} ne $params->{table};
         $i++;
-        $self->_change_column( $col->{table_name}, $col->{column_name}, "Column_$i", $params );
+        $self->_change_column( $col->{table_name}, $col->{column_name}, "Column_$i", $params, $messages );
     }
 }
 
@@ -203,7 +201,7 @@ ORDER BY table_name, column_name|;
 sub _change_column {
 # NOTE: We do not want to use DBIx schema here, but we use stored structure,
 # since we only want to change comment not actual table structure.
-    my ( $self, $table_name, $column_name, $comment, $params ) = @_; # params: dry_run, verbose
+    my ( $self, $table_name, $column_name, $comment, $params, $messages ) = @_; # params: dry_run
     $params //= {};
 
     my $dbh = $self->{dbh};
@@ -239,18 +237,19 @@ sub _change_column {
     }
     $rv =~ s/\s+$//; # remove trailing spaces
 
-    # Print
+    # Dry run
     if( $params->{dry_run} ) {
-        print { $self->{fh} } "$rv;\n";
+        push @$messages, "$rv;" if $messages;
         return;
     }
+
     # Deploy
     eval { $dbh->do($rv) };
     if( $@ ) {
         warn "Failure for $table_name:$column_name";
-        print { $self->{fh} } "-- FAILED: $rv;\n";
-    } elsif( $params->{verbose} ) {
-        print { $self->{fh} } "$rv;\n";
+        push @$messages, "-- FAILED: $rv;" if $messages;
+    } else {
+        push @$messages, "$rv;" if $messages;
     }
 }
 

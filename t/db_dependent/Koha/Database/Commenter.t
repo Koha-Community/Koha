@@ -24,31 +24,29 @@ subtest '->new, dry_run' => sub {
 
     # Another exception: delete schema file and reset should raise exception
     my $filename = create_schema_file();
-    my $stdout;
-    open my $fh, '>', \$stdout;
-    $mgr = Koha::Database::Commenter->new({ dbh => $dbh, schema_file => $filename, fh => $fh });
+    $mgr = Koha::Database::Commenter->new({ dbh => $dbh, schema_file => $filename });
     unlink $filename;
     throws_ok { $mgr->reset_to_schema({ dry_run => 1, table => 'biblio' }) } 'Koha::Exceptions::FileNotFound', 'Schema deleted';
 
     # Clear comments for article_requests in dry run mode
-    $stdout = q{};
-    $mgr->clear({ table => 'article_requests', dry_run => 1 });
-    like( $stdout, qr/COLUMN `toc_request`.*DEFAULT 0;$/m, 'No comment for toc_request' );
+    my $messages = [];
+    $mgr->clear( { table => 'article_requests', dry_run => 1 }, $messages );
+    is( grep( { /COLUMN `toc_request`.*DEFAULT 0;$/m } @$messages ), 1, 'No comment for toc_request' );
 
     # Renumber this field in dry run mode
-    $stdout = q{};
-    $mgr->renumber({ table => 'article_requests', dry_run => 1 });
-    like( $stdout, qr/COLUMN `toc_request`.*COMMENT 'Column_\d+';$/m, 'Numbered comment for toc_request' );
+    $messages = [];
+    $mgr->renumber( { table => 'article_requests', dry_run => 1 }, $messages );
+    is( grep( { /COLUMN `toc_request`.*COMMENT 'Column_\d+';$/m } @$messages ), 1, 'Numbered comment for toc_request' );
 
     # Reset in dry run mode, first fix schema file again
     # Our fake schema contains only one column for article_requests now.
     $filename = create_schema_file();
-    $mgr = Koha::Database::Commenter->new({ dbh => $dbh, schema_file => $filename, fh => $fh });
-    $stdout = q{};
-    $mgr->reset_to_schema({ table => 'article_requests', dry_run => 1 });
+    $mgr = Koha::Database::Commenter->new({ dbh => $dbh, schema_file => $filename });
+    $messages = [];
+    $mgr->reset_to_schema( { table => 'article_requests', dry_run => 1 }, $messages );
     # We expect an ALTER clearing toc_request first, followed by an ALTER adding comment.
     # Note: This is based on the fair assumption that toc_request had a comment! This test could fail if it had not.
-    like( $stdout, qr/ALTER.*toc_request.*DEFAULT 0;(.*\n)+ALTER.*toc_request.*COMMENT.*$/m, 'Reset for one-columned article_requests' );
+    like( join("\n", @$messages), qr/ALTER.*toc_request.*DEFAULT 0;(.*\n)+ALTER.*toc_request.*COMMENT.*$/m, 'Reset for one-columned article_requests' );
 
     $schema->storage->txn_rollback;
 };
