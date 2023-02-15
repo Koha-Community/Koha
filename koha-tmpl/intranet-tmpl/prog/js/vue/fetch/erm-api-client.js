@@ -24,19 +24,16 @@ export class ERMAPIClient extends HttpClient {
             delete: (id) =>
                 this.delete({
                     endpoint: "agreements/" + id,
-                    headers: this.getDefaultJSONPayloadHeader(),
                 }),
             create: (agreement) =>
                 this.post({
                     endpoint: "agreements",
                     body: agreement,
-                    headers: this.getDefaultJSONPayloadHeader(),
                 }),
             update: (agreement, id) =>
                 this.put({
                     endpoint: "agreements/" + id,
                     body: agreement,
-                    headers: this.getDefaultJSONPayloadHeader(),
                 }),
             //count: () => this.count("agreements"), //TODO: Implement count method
         };
