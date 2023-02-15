@@ -35,7 +35,7 @@ export const useMainStore = defineStore("main", {
             }
             this.displayed_already = true;
         },
-        isSubmitting(){
+        submitting(){
             this.is_submitting = true;
         },
         submitted(){

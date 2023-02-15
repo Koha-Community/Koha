@@ -22,10 +22,10 @@ export const removeMessages = function () {
     const { removeMessages } = mainStore;
     removeMessages();
 };
-export const isSubmitting = function () {
+export const submitting = function () {
     const mainStore = useMainStore();
-    const { isSubmitting } = mainStore;
-    isSubmitting();
+    const { submitting } = mainStore;
+    submitting();
 };
 export const submitted = function () {
     const mainStore = useMainStore();

@@ -1,4 +1,4 @@
-import { setError, isSubmitting, submitted } from "../messages";
+import { setError, submitting, submitted } from "../messages";
 
 class HttpClient {
     constructor(options = {}) {
@@ -16,7 +16,7 @@ class HttpClient {
         mark_submitting = false,
     ) {
         let res, error;
-        if ( mark_submitting) isSubmitting()
+        if ( mark_submitting) submitting()
         await fetch(this._baseURL + endpoint, {
             ...options,
             headers: { ...this._headers, ...headers },
