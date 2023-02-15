@@ -251,6 +251,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
     }
 }
 
+my $active_currency = Koha::Acquisition::Currencies->get_active,
 my $details = GetInvoiceDetails($invoiceid);
 my $bookseller = Koha::Acquisition::Booksellers->find( $details->{booksellerid} );
 my @orders_loop = ();
@@ -283,7 +284,7 @@ foreach my $order (@$orders) {
     $total_tax_included += get_rounded_price($$line{total_tax_included});
 
     $line->{orderline} = $line->{parent_ordernumber};
-    $has_invoice_unitprice = 1 if defined $line->{invoice_unitprice};
+    $has_invoice_unitprice = 1 if $line->{invoice_currency} ne $active_currency->currency;
     push @orders_loop, $line;
 }
 
@@ -343,7 +344,7 @@ $template->param(
     total_tax_excluded_shipment => $total_tax_excluded + $shipmentcost,
     total_tax_included_shipment => $total_tax_included + $shipmentcost,
     invoiceincgst               => $bookseller->invoiceincgst,
-    currency                    => Koha::Acquisition::Currencies->get_active,
+    currency                    => $active_currency,
     budgets                     => $budget_loop,
     budget                      => GetBudget( $shipmentcost_budgetid ),
     has_invoice_unitprice       => $has_invoice_unitprice,
