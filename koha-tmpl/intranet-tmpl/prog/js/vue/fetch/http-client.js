@@ -8,13 +8,18 @@ class HttpClient {
         };
     }
 
-    async _fetchJSON(endpoint, headers = {}, options = {}) {
+    async _fetchJSON(
+        endpoint,
+        headers = {},
+        options = {},
+        return_response = false
+    ) {
         let res;
         await fetch(this._baseURL + endpoint, {
             ...options,
             headers: { ...this._headers, ...headers },
         })
-            .then(this.checkError)
+            .then((response) => this.checkError(response, return_response))
             .then(
                 (result) => {
                     res = result;
@@ -60,6 +65,21 @@ class HttpClient {
         });
     }
 
+    count(params = {}) {
+        let res;
+        this._fetchJSON(params.endpoint, params.headers, 1).then(
+            (response) => {
+                if (response) {
+                    res = response.headers.get("X-Total-Count");
+                }
+            },
+            (error) => {
+                setError(error.toString());
+            }
+        );
+        return res;
+    }
+
     checkError(response, return_response = 0) {
         if (response.status >= 200 && response.status <= 299) {
             return return_response ? response : response.json();
@@ -69,8 +89,6 @@ class HttpClient {
             throw Error("%s (%s)".format(response.statusText, response.status));
         }
     }
-
-    //TODO: Implement count method
 }
 
 export default HttpClient;
