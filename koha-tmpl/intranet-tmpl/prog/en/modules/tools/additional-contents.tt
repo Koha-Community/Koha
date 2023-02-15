@@ -256,6 +256,7 @@
                         [% END %]
                     </div>
                 </li>
+                [% UNLESS category == 'pages' %]
                 <li>
                     <label for="number">Appear in position: </label>
                     [% IF ( additional_content.number ) %]
@@ -264,6 +265,7 @@
                         <input id="number" size="3" name="number" type="text" />
                     [% END %]
                 </li>
+                [% END %]
             </ol>
         </fieldset>
 
