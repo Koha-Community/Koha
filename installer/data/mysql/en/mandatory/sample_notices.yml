@@ -2031,7 +2031,7 @@ tables:
             - ""
             - "<<borrowers.firstname>> <<borrowers.surname>>,"
             - ""
-            - "A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.branchcode>>. Please pick up your item by <<recalls.expirationdate>>."
+            - "A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.pickup_library_id>>. Please pick up your item by <<recalls.expiration_date>>."
             - ""
             - "Thank you!"
 
@@ -2056,8 +2056,8 @@ tables:
             - "<<biblio.title>> by <<biblio.author>>"
             - "Barcode: <<items.barcode>>"
             - "Callnumber: <<items.itemcallnumber>>"
-            - "Waiting since: <<recalls.waitingdate>>"
-            - "Notes: <<recalls.recallnotes>>"
+            - "Waiting since: <<recalls.waiting_date>>"
+            - "Notes: <<recalls.notes>>"
 
         - module: members
           code: 2FA_DISABLE
