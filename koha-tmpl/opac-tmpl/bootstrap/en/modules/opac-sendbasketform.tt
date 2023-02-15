@@ -28,12 +28,12 @@
 
                         [% ELSE %]
                             <form action="/cgi-bin/koha/opac-sendbasket.pl" method="post" id="sendbasketform">
-                                <legend><h1>Sending your cart</h1></legend>
-                                <fieldset>
+                                <fieldset class="brief">
+                                    <legend><h1>Sending your cart</h1></legend>
                                     <label for="email_add">Email address:</label>
-                                    <input type="text" id="email_add" name="email_add" size="43" class="focus" />
+                                    <input type="text" id="email_add" name="email_add" size="43" class="focus form-control" />
                                     <label for="comment">Comment:</label>
-                                    <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+                                    <textarea id="comment" name="comment" rows="4" cols="40" class="form-control"></textarea>
                                     <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
                                     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                                 </fieldset>
