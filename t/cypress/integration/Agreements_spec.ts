@@ -426,11 +426,16 @@ describe("Agreement CRUD operations", () => {
         cy.get("#related_agreement_0 #related_agreement_id_0 .vs__selected").contains("agreement name");
 
         // Submit the form, get 500
-        cy.intercept("PUT", "/api/v1/erm/agreements/*", {
-            statusCode: 500,
-            error: "Something went wrong",
+        cy.intercept("PUT", "/api/v1/erm/agreements/*", (req) => {
+            req.reply({
+                statusCode: 500,
+                error: "Something went wrong",
+                delay: 1000,
+            });
         });
         cy.get("#agreements_add").contains("Submit").click();
+        cy.get("main div[class='modal_centered']").contains("Submitting...");
+        cy.wait(1000);
         cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
