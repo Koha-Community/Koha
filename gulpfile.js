@@ -9,8 +9,7 @@ const os = require('os');
 const path = require('path');
 const util = require('util');
 
-const sass = require("gulp-sass");
-const cssnano = require("gulp-cssnano");
+const sass = require('gulp-sass')(require('sass'));
 const rtlcss = require('gulp-rtlcss');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
@@ -36,8 +35,6 @@ if (args.view == "opac") {
 }
 
 var sassOptions = {
-    errLogToConsole: true,
-    precision: 3,
     includePaths: [
         __dirname + '/node_modules',
         __dirname + '/../node_modules'
@@ -67,15 +64,13 @@ function css() {
     return stream;
 
 }
-
 // CSS processing for production
-function build() {
+function build(css_base) {
+    css_base = css_base || CSS_BASE;
+    sassOptions.outputStyle = "compressed";
     var stream = src(css_base + "/src/**/*.scss")
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(cssnano({
-            zindex: false
-        }))
         .pipe(dest(css_base));
 
     if( args.view == "opac" ){
