@@ -20,6 +20,7 @@ package Koha::Database::Commenter;
 use Modern::Perl;
 use File::Slurp qw(read_file);
 
+use C4::Context;
 use Koha::Exceptions;
 
 use constant KOHA_STRUCTURE => 'installer/data/mysql/kohastructure.sql';
@@ -76,7 +77,7 @@ sub new {
         unless ref($self->{dbh}) eq DBI_HANDLE_CLASS;
 
     $self->{database} //= ( $self->{dbh}->selectrow_array('SELECT DATABASE()') )[0];
-    $self->{schema_file} //= KOHA_STRUCTURE;
+    $self->_find_schema unless $self->{schema_file};
     $self->{schema_info} = {};
 
     return $self;
@@ -151,7 +152,19 @@ sub renumber {
 
 =head1 INTERNAL ROUTINES
 
+=head2 _find_schema
+
 =cut
+
+sub _find_schema {
+    my $self = shift;
+    my $rootdir = C4::Context->config('intranetdir');
+    if( -e "$rootdir/". KOHA_STRUCTURE ) {
+        $self->{schema_file} = "$rootdir/". KOHA_STRUCTURE;
+    } elsif( -e "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE ) {
+        $self->{schema_file} = "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE;
+    }
+}
 
 =head2 _fetch_schema_comments
 
@@ -161,7 +174,7 @@ sub _fetch_schema_comments {
 # Wish we had a DBIC function for this, showing comments too ;) Now using kohastructure as source of truth.
     my ( $self ) = @_;
     my $file = $self->{schema_file};
-    Koha::Exceptions::FileNotFound->throw( filename => $file ) unless -e $file;
+    Koha::Exceptions::FileNotFound->throw( filename => $file ) unless $file && -e $file;
 
     return $self->{schema_info} if keys %{$self->{schema_info}};
 

@@ -36,12 +36,15 @@ GetOptions(
   'help|h'     => \$cmd_args->{help},
   'renumber'   => \$cmd_args->{renumber},
   'reset'      => \$cmd_args->{reset},
+  'schema:s'   => \$cmd_args->{schema},
   'table:s'    => \$cmd_args->{table},
   'verbose|v'  => \$cmd_args->{verbose},
 );
 $cmd_args->{dry_run} = !$cmd_args->{commit};
 
-my $commenter = Koha::Database::Commenter->new({ database => delete $cmd_args->{database}, dbh => C4::Context->dbh });
+my $commenter = Koha::Database::Commenter->new({
+    database => delete $cmd_args->{database}, dbh => C4::Context->dbh, schema_file => delete $cmd_args->{schema},
+});
 my $messages = $cmd_args->{verbose} || $cmd_args->{dry_run} ? [] : undef;
 if( $cmd_args->{help} ) {
     pod2usage( -verbose => 2 );
@@ -71,7 +74,7 @@ misc/maintenance/sync_db_comments.pl
 
 =head1 SYNOPSIS
 
-    perl sync_db_comments.pl [-h] [-v] [-database DB_NAME] [-table TABLE_NAME] [-commit] [-clear|-reset|-renumber]
+    perl sync_db_comments.pl [-h] [-v] [-schema FILE ] [-database DB_NAME] [-table TABLE_NAME] [-commit] [-clear|-reset|-renumber]
 
 =head1 DESCRIPTION
 
