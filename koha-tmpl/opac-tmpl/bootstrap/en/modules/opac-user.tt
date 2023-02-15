@@ -1292,6 +1292,10 @@
                 $("#addNoteTitle").text("");
                 $("#addNote").val("");
             });
+
+            $(".dismiss-message-button").click(function(e){
+                return confirmDelete(_("Are you sure you want to dismiss this message?"));
+            });
         });
 
         function submitNote( title, issue_id, note ){

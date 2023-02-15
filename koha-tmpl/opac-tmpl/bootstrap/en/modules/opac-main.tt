@@ -283,19 +283,19 @@
                                             </a>
                                         </li>
                                     [% END %]
-                                    [% IF patron_messages && patron_messages.count > 0 || opacnote %]
+                                    [% IF patron_messages && patron_messages.filter_by_unread.count > 0 || opacnote %]
                                         [% IF opacnote %]
                                             <li>
                                                 <a href="/cgi-bin/koha/opac-user.pl">
-                                                    <span class="count_label">[% patron_messages.count + 1 | html %]</span>
-                                                    [% tn('message', 'messages', patron_messages.count + 1 ) | html %]
+                                                    <span class="count_label">[% patron_messages.filter_by_unread.count + 1 | html %]</span>
+                                                    [% tn('message', 'messages', patron_messages.filter_by_unread.count + 1 ) | html %]
                                                 </a>
                                             </li>
                                         [% ELSE %]
                                             <li>
                                                 <a href="/cgi-bin/koha/opac-user.pl">
-                                                    <span class="count_label">[% patron_messages.count | html %]</span>
-                                                    [% tn('message', 'messages', patron_messages.count ) | html %]
+                                                    <span class="count_label">[% patron_messages.filter_by_unread.count | html %]</span>
+                                                    [% tn('message', 'messages', patron_messages.filter_by_unread.count ) | html %]
                                                 </a>
                                             </li>
                                         [% END %]

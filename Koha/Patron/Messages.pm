@@ -34,6 +34,25 @@ Koha::Patron::Messages - Koha Message Object set class
 
 =cut
 
+=head3 filter_by_unread
+
+    Returns a resultset of messages that have not been marked read by the patron
+
+=cut
+
+sub filter_by_unread {
+    my ( $self, $params ) = @_;
+
+    $params ||= {};
+
+    return $self->search(
+        {
+            patron_read_date => { is => undef },
+            %$params,
+        }
+    );
+}
+
 =head3 _type
 
 =cut
@@ -41,6 +60,10 @@ Koha::Patron::Messages - Koha Message Object set class
 sub _type {
     return 'Message';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Patron::Message';
