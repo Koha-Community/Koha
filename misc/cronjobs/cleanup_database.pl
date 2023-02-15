@@ -29,6 +29,7 @@ use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
 use constant DEFAULT_JOBS_PURGEDAYS               => 1;
 use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
+use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
 
 use Koha::Script -cron;
 use C4::Context;
@@ -49,10 +50,11 @@ use Koha::Item::Transfers;
 use Koha::PseudonymizedTransactions;
 use Koha::Patron::Messages;
 use Koha::Patron::Debarments qw( DelDebarment );
+use Koha::Database;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS] [--bg-days DAYS [--bg-type TYPE] ]
+Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS] [--bg-days DAYS [--bg-type TYPE] ] [--edifact-messages DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -114,6 +116,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
    --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
+   --edifact-messages DAYS   Purge entries from edifact_messages table older than DAYS days.
+                             Defaults to 365 days if no days specified.
 USAGE
     exit $_[0];
 }
@@ -158,51 +162,53 @@ my @preserve_logs;
 my $jobs_days;
 my @jobs_types;
 my $reports;
+my $edifact_msg_days;
 
 my $command_line_options = join(" ",@ARGV);
 
 GetOptions(
-    'h|help'            => \$help,
-    'confirm'           => \$confirm,
-    'sessions'          => \$sessions,
-    'sessdays:i'        => \$sess_days,
-    'v|verbose'         => \$verbose,
-    'm|mail:i'          => \$mail,
-    'zebraqueue:i'      => \$zebraqueue_days,
-    'merged'            => \$purge_merged,
-    'import:i'          => \$pImport,
-    'z3950'             => \$pZ3950,
-    'logs:i'            => \$pLogs,
-    'log-module:s'      => \@log_modules,
-    'preserve-log:s'    => \@preserve_logs,
-    'messages:i'        => \$pMessages,
-    'fees:i'            => \$fees_days,
-    'searchhistory:i'   => \$pSearchhistory,
-    'list-invites:i'    => \$pListShareInvites,
-    'restrictions:i'    => \$pDebarments,
-    'all-restrictions'  => \$allDebarments,
-    'del-exp-selfreg'   => \$pExpSelfReg,
-    'del-unv-selfreg:i' => \$pUnvSelfReg,
-    'unique-holidays:i' => \$special_holidays_days,
-    'temp-uploads'      => \$temp_uploads,
-    'temp-uploads-days:i' => \$temp_uploads_days,
-    'uploads-missing:i' => \$uploads_missing,
-    'oauth-tokens'      => \$oauth_tokens,
-    'statistics:i'      => \$pStatistics,
-    'deleted-catalog:i' => \$pDeletedCatalog,
-    'deleted-patrons:i' => \$pDeletedPatrons,
-    'old-issues:i'      => \$pOldIssues,
-    'old-reserves:i'    => \$pOldReserves,
-    'transfers:i'       => \$pTransfers,
+    'h|help'                     => \$help,
+    'confirm'                    => \$confirm,
+    'sessions'                   => \$sessions,
+    'sessdays:i'                 => \$sess_days,
+    'v|verbose'                  => \$verbose,
+    'm|mail:i'                   => \$mail,
+    'zebraqueue:i'               => \$zebraqueue_days,
+    'merged'                     => \$purge_merged,
+    'import:i'                   => \$pImport,
+    'z3950'                      => \$pZ3950,
+    'logs:i'                     => \$pLogs,
+    'log-module:s'               => \@log_modules,
+    'preserve-log:s'             => \@preserve_logs,
+    'messages:i'                 => \$pMessages,
+    'fees:i'                     => \$fees_days,
+    'searchhistory:i'            => \$pSearchhistory,
+    'list-invites:i'             => \$pListShareInvites,
+    'restrictions:i'             => \$pDebarments,
+    'all-restrictions'           => \$allDebarments,
+    'del-exp-selfreg'            => \$pExpSelfReg,
+    'del-unv-selfreg:i'          => \$pUnvSelfReg,
+    'unique-holidays:i'          => \$special_holidays_days,
+    'temp-uploads'               => \$temp_uploads,
+    'temp-uploads-days:i'        => \$temp_uploads_days,
+    'uploads-missing:i'          => \$uploads_missing,
+    'oauth-tokens'               => \$oauth_tokens,
+    'statistics:i'               => \$pStatistics,
+    'deleted-catalog:i'          => \$pDeletedCatalog,
+    'deleted-patrons:i'          => \$pDeletedPatrons,
+    'old-issues:i'               => \$pOldIssues,
+    'old-reserves:i'             => \$pOldReserves,
+    'transfers:i'                => \$pTransfers,
     'pseudo-transactions:i'      => \$pPseudoTransactions,
     'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
-    'labels'            => \$labels,
-    'cards'             => \$cards,
-    'return-claims'     => \$return_claims,
-    'jobs-type:s'       => \@jobs_types,
-    'jobs-days:i'       => \$jobs_days,
-    'reports:i'           => \$reports,
+    'labels'                     => \$labels,
+    'cards'                      => \$cards,
+    'return-claims'              => \$return_claims,
+    'jobs-type:s'                => \@jobs_types,
+    'jobs-days:i'                => \$jobs_days,
+    'reports:i'                  => \$reports,
+    'edifact-messages:i'         => \$edifact_msg_days,
 ) || usage(1);
 
 # Use default values
@@ -217,6 +223,7 @@ $pDebarments       = DEFAULT_DEBARMENTS_PURGEDAYS         if defined($pDebarment
 $pMessages         = DEFAULT_MESSAGES_PURGEDAYS           if defined($pMessages)         && $pMessages == 0;
 $jobs_days         = DEFAULT_JOBS_PURGEDAYS               if defined($jobs_days)         && $jobs_days == 0;
 @jobs_types        = (DEFAULT_JOBS_PURGETYPES)            if $jobs_days                  && @jobs_types == 0;
+$edifact_msg_days  = DEFAULT_EDIFACT_MSG_PURGEDAYS        if defined($edifact_msg_days)  && $edifact_msg_days == 0;
 
 if ($help) {
     usage(0);
@@ -256,6 +263,7 @@ unless ( $sessions
     || $return_claims
     || $jobs_days
     || $reports
+    || $edifact_msg_days
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -725,6 +733,16 @@ if ($reports) {
     }
 }
 
+if($edifact_msg_days) {
+    print "Purging edifact messages older than $edifact_msg_days days.\n" if $verbose;
+    my $count = PurgeEdifactMessages($edifact_msg_days, $confirm);
+    if ( $verbose ) {
+        say $confirm
+          ? sprintf( "Done with purging %d edifact messages", $count )
+          : sprintf( "%d edifact messages would have been removed", $count );
+    }
+}
+
 cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);
@@ -871,4 +889,27 @@ sub PurgeSavedReports {
             WHERE date(date_run) < DATE_SUB(CURDATE(),INTERVAL ? DAY );
         });
     $sth->execute( $reports );
+}
+
+sub PurgeEdifactMessages {
+    my ( $days, $doit ) = @_;
+
+    my $count = 0;
+    my $schema = Koha::Database->new()->schema();
+
+    $sth = $dbh->prepare(
+        q{
+            SELECT id
+            FROM edifact_messages
+            WHERE transfer_date < date_sub(curdate(), INTERVAL ? DAY)
+        }
+    );
+    $sth->execute($days) or die $dbh->errstr;
+
+    while ( my ($msg_id) = $sth->fetchrow_array) {
+        my $msg = $schema->resultset('EdifactMessage')->find($msg_id);
+        $msg->delete if $doit;
+        $count++;
+    }
+    return $count;
 }
