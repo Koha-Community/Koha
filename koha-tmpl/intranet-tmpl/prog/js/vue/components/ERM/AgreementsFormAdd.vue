@@ -251,14 +251,13 @@ export default {
     methods: {
         async getAgreement(agreement_id) {
             const client = APIClient.erm
-            try {
-                await client.agreements.get(agreement_id).then(data => {
+            client.agreements.get(agreement_id).then(
+                data => {
                     this.agreement = data
                     this.initialized = true
-                })
-            } catch (err) {
-                setError(err.message || err.statusText)
-            }
+                },
+                error => {}
+            )
         },
         checkForm(agreement) {
             let errors = []
@@ -373,22 +372,23 @@ export default {
             delete agreement.agreement_packages
 
             const client = APIClient.erm
-            ;(async () => {
-                try {
-                    if (agreement_id) {
-                        await client.agreements
-                            .update(agreement, agreement_id)
-                            .then(setMessage(this.$__("Agreement updated")))
-                    } else {
-                        await client.agreements
-                            .create(agreement)
-                            .then(setMessage(this.$__("Agreement created")))
-                    }
-                    this.$router.push("/cgi-bin/koha/erm/agreements")
-                } catch (err) {
-                    setError(err.message || err.statusText)
-                }
-            })()
+            if (agreement_id) {
+                client.agreements.update(agreement, agreement_id).then(
+                    success => {
+                        setMessage(this.$__("Agreement updated"))
+                        this.$router.push("/cgi-bin/koha/erm/agreements")
+                    },
+                    error => {}
+                )
+            } else {
+                client.agreements.create(agreement).then(
+                    success => {
+                        setMessage(this.$__("Agreement created"))
+                        this.$router.push("/cgi-bin/koha/erm/agreements")
+                    },
+                    error => {}
+                )
+            }
         },
         onStatusChanged(e) {
             if (e.authorised_value != "closed") {

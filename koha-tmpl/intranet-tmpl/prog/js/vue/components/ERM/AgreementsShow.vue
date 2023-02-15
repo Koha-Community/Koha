@@ -301,7 +301,6 @@
 <script>
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
-import { setError } from "../../messages"
 
 export default {
     setup() {
@@ -348,14 +347,13 @@ export default {
     methods: {
         async getAgreement(agreement_id) {
             const client = APIClient.erm
-            try {
-                await client.agreements.get(agreement_id).then(data => {
+            client.agreements.get(agreement_id).then(
+                data => {
                     this.agreement = data
                     this.initialized = true
-                })
-            } catch (err) {
-                setError(err.message || err.statusText)
-            }
+                },
+                error => {}
+            )
         },
     },
     name: "AgreementsShow",

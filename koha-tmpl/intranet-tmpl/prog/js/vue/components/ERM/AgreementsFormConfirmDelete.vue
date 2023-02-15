@@ -37,7 +37,7 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js"
-import { setMessage, setError } from "../../messages"
+import { setMessage } from "../../messages"
 
 export default {
     data() {
@@ -54,29 +54,22 @@ export default {
     methods: {
         async getAgreement(agreement_id) {
             const client = APIClient.erm
-            try {
-                await client.agreements.get(agreement_id).then(data => {
-                    this.agreement = data
-                    this.initialized = true
-                })
-            } catch (err) {
-                setError(err.message || err.statusText)
-            }
+            client.agreements.get(agreement_id).then(data => {
+                this.agreement = data
+                this.initialized = true
+            })
         },
         onSubmit(e) {
             e.preventDefault()
 
             const client = APIClient.erm
-            ;(async () => {
-                try {
-                    await client.agreements
-                        .delete(this.agreement.agreement_id)
-                        .then(setMessage(this.$__("Agreement deleted")))
+            client.agreements.delete(this.agreement.agreement_id).then(
+                success => {
+                    setMessage(this.$__("Agreement deleted"))
                     this.$router.push("/cgi-bin/koha/erm/agreements")
-                } catch (err) {
-                    setError(err)
-                }
-            })()
+                },
+                error => {}
+            )
         },
     },
     name: "AgreementsFormConfirmDelete",

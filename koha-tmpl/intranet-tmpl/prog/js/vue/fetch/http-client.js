@@ -14,7 +14,7 @@ class HttpClient {
         options = {},
         return_response = false
     ) {
-        let res;
+        let res, error;
         await fetch(this._baseURL + endpoint, {
             ...options,
             headers: { ...this._headers, ...headers },
@@ -24,13 +24,18 @@ class HttpClient {
                 (result) => {
                     res = result;
                 },
-                (error) => {
-                    setError(error.toString());
+                (err) => {
+                    error = err;
+                    setError(err.toString());
                 }
             )
-            .catch((error) => {
-                setError(error);
+            .catch((err) => {
+                error = err;
+                setError(err);
             });
+
+        if (error) throw Error(error);
+
         return res;
     }
 
