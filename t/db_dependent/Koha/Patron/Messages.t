@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use C4::Context;
 use Koha::ActionLogs;
@@ -27,6 +27,7 @@ use Koha::Patron::Message;
 use Koha::Patron::Messages;
 use Koha::Patrons;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -98,6 +99,21 @@ t::lib::Mocks::mock_preference('BorrowersLog', 1);
 $new_message_2->delete;
 is( Koha::Patron::Messages->search->count, $nb_of_messages + 1, 'Delete should have deleted the message 2' );
 is( get_nb_of_logactions(), $nb_of_logaction + 3, 'With BorrowersLog on, 1 new log should have been added when deleting a new message' );
+
+my $new_message_4  = Koha::Patron::Message->new(
+    {   borrowernumber => $patron->{borrowernumber},
+        branchcode     => $library->{branchcode},
+        message_type   => 'B',
+        message        => 'my message 2',
+        manager_id     => $patron_3->{borrowernumber},
+    }
+)->store;
+my $patron_obj = Koha::Patrons->find( $patron->{borrowernumber} );
+my $current_messages_count = $patron_obj->messages->count;
+is( $patron_obj->messages->filter_by_unread->count, $current_messages_count, "No messages have been marked as read" );
+$new_message_4->update({ patron_read_date => dt_from_string });
+is( $patron_obj->messages->filter_by_unread->count, $current_messages_count - 1, "One message has been marked as read" );
+$new_message_4->update({ patron_read_date => undef });
 
 $schema->storage->txn_rollback;
 
