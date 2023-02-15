@@ -80,7 +80,7 @@
                     Note: No upload categories are defined.
                     [% IF ( CAN_user_parameters_manage_auth_values ) -%]
                         [% av_UPLOAD_link = BLOCK %]<a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=UPLOAD'>UPLOAD</a>[% END %]
-                        <span>Add values to the [% av_UPLOAD_link | $KohaSpan %] authorized value category otherwise all uploads will be marked as temporary.</span>
+                        <span>Add values to the [% av_UPLOAD_link | $raw | $KohaSpan %] authorized value category otherwise all uploads will be marked as temporary.</span>
                     [% ELSE -%]
                         An administrator must add values to the UPLOAD authorized value category otherwise all uploads will be marked as temporary.
                     [% END %]
