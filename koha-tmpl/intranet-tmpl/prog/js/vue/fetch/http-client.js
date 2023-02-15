@@ -1,12 +1,15 @@
 class HttpClient {
     constructor(options = {}) {
         this._baseURL = options.baseURL || "";
+        this._headers = options.headers || {
+            "Content-Type": "application/json;charset=utf-8",
+        };
     }
 
     async _fetchJSON(endpoint, headers = {}, options = {}) {
         const res = await fetch(this._baseURL + endpoint, {
             ...options,
-            headers: headers,
+            headers: { ...this._headers, ...headers },
         });
 
         if (!res.ok) throw new Error(res.statusText);
@@ -18,7 +21,6 @@ class HttpClient {
     }
 
     get(params = {}) {
-        console.log(params);
         return this._fetchJSON(params.endpoint, params.headers, {
             ...params.options,
             method: "GET",
@@ -50,10 +52,6 @@ class HttpClient {
     }
 
     //TODO: Implement count method
-
-    getDefaultJSONPayloadHeader() {
-        return { "Content-Type": "application/json;charset=utf-8" };
-    }
 }
 
 export default HttpClient;
