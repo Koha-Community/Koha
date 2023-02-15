@@ -1621,7 +1621,7 @@ sub _process_tt {
     my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute, %$objects };
 
     $content = add_tt_filters( $content );
-    $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %][% PROCESS 'html_helpers.inc' %]$content|;
+    $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
 
     my $output;
     my $schema = Koha::Database->new->schema;
