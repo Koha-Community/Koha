@@ -62,7 +62,7 @@ class HttpClient {
             parseResponse: false,
             ...params.options,
             method: "DELETE",
-        });
+        }, true);
     }
 
     count(params = {}) {
