@@ -4310,6 +4310,7 @@ CREATE TABLE `messages` (
   `message` mediumtext NOT NULL COMMENT 'the text of the message',
   `message_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'the date and time the message was written',
   `manager_id` int(11) DEFAULT NULL COMMENT 'creator of message',
+  `patron_read_date` timestamp NULL DEFAULT NULL COMMENT 'the date and time the patron dismissed the message',
   PRIMARY KEY (`message_id`),
   KEY `messages_ibfk_1` (`manager_id`),
   KEY `messages_borrowernumber` (`borrowernumber`),
