@@ -94,9 +94,13 @@ export default {
     methods: {
         async getAgreements() {
             const client = APIClient.erm
-            const agreements = await client.agreements.getAll()
-            this.agreements = agreements
-            this.initialized = true
+            await client.agreements.getAll().then(
+                data => {
+                    this.agreements = data
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         show_agreement: function (agreement_id) {
             this.$router.push("/cgi-bin/koha/erm/agreements/" + agreement_id)
