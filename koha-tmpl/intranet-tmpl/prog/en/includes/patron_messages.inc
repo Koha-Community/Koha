@@ -58,7 +58,7 @@
 
         [% IF ( userdebarred ) %]
             <li class="userdebarred blocker">
-                <span class="circ-hlt"> Restricted:</span> Patron's account is restricted
+                <span class="circ-hlt"> Restricted since [% debarredsince | $KohaDates %]:</span> Patron's account is restricted
 
                 [% IF ( userdebarreddate ) %]
                     until [% userdebarreddate | $KohaDates %]

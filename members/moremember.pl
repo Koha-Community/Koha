@@ -87,6 +87,7 @@ if ( $patron->is_debarred ) {
     $template->param(
         'userdebarred'    => $patron->debarred,
         'debarredcomment' => $patron->debarredcomment,
+        'debarredsince'   => $patron->restrictions->search()->single->created,
     );
 
     if ( $patron->debarred ne "9999-12-31" ) {
