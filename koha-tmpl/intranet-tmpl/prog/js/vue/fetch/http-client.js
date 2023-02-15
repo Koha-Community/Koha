@@ -1,3 +1,5 @@
+import { setError } from "../messages";
+
 class HttpClient {
     constructor(options = {}) {
         this._baseURL = options.baseURL || "";
@@ -7,17 +9,24 @@ class HttpClient {
     }
 
     async _fetchJSON(endpoint, headers = {}, options = {}) {
-        const res = await fetch(this._baseURL + endpoint, {
+        let res;
+        await fetch(this._baseURL + endpoint, {
             ...options,
             headers: { ...this._headers, ...headers },
-        });
-
-        if (!res.ok) throw new Error(res.statusText);
-
-        if (options.parseResponse !== false && res.status !== 204)
-            return res.json();
-
-        return undefined;
+        })
+            .then(this.checkError)
+            .then(
+                (result) => {
+                    res = result;
+                },
+                (error) => {
+                    setError(error.toString());
+                }
+            )
+            .catch((error) => {
+                setError(error);
+            });
+        return res;
     }
 
     get(params = {}) {
@@ -49,6 +58,16 @@ class HttpClient {
             ...params.options,
             method: "DELETE",
         });
+    }
+
+    checkError(response, return_response = 0) {
+        if (response.status >= 200 && response.status <= 299) {
+            return return_response ? response : response.json();
+        } else {
+            console.log("Server returned an error:");
+            console.log(response);
+            throw Error("%s (%s)".format(response.statusText, response.status));
+        }
     }
 
     //TODO: Implement count method
