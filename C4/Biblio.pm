@@ -287,8 +287,8 @@ sub AddBiblio {
                 BiblioAutoLink( $record, $frameworkcode );
             }
 
-            # now add the record
-            ModBiblioMarc( $record, $biblionumber, { skip_record_index => $skip_record_index } ) unless $defer_marc_save;
+            # now add the record, don't index while we are in the transaction though
+            ModBiblioMarc( $record, $biblionumber, { skip_record_index => 1 } ) unless $defer_marc_save;
 
             # update OAI-PMH sets
             if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
@@ -298,7 +298,13 @@ sub AddBiblio {
             _after_biblio_action_hooks({ action => 'create', biblio_id => $biblionumber });
 
             logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
+
         });
+        # We index now, after the transaction is committed
+        unless ( $skip_record_index ) {
+            my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+            $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
+        }
     } catch {
         warn $_;
         ( $biblionumber, $biblioitemnumber ) = ( undef, undef );
