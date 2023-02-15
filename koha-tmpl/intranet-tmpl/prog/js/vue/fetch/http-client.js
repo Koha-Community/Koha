@@ -1,4 +1,4 @@
-import { setError } from "../messages";
+import { setError, isSubmitting, submitted } from "../messages";
 
 class HttpClient {
     constructor(options = {}) {
@@ -12,9 +12,11 @@ class HttpClient {
         endpoint,
         headers = {},
         options = {},
-        return_response = false
+        return_response = false,
+        mark_submitting = false,
     ) {
         let res, error;
+        if ( mark_submitting) isSubmitting()
         await fetch(this._baseURL + endpoint, {
             ...options,
             headers: { ...this._headers, ...headers },
@@ -32,7 +34,9 @@ class HttpClient {
             .catch((err) => {
                 error = err;
                 setError(err);
-            });
+            }).then(() => {
+              if (mark_submitting) submitted()})
+            ;
 
         if (error) throw Error(error);
 
@@ -56,7 +60,7 @@ class HttpClient {
             ...params.options,
             body,
             method: "POST",
-        });
+        }, false, true);
     }
 
     put(params = {}) {
@@ -69,7 +73,7 @@ class HttpClient {
             ...params.options,
             body,
             method: "PUT",
-        });
+        }, false, true);
     }
 
     delete(params = {}) {
@@ -81,7 +85,7 @@ class HttpClient {
                 ...params.options,
                 method: "DELETE",
             },
-            true
+            true, true
         );
     }
 
