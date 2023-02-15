@@ -20,7 +20,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Data::Dumper qw(Dumper);
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 

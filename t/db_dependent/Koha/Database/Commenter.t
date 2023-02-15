@@ -1,13 +1,9 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Data::Dumper qw/Dumper/;
 use File::Temp qw();
-#use Test::MockModule;
 use Test::More tests => 2;
 use Test::Exception;
-
-#use t::lib::Mocks;
 
 use C4::Context;
 use Koha::Database;

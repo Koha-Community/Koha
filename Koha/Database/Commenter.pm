@@ -18,7 +18,6 @@ package Koha::Database::Commenter;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Data::Dumper qw(Dumper);
 use File::Slurp qw(read_file);
 
 use Koha::Exceptions;
