@@ -1383,6 +1383,9 @@ sub ModReceiveOrder {
     $datereceived = $datereceived ? dt_from_string( $datereceived ) : dt_from_string;
     $datereceived = $datereceived->ymd;
 
+    $order->{invoice_unitprice} ||= $order->{unitprice};
+    $order->{invoice_currency}  ||= Koha::Acquisition::Currencies->get_active->currency;
+
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,

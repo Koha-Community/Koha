@@ -803,6 +803,7 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                         quantityreceived       => 0,
                         ecost_tax_excluded     => 42,
                         unitprice_tax_excluded => 42,
+                        unitprice              => 42,
                     }
                 }
             );
@@ -819,16 +820,17 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                     budget_id        => $order->budget_id,
                 }
             );
+            my $active_currency = Koha::Acquisition::Currencies->get_active;
             my $received_order =
               Koha::Acquisition::Orders->find($received_ordernumber);
             is( $received_order->invoice_unitprice,
-                undef, 'no price should be stored if none passed' );
+                $order->unitprice, 'no price should be stored if none passed' );
             is( $received_order->invoice_currency,
-                undef, 'no currency should be stored if none passed' );
+                $active_currency->currency, 'no currency should be stored if none passed' );
             $order = $order->get_from_storage;
-            is( $order->invoice_unitprice, undef,
+            is( $order->invoice_unitprice, $order->unitprice,
                 'no price should be stored if none passed' );
-            is( $order->invoice_currency, undef,
+            is( $order->invoice_currency, $active_currency->currency,
                 'no currency should be stored if none passed' );
         };
         subtest 'with invoice_unitprice' => sub {
@@ -841,6 +843,7 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                         quantityreceived       => 0,
                         ecost_tax_excluded     => 42,
                         unitprice_tax_excluded => 42,
+                        unitprice              => 42,
                     }
                 }
             );
@@ -886,6 +889,7 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                         quantityreceived       => 0,
                         ecost_tax_excluded     => 42,
                         unitprice_tax_excluded => 42,
+                        unitprice              => 42,
                     }
                 }
             );
@@ -902,17 +906,19 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                     budget_id        => $order->budget_id,
                 }
             );
+            my $active_currency = Koha::Acquisition::Currencies->get_active;
             my $received_order =
               Koha::Acquisition::Orders->find($received_ordernumber);
             is( $received_order->invoice_unitprice,
-                undef, 'no price should be stored if none passed' );
+                $order->unitprice, 'no price should be stored if none passed' );
             is( $received_order->invoice_currency,
-                undef, 'no currency should be stored if none passed' );
+                $active_currency->currency, 'no currency should be stored if none passed' );
             $order = $order->get_from_storage;
-            is( $order->invoice_unitprice, undef,
+            is( $order->invoice_unitprice, $order->unitprice,
                 'no price should be stored if none passed' );
-            is( $order->invoice_currency, undef,
+            is( $order->invoice_currency, $active_currency->currency,
                 'no currency should be stored if none passed' );
+
         };
 
         subtest 'with invoice_unitprice' => sub {
@@ -925,6 +931,7 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
                         quantityreceived       => 0,
                         ecost_tax_excluded     => 42,
                         unitprice_tax_excluded => 42,
+                        unitprice              => 42,
                     }
                 }
             );
