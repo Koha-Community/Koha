@@ -12,6 +12,7 @@
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Amount outstanding</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -39,6 +40,7 @@
                         </td>
                         [% IF ( ACCOUNT_LINE.is_credit ) %]<td class="credit">[% ACCOUNT_LINE.amount * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amount | $Price %][% END %]</td>
                         [% IF ( ACCOUNT_LINE.is_credit ) %]<td class="credit">[% ACCOUNT_LINE.amountoutstanding * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amountoutstanding | $Price %][% END %]</td>
+                        <td></td>
                     </tr>
                 [% END %]
             </tbody>
@@ -52,6 +54,7 @@
                     [%- END -%]
                     <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
                     <td class="sum">[% total | $Price %]</td>
+                    <th></th>
                 </tr>
                 [% IF outstanding_credits.total_outstanding < 0 %]
                 [% FOREACH outstanding_credit IN outstanding_credits %]
@@ -97,6 +100,7 @@
                     <th>Description</th>
                     <th>Fine amount</th>
                     <th>Amount outstanding</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -124,6 +128,7 @@
                         </td>
                         [% IF ( a.amount < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amount | $Price %]</td>
                         [% IF ( a.amountoutstanding < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amountoutstanding | $Price %]</td>
+                    <td></td>
                     </tr>
                 [% END %]
             </tbody>
@@ -132,6 +137,7 @@
                 <tr>
                     <th class="sum" colspan="4">Total due</th>
                     <td class="sum">[% account_sum | $Price %]</td>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>

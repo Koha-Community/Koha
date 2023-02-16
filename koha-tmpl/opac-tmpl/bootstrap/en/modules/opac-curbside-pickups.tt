@@ -179,6 +179,7 @@
                                                 <th>Schedule</th>
                                                 <th>Notes</th>
                                                 <th>Actions</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -211,6 +212,7 @@
                                                                 <i class="fa fa-ban" aria-hidden="true"></i> Cancel this pickup</button>
                                                         </form>
                                                     </td>
+                                                    <td></td>
                                                 </tr>
                                             [% END %]
                                         </tbody>
@@ -280,6 +282,7 @@
     <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
     <script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
     <script>
         [% SET pickup_exists_in = [] %]
         [% FOR p IN patron_curbside_pickups %]
@@ -324,6 +327,18 @@
         });
 
         $(document).ready(function() {
+            $('#pickups-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "searching": false,
+                "paging": false,
+                "info": false,
+                "autoWidth": false,
+                "responsive": {
+                    "details": { "type": 'column',"target": -1 }
+                },
+                "columnDefs": [
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                ],
+            }));
             $("#pickup-branch option").each(function(){
                 if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
                     $(this).prop("disabled", "disabled");
