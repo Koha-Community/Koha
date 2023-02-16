@@ -1,0 +1,32 @@
+---
+type: object
+properties:
+  authorised_value_id:
+    type: integer
+    description: internally assigned authorised value identifier
+    readOnly: true
+  category_name:
+    description: the category of this authorised value
+    type: string
+  value:
+    description: The code for this authorised value
+    type: string
+  description:
+    description: The staff interface description for this authorised value
+    type: string
+  opac_description:
+    description: The public interface description of this authorised value, if set"
+    type:
+      - string
+      - "null"
+  image_url:
+    description: The url of the image associated with this authorised value, if any
+    type:
+      - string
+      - "null"
+
+additionalProperties: false
+required:
+  - category_name
+  - value
+  - description

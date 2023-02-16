@@ -1,0 +1,85 @@
+---
+"/authorised_value_categories/{authorised_value_category_name}/values":
+  get:
+    x-mojo-to: AuthorisedValues#list_av_from_category
+    operationId: listAuthorisedValues
+    tags:
+      - authorised_values
+    summary: List authorised values for a given category
+    produces:
+      - application/json
+    parameters:
+      - description: category name
+        in: path
+        name: authorised_value_category_name
+        required: true
+        type: string
+      - description: Case insensitive search on authorised value id
+        in: query
+        name: authorised_value_id
+        required: false
+        type: integer
+      - description: Case insensitive search on authorised value category name
+        in: query
+        name: category_name
+        required: false
+        type: string
+      - description: Case insensitive search on value
+        in: query
+        name: value
+        required: false
+        type: string
+      - description: Case insensitive search on description
+        in: query
+        name: description
+        required: false
+        type: string
+      - description: Case insensitive search on opac description
+        in: query
+        name: opac_description
+        required: false
+        type: string
+      - description: Case insensitive search on image url
+        in: query
+        name: image_url
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of authorised values
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/authorised_value"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: 1
