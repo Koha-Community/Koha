@@ -46,6 +46,24 @@ sub opac_description {
     return $self->lib_opac() || $self->lib();
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::AuthorisedValue object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id               => 'authorised_value_id',
+        category         => 'category_name',
+        authorised_value => 'value',
+        lib              => 'description',
+        lib_opac         => 'opac_description',
+        imageurl         => 'image_url',
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type
