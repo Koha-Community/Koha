@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
+[% USE Notices %]
 [% USE AuthorisedValues %]
 [% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
@@ -21,16 +22,20 @@
     <div class="btn-group">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li><a id="printsummary" href="#">Print summary</a></li>
-                <li><a id="printslip" href="#">Print slip</a></li>
-                <li><a id="printquickslip" href="#">Print quick slip</a></li>
+                <li><a class="printslip" data-code="printsummary" href="#">Print summary</a></li>
+                <li><a class="printslip" data-code="issueslip" href="#">Print slip</a></li>
+                <li><a class="printslip" data-code="issueqslip" href="#">Print quick slip</a></li>
                 [% IF patron.account_balance != 0 %]
                 <li><a id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=ACCOUNTS_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print account balance</a></li>
                 [% END %]
                 [% IF patron.has_overdues %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
-                <li><a id="printcheckinslip" href="#">Print checkin slip</a></li>
+                <li><a class="printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
+		[% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
+                     <li><a class="printslip" data-code="[% notice.code %]" href="#">Print [% notice.name %] slip</a></li>
+		[% END %]
+
             </ul>
     </div>
     [% END %]

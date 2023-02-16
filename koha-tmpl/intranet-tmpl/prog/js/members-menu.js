@@ -45,38 +45,25 @@ $(document).ready(function(){
         $(".btn-group").removeClass("open");
         return false;
     });
-    $("#printsummary").click(function(){
-        printx_window("page");
-        $(".btn-group").removeClass("open");
-        return false;
-    });
-    $("#printslip").click(function(){
-        printx_window("slip");
-        $(".btn-group").removeClass("open");
-        return false;
-    });
-    $("#printquickslip").click(function(){
-        printx_window("qslip");
-        $(".btn-group").removeClass("open");
-        return false;
-    });
     $("#print_overdues").click(function(){
         window.open("/cgi-bin/koha/members/print_overdues.pl?borrowernumber=" + borrowernumber, "printwindow");
         $(".btn-group").removeClass("open");
         return false;
     });
-    $("#printcheckinslip").click(function(){
-        printx_window("checkinslip");
-        $(".btn-group").removeClass("open");
-        return false;
-    });
-    $("#printclearscreen").click(function(){
-        printx_window("slip");
-        window.location.replace("/cgi-bin/koha/circ/circulation.pl");
-    });
-    $("#printclearscreenq").click(function(){
-        printx_window("qslip");
-        window.location.replace("/cgi-bin/koha/circ/circulation.pl");
+    $(".printslip").click(function(){
+	let slip_code = $(this).data('code');
+	let clear_screen = $(this).data('clear');
+	if( slip_code == 'printsummary' ){
+            window.open("/cgi-bin/koha/members/summary-print.pl?borrowernumber=" + borrowernumber, "printwindow");
+	} else {
+            window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=" + slip_code, "printwindow");
+	}
+	if( clear_screen ){
+            window.location.replace("/cgi-bin/koha/circ/circulation.pl");
+	} else {
+            $(".btn-group").removeClass("open");
+            return false;
+	}
     });
     $("#searchtohold").click(function(){
         searchToHold();
@@ -155,12 +142,7 @@ function confirm_reregistration() {
 function export_barcodes() {
     window.open('/cgi-bin/koha/members/readingrec.pl?borrowernumber=' + borrowernumber + '&op=export_barcodes');
 }
-var slip_re = /slip/;
-function printx_window(print_type) {
-    var handler = print_type.match(slip_re) ? "printslip" : "summary-print";
-    window.open("/cgi-bin/koha/members/" + handler + ".pl?borrowernumber=" + borrowernumber + "&print=" + print_type, "printwindow");
-    return false;
-}
+
 function searchToHold(){
     var date = new Date();
     date.setTime(date.getTime() + (10 * 60 * 1000));

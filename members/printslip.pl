@@ -66,7 +66,7 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $branch=C4::Context->userenv->{'branch'};
-my ($slip, $is_html);
+my ($letter, $slip, $is_html);
 if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
 
@@ -76,7 +76,7 @@ if ( $print eq 'checkinslip' ) {
         old_issues => \@issue_ids,
     );
 
-    my $letter = C4::Letters::GetPreparedLetter(
+    $letter = C4::Letters::GetPreparedLetter(
         module      => 'circulation',
         letter_code => 'CHECKINSLIP',
         branchcode  => $checkinslip_branch,
@@ -89,13 +89,27 @@ if ( $print eq 'checkinslip' ) {
         message_transport_type => 'print'
     );
 
-    $slip    = $letter->{content};
-    $is_html = $letter->{is_html};
-
-} elsif (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
-    $slip = $letter->{content};
-    $is_html = $letter->{is_html};
+} elsif ( $print eq 'issueslip' ){
+    $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, 0);
+} elsif ( $print eq 'issueqslip' ){
+    $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, 1);
+} else {
+    $letter = C4::Letters::GetPreparedLetter(
+        module => 'patron_slip',
+	letter_code => $print,
+	branchcode => $branch,
+	lang => $patron->lang,
+	tables => {
+	    branches => $branch,
+	    borrowers => $borrowernumber
+        },
+        message_transport_type => 'print'
+    );
 }
+
+$slip    = $letter->{content};
+$is_html = $letter->{is_html};
+
 
 $template->param(
     slip => $slip,
