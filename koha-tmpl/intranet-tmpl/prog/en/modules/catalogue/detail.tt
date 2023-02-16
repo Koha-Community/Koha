@@ -859,6 +859,10 @@
                 [% ELSE %]
                     [% order.invoice.invoicenumber | html %]
                 [% END %]
+
+                [% IF CAN_user_acquisition_edi_manage && order.invoice.message_id %]
+                    (<a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a>)
+                [% END %]
             [% END %]
             </td>
             <td>
