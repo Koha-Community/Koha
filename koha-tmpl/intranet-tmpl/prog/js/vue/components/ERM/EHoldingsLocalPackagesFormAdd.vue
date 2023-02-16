@@ -38,8 +38,8 @@
                             <v-select
                                 id="package_type"
                                 v-model="erm_package.package_type"
-                                label="lib"
-                                :reduce="av => av.authorised_value"
+                                label="description"
+                                :reduce="av => av.value"
                                 :options="av_package_types"
                             />
                         </li>
@@ -50,8 +50,8 @@
                             <v-select
                                 id="package_content_type"
                                 v-model="erm_package.content_type"
-                                label="lib"
-                                :reduce="av => av.authorised_value"
+                                label="description"
+                                :reduce="av => av.value"
                                 :options="av_package_content_types"
                             />
                         </li>

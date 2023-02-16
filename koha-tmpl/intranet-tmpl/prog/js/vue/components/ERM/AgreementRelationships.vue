@@ -44,8 +44,8 @@
                     <v-select
                         :id="`related_agreement_relationship_${counter}`"
                         v-model="relationship.relationship"
-                        label="lib"
-                        :reduce="av => av.authorised_value"
+                        label="description"
+                        :reduce="av => av.value"
                         :options="av_agreement_relationships"
                     >
                         <template #search="{ attributes, events }">

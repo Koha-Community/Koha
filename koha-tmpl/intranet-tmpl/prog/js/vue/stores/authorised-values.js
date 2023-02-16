@@ -11,27 +11,27 @@ export const useAVStore = defineStore("authorised_values", {
         av_agreement_license_statuses: [],
         av_agreement_license_location: [],
         av_agreement_relationships: [
-            { authorised_value: "supersedes", lib: __("supersedes") },
-            { authorised_value: "is-superseded-by", lib: __("is superseded by") },
+            { value: "supersedes", description: __("supersedes") },
+            { value: "is-superseded-by", description: __("is superseded by") },
             {
-                authorised_value: "provides_post-cancellation_access_for",
-                lib: __("provides post-cancellation access for"),
+                value: "provides_post-cancellation_access_for",
+                description: __("provides post-cancellation access for"),
             },
             {
-                authorised_value: "has-post-cancellation-access-in",
-                lib: __("has post-cancellation access in"),
+                value: "has-post-cancellation-access-in",
+                description: __("has post-cancellation access in"),
             },
             {
-                authorised_value: "tracks_demand-driven_acquisitions_for",
-                lib: __("tracks demand-driven acquisitions for"),
+                value: "tracks_demand-driven_acquisitions_for",
+                description: __("tracks demand-driven acquisitions for"),
             },
             {
-                authorised_value: "has-demand-driven-acquisitions-in",
-                lib: __("has demand-driven acquisitions in"),
+                value: "has-demand-driven-acquisitions-in",
+                description: __("has demand-driven acquisitions in"),
             },
-            { authorised_value: "has_backfile_in", lib: __("has backfile in") },
-            { authorised_value: "has_frontfile_in", lib: __("has frontfile in") },
-            { authorised_value: "related_to", lib: __("related to") },
+            { value: "has_backfile_in", description: __("has backfile in") },
+            { value: "has_frontfile_in", description: __("has frontfile in") },
+            { value: "related_to", description: __("related to") },
         ],
         av_package_types: [],
         av_package_content_types: [],
@@ -47,13 +47,13 @@ export const useAVStore = defineStore("authorised_values", {
                 );
                 return;
             }
-            let o = this[arr_name].find((e) => e.authorised_value == av);
-            return o ? o.lib : av;
+            let o = this[arr_name].find((e) => e.value == av);
+            return o ? o.description : av;
         },
         map_av_dt_filter(arr_name) {
             return this[arr_name].map((e) => {
-                e["_id"] = e["authorised_value"];
-                e["_str"] = e["lib"];
+                e["_id"] = e["value"];
+                e["_str"] = e["description"];
                 return e;
             });
         },

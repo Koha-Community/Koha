@@ -27,10 +27,10 @@
                             <option value="">{{ $__("All") }}</option>
                             <option
                                 v-for="type in av_title_publication_types"
-                                :key="type.authorised_values"
-                                :value="type.authorised_value"
+                                :key="type.value"
+                                :value="type.value"
                             >
-                                {{ type.lib }}
+                                {{ type.description }}
                             </option>
                         </select>
                     </li>

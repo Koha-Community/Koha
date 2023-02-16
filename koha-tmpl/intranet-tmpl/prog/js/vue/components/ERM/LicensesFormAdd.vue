@@ -59,8 +59,8 @@
                                 <v-select
                                     id="license_type"
                                     v-model="license.type"
-                                    label="lib"
-                                    :reduce="av => av.authorised_value"
+                                    label="description"
+                                    :reduce="av => av.value"
                                     :options="av_license_types"
                                 >
                                     <template #search="{ attributes, events }">
@@ -83,9 +83,9 @@
                                 <v-select
                                     id="license_status"
                                     v-model="license.status"
-                                    :reduce="av => av.authorised_value"
+                                    :reduce="av => av.value"
                                     :options="av_license_statuses"
-                                    label="lib"
+                                    label="description"
                                 >
                                     <template #search="{ attributes, events }">
                                         <input

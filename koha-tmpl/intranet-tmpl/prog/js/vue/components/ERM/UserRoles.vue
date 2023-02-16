@@ -35,8 +35,8 @@
                     <v-select
                         :id="`user_role_${counter}`"
                         v-model="user_role.role"
-                        label="lib"
-                        :reduce="av => av.authorised_value"
+                        label="description"
+                        :reduce="av => av.value"
                         :options="av_user_roles"
                     >
                         <template #search="{ attributes, events }">

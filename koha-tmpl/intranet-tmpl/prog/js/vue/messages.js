@@ -32,3 +32,13 @@ export const submitted = function () {
     const { submitted } = mainStore;
     submitted();
 };
+export const loading = function () {
+    const mainStore = useMainStore();
+    const { loading } = mainStore;
+    loading();
+};
+export const loaded = function () {
+    const mainStore = useMainStore();
+    const { loaded } = mainStore;
+    loaded();
+};

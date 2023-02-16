@@ -232,8 +232,8 @@
                             <v-select
                                 id="title_publication_type"
                                 v-model="title.publication_type"
-                                label="lib"
-                                :reduce="av => av.authorised_value"
+                                label="description"
+                                :reduce="av => av.value"
                                 :options="av_title_publication_types"
                             />
                         </li>
