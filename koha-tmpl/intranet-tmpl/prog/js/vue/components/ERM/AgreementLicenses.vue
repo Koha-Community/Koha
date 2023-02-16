@@ -44,8 +44,8 @@
                     <v-select
                         :id="`license_status_${counter}`"
                         v-model="agreement_license.status"
-                        label="lib"
-                        :reduce="av => av.authorised_value"
+                        label="description"
+                        :reduce="av => av.value"
                         :options="av_agreement_license_statuses"
                     >
                         <template #search="{ attributes, events }">
@@ -66,8 +66,8 @@
                     <v-select
                         :id="`license_location_${counter}`"
                         v-model="agreement_license.physical_location"
-                        label="lib"
-                        :reduce="av => av.authorised_value"
+                        label="description"
+                        :reduce="av => av.value"
                         :options="av_agreement_license_location"
                     />
                 </li>

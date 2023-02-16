@@ -16,10 +16,10 @@
                 <option value="">{{ $__("All") }}</option>
                 <option
                     v-for="type in av_title_publication_types"
-                    :key="type.authorised_values"
-                    :value="type.authorised_value"
+                    :key="type.value"
+                    :value="type.value"
                 >
-                    {{ type.lib }}
+                    {{ type.description }}
                 </option>
             </select>
             {{ $__("Selection status") }}:
@@ -194,8 +194,8 @@ export default {
             }, {})
             window["av_title_publication_types"] =
                 this.av_title_publication_types.map(e => {
-                    e["_id"] = e["authorised_value"]
-                    e["_str"] = e["lib"]
+                    e["_id"] = e["value"]
+                    e["_str"] = e["description"]
                     return e
                 })
 

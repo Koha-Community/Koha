@@ -9,6 +9,7 @@ export const useMainStore = defineStore("main", {
         previousError: null,
         displayed_already: false,
         is_submitting: false,
+        is_loading: false,
     }),
     actions: {
         setMessage(message) {
@@ -40,6 +41,12 @@ export const useMainStore = defineStore("main", {
         },
         submitted(){
             this.is_submitting = false;
+        },
+        loading(){
+            this.is_loading = true;
+        },
+        loaded(){
+            this.is_loading = false;
         },
     },
 });

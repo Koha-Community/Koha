@@ -27,7 +27,7 @@ const router = createRouter({
 
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
-import { useAVStore } from "../stores/authorised_values";
+import { useAVStore } from "../stores/authorised-values";
 
 const pinia = createPinia();
 
@@ -52,7 +52,8 @@ app.config.unwrapInjectedRef = true;
 app.provide("vendorStore", useVendorStore(pinia));
 const mainStore = useMainStore(pinia);
 app.provide("mainStore", mainStore);
-app.provide("AVStore", useAVStore(pinia));
+const AVStore = useAVStore(pinia);
+app.provide("AVStore", AVStore);
 
 app.mount("#erm");
 

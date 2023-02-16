@@ -3,7 +3,6 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
-[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -28,23 +27,6 @@
     [% INCLUDE 'js-date-format.inc' %]
 
     <script>
-
-        const agreement_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_STATUS')) | $raw %];
-
-        const agreement_closure_reasons = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_CLOSURE_REASON')) | $raw %];
-        const agreement_renewal_priorities = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_RENEWAL_PRIORITY')) | $raw %];
-        const user_roles = [% To.json(AuthorisedValues.Get('ERM_USER_ROLES')) | $raw %];
-
-        const license_types = [% To.json(AuthorisedValues.Get('ERM_LICENSE_TYPE')) | $raw %];
-        const license_statuses = [% To.json(AuthorisedValues.Get('ERM_LICENSE_STATUS')) | $raw %];
-
-        const agreement_license_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_STATUS')) | $raw %];
-        const agreement_license_location = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_LOCATION')) | $raw %];
-
-        const package_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_TYPE')) | $raw %];
-        const package_content_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_CONTENT_TYPE')) | $raw %];
-
-        const title_publication_types = [% To.json(AuthorisedValues.Get('ERM_TITLE_PUBLICATION_TYPE')) | $raw %];
 
         const agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
         const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];

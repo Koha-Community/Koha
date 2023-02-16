@@ -59,8 +59,8 @@
                                 <v-select
                                     id="agreement_status"
                                     v-model="agreement.status"
-                                    label="lib"
-                                    :reduce="av => av.authorised_value"
+                                    label="description"
+                                    :reduce="av => av.value"
                                     :options="av_agreement_statuses"
                                     @option:selected="onStatusChanged"
                                     :required="!agreement.status"
@@ -85,8 +85,8 @@
                                 <v-select
                                     id="agreement_closure_reason"
                                     v-model="agreement.closure_reason"
-                                    label="lib"
-                                    :reduce="av => av.authorised_value"
+                                    label="description"
+                                    :reduce="av => av.value"
                                     :options="av_agreement_closure_reasons"
                                     :disabled="
                                         agreement.status == 'closed'
@@ -129,8 +129,8 @@
                                 <v-select
                                     id="agreement_renewal_priority"
                                     v-model="agreement.renewal_priority"
-                                    label="lib"
-                                    :reduce="av => av.authorised_value"
+                                    label="description"
+                                    :reduce="av => av.value"
                                     :options="av_agreement_renewal_priorities"
                                 />
                             </li>
@@ -395,7 +395,7 @@ export default {
             }
         },
         onStatusChanged(e) {
-            if (e.authorised_value != "closed") {
+            if (e.value != "closed") {
                 this.agreement.closure_reason = ""
             }
         },

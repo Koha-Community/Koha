@@ -16,6 +16,9 @@
     <div class="modal_centered" v-if="is_submitting">
         <div class="spinner dialog alert">{{ $__("Submitting...") }}</div>
     </div>
+    <div class="modal_centered" v-if="is_loading">
+        <div class="spinner dialog message">{{ $__("Loading...") }}</div>
+    </div>
 </template>
 
 <script>
@@ -24,10 +27,17 @@ import { storeToRefs } from "pinia"
 export default {
     setup() {
         const mainStore = inject("mainStore")
-        const { message, error, warning, is_submitting } =
+        const { message, error, warning, is_submitting, is_loading } =
             storeToRefs(mainStore)
         const { removeMessages } = mainStore
-        return { message, error, warning, is_submitting, removeMessages }
+        return {
+            message,
+            error,
+            warning,
+            is_submitting,
+            is_loading,
+            removeMessages,
+        }
     },
 }
 </script>
