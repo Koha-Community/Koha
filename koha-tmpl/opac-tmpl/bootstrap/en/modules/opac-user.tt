@@ -1158,7 +1158,7 @@
                 minDate: "today"
             });
 
-            $(".suspend_hold").on("click", function(e){
+            $(document).on("click", ".suspend_hold", function(e){
                 e.preventDefault();
                 var title = $(this).data("title");
                 var reserve_id = $(this).data("reserve_id");

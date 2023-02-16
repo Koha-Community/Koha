@@ -96,13 +96,37 @@ $( document ).ready(function() {
          [% END %]
          "dom": '<"#filter_p">',
          "autoWidth": false,
-         "responsive": true,
+         "responsive": {
+            "details": { "type": 'column',"target": -1 }
+         },
+         "columnDefs": [
+            { "className": 'dtr-control', "orderable": false, "targets": -1 }
+         ],
+         'fnDrawCallback': function() {
+            show_hiddentfoot('#finestable');
+         }
     } ));
 
     $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
-        "responsive": true
+         "autoWidth": false,
+         "responsive": {
+            "details": { "type": 'column',"target": -1 }
+         },
+         "columnDefs": [
+            { "className": 'dtr-control', "orderable": false, "targets": -1 }
+         ],
+         'fnDrawCallback': function() {
+            show_hiddentfoot('table[id^="finestable-"]');
+         }
     } ));
 
+    function show_hiddentfoot(selector) {
+        $('.finestable tfoot .sum').show();
+        if ($(".finestable tfoot td.dtr-hidden").length > 0) {
+            $(selector+" tfoot th").removeAttr( "colspan" );
+            $(".finestable tfoot .dtr-control").hide();
+        }
+    }
     $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
     $('#filter_paid').click(function(e) {
         e.preventDefault();
