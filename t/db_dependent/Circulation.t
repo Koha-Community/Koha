@@ -672,7 +672,7 @@ subtest "CanBookBeRenewed tests" => sub {
     # Items can't fill hold for reasons
     $item_1->notforloan(1)->store;
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber, 1);
-    is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
+    is( $renewokay, 0, 'Cannot renew, item is marked not for loan, but an item specific hold always blocks');
     $item_1->set({notforloan => 0, itype => $itemtype })->store;
 
     # FIXME: Add more for itemtype not for loan etc.
