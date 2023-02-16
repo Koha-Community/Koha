@@ -288,7 +288,7 @@ Koha::CirculationRules->set_rules(
 );
 
 subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers and items tests" => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     #Can only reserve from home branch
     Koha::CirculationRules->set_rule(
@@ -334,7 +334,7 @@ subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers a
     is (defined $issue->date_due(), 1, "Item 1 checked out, due date: " . $issue->date_due() );
 
     # Biblio-level holds
-    AddReserve(
+    my $reserve_1 = AddReserve(
         {
             branchcode       => $patron_hold_1->branchcode,
             borrowernumber   => $patron_hold_1->borrowernumber,
@@ -370,6 +370,13 @@ subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers a
     is( $renewokay, 1, 'Can renew, two items available for two holds');
     is( $error, undef, 'Can renew, each reserve has an item');
 
+    # Item level hold
+    my $hold = Koha::Holds->find( $reserve_1 );
+    $hold->itemnumber( $item_1->itemnumber )->store;
+
+    ( $renewokay, $error ) = CanBookBeRenewed($patron_borrower->borrowernumber, $item_1->itemnumber);
+    is( $renewokay, 0, 'Cannot renew when there is an item specific hold');
+    is( $error, 'on_reserve', 'Cannot renew, only this item can fill the reserve');
 
 };
 
