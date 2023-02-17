@@ -597,4 +597,76 @@ sub update {
         $c->unhandled_exception($_);
     };
 }
+
+=head3 list
+
+Controller function that handles retrieving a single biblio object
+
+=cut
+
+sub list {
+    my $c = shift->openapi->valid_input or return;
+
+    my $attributes;
+    $attributes =
+      { prefetch => ['metadata'] }    # don't prefetch metadata if not needed
+      unless $c->req->headers->accept =~ m/application\/json/;
+
+    my $biblios = $c->objects->search_rs( Koha::Biblios->new );
+
+    return try {
+
+        if ( $c->req->headers->accept =~ m/application\/json(;.*)?$/ ) {
+            return $c->render(
+                status => 200,
+                json   => $biblios->to_api
+            );
+        }
+        elsif (
+            $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ )
+        {
+            $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
+            return $c->render(
+                status => 200,
+                text   => $biblios->print_collection('marcxml')
+            );
+        }
+        elsif (
+            $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ )
+        {
+            $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
+            return $c->render(
+                status => 200,
+                data   => $biblios->print_collection('mij')
+            );
+        }
+        elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
+            $c->res->headers->add( 'Content-Type', 'application/marc' );
+            return $c->render(
+                status => 200,
+                text   => $biblios->print_collection('marc')
+            );
+        }
+        elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
+            return $c->render(
+                status => 200,
+                text   => $biblios->print_collection('txt')
+            );
+        }
+        else {
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/json",         "application/marcxml+xml",
+                    "application/marc-in-json", "application/marc",
+                    "text/plain"
+                ]
+            );
+        }
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -733,381 +733,381 @@ subtest 'post() tests' => sub {
 
     my $frameworkcode = 'BKS';
     my $marcxml = q|<?xml version="1.0" encoding="UTF-8"?>
-<record
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
-    xmlns="http://www.loc.gov/MARC21/slim">
+    <record
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+        xmlns="http://www.loc.gov/MARC21/slim">
 
-  <leader>01102pam a2200289 a 7500</leader>
-  <controlfield tag="001">2504398</controlfield>
-  <controlfield tag="005">20200421093816.0</controlfield>
-  <controlfield tag="008">920610s1993    caub         s001 0 eng  </controlfield>
-  <datafield tag="010" ind1=" " ind2=" ">
-    <subfield code="a">   92021731 </subfield>
-  </datafield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">05200784381 (Test marcxml)</subfield>
-  </datafield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">05200784461 (Test marcxml)</subfield>
-  </datafield>
-  <datafield tag="040" ind1=" " ind2=" ">
-    <subfield code="a">DLC</subfield>
-    <subfield code="c">DLC</subfield>
-    <subfield code="d">DLC</subfield>
-  </datafield>
-  <datafield tag="041" ind1="0" ind2=" ">
-    <subfield code="a">enggrc</subfield>
-  </datafield>
-  <datafield tag="050" ind1="0" ind2="0">
-    <subfield code="a">PA522</subfield>
-    <subfield code="b">.M38 1993</subfield>
-  </datafield>
-  <datafield tag="082" ind1="0" ind2="0">
-    <subfield code="a">480</subfield>
-    <subfield code="2">20</subfield>
-  </datafield>
-  <datafield tag="100" ind1="1" ind2=" ">
-    <subfield code="a">Mastronarde, Donald J.</subfield>
-    <subfield code="9">389</subfield>
-  </datafield>
-  <datafield tag="245" ind1="1" ind2="0">
-    <subfield code="a">Introduction to Attic Greek (Using marcxml) /</subfield>
-    <subfield code="c">Donald J. Mastronarde.</subfield>
-  </datafield>
-  <datafield tag="260" ind1=" " ind2=" ">
-    <subfield code="a">Berkeley :</subfield>
-    <subfield code="b">University of California Press,</subfield>
-    <subfield code="c">c1993.</subfield>
-  </datafield>
-  <datafield tag="300" ind1=" " ind2=" ">
-    <subfield code="a">ix, 425 p. :</subfield>
-    <subfield code="b">maps ;</subfield>
-    <subfield code="c">26 cm.</subfield>
-  </datafield>
-  <datafield tag="500" ind1=" " ind2=" ">
-    <subfield code="a">Includes index.</subfield>
-  </datafield>
-  <datafield tag="650" ind1=" " ind2="0">
-    <subfield code="a">Attic Greek dialect</subfield>
-    <subfield code="9">7</subfield>
-  </datafield>
-  <datafield tag="856" ind1="4" ind2="2">
-    <subfield code="3">Contributor biographical information</subfield>
-    <subfield code="u">http://www.loc.gov/catdir/bios/ucal051/92021731.html</subfield>
-  </datafield>
-  <datafield tag="856" ind1="4" ind2="2">
-    <subfield code="3">Publisher description</subfield>
-    <subfield code="u">http://www.loc.gov/catdir/description/ucal041/92021731.html</subfield>
-  </datafield>
-  <datafield tag="906" ind1=" " ind2=" ">
-    <subfield code="a">7</subfield>
-    <subfield code="b">cbc</subfield>
-    <subfield code="c">orignew</subfield>
-    <subfield code="d">1</subfield>
-    <subfield code="e">ocip</subfield>
-    <subfield code="f">19</subfield>
-    <subfield code="g">y-gencatlg</subfield>
-  </datafield>
-  <datafield tag="942" ind1=" " ind2=" ">
-    <subfield code="2">ddc</subfield>
-    <subfield code="c">BK</subfield>
-  </datafield>
-  <datafield tag="955" ind1=" " ind2=" ">
-    <subfield code="a">pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93</subfield>
-  </datafield>
-  <datafield tag="999" ind1=" " ind2=" ">
-    <subfield code="c">3</subfield>
-    <subfield code="d">3</subfield>
-  </datafield>
-</record>|;
+      <leader>01102pam a2200289 a 7500</leader>
+      <controlfield tag="001">2504398</controlfield>
+      <controlfield tag="005">20200421093816.0</controlfield>
+      <controlfield tag="008">920610s1993    caub         s001 0 eng  </controlfield>
+      <datafield tag="010" ind1=" " ind2=" ">
+        <subfield code="a">   92021731 </subfield>
+      </datafield>
+      <datafield tag="020" ind1=" " ind2=" ">
+        <subfield code="a">05200784381 (Test marcxml)</subfield>
+      </datafield>
+      <datafield tag="020" ind1=" " ind2=" ">
+        <subfield code="a">05200784461 (Test marcxml)</subfield>
+      </datafield>
+      <datafield tag="040" ind1=" " ind2=" ">
+        <subfield code="a">DLC</subfield>
+        <subfield code="c">DLC</subfield>
+        <subfield code="d">DLC</subfield>
+      </datafield>
+      <datafield tag="041" ind1="0" ind2=" ">
+        <subfield code="a">enggrc</subfield>
+      </datafield>
+      <datafield tag="050" ind1="0" ind2="0">
+        <subfield code="a">PA522</subfield>
+        <subfield code="b">.M38 1993</subfield>
+      </datafield>
+      <datafield tag="082" ind1="0" ind2="0">
+        <subfield code="a">480</subfield>
+        <subfield code="2">20</subfield>
+      </datafield>
+      <datafield tag="100" ind1="1" ind2=" ">
+        <subfield code="a">Mastronarde, Donald J.</subfield>
+        <subfield code="9">389</subfield>
+      </datafield>
+      <datafield tag="245" ind1="1" ind2="0">
+        <subfield code="a">Introduction to Attic Greek (Using marcxml) /</subfield>
+        <subfield code="c">Donald J. Mastronarde.</subfield>
+      </datafield>
+      <datafield tag="260" ind1=" " ind2=" ">
+        <subfield code="a">Berkeley :</subfield>
+        <subfield code="b">University of California Press,</subfield>
+        <subfield code="c">c1993.</subfield>
+      </datafield>
+      <datafield tag="300" ind1=" " ind2=" ">
+        <subfield code="a">ix, 425 p. :</subfield>
+        <subfield code="b">maps ;</subfield>
+        <subfield code="c">26 cm.</subfield>
+      </datafield>
+      <datafield tag="500" ind1=" " ind2=" ">
+        <subfield code="a">Includes index.</subfield>
+      </datafield>
+      <datafield tag="650" ind1=" " ind2="0">
+        <subfield code="a">Attic Greek dialect</subfield>
+        <subfield code="9">7</subfield>
+      </datafield>
+      <datafield tag="856" ind1="4" ind2="2">
+        <subfield code="3">Contributor biographical information</subfield>
+        <subfield code="u">http://www.loc.gov/catdir/bios/ucal051/92021731.html</subfield>
+      </datafield>
+      <datafield tag="856" ind1="4" ind2="2">
+        <subfield code="3">Publisher description</subfield>
+        <subfield code="u">http://www.loc.gov/catdir/description/ucal041/92021731.html</subfield>
+      </datafield>
+      <datafield tag="906" ind1=" " ind2=" ">
+        <subfield code="a">7</subfield>
+        <subfield code="b">cbc</subfield>
+        <subfield code="c">orignew</subfield>
+        <subfield code="d">1</subfield>
+        <subfield code="e">ocip</subfield>
+        <subfield code="f">19</subfield>
+        <subfield code="g">y-gencatlg</subfield>
+      </datafield>
+      <datafield tag="942" ind1=" " ind2=" ">
+        <subfield code="2">ddc</subfield>
+        <subfield code="c">BK</subfield>
+      </datafield>
+      <datafield tag="955" ind1=" " ind2=" ">
+        <subfield code="a">pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93</subfield>
+      </datafield>
+      <datafield tag="999" ind1=" " ind2=" ">
+        <subfield code="c">3</subfield>
+        <subfield code="d">3</subfield>
+      </datafield>
+    </record>|;
 
     my $mij = q|{
-  "fields": [
-    {
-      "001": "2504398"
-    },
-    {
-      "005": "20200421093816.0"
-    },
-    {
-      "008": "920610s1993    caub         s001 0 eng  "
-    },
-    {
-      "010": {
-        "ind1": " ",
-        "subfields": [
-          {
-            "a": "   92021731 "
+      "fields": [
+        {
+          "001": "2504398"
+        },
+        {
+          "005": "20200421093816.0"
+        },
+        {
+          "008": "920610s1993    caub         s001 0 eng  "
+        },
+        {
+          "010": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "   92021731 "
+              }
+            ],
+            "ind2": " "
           }
-        ],
-        "ind2": " "
-      }
-    },
-    {
-      "020": {
-        "subfields": [
-          {
-            "a": "05200784382 (Test mij)"
+        },
+        {
+          "020": {
+            "subfields": [
+              {
+                "a": "05200784382 (Test mij)"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "020": {
-        "subfields": [
-          {
-            "a": "05200784462 (Test mij)"
+        },
+        {
+          "020": {
+            "subfields": [
+              {
+                "a": "05200784462 (Test mij)"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "040": {
-        "subfields": [
-          {
-            "a": "DLC"
-          },
-          {
-            "c": "DLC"
-          },
-          {
-            "d": "DLC"
+        },
+        {
+          "040": {
+            "subfields": [
+              {
+                "a": "DLC"
+              },
+              {
+                "c": "DLC"
+              },
+              {
+                "d": "DLC"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "041": {
-        "ind2": " ",
-        "subfields": [
-          {
-            "a": "enggrc"
+        },
+        {
+          "041": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "enggrc"
+              }
+            ],
+            "ind1": "0"
           }
-        ],
-        "ind1": "0"
-      }
-    },
-    {
-      "050": {
-        "subfields": [
-          {
-            "a": "PA522"
-          },
-          {
-            "b": ".M38 1993"
+        },
+        {
+          "050": {
+            "subfields": [
+              {
+                "a": "PA522"
+              },
+              {
+                "b": ".M38 1993"
+              }
+            ],
+            "ind1": "0",
+            "ind2": "0"
           }
-        ],
-        "ind1": "0",
-        "ind2": "0"
-      }
-    },
-    {
-      "082": {
-        "subfields": [
-          {
-            "a": "480"
-          },
-          {
-            "2": "20"
+        },
+        {
+          "082": {
+            "subfields": [
+              {
+                "a": "480"
+              },
+              {
+                "2": "20"
+              }
+            ],
+            "ind2": "0",
+            "ind1": "0"
           }
-        ],
-        "ind2": "0",
-        "ind1": "0"
-      }
-    },
-    {
-      "100": {
-        "ind2": " ",
-        "subfields": [
-          {
-            "a": "Mastronarde, Donald J."
-          },
-          {
-            "9": "389"
+        },
+        {
+          "100": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "Mastronarde, Donald J."
+              },
+              {
+                "9": "389"
+              }
+            ],
+            "ind1": "1"
           }
-        ],
-        "ind1": "1"
-      }
-    },
-    {
-      "245": {
-        "ind1": "1",
-        "subfields": [
-          {
-            "a": "Introduction to Attic Greek  (Using mij) /"
-          },
-          {
-            "c": "Donald J. Mastronarde."
+        },
+        {
+          "245": {
+            "ind1": "1",
+            "subfields": [
+              {
+                "a": "Introduction to Attic Greek  (Using mij) /"
+              },
+              {
+                "c": "Donald J. Mastronarde."
+              }
+            ],
+            "ind2": "0"
           }
-        ],
-        "ind2": "0"
-      }
-    },
-    {
-      "260": {
-        "subfields": [
-          {
-            "a": "Berkeley :"
-          },
-          {
-            "b": "University of California Press,"
-          },
-          {
-            "c": "c1993."
+        },
+        {
+          "260": {
+            "subfields": [
+              {
+                "a": "Berkeley :"
+              },
+              {
+                "b": "University of California Press,"
+              },
+              {
+                "c": "c1993."
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "300": {
-        "ind1": " ",
-        "subfields": [
-          {
-            "a": "ix, 425 p. :"
-          },
-          {
-            "b": "maps ;"
-          },
-          {
-            "c": "26 cm."
+        },
+        {
+          "300": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "ix, 425 p. :"
+              },
+              {
+                "b": "maps ;"
+              },
+              {
+                "c": "26 cm."
+              }
+            ],
+            "ind2": " "
           }
-        ],
-        "ind2": " "
-      }
-    },
-    {
-      "500": {
-        "subfields": [
-          {
-            "a": "Includes index."
+        },
+        {
+          "500": {
+            "subfields": [
+              {
+                "a": "Includes index."
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "650": {
-        "subfields": [
-          {
-            "a": "Attic Greek dialect"
-          },
-          {
-            "9": "7"
+        },
+        {
+          "650": {
+            "subfields": [
+              {
+                "a": "Attic Greek dialect"
+              },
+              {
+                "9": "7"
+              }
+            ],
+            "ind2": "0",
+            "ind1": " "
           }
-        ],
-        "ind2": "0",
-        "ind1": " "
-      }
-    },
-    {
-      "856": {
-        "subfields": [
-          {
-            "3": "Contributor biographical information"
-          },
-          {
-            "u": "http://www.loc.gov/catdir/bios/ucal051/92021731.html"
+        },
+        {
+          "856": {
+            "subfields": [
+              {
+                "3": "Contributor biographical information"
+              },
+              {
+                "u": "http://www.loc.gov/catdir/bios/ucal051/92021731.html"
+              }
+            ],
+            "ind2": "2",
+            "ind1": "4"
           }
-        ],
-        "ind2": "2",
-        "ind1": "4"
-      }
-    },
-    {
-      "856": {
-        "ind1": "4",
-        "subfields": [
-          {
-            "3": "Publisher description"
-          },
-          {
-            "u": "http://www.loc.gov/catdir/description/ucal041/92021731.html"
+        },
+        {
+          "856": {
+            "ind1": "4",
+            "subfields": [
+              {
+                "3": "Publisher description"
+              },
+              {
+                "u": "http://www.loc.gov/catdir/description/ucal041/92021731.html"
+              }
+            ],
+            "ind2": "2"
           }
-        ],
-        "ind2": "2"
-      }
-    },
-    {
-      "906": {
-        "subfields": [
-          {
-            "a": "7"
-          },
-          {
-            "b": "cbc"
-          },
-          {
-            "c": "orignew"
-          },
-          {
-            "d": "1"
-          },
-          {
-            "e": "ocip"
-          },
-          {
-            "f": "19"
-          },
-          {
-            "g": "y-gencatlg"
+        },
+        {
+          "906": {
+            "subfields": [
+              {
+                "a": "7"
+              },
+              {
+                "b": "cbc"
+              },
+              {
+                "c": "orignew"
+              },
+              {
+                "d": "1"
+              },
+              {
+                "e": "ocip"
+              },
+              {
+                "f": "19"
+              },
+              {
+                "g": "y-gencatlg"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "942": {
-        "subfields": [
-          {
-            "2": "ddc"
-          },
-          {
-            "c": "BK"
+        },
+        {
+          "942": {
+            "subfields": [
+              {
+                "2": "ddc"
+              },
+              {
+                "c": "BK"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "955": {
-        "subfields": [
-          {
-            "a": "pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93"
+        },
+        {
+          "955": {
+            "subfields": [
+              {
+                "a": "pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "999": {
-        "subfields": [
-          {
-            "c": "3"
-          },
-          {
-            "d": "3"
+        },
+        {
+          "999": {
+            "subfields": [
+              {
+                "c": "3"
+              },
+              {
+                "d": "3"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    }
-  ],
-  "leader": "01102pam a2200289 a 8500"
-}|;
+        }
+      ],
+      "leader": "01102pam a2200289 a 8500"
+    }|;
     my $marc = q|01102pam a2200289 a 9500001000800000005001700008008004100025010001700066020002800083020003500111040001800146041001100164050002100175082001200196100003200208245005800240260005600298300003300354500002000387650002700407856009500434856008700529906004500616942001200661955013000673999000900803250439820200421093816.0920610s1993    caub         s001 0 eng    a   92021731   a05200784383 (Test usmarc)  a05200784463 (Test usmarc)  aDLCcDLCdDLC0 aenggrc00aPA522b.M38 199300a4802201 aMastronarde, Donald J.938910aIntroduction to Attic Greek  (Using usmarc) /cDonald J. Mastronarde.  aBerkeley :bUniversity of California Press,cc1993.  aix, 425 p. :bmaps ;c26 cm.  aIncludes index. 0aAttic Greek dialect97423Contributor biographical informationuhttp://www.loc.gov/catdir/bios/ucal051/92021731.html423Publisher descriptionuhttp://www.loc.gov/catdir/description/ucal041/92021731.html  a7bcbccorignewd1eocipf19gy-gencatlg  2ddccBK  apc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93  c3d3|;
 
     $t->post_ok("//$userid:$password@/api/v1/biblios")
@@ -1165,381 +1165,381 @@ subtest 'put() tests' => sub {
     my $biblionumber = $biblio->biblionumber;
 
     my $marcxml = q|<?xml version="1.0" encoding="UTF-8"?>
-<record
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
-    xmlns="http://www.loc.gov/MARC21/slim">
+    <record
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+        xmlns="http://www.loc.gov/MARC21/slim">
 
-  <leader>01102pam a2200289 a 6500</leader>
-  <controlfield tag="001">2504398</controlfield>
-  <controlfield tag="005">20200421093816.0</controlfield>
-  <controlfield tag="008">920610s1993    caub         s001 0 eng  </controlfield>
-  <datafield tag="010" ind1=" " ind2=" ">
-    <subfield code="a">   92021731 </subfield>
-  </datafield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">05200784384 (Test json)</subfield>
-  </datafield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">05200784464 (Test json)</subfield>
-  </datafield>
-  <datafield tag="040" ind1=" " ind2=" ">
-    <subfield code="a">DLC</subfield>
-    <subfield code="c">DLC</subfield>
-    <subfield code="d">DLC</subfield>
-  </datafield>
-  <datafield tag="041" ind1="0" ind2=" ">
-    <subfield code="a">enggrc</subfield>
-  </datafield>
-  <datafield tag="050" ind1="0" ind2="0">
-    <subfield code="a">PA522</subfield>
-    <subfield code="b">.M38 1993</subfield>
-  </datafield>
-  <datafield tag="082" ind1="0" ind2="0">
-    <subfield code="a">480</subfield>
-    <subfield code="2">20</subfield>
-  </datafield>
-  <datafield tag="100" ind1="1" ind2=" ">
-    <subfield code="a">Mastronarde, Donald J.</subfield>
-    <subfield code="9">389</subfield>
-  </datafield>
-  <datafield tag="245" ind1="1" ind2="0">
-    <subfield code="a">Introduction to Attic Greek  (Using marcxml) /</subfield>
-    <subfield code="c">Donald J. Mastronarde.</subfield>
-  </datafield>
-  <datafield tag="260" ind1=" " ind2=" ">
-    <subfield code="a">Berkeley :</subfield>
-    <subfield code="b">University of California Press,</subfield>
-    <subfield code="c">c1993.</subfield>
-  </datafield>
-  <datafield tag="300" ind1=" " ind2=" ">
-    <subfield code="a">ix, 425 p. :</subfield>
-    <subfield code="b">maps ;</subfield>
-    <subfield code="c">26 cm.</subfield>
-  </datafield>
-  <datafield tag="500" ind1=" " ind2=" ">
-    <subfield code="a">Includes index.</subfield>
-  </datafield>
-  <datafield tag="650" ind1=" " ind2="0">
-    <subfield code="a">Attic Greek dialect</subfield>
-    <subfield code="9">7</subfield>
-  </datafield>
-  <datafield tag="856" ind1="4" ind2="2">
-    <subfield code="3">Contributor biographical information</subfield>
-    <subfield code="u">http://www.loc.gov/catdir/bios/ucal051/92021731.html</subfield>
-  </datafield>
-  <datafield tag="856" ind1="4" ind2="2">
-    <subfield code="3">Publisher description</subfield>
-    <subfield code="u">http://www.loc.gov/catdir/description/ucal041/92021731.html</subfield>
-  </datafield>
-  <datafield tag="906" ind1=" " ind2=" ">
-    <subfield code="a">7</subfield>
-    <subfield code="b">cbc</subfield>
-    <subfield code="c">orignew</subfield>
-    <subfield code="d">1</subfield>
-    <subfield code="e">ocip</subfield>
-    <subfield code="f">19</subfield>
-    <subfield code="g">y-gencatlg</subfield>
-  </datafield>
-  <datafield tag="942" ind1=" " ind2=" ">
-    <subfield code="2">ddc</subfield>
-    <subfield code="c">BK</subfield>
-  </datafield>
-  <datafield tag="955" ind1=" " ind2=" ">
-    <subfield code="a">pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93</subfield>
-  </datafield>
-  <datafield tag="999" ind1=" " ind2=" ">
-    <subfield code="c">3</subfield>
-    <subfield code="d">3</subfield>
-  </datafield>
-</record>|;
+      <leader>01102pam a2200289 a 6500</leader>
+      <controlfield tag="001">2504398</controlfield>
+      <controlfield tag="005">20200421093816.0</controlfield>
+      <controlfield tag="008">920610s1993    caub         s001 0 eng  </controlfield>
+      <datafield tag="010" ind1=" " ind2=" ">
+        <subfield code="a">   92021731 </subfield>
+      </datafield>
+      <datafield tag="020" ind1=" " ind2=" ">
+        <subfield code="a">05200784384 (Test json)</subfield>
+      </datafield>
+      <datafield tag="020" ind1=" " ind2=" ">
+        <subfield code="a">05200784464 (Test json)</subfield>
+      </datafield>
+      <datafield tag="040" ind1=" " ind2=" ">
+        <subfield code="a">DLC</subfield>
+        <subfield code="c">DLC</subfield>
+        <subfield code="d">DLC</subfield>
+      </datafield>
+      <datafield tag="041" ind1="0" ind2=" ">
+        <subfield code="a">enggrc</subfield>
+      </datafield>
+      <datafield tag="050" ind1="0" ind2="0">
+        <subfield code="a">PA522</subfield>
+        <subfield code="b">.M38 1993</subfield>
+      </datafield>
+      <datafield tag="082" ind1="0" ind2="0">
+        <subfield code="a">480</subfield>
+        <subfield code="2">20</subfield>
+      </datafield>
+      <datafield tag="100" ind1="1" ind2=" ">
+        <subfield code="a">Mastronarde, Donald J.</subfield>
+        <subfield code="9">389</subfield>
+      </datafield>
+      <datafield tag="245" ind1="1" ind2="0">
+        <subfield code="a">Introduction to Attic Greek  (Using marcxml) /</subfield>
+        <subfield code="c">Donald J. Mastronarde.</subfield>
+      </datafield>
+      <datafield tag="260" ind1=" " ind2=" ">
+        <subfield code="a">Berkeley :</subfield>
+        <subfield code="b">University of California Press,</subfield>
+        <subfield code="c">c1993.</subfield>
+      </datafield>
+      <datafield tag="300" ind1=" " ind2=" ">
+        <subfield code="a">ix, 425 p. :</subfield>
+        <subfield code="b">maps ;</subfield>
+        <subfield code="c">26 cm.</subfield>
+      </datafield>
+      <datafield tag="500" ind1=" " ind2=" ">
+        <subfield code="a">Includes index.</subfield>
+      </datafield>
+      <datafield tag="650" ind1=" " ind2="0">
+        <subfield code="a">Attic Greek dialect</subfield>
+        <subfield code="9">7</subfield>
+      </datafield>
+      <datafield tag="856" ind1="4" ind2="2">
+        <subfield code="3">Contributor biographical information</subfield>
+        <subfield code="u">http://www.loc.gov/catdir/bios/ucal051/92021731.html</subfield>
+      </datafield>
+      <datafield tag="856" ind1="4" ind2="2">
+        <subfield code="3">Publisher description</subfield>
+        <subfield code="u">http://www.loc.gov/catdir/description/ucal041/92021731.html</subfield>
+      </datafield>
+      <datafield tag="906" ind1=" " ind2=" ">
+        <subfield code="a">7</subfield>
+        <subfield code="b">cbc</subfield>
+        <subfield code="c">orignew</subfield>
+        <subfield code="d">1</subfield>
+        <subfield code="e">ocip</subfield>
+        <subfield code="f">19</subfield>
+        <subfield code="g">y-gencatlg</subfield>
+      </datafield>
+      <datafield tag="942" ind1=" " ind2=" ">
+        <subfield code="2">ddc</subfield>
+        <subfield code="c">BK</subfield>
+      </datafield>
+      <datafield tag="955" ind1=" " ind2=" ">
+        <subfield code="a">pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93</subfield>
+      </datafield>
+      <datafield tag="999" ind1=" " ind2=" ">
+        <subfield code="c">3</subfield>
+        <subfield code="d">3</subfield>
+      </datafield>
+    </record>|;
 
     my $mij = q|{
-  "fields": [
-    {
-      "001": "2504398"
-    },
-    {
-      "005": "20200421093816.0"
-    },
-    {
-      "008": "920610s1993    caub         s001 0 eng  "
-    },
-    {
-      "010": {
-        "ind1": " ",
-        "subfields": [
-          {
-            "a": "   92021731 "
+      "fields": [
+        {
+          "001": "2504398"
+        },
+        {
+          "005": "20200421093816.0"
+        },
+        {
+          "008": "920610s1993    caub         s001 0 eng  "
+        },
+        {
+          "010": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "   92021731 "
+              }
+            ],
+            "ind2": " "
           }
-        ],
-        "ind2": " "
-      }
-    },
-    {
-      "020": {
-        "subfields": [
-          {
-            "a": "05200784382 (Test mij)"
+        },
+        {
+          "020": {
+            "subfields": [
+              {
+                "a": "05200784382 (Test mij)"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "020": {
-        "subfields": [
-          {
-            "a": "05200784462 (Test mij)"
+        },
+        {
+          "020": {
+            "subfields": [
+              {
+                "a": "05200784462 (Test mij)"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "040": {
-        "subfields": [
-          {
-            "a": "DLC"
-          },
-          {
-            "c": "DLC"
-          },
-          {
-            "d": "DLC"
+        },
+        {
+          "040": {
+            "subfields": [
+              {
+                "a": "DLC"
+              },
+              {
+                "c": "DLC"
+              },
+              {
+                "d": "DLC"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "041": {
-        "ind2": " ",
-        "subfields": [
-          {
-            "a": "enggrc"
+        },
+        {
+          "041": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "enggrc"
+              }
+            ],
+            "ind1": "0"
           }
-        ],
-        "ind1": "0"
-      }
-    },
-    {
-      "050": {
-        "subfields": [
-          {
-            "a": "PA522"
-          },
-          {
-            "b": ".M38 1993"
+        },
+        {
+          "050": {
+            "subfields": [
+              {
+                "a": "PA522"
+              },
+              {
+                "b": ".M38 1993"
+              }
+            ],
+            "ind1": "0",
+            "ind2": "0"
           }
-        ],
-        "ind1": "0",
-        "ind2": "0"
-      }
-    },
-    {
-      "082": {
-        "subfields": [
-          {
-            "a": "480"
-          },
-          {
-            "2": "20"
+        },
+        {
+          "082": {
+            "subfields": [
+              {
+                "a": "480"
+              },
+              {
+                "2": "20"
+              }
+            ],
+            "ind2": "0",
+            "ind1": "0"
           }
-        ],
-        "ind2": "0",
-        "ind1": "0"
-      }
-    },
-    {
-      "100": {
-        "ind2": " ",
-        "subfields": [
-          {
-            "a": "Mastronarde, Donald J."
-          },
-          {
-            "9": "389"
+        },
+        {
+          "100": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "Mastronarde, Donald J."
+              },
+              {
+                "9": "389"
+              }
+            ],
+            "ind1": "1"
           }
-        ],
-        "ind1": "1"
-      }
-    },
-    {
-      "245": {
-        "ind1": "1",
-        "subfields": [
-          {
-            "a": "Introduction to Attic Greek  (Using mij) /"
-          },
-          {
-            "c": "Donald J. Mastronarde."
+        },
+        {
+          "245": {
+            "ind1": "1",
+            "subfields": [
+              {
+                "a": "Introduction to Attic Greek  (Using mij) /"
+              },
+              {
+                "c": "Donald J. Mastronarde."
+              }
+            ],
+            "ind2": "0"
           }
-        ],
-        "ind2": "0"
-      }
-    },
-    {
-      "260": {
-        "subfields": [
-          {
-            "a": "Berkeley :"
-          },
-          {
-            "b": "University of California Press,"
-          },
-          {
-            "c": "c1993."
+        },
+        {
+          "260": {
+            "subfields": [
+              {
+                "a": "Berkeley :"
+              },
+              {
+                "b": "University of California Press,"
+              },
+              {
+                "c": "c1993."
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "300": {
-        "ind1": " ",
-        "subfields": [
-          {
-            "a": "ix, 425 p. :"
-          },
-          {
-            "b": "maps ;"
-          },
-          {
-            "c": "26 cm."
+        },
+        {
+          "300": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "ix, 425 p. :"
+              },
+              {
+                "b": "maps ;"
+              },
+              {
+                "c": "26 cm."
+              }
+            ],
+            "ind2": " "
           }
-        ],
-        "ind2": " "
-      }
-    },
-    {
-      "500": {
-        "subfields": [
-          {
-            "a": "Includes index."
+        },
+        {
+          "500": {
+            "subfields": [
+              {
+                "a": "Includes index."
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "650": {
-        "subfields": [
-          {
-            "a": "Attic Greek dialect"
-          },
-          {
-            "9": "7"
+        },
+        {
+          "650": {
+            "subfields": [
+              {
+                "a": "Attic Greek dialect"
+              },
+              {
+                "9": "7"
+              }
+            ],
+            "ind2": "0",
+            "ind1": " "
           }
-        ],
-        "ind2": "0",
-        "ind1": " "
-      }
-    },
-    {
-      "856": {
-        "subfields": [
-          {
-            "3": "Contributor biographical information"
-          },
-          {
-            "u": "http://www.loc.gov/catdir/bios/ucal051/92021731.html"
+        },
+        {
+          "856": {
+            "subfields": [
+              {
+                "3": "Contributor biographical information"
+              },
+              {
+                "u": "http://www.loc.gov/catdir/bios/ucal051/92021731.html"
+              }
+            ],
+            "ind2": "2",
+            "ind1": "4"
           }
-        ],
-        "ind2": "2",
-        "ind1": "4"
-      }
-    },
-    {
-      "856": {
-        "ind1": "4",
-        "subfields": [
-          {
-            "3": "Publisher description"
-          },
-          {
-            "u": "http://www.loc.gov/catdir/description/ucal041/92021731.html"
+        },
+        {
+          "856": {
+            "ind1": "4",
+            "subfields": [
+              {
+                "3": "Publisher description"
+              },
+              {
+                "u": "http://www.loc.gov/catdir/description/ucal041/92021731.html"
+              }
+            ],
+            "ind2": "2"
           }
-        ],
-        "ind2": "2"
-      }
-    },
-    {
-      "906": {
-        "subfields": [
-          {
-            "a": "7"
-          },
-          {
-            "b": "cbc"
-          },
-          {
-            "c": "orignew"
-          },
-          {
-            "d": "1"
-          },
-          {
-            "e": "ocip"
-          },
-          {
-            "f": "19"
-          },
-          {
-            "g": "y-gencatlg"
+        },
+        {
+          "906": {
+            "subfields": [
+              {
+                "a": "7"
+              },
+              {
+                "b": "cbc"
+              },
+              {
+                "c": "orignew"
+              },
+              {
+                "d": "1"
+              },
+              {
+                "e": "ocip"
+              },
+              {
+                "f": "19"
+              },
+              {
+                "g": "y-gencatlg"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    },
-    {
-      "942": {
-        "subfields": [
-          {
-            "2": "ddc"
-          },
-          {
-            "c": "BK"
+        },
+        {
+          "942": {
+            "subfields": [
+              {
+                "2": "ddc"
+              },
+              {
+                "c": "BK"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "955": {
-        "subfields": [
-          {
-            "a": "pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93"
+        },
+        {
+          "955": {
+            "subfields": [
+              {
+                "a": "pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
           }
-        ],
-        "ind2": " ",
-        "ind1": " "
-      }
-    },
-    {
-      "999": {
-        "subfields": [
-          {
-            "c": "3"
-          },
-          {
-            "d": "3"
+        },
+        {
+          "999": {
+            "subfields": [
+              {
+                "c": "3"
+              },
+              {
+                "d": "3"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      }
-    }
-  ],
-  "leader": "01102pam a2200289 a 8500"
-}|;
+        }
+      ],
+      "leader": "01102pam a2200289 a 8500"
+    }|;
     my $marc = q|01116pam a2200289 a 4500001000800000005001700008008004100025010001700066020002800083020002800111040001800139041001100157050002100168082001200189100003200201245007500233260005600308300003300364500002000397650002700417856009500444856008700539906004500626942001200671955013000683999001300813250439820221223213433.0920610s1993    caub         s001 0 eng    a   92021731   a05200784384 (Test json)  a05200784464 (Test json)  aDLCcDLCdDLC0 aenggrc00aPA522b.M38 199300a4802201 aMastronarde, Donald J.938910aIntroduction to Attic Greek  (Using usmarc) /cDonald J. Mastronarde.  aBerkeley :bUniversity of California Press,cc1993.  aix, 425 p. :bmaps ;c26 cm.  aIncludes index. 0aAttic Greek dialect97423Contributor biographical informationuhttp://www.loc.gov/catdir/bios/ucal051/92021731.html423Publisher descriptionuhttp://www.loc.gov/catdir/description/ucal041/92021731.html  a7bcbccorignewd1eocipf19gy-gencatlg  2ddccBK  apc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93  c715d715|;
 
     $t->put_ok("//$userid:$password@/api/v1/biblios/$biblionumber")
@@ -1580,6 +1580,60 @@ subtest 'put() tests' => sub {
     $biblio = Koha::Biblios->find($biblionumber);
 
     is($biblio->title, 'Introduction to Attic Greek  (Using usmarc) /');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list() tests' => sub {
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblionumber1 = $builder->build_sample_biblio->biblionumber;
+    my $biblionumber2 = $builder->build_sample_biblio->biblionumber;
+
+    my $search =
+"[{\"biblionumber\": \"$biblionumber1\"}, {\"biblionumber\": \"$biblionumber2\"}]";
+    $t->get_ok(
+        "//$userid:$password@/api/v1/biblios/" => { 'x-koha-query' => $search }
+    )->status_is(403);
+
+    $patron->flags(4)->store;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'application/weird+format', 'x-koha-query' => $search } )
+      ->status_is(400);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'application/json', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'application/marc', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+          { Accept => 'text/plain', 'x-koha-query' => $search } )
+      ->status_is(200);
 
     $schema->storage->txn_rollback;
 };
