@@ -1724,21 +1724,24 @@ sub _update_batch_record_counts {
     my ($batch_id) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("UPDATE import_batches SET
-                                        num_records = (
+    my ( $num_records ) = $dbh->selectrow_array(q|
                                             SELECT COUNT(*)
                                             FROM import_records
-                                            WHERE import_batch_id = import_batches.import_batch_id),
-                                        num_items = (
+                                            WHERE import_batch_id = ?
+    |, undef, $batch_id );
+    my ( $num_items ) = $dbh->selectrow_array(q|
                                             SELECT COUNT(*)
                                             FROM import_records
                                             JOIN import_items USING (import_record_id)
-                                            WHERE import_batch_id = import_batches.import_batch_id
-                                            AND record_type = 'biblio')
-                                    WHERE import_batch_id = ?");
-    $sth->bind_param(1, $batch_id);
-    $sth->execute();
-    $sth->finish();
+                                            WHERE import_batch_id = ? AND record_type = 'biblio'
+    |, undef, $batch_id );
+    $dbh->do(
+        "UPDATE import_batches SET num_records=?, num_items=? WHERE import_batch_id=?",
+        undef,
+        $num_records,
+        $num_items,
+        $batch_id,
+    );
 }
 
 sub _get_commit_action {
