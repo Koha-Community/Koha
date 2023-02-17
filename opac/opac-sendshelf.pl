@@ -116,7 +116,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             content => Encode::encode("UTF-8", $iso2709),
         };
 
-        C4::Letters::EnqueueLetter({
+        my $message_id = C4::Letters::EnqueueLetter({
             letter => $letter,
             message_transport_type => 'email',
             borrowernumber => $patron->borrowernumber,
@@ -124,6 +124,8 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             reply_address => $user_email,
             attachments => [$attachment],
         });
+
+        C4::Letters::SendQueuedMessages({ message_id => $message_id });
 
         $template->param( SENT => 1 );
     }

@@ -99,13 +99,15 @@ if ( $email_add ) {
             content => Encode::encode("UTF-8", $iso2709),
         };
 
-        C4::Letters::EnqueueLetter({
+        my $message_id = C4::Letters::EnqueueLetter({
             letter => $letter,
             message_transport_type => 'email',
             to_address => $email_add,
             reply_address => $user_email,
             attachments => [$attachment],
         });
+
+        C4::Letters::SendQueuedMessages({ message_id => $message_id });
 
         $template->param( SENT => 1 );
     }
