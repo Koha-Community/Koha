@@ -157,23 +157,13 @@ while (1) {
     }
 }
 $conn->disconnect;
+$pm->wait_all_children;
 
 sub process_job {
     my ( $job, $args ) = @_;
-
-    my $pid;
-    if ( $pid = fork ) {
-        wait;
-        return;
-    }
-
-    die "fork failed!" unless defined $pid;
-
     try {
         $job->process( $args );
     } catch {
         $job->status('failed')->store;
     };
-
-    exit;
 }
