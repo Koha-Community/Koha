@@ -149,5 +149,11 @@ __PACKAGE__->belongs_to(
 
 __PACKAGE__->add_columns( '+public' => { is_boolean => 1 }, );
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Ticket::Update';
+}
+sub koha_objects_class {
+    'Koha::Ticket::Updates';
+}
+
 1;
