@@ -8,7 +8,7 @@ After=syslog.target network.target
 User=%i-koha
 Environment=PERL5LIB=/usr/share/koha/lib
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
-ExecStart=/usr/share/koha/bin/background_jobs_worker.pl
+ExecStart=/usr/share/koha/bin/workers/background_jobs_worker.pl
 Restart=on-failure
 RestartSec=5s
 StartLimitBurst=3
