@@ -23,6 +23,7 @@ use Carp qw( croak );
 use base qw(Koha::ExternalContent);
 use WebService::ILS::OverDrive::Patron;
 use C4::Context;
+use Koha;
 use LWP::UserAgent;
 
 =head1 NAME
@@ -223,6 +224,7 @@ sub checkout_download_url {
 
     my $ua = LWP::UserAgent->new;
     $ua->max_redirect(0);
+    $ua->agent( 'Koha/'.Koha::version() );
     my $response = $ua->get(
         "https://patron.api.overdrive.com/v1/patrons/me/checkouts/".$item_id."/formats/downloadredirect",
         'Authorization' => "Bearer ".$self->client->access_token,
