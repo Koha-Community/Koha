@@ -1641,7 +1641,8 @@
                     document.getElementById("qrcode").appendChild( qrcode );
                 }
 
-                $(".show_qrcode").on("click", function(){
+                $(".show_qrcode").on("click", function(e){
+                    e.preventDefault();
                     var qrcodeImg = $("#qrcode");
                     if( qrcodeImg.hasClass("d-none") ){
                         qrcodeImg.removeClass("d-none");
