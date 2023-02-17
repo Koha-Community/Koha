@@ -183,6 +183,15 @@ legend:hover {
                                     [% IF ERROR_bad_email_alternative %]
                                         <li id="ERROR_bad_email_alternative">The alternative email is invalid.</li>
                                     [% END %]
+                                    [% IF ( ERROR_child_no_guarantor ) %]
+                                        <li id="ERROR_child_no_guarantor">A child patron needs a guarantor.</li>
+                                    [% END %]
+                                    [% IF ( ERROR_guarantor_is_guarantee ) %]
+                                        <li id="ERROR_guarantor_is_guarantee">A guarantor cannot be a guarantee.</li>
+                                    [% END %]
+                                    [% IF ( ERROR_cannot_delete_guarantor ) %]
+                                        <li id="ERROR_cannot_delete_guarantor">Cannot delete guarantor(s). A child patron needs a guarantor.</li>
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]

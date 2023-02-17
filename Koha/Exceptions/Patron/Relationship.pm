@@ -32,8 +32,12 @@ use Exception::Class (
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship' => {
         isa         => 'Koha::Exceptions::Patron::Relationship',
         description => 'The specified relationship is invalid',
-        fields      =>  ['relationship','no_relationship']
-    }
+        fields => [ 'relationship', 'no_relationship', 'invalid_guarantor' ]
+    },
+    'Koha::Exceptions::Patron::Relationship::NoGuarantor' => {
+        isa         => 'Koha::Exceptions::Patron::Relationship',
+        description => 'Child patron needs a guarantor',
+    },
 );
 
 sub full_message {
@@ -45,6 +49,9 @@ sub full_message {
         if ( $self->isa('Koha::Exceptions::Patron::Relationship::InvalidRelationship') ) {
             if ( $self->no_relationship ) {
                 $msg = sprintf( "No relationship passed." );
+            }
+            elsif ( $self->invalid_guarantor ) {
+                $msg = sprintf("Child patron cannot be a guarantor.");
             }
             else {
                 $msg = sprintf("Invalid relationship passed, '%s' is not defined.", $self->relationship );

@@ -191,7 +191,10 @@ to db
 =cut
 
 sub store {
-    my ($self) = @_;
+    my $self = shift;
+    my $params = @_ ? shift : {};
+
+    my $guarantors = $params->{guarantors} // [];
 
     $self->_result->result_source->schema->txn_do(
         sub {
@@ -288,6 +291,21 @@ sub store {
 
                 $self->borrowernumber(undef);
 
+                if ( C4::Context->preference('ChildNeedsGuarantor')
+                    and ( $self->is_child or $self->category->can_be_guarantee )
+                    and $self->contactname eq ""
+                    and !@$guarantors )
+                {
+                    Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
+                }
+
+                foreach my $guarantor (@$guarantors) {
+                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee) {
+                        Koha::Exceptions::Patron::Relationship::InvalidRelationship
+                        ->throw( invalid_guarantor => 1 );
+                    }
+                }
+
                 $self = $self->SUPER::store;
 
                 $self->add_enrolment_fee_if_needed(0);
@@ -331,6 +349,24 @@ sub store {
                     $self->guarantor_relationships->delete
                       unless ( $self->category->can_be_guarantee );
 
+                }
+
+                my @existing_guarantors = $self->guarantor_relationships()->guarantors->as_list;
+                push @$guarantors, @existing_guarantors;
+
+                if ( C4::Context->preference('ChildNeedsGuarantor')
+                    and ( $self->is_child or $self->category->can_be_guarantee )
+                    and $self->contactname eq ""
+                    and !@$guarantors )
+                {
+                    Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
+                }
+
+                foreach my $guarantor (@$guarantors) {
+                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee) {
+                        Koha::Exceptions::Patron::Relationship::InvalidRelationship
+                        ->throw( invalid_guarantor => 1 );
+                    }
                 }
 
                 # Actionlogs
