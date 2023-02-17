@@ -212,9 +212,9 @@ done
 adjust_paths_dev_install $1
 
 if [ "$DEV_INSTALL" = "" ]; then
-    worker_DAEMON="${KOHA_HOME}/bin/background_jobs_worker.pl"
+    worker_DAEMON="${KOHA_HOME}/bin/workers/background_jobs_worker.pl"
 else
-    worker_DAEMON="${KOHA_HOME}/misc/background_jobs_worker.pl"
+    worker_DAEMON="${KOHA_HOME}/misc/workers/background_jobs_worker.pl"
 fi
 
 # PERL5LIB has been read from etc/default

@@ -6,7 +6,7 @@ After=syslog.target network.target
 [Service]
 Environment=PERL5LIB=__PERL5LIB_DIRS__
 Environment=KOHA_CONF=__KOHA_CONF_DIR__/koha-conf.xml
-ExecStart=__SCRIPT_DIR__/background_jobs_worker.pl
+ExecStart=__SCRIPT_DIR__/workers/background_jobs_worker.pl
 Restart=on-failure
 RestartSec=5s
 StartLimitBurst=3
