@@ -4,20 +4,32 @@
     <div class="dialog alert modal" v-if="warning">
         <span v-html="warning"></span>
         <a
-            v-if="accept"
-            id="close_modal"
-            class="btn btn-primary btn-xs"
-            role="button"
-            @click="accept"
-            >{{ $__("Accept") }}</a
-        >
-        <a
             id="close_modal"
             class="btn btn-default btn-xs"
             role="button"
             @click="removeMessages"
             >{{ $__("Close") }}</a
         >
+    </div>
+    <div class="modal_centered" v-if="confirmation">
+        <div class="dialog alert confirmation">
+            <span v-html="confirmation"></span>
+            <a
+                v-if="accept"
+                id="close_modal"
+                class="btn btn-primary btn-xs"
+                role="button"
+                @click="accept"
+                >{{ $__("Accept") }}</a
+            >
+            <a
+                id="close_modal"
+                class="btn btn-default btn-xs"
+                role="button"
+                @click="removeMessages"
+                >{{ $__("Close") }}</a
+            >
+        </div>
     </div>
     <!-- Must be styled differently -->
 
@@ -35,13 +47,21 @@ import { storeToRefs } from "pinia"
 export default {
     setup() {
         const mainStore = inject("mainStore")
-        const { message, error, warning, accept, is_submitting, is_loading } =
-            storeToRefs(mainStore)
+        const {
+            message,
+            error,
+            warning,
+            confirmation,
+            accept,
+            is_submitting,
+            is_loading,
+        } = storeToRefs(mainStore)
         const { removeMessages } = mainStore
         return {
             message,
             error,
             warning,
+            confirmation,
             accept,
             is_submitting,
             is_loading,
@@ -83,5 +103,18 @@ export default {
     top: 50%;
     left: 40%;
     width: 10%;
+}
+
+.confirmation {
+    position: absolute;
+    top: 25%;
+    left: 40%;
+
+    display: flex;
+    width: 50%;
+    min-height: 10%;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
 }
 </style>

@@ -5,6 +5,7 @@ export const useMainStore = defineStore("main", {
         _message: null,
         _error: null,
         _warning: null,
+        _confirmation: null,
         _accept: null,
         previousMessage: null,
         previousError: null,
@@ -17,30 +18,43 @@ export const useMainStore = defineStore("main", {
             this._error = null;
             this._warning = null;
             this._message = message;
+            this._confirmation = null;
             this.displayed_already = displayed; /* Will be displayed on the next view */
         },
         setError(error, displayed = true) {
             this._error = error;
+            this._warning = null;
             this._message = null;
+            this._confirmation = null;
             this.displayed_already = displayed; /* Is displayed on the current view */
         },
         setWarning(warning, accept, displayed = true) {
+            this._error = null;
+            this._warning = warning;
+            this._message = null;
+            this._confirmation = null;
+            this.displayed_already = displayed; /* Is displayed on the current view */
+        },
+        setConfirmation(confirmation, accept, displayed = true){
             if(accept) {
                 this._accept = async () => {
                     await accept()
                     this.removeMessages()
                 }
             }
-            this._warning = warning;
+            this._error = null;
+            this._warning = null;
             this._message = null;
+            this._confirmation = confirmation;
             this.displayed_already = displayed; /* Is displayed on the current view */
         },
         removeMessages() {
             if (this.displayed_already) {
-                this._accept = null;
                 this._error = null;
                 this._warning = null;
                 this._message = null;
+                this._confirmation = null;
+                this._accept = null;
             }
             this.displayed_already = true;
         },
@@ -66,6 +80,9 @@ export const useMainStore = defineStore("main", {
         },
         message() {
             return this._message
+        },
+        confirmation() {
+            return this._confirmation
         },
         accept() {
             return this._accept
