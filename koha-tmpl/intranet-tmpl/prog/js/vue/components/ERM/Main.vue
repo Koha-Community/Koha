@@ -1,5 +1,5 @@
 <template>
-    <div v-if="is_loading">
+    <div v-if="_is_loading">
         <Dialog />
     </div>
     <div v-else-if="ERMModule">
@@ -139,7 +139,7 @@ export default {
 
         // Note that we cannot use loading and loaded from messages
         // Pinia is not initiated yet there
-        const { is_loading } = storeToRefs(mainStore)
+        const { _is_loading } = storeToRefs(mainStore)
 
         return {
             vendorStore,
@@ -147,7 +147,7 @@ export default {
             mainStore,
             erm_providers,
             ERMModule,
-            is_loading,
+            _is_loading,
         }
     },
     data() {
@@ -156,7 +156,7 @@ export default {
         }
     },
     beforeCreate() {
-        this.mainStore.is_loading = true
+        this.mainStore._is_loading = true
 
         const acq_client = APIClient.acquisition
         acq_client.vendors.getAll().then(
@@ -200,7 +200,7 @@ export default {
                     }
                 )
             })
-            .then(() => (this.mainStore.is_loading = false))
+            .then(() => (this.mainStore._is_loading = false))
     },
     components: {
         Breadcrumb,

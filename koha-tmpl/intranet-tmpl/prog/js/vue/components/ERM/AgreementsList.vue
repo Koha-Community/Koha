@@ -57,6 +57,8 @@ export default {
         const AVStore = inject("AVStore")
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
+        const { setWarning, setMessage } = inject("mainStore")
+
         const table_id = "agreement_list"
         useDataTable(table_id)
 
@@ -66,6 +68,8 @@ export default {
             map_av_dt_filter,
             table_id,
             logged_in_user,
+            setWarning,
+            setMessage,
         }
     },
     data: function () {
@@ -121,13 +125,26 @@ export default {
             )
         },
         delete_agreement: function (agreement_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/agreements/delete/" + agreement_id
-            )
+            this.setWarning(this.$__("Are you sure you want to remove this agreement?"), () => {
+                const client = APIClient.erm
+                client.agreements.delete(agreement_id).then(
+                    success => {
+                        this.setMessage(this.$__("Agreement deleted"))
+                        this.refresh_table()
+                    },
+                    error => {}
+                )
+            })
         },
         select_agreement: function (agreement_id) {
             this.$emit("select-agreement", agreement_id)
             this.$emit("close")
+        },
+        refresh_table: function(){
+            $("#" + this.table_id)
+                .DataTable()
+                .ajax.url(this.datatable_url)
+                .draw()
         },
         filter_table: async function () {
             if (this.before_route_entered) {
@@ -143,10 +160,7 @@ export default {
                         .toISOString()
                         .substring(0, 10)
             }
-            $("#" + this.table_id)
-                .DataTable()
-                .ajax.url(this.datatable_url)
-                .draw()
+            this.refresh_table()
         },
         table_url: function () {},
         build_datatable: function () {
