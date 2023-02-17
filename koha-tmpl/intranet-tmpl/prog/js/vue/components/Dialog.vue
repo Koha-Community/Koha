@@ -1,8 +1,16 @@
 <template>
-    <div class="dialog message" v-if="message">{{ message }}</div>
-    <div class="dialog alert" v-if="error">{{ error }}</div>
+    <div class="dialog message" v-if="message" v-html="message"></div>
+    <div class="dialog alert" v-if="error" v-html="error"></div>
     <div class="dialog alert modal" v-if="warning">
-        {{ warning }}
+        <span v-html="warning"></span>
+        <a
+            v-if="accept"
+            id="close_modal"
+            class="btn btn-primary btn-xs"
+            role="button"
+            @click="accept"
+            >{{ $__("Accept") }}</a
+        >
         <a
             id="close_modal"
             class="btn btn-default btn-xs"
@@ -27,13 +35,14 @@ import { storeToRefs } from "pinia"
 export default {
     setup() {
         const mainStore = inject("mainStore")
-        const { message, error, warning, is_submitting, is_loading } =
+        const { message, error, warning, accept, is_submitting, is_loading } =
             storeToRefs(mainStore)
         const { removeMessages } = mainStore
         return {
             message,
             error,
             warning,
+            accept,
             is_submitting,
             is_loading,
             removeMessages,
