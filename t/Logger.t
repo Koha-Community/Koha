@@ -47,10 +47,16 @@ HERE
 
     t::lib::Mocks::mock_config('log4perl_conf', $config_file);
 
-    system("chmod 400 $log");
-    throws_ok { Koha::Logger->get } qr/Permission denied/, 'Logger did not init correctly without permission';
+    my $login = getlogin || getpwuid($<) || q{};
 
-    system("chmod 700 $log");
+    SKIP: {
+        skip "Running as root user", 1 if $login eq 'root';
+
+        system("chmod 400 $log");
+        throws_ok { Koha::Logger->get } qr/Permission denied/, 'Logger did not init correctly without permission';
+        system("chmod 700 $log");
+    }
+
     my $logger = Koha::Logger->get( { interface => 'intranet' } );
     is( exists $logger->{logger}, 1, 'Log4perl config found');
     is( $logger->warn('Message 1'), 1, '->warn returned a value' );
