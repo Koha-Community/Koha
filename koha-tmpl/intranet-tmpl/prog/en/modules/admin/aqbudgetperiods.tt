@@ -77,96 +77,75 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
 
         [% IF ( add_form ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            </li>
+            [% END %]
             [% IF ( budget_period_id ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify budget '[% budget_period_description | html %]'
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Modify budget '[% budget_period_description | html %]'
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Add budget
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Add budget
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            </li>
+            [% END %]
             [% IF ( total || funds_exist ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Cannot delete budget '[% budget_period_description | html %]'
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Cannot delete budget '[% budget_period_description | html %]'
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Delete budget '[% budget_period_description | html %]'?
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Delete budget '[% budget_period_description | html %]'?
+                [% END %]
             [% END %]
         [% END %]
 
             [% IF ( duplicate_form ) %]
-                <li>
+                [% WRAPPER breadcrumb_item %]
                     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page">
-                        Duplicate budget
-                    </a>
-                </li>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Duplicate budget
+                [% END %]
             [% END %]
 
         [% IF close_form %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Close budget [% budget_period_description | html %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Close budget [% budget_period_description | html %]
+            [% END %]
         [% END %]
 
         [% IF closed %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Budget [% budget_period_description | html %] closed
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Budget [% budget_period_description | html %] closed
+            [% END %]
         [% END %]
 
         [% IF ( else ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Budgets administration
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Budgets administration
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

@@ -12,68 +12,58 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
-        </li>
+        [% END %]
 
         [% IF ( authtypecode ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% authtypecode | html %] framework</a>
-            </li>
+            [% END %]
         [% ELSE %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-            </li>
+            [% END %]
         [% END %]
 
         [% IF ( else ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Authority MARC subfield structure for [% tagfield | html %]
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Authority MARC subfield structure for [% tagfield | html %]
+            [% END %]
         [% ELSE %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a>
-            </li>
+            [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of subfield [% tagsubfield | html %]?
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Confirm deletion of subfield [% tagsubfield | html %]?
+            [% END %]
         [% END %]
 
         [% IF ( add_form ) %]
             [% IF ( use_heading_flags_p ) %]
                 [% IF ( heading_edit_subfields_p ) %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Edit MARC subfields constraints
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        Edit MARC subfields constraints
+                    [% END %]
                 [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        [% action | html %]
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% action | html %]
+                [% END %]
             [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

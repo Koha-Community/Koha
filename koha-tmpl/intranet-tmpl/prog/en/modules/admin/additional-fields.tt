@@ -21,55 +21,42 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-            </li>
-            [% SWITCH op %]
-                [% CASE 'add_form' %]
-                    <li>
-                        <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
-                    </li>
-                    [% IF field %]
-                        <li>
-                            <a href="#" aria-current="page">
-                                Modify field '[% field.name | html %]'
-                            </a>
-                        </li>
-                    [% ELSE %]
-                        <li>
-                            <a href="#" aria-current="page">
-                                Add field
-                            </a>
-                        </li>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
+        [% SWITCH op %]
+            [% CASE 'add_form' %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                [% END %]
+                [% IF field %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        Modify field '[% field.name | html %]'
                     [% END %]
+                [% ELSE %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        Add field
+                    [% END %]
+                [% END %]
 
-                [% CASE 'list' %]
-                    <li>
-                        <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Modify fields for '[% tablename | html %]'
-                        </a>
-                    </li>
+            [% CASE 'list' %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Modify fields for '[% tablename | html %]'
+                [% END %]
 
-                [% CASE %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Manage additional fields
-                        </a>
-                    </li>
+            [% CASE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Manage additional fields
+                [% END %]
 
-            [% END %]
-        </ol>
-    </nav>
-    [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

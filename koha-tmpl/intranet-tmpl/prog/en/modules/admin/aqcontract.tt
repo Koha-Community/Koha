@@ -23,80 +23,63 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
-        </li>
+        [% END %]
 
         [% IF ( add_form ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-            </li>
+            [% END %]
             [% IF ( contractnumber ) %]
-                <li>
-                    <a href="#" aria-current="page">
+                [% WRAPPER breadcrumb_item bc_active=1 %]
                         Modify contract '[% contractname | html %]'
-                    </a>
-                </li>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New contract
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active=1 %]
+                    New contract
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF ( add_validate ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Data recorded
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active=1 %]
+                Data recorded
+            [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of contract [% contractnumber | html %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active=1 %]
+                Confirm deletion of contract [% contractnumber | html %]
+            [% END %]
         [% END %]
 
         [% IF ( delete_confirmed ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Contract deleted
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active=1 %]
+                Contract deleted
+            [% END %]
         [% END %]
 
         [% IF ( else ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Contracts
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active=1 %]
+                Contracts
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
