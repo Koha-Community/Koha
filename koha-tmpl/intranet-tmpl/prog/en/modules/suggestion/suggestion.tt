@@ -992,6 +992,16 @@
                                             </fieldset>
                                         </fieldset>
                                     </div> <!-- /.col-sm-2 -->
+                                    <div class="col-sm-2">
+                                        <fieldset class="brief">
+                                            <span class="label">Archive selected</span>
+                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                            <fieldset class="action">
+                                                <button type="submit" class="btn btn-primary" value="archive">Archive</button>
+                                            </fieldset>
+                                        </fieldset>
+                                    </div> <!-- /.col-sm-2 -->
                                 </div> <!-- /.row -->
 
                             [% ELSE %]
