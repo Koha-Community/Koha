@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
 [% BLOCK edit_contact %]
     <ol id="contact-form">
         <input type="hidden" name="contact_id" value="[% contact.id | html %]" />
@@ -306,7 +307,10 @@
             <div class="col-sm-6">
                 <div id="supplier-company-details" class="page-section">
                     <h2>Vendor details</h2>
-                    <p><span class="label">Type: </span>[% type | html %]</p>
+                    <p>
+                        <span class="label">Type: </span>
+                        [% IF (type) %][% AuthorisedValues.GetByCode( 'VENDOR_TYPE', type ) | html %][% END %]
+                    </p>
                     <p><span class="label">Company name: </span>[% name | html %]</p>
                     <p><span class="label">Postal address: </span>[% postal | html %]</p>
                     <p><span class="label">Physical address: </span>[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</p>
