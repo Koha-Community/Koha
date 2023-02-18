@@ -43,125 +43,106 @@ Authority MARC framework &rsaquo; Administration &rsaquo; Koha
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
-        </li>
+        [% END %]
 
         [% IF ( add_form ) %]
             [% IF ( use_heading_flags_p ) %]
 
                 [% IF ( heading_modify_tag_p ) %]
                     [% IF ( authtypecode ) %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
-                        </li>
+                        [% END %]
                     [% ELSE %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                        </li>
+                        [% END %]
                     [% END %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Modify tag
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        Modify tag
+                    [% END %]
                 [% END %]
 
                 [% IF ( heading_add_tag_p ) %]
                     [% IF ( authtypecode ) %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
-                        </li>
+                        [% END %]
                     [% ELSE %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                        </li>
+                        [% END %]
                     [% END %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            New tag
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        New tag
+                    [% END %]
                 [% END %]
 
             [% ELSE %]
                 [% IF ( authtypecode ) %]
-                    <li>
+                    [% WRAPPER breadcrumb_item %]
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
-                    </li>
+                    [% END %]
                 [% ELSE %]
-                    <li>
+                    [% WRAPPER breadcrumb_item %]
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                    </li>
+                    [% END %]
                 [% END %]
-                <li>
-                    <a href="#" aria-current="page">
-                        [% action | html %]
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% action | html %]
+                [% END %]
             [% END %]
 
         [% ELSE %]
             [% IF ( delete_confirm ) %]
                 [% IF ( authtypecode ) %]
-                    <li>
+                    [% WRAPPER breadcrumb_item %]
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
-                    </li>
+                    [% END %]
                 [% ELSE %]
-                    <li>
+                    [% WRAPPER breadcrumb_item %]
                         <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                    </li>
+                    [% END %]
                 [% END %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Confirm deletion
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    Confirm deletion
+                [% END %]
             [% ELSE %]
                 [% IF ( delete_confirmed ) %]
                     [% IF ( authtypecode ) %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
-                        </li>
+                        [% END %]
                     [% ELSE %]
-                        <li>
+                        [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-                        </li>
+                        [% END %]
                     [% END %]
-                    <li>
-                        <a href="#" aria-current="page">
-                            Data deleted
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        Data deleted
+                    [% END %]
                 [% ELSE %]
                     [% IF ( authtypecode ) %]
-                        <li>
-                            <a href="#" aria-current="page">
-                                [% authtypecode | html %] Framework
-                            </a>
-                        </li>
+                        [% WRAPPER breadcrumb_item bc_active= 1 %]
+                            [% authtypecode | html %] Framework
+                        [% END %]
                     [% ELSE %]
-                        <li>
-                            <a href="#" aria-current="page">
-                                Default framework
-                            </a>
-                        </li>
+                        [% WRAPPER breadcrumb_item bc_active= 1 %]
+                            Default framework
+                        [% END %]
                     [% END %]
                 [% END %]
 
             [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
