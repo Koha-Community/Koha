@@ -156,6 +156,14 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {editcatalogue => $userflags},
                  });
 
+if ( $op eq 'edititem' || $op eq 'dupeitem' ) {
+    my $item = Koha::Items->find($itemnumber);
+    if ( !$item ) {
+        $itemnumber = undef;
+        $template->param( item_doesnt_exist => 1 );
+        output_and_exit( $input, $cookie, $template, 'unknown_item' );
+    }
+}
 
 # Does the user have a restricted item editing permission?
 my $uid = Koha::Patrons->find( $loggedinuser )->userid;
@@ -463,20 +471,18 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
     $current_item = Koha::Items->find($itemnumber)->unblessed;
-    # FIXME Handle non existent item
-    $nextop = "saveitem";
+    $nextop       = "saveitem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "dupeitem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
     $current_item = Koha::Items->find($itemnumber)->unblessed;
-    # FIXME Handle non existent item
-    if (C4::Context->preference('autoBarcode') eq 'incremental') {
-        my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+    if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
+        my ($barcode) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $current_item->{barcode} = $barcode;
     }
     else {
-        $current_item->{barcode} = undef; # Don't save it!
+        $current_item->{barcode} = undef;    # Don't save it!
     }
 
     $nextop = "additem";
