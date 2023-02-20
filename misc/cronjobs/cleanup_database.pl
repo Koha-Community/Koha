@@ -116,7 +116,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
    --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
-   --edifact-messages DAYS   Purge entries from edifact_messages table older than DAYS days.
+   --edifact-messages DAYS   Purge entries from the edifact_messages table older than DAYS days.
                              Defaults to 365 days if no days specified.
 USAGE
     exit $_[0];
@@ -734,12 +734,12 @@ if ($reports) {
 }
 
 if($edifact_msg_days) {
-    print "Purging edifact messages older than $edifact_msg_days days.\n" if $verbose;
+    print "Purging EDIFACT messages older than $edifact_msg_days days.\n" if $verbose;
     my $count = PurgeEdifactMessages($edifact_msg_days, $confirm);
     if ( $verbose ) {
         say $confirm
-          ? sprintf( "Done with purging %d edifact messages", $count )
-          : sprintf( "%d edifact messages would have been removed", $count );
+          ? sprintf( "Done with purging %d EDIFACT messages", $count )
+          : sprintf( "%d EDIFACT messages would have been removed", $count );
     }
 }
 
