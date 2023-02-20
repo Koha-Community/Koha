@@ -385,7 +385,7 @@
                                 </div>
                             [% ELSE %]
                                 <h3>Shibboleth login</h3>
-                                <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
+                                <p><a id="shib_url" href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
                                 [% UNLESS Koha.Preference('opacShibOnly') %]
                                     <h3>Local login</h3>
                                 [% END %]
