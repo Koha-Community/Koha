@@ -10,6 +10,8 @@ definitions:
     $ref: ./definitions/allows_renewal.yaml
   authorised_value:
     $ref: ./definitions/authorised_value.yaml
+  authorised_value_category:
+    $ref: ./definitions/authorised_value_category.yaml
   identity_provider:
     "$ref": ./definitions/identity_provider.yaml
   identity_provider_domain:
@@ -141,6 +143,8 @@ paths:
     $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains
   "/auth/identity_providers/{identity_provider_id}/domains/{identity_provider_domain_id}":
     $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains~1{identity_provider_domain_id}
+  /authorised_value_categories:
+    $ref: paths/authorised_value_categories.yaml#/~1authorised_value_categories
   "/authorised_value_categories/{authorised_value_category_name}/values":
     $ref: "./paths/authorised_values.yaml#/~1authorised_value_categories~1{authorised_value_category_name}~1values"
   "/biblios/{biblio_id}":
