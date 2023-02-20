@@ -1,0 +1,20 @@
+---
+type: object
+properties:
+  category_name:
+    type: string
+    description: Unique category name primary key
+    readOnly: true
+  is_system:
+    description: Is this category system or not
+    type: boolean
+    readOnly: true
+  authorised_values:
+    type: array
+    description: This category's authorised values
+    items:
+      $ref: authorised_value.yaml
+
+additionalProperties: false
+required:
+  - category_name
