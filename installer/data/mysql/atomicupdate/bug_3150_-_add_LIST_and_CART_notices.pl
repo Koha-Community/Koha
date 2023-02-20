@@ -28,6 +28,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% IF ( biblio.unititle ) %]Unified title: [% biblio.unititle | html %]<br>[% END %]
 [% IF ( biblio.serial ) %]Serial: [% biblio.serial | html %]<br>[% END %]
 [% IF ( biblioitem.lccn ) %]LCCN: [% biblioitem.lccn | html %]<br>[% END %]
+[% IF ( biblio.get_marc_host ) %]In: [% FOREACH entry IN biblio.get_marc_host %][% entry.title | html %][% IF ( entry.subtitle ) %][% FOREACH subtitle IN entry.subtitle.split(' | ') %][% subtitle | html %][% END %][% END %][% entry.part_number | html %] [% entry.part_name | html %]<br>[% END %][% END %]
 [% IF ( biblioitem.url ) %]URL: [% biblioitem.url | html %]<br>[% END %]
 <a href='[% Koha.Preference('OpacBaseUrl') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]'>View in online catalog</a>
 [% IF ( biblio.items.count > 0 ) %]<br>Items: <ul>[% FOREACH item IN biblio.items %]<li>[% Branches.GetName( item.holdingbranch ) | html %]
@@ -55,6 +56,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% IF ( biblio.unititle ) %]Unified title: [% biblio.unititle | html %]<br>[% END %]
 [% IF ( biblio.serial ) %]Serial: [% biblio.serial | html %]<br>[% END %]
 [% IF ( biblioitem.lccn ) %]LCCN: [% biblioitem.lccn | html %]<br>[% END %]
+[% IF ( biblio.get_marc_host ) %]In: [% FOREACH entry IN biblio.get_marc_host %][% entry.title | html %][% IF ( entry.subtitle ) %][% FOREACH subtitle IN entry.subtitle.split(' | ') %][% subtitle | html %][% END %][% END %][% entry.part_number | html %] [% entry.part_name | html %]<br>[% END %][% END %]
 [% IF ( biblioitem.url ) %]URL: [% biblioitem.url | html %]<br>[% END %]
 <a href='[% Koha.Preference('OpacBaseUrl') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]'>View in online catalog</a>
 [% IF ( biblio.items.count > 0 ) %]<br>Items: <ul>[% FOREACH item IN biblio.items %]<li>[% Branches.GetName( item.holdingbranch ) | html %]
