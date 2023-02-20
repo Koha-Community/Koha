@@ -30,7 +30,7 @@ describe("Package CRUD operations", () => {
     });
 
     beforeEach(() => {
-        cy.login("koha", "koha");
+        cy.login();
         cy.title().should("eq", "Koha staff interface");
     });
 
