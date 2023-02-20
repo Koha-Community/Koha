@@ -71,9 +71,7 @@ if ( $print eq 'checkinslip' ) {
     my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
 
     # get today's checkins
-    my @issue_ids = $patron->old_checkouts->search( { branchcode => $checkinslip_branch } )
-      ->filter_by_todays_checkins->get_column('issue_id');
-
+    my @issue_ids = $patron->old_checkouts->filter_by_todays_checkins->get_column('issue_id');
     my %loops = (
         old_issues => \@issue_ids,
     );
