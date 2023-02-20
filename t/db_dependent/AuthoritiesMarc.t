@@ -153,7 +153,8 @@ my $expected_marc21_summary = {
                  ],
     'seefrom' => [],
     'label' => 'Geographic Name',
-    'type' => 'Geographic Name'
+    'type' => 'Geographic Name',
+    'equalterm' => []
 };
 is_deeply(
     BuildSummary(C4::AuthoritiesMarc::GetAuthority(2), 2, 'GEOGR_NAME'),
@@ -196,7 +197,9 @@ my $expected_unimarc_name_summary = {
     'seealso' => [],
     'seefrom' => [],
     'summary' => 'Fossey, Brigitte',
-    'type' => 'Auteur'
+    'type' => 'Auteur',
+    'equalterm' => []
+
 };
 
 is_deeply(

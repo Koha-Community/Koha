@@ -992,7 +992,8 @@ sub BuildSummary {
         my $handler = C4::Heading::MARC21->new();
         my $subfields_to_report;
         my $subfields_to_subdivision="";
-        my $delimiter = " -- ";
+        my $delimiter = C4::Context->preference('AuthoritySeparator');
+
         foreach my $field ($record->field('1..')) {
             my $tag = $field->tag();
             next if "152" eq $tag;
@@ -1077,35 +1078,27 @@ sub BuildSummary {
             if ($tag eq '700') {
                 $subfields_to_report = 'abcdefghjklmnopqrst';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '710') {
                 $subfields_to_report = 'abcdefghklmnoprst';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '711') {
                 $subfields_to_report = 'acdefghklnpqst';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '730') {
                 $subfields_to_report = 'adfghklmnoprst';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '748') {
                 $subfields_to_report = 'ab';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '750') {
                 $subfields_to_report = 'ab';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '751') {
                 $subfields_to_report = 'a';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '755') {
                 $subfields_to_report = 'abvxyz';
                 $subfields_to_subdivision='vxyz';
-                $delimiter=" -- ";
             } elsif ($tag eq '780') {
                 $subfields_to_report = 'vxyz';
                 $delimiter=" ";
@@ -1116,7 +1109,7 @@ sub BuildSummary {
                 $subfields_to_report = 'vxyz';
                 $delimiter=" ";
             } elsif ($tag eq '785') {
-               $subfields_to_report = 'vxyz';
+                $subfields_to_report = 'vxyz';
                 $delimiter=" ";
             }
 
