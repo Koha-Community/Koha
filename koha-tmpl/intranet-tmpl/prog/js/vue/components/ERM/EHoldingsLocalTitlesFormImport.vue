@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import { setMessage, setError, setWarning } from "../../messages"
+import { setError } from "../../messages"
 import { createVNode, render } from "vue"
+import { APIClient } from "../../fetch/api-client.js"
 import { useDataTable } from "../../composables/datatables"
-import { checkError, fetchLocalPackages } from "../../fetch/erm.js"
 
 export default {
     setup() {
@@ -46,12 +46,17 @@ export default {
         }
     },
     beforeCreate() {
-        fetchLocalPackages().then(packages => {
-            this.packages = packages
-            if (this.packages.length) {
-                this.package_id = packages[0].package_id
-            }
-        })
+        const client = APIClient.erm
+        client.localPackages.getAll().then(
+            packages => {
+                this.packages = packages
+                if (this.packages.length) {
+                    this.package_id = packages[0].package_id
+                }
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         import_from_list: async function (list_id) {

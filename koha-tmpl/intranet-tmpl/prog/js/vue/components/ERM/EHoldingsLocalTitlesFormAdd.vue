@@ -388,7 +388,7 @@
 import { inject } from "vue"
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLocalTitle, checkError } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -450,10 +450,15 @@ export default {
         })
     },
     methods: {
-        async getTitle(title_id) {
-            const title = await fetchLocalTitle(title_id)
-            this.title = title
-            this.initialized = true
+        getTitle(title_id) {
+            const client = APIClient.erm
+            client.localTitles.get(title_id).then(
+                title => {
+                    this.title = title
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         checkForm(title) {
             let errors = []
@@ -481,13 +486,8 @@ export default {
             if (!this.checkForm(title)) {
                 return false
             }
-            let apiUrl = "/api/v1/erm/eholdings/local/titles"
 
-            let method = "POST"
-            if (title.title_id) {
-                method = "PUT"
-                apiUrl += "/" + title.title_id
-            }
+            let title_id = title.title_id
             delete title.title_id
             delete title.biblio_id
 
@@ -497,39 +497,28 @@ export default {
                 delete e.resource_id
             })
 
-            const options = {
-                method: method,
-                body: JSON.stringify(title),
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(
-                    response => {
-                        if (response && response.status == 200) {
-                            this.$router.push(
-                                "/cgi-bin/koha/erm/eholdings/local/titles"
-                            )
-                            setMessage(this.$__("Title updated"))
-                        } else if (response && response.status == 201) {
-                            this.$router.push(
-                                "/cgi-bin/koha/erm/eholdings/local/titles"
-                            )
-                            setMessage(this.$__("Title created"))
-                        } else if (response) {
-                            setError(response.message || response.statusText)
-                        }
+            const client = APIClient.erm
+            if (title_id) {
+                client.localTitles.update(title, title_id).then(
+                    success => {
+                        setMessage(this.$__("Title updated"))
+                        this.$router.push(
+                            "/cgi-bin/koha/erm/eholdings/local/titles"
+                        )
                     },
-                    error => {
-                        setError(error)
-                    }
+                    error => {}
                 )
-                .catch(e => {
-                    console.log(e)
-                })
+            } else {
+                client.localTitles.create(title).then(
+                    success => {
+                        setMessage(this.$__("Title created"))
+                        this.$router.push(
+                            "/cgi-bin/koha/erm/eholdings/local/titles"
+                        )
+                    },
+                    error => {}
+                )
+            }
         },
     },
     components: { EHoldingsTitlesFormAddResources },

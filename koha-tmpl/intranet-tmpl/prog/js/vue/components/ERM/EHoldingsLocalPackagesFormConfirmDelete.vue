@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { fetchLocalPackage, checkError } from "../../fetch/erm.js"
 import { setMessage, setError } from "../../messages"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     data() {
@@ -47,40 +47,28 @@ export default {
         })
     },
     methods: {
-        async getPackage(package_id) {
-            const erm_package = await fetchLocalPackage(package_id)
-            this.erm_package = erm_package
-            this.initialized = true
+        getPackage(package_id) {
+            const client = APIClient.erm
+            client.localPackages.get(package_id).then(
+                erm_package => {
+                    this.erm_package = erm_package
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         onSubmit(e) {
             e.preventDefault()
-
-            let apiUrl =
-                "/api/v1/erm/eholdings/local/packages/" +
-                this.erm_package.package_id
-
-            const options = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
+            const client = APIClient.erm
+            client.localPackages.delete(this.erm_package.package_id).then(
+                success => {
+                    setMessage(this.$__("Package deleted"))
+                    this.$router.push(
+                        "/cgi-bin/koha/erm/eholdings/local/packages"
+                    )
                 },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(response => {
-                    if (response.status == 204) {
-                        setMessage(this.$__("Package deleted"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/packages"
-                        )
-                    } else {
-                        setError(response.message || response.statusText)
-                    }
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                error => {}
+            )
         },
     },
     name: "EHoldingsLocalPackagesFormConfirmDelete",

@@ -117,7 +117,7 @@ export default {
     },
     beforeCreate() {
         const client = APIClient.erm
-        client.licenses.getAll.then(
+        client.licenses.getAll().then(
             licenses => {
                 this.licenses = licenses
                 this.initialized = true

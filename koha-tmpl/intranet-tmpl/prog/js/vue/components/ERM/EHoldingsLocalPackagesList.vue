@@ -21,7 +21,7 @@
 import Toolbar from "./EHoldingsLocalPackagesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalPackageCount } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -59,8 +59,14 @@ export default {
     },
     methods: {
         async getPackageCount() {
-            this.package_count = await fetchLocalPackageCount()
-            this.initialized = true
+            const client = APIClient.erm
+            await client.localPackages.count().then(
+                count => {
+                    this.package_count = count
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         show_package: function (package_id) {
             this.$router.push(

@@ -8,7 +8,7 @@
                     <ol>
                         <li>
                             {{ $__("Title") }}:
-                            {{ eholding.publication_title }}
+                            {{ title.publication_title }}
                         </li>
                     </ol>
                 </fieldset>
@@ -31,32 +31,37 @@
 </template>
 
 <script>
-import { fetchLocalTitle, checkError } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setError } from "../../messages"
 
 export default {
     data() {
         return {
-            eholding: {},
+            title: {},
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getEHolding(to.params.title_id)
+            vm.getTitle(to.params.title_id)
         })
     },
     methods: {
-        async getEHolding(title_id) {
-            const eholding = await fetchLocalTitle(title_id)
-            this.eholding = eholding
-            this.initialized = true
+        getTitle(title_id) {
+            const client = APIClient.erm
+            client.localTitles.get(title_id).then(
+                title => {
+                    this.title = title
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         onSubmit(e) {
             e.preventDefault()
 
             let apiUrl =
-                "/api/v1/erm/eholdings/local/titles/" + this.eholding.title_id
+                "/api/v1/erm/eholdings/local/titles/" + this.title.title_id
 
             const options = {
                 method: "DELETE",

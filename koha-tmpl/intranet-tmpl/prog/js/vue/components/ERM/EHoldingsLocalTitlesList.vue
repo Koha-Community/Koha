@@ -21,7 +21,7 @@
 import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalTitleCount } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -58,8 +58,14 @@ export default {
     },
     methods: {
         async getTitleCount() {
-            this.title_count = await fetchLocalTitleCount()
-            this.initialized = true
+            const client = APIClient.erm
+            await client.localTitles.count().then(
+                count => {
+                    this.title_count = count
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         show_title: function (title_id) {
             this.$router.push(

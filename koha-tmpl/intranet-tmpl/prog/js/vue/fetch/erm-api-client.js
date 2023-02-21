@@ -46,7 +46,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "licenses/" + id,
                     headers: {
                         "x-koha-embed":
-                        "user_roles,user_roles.patron,vendor,documents"
+                            "user_roles,user_roles.patron,vendor,documents",
                     },
                 }),
             getAll: (query) =>
@@ -69,6 +69,103 @@ export class ERMAPIClient extends HttpClient {
                 this.put({
                     endpoint: "licenses/" + id,
                     body: license,
+                }),
+        };
+    }
+
+    get localPackages() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/local/packages/" + id,
+                    headers: {
+                        "x-koha-embed":
+                            "package_agreements,package_agreements.agreement,resources+count,vendor",
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint:
+                        "eholdings/local/packages?" + (query || "_per_page=-1"),
+                    headers: {
+                        "x-koha-embed": "resources+count,vendor.name",
+                    },
+                }),
+            delete: (id) =>
+                this.delete({
+                    endpoint: "eholdings/local/packages/" + id,
+                }),
+            create: (local_package) =>
+                this.post({
+                    endpoint: "eholdings/local/packages",
+                    body: local_package,
+                }),
+            update: (local_package, id) =>
+                this.put({
+                    endpoint: "eholdings/local/packages/" + id,
+                    body: local_package,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "eholdings/local/packages?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get localTitles() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/local/titles/" + id,
+                    headers: {
+                        "x-koha-embed": "resources,resources.package",
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint: "eholdings/local/titles?" + (query || "_per_page=-1"),
+                }),
+            delete: (id) =>
+                this.delete({
+                    endpoint: "eholdings/local/titles/" + id,
+                }),
+            create: (local_package) =>
+                this.post({
+                    endpoint: "eholdings/local/titles",
+                    body: local_package,
+                }),
+            update: (local_package, id) =>
+                this.put({
+                    endpoint: "eholdings/local/titles/" + id,
+                    body: local_package,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "eholdings/local/titles?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get localResources() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/local/resources/" + id,
+                    headers: {
+                        "x-koha-embed": "title,package,vendor",
+                    },
                 }),
         };
     }

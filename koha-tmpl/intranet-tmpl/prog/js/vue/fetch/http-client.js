@@ -72,17 +72,16 @@ class HttpClient {
 
     count(params = {}) {
         let res;
-        this._fetchJSON(params.endpoint, params.headers, 1).then(
+        return this._fetchJSON(params.endpoint, params.headers, {}, 1).then(
             (response) => {
                 if (response) {
-                    res = response.headers.get("X-Total-Count");
+                    return response.headers.get("X-Total-Count");
                 }
             },
             (error) => {
                 setError(error.toString());
             }
         );
-        return res;
     }
 
     checkError(response, return_response = 0) {
