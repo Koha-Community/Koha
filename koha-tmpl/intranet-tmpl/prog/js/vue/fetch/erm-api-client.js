@@ -38,6 +38,40 @@ export class ERMAPIClient extends HttpClient {
             //count: () => this.count("agreements"), //TODO: Implement count method
         };
     }
+
+    get licenses() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "licenses/" + id,
+                    headers: {
+                        "x-koha-embed":
+                        "user_roles,user_roles.patron,vendor,documents"
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint: "licenses?" + (query || "_per_page=-1"),
+                    headers: {
+                        "x-koha-embed": "vendor.name",
+                    },
+                }),
+            delete: (id) =>
+                this.delete({
+                    endpoint: "licenses/" + id,
+                }),
+            create: (license) =>
+                this.post({
+                    endpoint: "licenses",
+                    body: license,
+                }),
+            update: (license, id) =>
+                this.put({
+                    endpoint: "licenses/" + id,
+                    body: license,
+                }),
+        };
+    }
 }
 
 export default ERMAPIClient;

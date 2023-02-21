@@ -15,7 +15,7 @@
 import Toolbar from "./LicensesToolbar.vue"
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLicenses } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { useDataTable } from "../../composables/datatables"
 
 export default {
@@ -49,9 +49,14 @@ export default {
     },
     methods: {
         async getLicenses() {
-            const licenses = await fetchLicenses()
-            this.licenses = licenses
-            this.initialized = true
+            const client = APIClient.erm
+            await client.licenses.getAll().then(
+                licenses => {
+                    this.licenses = licenses
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
         show_license: function (license_id) {
             this.$router.push("/cgi-bin/koha/erm/licenses/" + license_id)

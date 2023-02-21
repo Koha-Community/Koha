@@ -149,8 +149,8 @@ import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
-import { setMessage, setError, setWarning } from "../../messages"
-import { fetchLicense, checkError } from "../../fetch/erm.js"
+import { setMessage, setWarning } from "../../messages"
+import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -199,9 +199,11 @@ export default {
     },
     methods: {
         async getLicense(license_id) {
-            const license = await fetchLicense(license_id)
-            this.license = license
-            this.initialized = true
+            const client = APIClient.erm
+            client.licenses.get(license_id).then(license => {
+                this.license = license
+                this.initialized = true
+            })
         },
         checkForm(license) {
             let errors = []
@@ -229,6 +231,7 @@ export default {
             e.preventDefault()
 
             let license = JSON.parse(JSON.stringify(this.license)) // copy
+            let license_id = license.license_id
 
             if (!this.checkForm(license)) {
                 return false
@@ -256,35 +259,24 @@ export default {
                 ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
             )
 
-            const options = {
-                method: method,
-                body: JSON.stringify(license),
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(
-                    response => {
-                        if (response.status == 200) {
-                            this.$router.push("/cgi-bin/koha/erm/licenses")
-                            setMessage(this.$__("License updated"))
-                        } else if (response.status == 201) {
-                            this.$router.push("/cgi-bin/koha/erm/licenses")
-                            setMessage(this.$__("License created"))
-                        } else {
-                            setError(response.message || response.statusText)
-                        }
+            const client = APIClient.erm
+            if (license_id) {
+                client.licenses.update(license, license_id).then(
+                    success => {
+                        setMessage(this.$__("License updated"))
+                        this.$router.push("/cgi-bin/koha/erm/licenses")
                     },
-                    error => {
-                        setError(error)
-                    }
+                    error => {}
                 )
-                .catch(e => {
-                    console.log(e)
-                })
+            } else {
+                client.licenses.create(license).then(
+                    success => {
+                        setMessage(this.$__("License created"))
+                        this.$router.push("/cgi-bin/koha/erm/licenses")
+                    },
+                    error => {}
+                )
+            }
         },
     },
     components: {

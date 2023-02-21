@@ -101,7 +101,8 @@
 </template>
 
 <script>
-import { fetchLicenses } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
+
 export default {
     name: "AgreementLicenses",
     data() {
@@ -115,7 +116,14 @@ export default {
         agreement_licenses: Array,
     },
     beforeCreate() {
-        fetchLicenses().then(licenses => (this.licenses = licenses))
+        const client = APIClient.erm
+        client.licenses.getAll.then(
+            licenses => {
+                this.licenses = licenses
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         addLicense() {
