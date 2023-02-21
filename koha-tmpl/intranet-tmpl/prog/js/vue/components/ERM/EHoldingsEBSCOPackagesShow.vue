@@ -116,7 +116,7 @@
 import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
-import { fetchEBSCOPackage, checkError } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -157,11 +157,16 @@ export default {
         this.erm_package = this.getPackage(to.params.package_id)
     },
     methods: {
-        async getPackage(package_id) {
-            const erm_package = await fetchEBSCOPackage(package_id)
-            this.erm_package = erm_package
-            this.initialized = true
-            this.updating_is_selected = false
+        getPackage(package_id) {
+            const client = APIClient.erm
+            client.EBSCOPackages.get(package_id).then(
+                erm_package => {
+                    this.erm_package = erm_package
+                    this.initialized = true
+                    this.updating_is_selected = false
+                },
+                error => {}
+            )
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true

@@ -169,6 +169,59 @@ export class ERMAPIClient extends HttpClient {
                 }),
         };
     }
+
+
+    get EBSCOPackages() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/ebsco/packages/" + id,
+                    headers: {
+                        "x-koha-embed":
+                            "package_agreements,package_agreements.agreement,resources+count,vendor",
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint:
+                        "eholdings/ebsco/packages/" +
+                        id +
+                        (query || "_per_page=-1"),
+                    headers: {
+                        "x-koha-embed": "resources+count,vendor.name",
+                    },
+                }),
+        };
+    }
+
+    get EBSCOTitles() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/ebsco/titles/" + id,
+                    headers: {
+                        "x-koha-embed": "resources,resources.package",
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint:
+                        "eholdings/local/ebsco/titles" + (query || "_per_page=-1"),
+                }),
+        };
+    }
+
+    get EBSCOResources() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "eholdings/ebsco/resources/" + id,
+                    headers: {
+                        "x-koha-embed": "title,package,vendor",
+                    },
+                }),
+        };
+    }
 }
 
 export default ERMAPIClient;

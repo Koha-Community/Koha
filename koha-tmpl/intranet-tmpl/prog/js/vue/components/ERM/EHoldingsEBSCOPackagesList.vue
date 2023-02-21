@@ -137,11 +137,13 @@ export default {
                 .draw()
             if (this.erm_providers.includes("local")) {
                 const client = APIClient.erm
-                const query = filters
+                const query = this.filters
                     ? {
-                          "me.name": { like: "%" + filters.package_name + "%" },
-                          ...(filters.content_type
-                              ? { "me.content_type": filters.content_type }
+                          "me.name": {
+                              like: "%" + this.filters.package_name + "%",
+                          },
+                          ...(this.filters.content_type
+                              ? { "me.content_type": this.filters.content_type }
                               : {}),
                       }
                     : {}

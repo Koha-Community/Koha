@@ -115,9 +115,9 @@
 
 <script>
 import { inject } from "vue"
-import { fetchEBSCOResource } from "../../fetch/erm.js"
 import { storeToRefs } from "pinia"
 import { checkError } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -156,11 +156,16 @@ export default {
         this.resource = this.getResource(to.params.resource_id)
     },
     methods: {
-        async getResource(resource_id) {
-            const resource = await fetchEBSCOResource(resource_id)
-            this.resource = resource
-            this.initialized = true
-            this.updating_is_selected = false
+        getResource(resource_id) {
+            const client = APIClient.erm
+            client.EBSCOResources.get(resource_id).then(
+                resource => {
+                    this.resource = resource
+                    this.initialized = true
+                    this.updating_is_selected = false
+                },
+                error => {}
+            )
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true

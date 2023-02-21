@@ -245,7 +245,8 @@
 <script>
 import { inject } from "vue"
 import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue"
-import { fetchEBSCOTitle } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
+
 export default {
     setup() {
         const AVStore = inject("AVStore")
@@ -298,10 +299,15 @@ export default {
         this.title = this.getTitle(to.params.title_id)
     },
     methods: {
-        async getTitle(title_id) {
-            const title = await fetchEBSCOTitle(title_id)
-            this.title = title
-            this.initialized = true
+        getTitle(title_id) {
+            const client = APIClient.erm
+            client.EBSCOTitles.get(title_id).then(
+                title => {
+                    this.title = title
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
     },
     components: {

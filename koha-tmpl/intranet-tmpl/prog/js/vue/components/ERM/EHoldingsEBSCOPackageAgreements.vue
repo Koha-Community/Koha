@@ -58,6 +58,10 @@ export default {
             erm_package.provider = "ebsco"
             erm_package.package_id = erm_package.koha_internal_id
             delete erm_package.koha_internal_id
+            delete erm_package.resources
+            delete erm_package.vendor
+            delete erm_package.resources_count
+            delete erm_package.is_selected
             return erm_package
         },
         addAgreement(agreement_id) {
@@ -72,7 +76,10 @@ export default {
             ) {
                 erm_package.package_agreements.push({ agreement_id })
                 const client = APIClient.erm
+
                 if (this.erm_package.koha_internal_id) {
+                    let package_id = erm_package.package_id
+                    delete erm_package.package_id
                     client.localPackages.update(erm_package, package_id).then(
                         success => {
                             this.$emit("refresh-agreements")
@@ -97,8 +104,10 @@ export default {
         },
         deleteAgreement(counter) {
             let erm_package = this.serializeAgreement()
-            const client = APIClient.erm
             erm_package.package_agreements.splice(counter, 1)
+            let package_id = erm_package.package_id
+            delete erm_package.package_id
+            const client = APIClient.erm
             client.localPackages.update(erm_package, package_id).then(
                 success => {
                     this.$emit("refresh-agreements")
