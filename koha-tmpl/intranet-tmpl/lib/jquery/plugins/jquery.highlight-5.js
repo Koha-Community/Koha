@@ -1,6 +1,6 @@
 /*
 
-highlight v3
+highlight v5
 
 Highlights arbitrary terms.
 
@@ -19,6 +19,7 @@ jQuery.fn.highlight = function(pat) {
   var skip = 0;
   if (node.nodeType == 3) {
    var pos = node.data.toUpperCase().indexOf(pat);
+   pos -= (node.data.substr(0, pos).toUpperCase().length - node.data.substr(0, pos).length);
    if (pos >= 0) {
     var spannode = document.createElement('span');
     spannode.className = 'term';
@@ -37,9 +38,9 @@ jQuery.fn.highlight = function(pat) {
   }
   return skip;
  }
- return this.each(function() {
+ return this.length && pat && pat.length ? this.each(function() {
   innerHighlight(this, pat.toUpperCase());
- });
+ }) : this;
 };
 
 jQuery.fn.removeHighlight = function() {
