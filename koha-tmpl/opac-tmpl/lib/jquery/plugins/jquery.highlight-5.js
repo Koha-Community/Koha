@@ -48,4 +48,3 @@ jQuery.fn.removeHighlight = function() {
   $(this).contents().unwrap();
  });
 };
-
