@@ -653,7 +653,7 @@
 
                                                     [% ELSE # /IF ( SEARCH_RESULT.items_count ) %]
 
-                                                        [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS.count ) %]
+                                                        [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) %]
                                                             <strong id="altholdings_heading">Other holdings:</strong>
                                                             <ul>
                                                                 [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
