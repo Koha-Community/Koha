@@ -145,7 +145,7 @@ subtest 'Create a pickup' => sub {
       'Cannot create a pickup on a time without opening slots defined';
 
     # Day ok, datetime inside the opening slot, but wrong (15:07 for instance)
-    $schedule_dt = $next_monday->set_hour(15)->set_minute(07)->set_second(00);
+    $schedule_dt = $next_monday->set_hour(15)->set_minute(7)->set_second(0);
     throws_ok {
         Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
     }
