@@ -53,6 +53,11 @@ sub _parse_config_for_durations {
     return @results;
 }
 
+sub datetime_from_string {
+    my ( $self, @params ) = @_;
+    return dt_from_string( @params );
+}
+
 sub output_preference {
     my ( $self, @params ) = @_;
     return output_pref( @params );
