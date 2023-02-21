@@ -2,12 +2,6 @@ import { setError } from "../messages";
 
 //TODO: all of these functions should be deleted and reimplemented in the components using ERMAPIClient
 
-export const fetchPatron = function (patron_id) {
-    if (!patron_id) return;
-    const apiUrl = "/api/v1/patrons/" + patron_id;
-    return myFetch(apiUrl);
-};
-
 export const fetchVendors = function () {
     const apiUrl = "/api/v1/acquisitions/vendors?_per_page=-1";
     return myFetch(apiUrl);
