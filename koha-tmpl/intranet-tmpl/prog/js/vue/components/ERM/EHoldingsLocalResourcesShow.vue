@@ -96,7 +96,7 @@
 
 <script>
 import { inject } from "vue"
-import { fetchLocalResource } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 export default {
     setup() {
@@ -134,10 +134,15 @@ export default {
         this.resource = this.getResource(to.params.resource_id)
     },
     methods: {
-        async getResource(resource_id) {
-            const resource = await fetchLocalResource(resource_id)
-            this.resource = resource
-            this.initialized = true
+        getResource(resource_id) {
+            const client = APIClient.erm
+            client.localResources.get(resource_id).then(
+                resource => {
+                    this.resource = resource
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
     },
     name: "EHoldingsLocalResourcesShow",

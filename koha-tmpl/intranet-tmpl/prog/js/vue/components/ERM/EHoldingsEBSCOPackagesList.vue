@@ -62,7 +62,7 @@
 <script>
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalPackageCount } from "./../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import {
     useDataTable,
     build_url_params,
@@ -136,8 +136,18 @@ export default {
                 .DataTable()
                 .draw()
             if (this.erm_providers.includes("local")) {
-                this.local_count_packages = await fetchLocalPackageCount(
-                    this.filters
+                const client = APIClient.erm
+                const query = filters
+                    ? {
+                          "me.name": { like: "%" + filters.package_name + "%" },
+                          ...(filters.content_type
+                              ? { "me.content_type": filters.content_type }
+                              : {}),
+                      }
+                    : {}
+                client.localPackages.count(query).then(
+                    count => (this.local_count_packages = count),
+                    error => {}
                 )
             }
         },

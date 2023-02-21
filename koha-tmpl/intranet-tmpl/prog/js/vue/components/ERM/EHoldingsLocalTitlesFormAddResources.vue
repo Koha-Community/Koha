@@ -95,7 +95,7 @@
 import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import { storeToRefs } from "pinia"
-import { fetchLocalPackages } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -110,7 +110,14 @@ export default {
         }
     },
     beforeCreate() {
-        fetchLocalPackages().then(packages => (this.packages = packages))
+        const client = APIClient.erm
+        client.localPackages.getAll().then(
+            packages => {
+                this.packages = packages
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         addPackage() {

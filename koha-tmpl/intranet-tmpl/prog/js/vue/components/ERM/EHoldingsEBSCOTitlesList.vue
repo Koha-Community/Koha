@@ -66,7 +66,7 @@
 <script>
 import { inject, createVNode, render } from "vue"
 import { storeToRefs } from "pinia"
-import { fetchLocalTitleCount } from "./../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import {
     useDataTable,
     build_url_params,
@@ -140,8 +140,32 @@ export default {
                     .DataTable()
                     .draw()
                 if (this.erm_providers.includes("local")) {
-                    this.local_title_count = await fetchLocalTitleCount(
-                        this.filters
+                    const client = APIClient.erm
+
+                    const q = filters
+                        ? {
+                              ...(this.filters.publication_title
+                                  ? {
+                                        "me.publication_title": {
+                                            like:
+                                                "%" +
+                                                this.filters.publication_title +
+                                                "%",
+                                        },
+                                    }
+                                  : {}),
+                              ...(this.filters.publication_type
+                                  ? {
+                                        "me.publication_type":
+                                            this.filters.publication_type,
+                                    }
+                                  : {}),
+                          }
+                        : undefined
+
+                    client.localTitles.count(q).then(
+                        count => (this.local_title_count = count),
+                        error => {}
                     )
                 }
             } else {

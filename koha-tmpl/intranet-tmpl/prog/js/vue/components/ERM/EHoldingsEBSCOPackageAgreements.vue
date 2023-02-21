@@ -36,7 +36,7 @@
 
 <script>
 import AgreementsList from "./AgreementsList.vue"
-import { createPackage, editPackage } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import { setWarning, removeMessages } from "../../messages"
 
 export default {
@@ -71,14 +71,21 @@ export default {
                 )
             ) {
                 erm_package.package_agreements.push({ agreement_id })
+                const client = APIClient.erm
                 if (this.erm_package.koha_internal_id) {
-                    editPackage(erm_package).then(() => {
-                        this.$emit("refresh-agreements")
-                    })
+                    client.localPackages.update(erm_package, package_id).then(
+                        success => {
+                            this.$emit("refresh-agreements")
+                        },
+                        error => {}
+                    )
                 } else {
-                    createPackage(erm_package).then(() => {
-                        this.$emit("refresh-agreements")
-                    })
+                    client.localPackages.create(erm_package).then(
+                        success => {
+                            this.$emit("refresh-agreements")
+                        },
+                        error => {}
+                    )
                 }
             } else {
                 setWarning(
@@ -90,10 +97,14 @@ export default {
         },
         deleteAgreement(counter) {
             let erm_package = this.serializeAgreement()
+            const client = APIClient.erm
             erm_package.package_agreements.splice(counter, 1)
-            editPackage(erm_package).then(() => {
-                this.$emit("refresh-agreements")
-            })
+            client.localPackages.update(erm_package, package_id).then(
+                success => {
+                    this.$emit("refresh-agreements")
+                },
+                error => {}
+            )
         },
     },
     props: {

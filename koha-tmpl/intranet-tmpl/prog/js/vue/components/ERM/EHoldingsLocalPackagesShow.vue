@@ -106,7 +106,7 @@
 <script>
 import { inject } from "vue"
 import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
-import { fetchLocalPackage } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -145,10 +145,15 @@ export default {
         this.erm_package = this.getPackage(to.params.package_id)
     },
     methods: {
-        async getPackage(package_id) {
-            const erm_package = await fetchLocalPackage(package_id)
-            this.erm_package = erm_package
-            this.initialized = true
+        getPackage(package_id) {
+            const client = APIClient.erm
+            client.localPackages.get(package_id).then(
+                erm_package => {
+                    this.erm_package = erm_package
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
     },
     components: {
