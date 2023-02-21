@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import { fetchLicense, checkError } from "../../fetch/erm.js"
-import { setMessage, setError } from "../../messages"
+import { APIClient } from "../../fetch/api-client.js"
+import { setMessage } from "../../messages"
 
 export default {
     data() {
@@ -53,35 +53,23 @@ export default {
     },
     methods: {
         async getLicense(license_id) {
-            const license = await fetchLicense(license_id)
-            this.license = license
-            this.initialized = true
+            const client = APIClient.erm
+            client.licenses.get(license_id).then(data => {
+                this.license = data
+                this.initialized = true
+            })
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = "/api/v1/erm/licenses/" + this.license.license_id
-
-            const options = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
+            const client = APIClient.erm
+            client.licenses.delete(this.license.license_id).then(
+                success => {
+                    setMessage(this.$__("License deleted"))
+                    this.$router.push("/cgi-bin/koha/erm/licenses")
                 },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(response => {
-                    if (response.status == 204) {
-                        this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage(this.$__("License deleted"))
-                    } else {
-                        setError(response.message || response.statusText)
-                    }
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                error => {}
+            )
         },
     },
     name: "LicensesFormConfirmDelete",

@@ -2,25 +2,6 @@ import { setError } from "../messages";
 
 //TODO: all of these functions should be deleted and reimplemented in the components using ERMAPIClient
 
-export const fetchLicense = function (license_id) {
-    if (!license_id) return;
-    const apiUrl = "/api/v1/erm/licenses/" + license_id;
-    return myFetch(apiUrl, {
-        headers: {
-            "x-koha-embed": "user_roles,user_roles.patron,vendor,documents",
-        },
-    });
-};
-
-export const fetchLicenses = function () {
-    const apiUrl = "/api/v1/erm/licenses?_per_page=-1";
-    return myFetch(apiUrl, {
-        headers: {
-            "x-koha-embed": "vendor.name",
-        },
-    });
-};
-
 export const fetchPatron = function (patron_id) {
     if (!patron_id) return;
     const apiUrl = "/api/v1/patrons/" + patron_id;

@@ -145,7 +145,7 @@
 
 <script>
 import { inject } from "vue"
-import { fetchLicense } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
@@ -185,9 +185,14 @@ export default {
     },
     methods: {
         async getLicense(license_id) {
-            const license = await fetchLicense(license_id)
-            this.license = license
-            this.initialized = true
+            const client = APIClient.erm
+            client.licenses.get(license_id).then(
+                license => {
+                    this.license = license
+                    this.initialized = true
+                },
+                error => {}
+            )
         },
     },
     components: {},
