@@ -278,8 +278,13 @@ sub add_to_bundle {
     }
 
     return try {
-        my $force_checkin = $c->validation->param('body')->{'force_checkin'};
-        my $link = $item->add_to_bundle($bundle_item, { force_checkin => $force_checkin });
+        my $body = $c->validation->param('body');
+        my $options = {
+            force_checkin => $body->{force_checkin},
+            ignore_holds => $body->{ignore_holds},
+        };
+
+        my $link = $item->add_to_bundle($bundle_item, $options);
         return $c->render(
             status  => 201,
             openapi => $bundle_item
@@ -312,6 +317,15 @@ sub add_to_bundle {
                 openapi => {
                     error      => 'Item cannot be checked in',
                     error_code => 'failed_checkin'
+                }
+            );
+        }
+        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemHasHolds' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Item is reserved',
+                    error_code => 'reserved'
                 }
             );
         }

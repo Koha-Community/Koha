@@ -1976,6 +1976,18 @@ Note that permanent location is a code, and location may be an authval.
                                 .empty()
                                 .attr('class', 'alert alert-danger')
                                 .append(__x('Failure: Item {barcode} cannot be checked in', { barcode }))
+                          } else if (response.error_code === 'reserved') {
+                              const button = $('<button type="button">')
+                                .addClass('btn btn-xs')
+                                .text(__('Ignore holds and add to bundle'))
+                                .on('click', function () {
+                                    addToBundle(url, { external_id: barcode, ignore_holds: true });
+                                });
+                              $('#addResult')
+                                .empty()
+                                .attr('class', 'alert alert-warning')
+                                .append(__x('Warning: Item {barcode} is reserved', { barcode }))
+                                .append(' ', button);
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                           }

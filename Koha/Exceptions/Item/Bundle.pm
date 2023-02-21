@@ -31,6 +31,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Item::Bundle',
         description => 'Someone tried to add a checked out item to a bundle',
     },
+    'Koha::Exceptions::Item::Bundle::ItemHasHolds' => {
+        isa         => 'Koha::Exceptions::Item::Bundle',
+        description => 'Someone tried to add a reserved item to a bundle',
+    },
 );
 
 =head1 NAME

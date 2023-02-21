@@ -1730,6 +1730,13 @@ sub add_to_bundle {
                     }
                 }
 
+                my $holds = $bundle_item->current_holds;
+                if ($holds->count) {
+                    unless ($options->{ignore_holds}) {
+                        Koha::Exceptions::Item::Bundle::ItemHasHolds->throw();
+                    }
+                }
+
                 $self->_result->add_to_item_bundles_hosts(
                     { item => $bundle_item->itemnumber } );
 
