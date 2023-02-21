@@ -2170,6 +2170,10 @@ Note that permanent location is a code, and location may be an authval.
 
         });
 
+        function columnsInit(table) {
+            activate_filters(table.id, false);
+        }
+
         [% IF found1 && Koha.Preference('RetainCatalogSearchTerms') %]
             $(document).ready(function() {
                 var search_index = localStorage.getItem("cat_search_pulldown_selection");

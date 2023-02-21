@@ -1,4 +1,4 @@
-function activate_filters(id) {
+function activate_filters(id, bShowFilters) {
     var table = $("#" + id );
     if (table.length == 1) {
         filters_row = table.find('thead tr.filters_row');
@@ -16,19 +16,29 @@ function activate_filters(id) {
             table.dataTable().columnFilter({
                 'sPlaceHolder': 'head:after'
                 ,   'aoColumns': aoColumns
+                ,'bFiltersAlreadyActivated': false
             });
             filters_row.addClass('columnFilter');
+        } else {
+            table.dataTable().columnFilter({
+                'sPlaceHolder': 'head:after'
+                ,   'aoColumns': aoColumns
+                ,'bFiltersAlreadyActivated': true
+            });
         }
-        filters_row.show();
-    }
 
-    $('#' + id + '_activate_filters')
-        .html('<i class="fa fa-filter"></i> ' + __('Deactivate filters') )
-        .unbind('click')
-        .click(function() {
-            deactivate_filters(id);
-            return false;
-        });
+        if (bShowFilters) {
+            filters_row.show();
+
+            $('#' + id + '_activate_filters')
+                .html('<i class="fa fa-filter"></i> ' + __('Deactivate filters') )
+                .unbind('click')
+                .click(function() {
+                    deactivate_filters(id);
+                    return false;
+                });
+        }
+    }
 }
 
 function deactivate_filters(id) {
@@ -44,7 +54,7 @@ function deactivate_filters(id) {
         .html('<i class="fa fa-filter"></i> ' + __('Activate filters') )
         .unbind('click')
         .click(function() {
-            activate_filters(id);
+            activate_filters(id, true);
             return false;
         });
 }

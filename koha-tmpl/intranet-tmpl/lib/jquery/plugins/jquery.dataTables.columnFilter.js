@@ -523,17 +523,20 @@
             var sFilterRow = "tr"; //Before fix for ColVis
 
             if (properties.sPlaceHolder == "head:after") {
-                var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
-                //tr.appendTo($(oTable.fnSettings().nTHead));
-                if (oTable.fnSettings().bSortCellsTop) {
-                    tr.prependTo($(oTable.fnSettings().nTHead));
-                    //tr.appendTo($("thead", oTable));
-                    aoFilterCells = oTable.fnSettings().aoHeader[1];
-                }
-                else {
-                    tr.appendTo($(oTable.fnSettings().nTHead));
-                    //tr.prependTo($("thead", oTable));
-                    aoFilterCells = oTable.fnSettings().aoHeader[0];
+
+                if (!properties.bFiltersAlreadyActivated) {
+                    var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
+                    //tr.appendTo($(oTable.fnSettings().nTHead));
+                    if (oTable.fnSettings().bSortCellsTop) {
+                        tr.prependTo($(oTable.fnSettings().nTHead));
+                        //tr.appendTo($("thead", oTable));
+                        aoFilterCells = oTable.fnSettings().aoHeader[1];
+                    }
+                    else {
+                        tr.appendTo($(oTable.fnSettings().nTHead));
+                        //tr.prependTo($("thead", oTable));
+                        aoFilterCells = oTable.fnSettings().aoHeader[0];
+                    }
                 }
 
                 sFilterRow = "tr:last";
@@ -541,27 +544,30 @@
 
             } else if (properties.sPlaceHolder == "head:before") {
 
-                if (oTable.fnSettings().bSortCellsTop) {
-                    var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
-                    tr.appendTo($(oTable.fnSettings().nTHead));
-                    aoFilterCells = oTable.fnSettings().aoHeader[1];
-                } else {
-                    aoFilterCells = oTable.fnSettings().aoHeader[0];
+                if (!properties.bFiltersAlreadyActivated) {
+                    if (oTable.fnSettings().bSortCellsTop) {
+                        var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
+                        tr.appendTo($(oTable.fnSettings().nTHead));
+                        aoFilterCells = oTable.fnSettings().aoHeader[1];
+                    } else {
+                        aoFilterCells = oTable.fnSettings().aoHeader[0];
+                    }
+                    /*else {
+                    //tr.prependTo($("thead", oTable));
+                    sFilterRow = "tr:first";
+                    }*/
                 }
-                /*else {
-                //tr.prependTo($("thead", oTable));
-                sFilterRow = "tr:first";
-                }*/
 
                 sFilterRow = "tr:first";
-
                 oHost = oTable.fnSettings().nTHead;
-
 
             }
 
-            //$(sFilterRow + " th", oHost).each(function (index) {//bug with ColVis
-            $(aoFilterCells).each(function (index) {//fix for ColVis
+            $(sFilterRow + " th", oHost).each(function (index) {
+            //$(aoFilterCells).each(function (index) {//fix for ColVis
+
+                var bHeaderHasInput = $(this).find('input').length;
+
                 i = index;
                 var aoColumn = { type: "text",
                     bRegex: false,
@@ -569,16 +575,20 @@
                     iMaxLenght: -1,
                     iFilterLength: 0
                 };
+
                 if (properties.aoColumns != null) {
                     if (properties.aoColumns.length < i || properties.aoColumns[i] == null)
                         return;
                     aoColumn = properties.aoColumns[i];
                 }
-                //label = $(this).text(); //Before fix for ColVis
-                label = $($(this)[0].cell).text(); //Fix for ColVis
+                if (bHeaderHasInput)
+                    label = $(this).find('input').val();
+                else
+                    label = $(this).text();
+                //label = $($(this)[0].cell).text(); //Fix for ColVis
                 if (aoColumn.sSelector == null) {
-                    //th = $($(this)[0]);//Before fix for ColVis
-                    th = $($(this)[0].cell); //Fix for ColVis
+                    th = $($(this)[0]);
+                    //th = $($(this)[0].cell); //Fix for ColVis
                 }
                 else {
                     th = $(aoColumn.sSelector);
