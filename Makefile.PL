@@ -679,9 +679,6 @@ $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/print.css'} = 'blib/OPAC_TMPL_DIR
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/print-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/print-rtl.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/sco.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/sco.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/sco-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/sco-rtl.css';
-$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/opac-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/opac-rtl.css.map';
-$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/print-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/print-rtl.css.map';
-$file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/maps/sco-rtl.css.map'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/maps/sco-rtl.css.map';
 
 my $pl_files = {
       'rewrite-config.PL' => [
