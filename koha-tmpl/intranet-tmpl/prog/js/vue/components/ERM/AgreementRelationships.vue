@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { fetchAgreements } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     data() {
@@ -94,11 +94,16 @@ export default {
         }
     },
     beforeCreate() {
-        fetchAgreements().then(agreements => {
-            this.agreements = agreements.filter(
-                agreement => agreement.agreement_id !== this.agreement_id
-            )
-        })
+        const client = APIClient.erm
+        client.agreements.getAll().then(
+            agreements => {
+                this.agreements = agreements.filter(
+                    agreement => agreement.agreement_id !== this.agreement_id
+                )
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         addRelationship() {
