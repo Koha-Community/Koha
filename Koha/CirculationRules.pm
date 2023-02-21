@@ -24,6 +24,7 @@ use Koha::Exceptions;
 use Koha::CirculationRule;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
+use Koha::Number::Price;
 
 use base qw(Koha::Objects);
 
@@ -387,6 +388,12 @@ sub set_rule {
             itemtype     => $itemtype,
         }
     )->next();
+
+    if ( $rule
+    && ( $rule->rule_name eq 'overduefinescap' || $rule->rule_name eq 'fine' ) )
+    {
+        $rule_value = Koha::Number::Price->new($rule_value)->unformat;
+    }
 
     if ($rule) {
         if ( defined $rule_value ) {
