@@ -32,7 +32,7 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js"
-import { setMessage, setError } from "../../messages"
+import { setMessage } from "../../messages"
 
 export default {
     data() {
@@ -59,32 +59,16 @@ export default {
         },
         onSubmit(e) {
             e.preventDefault()
-
-            let apiUrl =
-                "/api/v1/erm/eholdings/local/titles/" + this.title.title_id
-
-            const options = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
+            const client = APIClient.erm
+            client.localTitles.delete(this.title.title_id).then(
+                success => {
+                    setMessage(this.$__("Title deleted"))
+                    this.$router.push(
+                        "/cgi-bin/koha/erm/eholdings/local/titles"
+                    )
                 },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => checkError(response, 1))
-                .then(response => {
-                    if (response.status == 204) {
-                        setMessage(this.$__("Title deleted"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/titles"
-                        )
-                    } else {
-                        setError(response.message || response.statusText)
-                    }
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                error => {}
+            )
         },
     },
     name: "EHoldingsLocalTitlesFormConfirmDelete",
