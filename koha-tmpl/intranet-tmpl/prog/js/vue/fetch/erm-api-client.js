@@ -155,6 +155,11 @@ export class ERMAPIClient extends HttpClient {
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
+            import: (body) =>
+                this.post({
+                    endpoint: "eholdings/local/titles/import",
+                    body,
+                }),
         };
     }
 
@@ -169,7 +174,6 @@ export class ERMAPIClient extends HttpClient {
                 }),
         };
     }
-
 
     get EBSCOPackages() {
         return {
@@ -190,6 +194,11 @@ export class ERMAPIClient extends HttpClient {
                     headers: {
                         "x-koha-embed": "resources+count,vendor.name",
                     },
+                }),
+            patch: (id, body) =>
+                this.patch({
+                    endpoint: "eholdings/ebsco/packages/" + id,
+                    body,
                 }),
         };
     }
@@ -219,6 +228,11 @@ export class ERMAPIClient extends HttpClient {
                     headers: {
                         "x-koha-embed": "title,package,vendor",
                     },
+                }),
+            patch: (id, body) =>
+                this.patch({
+                    endpoint: "eholdings/ebsco/packages/" + id,
+                    body,
                 }),
         };
     }

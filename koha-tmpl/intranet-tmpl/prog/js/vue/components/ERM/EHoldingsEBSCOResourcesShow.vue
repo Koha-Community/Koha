@@ -116,7 +116,6 @@
 <script>
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
-import { checkError } from "../../fetch/erm.js"
 import { APIClient } from "../../fetch/api-client.js"
 
 export default {
@@ -169,26 +168,16 @@ export default {
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true
-            fetch(
-                "/api/v1/erm/eholdings/ebsco/resources/" +
-                    this.resource.resource_id,
-                {
-                    method: "PATCH",
-                    body: JSON.stringify({ is_selected }),
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-                .then(checkError)
-                .then(result => {
+            const client = APIClient.erm
+            client.EBSCOResources.patch(this.resource.resource_id, {
+                is_selected,
+            }).then(
+                result => {
                     // Refresh the page. We should not need that actually.
                     this.getResource(this.resource.resource_id)
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                },
+                error => {}
+            )
         },
         add_to_holdings() {
             this.edit_selected(true)

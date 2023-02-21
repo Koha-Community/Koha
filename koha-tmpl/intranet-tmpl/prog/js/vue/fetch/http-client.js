@@ -47,27 +47,42 @@ class HttpClient {
     }
 
     post(params = {}) {
+        const body = params.body
+            ? typeof str === "string"
+                ? params.body
+                : JSON.stringify(params.body)
+            : undefined;
         return this._fetchJSON(params.endpoint, params.headers, {
             ...params.options,
-            body: params.body ? JSON.stringify(params.body) : undefined,
+            body,
             method: "POST",
         });
     }
 
     put(params = {}) {
+        const body = params.body
+            ? typeof str === "string"
+                ? params.body
+                : JSON.stringify(params.body)
+            : undefined;
         return this._fetchJSON(params.endpoint, params.headers, {
             ...params.options,
-            body: params.body ? JSON.stringify(params.body) : undefined,
+            body,
             method: "PUT",
         });
     }
 
     delete(params = {}) {
-        return this._fetchJSON(params.endpoint, params.headers, {
-            parseResponse: false,
-            ...params.options,
-            method: "DELETE",
-        }, true);
+        return this._fetchJSON(
+            params.endpoint,
+            params.headers,
+            {
+                parseResponse: false,
+                ...params.options,
+                method: "DELETE",
+            },
+            true
+        );
     }
 
     count(params = {}) {
@@ -82,6 +97,19 @@ class HttpClient {
                 setError(error.toString());
             }
         );
+    }
+
+    patch(params = {}) {
+        const body = params.body
+            ? typeof str === "string"
+                ? params.body
+                : JSON.stringify(params.body)
+            : undefined;
+        return this._fetchJSON(params.endpoint, params.headers, {
+            ...params.options,
+            body,
+            method: "PATCH",
+        });
     }
 
     checkError(response, return_response = 0) {
