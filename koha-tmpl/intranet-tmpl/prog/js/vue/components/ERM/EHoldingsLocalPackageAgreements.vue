@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { fetchAgreements } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     data() {
@@ -65,10 +65,14 @@ export default {
         }
     },
     beforeCreate() {
-        fetchAgreements().then(agreements => {
-            this.agreements = agreements
-            this.initialized = true
-        })
+        const client = APIClient.erm
+        client.agreements.getAll().then(
+            agreements => {
+                this.agreements = agreements
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         addAgreement() {

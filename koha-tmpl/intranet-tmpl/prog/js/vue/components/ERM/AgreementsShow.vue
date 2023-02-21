@@ -348,8 +348,8 @@ export default {
         async getAgreement(agreement_id) {
             const client = APIClient.erm
             client.agreements.get(agreement_id).then(
-                data => {
-                    this.agreement = data
+                agreement => {
+                    this.agreement = agreement
                     this.initialized = true
                 },
                 error => {}
