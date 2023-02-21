@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { fetchPatron } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     name: "UserRoles",
@@ -110,8 +110,9 @@ export default {
             let selected_patron_id =
                 document.getElementById("selected_patron_id").value
             let patron
+            const client = APIClient.patron
             // FIXME We are missing a "loading..."
-            fetchPatron(selected_patron_id).then(p => {
+            client.patrons.get(selected_patron_id).then(p => {
                 patron = p
                 this.user_roles[c].patron = patron
                 this.user_roles[c].patron_str = $patron_to_html(patron)
