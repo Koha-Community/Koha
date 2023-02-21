@@ -65,22 +65,14 @@ export default {
                 return
             }
             if (!list_id) return
-            await fetch("/api/v1/erm/eholdings/local/titles/import", {
-                method: "POST",
-                body: JSON.stringify({ list_id, package_id: this.package_id }),
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
-                .then(checkError)
+            const client = APIClient.erm
+            client.localTitles
+                .import({ list_id, package_id: this.package_id })
                 .then(
                     result => {
                         this.job_id = result.job_id
                     },
-                    error => {
-                        setError(error)
-                    }
+                    error => {}
                 )
         },
         build_datatable: function () {

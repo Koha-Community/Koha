@@ -170,26 +170,16 @@ export default {
         },
         edit_selected(is_selected) {
             this.updating_is_selected = true
-            fetch(
-                "/api/v1/erm/eholdings/ebsco/packages/" +
-                    this.erm_package.package_id,
-                {
-                    method: "PATCH",
-                    body: JSON.stringify({ is_selected }),
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-                .then(checkError)
-                .then(result => {
+            const client = APIClient.erm
+            client.EBSCOPackages.patch(this.erm_package.package_id, {
+                is_selected,
+            }).then(
+                result => {
                     // Refresh the page. We should not need that actually.
                     this.getPackage(this.erm_package.package_id)
-                })
-                .catch(error => {
-                    setError(error)
-                })
+                },
+                error => {}
+            )
         },
         add_to_holdings() {
             this.edit_selected(true)
