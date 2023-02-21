@@ -2,11 +2,6 @@ import { setError } from "../messages";
 
 //TODO: all of these functions should be deleted and reimplemented in the components using ERMAPIClient
 
-export const fetchVendors = function () {
-    const apiUrl = "/api/v1/acquisitions/vendors?_per_page=-1";
-    return myFetch(apiUrl);
-};
-
 const _createEditPackage = function (method, erm_package) {
     let apiUrl = "/api/v1/erm/eholdings/local/packages";
 

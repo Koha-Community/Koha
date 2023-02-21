@@ -122,7 +122,7 @@
 import { inject } from "vue"
 import Breadcrumb from "../../components/Breadcrumb.vue"
 import Dialog from "../../components/Dialog.vue"
-import { fetchVendors } from "../../fetch/erm.js"
+import { APIClient } from "../../fetch/api-client.js"
 import "vue-select/dist/vue-select.css"
 
 export default {
@@ -154,7 +154,14 @@ export default {
         }
     },
     beforeCreate() {
-        fetchVendors().then(vendors => (this.vendorStore.vendors = vendors))
+        const client = APIClient.acquisition
+        client.vendors.getAll().then(
+            vendors => {
+                this.vendors = vendors
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     components: {
         Breadcrumb,
