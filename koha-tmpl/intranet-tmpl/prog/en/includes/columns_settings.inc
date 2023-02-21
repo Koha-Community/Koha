@@ -216,7 +216,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
             // This function can be created separately and used to trigger
             // an event after the DataTable has loaded AND column visibility
             // has been updated according to the table's configuration
-            columnsInit();
+            columnsInit(this);
         }
     }).columns( hidden_ids ).visible( false );
 
