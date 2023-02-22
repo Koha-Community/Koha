@@ -612,7 +612,11 @@
                                     [% FOR action IN actions %]
                                     [% SWITCH action %]
                                     [% CASE 'select' %]
-                                        action_node += '<a href="#" class="btn btn-default btn-xs select_user" data-borrowernumber="' + patron_id + '">Select</a><input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '" value=\''+JSON.stringify(row)+'\' />';
+                                        let patron_str = JSON.stringify(row);
+                                        action_node += '<a href="#" class="btn btn-default btn-xs select_user" data-borrowernumber="' + patron_id + '">Select</a>';
+                                        let input_node = $('<input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '"/>');
+                                        $(input_node).val(patron_str);
+                                        action_node += $(input_node).prop('outerHTML');
                                     [% CASE 'add' %]
                                         action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '" data-firstname="' + encodeURIComponent(row.firstname) + '" data-surname="' + encodeURIComponent(row.surname) + '">Add</a><input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '" />';
                                     [% CASE 'edit' %]
