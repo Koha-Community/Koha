@@ -1,8 +1,8 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="agreements" id="agreements_list">
+    <div v-else-if="agreement_count" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
-        <fieldset v-if="agreements.length" class="filters">
+        <fieldset v-if="agreement_count > 0" class="filters">
             <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
             <input
                 type="checkbox"
@@ -32,7 +32,7 @@
                 :value="$__('Filter')"
             />
         </fieldset>
-        <div v-if="agreements.length" class="page-section">
+        <div v-if="agreement_count > 0" class="page-section">
             <table :id="table_id"></table>
         </div>
         <div v-else-if="initialized" class="dialog message">
@@ -75,7 +75,7 @@ export default {
     data: function () {
         return {
             fp_config: flatpickr_defaults,
-            agreements: [],
+            agreement_count: null,
             initialized: false,
             filters: {
                 by_expired: this.$route.query.by_expired || false,
@@ -92,7 +92,7 @@ export default {
             vm.before_route_entered = true // FIXME This is ugly, but we need to distinguish when it's used as main component or child component (from EHoldingsEBSCOPAckagesShow for instance)
             if (!vm.building_table) {
                 vm.building_table = true
-                vm.getAgreements().then(() => vm.build_datatable())
+                vm.getAgreementCount().then(() => vm.build_datatable())
             }
         })
     },
@@ -106,11 +106,11 @@ export default {
         },
     },
     methods: {
-        async getAgreements() {
+        async getAgreementCount() {
             const client = APIClient.erm
-            await client.agreements.getAll().then(
-                agreements => {
-                    this.agreements = agreements
+            await client.agreements.count().then(
+                count => {
+                    this.agreement_count = count
                     this.initialized = true
                 },
                 error => {}
@@ -481,7 +481,7 @@ export default {
     mounted() {
         if (!this.building_table) {
             this.building_table = true
-            this.getAgreements().then(() => this.build_datatable())
+            this.getAgreementCount().then(() => this.build_datatable())
         }
     },
     components: { flatPickr, Toolbar },

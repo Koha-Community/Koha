@@ -1,8 +1,8 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="licenses" id="licenses_list">
+    <div v-else-if="license_count" id="licenses_list">
         <Toolbar />
-        <div v-if="licenses.length" class="page-section">
+        <div v-if="license_count > 0" class="page-section">
             <table :id="table_id"></table>
         </div>
         <div v-else-if="initialized" class="dialog message">
@@ -42,21 +42,21 @@ export default {
     },
     data: function () {
         return {
-            licenses: [],
+            license_count: null,
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getLicenses().then(() => vm.build_datatable())
+            vm.getLicenseCount().then(() => vm.build_datatable())
         })
     },
     methods: {
-        async getLicenses() {
+        async getLicenseCount() {
             const client = APIClient.erm
-            await client.licenses.getAll().then(
-                licenses => {
-                    this.licenses = licenses
+            await client.licenses.count().then(
+                count => {
+                    this.license_count = count
                     this.initialized = true
                 },
                 error => {}

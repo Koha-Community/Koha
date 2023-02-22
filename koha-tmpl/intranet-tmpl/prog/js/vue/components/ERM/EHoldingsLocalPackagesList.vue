@@ -48,7 +48,7 @@ export default {
     },
     data: function () {
         return {
-            package_count: [],
+            package_count: null,
             initialized: false,
             filters: {
                 package_name: this.$route.query.package_name || "",
