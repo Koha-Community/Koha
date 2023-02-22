@@ -110,7 +110,7 @@ sub logaction {
             }
         );
     }
-    my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 1 } ) : undef;
+    my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 0 } ) : undef;
 
     Koha::ActionLog->new(
         {
