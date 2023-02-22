@@ -798,6 +798,7 @@ Note that permanent location is a code, and location may be an authval.
                     <th>Issue #</th>
                     <th>Date arrived</th>
                     <th>Date published</th>
+                    <th>Date published (text)</th>
                     <th>Status</th>
                     <th>Note</th>
                 </tr>
@@ -806,6 +807,7 @@ Note that permanent location is a code, and location may be an authval.
                     <td>[% latestserial.serialseq | html %]</td>
                     <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
                     <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                    <td>[% latestserial.publisheddatetext | html %]</td>
                     <td>
                       [% IF ( latestserial.status1 ) %]<span>Expected</span>[% END %]
                       [% IF ( latestserial.status2 ) %]<span>Arrived</span>[% END %]
