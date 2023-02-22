@@ -35,7 +35,16 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "agreements/" + id,
                     body: agreement,
                 }),
-            //count: () => this.count("agreements"), //TODO: Implement count method
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "agreements?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
         };
     }
 
@@ -69,6 +78,16 @@ export class ERMAPIClient extends HttpClient {
                 this.put({
                     endpoint: "licenses/" + id,
                     body: license,
+                }),
+                count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "licenses?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
         };
     }

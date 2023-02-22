@@ -46,7 +46,7 @@ export default {
     },
     data: function () {
         return {
-            title_count: undefined,
+            title_count: null,
             initialized: false,
             filters: {
                 publication_title: this.$route.query.publication_title || "",
