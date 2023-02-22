@@ -204,6 +204,14 @@ sub context {
     return $self;
 }
 
+sub history {
+    my ( $self, @history) = @_;
+    if ( @history ) {
+        $self->{history} = \@history;
+    }
+    return $self->{history} || [];
+}
+
 =head1 AUTHOR
 
 Kyle M Hall, E<lt>kyle@bywatersolutions.comE<gt>
