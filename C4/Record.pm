@@ -38,6 +38,7 @@ use Koha::SimpleMARC qw( read_field );
 use Koha::XSLT::Base;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
+use Koha::TemplateUtils qw( process_tt );
 use Carp qw( carp croak );
 
 use vars qw(@ISA @EXPORT);
@@ -564,13 +565,10 @@ sub marcrecord2csv {
 
         # TT tags exist
         if ( $content =~ m|\[\%.*\%\]| ) {
-            my $tt = Template->new();
-            my $template = $content;
             # Replace 00X and 0XX with X or XX
             $content =~ s|fields.00(\d)|fields.$1|g;
             $content =~ s|fields.0(\d{2})|fields.$1|g;
-            my $tt_output;
-            $tt->process( \$content, $field_list, \$tt_output );
+            my $tt_output = process_tt( $content, $field_list );
             push @csv_rows, $tt_output;
         } else {
             for my $tag ( @$tags ) {
