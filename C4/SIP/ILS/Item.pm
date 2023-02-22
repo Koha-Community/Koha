@@ -11,7 +11,6 @@ use warnings;
 
 use C4::SIP::Sip qw(siplog);
 use Carp;
-use Template;
 
 use C4::SIP::ILS::Transaction;
 use C4::SIP::Sip qw(add_field maybe_add);
@@ -29,6 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
+use Koha::TemplateUtils qw( process_tt );
 
 =encoding UTF-8
 
@@ -183,13 +183,8 @@ sub hold_patron_name {
     my $borrowernumber = $self->hold_patron_id() or return q{};
 
     if ($template) {
-        my $tt = Template->new();
-
         my $patron = Koha::Patrons->find($borrowernumber);
-
-        my $output;
-        $tt->process( \$template, { patron => $patron }, \$output );
-        return $output;
+        return process_tt( $template, { patron => $patron } );
     }
 
     my $holder = Koha::Patrons->find( $borrowernumber );
@@ -480,21 +475,8 @@ sub format {
     my ( $self, $template ) = @_;
 
     if ($template) {
-        require Template;
-
-        my $tt = Template->new();
-
         my $item = $self->{_object};
-
-        my $output;
-        eval {
-            $tt->process( \$template, { item => $item }, \$output );
-        };
-        if ( $@ ){
-            siplog("LOG_DEBUG", "Error processing template: $template");
-            return "";
-        }
-        return $output;
+        return process_tt( $template, { item => $item } );
     }
 }
 
