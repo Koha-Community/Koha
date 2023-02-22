@@ -430,7 +430,7 @@ Note that permanent location is a code, and location may be an authval.
                     [% IF Koha.Preference('EnableItemGroups') %]<td class="item_group">[% item.object.item_group.description | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
-                        [% SET serial = item.itemserial.serial %]
+                        [% SET serial = item.serial %]
                         [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting %]
                             <td class="enumchron" data-order="[% serial.publisheddate | html %]">
                         [% ELSE %]
@@ -439,7 +439,7 @@ Note that permanent location is a code, and location may be an authval.
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && serial.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
-                                    [% IF ( item.serialseq && item.enumchron != serial.serialseq ) %]
+                                    [% IF ( serial.serialseq && item.enumchron != serial.serialseq ) %]
                                         <span class="sep"> -- </span>
                                         <span class="serialseq">[% serial.serialseq | html %]</span>
                                     [% END %]

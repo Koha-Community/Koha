@@ -386,7 +386,8 @@ foreach my $item (@items) {
     # FIXME The following must be Koha::Item->serial
     my $serial_item = Koha::Serial::Items->find($item->itemnumber);
     if ( $serial_item ) {
-        $item_info->{serial} = $serial_item;
+        my $serial = Koha::Serials->find($serial_item->serialid);
+        $item_info->{serial} = $serial if $serial;
         $itemfields{publisheddate} = 1;
     }
 
