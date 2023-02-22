@@ -20,9 +20,7 @@ package C4::Serials;
 
 use Modern::Perl;
 
-use C4::Auth qw( haspermission );
-use C4::Context;
-use DateTime;
+use Carp qw( croak );
 use Date::Calc qw(
     Add_Delta_Days
     Add_Delta_YM
@@ -31,19 +29,24 @@ use Date::Calc qw(
     N_Delta_YMD
     Today
 );
+use DateTime;
 use POSIX qw( strftime );
+use Scalar::Util qw( looks_like_number );
+use Try::Tiny;
+
+use C4::Auth qw( haspermission );
 use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
+use C4::Context;
 use C4::Log qw( logaction );    # logaction
 use C4::Serials::Frequency qw( GetSubscriptionFrequency );
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
 use Koha::Biblios;
 use Koha::Serial;
-use Koha::Subscriptions;
-use Koha::Subscription::Histories;
-use Koha::Suggestions;
 use Koha::SharedContent;
-use Scalar::Util qw( looks_like_number );
+use Koha::Subscription::Histories;
+use Koha::Subscriptions;
+use Koha::Suggestions;
 
 # Define statuses
 use constant {
@@ -894,6 +897,7 @@ sub GetNextSeq {
             my $newlastvalue3string = _numeration( $newlastvalue3, $pattern->{numbering3}, $locale );
             $calculated =~ s/\{Z\}/$newlastvalue3string/g;
         }
+
     }
 
     return ($calculated,
@@ -1287,7 +1291,7 @@ sub ModSubscription {
     $biblionumber, $callnumber, $notes, $letter, $manualhistory,
     $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
     $graceperiod, $location, $enddate, $subscriptionid, $skip_serialseq,
-    $itemtype, $previousitemtype, $mana_id, $ccode
+    $itemtype, $previousitemtype, $mana_id, $ccode, $published_on_template
     ) = @_;
 
     my $subscription = Koha::Subscriptions->find($subscriptionid);
@@ -1331,6 +1335,7 @@ sub ModSubscription {
             previousitemtype  => $previousitemtype,
             mana_id           => $mana_id,
             ccode             => $ccode,
+            published_on_template => $published_on_template,
         }
     )->store;
     # FIXME Must be $subscription->serials
@@ -1368,7 +1373,8 @@ sub NewSubscription {
     $innerloop3, $status, $notes, $letter, $firstacquidate, $irregularity,
     $numberpattern, $locale, $callnumber, $manualhistory, $internalnotes,
     $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,
-    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode
+    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode,
+    $published_on_template,
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1411,7 +1417,8 @@ sub NewSubscription {
             itemtype          => $itemtype,
             previousitemtype  => $previousitemtype,
             mana_id           => $mana_id,
-            ccode             => $ccode
+            ccode             => $ccode,
+            published_on_template => $published_on_template,
         }
     )->store;
     $subscription->discard_changes;
@@ -1587,6 +1594,61 @@ sub NewIssue {
 
     my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
+    if ( my $template = $subscription->published_on_template ) {
+        # If we detect a TT opening tag, run string through Template Toolkit Processor
+        if ( index( $template, '[%' ) != -1 ) { # Much faster than regex
+            my $use_template_cache = C4::Context->config('template_cache_dir')
+              && defined $ENV{GATEWAY_INTERFACE};
+
+            my $tt = Template->new(
+                {
+                    EVAL_PERL   => 1,
+                    ABSOLUTE    => 1,
+                    PLUGIN_BASE => 'Koha::Template::Plugin',
+                    COMPILE_EXT => $use_template_cache ? '.ttc' : '',
+                    COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
+                    FILTERS      => {},
+                    ENCODING     => 'UTF-8',
+                }
+            ) or die Template->error();
+
+            my $schema = Koha::Database->new->schema;
+
+            $schema->txn_begin;
+            try {
+                my $text;
+                $tt->process(
+                    \$template,
+                    {
+                        subscription      => $subscription,
+                        serialseq         => $serialseq,
+                        serialseq_x       => $subscription->lastvalue1(),
+                        serialseq_y       => $subscription->lastvalue2(),
+                        serialseq_z       => $subscription->lastvalue3(),
+                        subscriptionid    => $subscriptionid,
+                        biblionumber      => $biblionumber,
+                        status            => $status,
+                        planneddate       => $planneddate,
+                        publisheddate     => $publisheddate,
+                        publisheddatetext => $publisheddatetext,
+                        notes             => $notes,
+                        routingnotes      => $routingnotes,
+                    },
+                    \$text
+                );
+                $publisheddatetext = $text;
+            }
+            catch {
+                croak "ERROR PROCESSING TEMPLATE: $_ :: " . $template->error();
+            }
+            finally {
+                $schema->txn_rollback;
+            };
+        } else {
+            $publisheddatetext = $template;
+        }
+    }
+
     my $serial = Koha::Serial->new(
         {
             serialseq         => $serialseq,
@@ -1600,7 +1662,7 @@ sub NewIssue {
             publisheddate     => $publisheddate,
             publisheddatetext => $publisheddatetext,
             notes             => $notes,
-            routingnotes      => $routingnotes
+            routingnotes      => $routingnotes,
         }
     )->store();
 

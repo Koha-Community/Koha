@@ -1775,7 +1775,7 @@ subtest 'move_to_biblio() tests' => sub {
 
 subtest 'search_ordered' => sub {
 
-    plan tests => 6;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -1837,7 +1837,8 @@ subtest 'search_ordered' => sub {
                 value => {
                     biblionumber  => $biblio->biblionumber,
                     periodicity   => $sub_freq->{id},
-                    numberpattern => $sub_np->{id}
+                    numberpattern => $sub_np->{id},
+                    published_on_template => "[% publisheddatetext %] [% biblionumber %]",
                 }
             }
         );
@@ -1891,6 +1892,10 @@ subtest 'search_ordered' => sub {
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
             [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
             "serial - order by enumchron" );
+
+        is( $serial1->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial1" );
+        is( $serial2->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial2" );
+        is( $serial3->publisheddatetext, "publisheddatetext " . $biblio->biblionumber, "Column publisheddatetext rendered correctly from template for serial3" );
 
     }
 
