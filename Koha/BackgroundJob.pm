@@ -120,7 +120,7 @@ sub enqueue {
     } catch {
         warn "Cannot connect to broker " . $_;
     };
-    return unless $conn;
+    return $self->id unless $conn;
 
     $json_args = encode_json $job_args;
     try {
