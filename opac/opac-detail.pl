@@ -720,7 +720,8 @@ else {
         # FIXME The following must be Koha::Item->serial
         my $serial_item = Koha::Serial::Items->find($item->itemnumber);
         if ( $serial_item ) {
-            $item_info->{serial} = $serial_item;
+            my $serial = Koha::Serials->find($serial_item->serialid);
+            $item_info->{serial} = $serial if $serial;
         }
 
         $item_info->{checkout} = $item->checkout;
