@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 use Data::Dumper qw( Dumper );
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Context;
 use C4::Log qw( logaction cronlogaction );
@@ -88,6 +88,21 @@ subtest 'logaction(): interface is correctly logged' => sub {
     logaction( "MEMBERS", "MODIFY", 1, 'test info', 'sip');
     $log = Koha::ActionLogs->search->next;
     is( $log->interface, 'sip', 'Passed interface is respected (sip)');
+};
+
+subtest 'logaction / trace' => sub {
+    plan tests => 2;
+
+    C4::Context->interface( 'intranet' );
+    t::lib::Mocks::mock_preference('ActionLogsTraceDepth',0);
+
+    logaction( "MEMBERS", "MODIFY", 1, "test1");
+    is( Koha::ActionLogs->search({ info => 'test1' })->last->trace, undef, 'No trace at level 0' );
+    t::lib::Mocks::mock_preference('ActionLogsTraceDepth',2);
+    logaction( "MEMBERS", "MODIFY", 1, "test2");
+    like( Koha::ActionLogs->search({ info => 'test2' })->last->trace, qr/("line":.*){2}/, 'Found two trace levels' );
+
+    t::lib::Mocks::mock_preference('ActionLogsTraceDepth',0);
 };
 
 subtest 'GDPR logging' => sub {
