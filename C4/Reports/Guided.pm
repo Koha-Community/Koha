@@ -23,20 +23,20 @@ use Carp qw( carp croak );
 use JSON qw( from_json );
 
 use C4::Context;
-use C4::Templates qw/themelanguage/;
 use C4::Koha qw( GetAuthorisedValues );
+use C4::Log qw( logaction );
+use C4::Output;
+use C4::Templates qw/themelanguage/;
+use Koha::AuthorisedValues;
+use Koha::Database::Columns;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Logger;
+use Koha::Notice::Templates;
+use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Reports;
-use C4::Output;
-use C4::Log qw( logaction );
-use Koha::Notice::Templates;
-
-use Koha::Database::Columns;
-use Koha::Logger;
-use Koha::AuthorisedValues;
-use Koha::Patron::Categories;
 use Koha::SharedContent;
+use Koha::TemplateUtils qw( process_tt );
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -1061,7 +1061,7 @@ sub EmailReport {
 
         my $from_address = $from || $row->{from};
         my $to_address = $row->{$email_col};
-        push ( @errors, { NOT_PARSE => $counter } ) unless my $content = _process_row_TT( $row, $template );
+        push ( @errors, { NOT_PARSE => $counter } ) unless my $content = process_tt( $template, $row );
         $counter++;
         next if scalar @errors > $err_count; #If any problems, try next
 
@@ -1075,29 +1075,6 @@ sub EmailReport {
     }
 
     return ( \@emails, \@errors );
-
-}
-
-
-
-=head2 ProcessRowTT
-
-   my $content = ProcessRowTT($row_hashref, $template);
-
-Accepts a hashref containing values and processes them against Template Toolkit
-to produce content
-
-=cut
-
-sub _process_row_TT {
-
-    my ($row, $template) = @_;
-
-    return 0 unless ($row && $template);
-    my $content;
-    my $processor = Template->new();
-    $processor->process( \$template, $row, \$content);
-    return $content;
 
 }
 
