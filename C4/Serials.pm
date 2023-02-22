@@ -47,6 +47,7 @@ use Koha::SharedContent;
 use Koha::Subscription::Histories;
 use Koha::Subscriptions;
 use Koha::Suggestions;
+use Koha::TemplateUtils qw( process_tt );
 
 # Define statuses
 use constant {
@@ -1595,58 +1596,24 @@ sub NewIssue {
     my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
     if ( my $template = $subscription->published_on_template ) {
-        # If we detect a TT opening tag, run string through Template Toolkit Processor
-        if ( index( $template, '[%' ) != -1 ) { # Much faster than regex
-            my $use_template_cache = C4::Context->config('template_cache_dir')
-              && defined $ENV{GATEWAY_INTERFACE};
-
-            my $tt = Template->new(
-                {
-                    EVAL_PERL   => 1,
-                    ABSOLUTE    => 1,
-                    PLUGIN_BASE => 'Koha::Template::Plugin',
-                    COMPILE_EXT => $use_template_cache ? '.ttc' : '',
-                    COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
-                    FILTERS      => {},
-                    ENCODING     => 'UTF-8',
-                }
-            ) or die Template->error();
-
-            my $schema = Koha::Database->new->schema;
-
-            $schema->txn_begin;
-            try {
-                my $text;
-                $tt->process(
-                    \$template,
-                    {
-                        subscription      => $subscription,
-                        serialseq         => $serialseq,
-                        serialseq_x       => $subscription->lastvalue1(),
-                        serialseq_y       => $subscription->lastvalue2(),
-                        serialseq_z       => $subscription->lastvalue3(),
-                        subscriptionid    => $subscriptionid,
-                        biblionumber      => $biblionumber,
-                        status            => $status,
-                        planneddate       => $planneddate,
-                        publisheddate     => $publisheddate,
-                        publisheddatetext => $publisheddatetext,
-                        notes             => $notes,
-                        routingnotes      => $routingnotes,
-                    },
-                    \$text
-                );
-                $publisheddatetext = $text;
+        $publisheddatetext = process_tt(
+            $template,
+            {
+                subscription      => $subscription,
+                serialseq         => $serialseq,
+                serialseq_x       => $subscription->lastvalue1(),
+                serialseq_y       => $subscription->lastvalue2(),
+                serialseq_z       => $subscription->lastvalue3(),
+                subscriptionid    => $subscriptionid,
+                biblionumber      => $biblionumber,
+                status            => $status,
+                planneddate       => $planneddate,
+                publisheddate     => $publisheddate,
+                publisheddatetext => $publisheddatetext,
+                notes             => $notes,
+                routingnotes      => $routingnotes,
             }
-            catch {
-                croak "ERROR PROCESSING TEMPLATE: $_ :: " . $template->error();
-            }
-            finally {
-                $schema->txn_rollback;
-            };
-        } else {
-            $publisheddatetext = $template;
-        }
+        );
     }
 
     my $serial = Koha::Serial->new(
