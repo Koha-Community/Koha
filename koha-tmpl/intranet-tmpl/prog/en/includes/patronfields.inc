@@ -90,7 +90,7 @@
         [% SET full_address = 'streetnumber,streettype,address,address2,city,state,zipcode,country' %]
         [% SET all_emails = 'email,emailpro,B_email' %]
         [% SET all_phones = 'phone,phonepro,B_phone,altcontactphone,mobile' %]
-        [% default_fields = [ standard, 'surname', 'cardnumber', all_emails, 'borrowernumber', 'userid', all_phone, full_address, 'dateofbirth', 'sort1', 'sort2' ] %]
+        [% default_fields = [ standard, 'surname', 'cardnumber', all_emails, 'borrowernumber', 'userid', all_phones, full_address, 'dateofbirth', 'sort1', 'sort2' ] %]
         [% search_options = default_fields.merge(standard.split(',')).unique %]
         [% FOREACH s_o IN search_options %]
             [% display_name = PROCESS patron_fields name=s_o %]
