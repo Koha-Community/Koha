@@ -779,7 +779,7 @@ sub GetLatestSerials {
     my $dbh = C4::Context->dbh;
 
     my $statuses = join( ',', ( ARRIVED, MISSING_STATUSES ) );
-    my $strsth = "SELECT   serialid,serialseq, status, planneddate, publisheddate, notes
+    my $strsth = "SELECT   serialid,serialseq, status, planneddate, publisheddate, publisheddatetext, notes
                         FROM     serial
                         WHERE    subscriptionid = ?
                         AND      status IN ($statuses)
