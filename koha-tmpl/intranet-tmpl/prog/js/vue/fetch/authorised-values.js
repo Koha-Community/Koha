@@ -3,16 +3,20 @@ import HttpClient from "./http-client";
 export class AVAPIClient extends HttpClient {
     constructor() {
         super({
-            baseURL: "/api/v1/authorised_value_categories/",
+            baseURL: "/api/v1/authorised_value_categories",
         });
     }
 
     get values() {
         return {
-            getAll: (category_name, query) =>
+            getCategoriesWithValues: (cat_array) =>
                 this.get({
-                    endpoint: category_name + "/values?" + (query || "_per_page=-1"),
-                }),
+                    endpoint: "?q={\"me.category_name\":["+(cat_array.join(", "))+"]}",
+                    headers: {
+                        "x-koha-embed":
+                            "authorised_values",
+                    },
+            }),
         };
     }
 }
