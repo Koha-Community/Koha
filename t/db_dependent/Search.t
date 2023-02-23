@@ -679,7 +679,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ($error, $results_hashref, $facets_loop) = getRecords("Godzina pąsowej róży","Godzina pąsowej róży",[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
-    is($newresults[0]->{'alternateholdings_count'}, 1, 'Alternate holdings filled in correctly');
+    is(scalar(@{$newresults[0]->{'ALTERNATEHOLDINGS'}}), 1, 'Alternate holdings filled in correctly');
 
 
     ## Regression test for Bug 10741
