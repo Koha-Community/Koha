@@ -2246,7 +2246,6 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
         }
     );
 
-
     my ( $error, $question, $alerts );
 
     # Patron cannot issue item_1, they have overdues
@@ -2277,7 +2276,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 };
 
 subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
-    plan tests => 1;
+    plan tests => 9;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category_x = $builder->build_object(
@@ -2306,6 +2305,16 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 
     my ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_1->barcode );
     is( $error->{STATS}, 1, '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)' );
+
+    my $stat = Koha::Statistics->search( { itemnumber => $item_1->itemnumber } )->next;
+    is( $stat->branch,         C4::Context->userenv->{'branch'}, 'Recorded a branch' );
+    is( $stat->type,           'localuse',                       'Recorded type as localuse' );
+    is( $stat->itemnumber,     $item_1->itemnumber,              'Recorded an itemnumber' );
+    is( $stat->itemtype,       $item_1->effective_itemtype,      'Recorded an itemtype' );
+    is( $stat->borrowernumber, $patron->borrowernumber,          'Recorded a borrower number' );
+    is( $stat->ccode,          $item_1->ccode,                   'Recorded a collection code' );
+    is( $stat->categorycode,   $patron->categorycode,            'Recorded a categorycode' );
+    is( $stat->location,       $item_1->location,                'Recorded a location' );
 
     # TODO There are other tests to provide here
 };
