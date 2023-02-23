@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:46-0300\n"
+"POT-Creation-Date: 2023-02-17 09:52-0300\n"
 "PO-Revision-Date: 2022-05-01 10:33-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ko\n"
@@ -171,6 +171,12 @@ msgstr "글자코드 기본값 '%s'는 이미 존재합니다."
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
+msgstr "글자코드 '%s' 가 이미 '%s'에 존재합니다."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
 msgstr "글자코드 '%s' 가 이미 '%s'에 존재합니다."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
@@ -571,6 +577,10 @@ msgstr "8월"
 msgid "Authority"
 msgstr "전거"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr ""
@@ -584,7 +594,7 @@ msgstr ""
 msgid "Average rating: %s (%s votes)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Back to top"
 msgstr "도구로 돌아가기"
@@ -598,8 +608,8 @@ msgstr "서지 레코드 %s"
 msgid "Both subfield values should be filled or empty."
 msgstr "하위필드 값은 채워지거나 비어있어야 합니다."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "CSV"
 
@@ -698,10 +708,10 @@ msgstr "날짜를 지우고 무기한 연기"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 #, fuzzy
 msgid "Clear filter"
 msgstr "필드 제거"
@@ -739,19 +749,24 @@ msgstr ""
 msgid "Closure reason"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "열"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "열 설정"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 #, fuzzy
 msgid "Configure"
+msgstr "확인"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "확인"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -786,8 +801,8 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "복사"
 
@@ -1045,8 +1060,8 @@ msgstr "오류; 당신의 데이터를 저장하지 못할 것입니다"
 msgid "Every"
 msgstr "모두"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 #, fuzzy
 msgid "Excel"
 msgstr "발췌"
@@ -1056,13 +1071,13 @@ msgstr "발췌"
 msgid "Expired"
 msgstr "만료됨"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "출력"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 #, fuzzy
 msgid "Export or print"
 msgstr "사진인쇄"
@@ -1648,6 +1663,11 @@ msgstr "갱신할 수 없음"
 msgid "Not selected"
 msgstr "선택된 것이 없습니다."
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr ""
@@ -1910,7 +1930,7 @@ msgid ""
 "are done"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "적어도 하나의 템플릿을 작성해주세요."
 
@@ -1933,7 +1953,7 @@ msgstr ""
 msgid "Please select or enter a sound."
 msgstr "%s를 선택해주세요."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "표제와 내용을 명기해주세요 %s"
@@ -1955,9 +1975,9 @@ msgstr "이전"
 msgid "Previous checkouts"
 msgstr "이전 대출"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "프린트"
 
@@ -2114,6 +2134,16 @@ msgstr ""
 msgid "Renewal priority"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "갱신 실패:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "갱신됨, 연체:"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "갱신됨, 연체:"
@@ -2200,7 +2230,7 @@ msgstr "저장 중..."
 msgid "Scheduled for automatic renewal"
 msgstr "%s %s ( %s ) 자동갱신이 예약되었습니다. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Scroll to the top of the page"
 msgstr ""
 
@@ -2393,11 +2423,6 @@ msgstr "귀하의 예약을 일시 중지합니다"
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "다음 시기까지 일시 중지:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-#, fuzzy
-msgid "Table settings"
-msgstr "열 설정"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2964,6 +2989,11 @@ msgstr "중복됨"
 msgid "is superseded by"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "1월"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "수정됨"
@@ -3031,7 +3061,7 @@ msgstr ""
 msgid "until %s"
 msgstr "할 때 까지 %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 #, fuzzy
 msgid "years"
 msgstr "%s 년"
@@ -3039,6 +3069,10 @@ msgstr "%s 년"
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Table settings"
+#~ msgstr "열 설정"
 
 #, fuzzy
 #~ msgid "Unable to claim as returned"

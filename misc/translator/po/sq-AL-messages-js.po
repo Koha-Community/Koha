@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:59-0300\n"
+"POT-Creation-Date: 2023-02-17 10:50-0300\n"
 "PO-Revision-Date: 2022-05-01 12:03-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: sq\n"
@@ -161,6 +161,13 @@ msgstr ""
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
+msgstr ""
+"Ndodhi një gabim gjatë krijimit të listës. Emri %s ekziston paraprakisht."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -566,6 +573,10 @@ msgstr "Gusht"
 msgid "Authority"
 msgstr "Autoritetet"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 #, fuzzy
 msgid "Automatic renewal failed, account expired"
@@ -581,7 +592,7 @@ msgstr "%s Rinovimi automatik dështoi, llogaria juaj ka skaduar"
 msgid "Average rating: %s (%s votes)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Back to top"
 msgstr "Kthehu tek listat"
@@ -595,8 +606,8 @@ msgstr "# E dhene bibliographike"
 msgid "Both subfield values should be filled or empty."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr ""
 
@@ -697,10 +708,10 @@ msgstr "Pastro datën dhe pezullo pa afat"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 #, fuzzy
 msgid "Clear filter"
 msgstr "Pastro datën"
@@ -739,20 +750,25 @@ msgstr ""
 msgid "Closure reason"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 #, fuzzy
 msgid "Columns settings"
 msgstr "Parametrat e komunikimit"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 #, fuzzy
 msgid "Configure"
+msgstr "Konfirmo fjalëkalimin"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "Konfirmo fjalëkalimin"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -788,8 +804,8 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 #, fuzzy
 msgid "Copy"
 msgstr "Të drejtat e autorësisë"
@@ -1041,8 +1057,8 @@ msgstr ""
 msgid "Every"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 #, fuzzy
 msgid "Excel"
 msgstr "Ekstrakt"
@@ -1052,13 +1068,13 @@ msgstr "Ekstrakt"
 msgid "Expired"
 msgstr "Skadon më"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "Eksporto"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr ""
 
@@ -1641,6 +1657,11 @@ msgstr "%s Jo i rifreskueshem"
 msgid "Not selected"
 msgstr "Nuk u përzgjodh asnjë titull"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr ""
@@ -1905,7 +1926,7 @@ msgid ""
 "are done"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 #, fuzzy
 msgid "Please fill at least one template."
 msgstr "Duhet të zgjidhni të paktën një titull. "
@@ -1928,7 +1949,7 @@ msgstr ""
 msgid "Please select or enter a sound."
 msgstr "Vendosni vetëm numra. "
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr ""
@@ -1951,9 +1972,9 @@ msgstr "Kthehu"
 msgid "Previous checkouts"
 msgstr "Dhëniet në dorëzim të mëparshme"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "Printo"
 
@@ -2111,6 +2132,16 @@ msgstr ""
 msgid "Renewal priority"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "Rinovo të gjitha"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "Rinovuar!"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 #, fuzzy
 msgid "Renewed, due:"
@@ -2199,7 +2230,7 @@ msgstr "Duke u ngarkuar..."
 msgid "Scheduled for automatic renewal"
 msgstr "%s Rifreskim automatik "
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Scroll to the top of the page"
 msgstr "Kthehu tek faqja e parë e katalogut."
@@ -2390,11 +2421,6 @@ msgstr "Pezullo rezervimin mbi "
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "Pezullo deri:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-#, fuzzy
-msgid "Table settings"
-msgstr "Parametrat e komunikimit"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2957,6 +2983,11 @@ msgstr "Lista u përditësua."
 msgid "is superseded by"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "Janar"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 #, fuzzy
 msgid "modified"
@@ -3026,7 +3057,7 @@ msgstr ""
 msgid "until %s"
 msgstr "deri "
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 #, fuzzy
 msgid "years"
 msgstr "%s vite"
@@ -3034,3 +3065,7 @@ msgstr "%s vite"
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Table settings"
+#~ msgstr "Parametrat e komunikimit"

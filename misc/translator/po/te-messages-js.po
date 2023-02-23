@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 10:02-0300\n"
+"POT-Creation-Date: 2023-02-17 11:03-0300\n"
 "PO-Revision-Date: 2022-05-03 18:56+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -171,6 +171,12 @@ msgstr "కోడ్‌తో డిఫాల్ట్ అక్షరం '%s' �
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
+msgstr "కోడ్‌తో ఒక లేఖ '%s' ఇప్పటికే ఉంది '%s'."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
 msgstr "కోడ్‌తో ఒక లేఖ '%s' ఇప్పటికే ఉంది '%s'."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
@@ -555,6 +561,10 @@ msgstr "ఆగస్టు"
 msgid "Authority"
 msgstr "అధికారం"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "స్వయంచాలక పునరుద్ధరణ విఫలమైంది, ఖాతా గడువు ముగిసింది"
@@ -568,7 +578,7 @@ msgstr "స్వయంచాలక పునరుద్ధరణ విఫల�
 msgid "Average rating: %s (%s votes)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Back to top"
 msgstr "టూల్స్ తిరిగి వెళ్ళు"
@@ -581,8 +591,8 @@ msgstr "బిబ్లియోగ్రాఫిక్ రికార్డ�
 msgid "Both subfield values should be filled or empty."
 msgstr "రెండు సబ్ ఫీల్డ్ విలువలు నింపాలి లేదా ఖాళీగా ఉండాలి."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "సిఎస్ వి"
 
@@ -678,10 +688,10 @@ msgstr "నిరవధికంగా నిలిపివేయడాని�
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 msgid "Clear filter"
 msgstr "ఫిల్టర్ క్లియర్"
 
@@ -717,19 +727,24 @@ msgstr ""
 msgid "Closure reason"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "నిలువు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "నిలువు సెట్టింగ్‌లు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 #, fuzzy
 msgid "Configure"
+msgstr "నిర్ధారించండి"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "నిర్ధారించండి"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -764,8 +779,8 @@ msgstr "కాపీ %d క్లిప్‌బోర్డ్‌కు వర�
 msgid "Copied one row to clipboard"
 msgstr "క్లిప్‌బోర్డ్‌కు ఒక అడ్డు వరుసను కాపీ చేశారు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "కాపీ"
 
@@ -1016,8 +1031,8 @@ msgstr "లోపం; మీ డేటా సేవ్ చేయబడకపో�
 msgid "Every"
 msgstr "ప్రతి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 msgid "Excel"
 msgstr "ఎక్సెల్"
 
@@ -1025,13 +1040,13 @@ msgstr "ఎక్సెల్"
 msgid "Expired"
 msgstr "ముగిసినది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "ఎగుమతి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr "ఎగుమతి చేయండి లేదా ముద్రించండి"
 
@@ -1604,6 +1619,11 @@ msgstr "పునరుత్పాదకం కాదు"
 msgid "Not selected"
 msgstr "ఏదీ ఎంచుకోబడలేదు"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr "గమనిక: _అన్నీ_ విలువ మిగతా అన్ని విలువలను భర్తీ చేస్తుంది"
@@ -1860,7 +1880,7 @@ msgid ""
 "are done"
 msgstr "మీరు పూర్తి చేసిన తర్వాత మీ నమూనాను మిగతా లైబ్రేరియన్లతో పంచుకోవడానికి సంకోచించకండి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "దయచేసి కనీసం ఒక టెంప్లేట్ నింపండి."
 
@@ -1882,7 +1902,7 @@ msgstr "దయచేసి ఒక ఎంచుకోండి CSV (.csv) లే�
 msgid "Please select or enter a sound."
 msgstr "దయచేసి ధ్వనిని ఎంచుకోండి లేదా నమోదు చేయండి."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "దయచేసి శీర్షిక మరియు కంటెంట్‌ను పేర్కొనండి %s"
@@ -1906,9 +1926,9 @@ msgstr "మునుపటి"
 msgid "Previous checkouts"
 msgstr "మునుపటి చెక్‌అవుట్‌లు"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "ముద్రణ"
 
@@ -2062,6 +2082,16 @@ msgstr "సిస్ప్రెఫ్ చేత పునరుద్ధరణ 
 msgid "Renewal priority"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "పునరుద్ధరించడం విఫలమైంది:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "పునరుద్ధరించబడింది, గడువు:"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "పునరుద్ధరించబడింది, గడువు:"
@@ -2147,7 +2177,7 @@ msgstr "సేవింగ్..."
 msgid "Scheduled for automatic renewal"
 msgstr "స్వయంచాలక పునరుద్ధరణ కోసం షెడ్యూల్ చేయబడింది"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Scroll to the top of the page"
 msgstr "మొదటి పేజీకి వెళ్ళండి"
@@ -2336,11 +2366,6 @@ msgstr "సస్పెండ్ హోల్డ్ ఆన్"
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "వరకు సస్పెండ్ చేయండి:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-#, fuzzy
-msgid "Table settings"
-msgstr "నిలువు సెట్టింగ్‌లు"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2892,6 +2917,11 @@ msgstr "నకిలీ చేయబడింది"
 msgid "is superseded by"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "జనవరి"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "మార్చబడినది"
@@ -2957,7 +2987,7 @@ msgstr ""
 msgid "until %s"
 msgstr "వరకు %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 #, fuzzy
 msgid "years"
 msgstr "%s సంవత్సరాల"
@@ -2965,6 +2995,10 @@ msgstr "%s సంవత్సరాల"
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Table settings"
+#~ msgstr "నిలువు సెట్టింగ్‌లు"
 
 #~ msgid "Unable to claim as returned"
 #~ msgstr "తిరిగి వచ్చినట్లు క్లెయిమ్ చేయడం సాధ్యం కాలేదు"

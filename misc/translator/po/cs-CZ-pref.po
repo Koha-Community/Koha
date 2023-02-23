@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2023-01-23 07:20+0000\n"
-"Last-Translator: m23 <black23@gmail.com>\n"
+"PO-Revision-Date: 2023-02-22 06:12+0000\n"
+"Last-Translator: Josef Moravec <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /cs/22.11/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1674458407.042915\n"
+"X-POOTLE-MTIME: 1677046366.500064\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -112,14 +112,14 @@ msgid ""
 msgstr "automaticky zobrazit tiskový dialog v případě provedení platby."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# . (Requires <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-". Poznámka: volba <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACXSLT\">OPACXSLT</a> musí být povolena."
+" . (Vyžaduje <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
+">UseCashRegisters</a>)"
 
 # Accounting > Features
 #, fuzzy
@@ -149,7 +149,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Zaokrouhlit"
 
 # Administration > Share anonymous usage statistics > UsageStats
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -158,10 +157,11 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"<br><strong>POZNÁMKA:</strong> Ostatní systémové předvolby <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
-"a> nemají žádný vliv, pokud je tato systémová předvolba nastavena na \"Ne"
-"\" (nesdílet)."
+"Tato předvolba nemá žádný vliv, pokud je povoleno <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
+">UseCashRegisters</a> nebo pokud nejsou v kategorii ověřených hodnot <a href"
+"=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
+">PAYMENT_TYPE</a> definovány žádné typy plateb."
 
 # Accounting > Policy
 #, fuzzy
@@ -409,16 +409,16 @@ msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "Výstupy"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Pokud zvolíte <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a>, musíte zadat platnou e-mailovou adresu:"
+" <br>Pokud zvolítee <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"EmailAddressForSuggestions\">EmailAddressForSuggestions</a> musíte zadat "
+"platnou e-mailovou adresu:"
 
 # Acquisitions > Policy
 msgid ""
@@ -583,14 +583,13 @@ msgstr ""
 "(svislítko)."
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
 "only accept values up to 4 decimals precision, further values will be "
 "rounded."
 msgstr ""
-"Prosím pozor: Databáze pracuje s přesností na 4 desetinná místa. Pokud "
-"použijete více míst, hodnota bude zakrouhlena."
+"<br/><strong>Pozor::</strong> Databáze pracuje s přesností na 4 desetinná "
+"místa. Pokud použijete více míst, hodnota bude zakrouhlena."
 
 # Acquisitions > Policy > TaxRates
 msgid ""
@@ -907,7 +906,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ano"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -918,9 +916,13 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
-"Při vytváření aplikace v google cloud konzoli je třeba vybrat OAuth2 a "
-"nastavit \"web origin\" na url vašeho on-line katalogu a \"redirect url\" na "
-"\"vas_on-line_katalog/cgi-bin/koha/svc/auth/googleopenidconnect\"."
+"Zvolte OAuth2 až budete vytvářet aplikaci v Google cloud console a nastavte "
+"správnou URL do vašeho katalogu. Dále také přesměrování na vas_opac_url/cgi-"
+"bin/koha/svc/auth/googleopenidconnect. Vyžaduje, aby bylo <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID\""
+">GoogleOAuth2ClientID</a> and <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a> nastavené."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -932,7 +934,6 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "Neumožnit"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
@@ -940,7 +941,9 @@ msgid ""
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 "automatické zaregistrování uživatele při jeho přihlášení pomocí Google Open "
-"ID."
+"ID. Vyžaduje <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
+">GoogleOpenIDConnect</a>"
 
 # Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
 msgid ""
@@ -1179,16 +1182,14 @@ msgstr ""
 "pl</code>. O její nastavení požádejte správce."
 
 # Administration > Share anonymous usage statistics > UsageStats
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/"
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
 "the statistics you share."
 msgstr ""
-"<br><strong>POZNÁMKA:</strong> Ostatní systémové předvolby <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
-"a> nemají žádný vliv, pokud je tato systémová předvolba nastavena na \"Ne"
-"\" (nesdílet)."
+"<br><strong>POZNÁMKA:</strong>Pro nastavení statistik, které chcete sdílet, "
+"použijte <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">samostatnou "
+"stránku</a>."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2038,16 +2039,13 @@ msgstr ""
 "\" (nesdílet)."
 
 # Administration > Share anonymous usage statistics > UsageStats
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use "
 "the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated "
 "configuration page</a> to set and edit this system preference."
 msgstr ""
-"<br><strong>POZNÁMKA:</strong> Ostatní systémové předvolby <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
-"a> nemají žádný vliv, pokud je tato systémová předvolba nastavena na \"Ne"
-"\" (nesdílet)."
+"<br><strong>POZNÁMKA:</strong>Pro toto nastavení je třeba použít <a href"
+"=\"/cgi-bin/koha/admin/usage_statistics.pl\">samostatnou stránku</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -2406,7 +2404,6 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Při úpravě záznamů"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -2414,9 +2411,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"chybějící záznamy autorit (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> musí "
-"být nastaveno na \"povolit\", aby to mělo nějaký efekt)."
+"chybějící záznamy autorit (<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"RequireChoosingExistingAuthority\">RequireChoosingExistingAuthority</a> musí "
+"být nastaveno na \"nevyžadovat\", aby to mělo nějaký efekt)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -3876,10 +3874,6 @@ msgstr "Modul donáškové služby"
 msgid "circulation.pref Interface"
 msgstr "Rozhraní"
 
-# Circulation > Interlibrary loans
-msgid "circulation.pref Interlibrary loans"
-msgstr "MVS"
-
 # Circulation > Interface
 #, fuzzy
 msgid "circulation.pref Item bundles"
@@ -4857,8 +4851,8 @@ msgstr "knihovny, ke které jste přihlášen."
 # Circulation > Checkout Policy
 #, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr "buď do pobočky z které pochází nebo kde byly vydány."
 
@@ -4896,21 +4890,6 @@ msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
 msgstr "boční navigační panel na všech stránkách modulu Výpůjčky."
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Nepovolit"
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Povolit"
-
-# Circulation > Checkout Policy
-#, fuzzy
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "výpůjčních pravidel."
 
 # Circulation > Return claims
 #, fuzzy
@@ -5715,104 +5694,6 @@ msgstr "Zapnout"
 #, fuzzy
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "modul donáškové služby"
-
-# Circulation > Checkin Policy
-#, fuzzy
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Pravidla vracení"
-
-# Circulation > Holds policy
-#, fuzzy
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Neupřednostňovat"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr ""
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-
-# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Nepovolit"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Povolit"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "modul pro správu MVS."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Zakázat"
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Zakázat"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr ""
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-
-# Circulation > Checkout policy
-#, fuzzy
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr "Zaslat všechna upozornění jako slepé kopie (BCC) na tento e-mail:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -9421,6 +9302,144 @@ msgid ""
 "on the OPAC."
 msgstr "čtenářům měnit jazyky rozhraní on-line katalogu."
 
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "Periodika"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Vlastnosti"
+
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Čtenáří požadující změny v osobních údajích"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Nepovolit"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Povolit"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr "výpůjčních pravidel."
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Pravidla vracení"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Neupřednostňovat"
+
+# Interlibrary loans > Features > ILLCheckAvailability
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr ""
+
+# Interlibrary loans > Notifications > ILLDefaultStaffEmail
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+
+# Circulation > Return claims
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr "Použít ověřenou hodnotu LOST"
+
+# Interlibrary loans > Features > ILLHiddenRequestStatuses
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Nepovolit"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Povolit"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr "modul pro správu MVS."
+
+# Interlibrary loans > Features > ILLModuleCopyrightClearance
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Zakázat"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Zakázat"
+
+# Interlibrary loans > Features > ILLModuleUnmediated
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+
+# Interlibrary loans > OPAC > ILLOpacbackends
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+
+# Interlibrary loans > OPAC > ILLOpacbackends
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr ""
+
+# Interlibrary loans > Notifications > ILLSendStaffNotices
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr "Zaslat všechna upozornění jako slepé kopie (BCC) na tento e-mail:"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "Místní nastavení"
@@ -12723,11 +12742,11 @@ msgid ""
 "still be expanded later):"
 msgstr ""
 
-# Patrons > General
+# Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr ""
 
 # Patrons > General > DefaultPatronSearchFields
@@ -15933,6 +15952,10 @@ msgstr "řádků z výstupů vyžádaných pomocí webové služby SVC."
 #~ msgstr ""
 #~ "automatické vytvoření nové autority, pokud neexistuje, místo napojení na "
 #~ "již existující autortní zázam."
+
+# Circulation > Interlibrary loans
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "MVS"
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."

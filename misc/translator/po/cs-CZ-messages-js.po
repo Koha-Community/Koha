@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:30-0300\n"
-"PO-Revision-Date: 2022-11-20 20:53+0000\n"
+"POT-Creation-Date: 2023-02-17 08:38-0300\n"
+"PO-Revision-Date: 2023-02-21 16:02+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: cs\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /cs/22.11/cs-CZ-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1668977603.059723\n"
+"X-POOTLE-MTIME: 1676995353.053250\n"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
@@ -176,6 +176,12 @@ msgstr "Výchozí oznámení oznámení s kódem '%s' již existuje."
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "Oznámení s kódem'%s' již je pro knihovnu'%s' vytvořeno."
 
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
+msgstr "Oznámení s kódem'%s' již je pro knihovnu'%s' vytvořeno."
+
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
 msgid "A license is used several times"
@@ -326,9 +332,9 @@ msgid "Agreement deleted"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Agreement license %s"
-msgstr "Odstranit všechny položky"
+msgstr "Licence k dohodě %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormConfirmDelete.vue:10
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:24
@@ -475,9 +481,9 @@ msgid "Are you sure you want to empty your cart?"
 msgstr "Opravdu chcete odstranit z košíku všechny položky?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:32
-#, fuzzy
 msgid "Are you sure you want to expire this recall?"
-msgstr "Opravdu chcete odstranit tento záznam?"
+msgstr ""
+"Jste si jisti, že chcete, aby platnost této přednostní rezervace vypršela?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:88
 #, fuzzy
@@ -565,6 +571,10 @@ msgstr "Srpen"
 msgid "Authority"
 msgstr "Autoritní"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "Automatické prodloužení selhalo, registrace čtenáře již skončila"
@@ -578,7 +588,7 @@ msgstr "Automatické prodloužení selhalo, čtenář má neuhrazené poplatky"
 msgid "Average rating: %s (%s votes)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Back to top"
 msgstr "Zpět na začátek stránky"
 
@@ -590,8 +600,8 @@ msgstr "Bibliografický záznam neexistuje!"
 msgid "Both subfield values should be filled or empty."
 msgstr "Obě podpole mohou být vyplněna nebo prázdná."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "CSV"
 
@@ -689,10 +699,10 @@ msgstr "Smažte datum pro odložení na neurčito."
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 msgid "Clear filter"
 msgstr "Zrušit filtr"
 
@@ -728,19 +738,24 @@ msgstr ""
 msgid "Closure reason"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "Sloupce"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "Nastavení sloupců"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 #, fuzzy
 msgid "Configure"
+msgstr "Potvrdit"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "Potvrdit"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -775,8 +790,8 @@ msgstr "%d řádků zkopírováno do schránky"
 msgid "Copied one row to clipboard"
 msgstr "Jeden řádek byl zkopírovaný do schránky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "Kopírovat"
 
@@ -1030,8 +1045,8 @@ msgstr "Chyba; vaše data nemusela být uložena"
 msgid "Every"
 msgstr "Každý"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 msgid "Excel"
 msgstr "Excel"
 
@@ -1039,13 +1054,13 @@ msgstr "Excel"
 msgid "Expired"
 msgstr "Registrace vypršela"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "Exportovat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr "Export nebo tisk"
 
@@ -1312,9 +1327,9 @@ msgid "License"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "License #%s"
-msgstr "Název souboru:"
+msgstr "Licence #%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:275
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -1618,6 +1633,11 @@ msgstr "Nelze prodloužit"
 msgid "Not selected"
 msgstr "Nic není vybráno"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr "Poznámka: _ALL_ hodnota přepíše všechny ostatní hodnoty"
@@ -1879,7 +1899,7 @@ msgid ""
 msgstr ""
 "Pokud je Váš vzor odladěn, sdílejte ho prosím se všemi ostatními knihovníky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "Vyberte prosím alespoň jednu šablonu."
 
@@ -1903,7 +1923,7 @@ msgstr "Vyberte soubor ve formátu CSV (.csv) či ODS (.ods)."
 msgid "Please select or enter a sound."
 msgstr "Vyberte nebo vložte zvuk."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "Prosím upřesněte název a obsah pro %s"
@@ -1928,9 +1948,9 @@ msgstr "Předchozí"
 msgid "Previous checkouts"
 msgstr "Předchozí výpůjčky"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "Tisk"
 
@@ -1975,9 +1995,8 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:471
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:605
-#, fuzzy
 msgid "Recalled"
-msgstr "RecallItem "
+msgstr "S přednostní rezervací"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:112
 msgid "Reject"
@@ -2084,6 +2103,16 @@ msgstr "Prodloužení je zakázáno systémovým nastavením"
 msgid "Renewal priority"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "Prodloužení se nezdařilo:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "Prodlouženo do:"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "Prodlouženo do:"
@@ -2169,7 +2198,7 @@ msgstr "Ukládání..."
 msgid "Scheduled for automatic renewal"
 msgstr "Naplánováno automatické prodloužení"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Scroll to the top of the page"
 msgstr "Přesunout se na začátek stránky"
 
@@ -2360,11 +2389,6 @@ msgstr "Pozastavit rezervaci do"
 msgid "Suspend until:"
 msgstr "Odložit do:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-#, fuzzy
-msgid "Table settings"
-msgstr "Nastavení sloupců"
-
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
 msgstr ""
@@ -2446,10 +2470,12 @@ msgstr "Stránka by měla být číslo mezi 1 a %s."
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:22
 msgid "The recall may have already been cancelled. Please refresh the page."
 msgstr ""
+"Je možné, že přednostní rezervace již byla zrušena. Obnovte prosím stránku."
 
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:50
 msgid "The recall may have already been expired. Please refresh the page."
 msgstr ""
+"Je možné, že přednostní rezervace již byla zrušena. Obnovte prosím stránku."
 
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:106
 msgid ""
@@ -2459,6 +2485,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:134
 msgid "The recall may have already been removed. Please refresh the page."
 msgstr ""
+"Je možné, že přednostní rezervace již byla odstraněna. Obnovte prosím "
+"stránku."
 
 #: koha-tmpl/intranet-tmpl/prog/js/recalls.js:78
 msgid ""
@@ -2923,6 +2951,11 @@ msgstr "je duplicitní"
 msgid "is superseded by"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "Leden"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "změněno"
@@ -2989,13 +3022,17 @@ msgstr ""
 msgid "until %s"
 msgstr "do %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 msgid "years"
 msgstr "let"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Table settings"
+#~ msgstr "Nastavení sloupců"
 
 #, fuzzy
 #~ msgid "Unable to claim as returned"

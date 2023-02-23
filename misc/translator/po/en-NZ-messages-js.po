@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:33-0300\n"
-"PO-Revision-Date: 2022-12-04 20:09+0000\n"
-"Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
+"POT-Creation-Date: 2023-02-17 08:55-0300\n"
+"PO-Revision-Date: 2023-01-30 02:21+0000\n"
+"Last-Translator: aleisha <aleisha@catalyst.net.nz>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: en_NZ\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /en_NZ/22.11/en-NZ-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1670184591.587503\n"
+"X-POOTLE-MTIME: 1675045292.884953\n"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
@@ -175,6 +175,12 @@ msgstr "A default letter with the code '%s' already exists."
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
+msgstr "A letter with the code '%s' already exists for '%s'."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
 msgstr "A letter with the code '%s' already exists for '%s'."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
@@ -350,9 +356,8 @@ msgid "Agreement updated"
 msgstr "Agreement updated"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy
 msgid "Agreement user"
-msgstr "Agreement %s"
+msgstr "Agreement user"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:3
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -562,6 +567,10 @@ msgstr "August"
 msgid "Authority"
 msgstr "Authority"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "Automatic renewal failed, account expired"
@@ -575,7 +584,7 @@ msgstr "Automatic renewal failed, user has unpaid fines"
 msgid "Average rating: %s (%s votes)"
 msgstr "Average rating: %s (%s votes)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Back to top"
 msgstr "Back to top"
 
@@ -587,8 +596,8 @@ msgstr "Bibliographic record does not exist!"
 msgid "Both subfield values should be filled or empty."
 msgstr "Both subfield values should be filled or empty."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "CSV"
 
@@ -686,10 +695,10 @@ msgstr "Clear date to suspend indefinitely"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 msgid "Clear filter"
 msgstr "Clear filter"
 
@@ -724,18 +733,23 @@ msgstr "Close"
 msgid "Closure reason"
 msgstr "Closure reason"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "Columns"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "Columns settings"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 msgid "Configure"
+msgstr "Configure"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "Configure"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -769,8 +783,8 @@ msgstr "Copied %d rows to clipboard"
 msgid "Copied one row to clipboard"
 msgstr "Copied one row to clipboard"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "Copy"
 
@@ -899,9 +913,9 @@ msgid "Directory is not writeable"
 msgstr "Directory is not writeable"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Document %s"
-msgstr "Documents"
+msgstr "Document %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:3
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:97
@@ -1024,8 +1038,8 @@ msgstr "Error; your data might not have been saved"
 msgid "Every"
 msgstr "Every"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 msgid "Excel"
 msgstr "Excel"
 
@@ -1033,13 +1047,13 @@ msgstr "Excel"
 msgid "Expired"
 msgstr "Expired"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "Export"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr "Export or print"
 
@@ -1305,9 +1319,9 @@ msgid "License"
 msgstr "License"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "License #%s"
-msgstr "Licenses"
+msgstr "License #%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:275
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -1606,6 +1620,11 @@ msgstr "Not renewable"
 msgid "Not selected"
 msgstr "Not selected"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr "Note: _ALL_ value will override all other values "
@@ -1728,14 +1747,14 @@ msgid "Package"
 msgstr "Package"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Package #%s"
-msgstr "Packages"
+msgstr "Package #%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Package %s"
-msgstr "Packages"
+msgstr "Package %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:93
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:74
@@ -1863,7 +1882,7 @@ msgstr ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "Please fill at least one template."
 
@@ -1885,7 +1904,7 @@ msgstr "Please select a CSV (.csv), ODS (.ods) "
 msgid "Please select or enter a sound."
 msgstr "Please select or enter a sound."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "Please specify title and content for %s"
@@ -1909,9 +1928,9 @@ msgstr "Previous"
 msgid "Previous checkouts"
 msgstr "Previous issues"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "Print"
 
@@ -1974,9 +1993,9 @@ msgid "Related agreement"
 msgstr "Related agreement"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Related agreement %s"
-msgstr "Related agreements"
+msgstr "Related agreement %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:3
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:191
@@ -2059,6 +2078,16 @@ msgstr "Renewal denied by syspref"
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
 msgid "Renewal priority"
 msgstr "Renewal priority"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "Renew failed:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "Renewed, due:"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
@@ -2145,7 +2174,7 @@ msgstr "Saving..."
 msgid "Scheduled for automatic renewal"
 msgstr "Scheduled for automatic renewal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Scroll to the top of the page"
 msgstr "Scroll to the top of the page"
 
@@ -2328,10 +2357,6 @@ msgstr "Suspend reserve on"
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "Suspend until:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-msgid "Table settings"
-msgstr "Table settings"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2565,9 +2590,9 @@ msgid "Title"
 msgstr "Title"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Title #%s"
-msgstr "Titles"
+msgstr "Title #%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:520
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -2612,9 +2637,9 @@ msgid "Titles"
 msgstr "Titles"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Titles (%s)"
-msgstr "Titles"
+msgstr "Titles (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:10
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -2892,6 +2917,11 @@ msgstr "is duplicated"
 msgid "is superseded by"
 msgstr "is superseded by"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "January"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "modified"
@@ -2956,13 +2986,16 @@ msgstr "tracks demand-driven acquisitions for"
 msgid "until %s"
 msgstr "until %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 msgid "years"
 msgstr "years"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr "{credit_type_description} against {debit_type_description}"
+
+#~ msgid "Table settings"
+#~ msgstr "Table settings"
 
 #, fuzzy
 #~ msgid "Unable to claim as returned"

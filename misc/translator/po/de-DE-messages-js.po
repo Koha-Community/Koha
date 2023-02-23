@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:32-0300\n"
-"PO-Revision-Date: 2022-12-18 22:45+0000\n"
+"POT-Creation-Date: 2023-02-17 08:47-0300\n"
+"PO-Revision-Date: 2023-02-20 08:20+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /de/22.11/de-DE-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1671403500.174896\n"
+"X-POOTLE-MTIME: 1676881206.597466\n"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
@@ -179,6 +179,14 @@ msgstr "Eine Standardbenachrichtigung mit dem Code '%s' existiert bereits."
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "Eine Benachrichtigung mit dem Code '%s' existiert bereits für '%s'."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
+msgstr ""
+"Eine Benachrichtigung mit dem Code '%s' existiert bereits für '%s'. "
+"Benachrichtigung überschreiben?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
 #: koha-tmpl/intranet-tmpl/prog/js/vue/dist/main.js:2
@@ -572,6 +580,10 @@ msgstr "August"
 msgid "Authority"
 msgstr "Normdaten"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr "Automatisch"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "Automatische Verlängerung nicht möglich, Konto abgelaufen"
@@ -586,7 +598,7 @@ msgstr ""
 msgid "Average rating: %s (%s votes)"
 msgstr "Durchschnittsbewertung: %s (%s Wertungen)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Back to top"
 msgstr "Zurück zum Anfang"
 
@@ -598,8 +610,8 @@ msgstr "Dieser Titelsatz existiert nicht!"
 msgid "Both subfield values should be filled or empty."
 msgstr "Beide Unterfelder sollten ausgefüllt oder freigelassen werden."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "CSV"
 
@@ -701,10 +713,10 @@ msgstr "Löschen Sie das Datum, um unbefristet auszusetzen"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 msgid "Clear filter"
 msgstr "Filter löschen"
 
@@ -739,19 +751,23 @@ msgstr "Schließen"
 msgid "Closure reason"
 msgstr "Abschlussgrund"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "Spalten"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "Tabellenkonfiguration"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 msgid "Configure"
 msgstr "Konfigurieren"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+msgid "Configure table"
+msgstr "Tabelle konfigurieren"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
 msgid "Confirm"
@@ -784,8 +800,8 @@ msgstr "%d Zeilen in Zwischenablage kopiert"
 msgid "Copied one row to clipboard"
 msgstr "Eine Zeile in Zwischenablage kopiert"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -1036,8 +1052,8 @@ msgstr "Fehler; Daten wurden möglicherweise nicht gespeichert"
 msgid "Every"
 msgstr "Alle"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 msgid "Excel"
 msgstr "Excel"
 
@@ -1045,13 +1061,13 @@ msgstr "Excel"
 msgid "Expired"
 msgstr "Abgelaufen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "Export"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr "Exportieren oder drucken"
 
@@ -1616,6 +1632,11 @@ msgstr "Nicht verlängerbar"
 msgid "Not selected"
 msgstr "Nicht ausgewählt"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr "Hinweis: %s von %s Verlängerungen wurden protokolliert"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr "Hinweis: _ALL_ überschreibt alle anderen Werte"
@@ -1872,7 +1893,7 @@ msgid ""
 msgstr ""
 "Bitte teilen Sie Ihr Muster mit allen Bibliotheken, wenn Sie fertig sind"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "Mindestens ein Template erforderlich."
 
@@ -1895,7 +1916,7 @@ msgstr "Bitte wählen Sie eine CSV (.csv) oder ODS (.ods) Datei."
 msgid "Please select or enter a sound."
 msgstr "Bitte Klang wählen oder angeben."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "Bitte Titel und Inhalt für %s angeben"
@@ -1920,9 +1941,9 @@ msgstr "Zurück"
 msgid "Previous checkouts"
 msgstr "Vorherige Ausleihen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "Druck"
 
@@ -2070,6 +2091,14 @@ msgstr "Verlängerung durch Systemparameter verhindert"
 msgid "Renewal priority"
 msgstr "Priorität für Verlängerung"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Renewal type:"
+msgstr "Verlängerungsart:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+msgid "Renewed by"
+msgstr "Verlängert durch"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "Verlängert, bis:"
@@ -2155,7 +2184,7 @@ msgstr "Speichert..."
 msgid "Scheduled for automatic renewal"
 msgstr "Automatische Verlängerung geplant"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 msgid "Scroll to the top of the page"
 msgstr "Gehe zum Anfang der Seite"
 
@@ -2339,10 +2368,6 @@ msgstr "Vormerkung aussetzen am "
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "Aussetzen bis:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-msgid "Table settings"
-msgstr "Tabellenkonfiguration"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2909,6 +2934,10 @@ msgstr "ist eine Dublette"
 msgid "is superseded by"
 msgstr "wurde ersetzt durch"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+msgid "manually"
+msgstr "manuell"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "geändert"
@@ -2974,13 +3003,16 @@ msgstr "trackt nachfrageorientierte Erwerbung für"
 msgid "until %s"
 msgstr "bis %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 msgid "years"
 msgstr "Jahre"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr "{credit_type_description} gegen {debit_type_description}"
+
+#~ msgid "Table settings"
+#~ msgstr "Tabellenkonfiguration"
 
 #~ msgid "Unable to claim as returned"
 #~ msgstr "Nicht möglich als zurückgegeben zu reklamieren"

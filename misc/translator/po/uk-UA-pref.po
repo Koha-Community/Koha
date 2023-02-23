@@ -3,19 +3,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-21 12:33+0000\n"
+"PO-Revision-Date: 2023-02-05 14:48+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /uk/22.11/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1674304401.369920\n"
+"X-POOTLE-MTIME: 1675608523.586621\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -156,12 +156,11 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"Цей параметр значення не має впливу, якщо системний параметр \"<a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"UseCashRegisters\">UseCashRegisters</a>\" увімкнуто або якщо не визначено "
-"жодного типу платежів в категорії допустимих платежів „<a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
-">PAYMENT_TYPE</a>“."
+"Цей параметр значення не має впливу, якщо системний параметр \"<a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a>\" увімкнуто або якщо не визначено жодного типу "
+"платежів в категорії допустимих платежів „<a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a>“."
 
 # Accounting > Policy
 msgid ""
@@ -203,8 +202,8 @@ msgid ""
 "device.</p>"
 msgstr ""
 "<p class='text-danger'><strong>Попередження:</strong> увімкнення цього "
-"параметра зробить реєстр обов’язковим полем для усіх готівкових операцій ("
-"типу CASH); це включає транзакції SIP00, тому переконайтеся, що Ваші "
+"параметра зробить реєстр обов’язковим полем для усіх готівкових операцій "
+"(типу CASH); це включає транзакції SIP00, тому переконайтеся, що Ваші "
 "конфігурації SIP оновлено, щоб зіставити реєстр із вашим SIP-пристроєм.</p>"
 
 # Accounting > Features
@@ -599,6 +598,9 @@ msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> Vendor tax rate "
 "information may need updating if tax rate values are removed."
 msgstr ""
+"<br/><strong>Примітка:</strong> інформація про податкову ставку "
+"постачальника може потребувати оновлення, якщо значення податкових ставок "
+"буде вилучено."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#TaxRates# Tax rates are"
@@ -864,6 +866,8 @@ msgid ""
 "admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
 "address to staff."
 msgstr ""
+"працівникам бібліотеки сповіщення про прострочення для користувачів без "
+"адреси електронної пошти."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -2420,10 +2424,9 @@ msgid ""
 "this to have any effect)."
 msgstr ""
 " авторитетні записи, які відсутні (щоб з цього був хоча би який-небудь ефект "
-"також повинен бути встановлений параметр „<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"RequireChoosingExistingAuthority\">RequireChoosingExistingAuthorit</a>“ у „"
-"не вимагати“)."
+"також повинен бути встановлений параметр „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthorit</a>“ у „не вимагати“)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2435,14 +2438,13 @@ msgstr "створювати"
 
 # Authorities > Linker
 msgid "authorities.pref#AutoLinkBiblios# Do"
-msgstr "Виконувати"
+msgstr "Намагатися"
 
 # Authorities > Linker
 msgid "authorities.pref#AutoLinkBiblios# Don't"
-msgstr "Не виконувати"
+msgstr "Не намагатися"
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
 "when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
@@ -2451,11 +2453,12 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"attempt to automatically link headings when saving records in the cataloging "
-"module, obeys <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfie"
-"ld=LinkerRelink'>LinkerRelink</a> and <a href='/cgi-bin/koha/admin/preference"
-"s.pl?op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
-"record edits."
+"автоматично звʼязувати заголовки під час збереження бібзаписів у модулі "
+"каталогізації, дотримуючись вимог <a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> та <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> для "
+"редагування записів."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2473,9 +2476,9 @@ msgid ""
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
 " автоматичне переприєднання заголовків (які раніше були приєднані) під час "
-"збереження записів у модулі каталогізації (вимагає параметра <a href='/cgi-bi"
-"n/koha/admin/preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBi"
-"blios</a>)."
+"збереження бібзаписів у модулі каталогізації (вимагає параметра <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # OPAC > Privacy > OPACPrivacy
 msgid ""
@@ -2487,11 +2490,11 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Використовуйте наступний текст як значення за умовчанням для поля 667$a "
-"авторитетних записів MARC21 (не повинен вимагати „<a href='/cgi-bin/koha/admi"
-"n/preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority'>Requ"
-"ireChoosingExistingAuthority</a>“ і повинен дозволити створювати „<a href"
-"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorit"
-"ies'>AutoCreateAuthorities</a>“):"
+"авторитетних записів MARC21 (не повинен вимагати „<a href='/cgi-bin/koha/"
+"admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a>“ і повинен дозволити створювати „<a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>“):"
 
 # OPAC > Privacy > OPACPrivacy
 msgid ""
@@ -2503,11 +2506,11 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Використовуйте наступний текст як значення за умовчанням для поля 670$a "
-"авторитетних записів MARC21 (не повинен вимагати „<a href='/cgi-bin/koha/admi"
-"n/preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority'>Requ"
-"ireChoosingExistingAuthority</a>“ і повинен дозволити створювати „<a href"
-"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorit"
-"ies'>AutoCreateAuthorities</a>“):"
+"авторитетних записів MARC21 (не повинен вимагати „<a href='/cgi-bin/koha/"
+"admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a>“ і повинен дозволити створювати „<a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>“):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2764,23 +2767,23 @@ msgstr ""
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
-msgstr ""
+msgstr "Встановлювати значення за умовчанням структури"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
-msgstr ""
+msgstr "під час каталогізації нових записів"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
 "editing the existing record"
-msgstr ""
+msgstr "при зміні структури під час редагування існуючого запису"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
 "(duplicating)"
-msgstr ""
+msgstr "при редагуванні записів як нових (дублювання)"
 
 # Cataloging > Record structure
 msgid ""
@@ -3804,7 +3807,7 @@ msgstr "Резервування курсів"
 # Circulation > Housebound module
 #, fuzzy
 msgid "circulation.pref Curbside pickup module"
-msgstr "Модуль прикутих до дому"
+msgstr "Curbside pickup module"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
@@ -3821,10 +3824,6 @@ msgstr "Модуль прикутих до дому"
 # Circulation > Interface
 msgid "circulation.pref Interface"
 msgstr "Інтерфейс"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref Interlibrary loans"
-msgstr "Міжбібліотечний абонемент"
 
 # Circulation > Interface
 msgid "circulation.pref Item bundles"
@@ -4394,6 +4393,9 @@ msgid ""
 "to host based on MARC21 773$w when the child has no items when requesting "
 "articles on the Opac."
 msgstr ""
+"перенаправлення з дочірнього запису на головний запис ґрунтуючись на підполі "
+"MARC21 773$w, коли дочірній запис  не має примірників при замовленні статей "
+"з електронного каталогу."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
@@ -4547,13 +4549,12 @@ msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
 msgstr "Не здійснювати"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
 "when the modal is dismissed without clicking 'Yes'."
 msgstr ""
-"автоматичне підтвердження переміщення, коли модаль відхилено без натискання "
-"„Так“."
+"автоматичне підтвердження переміщення, коли модальна умова відхилена без "
+"натискання кнопки „Так“."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -4783,9 +4784,10 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "від бібліотекипідрозділу, у яких Ви увійшли в систему."
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
 "Для того, щоб визначити, чи примірник переміщено чи залишено у бібліотеці/"
@@ -4822,18 +4824,6 @@ msgid ""
 "pages."
 msgstr " навігаційну бічну панель на усіх сторінках обігу."
 
-# Circulation > Interlibrary Loans
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Вимкнути"
-
-# Circulation > Interlibrary Loans
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Увімкнути"
-
-# Circulation > Interface
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "обіг примірників запитаних через МБА."
-
 # Circulation > Checkout Policy
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
 msgstr "."
@@ -4862,8 +4852,8 @@ msgid ""
 "circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
 "admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr ""
-"Використовувати допустиме значення „<a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=LOST\">LOST</a>“"
+"Використовувати допустиме значення „<a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=LOST\">LOST</a>“"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5152,24 +5142,23 @@ msgid ""
 msgstr "Не показувати кнопку очищення екрану"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# Show print quick slip and clear "
 "screen buttons"
-msgstr "Показати кнопки друку quick slip та очищення екрану"
+msgstr ""
+"Показувати кнопки швидкого переходу до друку квитанції та очищення екрану"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# Show print slip and clear screen "
 "buttons"
-msgstr "Показати кнопки друку slip та очищення екрану"
+msgstr "Показувати кнопки друку квитанції та очищення екрану"
 
 # Circulation > Interface
 msgid ""
 "circulation.pref#DisplayClearScreenButton# to clear the current patron from "
 "the screen on the circulation screen."
-msgstr " для очищення поточного користувача на сторінці обігу."
+msgstr " щоб прибрати поточного користувача зі сторінки обігу."
 
 # Circulation > Holds policy
 msgid "circulation.pref#DisplayMultiPlaceHold# Don't enable"
@@ -5267,7 +5256,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Не дозволяти"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
 "the new hold filled with a canceled item to"
@@ -5276,11 +5264,10 @@ msgstr ""
 "скасованим примірником на адресу"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
 "hold using the item."
-msgstr "автоматично заповнити наступне замовлення за допомогою примірника."
+msgstr "автоматичне наступне замовлення використовуючи доступний примірник."
 
 # Circulation > Holds Policy
 msgid ""
@@ -5291,9 +5278,9 @@ msgid ""
 "system preference.</br>"
 msgstr ""
 "замовленням автоматично закінчуватися, якщо вони не були вибрані протягом "
-"періоду часу, зазначеного в системному параметрі „<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay\""
-">ReservesMaxPickUpDelay</a>“.<br>"
+"періоду часу, зазначеного в системному параметрі „<a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
+"\">ReservesMaxPickUpDelay</a>“.<br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -5607,118 +5594,6 @@ msgstr "Задіяти"
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "модуль прикутих до дому."
 
-# Circulation > Checkin Policy
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Перевіряти"
-
-# Circulation > Self Checkout
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Не перевіряти"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr "зовнішні джерела щодо доступності під час процесу запиту."
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-"Запасна адреса електронної пошти для повідомлень персоналу МБА, на яку "
-"надсилається у разі відсутності адреси бібліотеки: "
-
-# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-"(відокремлювати через „|“). Якщо залишити пустим, відображатимуться всі "
-"запити МБА. Коди запитів можна знайти в категорії допустимого значення „<a "
-"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\""
-">ILLSTATUS</a>“."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-"Статуси МБА, які вважаються завершеними і не повинні відображатися в модулі "
-"МБА: "
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Вимкнути"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Задіяти"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr " модуль міжбібліотечного абонементу МБА (головний перемикач)."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-"Додавання тексту увімкне етап оформлення авторських прав в створенні запиту. "
-"Текст, який Ви введете, буде відображено."
-
-# Circulation > Interlibrary Loans
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Вимкнути"
-
-# Circulation > Interlibrary Loans
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Задіяти"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-"запити на міжбібліотечний абонемент без посередництва. Якщо задіяно і сервер "
-"МБА підтримує це, новостворені запити негайно запитуються сервером."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-"(відокремлювати через „|“). Якщо залишити пустим, усі встановлені серверні "
-"програми будуть увімкнені."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr ""
-"Задіяні серверні системи МБА для запитів, ініційованих з електронного "
-"каталогу:"
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-"(відокремлювати через „|“), напр. „ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED“. "
-"Якщо залишити пустим, повідомлення МБА для персоналу не надсилатимуться."
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr "Надсилати ці повідомлення МБА для персоналу, якщо це необхідно: "
-
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
 msgstr "."
@@ -5996,12 +5871,11 @@ msgstr ""
 "також повинен бути задіяний)."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
 "library to pick up a hold for these statuses:"
 msgstr ""
-"Дозволити користувачеві змінювати бібліотеку/підрозділ, щоб отримати "
+"Дозволити користувачам змінювати бібліотеку/підрозділ, щоб отримати "
 "замовлення для цих станів:"
 
 # Circulation > Holds policy
@@ -6091,10 +5965,11 @@ msgid ""
 msgstr ""
 "<br><strong>Примітка:</strong> варіант дати початку замовлення діє і "
 "відображається на формі замовлення тільки тоді, коли задіяні параметри <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"AllowHoldDateInFuture\">AllowHoldDateInFuture</a> та <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a>."
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> та "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a>."
 
 # Circulation > Holds policy
 msgid ""
@@ -6633,8 +6508,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'comparator' is the type of "
 "comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
 msgstr ""
-"- 'comparator' (порівнювач) — тип порівняння, можливі значення: "
-"eq,<,<=,>,>=,ne<br/>"
+"- 'comparator' (порівнювач) — тип порівняння, можливі значення: eq,<,<=,>,>=,"
+"ne<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6686,8 +6561,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:itype:eq:BOOK:1 - Will return sort "
 "bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
 msgstr ""
-"CPL:type:eq:BOOK:1 — поверне sort bin 1 для примірника з типом одиниці „BOOK“"
-", повернутого у CPL.<br/>"
+"CPL:type:eq:BOOK:1 — поверне sort bin 1 для примірника з типом одиниці "
+"„BOOK“, повернутого у CPL.<br/>"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
@@ -7284,11 +7159,12 @@ msgstr ""
 "\">CanMarkHoldsToPullAsLost</a>“)"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckin# Can be used for showing "
 "only the not for loan description. E.g. '-1: ONLYMESSAGE'."
-msgstr "Кожна пара значень повинна бути в окремому рядку."
+msgstr ""
+"Може використовуватися для відображення лише опису стану „не для "
+"випозичання“. Наприклад, „-1: ONLYMESSAGE“."
 
 # Circulation > Checkin policy
 msgid ""
@@ -7706,6 +7582,8 @@ msgid ""
 "any leading or trailing whitespace in a barcode gets removed before this "
 "filter."
 msgstr ""
+"відскановані штрих-коди примірників. Зверніть увагу, що перед цим фільтром "
+"будь-які початкові та кінцеві пробіли в штрих-коді вилучаються."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -8794,13 +8672,12 @@ msgid "enhanced_content.pref#SyndeticsCoverImages# Show"
 msgstr "Показувати"
 
 # Enhanced Content > Open Library
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsCoverImages# cover images from Syndetics on "
 "search results and item detail pages in the OPAC and the staff interface in a"
 msgstr ""
 " зображення обкладинок від Syndetics на сторінках результатів пошуку й "
-"подробиць про записи у електронному каталозі у "
+"подробиць про записи у електронному каталозі ті інтерфейсі бібліотекаря у "
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# large"
@@ -9089,9 +8966,8 @@ msgid "i18n_l10n.pref"
 msgstr "Інтернаціоналізація/локалізація"
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref Global"
-msgstr "Інтернаціоналізація/локалізація"
+msgstr "Глобально"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
@@ -9286,6 +9162,171 @@ msgid ""
 msgstr ""
 " користувачам змінювати мову, якою вони бачать інтерфейс електронного "
 "каталогу."
+
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "Серіальні видання"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Можливості"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Примітки та сповіщення"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Interlibrary Loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Вимкнути"
+
+# Circulation > Interlibrary Loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Увімкнути"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr "обіг примірників запитаних через МБА."
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Перевіряти"
+
+# Circulation > Self Checkout
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Не перевіряти"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr "зовнішні джерела щодо доступності під час процесу запиту."
+
+# Circulation > Interlibrary loans > ILLDefaultStaffEmail
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+"Запасна адреса електронної пошти для повідомлень персоналу МБА, на яку "
+"надсилається у разі відсутності адреси бібліотеки: "
+
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr ""
+"(відокремлювати через „|“). Якщо залишити пустим, відображатимуться всі "
+"запити МБА. Коди запитів можна знайти в категорії допустимого значення „<a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a>“."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+"Статуси МБА, які вважаються завершеними і не повинні відображатися в модулі "
+"МБА: "
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Вимкнути"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Задіяти"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr " модуль міжбібліотечного абонементу МБА (головний перемикач)."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+"Додавання тексту увімкне етап оформлення авторських прав в створенні запиту. "
+"Текст, який Ви введете, буде відображено."
+
+# Circulation > Interlibrary Loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Вимкнути"
+
+# Circulation > Interlibrary Loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Задіяти"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+"запити на міжбібліотечний абонемент без посередництва. Якщо задіяно і сервер "
+"МБА підтримує це, новостворені запити негайно запитуються сервером."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+"(відокремлювати через „|“). Якщо залишити пустим, усі встановлені серверні "
+"програми будуть увімкнені."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr ""
+"Задіяні серверні системи МБА для запитів, ініційованих з електронного "
+"каталогу:"
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+"(відокремлювати через „|“), напр. „ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED“. "
+"Якщо залишити пустим, повідомлення МБА для персоналу не надсилатимуться."
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr "Надсилати ці повідомлення МБА для персоналу, якщо це необхідно: "
 
 # Local Use
 msgid "local_use.pref"
@@ -9646,9 +9687,8 @@ msgid "opac.pref Shelf browser"
 msgstr "Оглядач полиці"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref Suggestions"
-msgstr "Дозволити"
+msgstr "Пропозиції"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -9716,7 +9756,6 @@ msgstr ""
 "історії видач)."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
 "XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
@@ -9726,19 +9765,21 @@ msgid ""
 "interface language</li><li>authority types: use the placeholder "
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
-"<br />Опції:<ul><li>введіть шлях для визначення xslt-файлу</li><li>додайте "
-"URL-адресу зовнішньої таблиці стилів.</li></ul>{langcode} буде замінено "
-"поточною мовою інтерфейсу, а {authtypecode} буде замінено кодом типу "
-"авторитетного джерела"
+"<br />Опції:<ul><li>порожньо, XSLT не буде застосовано (<strong>за "
+"умовчанням</strong>);</li><li>ввести шлях для визначення xslt-файлу;</li> "
+"<li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>Якщо Ви маєте "
+"декілька таблиць стилів для:<ul><li>різних мов: використовуйте заповнювач "
+"{langcode} — його буде замінено поточною мовою інтерфейсу</li><li>різних "
+"типів авторитетних джерел: використовуйте заповнювач {authtypecode} — він "
+"буде замінений кодом типу авторитетного джерела</li></ul>"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacResultsDisplay# Display authority results in the "
 "OPAC using the XSLT stylesheet at: "
 msgstr ""
-"Відображати результати пошуку серед авторитетних джерел в інтерфейсі "
-"бібліотекаря за допомогою таблиці XSLT-стилів за адресою: "
+"Відображати результати пошуку серед авторитетних джерел в електронному "
+"каталозі за допомогою таблиці XSLT-стилів за адресою: "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
@@ -9838,7 +9879,6 @@ msgstr ""
 "MARC21 на сторінках результатів пошуку і подробиць в електронному каталозі."
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?"
@@ -9847,38 +9887,33 @@ msgid ""
 "address: "
 msgstr ""
 "Якщо Ви вибрали „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggesitions</a>“, потрібно також ввести дійсну адресу "
-"електронної пошти: "
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a>“, потрібно також ввести дійсну "
+"адресу електронної пошти: "
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "opac.pref#EmailPatronRegistrations# Choose email address that new patron "
 "self-registrations will be sent to: "
 msgstr ""
-"Виберіть адресу електронної пошти, на яку надсилатимуться нові пропозиції "
-"про придбання: "
+"Виберіть адресу електронної пошти, на яку будуть надсилатися повідомлення "
+"про самостійну реєстрацію нових користувачів: "
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
-msgstr "EmailAddressForSuggestions"
+msgstr "EmailAddressForPatronRegistrations"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# email address of library"
-msgstr "електронна адреса підрозділу"
+msgstr "електронна адреса підрозділу/бібліотеки"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#EmailPatronRegistrations# none"
-msgstr "Дозволити"
+msgstr "немає"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -10336,6 +10371,8 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
 "search results, and show no more than"
 msgstr ""
+"(доступного) окремого примірника в XSLT-результатах пошуку в електронному "
+"каталозі та не більше "
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
@@ -10343,35 +10380,37 @@ msgid ""
 "like Checked out, Damaged, On Hold, but only when you group them by branch."
 "<br>"
 msgstr ""
+"(недоступного) окремого примірника для таких категорій, як „Видано“, "
+"„Пошкоджено“, „Замовлено“, але лише тоді, коли Ви згрупуєте примірники за "
+"підрозділом/бібліотекою.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by substatus, listing item counts only.)"
 msgstr ""
+". (примітка: для великих консорціумів ми рекомендуємо групувати недоступні "
+"елементи за підстанами, враховуючи лише кількість примірників у списку)."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
-msgstr ""
+msgstr "Групувати недоступні примірники за: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
-msgstr ""
+msgstr "Показувати не більше"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
-msgstr "поточної бібліотеки"
+msgstr "підрозділом/бібліотекою та підстаном"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch only"
-msgstr "поточної бібліотеки"
+msgstr "лише підрозділом/бібліотекою"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# substatus only"
-msgstr "поточної бібліотеки"
+msgstr "лише підстаном"
 
 # OPAC > Appearance
 msgid ""
@@ -10382,15 +10421,14 @@ msgstr ""
 "електронному каталозі: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
 "{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
 "replaced with information from the displayed record."
 msgstr ""
 "<br />Примітка: позначки-заповнювачі {BIBLIONUMBER}, {CONTROLNUMBER}, "
-"{TITLE}, {ISBN}, {ISSN} та {AUTHOR} будуть замінені на інформацію з "
-"висвіченого запису. "
+"{OCLC_NO}, {TITLE}, {ISBN}, {ISSN} та {AUTHOR} будуть замінені на інформацію "
+"з висвіченого запису. "
 
 # OPAC > Appearance
 msgid ""
@@ -10522,12 +10560,10 @@ msgstr ""
 "електронного каталогу."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Disable"
 msgstr "Вимкнути"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionAutoFill# Enable"
 msgstr "Увімкнути"
 
@@ -10536,6 +10572,8 @@ msgid ""
 "opac.pref#OPACSuggestionAutoFill# OPAC suggestions form automatically "
 "filling with data from Google Books API."
 msgstr ""
+"автоматичне заповнення форми пропозицій у електронному каталозі даними з "
+"Google Books API."
 
 # OPAC > Policy
 msgid ""
@@ -10632,7 +10670,6 @@ msgstr ""
 " пропозиції на придбання від інших користувачів в електронному каталозі."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10641,15 +10678,12 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
-"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
-"системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
-"задіяний, якщо у Вашій таблиці стилів використовуються дані з примірникових "
-"полів</li></ul>Якщо у Вас є декілька таблиць стилів для різних мов, "
-"заповнювач {langcode} буде замінено поточною мовою інтерфейсу."
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
+"таблиці стилів за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>Якщо у Вас "
+"є декілька таблиць стилів для різних мов, заповнювач {langcode} буде "
+"замінено поточною мовою інтерфейсу."
 
 # OPAC > Appearance
 msgid ""
@@ -10660,7 +10694,6 @@ msgstr ""
 "стилів відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10669,15 +10702,12 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">\" для виводу за "
-"умовчанням</li><li>ввести шлях для визначення xslt-файлу</li><li>ввести URL-"
-"адресу для зовнішньої таблиці стилів.</li><li>Примітка: системний параметр "
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
-"задіяний, якщо у Вашій таблиці стилів використовуються дані з примірникових "
-"полів</li></ul>Якщо у Вас є декілька таблиць стилів для різних мов, "
-"заповнювач {langcode} буде замінено поточною мовою інтерфейсу."
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">“ для таблиці стилів "
+"за умовчанням</li><li>ввести шлях для визначення xslt-файлу</li><li>ввести "
+"URL-адресу для зовнішньої таблиці стилів.</li></ul>Якщо у Вас є декілька "
+"таблиць стилів для різних мов, заповнювач {langcode} буде замінено поточною "
+"мовою інтерфейсу."
 
 # OPAC > Appearance
 msgid ""
@@ -10688,7 +10718,6 @@ msgstr ""
 "відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -10700,9 +10729,9 @@ msgid ""
 "ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
+"таблиці стилів за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
@@ -10829,7 +10858,6 @@ msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr "Підтипи"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
@@ -10845,15 +10873,14 @@ msgid ""
 "limiting searches on the"
 msgstr ""
 "Показувати вкладки в детальнішому пошуку електронного каталогу для обмеження "
-"пошуку за"
+"пошуку за полями"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
 msgstr ""
-" (значення відокремлювати \"|\"). Вкладки з’являтимуться у зазначеному "
+" (значення відокремлювати через „|“). Вкладки з’являтимуться у зазначеному "
 "порядку.<br/>"
 
 # OPAC > Policy
@@ -11048,15 +11075,14 @@ msgstr ""
 "\">Koha вікі</a>."
 
 # OPAC > Policy > OpacHiddenItemsExceptions
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
 "items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
-"Перелік категорій користувачів, розділених символом „|“, які можуть бачити "
-"записи, приховані відповідно „<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>“."
+"Перелік категорій користувачів, які можуть бачити примірники, приховані для "
+"інших відповідно „<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>“: "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
@@ -11306,9 +11332,8 @@ msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr "Показувати"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
-msgstr "Показувати піктограми типів одиниць в електронному каталозі: "
+msgstr " піктограми типів одиниць в електронному каталозі."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11767,7 +11792,6 @@ msgid ""
 msgstr "Якщо порожньо, відображатимуться усі підрозділи/бібліотеки."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr "Не відображати та попередньо не заповнювати"
 
@@ -12114,17 +12138,14 @@ msgid ""
 msgstr "користувачам входити у свої облікові записи в електронному каталозі."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#suggestion# Disable"
-msgstr "Дозволити"
+msgstr "Заборонити"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#suggestion# Enable"
 msgstr "Дозволити"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
@@ -12132,15 +12153,17 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"Разом з <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
-"задіює <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
+"Коли пропозиції (параметр „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a>“) дозволені, а параметр "
+"„<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonSuggestions\">AnonSuggestions</a>“ вимкнено, "
+"наступним категоріям користувачів не дозволяється робити пропозиції щодо "
+"придбання:"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
-msgstr "користувачам вносити пропозиції на придбання в електронному каталозі."
+msgstr ""
+"користувачам вносити пропозиції на придбання в електронному каталозі.<br>"
 
 # Patrons
 msgid "patrons.pref"
@@ -12257,22 +12280,20 @@ msgid ""
 "patrons.pref#AutoEmailNewUser# <br><strong>NOTE:</strong> This uses the "
 "WELCOME notice."
 msgstr ""
+"<br><strong>Примітка:</strong> тут використовується вітальне сповіщення "
+"„WELCOME“."
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Don't send"
 msgstr "Не надсилати"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Send"
 msgstr "Надсилати"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# an email to newly created patrons."
-msgstr ""
-"електронний лист новоствореним користувачам з даними їх облікового запису."
+msgstr "електронний лист новоствореним користувачам."
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
@@ -12539,10 +12560,11 @@ msgstr ""
 "повної форми (можуть бути розгорнуті пізніше): "
 
 # Patrons > General
+#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr ""
 "Розділений комами перелік, що визначає поля за умовчанням, які будуть "
 "використовуватися під час пошуку користувачів при використанні поля пошуку "
@@ -12555,6 +12577,10 @@ msgid ""
 "fields added to this preference will be added as search options in the "
 "dropdown menu on the patron search page."
 msgstr ""
+"Якщо поле не заповнене, то за замовчуванням буде використано „firstname,"
+"middle_name,surname,othernames,cardnumber,userid“. Додаткові поля, додані до "
+"цього параметра, будуть додані як варіанти пошуку у випадаючому меню на "
+"сторінці пошуку користувачів."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12581,7 +12607,6 @@ msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Задіяти"
 
 # Patrons > Security > EnableExpiredPasswordReset
-#, fuzzy
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
@@ -12767,6 +12792,8 @@ msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
 "patron deletion, use borrowernumber "
 msgstr ""
+"<br/>При зміні власника при вилученні користувача, використовуйте номер "
+"користувача „borrowernumber“ "
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12774,12 +12801,17 @@ msgid ""
 "this patron are either deleted or transferred to a new owner according to "
 "your choice; other private lists (not shared) are deleted."
 msgstr ""
+" Усі загальнодоступні або спільні списки цього користувача будуть вилучені "
+"або передані новому користувачеві на Ваш вибір; інші приватні списки (які не "
+"є спільними) будуть вилучені."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
 "owns public or shared lists,"
 msgstr ""
+"При вилученні користувача, який володіє загальнодоступними або спільними "
+"списками, "
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12787,15 +12819,17 @@ msgid ""
 "this field empty in order to change owner to the active staff member who "
 "deletes the patron."
 msgstr ""
+"для нового власника списку, або залиште це поле порожнім, щоб змінити "
+"власника на активного працівника бібліотеки, який вилучає користувача."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
-msgstr ""
+msgstr "змінювати власника цих списків."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
-msgstr ""
+msgstr "вилучати ці списки."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -12869,21 +12903,18 @@ msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr " днів до цього."
 
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Don't notify"
-msgstr "Не дозволяти"
+msgstr "Не сповіщати"
 
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Notify"
-msgstr "Дозволити"
+msgstr "Сповіщати"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#NotifyPasswordChange# patrons whenever their password is "
 "changed."
-msgstr "щоб скинути всій пароль."
+msgstr " користувачів про зміну їхнього пароля."
 
 # Patrons > Patron forms
 msgid ""
@@ -12999,9 +13030,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Запасна адреса — номер будинку, квартири"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
-msgstr "Запасна адреса — номер будинку, квартири"
+msgstr "Запасна адреса — тип вулиці"
 
 # Patrons > Patron forms
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
@@ -13017,7 +13047,7 @@ msgstr "Запасні дані для зв’язку — адреса 2"
 
 # Patrons > Patron forms
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - City"
-msgstr "Запасні дані для зв’язку — населений пукт"
+msgstr "Запасні дані для зв’язку — населений пункт"
 
 # Patrons > Patron forms
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact - Country"
@@ -13092,9 +13122,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
 msgstr "Основна адреса — номер будинку, квартири"
 
 # Patrons > Patron forms
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
-msgstr "Основна адреса — номер будинку, квартири"
+msgstr "Основна адреса — тип вулиці"
 
 # Patrons > Patron forms
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -13174,9 +13203,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "населений пункт"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Collection"
-msgstr "шифр зібрання"
+msgstr "зібрання"
 
 # Patrons > Patron forms
 msgid "patrons.pref#Pseudonymization# Country"
@@ -13199,12 +13227,10 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "Задіяти"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Holding library"
 msgstr "підрозділ/бібліотека тимч. зберігання / видачі"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Home library"
 msgstr "джерельний підрозділ/бібліотека"
 
@@ -13303,6 +13329,9 @@ msgid ""
 "have deprecated support for this feature and it is not recommended for use "
 "unless you have a dedicated SMS to Email gateway."
 msgstr ""
+"<br><strong>Примітка:</strong> багато мобільних провайдерів вже не "
+"підтримують цю функцію, і ми не рекомендуємо використовувати її, якщо у Вас "
+"немає спеціального шлюзу для надсилання SMS на електронну пошту."
 
 # Patrons > General
 msgid ""
@@ -13318,7 +13347,7 @@ msgstr "Використовувати драйвер „SMS::Send::"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
-msgstr "\" для відсилання SMS-повідомлень."
+msgstr "“ для відсилання SMS-повідомлень."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# . Override from address with"
@@ -13746,11 +13775,12 @@ msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr "Обмежувати довжину граней пошуку до "
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface (REQUIRES ZEBRA)."
-msgstr " символів, у електронному каталозі та інтерфейсі бібліотекаря."
+msgstr ""
+" символів, у електронному каталозі та інтерфейсі бібліотекаря (ВИМАГАЄ РУШІЯ "
+"ZEBRA)."
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# Show up to"
@@ -13986,6 +14016,7 @@ msgid ""
 "searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
 "displayed using other methods."
 msgstr ""
+"<br/>За умовчанням — „не робити“, примірники відображаються іншими методами."
 
 # Searching > Search Form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -14001,6 +14032,9 @@ msgid ""
 "UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
 "results pages."
 msgstr ""
+"поля примірників з MARC-полів (995 для UNIMARC, 952 для MARC21) доступними "
+"для таблиць стилів XSLT на сторінках результатів в електронному каталозі та "
+"в інтерфейсі бібліотекаря."
 
 # Searching > Features
 msgid ""
@@ -14110,12 +14144,10 @@ msgstr ""
 " впорядкування результатів пошуку за значимістю (потребує рушія Zebra)."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
 msgstr "Не зберігати"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Retain"
 msgstr "Зберігати"
 
@@ -14124,16 +14156,16 @@ msgid ""
 "searching.pref#RetainCatalogSearchTerms# search terms between searches when "
 "searching from the 'search the catalog' tab in the staff interface header."
 msgstr ""
+"пошукові терміни між пошуками під час пошуку на вкладці „пошук у каталозі“ "
+"заголовку інтерфейсу бібліотекаря."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
-msgstr "Не долучати"
+msgstr "Не зберігати"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Retain"
-msgstr "Не долучати"
+msgstr "Зберігати"
 
 # Searching > Results display > RetainPatronsSearchTerms
 msgid ""
@@ -14141,14 +14173,14 @@ msgid ""
 "searching from the 'checkout' and 'search patrons' tab in the staff "
 "interface header."
 msgstr ""
+"пошукові терміни між пошуками під час пошуку на вкладках „Видача“ та „Пошук "
+"за користувачами“ у шапці інтерфейсу для бібліотекарів."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#SavedSearchFilters# Disable"
-msgstr "Вимкнути"
+msgstr "На задіювати"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#SavedSearchFilters# Enable"
 msgstr "Задіяти"
 
@@ -14157,6 +14189,8 @@ msgid ""
 "searching.pref#SavedSearchFilters# the option for staff with permission to "
 "create/edit custom saved search filters."
 msgstr ""
+"можливість для персоналу бібліотеки мати привілей створювати/редагувати "
+"власні збережені фільтри пошуку."
 
 # Searching > Results display > SearchLimitLibrary
 msgid ""
@@ -14198,25 +14232,21 @@ msgid "searching.pref#SearchWithISBNVariations# search"
 msgstr " шукати "
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
-msgstr "Під час пошуку за індексом ISBN, "
+msgstr "Під час пошуку за індексом ISSN, "
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# don't search"
-msgstr " не шукати "
+msgstr "не шукати"
 
 # Searching > Results Display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
-msgstr "за всіма варіантами ISBN."
+msgstr "за всіма варіантами ISSN."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# search"
-msgstr " шукати "
+msgstr "шукати"
 
 # Searching > Results display
 msgid "searching.pref#ShowHeadingUse# Don't show"
@@ -14232,6 +14262,9 @@ msgid ""
 "established heading that conforms to descriptive cataloguing rules, and can "
 "therefore be used as a main/added entry, or subject, or series title."
 msgstr ""
+", чи містить авторитетний запис встановлену рубрику, яка відповідає правилам "
+"описової каталогізації, а отже, може бути використана як основний/додатковий "
+"запис, тема або назва серії."
 
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
@@ -14431,7 +14464,6 @@ msgid "serials.pref"
 msgstr "Серіальні видання"
 
 # Searching > Features
-#, fuzzy
 msgid "serials.pref Features"
 msgstr "Можливості"
 
@@ -14716,22 +14748,19 @@ msgstr ""
 "подробиць про бібзапис чи на сторінці „встановлення замовлення“."
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
 msgstr "Не показувати"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
 msgstr "Показувати"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
 msgstr ""
-"випадаюче меню вибору бібліотеки на головній сторінці електронного каталогу."
+"випадаюче меню вибору бібліотеки/підрозділу у заголовному вікні пошуку."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -14847,22 +14876,20 @@ msgid ""
 msgstr "вибір примірників на сторінці подробиць про бібзапис."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Don't highlight"
 msgstr "Не підсвічувати"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Highlight"
 msgstr "Підсвічувати"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
 msgstr ""
-"Показувати наступний HTML-код на сторінці входу в бібліотечний інтерфейс"
+"слова, які Ви шукаєте, на сторінках результатів пошуку в інтерфейсі "
+"бібліотекарів."
 
 # Staff interface > Appearance
 msgid ""
@@ -14889,26 +14916,22 @@ msgstr ""
 "Показувати наступний HTML-код на сторінці входу в бібліотечний інтерфейс"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Don't enable"
 msgstr "Не задіювати"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
-msgstr "Автентифікація"
+msgstr "Задіяти"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "Автентифікація"
+msgstr "Примушувати"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA) for staff members."
-msgstr "Використовувати CAS для автентифікації входу: "
+msgstr "двофакторну автентифікацію (2FA) для працівників бібліотеки."
 
 # Staff Client > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -14926,7 +14949,6 @@ msgstr ""
 " візуальний редактор під час редагування деяких HTML-параметрів системи."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14936,15 +14958,12 @@ msgid ""
 "languages the placeholder {langcode} will be replaced with current interface "
 "language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
-"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
-"системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
-"задіяний, якщо у Вашій таблиці стилів використовуються дані з примірникових "
-"полів</li></ul>Якщо у Вас є декілька таблиць стилів для різних мов, "
-"заповнювач {langcode} буде замінено поточною мовою інтерфейсу."
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>“ для "
+"таблиці стилів за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>Якщо у Вас "
+"є декілька таблиць стилів для різних мов, заповнювач {langcode} буде "
+"замінено поточною мовою інтерфейсу."
 
 # Staff interface > Appearance
 msgid ""
@@ -14955,7 +14974,6 @@ msgstr ""
 "стилів відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14964,15 +14982,12 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
-"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
-"системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
-"задіяний, якщо у Вашій таблиці стилів використовуються дані з примірникових "
-"полів</li></ul>Якщо у Вас є декілька таблиць стилів для різних мов, "
-"заповнювач {langcode} буде замінено поточною мовою інтерфейсу."
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>“ для таблиці "
+"стилів за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li></ul>Якщо у Вас "
+"є декілька таблиць стилів для різних мов, заповнювач {langcode} буде "
+"замінено поточною мовою інтерфейсу."
 
 # Staff interface > Appearance
 msgid ""
@@ -14983,7 +14998,6 @@ msgstr ""
 "стилів відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14996,9 +15010,9 @@ msgid ""
 "different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "
-"виводу за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
+"<br />Варіанти:<ul><li>ввести „<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>“ для "
+"таблиці стилів за умовчанням</li><li>ввести шлях для визначення xslt-файлу</"
 "li><li>ввести URL-адресу для зовнішньої таблиці стилів.</li><li>Примітка: "
 "системний параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> має бути "
@@ -15655,6 +15669,8 @@ msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
+"надання облікових даних клієнта OAuth2 для REST API. Потрібно встановити "
+"Perl-модуль „Net::OAuth2::AuthorizationServer“."
 
 # Web services > ILS-DI
 msgid "web_services.pref#RESTPublicAPI# Disable"
@@ -15730,6 +15746,10 @@ msgstr " рядків у повідомленні, яке було запита�
 #~ msgstr ""
 #~ " також автоматичне створення нових (за необхідності) авторитетних "
 #~ "записів, замість того, щоб посилатися на вже існуючі авторитетні джерела."
+
+# Circulation > Interlibrary loans
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "Міжбібліотечний абонемент"
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."

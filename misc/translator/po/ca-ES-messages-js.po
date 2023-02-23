@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:29-0300\n"
+"POT-Creation-Date: 2023-02-17 08:36-0300\n"
 "PO-Revision-Date: 2022-09-30 11:01+0000\n"
 "Last-Translator: Rbellido <rbellido@orex.es>\n"
 "Language-Team: Koha Translation Team\n"
@@ -179,6 +179,12 @@ msgstr "Ja existeix una carta per defecte amb el codi \"%s\"."
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
 #, javascript-format
 msgid "A letter with the code '%s' already exists for '%s'."
+msgstr "Una carta amb el codi \"%s\" ja existeix per a \"%s\"."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:47
+#, fuzzy, javascript-format
+msgid ""
+"A letter with the code '%s' already exists for '%s'. Overwrite this letter?"
 msgstr "Una carta amb el codi \"%s\" ja existeix per a \"%s\"."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:272
@@ -574,6 +580,10 @@ msgstr "Agost"
 msgid "Authority"
 msgstr "Autoritat"
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+msgid "Automatic"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:539
 msgid "Automatic renewal failed, account expired"
 msgstr "La renovació automàtica ha fallat, el compte ha caducat"
@@ -588,7 +598,7 @@ msgstr ""
 msgid "Average rating: %s (%s votes)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Back to top"
 msgstr "Tornar a eines"
@@ -601,8 +611,8 @@ msgstr "El registre bibliogràfic no existeix!"
 msgid "Both subfield values should be filled or empty."
 msgstr "Els dos valors de subcamp han de ser plenes o buides."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "CSV"
 msgstr "CSV"
 
@@ -702,10 +712,10 @@ msgstr "Esborreu la data per a suspensió indefinida"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:786
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:776
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:778
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:279
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:281
 msgid "Clear filter"
 msgstr "Esborra el filtre"
 
@@ -741,19 +751,24 @@ msgstr ""
 msgid "Closure reason"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:802
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:794
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:297
 msgid "Columns"
 msgstr "Columnes"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:801
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:793
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:296
 msgid "Columns settings"
 msgstr "Configuració  columnes"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:827
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:820
 #, fuzzy
 msgid "Configure"
+msgstr "Confirmar"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:819
+#, fuzzy
+msgid "Configure table"
 msgstr "Confirmar"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:142
@@ -788,8 +803,8 @@ msgstr "Files %d copiades al porta-retalls"
 msgid "Copied one row to clipboard"
 msgstr "Copiar una fila al porta-retalls"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:756
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "Copy"
 msgstr "Còpia"
 
@@ -1044,8 +1059,8 @@ msgstr "Error; les seves dades podrien no haver-se desat"
 msgid "Every"
 msgstr "Cada"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:740
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:243
 msgid "Excel"
 msgstr "Excel"
 
@@ -1053,13 +1068,13 @@ msgstr "Excel"
 msgid "Expired"
 msgstr "Ha vençut"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:817
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:809
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:312
 msgid "Export"
 msgstr "Exportar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:816
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:808
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:311
 msgid "Export or print"
 msgstr "Exportar o imprimir"
 
@@ -1639,6 +1654,11 @@ msgstr "No renovables"
 msgid "Not selected"
 msgstr "No se selecciona res."
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
+#, javascript-format
+msgid "Note: %s out of %s renewals have been logged"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
 msgstr ""
@@ -1900,7 +1920,7 @@ msgstr ""
 "Si us plau, no dubteu a compartir el vostre usuari amb tots els altres "
 "bibliotecaris un cop hàgiu acabat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:95
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:113
 msgid "Please fill at least one template."
 msgstr "Ompliu almenys una plantilla."
 
@@ -1924,7 +1944,7 @@ msgstr ""
 msgid "Please select or enter a sound."
 msgstr "Si us plau seleccioni o introdueixi un so."
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:86
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:104
 #, javascript-format
 msgid "Please specify title and content for %s"
 msgstr "Especifiqueu el títol i el contingut de %s"
@@ -1949,9 +1969,9 @@ msgstr "Anterior"
 msgid "Previous checkouts"
 msgstr "Préstecs anteriors"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:772
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:764
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -2108,6 +2128,16 @@ msgstr ""
 msgid "Renewal priority"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
+#, fuzzy
+msgid "Renewal type:"
+msgstr "No s'ha pogut renovar"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "Renewed by"
+msgstr "Renovat, degut:"
+
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
 msgstr "Renovat, degut:"
@@ -2194,7 +2224,7 @@ msgstr "Desant…"
 msgid "Scheduled for automatic renewal"
 msgstr "Programat per a la renovació automàtica"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:248
+#: koha-tmpl/opac-tmpl/bootstrap/js/global.js:260
 #, fuzzy
 msgid "Scroll to the top of the page"
 msgstr "Vés a la primera pàgina"
@@ -2388,11 +2418,6 @@ msgstr "Suspendre reserva en"
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:398
 msgid "Suspend until:"
 msgstr "Suspès fins:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:826
-#, fuzzy
-msgid "Table settings"
-msgstr "Configuració  columnes"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
@@ -2963,6 +2988,11 @@ msgstr "és duplicat"
 msgid "is superseded by"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
+#, fuzzy
+msgid "manually"
+msgstr "Gener"
+
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
 msgstr "Editat"
@@ -3028,7 +3058,7 @@ msgstr ""
 msgid "until %s"
 msgstr "fins %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:106
+#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
 #, fuzzy
 msgid "years"
 msgstr "%s anys"
@@ -3036,6 +3066,10 @@ msgstr "%s anys"
 #: koha-tmpl/intranet-tmpl/prog/js/cashup_modal.js:23
 msgid "{credit_type_description} against {debit_type_description}"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Table settings"
+#~ msgstr "Configuració  columnes"
 
 #, fuzzy
 #~ msgid "Unable to claim as returned"

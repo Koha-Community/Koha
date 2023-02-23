@@ -3796,10 +3796,6 @@ msgstr "Модул за домашно обслужване"
 msgid "circulation.pref Interface"
 msgstr "Интерфейс"
 
-# Circulation > Interlibrary loans
-msgid "circulation.pref Interlibrary loans"
-msgstr "Междубиблиотечни заемания"
-
 # Circulation > Interface
 msgid "circulation.pref Item bundles"
 msgstr "Пакети от екземпляри"
@@ -4759,9 +4755,10 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "библиотеката, в която сте влезли (онлайн)."
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
 "За да определите дали даден екземпляр се прехвърля или остава в библиотеката "
@@ -4797,18 +4794,6 @@ msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
 msgstr "навигационната странична лента на всички страници на Заемане за дома."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Деактивирайте"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Активирайте"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "заемането на исканите от МБЗ библиотечни документи."
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -5578,116 +5563,6 @@ msgstr "Активиране"
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "Модул Самообслужване"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Проверявайте"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Не проверявайте"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr "външните източници за наличност по време на процеса на заявка за МБЗ"
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-"Запазете имейл адрес за изпращане на МБЗ известия до служители при липса на "
-"адреса в описанието библиотеката:"
-
-# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-"разделени с |). Ако оставите полето празно, ще бъдат показани всички заявки "
-"за МБЗ. Кодовете на заявката могат да бъдат намерени в категорията <a href="
-"\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> константни стойности."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-"МБЗ състояния, които се считат за завършени и не трябва да се показват в "
-"модула МБЗ:"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Не активирайте"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Активирайте"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "модулът междубиблиотечно заемане МБЗ (главен превключвател)."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-"Добавянето на текст ще позволи за разрешаване на авторски права при "
-"създаване на заявка. Текстът, който въвеждате, ще бъде показан."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Изключване"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Включване"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-"на директна заявка за междубиблиотечно заемане. Ако е активиран и МБЗ "
-"бекендът го поддържа, новосъздадените заявки се искат незабавно."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-"(разделено с права черта |). Ако се остави празно, всички инсталирани пакети "
-"ще бъдат активирани."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr "Активирани пакети МБЗ за заявки, инициирани от OPAC:"
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-"разделени с |). Например ILL_REQUEST_CANCEL | ILL_REQUEST_MODIFIED Ако "
-"оставите празно, няма да бъдат изпращани известия на МБЗ до служителите."
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr "Ако е необходимо, изпратете тези МБЗ известия до библиотекарите:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -9246,6 +9121,169 @@ msgid ""
 "on the OPAC."
 msgstr "на читателите да променят езика, който виждат в OPAC."
 
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "Периодика"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Характеристики"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Известия и съобщения"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Деактивирайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Активирайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr "заемането на исканите от МБЗ библиотечни документи."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Проверявайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Не проверявайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr "външните източници за наличност по време на процеса на заявка за МБЗ"
+
+# Circulation > Interlibrary loans > ILLDefaultStaffEmail
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+"Запазете имейл адрес за изпращане на МБЗ известия до служители при липса на "
+"адреса в описанието библиотеката:"
+
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr ""
+"разделени с |). Ако оставите полето празно, ще бъдат показани всички заявки "
+"за МБЗ. Кодовете на заявката могат да бъдат намерени в категорията <a href="
+"\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> константни стойности."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+"МБЗ състояния, които се считат за завършени и не трябва да се показват в "
+"модула МБЗ:"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Не активирайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Активирайте"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr "модулът междубиблиотечно заемане МБЗ (главен превключвател)."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+"Добавянето на текст ще позволи за разрешаване на авторски права при "
+"създаване на заявка. Текстът, който въвеждате, ще бъде показан."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Изключване"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Включване"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+"на директна заявка за междубиблиотечно заемане. Ако е активиран и МБЗ "
+"бекендът го поддържа, новосъздадените заявки се искат незабавно."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+"(разделено с права черта |). Ако се остави празно, всички инсталирани пакети "
+"ще бъдат активирани."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr "Активирани пакети МБЗ за заявки, инициирани от OPAC:"
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+"разделени с |). Например ILL_REQUEST_CANCEL | ILL_REQUEST_MODIFIED Ако "
+"оставите празно, няма да бъдат изпращани известия на МБЗ до служителите."
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr "Ако е необходимо, изпратете тези МБЗ известия до библиотекарите:"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "Локално използване"
@@ -12421,10 +12459,11 @@ msgstr ""
 "полета от пълния формуляр (все още може да бъде разширено по-късно):"
 
 # Patrons > General
+#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr ""
 "Списък, разделен със запетая, определящ полетата по подразбиране, които да "
 "се използват по време на търсене на читател използвайки опцията \"стандартна"
@@ -15553,6 +15592,10 @@ msgstr "реда от доклад, поискан чрез уеб услуга�
 #~ msgstr ""
 #~ "те автоматично да създават нови Класификатори, ако е необходимо, вместо "
 #~ "да се налага препратка към съществуващите класификатори."
+
+# Circulation > Interlibrary loans
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "Междубиблиотечни заемания"
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."

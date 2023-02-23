@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-20 11:20+0000\n"
+"PO-Revision-Date: 2023-02-01 13:28+0000\n"
 "Last-Translator: pmis <pmis@mnw.art.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-installer-MARC21.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653045651.149791\n"
+"X-POOTLE-MTIME: 1675258086.944833\n"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:1080
 msgid " Linkage"
@@ -883,7 +883,7 @@ msgstr "Sygnatura"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:4109
 msgid "Call number (full call number)"
-msgstr "Call number (full call number)"
+msgstr "Sygnatura"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:260
 msgid ""
@@ -935,7 +935,7 @@ msgstr "Anulowany/niepoprawny numer kontrolny Biblioteki Kongresu"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:246
 msgid "Canceled/invalid call number"
-msgstr "Canceled/invalid call number"
+msgstr "Unieważniony/niepoprawny symbol klasyfikacji"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:376
 msgid "Canceled/invalid classification number"
@@ -5832,7 +5832,8 @@ msgid "Serial"
 msgstr "Czasopismo"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:18
-msgid "Serial Enumeration / chronology"
+#, fuzzy
+msgid "Serial enumeration / chronology"
 msgstr "Serial Enumeration / chronology"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:660
@@ -5995,7 +5996,7 @@ msgstr "Source of availability status code"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:288
 msgid "Source of call/class number"
-msgstr "Source of call/class number"
+msgstr "Źródło sygnatury/symbolu"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:4:row:2
 msgid "Source of classification or shelving scheme"
@@ -6632,16 +6633,14 @@ msgid "Topical term or geographic name entry element"
 msgstr "Nazwa pospolita lub nazwa geograficzna jako element wprowadzający"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:21
-msgid "Total Checkouts"
+#, fuzzy
+msgid "Total checkouts"
 msgstr "Total Checkouts"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:23
-msgid "Total Holds"
+#, fuzzy
+msgid "Total holds"
 msgstr "Total Holds"
-
-#: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:22
-msgid "Total Renewals"
-msgstr "Total Renewals"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:710
 msgid "Total number of ensembles"
@@ -6654,6 +6653,11 @@ msgstr "Total number of individuals performing alongside ensembles"
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:709
 msgid "Total number of performers"
 msgstr "Total number of performers"
+
+#: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:22
+#, fuzzy
+msgid "Total renewals"
+msgstr "Total Renewals"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:8:row:857
 msgid "Track configuration"
@@ -6770,6 +6774,11 @@ msgstr "Uniform Resource Identifier [LOCAL, KOHA]"
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_types:1:row:9
 msgid "Uniform Title"
 msgstr "Tytuł ujednolicony"
+
+#: installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.yml:marc_subfield_structure:6:row:30
+#, fuzzy
+msgid "Uniform resource identifier"
+msgstr "Jednolity Identyfikator Zasobu (URI)"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:406
 msgid "Uniform title"
@@ -6961,7 +6970,7 @@ msgstr "Volumes/dates to which analysis practice applies"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:128
 msgid "Volumes/dates to which call number applies"
-msgstr "Volumes/dates to which call number applies"
+msgstr "Tomy/daty, których dotyczy sygnatura"
 
 #: installer/data/mysql/en/marcflavour/marc21/mandatory/authorities_normal_marc21.yml:auth_subfield_structure:3:row:1282
 msgid "Volumes/dates to which classification practice applies"

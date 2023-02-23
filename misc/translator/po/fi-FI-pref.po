@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2023-01-11 06:56+0000\n"
-"Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
+"PO-Revision-Date: 2023-02-03 08:33+0000\n"
+"Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1673420203.112684\n"
+"X-POOTLE-MTIME: 1675413223.464631\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -3605,7 +3605,7 @@ msgstr "generoidaan tietuenumerona."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#autoControlNumber# not generated automatically."
-msgstr "ei generoida automaattisesti."
+msgstr "ei generoida tietuenumerona."
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# Don't show"
@@ -3747,10 +3747,6 @@ msgstr "Kotipalvelu-moduuli"
 # Circulation > Interface
 msgid "circulation.pref Interface"
 msgstr "Käyttöliittymä"
-
-# Circulation > Interface
-msgid "circulation.pref Interlibrary loans"
-msgstr "Kaukolainat"
 
 # Circulation > Interface
 msgid "circulation.pref Item bundles"
@@ -4681,9 +4677,10 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "Kirjautuneen käyttäjän kotikirjaston säännöt."
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
 "Määrittääksesi asetetaanko nide kuljetukseen vai jääkö se palautuskirjastoon "
@@ -4721,18 +4718,6 @@ msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
 msgstr "navigointivalikko kaikilla lainaus- ja palautussivuilla."
-
-# Circulation > Checkout policy
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Älä salli"
-
-# Circulation > Interface
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Salli"
-
-# Circulation > Interface
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "kaukolainapyydettyjen niteiden lainaus ja palatus."
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -5490,116 +5475,6 @@ msgstr "Ota käyttöön"
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "kotipalvelu-moduuli."
-
-# Circulation > Checkin Policy
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Tarkista"
-
-# Circulation > Holds policy
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Älä tarkista"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr "ulkoisista lähteistä saatavuutta pyyntöprosessin aikana."
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-"Sähköposti, johon kirjaston kaukolaina-viestit saapuvat, jos kirjaston "
-"sähköpostia ei ole: "
-
-# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaukolainapyynnöt "
-"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta  <a href=\"/"
-"cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</"
-"a>."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-"Kaukolainastatukset, joita pidetään valmiina, ja joita ei tulisi näyttää "
-"kaukolainamoduulissa:"
-
-# Circulation > Housebound module
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Älä salli"
-
-# Circulation > Self check-in module
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Salli"
-
-# Circulation > Housebound module
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "kaukolaina-moduulin käyttö (\"master switch\")."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-"Tekstin lisääminen mahdollistaa tekijänoikeus-ilmoituksen (copyright "
-"clearance stage) pyydetyille teoksille. Lisätty teksti näytetään."
-
-# Circulation > Housebound module
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Älä salli"
-
-# Circulation > Self check-in module
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Salli"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-"asiakkaiden lähettämät kaukolainapyynnöt. Jos sallittu ja kaukolainayhteydet "
-"tukevat ominaisuutta, uudet pyynnöt lähetetään suoraa eteenpäin."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaikki määritetyt "
-"kaukolainayhteydet sallitaan."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr "Salli kaukolainayhteydet verkkokirjastossa tehdyille pyynnöille:"
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-"(erotetaan | -merkillä). Esim. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Jos "
-"jätetään tyhjäksi, kirjastolle ei lähetetä yhtään kaukolaina-viestiä."
-
-# Circulation > Checkout policy
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr "Lähetä nämä kaukolaina-viestit kirjastolle tarvittaessa:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -9098,6 +8973,168 @@ msgid ""
 "on the OPAC."
 msgstr "asiakkaiden vaihtaa käytettävää kieltä verkkokirjastossa."
 
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "Kausijulkaisut"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Ominaisuudet"
+
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Ilmoitukset ja muistutukset"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Älä salli"
+
+# Circulation > Interface
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Salli"
+
+# Circulation > Interface
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr "kaukolainapyydettyjen niteiden lainaus ja palatus."
+
+# Circulation > Checkin Policy
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Tarkista"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Älä tarkista"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr "ulkoisista lähteistä saatavuutta pyyntöprosessin aikana."
+
+# Circulation > Interlibrary loans > ILLDefaultStaffEmail
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+"Sähköposti, johon kirjaston kaukolaina-viestit saapuvat, jos kirjaston "
+"sähköpostia ei ole: "
+
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr ""
+"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaukolainapyynnöt "
+"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta  <a href=\"/"
+"cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</"
+"a>."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+"Kaukolainastatukset, joita pidetään valmiina, ja joita ei tulisi näyttää "
+"kaukolainamoduulissa:"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Älä salli"
+
+# Circulation > Self check-in module
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Salli"
+
+# Circulation > Housebound module
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr "kaukolaina-moduulin käyttö (\"master switch\")."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+"Tekstin lisääminen mahdollistaa tekijänoikeus-ilmoituksen (copyright "
+"clearance stage) pyydetyille teoksille. Lisätty teksti näytetään."
+
+# Circulation > Housebound module
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Älä salli"
+
+# Circulation > Self check-in module
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Salli"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+"asiakkaiden lähettämät kaukolainapyynnöt. Jos sallittu ja kaukolainayhteydet "
+"tukevat ominaisuutta, uudet pyynnöt lähetetään suoraa eteenpäin."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaikki määritetyt "
+"kaukolainayhteydet sallitaan."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr "Salli kaukolainayhteydet verkkokirjastossa tehdyille pyynnöille:"
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+"(erotetaan | -merkillä). Esim. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Jos "
+"jätetään tyhjäksi, kirjastolle ei lähetetä yhtään kaukolaina-viestiä."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr "Lähetä nämä kaukolaina-viestit kirjastolle tarvittaessa:"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "Paikalliskäyttö"
@@ -11706,10 +11743,9 @@ msgid ""
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
-"opac.pref#ShowReviewerPhoto# kommentoijan avatar(ia) kommentin vieressä "
-"verkkokirjastossa. Avatar haetaan osoitteesta <a href=\"https://www."
-"libravatar.org\" target=\"_blank\">www.libravatar.org</a> asiakkaan "
-"sähköpostiosoitteen perusteella."
+"kommentoijan avatar(ia) kommentin vieressä verkkokirjastossa. Avatar haetaan "
+"osoitteesta <a href=\"https://www.libravatar.org\" target=\"_blank\">www."
+"libravatar.org</a> asiakkaan sähköpostiosoitteen perusteella."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
@@ -12251,10 +12287,11 @@ msgstr ""
 "myöhemmin):"
 
 # Patrons > General
+#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr "Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa:"
 
 # Patrons > General
@@ -15360,6 +15397,10 @@ msgstr "riviä raportista, joka on tehty nettipalvelun kautta."
 #~ msgstr ""
 #~ "tarvittaessa uusia auktoriteettitietueita sen sijaan, että "
 #~ "linkitettäisiin olemassaoleviin tietueisiin."
+
+# Circulation > Interface
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "Kaukolainat"
 
 # Circulation > Holds policy > OPACMandatoryHoldDates
 #~ msgid ""

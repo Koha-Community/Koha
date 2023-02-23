@@ -3784,10 +3784,6 @@ msgstr "Moduł użytkownika nieopuszczającego dom"
 msgid "circulation.pref Interface"
 msgstr "Interfejs"
 
-# Circulation > Interlibrary loans
-msgid "circulation.pref Interlibrary loans"
-msgstr "Wypożyczalnia Międzybiblioteczna"
-
 # Circulation > Interface
 #, fuzzy
 msgid "circulation.pref Item bundles"
@@ -4735,8 +4731,8 @@ msgstr "biblioteki, do której bibliotekarz aktualnie jest zalogowany."
 # Circulation > Checkout policy
 #, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
 "biblioteki, z której pochodzi egzemplarz, i do biblioteki, z której "
@@ -4775,19 +4771,6 @@ msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
 msgstr "pasek boczny nawigacji na stronach modułu Udostępniania."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Wyłącz"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Włącz"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr ""
-"udostępnianie egzemplarzy zamówionych przez Wypożyczalnię Międzybiblioteczną."
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -5564,117 +5547,6 @@ msgstr "Włącz"
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "moduł użytkownika nieopuszczającego dom."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Sprawdzaj"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Nie sprawdzaj"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr "dostępności w zewnętrznych źródłach podczas procesu zamawiania."
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-"Zastępczy adres e-mail do wysyłania powiadomień Wypożyczalni "
-"Międzybibliotecznej w przypadku braku adresu domyślnego:"
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-"(oddzielone separatorem |). Pozostaw pole puste, jeśli chcesz wyświetlać "
-"wszystkie zamówienia Wypożyczalni Międzybibliotecznej. Kody ukrytych "
-"zamówień określ domyślną autoryzowaną wartością z ILLSTATUS."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-"Zakończone zamówienia międzybiblioteczne, które nie będą wyświetlane w "
-"module Wypożyczalni Międzybibliotecznej: "
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Wyłącz"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Włącz"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "moduł Wypożyczalni Międzybibliotecznej."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-"Możliwość dodania tekstu podczas tworzenia zamówienia umożliwi wprowadzenie "
-"informacji o prawie autorskim. Tekst będzie wyświetlany."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Nie zezwalaj"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Nie zezwalaj"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-"na bezpośrednie przesyłanie na zewnątrz zamówień międzybibliotecznych. Jeśli "
-"opcja jest włączona i wspierana przez Wypożyczalnię Międzybiblioteczną, nowe "
-"zamówienia będą natychmiastowo wysyłane przez bazę danych."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-"(oddzielone znakiem I). Jeśli puste, wszystkie zainstalowane bazy będą "
-"włączone."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr "Włączone bazy modułu WM dla zamówień składanych przez OPAC:"
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-"(oddzielone separatorem |), np. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. "
-"Pozostaw pole puste, aby nie wysyłać powiadomień."
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr "Wysyłaj następujące powiadomienia Wypożyczalni Międzybibliotecznej:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -9212,6 +9084,170 @@ msgid ""
 "on the OPAC."
 msgstr "użytkownikowi na zmianę języka w OPAC."
 
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "Czasopisma"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Funkcje"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Powiadomienia"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Wyłącz"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Włącz"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr ""
+"udostępnianie egzemplarzy zamówionych przez Wypożyczalnię Międzybiblioteczną."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Sprawdzaj"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Nie sprawdzaj"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr "dostępności w zewnętrznych źródłach podczas procesu zamawiania."
+
+# Circulation > Interlibrary loans > ILLDefaultStaffEmail
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+"Zastępczy adres e-mail do wysyłania powiadomień Wypożyczalni "
+"Międzybibliotecznej w przypadku braku adresu domyślnego:"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr ""
+"(oddzielone separatorem |). Pozostaw pole puste, jeśli chcesz wyświetlać "
+"wszystkie zamówienia Wypożyczalni Międzybibliotecznej. Kody ukrytych "
+"zamówień określ domyślną autoryzowaną wartością z ILLSTATUS."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+"Zakończone zamówienia międzybiblioteczne, które nie będą wyświetlane w "
+"module Wypożyczalni Międzybibliotecznej: "
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Wyłącz"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Włącz"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr "moduł Wypożyczalni Międzybibliotecznej."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+"Możliwość dodania tekstu podczas tworzenia zamówienia umożliwi wprowadzenie "
+"informacji o prawie autorskim. Tekst będzie wyświetlany."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Nie zezwalaj"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Nie zezwalaj"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+"na bezpośrednie przesyłanie na zewnątrz zamówień międzybibliotecznych. Jeśli "
+"opcja jest włączona i wspierana przez Wypożyczalnię Międzybiblioteczną, nowe "
+"zamówienia będą natychmiastowo wysyłane przez bazę danych."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+"(oddzielone znakiem I). Jeśli puste, wszystkie zainstalowane bazy będą "
+"włączone."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr "Włączone bazy modułu WM dla zamówień składanych przez OPAC:"
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+"(oddzielone separatorem |), np. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. "
+"Pozostaw pole puste, aby nie wysyłać powiadomień."
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr "Wysyłaj następujące powiadomienia Wypożyczalni Międzybibliotecznej:"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "local_use.pref"
@@ -12384,10 +12420,11 @@ msgstr ""
 "następujące pola będą zwinięte (można je rozwinąć później):"
 
 # Patrons > General
+#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr ""
 "Lista zdefiniowanych domyślnych pól używanych podczas wyszukiwania "
 "użytkowników w \"standardowej\" opcji (rozdzielona przecinkami):"
@@ -15529,6 +15566,10 @@ msgstr "."
 #~ msgstr ""
 #~ "na automatyczne tworzenie nowych rekordów haseł wzorcowych (jeśli "
 #~ "potrzeba), zamiast odwołania się do istniejących haseł wzorcowych."
+
+# Circulation > Interlibrary loans
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "Wypożyczalnia Międzybiblioteczna"
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."

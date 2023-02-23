@@ -3807,10 +3807,6 @@ msgstr "Housebound module"
 msgid "circulation.pref Interface"
 msgstr "Gränssnitt "
 
-# Circulation > Interlibrary Loans
-msgid "circulation.pref Interlibrary loans"
-msgstr "Fjärrlån"
-
 # Circulation > Interface
 #, fuzzy
 msgid "circulation.pref Item bundles"
@@ -4753,8 +4749,8 @@ msgstr "biblioteket du är inloggad på."
 # Circulation > Checkout policy
 #, fuzzy
 msgid ""
-"circulation.pref#CircControlReturnsBranch# To determine wether an item is "
-"transferred or remains in the libray after checkin, use the circulation "
+"circulation.pref#CircControlReturnsBranch# To determine whether an item is "
+"transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
 "circulation.pref#AllowReturnToBranch# antingen det bibliotek exemplaret är "
@@ -4793,19 +4789,6 @@ msgid ""
 "circulation.pref#CircSidebar# the navigation sidebar on all circulation "
 "pages."
 msgstr "sidofältet för navigering på alla cirkulationssidor."
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Disable"
-msgstr "Avaktivera"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#CirculateILL# Enable"
-msgstr "Aktivera"
-
-# Circulation > Checkout Policy
-#, fuzzy
-msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "endast för låneregler. "
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -5596,114 +5579,6 @@ msgstr "Aktivera "
 #, fuzzy
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "housebound module"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr "Kontrollera"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr "Kontrollera inte"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLCheckAvailability# external sources for availability "
-"during the request process."
-msgstr "externa källor för tillgänglighet under beställningsprocessen."
-
-# Circulation > Interlibrary loans > ILLDefaultStaffEmail
-msgid ""
-"circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
-"notices to be sent to in the absence of a library address:"
-msgstr ""
-
-# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-#, fuzzy
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# (separated with |). If left "
-"empty, all ILL requests will be displayed. The request codes can be found in "
-"the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> authorized value category."
-msgstr ""
-"(separerat med |). Om den lämnas tom så kommer alla fjärrlånebeställningar "
-"att visas. Beställningskoderna kan hittas i den auktoriserade värde-"
-"kategorin ILLSTATUS."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
-"finished and should not be displayed in the ILL module: "
-msgstr ""
-"Fjärrlånestatusar som ska anses färdiga och inte ska visas i "
-"fjärrlånemodulen: "
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Disable"
-msgstr "Avaktivera"
-
-# Circulation > Interlibrary loans
-msgid "circulation.pref#ILLModule# Enable"
-msgstr "Aktivera"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "fjärrlånemodulen (huvudströmbrytaren)."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
-"copyright clearance stage in request creation. The text you enter will be "
-"the text displayed."
-msgstr ""
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr "Avaktivera"
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr "Aktivera"
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
-"If enabled and the ILL backend supports it, the newly created requests are "
-"immediately requested by backend."
-msgstr ""
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
-"installed backends will be enabled."
-msgstr ""
-"(separerade med |). Om fältet lämnas tomt, kommer alla installerade backends "
-"att aktiveras."
-
-# Circulation > Interlibrary loans
-msgid ""
-"circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
-"requests:"
-msgstr ""
-
-# Circulation > Interlibrary loans
-#, fuzzy
-msgid ""
-"circulation.pref#ILLSendStaffNotices# (separated with |). e.g. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
-"will be sent."
-msgstr ""
-"(separerade med |). Om fältet lämnas tomt, kommer alla installerade backends "
-"att aktiveras."
-
-# Circulation > Interlibrary loans > ILLSendStaffNotices
-msgid ""
-"circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
-"appropriate:"
-msgstr ""
-"Skicka följande fjärrlånemeddelanden till personalen när det är lämpligt:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -9287,6 +9162,158 @@ msgid ""
 "on the OPAC."
 msgstr "låntagare ändra det språk de ser i OPAC. "
 
+# Serials
+#, fuzzy
+msgid "interlibrary_loans.pref"
+msgstr "serials.pref"
+
+# Searching > Features
+#, fuzzy
+msgid "interlibrary_loans.pref Features"
+msgstr "Funktioner"
+
+#, fuzzy
+msgid "interlibrary_loans.pref Notifications"
+msgstr "Låntagare som begärt modifieringar"
+
+# Interlibrary loans
+msgid "interlibrary_loans.pref OPAC"
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Disable"
+msgstr "Avaktivera"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#CirculateILL# Enable"
+msgstr "Aktivera"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
+msgstr "endast för låneregler. "
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
+msgstr "Kontrollera"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
+msgstr "Kontrollera inte"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLCheckAvailability# external sources for "
+"availability during the request process."
+msgstr "externa källor för tillgänglighet under beställningsprocessen."
+
+# Interlibrary loans > Notifications > ILLDefaultStaffEmail
+msgid ""
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
+"staff ILL notices to be sent to in the absence of a library address:"
+msgstr ""
+
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
+"left empty, all ILL requests will be displayed. The request codes can be "
+"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+msgstr ""
+"(separerat med |). Om den lämnas tom så kommer alla fjärrlånebeställningar "
+"att visas. Beställningskoderna kan hittas i den auktoriserade värde-"
+"kategorin ILLSTATUS."
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
+"considered finished and should not be displayed in the ILL module: "
+msgstr ""
+"Fjärrlånestatusar som ska anses färdiga och inte ska visas i "
+"fjärrlånemodulen: "
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Disable"
+msgstr "Avaktivera"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModule# Enable"
+msgstr "Aktivera"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
+"switch)."
+msgstr "fjärrlånemodulen (huvudströmbrytaren)."
+
+# Interlibrary loans > Features > ILLModuleCopyrightClearance
+msgid ""
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
+"the copyright clearance stage in request creation. The text you enter will "
+"be the text displayed."
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
+msgstr "Avaktivera"
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
+msgstr "Aktivera"
+
+# Interlibrary loans > Features > ILLModuleUnmediated
+msgid ""
+"interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
+"requests. If enabled and the ILL backend supports it, the newly created "
+"requests are immediately requested by backend."
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
+"all installed backends will be enabled."
+msgstr ""
+"(separerade med |). Om fältet lämnas tomt, kommer alla installerade backends "
+"att aktiveras."
+
+# Interlibrary loans > OPAC > ILLOpacbackends
+msgid ""
+"interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
+"initiated requests:"
+msgstr ""
+
+# Circulation > Interlibrary loans
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
+"will be sent."
+msgstr ""
+"(separerade med |). Om fältet lämnas tomt, kommer alla installerade backends "
+"att aktiveras."
+
+# Circulation > Interlibrary loans > ILLSendStaffNotices
+#, fuzzy
+msgid ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
+"when appropriate:"
+msgstr ""
+"Skicka följande fjärrlånemeddelanden till personalen när det är lämpligt:"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "local_use.pref"
@@ -12533,7 +12560,7 @@ msgstr ""
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
-"option:"
+"option in the patrons or circulation module:"
 msgstr ""
 "Kommaseparerad lista som definierar standardfälten som ska användas vid "
 "låntagarsökningar"
@@ -15648,6 +15675,10 @@ msgstr "rader av en rapport som begärts via webbtjänsten för rapporter."
 #~ msgstr ""
 #~ "dem automatiskt skapa nya auktoritetsposter om så krävs, istället för att "
 #~ "hänvisa till befintliga auktoriteter."
+
+# Circulation > Interlibrary Loans
+#~ msgid "circulation.pref Interlibrary loans"
+#~ msgstr "Fjärrlån"
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
