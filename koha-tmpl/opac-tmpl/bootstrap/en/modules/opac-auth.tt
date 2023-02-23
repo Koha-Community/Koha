@@ -225,7 +225,7 @@
                     [% ELSE %]
                         <h1>Logging on to the catalog has not been enabled by the library.</h1>
                         <ul>
-                            <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin | uri %]">Email</a></li>
+                            <li>To report this error, you can email the Koha Administrator. <a href="mailto:[% Koha.Preference( 'KohaAdminEmailAddress' ) | uri %]">Email</a></li>
                             <li>Use top menu bar to navigate to another part of Koha.</li>
                         </ul>
                     [% END # / IF opacuserlogin %]
