@@ -1362,9 +1362,21 @@ subtest 'get_savings tests' => sub {
 
     t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library->branchcode });
 
-    my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
-    my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
-    my $item2 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
+    my $biblio = $builder->build_sample_biblio;
+    my $item1 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => rand(20),
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => rand(20),
+        }
+    );
 
     is( $patron->get_savings, 0, 'No checkouts, no savings' );
 
