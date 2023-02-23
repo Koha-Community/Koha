@@ -24,7 +24,11 @@
             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketname | html %] ([% basketno | html %])</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active=1 %]
-            Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note
+            [% IF (type == "vendor") %]
+                <span>Change order's vendor note</span>
+            [% ELSE %]
+                <span>Change order's internal note</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]

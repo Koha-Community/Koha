@@ -56,11 +56,11 @@
         [% END %]
         [% IF ( ordernumber ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Modify order details (line #[% ordernumber | html %])
+                <span>Modify order details (line #[% ordernumber | html %])</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                New order
+                <span>New order</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
