@@ -65,8 +65,13 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/erm/agreements")->status_is(200)
       ->json_is( [] );
 
-    my $agreement =
-      $builder->build_object( { class => 'Koha::ERM::Agreements' } );
+    my $vendor_1 = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
+    my $agreement = $builder->build_object(
+        {
+            class => 'Koha::ERM::Agreements',
+            value => { vendor_id => $vendor_1->id },
+        }
+    );
 
     # One agreement created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/erm/agreements")->status_is(200)
@@ -75,11 +80,17 @@ subtest 'list() tests' => sub {
     my $another_agreement = $builder->build_object(
         {
             class => 'Koha::ERM::Agreements',
-            value => { vendor_id => $agreement->vendor_id }
+            value => { vendor_id => $vendor_1->id }
         }
     );
-    my $agreement_with_another_vendor_id =
-      $builder->build_object( { class => 'Koha::ERM::Agreements' } );
+
+    my $vendor_2 = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
+    my $agreement_with_another_vendor_id = $builder->build_object(
+        {
+            class => 'Koha::ERM::Agreements',
+            value => { vendor_id => $vendor_2->id },
+        }
+    );
 
     # Two agreements created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/erm/agreements")->status_is(200)
@@ -93,7 +104,7 @@ subtest 'list() tests' => sub {
 
     # Filtering works, two agreements sharing vendor_id
     $t->get_ok( "//$userid:$password@/api/v1/erm/agreements?vendor_id="
-          . $agreement->vendor_id )->status_is(200)
+          . $vendor_1->id )->status_is(200)
       ->json_is( [ $agreement->to_api, $another_agreement->to_api ] );
 
     # Attempt to search by name like 'ko'
