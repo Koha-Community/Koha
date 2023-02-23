@@ -181,15 +181,26 @@ export default {
             av_package_content_types: "ERM_PACKAGE_CONTENT_TYPE",
             av_title_publication_types: "ERM_TITLE_PUBLICATION_TYPE",
         }
-        let promises = []
-        Object.entries(authorised_values).forEach(([av_var, av_cat]) => {
-            promises.push(
-                av_client.values.getAll(av_cat).then(av => {
-                    this.AVStore[av_var] = av
-                })
-            )
+
+        let av_cat_array = Object.keys(authorised_values).map(function (
+            av_cat
+        ) {
+            return '"' + authorised_values[av_cat] + '"'
         })
-        Promise.all(promises).then(() => (this.mainStore.is_loading = false))
+
+        av_client.values
+            .getCategoriesWithValues(av_cat_array)
+            .then(av_categories => {
+                Object.entries(authorised_values).forEach(
+                    ([av_var, av_cat]) => {
+                        const av_match = av_categories.find(
+                            element => element.category_name == av_cat
+                        )
+                        this.AVStore[av_var] = av_match.authorised_values
+                    }
+                )
+            })
+            .then(() => (this.mainStore.is_loading = false))
     },
     components: {
         Breadcrumb,
