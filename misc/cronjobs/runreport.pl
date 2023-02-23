@@ -65,6 +65,8 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --subject=s     subject for the e-mail
    --param=s       parameters for the report
    --store-results store the result of the report
+   --separator     separator character for csv
+   --quote         quote character for csv
    --csv-header    add column names as first line of csv output
 
 
@@ -94,6 +96,11 @@ Current options are text, html, csv, and tsv. At the moment, text and tsv both p
 =item B<--separator>
 
 Separator character, only for csv format. Default to comma.
+
+=item B<--quote>
+
+Quote character, only for csv format. Default to double quote.
+Empty string is allowed.
 
 =item B<--email>
 
@@ -191,6 +198,7 @@ my $quote         = '"';
 my $store_results = 0;
 my $csv_header    = 0;
 my $csv_separator = "";
+my $csv_quote = "";
 
 my $username = undef;
 my $password = undef;
@@ -204,6 +212,7 @@ GetOptions(
     'verbose'           => \$verbose,
     'format=s'          => \$format,
     'separator=s'       => \$csv_separator,
+    'quote=s'           => \$csv_quote,
     'to=s'              => \$to,
     'from=s'            => \$from,
     'subject=s'         => \$subject,
@@ -234,6 +243,14 @@ if ($csv_separator) {
         $separator = "$csv_separator";
     } else {
         print STDERR "Cannot specify separator if not using CSV format\n";
+    }
+}
+
+if ($csv_quote) {
+    if ( $format eq 'csv' ) {
+        $quote = "$csv_quote";
+    } else {
+        print STDERR "Cannot specify quote if not using CSV format\n";
     }
 }
 
