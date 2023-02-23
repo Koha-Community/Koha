@@ -2068,7 +2068,6 @@ sub searchResults {
             my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
             my @alternateholdingsinfo = ();
             my @holdingsfields = $marcrecord->field(substr $fieldspec, 0, 3);
-            my $alternateholdingscount = 0;
 
             for my $field (@holdingsfields) {
                 my %holding = ( holding => '' );
@@ -2082,12 +2081,10 @@ sub searchResults {
                 }
                 if ($havesubfield) {
                     push(@alternateholdingsinfo, \%holding);
-                    $alternateholdingscount++;
                 }
             }
 
             $oldbiblio->{'ALTERNATEHOLDINGS'} = \@alternateholdingsinfo;
-            $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
         }
 
         push( @newresults, $oldbiblio );
