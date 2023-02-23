@@ -4,6 +4,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE HtmlTags %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Search for vendor [% supplier | html %] &rsaquo; Koha</title>
@@ -26,7 +27,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            Search for vendor <em>[% supplier | html %]</em>
+            <span>Search for vendor [% supplier | $HtmlTags tag='em' %]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]

@@ -30,11 +30,11 @@
         [% IF ( add_form ) %]
             [% IF ( basketno ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1%]
-                    Edit basket '[% basketname | html %]'
+                    <span>Edit basket '[% basketname | html %]'</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1%]
-                    Add a basket to [% booksellername | html %]
+                    <span>Add a basket to [% booksellername | html %]</span>
                 [% END %]
             [% END %]
         [% END %]
