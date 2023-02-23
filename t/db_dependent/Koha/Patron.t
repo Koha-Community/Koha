@@ -1377,12 +1377,12 @@ subtest 'get_savings tests' => sub {
     AddIssue( $patron->unblessed, $item2->barcode );
 
     my $savings = $patron->get_savings;
-    is( $savings, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );
+    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );
 
     AddReturn( $item2->barcode, $item2->homebranch );
 
     $savings = $patron->get_savings;
-    is( $savings, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
+    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
 
     $schema->storage->txn_rollback;
 };
