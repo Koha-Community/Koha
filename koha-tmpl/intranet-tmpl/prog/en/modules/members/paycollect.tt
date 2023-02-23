@@ -25,7 +25,7 @@
     [% IF type == 'WRITEOFF' %]
         Write off an amount for [% INCLUDE 'patron-title.inc' no_html = 1 %]
     [% ELSE %]
-        Collect fine payment for [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        Collect payment for [% INCLUDE 'patron-title.inc' no_html = 1 %]
     [% END %] &rsaquo; Patrons &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -51,18 +51,18 @@
         <li>
             <a href="#" aria-current="page">
                 [% IF ( pay_individual ) %]
-                    <span>Pay an individual fine</span>
+                    <span>Pay an individual charge</span>
                 [% ELSIF ( writeoff_individual ) %]
-                    <span>Write off an individual fine</span>
+                    <span>Write off an individual charge</span>
                 [% ELSE %]
                     [% IF ( selected_accts ) %]
                         [% IF type == 'WRITEOFF' %]
-                            <span>Write off an amount toward selected fines</span>
+                            <span>Write off an amount toward selected charges</span>
                         [% ELSE %]
-                            <span>Pay an amount toward selected fines</span>
+                            <span>Pay an amount toward selected charges</span>
                         [% END %]
                     [% ELSE %]
-                        <span>Pay an amount toward all fines</span>
+                        <span>Pay an amount toward all charges</span>
                     [% END %]
                 [% END %]
             </a>
@@ -78,18 +78,18 @@
 
             <h1>
                 [% IF ( pay_individual ) %]
-                    <span>Pay an individual fine</span>
+                    <span>Pay an individual charge</span>
                 [% ELSIF ( writeoff_individual ) %]
-                    <span>Write off an individual fine</span>
+                    <span>Write off an individual charge</span>
                 [% ELSE %]
                     [% IF ( selected_accts ) %]
                         [% IF type == 'WRITEOFF' %]
-                            <span>Write off an amount toward selected fines</span>
+                            <span>Write off an amount toward selected charges</span>
                         [% ELSE %]
-                            <span>Pay an amount toward selected fines</span>
+                            <span>Pay an amount toward selected charges</span>
                         [% END %]
                     [% ELSE %]
-                        <span>Pay an amount toward all fines</span>
+                        <span>Pay an amount toward all charges</span>
                     [% END %]
                 [% END %]
             </h1>
@@ -148,7 +148,7 @@
     <input type="hidden" name="change_given" id="change_given" />
 
 <fieldset class="rows">
-    <legend>Pay an individual fine</legend>
+    <legend>Pay an individual charge</legend>
     <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
     <table>
     <thead><tr>
@@ -234,7 +234,7 @@
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
     <fieldset class="rows">
-    <legend>Write off an individual fine</legend>
+    <legend>Write off an individual charge</legend>
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
@@ -309,12 +309,12 @@
     <fieldset class="rows">
     [% IF ( selected_accts ) %]
         [% IF type == 'WRITEOFF' %]
-            <legend>Write off an amount toward selected fines</legend>
+            <legend>Write off an amount toward selected charges</legend>
         [% ELSE %]
-            <legend>Pay an amount toward selected fines</legend>
+            <legend>Pay an amount toward selected charges</legend>
         [% END %]
     [% ELSE %]
-        <legend>Pay an amount toward all fines</legend>
+        <legend>Pay an amount toward all charges</legend>
     [% END %]
 
     <ol>
