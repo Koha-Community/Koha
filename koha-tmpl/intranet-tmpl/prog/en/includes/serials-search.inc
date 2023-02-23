@@ -21,9 +21,27 @@
                 [% END %]
 
                 <input type="text" class="form-control" placeholder="Title" size="11" name="title_filter" id="title_filter" value="[% title_filter | html %]" />
+                <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
 
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            <div class="form-extra-content">
+                <div>
+                    <label for="callnumber_filter">Call number:</label>
+                    <input class="form-control" type="text" id="callnumber_filter" name="callnumber_filter" placeholder="Call number" value="[% callnumber_filter | html %]">
+                </div>
+                <div>
+                    <label for="publisher_filter">Publisher:</label>
+                    <input class="form-control" type="text" id="publisher_filter" name="publisher_filter" placeholder="Publisher" value="[% publisher_filter | html %]">
+                </div>
+                <div>
+                    <label for="bookseller_filter">Vendor:</label>
+                    <input class="form-control" type="text" id="bookseller_filter" name="bookseller_filter" placeholder="Vendor" value="[% bookseller_filter | html %]">
+                </div>
+                <div>
+                    <a href="/cgi-bin/koha/serials/serials-search.pl">Advanced search</a>
+                </div>
+            </div>
         </form>
     </div>
 

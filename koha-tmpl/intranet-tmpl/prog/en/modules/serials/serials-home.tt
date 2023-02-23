@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Serials [% biblionumber | html %] &rsaquo; Koha</title>
@@ -35,7 +36,7 @@
       [% INCLUDE 'serials-toolbar.inc' %]
 
             <h1>Serials</h1>
-
+                [% INCLUDE 'serials-advsearch.inc' %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -48,6 +49,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script>
         var subscriptionid = "[% subscriptionid | html %]";
