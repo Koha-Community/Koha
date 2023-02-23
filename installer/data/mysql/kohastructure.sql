@@ -3564,7 +3564,7 @@ DROP TABLE IF EXISTS `item_groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `item_groups` (
   `item_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id for the items group',
-  `biblio_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id for the bibliographic record the group belongs to',
+  `biblio_id` int(11) NOT NULL COMMENT 'id for the bibliographic record the group belongs to',
   `display_order` int(4) NOT NULL DEFAULT 0 COMMENT 'The ''sort order'' for item_groups',
   `description` mediumtext DEFAULT NULL COMMENT 'A group description',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Time and date the group was created',
@@ -4843,7 +4843,7 @@ CREATE TABLE `recalls` (
   `recall_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this recall',
   `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Identifier for patron who requested recall',
   `created_date` datetime DEFAULT NULL COMMENT 'Date the recall was requested',
-  `biblio_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Identifier for bibliographic record that has been recalled',
+  `biblio_id` int(11) NOT NULL COMMENT 'Identifier for bibliographic record that has been recalled',
   `pickup_library_id` varchar(10) DEFAULT NULL COMMENT 'Identifier for recall pickup library',
   `completed_date` datetime DEFAULT NULL COMMENT 'Date the recall is completed (fulfilled, cancelled or expired)',
   `notes` mediumtext DEFAULT NULL COMMENT 'Notes related to the recall',
