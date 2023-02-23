@@ -247,6 +247,15 @@
                                             </li>
                                             [% END %]
 
+                                            [% IF action != 'new' %]
+                                                [% UNLESS hidden.defined('userid') %]
+                                                <li>
+                                                    <label>Username:</label>
+                                                    [% borrower.userid | html  %]
+                                                </li>
+                                                [% END %]
+                                            [% END %]
+
                                             [% UNLESS hidden.defined('dateexpiry') %]
                                             <li>
                                                 <label>Expiration date:</label>
