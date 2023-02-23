@@ -91,10 +91,10 @@
 [% END %]
 
 
-[% SET restricted_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
+[% SET restricted_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted, opac => 1 ) %]
 [% IF item.notforloan %]
     [% SET itemavailable = 0 %]
-    [% notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
+    [% notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan, opac => 1 ) %]
     [% IF notforloan_lib %]
         <span class="item-status notforloan">[% notforloan_lib | html %] [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
     [% ELSE %]
@@ -103,6 +103,10 @@
 [% ELSIF item.itemtype.notforloan %]
     [% SET itemavailable = 0 %]
     <span class="item-status notforloan">Not for loan [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
+[% ELSE %]
+    [% IF restricted_lib %]
+        <span class="item-status restricted">[% restricted_lib | html %]</span>
+    [% END %]
 [% END %]
 
 [% IF ( item.bundle_host ) %]
