@@ -187,7 +187,7 @@
 </fieldset>
 </form>
 [% ELSE %]
-    <p>[% INCLUDE 'patron-title.inc' %] has no outstanding fines.</p>
+    <p>[% INCLUDE 'patron-title.inc' %] has no outstanding charges.</p>
 [% END %]
         </div> <!-- /.tab-pane -->
     </div> <!-- /.tab-content -->
@@ -225,7 +225,7 @@
 
             $('#pay-fines-form').preventDoubleFormSubmit();
             $("#woall").click(function(event){
-                var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | $Price %]" );
+                var msg = _("Are you sure you want to write off %s in outstanding charges? This cannot be undone!").format( "[% total | $Price %]" );
                 var answer = confirm(msg);
                     if (!answer){
                         event.preventDefault();
