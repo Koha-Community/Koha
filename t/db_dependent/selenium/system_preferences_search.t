@@ -40,12 +40,12 @@ my $base_url = $s->base_url;
 # Adjust the height and width of the generated screenshots
 #$driver->set_window_size( 2160, 991 ); # Height, then Width
 
-my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1, branchcode => 'CPL' } } );
+my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
 my $password = Koha::AuthUtils::generate_password( $patron->category );
 t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
 $patron->set_password( { password => $password } );
 
-push @cleanup, $patron;
+push @cleanup, $patron, $patron->category, $patron->library;
 
 $s->auth( $patron->userid, $password );
 
