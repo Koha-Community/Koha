@@ -143,8 +143,8 @@ is_deeply(
     'categories must be ordered by category names'
 );
 
-subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
-    plan tests => 5;
+subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_values' => sub {
+    plan tests => 6;
 
     my $test_cat = Koha::AuthorisedValueCategories->find('TEST');
     $test_cat->delete if $test_cat;
@@ -251,6 +251,37 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
                 }
             ],
         );
+    };
+    subtest 'authorised_values' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $authorised_value_category =
+        $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValueCategories',
+                value => {
+                    category_name => 'test_avs'
+                }
+            }
+        );
+
+        is( $authorised_value_category->authorised_values->count, 0, "no authorised values yet" );
+
+        my $av1 = Koha::AuthorisedValue->new(
+            {
+                category         => 'test_avs',
+                authorised_value => 'value 1',
+                lib              => 'display value 1',
+                lib_opac         => 'opac display value 1',
+                imageurl         => 'image1.png',
+            }
+        )->store();
+        is( $authorised_value_category->authorised_values->count, 1, "one authorised value" );
+
+        $schema->storage->txn_rollback;
     };
 };
 
