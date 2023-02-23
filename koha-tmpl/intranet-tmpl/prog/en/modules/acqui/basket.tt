@@ -51,11 +51,11 @@
                     <span>New</span>
                 [% END %]
             [% END %]
-            <span>Basket [% basketname | html %]
             [% IF ( basketno ) %]
-                ([% basketno | html %])
+                <span>Basket [% basketname | html %] ([% basketno | html %]) for [% booksellername | html %]</span>
+            [% ELSE %]
+                <span>Basket [% basketname | html %] for [% booksellername | html %]</span>
             [% END %]
-            for [% booksellername | html %]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]

@@ -111,14 +111,14 @@
                 <a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | uri %]">Basket grouping</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Add basket group for [% booksellername | html %]
+                <span>Add basket group for [% booksellername | html %]</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Basket grouping
+                <span>Basket grouping</span>
             [% END %]
         [% END  # /IF grouping %]
     [% END #/ WRAPPER breadcrumbs %]
