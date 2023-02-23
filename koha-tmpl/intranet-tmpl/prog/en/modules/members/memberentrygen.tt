@@ -610,7 +610,7 @@ legend:hover {
                                                 [% END %]
                                                 [% IF Koha.Preference('AllowStaffToSetFinesVisibilityForGuarantor') %]
                                                     <li>
-                                                        <label for="privacy_guarantor_fines">Show fines to guarantors</label>
+                                                        <label for="privacy_guarantor_fines">Show charges to guarantors</label>
                                                         <select name="privacy_guarantor_fines" id="privacy_guarantor_fines">
                                                             [% IF borrower_data.privacy_guarantor_fines %]
                                                                 <option value="0">No</option>
@@ -620,7 +620,7 @@ legend:hover {
                                                                 <option value="1">Yes</option>
                                                             [% END %]
                                                         </select>
-                                                        <div class="hint">Allow guarantors of this patron to view this patron's fines from the OPAC</div>
+                                                        <div class="hint">Allow guarantors of this patron to view this patron's charges from the OPAC</div>
                                                     </li>
                                                 [% END %]
                                             </ol>
