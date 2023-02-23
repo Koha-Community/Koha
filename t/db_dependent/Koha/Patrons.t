@@ -2460,7 +2460,7 @@ subtest 'filter_by_amount_owed' => sub {
     );
 };
 
-subtest 'libraries_where_can_edit_items + can_edit_item' => sub {
+subtest 'libraries_where_can_edit_items() and can_edit_items_from() tests' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
@@ -2520,18 +2520,18 @@ subtest 'libraries_where_can_edit_items + can_edit_item' => sub {
         is_deeply( \@branchcodes, [$library_2A->branchcode], "patron_2A doesn't have edit_any_item => Can only see patron's from its group" );
     };
 
-    subtest 'can_edit_item' => sub {
+    subtest 'can_edit_items_from' => sub {
         plan tests => 6;
 
         t::lib::Mocks::mock_userenv({ patron => $patron_1A_1 });
-        is( $patron_1A_1->can_edit_item( $library_1A->id ), 1, "patron_1A_1 can see patron_1A_2, from its library" );
-        is( $patron_1A_1->can_edit_item( $library_1B->id ),   1, "patron_1A_1 can see patron_1B, from its group" );
-        is( $patron_1A_1->can_edit_item( $library_2A->id ),   1, "patron_1A_1 can see patron_1A_2, from another group" );
+        is( $patron_1A_1->can_edit_items_from( $library_1A->id ), 1, "patron_1A_1 can see patron_1A_2, from its library" );
+        is( $patron_1A_1->can_edit_items_from( $library_1B->id ),   1, "patron_1A_1 can see patron_1B, from its group" );
+        is( $patron_1A_1->can_edit_items_from( $library_2A->id ),   1, "patron_1A_1 can see patron_1A_2, from another group" );
 
         t::lib::Mocks::mock_userenv({ patron => $patron_1A_2 });
-        is( $patron_1A_2->can_edit_item( $library_1A->id ),   1, "patron_1A_2 can see patron_1A_1, from its library" );
-        is( $patron_1A_2->can_edit_item( $library_1B->id ),   1, "patron_1A_2 can see patron_1B, from its group" );
-        is( $patron_1A_2->can_edit_item( $library_2A->id ),   0, "patron_1A_2 can NOT see patron_2A, from another group" );
+        is( $patron_1A_2->can_edit_items_from( $library_1A->id ),   1, "patron_1A_2 can see patron_1A_1, from its library" );
+        is( $patron_1A_2->can_edit_items_from( $library_1B->id ),   1, "patron_1A_2 can see patron_1B, from its group" );
+        is( $patron_1A_2->can_edit_items_from( $library_2A->id ),   0, "patron_1A_2 can NOT see patron_2A, from another group" );
     };
 };
 

@@ -89,7 +89,7 @@ sub build_table {
             holds          => $item->biblio->holds->count,
             item_holds     => $item->holds->count,
             is_checked_out => $item->checkout ? 1 : 0,
-            nomod          => $patron ? !$patron->can_edit_item($item) : 0,
+            nomod          => $patron ? !$patron->can_edit_items_from($item->homebranch) : 0,
         };
         push @items, $item_info;
     }

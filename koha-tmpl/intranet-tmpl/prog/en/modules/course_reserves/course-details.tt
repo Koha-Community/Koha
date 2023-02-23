@@ -294,7 +294,7 @@
 
                                     [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                         <td class="actions">
-                                            [% IF CAN_user_coursereserves_add_reserves && user.can_edit_item( cr.item ) %]
+                                            [% IF CAN_user_coursereserves_add_reserves && user.can_edit_items_from( cr.item.homebranch ) %]
                                                 <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa fa-pencil"></i> Edit</a>
                                             [% END %]
 

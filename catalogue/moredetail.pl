@@ -247,7 +247,7 @@ foreach my $item (@items){
         }
     );
 
-    $item_info->{nomod} = !$patron->can_edit_item( $item );
+    $item_info->{nomod} = !$patron->can_edit_items_from( $item->homebranch );
 
     push @item_data, $item_info;
 }
