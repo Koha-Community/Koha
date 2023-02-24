@@ -35,7 +35,7 @@
 
         [% IF ( else ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Authority MARC subfield structure for [% tagfield | html %]
+                <span>Authority MARC subfield structure for [% tagfield | html %]</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
@@ -45,7 +45,7 @@
 
         [% IF ( delete_confirm ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Confirm deletion of subfield [% tagsubfield | html %]?
+                <span>Confirm deletion of subfield [% tagsubfield | html %]?</span>
             [% END %]
         [% END %]
 
@@ -53,7 +53,7 @@
             [% IF ( use_heading_flags_p ) %]
                 [% IF ( heading_edit_subfields_p ) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        Edit MARC subfields constraints
+                        <span>Edit MARC subfields constraints</span>
                     [% END %]
                 [% END %]
             [% ELSE %]

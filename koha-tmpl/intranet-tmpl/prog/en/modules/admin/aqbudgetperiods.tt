@@ -82,66 +82,55 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
-        [% IF ( add_form ) %]
+        [% IF ( else ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Budgets administration</span>
+            [% END %]
+        [% ELSE %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
             [% END %]
+        [% END %]
+
+        [% IF ( add_form ) %]
             [% IF ( budget_period_id ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Modify budget '[% budget_period_description | html %]'
+                    <span>Modify budget '[% budget_period_description | html %]'</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Add budget
+                    <span>Add budget</span>
                 [% END %]
             [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            [% END %]
             [% IF ( total || funds_exist ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Cannot delete budget '[% budget_period_description | html %]'
+                    <span>Cannot delete budget '[% budget_period_description | html %]'</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Delete budget '[% budget_period_description | html %]'?
+                    <span>Delete budget '[% budget_period_description | html %]'?</span>
                 [% END %]
             [% END %]
         [% END %]
 
             [% IF ( duplicate_form ) %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-                [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Duplicate budget
+                    <span>Duplicate budget</span>
                 [% END %]
             [% END %]
 
         [% IF close_form %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Close budget [% budget_period_description | html %]
+                <span>Close budget [% budget_period_description | html %]</span>
             [% END %]
         [% END %]
 
         [% IF closed %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a>
-            [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Budget [% budget_period_description | html %] closed
-            [% END %]
-        [% END %]
-
-        [% IF ( else ) %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Budgets administration
+                <span>Budget [% budget_period_description | html %] closed</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]

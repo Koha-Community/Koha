@@ -31,11 +31,11 @@
         [% IF op == 'list' %]
             [% IF budget_period_id %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Funds for '[% budget_period_description | html %]'
+                    <span>Funds for '[% budget_period_description | html %]'</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    All funds
+                    <span>All funds</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -46,12 +46,15 @@
             [% END %]
             [% IF ( budget_id ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Modify fund
-                    [% IF ( budget_name ) %] '[% budget_name | html %]'[% END %]
+                    [% IF ( budget_name ) %]
+                        <span>Modify fund '[% budget_name | html %]'</span>
+                    [% ELSE %]
+                        <span>Modify fund</span>
+                    [% END %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Add fund
+                    <span>Add fund</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -61,7 +64,7 @@
                 <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Delete fund?
+                <span>Delete fund?</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
