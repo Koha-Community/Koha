@@ -23,11 +23,11 @@
                 <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Uncertain prices for vendor [% booksellername | html %]
+                <span>Uncertain prices for vendor [% booksellername | html %]</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Uncertain prices
+                <span>Uncertain prices</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]

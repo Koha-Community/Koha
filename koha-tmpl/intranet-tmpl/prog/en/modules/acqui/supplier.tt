@@ -109,11 +109,11 @@
                     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Update: [% name | html %]
+                    <span>Update: [% name | html %]</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Add vendor
+                    <span>Add vendor</span>
                 [% END %]
             [% END %]
         [% ELSE %]
