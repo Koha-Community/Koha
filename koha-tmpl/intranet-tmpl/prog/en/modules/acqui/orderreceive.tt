@@ -26,9 +26,11 @@
             <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.basket.booksellerid | uri %]">[% name | html %]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            Receive items from : [% name | html %] [% IF ( invoice ) %]
-            [[% invoice | html %]]
-            [% END %] (order #[% order.ordernumber | html %])
+            [% IF ( invoice ) %]
+                <span>Receive items from: [% name | html %] [[% invoice | html %]] (order #[% order.ordernumber | html %])</span>
+            [% ELSE %]
+                <span>Receive items from: [% name | html %] (order #[% order.ordernumber | html %])</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]

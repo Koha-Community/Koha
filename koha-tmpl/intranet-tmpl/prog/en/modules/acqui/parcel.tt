@@ -29,9 +29,10 @@
         [% END %]
         [% IF invoiceclosedate %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Receipt summary for <em>[% name | html %]</em>
                 [% IF ( invoice ) %]
-                    <em>[ [% invoice | html %] ]</em>
+                    <span>Receipt summary for <em>[% name | html %] [ [% invoice | html %] ]</em></span>
+                [% ELSE %]
+                    <span>Receipt summary for <em>[% name | html %]</em></span>
                 [% END %]
             [% END %]
         [% ELSE %]
@@ -39,7 +40,7 @@
                 <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Receive orders from [% name | html %]
+                <span>Receive orders from [% name | html %]</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]

@@ -57,14 +57,14 @@ tr.selected td {
         [% END %]
         [% IF ( opsearch ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Order from external source
+                <span>Order from external source</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Search results
+                <span>Search results</span>
             [% END %]
         [% END # /IF opsearch %]
     [% END #/ WRAPPER breadcrumbs %]
