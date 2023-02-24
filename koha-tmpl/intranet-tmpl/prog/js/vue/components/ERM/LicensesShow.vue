@@ -9,11 +9,9 @@
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
-                <router-link
-                    :to="`/cgi-bin/koha/erm/licenses/delete/${license.license_id}`"
-                    :title="$__('Delete')"
+                <a @click="delete_license(license.license_id, license.name)"
                     ><i class="fa fa-trash"></i
-                ></router-link>
+                ></a>
             </span>
         </h2>
         <div>
@@ -152,6 +150,8 @@ export default {
         const format_date = $date
         const patron_to_html = $patron_to_html
 
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
+
         const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
@@ -159,6 +159,8 @@ export default {
             format_date,
             patron_to_html,
             get_lib_from_av,
+            setConfirmationDialog,
+            setMessage,
         }
     },
     data() {
@@ -194,6 +196,32 @@ export default {
                 error => {}
             )
         },
+        delete_license: function (license_id, license_name) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this license?"
+                    ),
+                    message: license_name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.licenses.delete(license_id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("License %s deleted").format(
+                                    license_name
+                                )
+                            )
+                            this.$router.push("/cgi-bin/koha/erm/licenses")
+                        },
+                        error => {}
+                    )
+                }
+            )
+        },
     },
     components: {},
     name: "LicensesShow",
@@ -203,6 +231,7 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+    cursor: pointer;
 }
 #license_documents ul {
     padding-left: 0px;
