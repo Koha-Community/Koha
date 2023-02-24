@@ -654,7 +654,12 @@ subtest 'cancel() tests' => sub {
     );
     $order->add_item( $item->id );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $item->homebranch, flags => 1 }
+        }
+    );
     t::lib::Mocks::mock_userenv({ patron => $patron });
 
     # Add a checkout so deleting the item fails because od 'book_on_loan'
