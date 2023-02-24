@@ -8,7 +8,6 @@ import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesF
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
 import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
 import EHoldingsLocalPackagesShow from "../components/ERM/EHoldingsLocalPackagesShow.vue";
-import EHoldingsLocalPackagesFormConfirmDelete from "../components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue";
 import EHoldingsLocalResourcesShow from "../components/ERM/EHoldingsLocalResourcesShow.vue";
 import EHoldingsLocalTitlesList from "../components/ERM/EHoldingsLocalTitlesList.vue";
 import EHoldingsLocalTitlesShow from "../components/ERM/EHoldingsLocalTitlesShow.vue";
@@ -233,22 +232,6 @@ export const routes = [
                                                     .packages,
                                             ],
                                             "Show package" // $t("Show package")
-                                        ),
-                                },
-                            },
-                            {
-                                path: "delete/:package_id",
-                                component:
-                                    EHoldingsLocalPackagesFormConfirmDelete,
-                                meta: {
-                                    breadcrumb: () =>
-                                        build_breadcrumb(
-                                            [
-                                                breadcrumb_paths.eholdings_local,
-                                                breadcrumbs.eholdings.local
-                                                    .packages,
-                                            ],
-                                            "Delete package" // $t("Delete package")
                                         ),
                                 },
                             },

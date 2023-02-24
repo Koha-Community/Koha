@@ -32,6 +32,8 @@ export default {
         const AVStore = inject("AVStore")
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
+
         const table_id = "package_list"
         useDataTable(table_id)
 
@@ -40,6 +42,8 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             table_id,
+            setConfirmationDialog,
+            setMessage,
         }
     },
     data: function () {
@@ -78,10 +82,35 @@ export default {
                 "/cgi-bin/koha/erm/eholdings/local/packages/edit/" + package_id
             )
         },
-        delete_package: function (package_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/packages/delete/" +
-                    package_id
+        delete_package: function (package_id, package_name) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this package?"
+                    ),
+                    message: package_name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.localPackages.delete(package_id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("Local package %s deleted").format(
+                                    package_name
+                                )
+                            )
+                            $("#" + this.table_id)
+                                .DataTable()
+                                .ajax.url(
+                                    "/api/v1/erm/eholdings/local/packages"
+                                )
+                                .draw()
+                        },
+                        error => {}
+                    )
+                }
             )
         },
         build_datatable: function () {
@@ -205,6 +234,7 @@ export default {
                             function (index, e) {
                                 let tr = $(this).parent().parent()
                                 let package_id = api.row(tr).data().package_id
+                                let package_name = api.row(tr).data().name
                                 let editButton = createVNode(
                                     "a",
                                     {
@@ -229,7 +259,10 @@ export default {
                                         class: "btn btn-default btn-xs",
                                         role: "button",
                                         onClick: () => {
-                                            delete_package(package_id)
+                                            delete_package(
+                                                package_id,
+                                                package_name
+                                            )
                                         },
                                     },
                                     [
