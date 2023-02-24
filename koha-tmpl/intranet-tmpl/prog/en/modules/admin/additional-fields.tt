@@ -33,11 +33,11 @@
                 [% END %]
                 [% IF field %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        Modify field '[% field.name | html %]'
+                        <span>Modify field '[% field.name | html %]'</span>
                     [% END %]
                 [% ELSE %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        Add field
+                        <span>Add field</span>
                     [% END %]
                 [% END %]
 
@@ -46,12 +46,12 @@
                     <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Modify fields for '[% tablename | html %]'
+                    <span>Modify fields for '[% tablename | html %]'</span>
                 [% END %]
 
             [% CASE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Manage additional fields
+                    <span>Manage additional fields</span>
                 [% END %]
 
         [% END %]
