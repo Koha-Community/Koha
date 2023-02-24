@@ -15,11 +15,21 @@ import DataTablesLib from "datatables.net"
 import "datatables.net-buttons"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
+import "datatables.net-buttons/js/buttons.colVis"
 DataTable.use(DataTablesLib)
 
 export default {
     name: "KohaTable",
     data() {
+        let hidden_ids, included_ids
+        ;[hidden_ids, included_ids] = _dt_visibility(
+            this.table_settings,
+            this.options
+        )
+        let buttons = _dt_buttons({
+            included_ids,
+            table_settings: this.table_settings,
+        })
         return {
             data: [],
             tableColumns: this.columns,
@@ -34,9 +44,11 @@ export default {
                     url: typeof this.url === "function" ? this.url() : this.url,
                     ..._dt_default_ajax({ options: this.options }),
                 },
-                buttons: _dt_buttons({ table_settings: this.table_settings }),
+                buttons,
                 default_search: this.$route.query.q,
             },
+            hidden_ids,
+            included_ids,
         }
     },
     setup() {
@@ -49,7 +61,6 @@ export default {
     },
     beforeMount() {
         if (this.actions.hasOwnProperty("-1")) {
-            let actions = this.actions["-1"]
             this.tableColumns = [
                 ...this.tableColumns,
                 {
@@ -78,10 +89,47 @@ export default {
                 },
             ]
         }
+
+        $(
+            ".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table"
+        ).tooltip()
+
+        if (this.add_filters) {
+            this.options.orderCellsTop = true
+        }
+
+        if (this.table_settings) {
+            if (
+                this.table_settings.hasOwnProperty("default_display_length") &&
+                this.table_settings.default_display_length != null
+            ) {
+                this.options.pageLength =
+                    this.table_settings.default_display_length
+            }
+            if (
+                this.table_settings.hasOwnProperty("default_sort_order") &&
+                this.table_settings.default_sort_order != null
+            ) {
+                this.options.order = [
+                    [this.table_settings.default_sort_order, "asc"],
+                ]
+            }
+        }
     },
     mounted() {
+        let dt = this.$refs.table.dt()
+        let table_node = dt.table().node()
+        if (this.add_filters) {
+            _dt_add_filters(table_node, dt)
+        }
+
+        dt.on("column-visibility.dt", function () {
+            _dt_on_visibility(this.add_filters, table_node, dt)
+        })
+            .columns(this.hidden_ids)
+            .visible(false)
+
         if (Object.keys(this.actions).length) {
-            const dt = this.$refs.table.dt()
             const self = this
             dt.on("draw", () => {
                 const dataSet = dt.rows().data()
@@ -135,6 +183,10 @@ export default {
         },
         default_search: {
             type: String,
+            required: false,
+        },
+        add_filters: {
+            type: Boolean,
             required: false,
         },
     },
