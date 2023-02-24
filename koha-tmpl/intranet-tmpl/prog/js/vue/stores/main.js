@@ -6,7 +6,7 @@ export const useMainStore = defineStore("main", {
         _error: null,
         _warning: null,
         _confirmation: null,
-        _accept: null,
+        _accept_callback: null,
         previousMessage: null,
         previousError: null,
         displayed_already: false,
@@ -28,17 +28,17 @@ export const useMainStore = defineStore("main", {
             this._confirmation = null;
             this.displayed_already = displayed; /* Is displayed on the current view */
         },
-        setWarning(warning, accept, displayed = true) {
+        setWarning(warning, displayed = true) {
             this._error = null;
             this._warning = warning;
             this._message = null;
             this._confirmation = null;
             this.displayed_already = displayed; /* Is displayed on the current view */
         },
-        setConfirmation(confirmation, accept, displayed = true){
-            if(accept) {
-                this._accept = async () => {
-                    await accept()
+        setConfirmation(confirmation, accept_callback, displayed = true){
+            if(accept_callback) {
+                this._accept_callback = async () => {
+                    await accept_callback()
                     this.removeMessages()
                 }
             }
@@ -54,7 +54,7 @@ export const useMainStore = defineStore("main", {
                 this._warning = null;
                 this._message = null;
                 this._confirmation = null;
-                this._accept = null;
+                this._accept_callback = null;
             }
             this.displayed_already = true;
         },
@@ -84,8 +84,8 @@ export const useMainStore = defineStore("main", {
         confirmation() {
             return this._confirmation
         },
-        accept() {
-            return this._accept
+        accept_callback() {
+            return this._accept_callback
         },
         is_submitting(){
             return this._is_submitting

@@ -12,10 +12,10 @@
         <div class="dialog alert confirmation">
             <h1 v-html="confirmation"></h1>
             <button
-                v-if="accept"
+                v-if="accept_callback"
                 id="accept_modal"
                 class="approve"
-                @click="accept"
+                @click="accept_callback"
             >
                 <i class="fa fa-fw fa-check"></i>
                 {{ $__("Accept") }}
@@ -47,7 +47,7 @@ export default {
             error,
             warning,
             confirmation,
-            accept,
+            accept_callback,
             is_submitting,
             is_loading,
         } = storeToRefs(mainStore)
@@ -57,7 +57,7 @@ export default {
             error,
             warning,
             confirmation,
-            accept,
+            accept_callback,
             is_submitting,
             is_loading,
             removeMessages,
