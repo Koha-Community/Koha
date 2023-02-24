@@ -2,12 +2,12 @@
 
 use Modern::Perl;
 
-use DateTime;
 use Test::More;
 
 use C4::ClassSource;
 
 use Koha::ClassSources;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Libraries;
 
@@ -33,7 +33,7 @@ subtest 'generate_subfield_form default value' => sub {
         },
     );
 
-    my $today = DateTime->now->ymd;
+    my $today = dt_from_string()->ymd;
     is($subfield->{marc_value}->{value}, "The date is $today and user is superlibrarian");
 };
 
