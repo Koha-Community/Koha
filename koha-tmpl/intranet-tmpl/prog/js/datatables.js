@@ -504,6 +504,381 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
     console.log(message);
 };
 
+function _dt_default_ajax (params){
+    let default_filters = params.default_filters;
+    let options = params.options;
+
+    if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
+    options.criteria = options.criteria.toLowerCase();
+
+    return {
+        'type': 'GET',
+        'cache': true,
+        'dataSrc': 'data',
+        'beforeSend': function(xhr, settings) {
+            this._xhr = xhr;
+            if(options.embed) {
+                xhr.setRequestHeader('x-koha-embed', Array.isArray(options.embed)?options.embed.join(','):options.embed);
+            }
+        },
+        'dataFilter': function(data, type) {
+            var json = {data: JSON.parse(data)};
+            if (total = this._xhr.getResponseHeader('x-total-count')) {
+                json.recordsTotal = total;
+                json.recordsFiltered = total;
+            }
+            if (total = this._xhr.getResponseHeader('x-base-total-count')) {
+                json.recordsTotal = total;
+            }
+            if (draw = this._xhr.getResponseHeader('x-koha-request-id')) {
+                json.draw = draw;
+            }
+
+            return JSON.stringify(json);
+        },
+        'data': function( data, settings ) {
+            var length = data.length;
+            var start  = data.start;
+
+            var dataSet = {
+                _page: Math.floor(start/length) + 1,
+                _per_page: length
+            };
+
+            function build_query(col, value){
+
+                var parts = [];
+                var attributes = col.data.split(':');
+                for (var i=0;i<attributes.length;i++){
+                    var part = {};
+                    var attr = attributes[i];
+                    let criteria = options.criteria;
+                    if ( value.match(/^\^(.*)\$$/) ) {
+                        value = value.replace(/^\^/, '').replace(/\$$/, '');
+                        criteria = "exact";
+                    } else {
+                        // escape SQL LIKE special characters %
+                        value = value.replace(/(\%|\\)/g, "\\$1");
+                    }
+                    part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
+                        ? value
+                        : {like: (['contains', 'ends_with'].indexOf(criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1?'%':'')};
+                    parts.push(part);
+                }
+                return parts;
+            }
+
+            var filter = data.search.value;
+            // Build query for each column filter
+            var and_query_parameters = settings.aoColumns
+            .filter(function(col) {
+                return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value != ''
+            })
+            .map(function(col) {
+                var value = data.columns[col.idx].search.value;
+                return build_query(col, value)
+            })
+            .map(function r(e){
+                return ($.isArray(e) ? $.map(e, r) : e);
+            });
+
+            // Build query for the global search filter
+            var or_query_parameters = settings.aoColumns
+            .filter(function(col) {
+                return col.bSearchable && filter != ''
+            })
+            .map(function(col) {
+                var value = filter;
+                return build_query(col, value)
+            })
+            .map(function r(e){
+                return ($.isArray(e) ? $.map(e, r) : e);
+            });
+
+            if ( default_filters ) {
+                let additional_filters = {};
+                for ( f in default_filters ) {
+                    let k; let v;
+                    if ( typeof(default_filters[f]) === 'function' ) {
+                        let val = default_filters[f]();
+                        if ( val != undefined && val != "" ) {
+                            k = f; v = val;
+                        }
+                    } else {
+                        k = f; v = default_filters[f];
+                    }
+
+                    // Pass to -or if you want a separate OR clause
+                    // It's not the usual DBIC notation!
+                    if ( f == '-or' ) {
+                        if (v) or_query_parameters.push(v)
+                    } else if ( f == '-and' ) {
+                        if (v) and_query_parameters.push(v)
+                    } else if ( v ) {
+                        additional_filters[k] = v;
+                    }
+                }
+                if ( Object.keys(additional_filters).length ) {
+                    and_query_parameters.push(additional_filters);
+                }
+            }
+            query_parameters = and_query_parameters;
+            if ( or_query_parameters.length) {
+                query_parameters.push(or_query_parameters);
+            }
+
+            if(query_parameters.length) {
+                query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:{"-and": query_parameters});
+                dataSet.q = query_parameters;
+                delete options.query_parameters;
+            } else {
+                delete options.query_parameters;
+            }
+
+            dataSet._match = options.criteria;
+
+            if ( data["draw"] !== undefined ) {
+                settings.ajax.headers = { 'x-koha-request-id': data.draw }
+            }
+
+            if(options.columns) {
+                var order = data.order;
+                var orderArray = new Array();
+                order.forEach(function (e,i) {
+                    var order_col      = e.column;
+                    var order_by       = options.columns[order_col].data;
+                    order_by           = order_by.split(':');
+                    var order_dir      = e.dir == 'asc' ? '+' : '-';
+                    Array.prototype.push.apply(orderArray,order_by.map(x => order_dir + (!x.includes('.')?'me.'+x:x)));
+                });
+                dataSet._order_by = orderArray.filter((v, i, a) => a.indexOf(v) === i).join(',');
+            }
+
+            return dataSet;
+        }
+    }
+}
+
+function _dt_buttons(params){
+    let included_ids = params.included_ids || [];
+    let settings = params.settings || {};
+    let table_settings = params.table_settings || {};
+
+    var exportColumns = ":visible:not(.noExport)";
+    if( settings.hasOwnProperty("exportColumns") ){
+        // A custom buttons configuration has been passed from the page
+        exportColumns = settings["exportColumns"];
+    }
+
+    var export_format = {
+        body: function ( data, row, column, node ) {
+            var newnode = $(node);
+
+            if ( newnode.find(".noExport").length > 0 ) {
+                newnode = newnode.clone();
+                newnode.find(".noExport").remove();
+            }
+
+            return newnode.text().replace( /\n/g, ' ' ).trim();
+        }
+    }
+
+    var export_buttons = [
+        {
+            extend: 'excelHtml5',
+            text: __("Excel"),
+            exportOptions: {
+                columns: exportColumns,
+                format:  export_format
+            },
+        },
+        {
+            extend: 'csvHtml5',
+            text: __("CSV"),
+            exportOptions: {
+                columns: exportColumns,
+                format:  export_format
+            },
+        },
+        {
+            extend: 'copyHtml5',
+            text: __("Copy"),
+            exportOptions: {
+                columns: exportColumns,
+                format:  export_format
+            },
+        },
+        {
+            extend: 'print',
+            text: __("Print"),
+            exportOptions: {
+                columns: exportColumns,
+                format:  export_format
+            },
+        }
+    ];
+
+    let buttons = [];
+    buttons.push(
+        {
+            fade: 100,
+            className: "dt_button_clear_filter",
+            titleAttr: __("Clear filter"),
+            enabled: false,
+            text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __("Clear filter") + '</span>',
+            action: function ( e, dt, node, config ) {
+                dt.search( "" ).draw("page");
+                node.addClass("disabled");
+            }
+        }
+    );
+
+    if( included_ids.length > 0 ){
+        buttons.push(
+            {
+                extend: 'colvis',
+                fade: 100,
+                columns: included_ids,
+                className: "columns_controls",
+                titleAttr: __("Columns settings"),
+                text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + __("Columns") + '</span>',
+                exportOptions: {
+                    columns: exportColumns
+                }
+            }
+        );
+    }
+
+    buttons.push(
+        {
+            extend: 'collection',
+            autoClose: true,
+            fade: 100,
+            className: "export_controls",
+            titleAttr: __("Export or print"),
+            text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + __("Export") + '</span>',
+            buttons: export_buttons
+        }
+    );
+
+    if ( table_settings && CAN_user_parameters_manage_column_config ) {
+        buttons.push(
+            {
+                className: "dt_button_configure_table",
+                fade: 100,
+                titleAttr: __("Configure table"),
+                text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
+                action: function() {
+                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
+                },
+            }
+        );
+    }
+
+    return buttons;
+}
+
+function _dt_visibility(table_settings, settings){
+    var counter = 0;
+    let hidden_ids = [];
+    let included_ids = [];
+    if ( table_settings ) {
+        var columns_settings = table_settings['columns'];
+        $(columns_settings).each( function() {
+            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', this ).index( 'th' );
+            var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
+            if ( used_id == -1 ) return;
+
+            if ( this['is_hidden'] == "1" ) {
+                hidden_ids.push( used_id );
+            }
+            if ( this['cannot_be_toggled'] == "0" ) {
+                included_ids.push( used_id );
+            }
+            counter++;
+        });
+    }
+    return [hidden_ids, included_ids];
+}
+
+function _dt_on_visibility(add_filters, table_node, table_dt){
+    if ( add_filters ) {
+        let visible_columns = table_dt.columns().visible();
+        $(table_node).find('thead tr:eq(1) th').each( function (i) {
+            let th_id = $(this).data('th-id');
+            if ( visible_columns[th_id] == false ) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+    }
+
+    if( typeof columnsInit == 'function' ){
+        // This function can be created separately and used to trigger
+        // an event after the DataTable has loaded AND column visibility
+        // has been updated according to the table's configuration
+        columnsInit();
+    }
+}
+
+function _dt_add_filters(table_node, table_dt) {
+    $(table_node).find('thead tr').clone().appendTo( $(table_node).find('thead') );
+
+    $(table_node).find('thead tr:eq(1) th').each( function (i) {
+        var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
+        $(this).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
+        $(this).data('th-id', i);
+        if ( is_searchable ) {
+            let input_type = 'input';
+            if ( $(this).data('filter') ) {
+                input_type = 'select'
+                let filter_type = $(this).data('filter');
+                var existing_search = table_dt.column(i).search();
+                let select = $('<select><option value=""></option></select');
+
+                // FIXME eval here is bad and dangerous, how do we workaround that?
+                $(eval(filter_type)).each(function(){
+                    let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
+                    if ( existing_search === this._id ) {
+                        o.prop("selected", "selected");
+                    }
+                    o.appendTo(select);
+                });
+                $(this).html( select );
+            } else {
+                var title = $(this).text();
+                var existing_search = table_dt.column(i).search();
+                if ( existing_search ) {
+                    $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
+                } else {
+                    var search_title = _("%s search").format(title);
+                    $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
+                }
+            }
+
+            $( input_type, this ).on( 'keyup change', function () {
+                if ( table_dt.column(i).search() !== this.value ) {
+                    if ( input_type == "input" ) {
+                        table_dt
+                            .column(i)
+                            .search( this.value )
+                            .draw();
+                    } else {
+                        table_dt
+                            .column(i)
+                            .search( this.value.length ? '^'+this.value+'$' : '', true, false )
+                            .draw();
+                    }
+                }
+            } );
+        } else {
+            $(this).html('');
+        }
+    } );
+}
+
+
 (function($) {
 
     /**
@@ -522,9 +897,6 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         var settings = null;
 
         if(options) {
-            if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
-            options.criteria = options.criteria.toLowerCase();
-
             // Don't redefine the default initComplete
             if ( options.initComplete ) {
                 let our_initComplete = options.initComplete;
@@ -544,286 +916,14 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         'language': {
                             'emptyTable': (options.emptyTable) ? options.emptyTable : __("No data available in table")
                         },
-                        'ajax': {
-                            'type': 'GET',
-                            'cache': true,
-                            'dataSrc': 'data',
-                            'beforeSend': function(xhr, settings) {
-                                this._xhr = xhr;
-                                if(options.embed) {
-                                    xhr.setRequestHeader('x-koha-embed', Array.isArray(options.embed)?options.embed.join(','):options.embed);
-                                }
-                            },
-                            'dataFilter': function(data, type) {
-                                var json = {data: JSON.parse(data)};
-                                if (total = this._xhr.getResponseHeader('x-total-count')) {
-                                    json.recordsTotal = total;
-                                    json.recordsFiltered = total;
-                                }
-                                if (total = this._xhr.getResponseHeader('x-base-total-count')) {
-                                    json.recordsTotal = total;
-                                }
-                                if (draw = this._xhr.getResponseHeader('x-koha-request-id')) {
-                                    json.draw = draw;
-                                }
-
-                                return JSON.stringify(json);
-                            },
-                            'data': function( data, settings ) {
-                                var length = data.length;
-                                var start  = data.start;
-
-                                var dataSet = {
-                                    _page: Math.floor(start/length) + 1,
-                                    _per_page: length
-                                };
-
-                                function build_query(col, value){
-
-                                    var parts = [];
-                                    var attributes = col.data.split(':');
-                                    for (var i=0;i<attributes.length;i++){
-                                        var part = {};
-                                        var attr = attributes[i];
-                                        let criteria = options.criteria;
-                                        if ( value.match(/^\^(.*)\$$/) ) {
-                                            value = value.replace(/^\^/, '').replace(/\$$/, '');
-                                            criteria = "exact";
-                                        } else {
-                                            // escape SQL LIKE special characters %
-                                            value = value.replace(/(\%|\\)/g, "\\$1");
-                                        }
-                                        part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
-                                            ? value
-                                            : {like: (['contains', 'ends_with'].indexOf(criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1?'%':'')};
-                                        parts.push(part);
-                                    }
-                                    return parts;
-                                }
-
-                                var filter = data.search.value;
-                                // Build query for each column filter
-                                var and_query_parameters = settings.aoColumns
-                                .filter(function(col) {
-                                    return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value != ''
-                                })
-                                .map(function(col) {
-                                    var value = data.columns[col.idx].search.value;
-                                    return build_query(col, value)
-                                })
-                                .map(function r(e){
-                                    return ($.isArray(e) ? $.map(e, r) : e);
-                                });
-
-                                // Build query for the global search filter
-                                var or_query_parameters = settings.aoColumns
-                                .filter(function(col) {
-                                    return col.bSearchable && filter != ''
-                                })
-                                .map(function(col) {
-                                    var value = filter;
-                                    return build_query(col, value)
-                                })
-                                .map(function r(e){
-                                    return ($.isArray(e) ? $.map(e, r) : e);
-                                });
-
-                                if ( default_filters ) {
-                                    let additional_filters = {};
-                                    for ( f in default_filters ) {
-                                        let k; let v;
-                                        if ( typeof(default_filters[f]) === 'function' ) {
-                                            let val = default_filters[f]();
-                                            if ( val != undefined && val != "" ) {
-                                                k = f; v = val;
-                                            }
-                                        } else {
-                                            k = f; v = default_filters[f];
-                                        }
-
-                                        // Pass to -or if you want a separate OR clause
-                                        // It's not the usual DBIC notation!
-                                        if ( f == '-or' ) {
-                                            if (v) or_query_parameters.push(v)
-                                        } else if ( f == '-and' ) {
-                                            if (v) and_query_parameters.push(v)
-                                        } else if ( v ) {
-                                            additional_filters[k] = v;
-                                        }
-                                    }
-                                    if ( Object.keys(additional_filters).length ) {
-                                        and_query_parameters.push(additional_filters);
-                                    }
-                                }
-                                query_parameters = and_query_parameters;
-                                if ( or_query_parameters.length) {
-                                    query_parameters.push(or_query_parameters);
-                                }
-
-                                if(query_parameters.length) {
-                                    query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:{"-and": query_parameters});
-                                    dataSet.q = query_parameters;
-                                    delete options.query_parameters;
-                                } else {
-                                    delete options.query_parameters;
-                                }
-
-                                dataSet._match = options.criteria;
-
-                                if ( data["draw"] !== undefined ) {
-                                    settings.ajax.headers = { 'x-koha-request-id': data.draw }
-                                }
-
-                                if(options.columns) {
-                                    var order = data.order;
-                                    var orderArray = new Array();
-                                    order.forEach(function (e,i) {
-                                        var order_col      = e.column;
-                                        var order_by       = options.columns[order_col].data;
-                                        order_by           = order_by.split(':');
-                                        var order_dir      = e.dir == 'asc' ? '+' : '-';
-                                        Array.prototype.push.apply(orderArray,order_by.map(x => order_dir + (!x.includes('.')?'me.'+x:x)));
-                                    });
-                                    dataSet._order_by = orderArray.filter((v, i, a) => a.indexOf(v) === i).join(',');
-                                }
-
-                                return dataSet;
-                            }
-                        }
+                        'ajax': _dt_default_ajax({default_filters, options}),
                     }, options);
         }
 
-        var counter = 0;
-        var hidden_ids = [];
-        var included_ids = [];
+        let hidden_ids, included_ids;
+        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings)
 
-
-        if ( table_settings ) {
-            var columns_settings = table_settings['columns'];
-            $(columns_settings).each( function() {
-                var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', this ).index( 'th' );
-                var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
-                if ( used_id == -1 ) return;
-
-                if ( this['is_hidden'] == "1" ) {
-                    hidden_ids.push( used_id );
-                }
-                if ( this['cannot_be_toggled'] == "0" ) {
-                    included_ids.push( used_id );
-                }
-                counter++;
-            });
-        }
-
-        var exportColumns = ":visible:not(.noExport)";
-        if( settings.hasOwnProperty("exportColumns") ){
-            // A custom buttons configuration has been passed from the page
-            exportColumns = settings["exportColumns"];
-        }
-
-        var export_format = {
-            body: function ( data, row, column, node ) {
-                var newnode = $(node);
-
-                if ( newnode.find(".noExport").length > 0 ) {
-                    newnode = newnode.clone();
-                    newnode.find(".noExport").remove();
-                }
-
-                return newnode.text().replace( /\n/g, ' ' ).trim();
-            }
-        }
-
-        var export_buttons = [
-            {
-                extend: 'excelHtml5',
-                text: __("Excel"),
-                exportOptions: {
-                    columns: exportColumns,
-                    format:  export_format
-                },
-            },
-            {
-                extend: 'csvHtml5',
-                text: __("CSV"),
-                exportOptions: {
-                    columns: exportColumns,
-                    format:  export_format
-                },
-            },
-            {
-                extend: 'copyHtml5',
-                text: __("Copy"),
-                exportOptions: {
-                    columns: exportColumns,
-                    format:  export_format
-                },
-            },
-            {
-                extend: 'print',
-                text: __("Print"),
-                exportOptions: {
-                    columns: exportColumns,
-                    format:  export_format
-                },
-            }
-        ];
-
-        settings[ "buttons" ] = [
-            {
-                fade: 100,
-                className: "dt_button_clear_filter",
-                titleAttr: __("Clear filter"),
-                enabled: false,
-                text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __("Clear filter") + '</span>',
-                action: function ( e, dt, node, config ) {
-                    dt.search( "" ).draw("page");
-                    node.addClass("disabled");
-                }
-            }
-        ];
-
-        if( included_ids.length > 0 ){
-            settings[ "buttons" ].push(
-                {
-                    extend: 'colvis',
-                    fade: 100,
-                    columns: included_ids,
-                    className: "columns_controls",
-                    titleAttr: __("Columns settings"),
-                    text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + __("Columns") + '</span>',
-                    exportOptions: {
-                        columns: exportColumns
-                    }
-                }
-            );
-        }
-
-        settings[ "buttons" ].push(
-            {
-                extend: 'collection',
-                autoClose: true,
-                fade: 100,
-                className: "export_controls",
-                titleAttr: __("Export or print"),
-                text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + __("Export") + '</span>',
-                buttons: export_buttons
-            }
-        );
-
-        if ( table_settings && CAN_user_parameters_manage_column_config ) {
-            settings[ "buttons" ].push(
-                {
-                    className: "dt_button_configure_table",
-                    fade: 100,
-                    titleAttr: __("Configure table"),
-                    text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
-                    action: function() {
-                        window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
-                    },
-                }
-            );
-        }
+        settings["buttons"] = _dt_buttons({included_ids, settings, table_settings});
 
         $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
 
@@ -842,85 +942,13 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         var table = $(this).dataTable(settings);
 
-
+        var table_dt = table.DataTable();
         if ( add_filters ) {
-            var table_dt = table.DataTable();
-
-            $(this).find('thead tr').clone().appendTo( $(this).find('thead') );
-
-            $(this).find('thead tr:eq(1) th').each( function (i) {
-                var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
-                $(this).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
-                $(this).data('th-id', i);
-                if ( is_searchable ) {
-                    let input_type = 'input';
-                    if ( $(this).data('filter') ) {
-                        input_type = 'select'
-                        let filter_type = $(this).data('filter');
-                        var existing_search = table_dt.column(i).search();
-                        let select = $('<select><option value=""></option></select');
-
-                        // FIXME eval here is bad and dangerous, how do we workaround that?
-                        $(eval(filter_type)).each(function(){
-                            let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
-                            if ( existing_search === this._id ) {
-                                o.prop("selected", "selected");
-                            }
-                            o.appendTo(select);
-                        });
-                        $(this).html( select );
-                    } else {
-                        var title = $(this).text();
-                        var existing_search = table_dt.column(i).search();
-                        if ( existing_search ) {
-                            $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
-                        } else {
-                            var search_title = __("%s search").format(title);
-                            $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
-                        }
-                    }
-
-                    $( input_type, this ).on( 'keyup change', function () {
-                        if ( table_dt.column(i).search() !== this.value ) {
-                            if ( input_type == "input" ) {
-                                table_dt
-                                    .column(i)
-                                    .search( this.value )
-                                    .draw();
-                            } else {
-                                table_dt
-                                    .column(i)
-                                    .search( this.value.length ? '^'+this.value+'$' : '', true, false )
-                                    .draw();
-                            }
-                        }
-                    } );
-                } else {
-                    $(this).html('');
-                }
-            } );
+            _dt_add_filters(this, table_dt);
         }
 
-        table.DataTable().on("column-visibility.dt", function(){
-            if ( add_filters ) {
-                let visible_columns = table_dt.columns().visible();
-                $(table).find('thead tr:eq(1) th').each( function (i) {
-                    let th_id = $(this).data('th-id');
-                    if ( visible_columns[th_id] == false ) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            }
-
-            if( typeof columnsInit == 'function' ){
-                // This function can be created separately and used to trigger
-                // an event after the DataTable has loaded AND column visibility
-                // has been updated according to the table's configuration
-                columnsInit();
-            }
-        }).columns( hidden_ids ).visible( false );
+        table.DataTable().on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
+            .columns( hidden_ids ).visible( false );
 
         return table;
     };
