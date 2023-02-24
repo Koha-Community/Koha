@@ -2,33 +2,28 @@
     <div class="dialog message" v-if="message" v-html="message"></div>
     <div class="dialog alert" v-if="error" v-html="error"></div>
     <div class="dialog alert modal" v-if="warning">
-        <span v-html="warning"></span>
-        <a
-            id="close_modal"
-            class="btn btn-default btn-xs"
-            role="button"
-            @click="removeMessages"
-            >{{ $__("Close") }}</a
-        >
+        <h1 v-html="warning"></h1>
+        <button id="close_modal" class="approve" @click="removeMessages">
+            <i class="fa fa-fw fa-check"></i>
+            {{ $__("Close") }}
+        </button>
     </div>
     <div class="modal_centered" v-if="confirmation">
         <div class="dialog alert confirmation">
-            <span v-html="confirmation"></span>
-            <a
+            <h1 v-html="confirmation"></h1>
+            <button
                 v-if="accept"
-                id="close_modal"
-                class="btn btn-primary btn-xs"
-                role="button"
+                id="accept_modal"
+                class="approve"
                 @click="accept"
-                >{{ $__("Accept") }}</a
             >
-            <a
-                id="close_modal"
-                class="btn btn-default btn-xs"
-                role="button"
-                @click="removeMessages"
-                >{{ $__("Close") }}</a
-            >
+                <i class="fa fa-fw fa-check"></i>
+                {{ $__("Accept") }}
+            </button>
+            <button id="close_modal" class="deny" @click="removeMessages">
+                <i class="fa fa-fw fa-remove"></i>
+                {{ $__("Close") }}
+            </button>
         </div>
     </div>
     <!-- Must be styled differently -->
@@ -83,7 +78,6 @@ export default {
     transition: all 0.3s ease;
 }
 #close_modal {
-    float: right;
     cursor: pointer;
 }
 
@@ -110,7 +104,6 @@ export default {
     top: 25%;
     left: 40%;
 
-    display: flex;
     width: 50%;
     min-height: 10%;
     margin: auto;
