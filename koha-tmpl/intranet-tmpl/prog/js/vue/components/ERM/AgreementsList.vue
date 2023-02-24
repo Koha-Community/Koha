@@ -33,7 +33,13 @@
             />
         </fieldset>
         <div v-if="agreement_count > 0" class="page-section">
-            <table :id="table_id"></table>
+            <KohaTable
+                ref="table"
+                v-bind="tableOptions"
+                @show="doShow"
+                @edit="doEdit"
+                @delete="doDelete"
+            ></KohaTable>
         </div>
         <div v-else class="dialog message">
             {{ $__("There are no agreements defined") }}
@@ -44,10 +50,11 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
-import { inject, createVNode, render } from "vue"
+import { inject, createVNode, render, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
-import { useDataTable, build_url } from "../../composables/datatables"
+import { build_url } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -59,17 +66,18 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
-        const table_id = "agreement_list"
-        useDataTable(table_id)
+        const table = ref()
 
         return {
             vendors,
             get_lib_from_av,
             map_av_dt_filter,
-            table_id,
+            logged_in_user,
+            table,
             setConfirmationDialog,
             setMessage,
-            logged_in_user,
+            escape_str,
+            agreement_table_settings,
         }
     },
     data: function () {
@@ -85,6 +93,16 @@ export default {
             },
             before_route_entered: false,
             building_table: false,
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: () => this.table_url(),
+                table_settings: this.agreement_table_settings,
+                add_filters: true,
+                actions: {
+                    0: ["show"],
+                    "-1": ["edit", "delete"],
+                },
+            },
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -92,18 +110,10 @@ export default {
             vm.before_route_entered = true // FIXME This is ugly, but we need to distinguish when it's used as main component or child component (from EHoldingsEBSCOPAckagesShow for instance)
             if (!vm.building_table) {
                 vm.building_table = true
-                vm.getAgreementCount().then(() => vm.build_datatable())
+                vm.getAgreementCount()
+                vm.initialized = true
             }
         })
-    },
-    computed: {
-        datatable_url() {
-            let url = "/api/v1/erm/agreements"
-            if (this.filters.by_expired)
-                url +=
-                    "?max_expiration_date=" + this.filters.max_expiration_date
-            return url
-        },
     },
     methods: {
         async getAgreementCount() {
@@ -111,55 +121,58 @@ export default {
             await client.agreements.count().then(
                 count => {
                     this.agreement_count = count
-                    this.initialized = true
                 },
                 error => {}
             )
         },
-        show_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/" + agreement_id)
-        },
-        edit_agreement: function (agreement_id) {
+        doShow: function (agreement, dt, event) {
+            event.preventDefault()
             this.$router.push(
-                "/cgi-bin/koha/erm/agreements/edit/" + agreement_id
+                "/cgi-bin/koha/erm/agreements/" + agreement.agreement_id
             )
         },
-        delete_agreement: function (agreement_id, agreement_name) {
+        doEdit: function (agreement, dt, event) {
+            this.$router.push(
+                "/cgi-bin/koha/erm/agreements/edit/" + agreement.agreement_id
+            )
+        },
+        doDelete: function (agreement, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
-                        "Are you sure you want to remove this agreement?"
+                        "Are you sure you want to delete this agreement?"
                     ),
-                    message: agreement_name,
+                    message: agreement.name,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm
-                    client.agreements.delete(agreement_id).then(
+                    client.agreements.delete(agreement.agreement_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("Agreement %s deleted").format(
-                                    agreement_name
+                                    agreement.name
                                 ),
                                 true
                             )
-                            this.refresh_table()
+                            dt.draw()
                         },
                         error => {}
                     )
                 }
             )
         },
+        table_url: function () {
+            let url = "/api/v1/erm/agreements"
+            if (this.filters.by_expired)
+                url +=
+                    "?max_expiration_date=" + this.filters.max_expiration_date
+            return url
+        },
         select_agreement: function (agreement_id) {
             this.$emit("select-agreement", agreement_id)
             this.$emit("close")
-        },
-        refresh_table: function () {
-            $("#" + this.table_id)
-                .DataTable()
-                .ajax.url(this.datatable_url)
-                .draw()
         },
         filter_table: async function () {
             if (this.before_route_entered) {
@@ -175,9 +188,8 @@ export default {
                         .toISOString()
                         .substring(0, 10)
             }
-            this.refresh_table()
+            this.$refs.table.redraw(this.table_url())
         },
-        table_url: function () {},
         build_datatable: function () {
             let show_agreement = this.show_agreement
             let edit_agreement = this.edit_agreement
@@ -477,14 +489,131 @@ export default {
                 additional_filters
             )
         },
+        getTableColumns: function () {
+            let get_lib_from_av = this.get_lib_from_av
+            let escape_str = this.escape_str
+            window["vendors"] = this.vendors.map(e => {
+                e["_id"] = e["id"]
+                e["_str"] = e["name"]
+                return e
+            })
+            let vendors_map = this.vendors.reduce((map, e) => {
+                map[e.id] = e
+                return map
+            }, {})
+            let avs = [
+                "av_agreement_statuses",
+                "av_agreement_closure_reasons",
+                "av_agreement_renewal_priorities",
+            ]
+            let c = this
+            avs.forEach(function (av_cat) {
+                window[av_cat] = c.map_av_dt_filter(av_cat)
+            })
+
+            window["av_agreement_is_perpetual"] = [
+                { _id: 0, _str: _("No") },
+                { _id: 1, _str: _("Yes") },
+            ]
+            return [
+                {
+                    title: __("Name"),
+                    data: "me.agreement_id:me.name",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        // Rendering done in drawCallback
+                        return (
+                            '<a href="/cgi-bin/koha/erm/agreements/' +
+                            row.agreement_id +
+                            '" class="show">show</a>'
+                        )
+                    },
+                },
+                {
+                    title: __("Vendor"),
+                    data: "vendor_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.vendor_id != undefined
+                            ? escape_str(vendors_map[row.vendor_id].name)
+                            : ""
+                    },
+                },
+                {
+                    title: __("Description"),
+                    data: "description",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av("av_agreement_statuses", row.status)
+                        )
+                    },
+                },
+                {
+                    title: __("Closure reason"),
+                    data: "closure_reason",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_agreement_closure_reasons",
+                                row.closure_reason
+                            )
+                        )
+                    },
+                },
+                {
+                    title: __("Is perpetual"),
+                    data: "is_perpetual",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(row.is_perpetual ? _("Yes") : _("No"))
+                    },
+                },
+                {
+                    title: __("Renewal priority"),
+                    data: "renewal_priority",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_agreement_renewal_priorities",
+                                row.renewal_priority
+                            )
+                        )
+                    },
+                },
+                {
+                    title: __("Actions"),
+                    data: function (row, type, val, meta) {
+                        return '<div class="actions"></div>'
+                    },
+                    className: "actions noExport",
+                    searchable: false,
+                    orderable: false,
+                },
+            ]
+        },
     },
     mounted() {
         if (!this.building_table) {
             this.building_table = true
-            this.getAgreementCount().then(() => this.build_datatable())
+            this.getAgreementCount()
         }
     },
-    components: { flatPickr, Toolbar },
+    components: { flatPickr, Toolbar, KohaTable },
     name: "AgreementsList",
     emits: ["select-agreement", "close"],
 }
