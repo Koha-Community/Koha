@@ -295,10 +295,10 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get("#packages_confirm_delete h2").contains("Delete package");
-        cy.contains("Package name: " + erm_package.name);
+        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.contains(erm_package.name);
 
-        // Submit the form, get 500
+        // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 500,
             error: "Something went wrong",
@@ -308,12 +308,54 @@ describe("Package CRUD operations", () => {
             "Something went wrong: Error: Internal Server Error"
         );
 
-        // Submit the form, success!
+        // Accept the confirmation dialog, success!
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 204,
             body: null,
         });
+        cy.get("#packages_list table tbody tr:first")
+            .contains("Delete")
+            .click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Package deleted");
+        cy.get("main div[class='dialog message']").contains("Local package").contains("deleted");
+
+        // Delete from show
+        // Click the "name" link from the list
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
+            statusCode: 200,
+            body: packages,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        ).as("get-package");
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        let name_link = cy.get(
+            "#packages_list table tbody tr:first td:first a"
+        );
+        name_link.should(
+            "have.text",
+            erm_package.name + " (#" + erm_package.package_id + ")"
+        );
+        name_link.click();
+        cy.wait("@get-package");
+        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
+        cy.get("#packages_show h2").contains(
+            "Package #" + erm_package.package_id
+        );
+
+        cy.get('#packages_show .action_links .fa-trash').click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.contains("Yes, delete").click();
+        cy.get("main div[class='dialog message']").contains("Local package").contains("deleted");
+
+        //Make sure we return to list after deleting from show
+        cy.get("#packages_list table tbody tr:first")
     });
 });

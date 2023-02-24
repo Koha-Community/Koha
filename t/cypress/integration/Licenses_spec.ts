@@ -253,10 +253,10 @@ describe("License CRUD operations", () => {
         cy.get("#licenses_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get("#licenses_confirm_delete h2").contains("Delete license");
-        cy.contains("License name: " + license.name);
+        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
+        cy.contains(license.name);
 
-        // Submit the form, get 500
+        // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/licenses/*", {
             statusCode: 500,
             error: "Something went wrong",
@@ -266,14 +266,52 @@ describe("License CRUD operations", () => {
             "Something went wrong: Error: Internal Server Error"
         );
 
-        // Submit the form, success!
+        // Accept the confirmation dialog, success!
         cy.intercept("DELETE", "/api/v1/erm/licenses/*", {
             statusCode: 204,
             body: null,
         });
+        cy.get("#licenses_list table tbody tr:first")
+            .contains("Delete")
+            .click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
-            "License deleted"
+        cy.get("main div[class='dialog message']").contains("License").contains("deleted");
+
+        // Delete from show
+        // Click the "name" link from the list
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: licenses,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
+            "get-license"
         );
+        cy.visit("/cgi-bin/koha/erm/licenses");
+        let name_link = cy.get(
+            "#licenses_list table tbody tr:first td:first a"
+        );
+        name_link.should(
+            "have.text",
+            license.name + " (#" + license.license_id + ")"
+        );
+        name_link.click();
+        cy.wait("@get-license");
+        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
+        cy.get("#licenses_show h2").contains(
+            "License #" + license.license_id
+        );
+
+        cy.get('#licenses_show .action_links .fa-trash').click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
+        cy.contains("Yes, delete").click();
+        cy.get("main div[class='dialog message']").contains("License").contains("deleted");
+
+        //Make sure we return to list after deleting from show
+        cy.get("#licenses_list table tbody tr:first")
     });
 });
