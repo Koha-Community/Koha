@@ -58,7 +58,7 @@ var dataTablesDefaults = {
         // When the DataTables search function is triggered,
         // enable or disable the "Clear filter" button based on
         // the presence of a search string
-        $("#" + tableId ).on( 'search.dt', function ( e, settings ) {
+        $(this).on( 'search.dt', function ( e, settings ) {
             toggledClearFilter(settings.oPreviousSearch.sSearch, tableId);
         });
     }
