@@ -10,11 +10,12 @@
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
-                <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/local/packages/delete/${erm_package.package_id}`"
-                    :title="$__('Delete')"
+                <a
+                    @click="
+                        delete_package(erm_package.package_id, erm_package.name)
+                    "
                     ><i class="fa fa-trash"></i
-                ></router-link>
+                ></a>
             </span>
         </h2>
         <div>
@@ -112,12 +113,16 @@ export default {
     setup() {
         const format_date = $date
 
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
+
         const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
         return {
             format_date,
             get_lib_from_av,
+            setConfirmationDialog,
+            setMessage,
         }
     },
     data() {
@@ -155,6 +160,34 @@ export default {
                 error => {}
             )
         },
+        delete_package: function (package_id, package_name) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this package?"
+                    ),
+                    message: package_name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.localPackages.delete(package_id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("Local package %s deleted").format(
+                                    package_name
+                                )
+                            )
+                            this.$router.push(
+                                "/cgi-bin/koha/erm/eholdings/local/packages"
+                            )
+                        },
+                        error => {}
+                    )
+                }
+            )
+        },
     },
     components: {
         EHoldingsPackageTitlesList,
@@ -166,6 +199,7 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+    cursor: pointer;
 }
 fieldset.rows label {
     width: 25rem;
