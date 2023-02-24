@@ -66,9 +66,8 @@ __PACKAGE__->table("marc_modification_template_actions");
 
 =head2 field_value
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 100
 
 =head2 to_field
 
@@ -170,7 +169,7 @@ __PACKAGE__->add_columns(
   "from_subfield",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "field_value",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "text", is_nullable => 1 },
   "to_field",
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "to_subfield",
@@ -235,8 +234,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-19 17:32:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dAUr9aGlNZleldYbjJHdmw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-24 20:18:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yDK2nFt+Fj3UuXAij1UwQw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
