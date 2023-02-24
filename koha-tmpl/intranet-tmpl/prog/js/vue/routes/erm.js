@@ -19,7 +19,6 @@ import EHoldingsEBSCOTitlesShow from "../components/ERM/EHoldingsEBSCOTitlesShow
 import LicensesList from "../components/ERM/LicensesList.vue";
 import LicensesShow from "../components/ERM/LicensesShow.vue";
 import LicensesFormAdd from "../components/ERM/LicensesFormAdd.vue";
-import LicensesFormConfirmDelete from "../components/ERM/LicensesFormConfirmDelete.vue";
 
 const breadcrumbs = {
     home: {
@@ -467,17 +466,6 @@ export const routes = [
                         build_breadcrumb(
                             breadcrumb_paths.licenses,
                             "Show license" // $t("Show license")
-                        ),
-                },
-            },
-            {
-                path: "delete/:license_id",
-                component: LicensesFormConfirmDelete,
-                meta: {
-                    breadcrumb: () =>
-                        build_breadcrumb(
-                            breadcrumb_paths.licenses,
-                            "Delete license" // $t("Delete license")
                         ),
                 },
             },
