@@ -491,6 +491,7 @@ describe("Agreement CRUD operations", () => {
         let agreement = get_agreement();
         let agreements = [agreement];
 
+        // Delete from list
         // Click the 'Delete' button from the list
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
@@ -506,27 +507,65 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get("#agreements_confirm_delete h2").contains("Delete agreement");
-        cy.contains("Agreement name: " + agreement.name);
+        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
+        cy.contains(agreement.name);
 
-        // Submit the form, get 500
+        // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/agreements/*", {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.contains("Yes, delete").click();
+        cy.contains("Accept").click();
         cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
-        // Submit the form, success!
+        // Accept the confirmation dialog, success!
         cy.intercept("DELETE", "/api/v1/erm/agreements/*", {
             statusCode: 204,
             body: null,
         });
+        cy.get("#agreements_list table tbody tr:first")
+            .contains("Delete")
+            .click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
-            "Agreement deleted"
+        cy.get("main div[class='dialog message']").contains("Agreement").contains("deleted");
+
+        // Delete from show
+        // Click the "name" link from the list
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
+            statusCode: 200,
+            body: agreements,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
+            "get-agreement"
         );
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        let name_link = cy.get(
+            "#agreements_list table tbody tr:first td:first a"
+        );
+        name_link.should(
+            "have.text",
+            agreement.name + " (#" + agreement.agreement_id + ")"
+        );
+        name_link.click();
+        cy.wait("@get-agreement");
+        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
+        cy.get("#agreements_show h2").contains(
+            "Agreement #" + agreement.agreement_id
+        );
+
+        cy.get('#agreements_show .action_links .fa-trash').click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
+        cy.contains("Yes, delete").click();
+        cy.get("main div[class='dialog message']").contains("Agreement").contains("deleted");
+
+        //Make sure we return to list after deleting from show
+        cy.get("#agreements_list table tbody tr:first")
     });
 });

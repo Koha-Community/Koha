@@ -428,10 +428,10 @@ describe("Title CRUD operations", () => {
         cy.get("#titles_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get("#eholdings_confirm_delete h2").contains("Delete title");
-        cy.contains("Title: " + erm_title.publication_title);
+        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
+        cy.contains(erm_title.publication_title);
 
-        // Submit the form, get 500
+        // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/titles/*", {
             statusCode: 500,
             error: "Something went wrong",
@@ -441,12 +441,66 @@ describe("Title CRUD operations", () => {
             "Something went wrong: Error: Internal Server Error"
         );
 
-        // Submit the form, success!
+        // Accept the confirmation dialog, success!
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/titles/*", {
             statusCode: 204,
             body: null,
         });
+        cy.get("#titles_list table tbody tr:first")
+            .contains("Delete")
+            .click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Title deleted");
+        cy.get("main div[class='dialog message']").contains("Local title").contains("deleted");
+
+        // Delete from show
+        // Click the "name" link from the list
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
+            statusCode: 200,
+            body: titles,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        // Title with empty resources.
+        cy.intercept(
+            {
+                method: "GET",
+                url: "/api/v1/erm/eholdings/local/titles/*",
+                times: 1
+            },
+            {
+                body: {
+                    publication_title: "publication title",
+                    resources: [],
+                    title_id: 1,
+                }
+            }
+        ).as("get-title");
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
+        let title_link = cy.get(
+            "#titles_list table tbody tr:first td:first a"
+        );
+        title_link.should(
+            "have.text",
+            erm_title.publication_title + " (#" + erm_title.title_id + ")"
+        );
+        cy.get(
+            "#titles_list table tbody tr:first td:first a"
+        ).click();
+        cy.wait("@get-title");
+        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
+        cy.get("#eholdings_title_show h2").contains(
+            "Title #" + erm_title.title_id
+        );
+
+        cy.get('#eholdings_title_show .action_links .fa-trash').click();
+        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
+        cy.contains("Yes, delete").click();
+        cy.get("main div[class='dialog message']").contains("Local title").contains("deleted");
+
+        //Make sure we return to list after deleting from show
+        cy.get("#titles_list table tbody tr:first")
     });
 });
