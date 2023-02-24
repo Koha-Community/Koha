@@ -293,6 +293,15 @@ sub run_marc21_search_tests {
     is($biblionumber, 51, 'Found duplicate with ISBN');
 
     $record = MARC::Record->new;
+    $record->add_fields(
+            [ '020', ' ', ' ', a => '0465039146' ],
+            [ '020', ' ', ' ', a => '9780465039142' ],
+            [ '245', '0', '0', a => 'Doesnt matter, searching isbn /' ]
+            );
+    ($biblionumber,undef,$title) = FindDuplicate($record);
+    is($biblionumber, 48, 'Found duplicate with ISBN when two ISBNs in record');
+
+    $record = MARC::Record->new;
 
     $record->add_fields(
             [ '100', '1', ' ', a => 'Carter, Philip J.' ],
@@ -930,7 +939,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 93;
+    plan tests => 94;
     run_marc21_search_tests();
 };
 
@@ -941,7 +950,7 @@ subtest 'UNIMARC + DOM' => sub {
 
 
 subtest 'FindDuplicate' => sub {
-    plan tests => 6;
+    plan tests => 8;
     Koha::Caches->get_instance('config')->flush_all;
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21' );
     mock_GetMarcSubfieldStructure('MARC21');
@@ -970,6 +979,13 @@ subtest 'FindDuplicate' => sub {
     $record_3->add_fields(
             [ '245', '0', '0', a => 'Frog and toad all year /' ]
     );
+    my $record_4 = MARC::Record->new;
+    $record_4 ->add_fields(
+            [ '020', ' ', ' ', a => '9780307744432' ],
+            [ '020', ' ', ' ', a => '0307744434' ],
+            [ '100', '0', '0', a => 'Morgenstern, Erin' ],
+            [ '245', '0', '0', a => 'The night circus /' ]
+    );
 
     foreach my $engine ('Zebra','Elasticsearch'){
         t::lib::Mocks::mock_preference('searchEngine', $engine );
@@ -982,6 +998,9 @@ subtest 'FindDuplicate' => sub {
 
         warning_is { C4::Search::FindDuplicate($record_3);}
             q/ti,ext:"Frog and toad all year \/"/,"Term correctly formed and passed to $engine";
+
+        warning_is { C4::Search::FindDuplicate($record_4);}
+            q/isbn:9780307744432 OR 0307744434/,"Term correctly formed and passed to $engine";
     }
 
 };
