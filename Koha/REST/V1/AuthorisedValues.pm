@@ -28,7 +28,9 @@ use Try::Tiny;
 
 =head2 Methods
 
-=head3 list
+=head3 list_av_from_category
+
+This routine returns the authorised values for a given category
 
 =cut
 
