@@ -157,7 +157,7 @@ export default {
         const client = APIClient.acquisition
         client.vendors.getAll().then(
             vendors => {
-                this.vendors = vendors
+                this.vendorStore.vendors = vendors
                 this.initialized = true
             },
             error => {}
