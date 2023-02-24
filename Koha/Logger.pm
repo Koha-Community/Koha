@@ -204,6 +204,15 @@ sub context {
     return $self;
 }
 
+=head2 history
+
+Similar to above, Mojolicious has a "history" method and will die
+on it if it's missing from the logger.
+
+Note: We are just preventing a crash here not returning a new history logger.
+
+=cut
+
 sub history {
     my ( $self, @history) = @_;
     if ( @history ) {
