@@ -93,6 +93,7 @@ sub FindDuplicate {
     if ( $result->{isbn} ) {
         $result->{isbn} =~ s/\(.*$//;
         $result->{isbn} =~ s/\s+$//;
+        $result->{isbn} =~ s/\|/OR/;
         $query = "isbn:$result->{isbn}";
     }
     else {
