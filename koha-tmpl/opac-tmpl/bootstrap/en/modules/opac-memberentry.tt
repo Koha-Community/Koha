@@ -20,6 +20,16 @@
         </li>
     [% END %]
 [% END %]
+[% BLOCK B_streetnumber %]
+    [% UNLESS hidden.defined('B_streetnumber') %]
+        <li>
+            <label for="borrower_B_streetnumber" class="[% required.B_streetnumber | html %]">Street number:</label>
+
+            <input type="text" id="borrower_B_streetnumber" name="borrower_B_streetnumber" value="[% borrower.B_streetnumber | html %]" class="[% required.B_streetnumber | html %]" size="5" maxlength="10" />
+            <div class="required_label [% required.B_streetnumber | html %]">Required</div>
+        </li>
+    [% END %]
+[% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
     <title>[% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
@@ -204,7 +214,7 @@
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
 
-                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
+                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
                     [% IF mandatory.defined( field ) %]
                         [% SET required.$field = 'required' %]
                     [% END %]
@@ -681,13 +691,15 @@
                     [% END %]
 
                     [%# Following on one line for translatability %]
-                    [% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined('B_zipcode') && hidden.defined('B_country') && hidden.defined('B_phone') && hidden.defined('B_email') && hidden.defined('contactnote') %]
+                    [% UNLESS hidden.defined('B_streetnumber') && hidden.defined('B_address') && hidden.defined('B_address2') && hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined('B_zipcode') && hidden.defined('B_country') && hidden.defined('B_phone') && hidden.defined('B_email') && hidden.defined('contactnote') %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_alternateaddress">
                                     <legend id="alternateaddress_legend">Alternate address</legend>
 
                                     <ol>
+                                        [% IF Koha.Preference('AddressFormat') != 'de' %][% INCLUDE B_streetnumber %][% END %]
+
                                         [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
                                         [% IF roadtypes.count %]
                                             [% UNLESS hidden.defined('B_streettype') %]
@@ -716,6 +728,8 @@
                                                 <div class="required_label [% required.B_address | html %]">Required</div>
                                             </li>
                                         [% END %]
+
+                                        [% IF Koha.Preference('AddressFormat') == 'de' %][% INCLUDE streetnumber %][% END %]
 
                                         [% UNLESS hidden.defined('B_address2') %]
                                             <li>
