@@ -36,14 +36,18 @@
         <div class="patronimage-container">
             [% IF ( patron.image ) %]
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
-                <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
-                </div>
+                [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
+                    <div class="patronimage-controls">
+                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
+                    </div>
+                [% END %]
             [% ELSE %]
                 <div class="patronimage empty"></div>
-                <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-plus"></i> Add</a></div>
-                </div>
+                [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
+                    <div class="patronimage-controls">
+                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-plus"></i> Add</a></div>
+                    </div>
+                [% END %]
             [% END %]
         </div>
     </div>
