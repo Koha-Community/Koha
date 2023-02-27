@@ -132,8 +132,8 @@ Acquisitions &rsaquo; Koha
 
 
 [% IF op == 'select' && ( result_order_loop || selected_order_loop ) %]
-    <div id="xxx">
-        <form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl">
+<form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl">
+    <div id="orders_to_copy" class="page-section">
         <table id="table_orders">
             <caption>
                 <span class="actions"><a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
@@ -169,13 +169,13 @@ Acquisitions &rsaquo; Koha
             [% END %]
             </tbody>
         </table>
-        <fieldset class="action">
-            <input type="hidden" name="op" value="batch_edit" />
-            <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
-            <button type="submit" class="btn btn-default go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
-        </fieldset>
-        </form>
     </div>
+    <fieldset class="action">
+        <input type="hidden" name="op" value="batch_edit" />
+        <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
+        <button type="submit" class="btn btn-primary go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
+    </fieldset>
+</form>
 
 [% ELSIF op == "batch_edit" %]
 
@@ -253,7 +253,7 @@ Acquisitions &rsaquo; Koha
         <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
         <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
         <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
-        <button type="submit" class="btn btn-default">Duplicate orders</button>
+        <button type="submit" class="btn btn-primary">Duplicate orders</button>
         <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno | html %]">Cancel</a>
     </fieldset>
 </form>
