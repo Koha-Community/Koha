@@ -10,7 +10,8 @@
     </div>
     <div class="modal_centered" v-if="confirmation">
         <div class="dialog alert confirmation">
-            <h1 v-html="confirmation"></h1>
+            <h1 v-html="confirmation.title"></h1>
+            <p v-html="confirmation.message"></p>
             <button
                 v-if="accept_callback"
                 id="accept_modal"
@@ -18,11 +19,11 @@
                 @click="accept_callback"
             >
                 <i class="fa fa-fw fa-check"></i>
-                {{ $__("Accept") }}
+                <span v-html="confirmation.accept_label"></span>
             </button>
             <button id="close_modal" class="deny" @click="removeMessages">
                 <i class="fa fa-fw fa-remove"></i>
-                {{ $__("Close") }}
+                <span v-html="confirmation.cancel_label"></span>
             </button>
         </div>
     </div>
