@@ -177,3 +177,50 @@
       permissions:
         borrowers: edit_borrowers
         updatecharges: remaining_permissions
+  post:
+    x-mojo-to: Patrons::Account#add_debit
+    operationId: addPatronDebit
+    tags:
+      - patrons
+    summary: Add debit to a patron's account
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing debit information
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/debit"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Debit added
+        schema:
+          $ref: "../swagger.yaml#/definitions/account_line"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        updatecharges: remaining_permissions

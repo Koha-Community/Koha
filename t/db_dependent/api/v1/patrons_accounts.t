@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Test::Mojo;
 
@@ -42,35 +42,37 @@ subtest 'get_balance() tests' => sub {
     # Enable AccountAutoReconcile
     t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_id = $patron->id;
     my $account   = $patron->account;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)
-      ->json_is(
-        {   balance             => 0.00,
+      ->status_is(200)->json_is(
+        {
+            balance             => 0.00,
             outstanding_debits  => { total => 0, lines => [] },
             outstanding_credits => { total => 0, lines => [] }
         }
-    );
+      );
 
     my $debit_1 = $account->add_debit(
         {
-            amount       => 50,
-            description  => "A description",
-            type         => "NEW_CARD",
-            user_id      => $patron->borrowernumber,
-            library_id   => $library->id,
-            interface    => 'test',
+            amount      => 50,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            library_id  => $library->id,
+            interface   => 'test',
         }
     )->store();
     $debit_1->discard_changes;
@@ -79,7 +81,7 @@ subtest 'get_balance() tests' => sub {
         {
             amount      => 50.01,
             description => "A description",
-            type        => "NEW_CARD", # New card
+            type        => "NEW_CARD",                # New card
             user_id     => $patron->borrowernumber,
             library_id  => $library->id,
             interface   => 'test',
@@ -88,25 +90,23 @@ subtest 'get_balance() tests' => sub {
     $debit_2->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)
-      ->json_is(
-        {   balance            => 100.01,
+      ->status_is(200)->json_is(
+        {
+            balance            => 100.01,
             outstanding_debits => {
                 total => 100.01,
-                lines => [
-                    $debit_1->to_api,
-                    $debit_2->to_api
-                ]
+                lines => [ $debit_1->to_api, $debit_2->to_api ]
             },
             outstanding_credits => {
                 total => 0,
                 lines => []
             }
         }
-    );
+      );
 
     $account->pay(
-        {   amount       => 100.01,
+        {
+            amount       => 100.01,
             note         => 'He paid!',
             description  => 'Finally!',
             library_id   => $patron->branchcode,
@@ -115,24 +115,31 @@ subtest 'get_balance() tests' => sub {
     );
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)
-      ->json_is(
-        {   balance             => 0,
+      ->status_is(200)->json_is(
+        {
+            balance             => 0,
             outstanding_debits  => { total => 0, lines => [] },
             outstanding_credits => { total => 0, lines => [] }
         }
-    );
+      );
 
     # add a credit
     my $credit_line = $account->add_credit(
-        { amount => 10, user_id => $patron->id, library_id => $library->id, interface => 'test' } );
+        {
+            amount     => 10,
+            user_id    => $patron->id,
+            library_id => $library->id,
+            interface  => 'test'
+        }
+    );
+
     # re-read from the DB
     $credit_line->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)
-      ->json_is(
-        {   balance            => -10,
+      ->status_is(200)->json_is(
+        {
+            balance            => -10,
             outstanding_debits => {
                 total => 0,
                 lines => []
@@ -142,14 +149,14 @@ subtest 'get_balance() tests' => sub {
                 lines => [ $credit_line->to_api ]
             }
         }
-    );
+      );
 
     # Accountline without manager_id (happens with fines.pl cron for example)
     my $debit_3 = $account->add_debit(
         {
             amount      => 50,
             description => "A description",
-            type        => "NEW_CARD", # New card
+            type        => "NEW_CARD",        # New card
             user_id     => undef,
             library_id  => $library->id,
             interface   => 'test',
@@ -158,21 +165,19 @@ subtest 'get_balance() tests' => sub {
     $debit_3->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)
-      ->json_is(
-        {   balance            => 40.00,
+      ->status_is(200)->json_is(
+        {
+            balance            => 40.00,
             outstanding_debits => {
                 total => 50.00,
-                lines => [
-                    $debit_3->to_api
-                ]
+                lines => [ $debit_3->to_api ]
             },
             outstanding_credits => {
                 total => -10,
                 lines => [ $credit_line->to_api ]
             }
         }
-    );
+      );
 
     $schema->storage->txn_rollback;
 };
@@ -183,34 +188,44 @@ subtest 'add_credit() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
     my $password = 'thePassword123';
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_id = $patron->id;
     my $account   = $patron->account;
 
-    is( $account->outstanding_debits->count,  0, 'No outstanding debits for patron' );
-    is( $account->outstanding_credits->count, 0, 'No outstanding credits for patron' );
+    is( $account->outstanding_debits->count,
+        0, 'No outstanding debits for patron' );
+    is( $account->outstanding_credits->count,
+        0, 'No outstanding credits for patron' );
 
     my $credit = { amount => 100 };
 
-    my $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(201)->tx->res->json;
+    my $ret = $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/credits" =>
+          json => $credit )->status_is(201)->tx->res->json;
 
-    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
+    is_deeply(
+        $ret,
+        Koha::Account::Lines->find( $ret->{account_line_id} )->to_api,
+        'Line returned correctly'
+    );
 
     my $outstanding_credits = $account->outstanding_credits;
     is( $outstanding_credits->count,             1 );
     is( $outstanding_credits->total_outstanding, -100 );
 
     my $debit_1 = $account->add_debit(
-        {   amount      => 10,
+        {
+            amount      => 10,
             description => "A description",
             type        => "NEW_CARD",
             user_id     => $patron->borrowernumber,
@@ -218,7 +233,8 @@ subtest 'add_credit() tests' => sub {
         }
     )->store();
     my $debit_2 = $account->add_debit(
-        {   amount      => 15,
+        {
+            amount      => 15,
             description => "A description",
             type        => "NEW_CARD",
             user_id     => $patron->borrowernumber,
@@ -229,11 +245,15 @@ subtest 'add_credit() tests' => sub {
     is( $account->outstanding_debits->total_outstanding, 25 );
     $credit->{library_id} = $library->id;
 
-    $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(201)
-      ->tx->res->json;
+    $ret = $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/credits" =>
+          json => $credit )->status_is(201)->tx->res->json;
 
-    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
+    is_deeply(
+        $ret,
+        Koha::Account::Lines->find( $ret->{account_line_id} )->to_api,
+        'Line returned correctly'
+    );
 
     my $account_line_id = $t->tx->res->json->{account_line_id};
     is( Koha::Account::Lines->find($account_line_id)->branchcode,
@@ -243,7 +263,8 @@ subtest 'add_credit() tests' => sub {
         0, "Debits have been cancelled automatically" );
 
     my $debit_3 = $account->add_debit(
-        {   amount      => 100,
+        {
+            amount      => 100,
             description => "A description",
             type        => "NEW_CARD",
             user_id     => $patron->borrowernumber,
@@ -256,11 +277,15 @@ subtest 'add_credit() tests' => sub {
         account_lines_ids => [ $debit_1->id, $debit_2->id, $debit_3->id ]
     };
 
-    $ret = $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
-      ->status_is(201)
-      ->tx->res->json;
+    $ret = $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/credits" =>
+          json => $credit )->status_is(201)->tx->res->json;
 
-    is_deeply( $ret, Koha::Account::Lines->find( $ret->{account_line_id} )->to_api, 'Line returned correctly' );
+    is_deeply(
+        $ret,
+        Koha::Account::Lines->find( $ret->{account_line_id} )->to_api,
+        'Line returned correctly'
+    );
 
     my $outstanding_debits = $account->outstanding_debits;
     is( $outstanding_debits->total_outstanding, 65 );
@@ -342,6 +367,81 @@ subtest 'list_debits() test' => sub {
       ->tx->res->json;
 
     is(140, $ret->[0]->{amount} + $ret->[1]->{amount}, 'Total debits are 140');
+};
+
+subtest 'add_debit() tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_id = $patron->id;
+    my $account   = $patron->account;
+
+    is( $account->outstanding_debits->count,
+        0, 'No outstanding debits for patron' );
+    is( $account->outstanding_credits->count,
+        0, 'No outstanding credits for patron' );
+
+    my $debit = {
+        amount      => 100,
+        description => "A description",
+        debit_type  => "NEW_CARD",
+        user_id     => $patron->borrowernumber,
+        interface   => 'test',
+        library_id  => $library->id,
+    };
+
+    my $ret = $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
+          json => $debit )->status_is(201)->tx->res->json;
+    my $account_line = Koha::Account::Lines->find( $ret->{account_line_id} );
+
+    is_deeply( $ret, $account_line->to_api, 'Line returned correctly' );
+
+    is( $account_line->branchcode,
+        $library->id, 'Library id is sored correctly' );
+
+    my $outstanding_debits = $account->outstanding_debits;
+    is( $outstanding_debits->count,             1 );
+    is( $outstanding_debits->total_outstanding, 100 );
+
+    my $credit_1 = $account->add_credit(
+        {
+            amount    => 10,
+            interface => 'test',
+        }
+    )->store()->apply( { debits => [$account_line] } );
+    my $credit_2 = $account->add_credit(
+        {
+            amount    => 15,
+            interface => 'test'
+        }
+    )->store()->apply( { debits => [$account_line] } );
+
+    is( $account->outstanding_credits->total_outstanding, 0 );
+    is( $account->outstanding_debits->total_outstanding,
+        75, "Credits partially cancelled debit" );
+
+    my $account_line_id = $ret->{account_line_id};
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
+          json => $debit )->status_is(201);
+
+    is( $account->outstanding_debits->total_outstanding,
+        175, "Debit added to total outstanding debits" );
 
     $schema->storage->txn_rollback;
 };

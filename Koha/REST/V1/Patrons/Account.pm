@@ -44,7 +44,10 @@ sub get {
     my $patron    = Koha::Patrons->find($patron_id);
 
     unless ($patron) {
-        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found." }
+        );
     }
 
     return try {
@@ -57,7 +60,7 @@ sub get {
         return $c->render(
             status  => 200,
             openapi => {
-                balance => $account->balance,
+                balance            => $account->balance,
                 outstanding_debits => {
                     total => $debits->total_outstanding,
                     lines => $debits->to_api
@@ -85,14 +88,17 @@ sub list_credits {
     my $patron    = Koha::Patrons->find($patron_id);
 
     unless ($patron) {
-        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found." }
+        );
     }
 
     return try {
         my $account = $patron->account;
 
         my $credits_set = $account->credits;
-        my $credits = $c->objects->search( $credits_set );
+        my $credits     = $c->objects->search($credits_set);
         return $c->render( status => 200, openapi => $credits );
     }
     catch {
@@ -113,19 +119,23 @@ sub add_credit {
     my $patron    = Koha::Patrons->find($patron_id);
     my $user      = $c->stash('koha.user');
 
-
     unless ($patron) {
-        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found." }
+        );
     }
 
     my $account = $patron->account;
     my $body    = $c->validation->param('body');
 
     return try {
-        my $credit_type = $body->{credit_type} || 'PAYMENT';    # default to 'PAYMENT'
-        my $amount = $body->{amount};                           # mandatory, validated by openapi
+        my $credit_type =
+          $body->{credit_type} || 'PAYMENT';    # default to 'PAYMENT'
+        my $amount = $body->{amount};    # mandatory, validated by openapi
 
-        unless ( $amount > 0 ) {  # until we support newer JSON::Validator and thus minimumExclusive
+        unless ( $amount > 0 )
+        {    # until we support newer JSON::Validator and thus minimumExclusive
             Koha::Exceptions::BadParameter->throw( { parameter => 'amount' } );
         }
 
@@ -136,7 +146,8 @@ sub add_credit {
         my $library_id   = $body->{library_id};
 
         my $credit = $account->add_credit(
-            {   amount       => $amount,
+            {
+                amount       => $amount,
                 type         => $credit_type,
                 payment_type => $payment_type,
                 description  => $description,
@@ -149,22 +160,24 @@ sub add_credit {
         $credit->discard_changes;
 
         my $date = $body->{date};
-        $credit->date( $date )->store
-            if $date;
+        $credit->date($date)->store
+          if $date;
 
         my $debits_ids = $body->{account_lines_ids};
         my $debits;
-        $debits = Koha::Account::Lines->search({ accountlines_id => { -in => $debits_ids } })
-            if $debits_ids;
+        $debits = Koha::Account::Lines->search(
+            { accountlines_id => { -in => $debits_ids } } )
+          if $debits_ids;
 
         if ($debits) {
+
             # pay them!
-            $credit = $credit->apply({ debits => [ $debits->as_list ] });
+            $credit = $credit->apply( { debits => [ $debits->as_list ] } );
         }
 
-        if ($credit->amountoutstanding != 0) {
+        if ( $credit->amountoutstanding != 0 ) {
             my $outstanding_debits = $account->outstanding_debits;
-            $credit->apply({ debits => [ $outstanding_debits->as_list ] });
+            $credit->apply( { debits => [ $outstanding_debits->as_list ] } );
         }
 
         $credit->discard_changes;
@@ -190,15 +203,64 @@ sub list_debits {
     my $patron    = Koha::Patrons->find($patron_id);
 
     unless ($patron) {
-        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found." }
+        );
     }
 
     return try {
         my $account = $patron->account;
 
         my $debits_set = $account->debits;
-        my $debits = $c->objects->search( $debits_set );
+        my $debits     = $c->objects->search($debits_set);
         return $c->render( status => 200, openapi => $debits );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 add_debit
+
+=cut
+
+sub add_debit {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron_id = $c->validation->param('patron_id');
+    my $patron    = Koha::Patrons->find($patron_id);
+
+    unless ($patron) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found." }
+        );
+    }
+
+    return try {
+        my $data =
+          Koha::Account::Debit->new_from_api( $c->validation->param('body') )
+          ->unblessed;
+
+        $data->{library_id}    = $data->{branchcode};
+        $data->{cash_register} = $data->{cash_register_id};
+        $data->{item_id}       = $data->{itemnumber};
+        $data->{interface}     = 'api'
+          ; # Should this always be API, or should we allow the API consumer to choose?
+        $data->{user_id} = $patron->borrowernumber
+          ; # Should this be API user OR staff the API may be acting on behalf of?
+
+        my $debit = $patron->account->add_debit($data);
+
+        $c->res->headers->location(
+            $c->req->url->to_string . '/' . $debit->id );
+        $debit->discard_changes;
+
+        return $c->render(
+            status  => 201,
+            openapi => $debit->to_api
+        );
     }
     catch {
         $c->unhandled_exception($_);
