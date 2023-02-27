@@ -2,19 +2,22 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op =='add_form' %]
         [% IF city.cityid %]
-            Modify city
+            [% t("Modify city") | html %]
         [% ELSE %]
-            New city
-        [% END %] &rsaquo; [% ELSE %]
+            [% t("New city") | html %]
+        [% END %] &rsaquo;
+    [% ELSE %]
         [% IF op == 'delete_confirm' %]
-            Confirm deletion of city &rsaquo; [% END %]
+            [% t("Confirm deletion of city") | html %] &rsaquo;
+        [% END %]
     [% END %]
-    Cities &rsaquo; Administration &rsaquo; Koha
-</title>
+    [% t("Cities") | html %] &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
