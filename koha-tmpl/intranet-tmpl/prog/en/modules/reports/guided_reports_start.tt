@@ -1675,6 +1675,7 @@
 
         function load_group_subgroups () {
             var group = $("#group_select").val();
+            var subgroup = $("#subgroup_select").val();
             var sg = $("#subgroup");
             $(sg).find('option[value!=""]').each(function() {
                 $(this).remove();
@@ -1683,7 +1684,11 @@
             if (group) {
                 var select = $(sg).find('select')[0];
                 $.each( group_subgroups[group], function(index, value) {
-                    $('<option value="' + value[0] + '">' + value[1] + '</option>').appendTo(select);
+                    if ( value[0] == subgroup ) {
+                        $('<option selected="selected" value="' + value[0] + '">' + value[1] + '</option>').appendTo(select);
+                    } else {
+                        $('<option value="' + value[0] + '">' + value[1] + '</option>').appendTo(select);
+                    }
                 } );
                 $("#subgroup, #subgroup *").show();
             }
