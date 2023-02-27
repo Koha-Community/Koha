@@ -88,6 +88,20 @@ sub metadata {
     return Koha::Biblio::Metadata->_new_from_dbic($metadata);
 }
 
+=head3 record
+
+my $record = $biblio->record();
+
+Returns a Marc::Record object
+
+=cut
+
+sub record {
+    my ( $self ) = @_;
+
+    return $self->metadata->record;
+}
+
 =head3 orders
 
 my $orders = $biblio->orders();

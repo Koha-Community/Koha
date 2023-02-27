@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -851,6 +851,21 @@ subtest 'autoControlNumber tests' => sub {
     is($record->field('001')->as_string(), 'Not biblionumber', '001 not set to biblionumber when pref set and field exists');
 
 };
+
+subtest 'record test' => sub {
+    plan tests => 1;
+
+    my $marc_record = MARC::Record->new;
+    $marc_record->append_fields( create_isbn_field( '0590353403', 'MARC21' ) );
+
+    my ($biblionumber) = C4::Biblio::AddBiblio( $marc_record, '' );
+
+    my $biblio = Koha::Biblios->find($biblionumber);
+
+    is( $biblio->record->as_formatted,
+        $biblio->metadata->record->as_formatted );
+};
+
 
 
 # Cleanup
