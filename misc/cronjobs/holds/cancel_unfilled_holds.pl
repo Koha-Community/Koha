@@ -94,7 +94,7 @@ GetOptions(
     'holidays'   => \$use_calendar,
     'v|verbose'  => \$verbose,
     'confirm'    => \$confirm,
-    'reason=s' => \$reason
+    'reason=s'   => \$reason
 ) or pod2usage(1);
 pod2usage(1) if $help;
 
