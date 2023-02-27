@@ -36,7 +36,7 @@ $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'get_marc_host' => sub {
-    plan tests => 15;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
@@ -92,6 +92,12 @@ subtest 'get_marc_host' => sub {
     ( $host, $relatedparts, $info ) = $bib1->get_marc_host;
     is( $host, undef, 'No Koha Biblio object returned with no $w' );
     is( $info, "title, relpart", '773$atg returned when no $w' );
+
+    my $host_only = $bib1->get_marc_host_only;
+    is_deeply( $host_only, $host, "Host only retrieved successfully" );
+    my $relatedparts_only = $bib1->get_marc_relatedparts_only;
+    is_deeply( $relatedparts_only, $relatedparts, "Related parts only retrieved successfully" );
+
     $marc->field('773')->delete_subfield( code => 't' ); # restore
 
     # Add second 773

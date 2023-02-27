@@ -1322,6 +1322,38 @@ sub get_marc_host {
     }
 }
 
+=head3 get_marc_host_only
+
+    my $host = $biblio->get_marc_host_only;
+
+Return host only
+
+=cut
+
+sub get_marc_host_only {
+    my ($self) = @_;
+
+    my ( $host, $relatedparts ) = $self->get_marc_host;
+
+    return $host;
+}
+
+=head3 get_marc_relatedparts_only
+
+    my $relatedparts = $biblio->get_marc_relatedparts_only;
+
+Return related parts only
+
+=cut
+
+sub get_marc_relatedparts_only {
+    my ($self) = @_;
+
+    my ( $host, $relatedparts ) = $self->get_marc_host;
+
+    return $relatedparts;
+}
+
 =head3 recalls
 
     my $recalls = $biblio->recalls;
