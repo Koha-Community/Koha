@@ -49,7 +49,7 @@ export default {
         const AVStore = inject("AVStore")
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
-        const { setConfirmation, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
 
         const table_id = "agreement_list"
         useDataTable(table_id)
@@ -60,7 +60,7 @@ export default {
             map_av_dt_filter,
             table_id,
             logged_in_user,
-            setConfirmation,
+            setConfirmationDialog,
             setMessage,
         }
     },
@@ -115,14 +115,25 @@ export default {
                 "/cgi-bin/koha/erm/agreements/edit/" + agreement_id
             )
         },
-        delete_agreement: function (agreement_id) {
-            this.setConfirmation(
-                this.$__("Are you sure you want to remove this agreement?"),
+        delete_agreement: function (agreement_id, agreement_name) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this agreement?"
+                    ),
+                    message: agreement_name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
                 () => {
                     const client = APIClient.erm
                     client.agreements.delete(agreement_id).then(
                         success => {
-                            this.setMessage(this.$__("Agreement deleted"))
+                            this.setMessage(
+                                this.$__("Agreement %s deleted").format(
+                                    agreement_name
+                                )
+                            )
                             this.refresh_table()
                         },
                         error => {}
@@ -315,6 +326,7 @@ export default {
                                     let agreement_id = api
                                         .row(tr)
                                         .data().agreement_id
+                                    let agreement_name = api.row(tr).data().name
                                     let editButton = createVNode(
                                         "a",
                                         {
@@ -339,7 +351,10 @@ export default {
                                             class: "btn btn-default btn-xs",
                                             role: "button",
                                             onClick: () => {
-                                                delete_agreement(agreement_id)
+                                                delete_agreement(
+                                                    agreement_id,
+                                                    agreement_name
+                                                )
                                             },
                                         },
                                         [
