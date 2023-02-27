@@ -4,7 +4,6 @@ import AgreementsShow from "../components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "../components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "../components/ERM/AgreementsFormConfirmDelete.vue";
 import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
-import EHoldingsLocalTitlesFormConfirmDelete from "../components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue";
 import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
 import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
@@ -311,22 +310,6 @@ export const routes = [
                                                     .titles,
                                             ],
                                             "Show title" // $t("Show title")
-                                        ),
-                                },
-                            },
-                            {
-                                path: "delete/:title_id",
-                                component:
-                                    EHoldingsLocalTitlesFormConfirmDelete,
-                                meta: {
-                                    breadcrumb: () =>
-                                        build_breadcrumb(
-                                            [
-                                                breadcrumb_paths.eholdings_local,
-                                                breadcrumbs.eholdings.local
-                                                    .titles,
-                                            ],
-                                            "Delete title" // $t("Delete title")
                                         ),
                                 },
                             },

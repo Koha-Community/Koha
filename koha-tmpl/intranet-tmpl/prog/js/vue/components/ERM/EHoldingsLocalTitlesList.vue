@@ -30,6 +30,8 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
+
         const table_id = "title_list"
         useDataTable(table_id)
 
@@ -38,6 +40,8 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             table_id,
+            setConfirmationDialog,
+            setMessage,
         }
     },
     data: function () {
@@ -77,9 +81,33 @@ export default {
                 "/cgi-bin/koha/erm/eholdings/local/titles/edit/" + title_id
             )
         },
-        delete_title: function (title_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/titles/delete/" + title_id
+        delete_title: function (title_id, title_publication_title) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this title?"
+                    ),
+                    message: title_publication_title,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.localTitles.delete(title_id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("Local title %s deleted").format(
+                                    title_publication_title
+                                )
+                            )
+                            $("#" + this.table_id)
+                                .DataTable()
+                                .ajax.url("/api/v1/erm/eholdings/local/titles")
+                                .draw()
+                        },
+                        error => {}
+                    )
+                }
             )
         },
         build_datatable: function () {
@@ -193,6 +221,9 @@ export default {
                             function (index, e) {
                                 let tr = $(this).parent().parent()
                                 let title_id = api.row(tr).data().title_id
+                                let title_publication_title = api
+                                    .row(tr)
+                                    .data().publication_title
                                 let editButton = createVNode(
                                     "a",
                                     {
@@ -217,7 +248,10 @@ export default {
                                         class: "btn btn-default btn-xs",
                                         role: "button",
                                         onClick: () => {
-                                            delete_title(title_id)
+                                            delete_title(
+                                                title_id,
+                                                title_publication_title
+                                            )
                                         },
                                     },
                                     [
