@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Quote editor &rsaquo; Tools &rsaquo; Koha</title>
@@ -101,7 +102,7 @@
 [% END %]
 
 [% IF op == 'list' %]
-    <h1>Quotes</h1>
+    <h1>[% tp('citations', 'Quotes') | html %]</h1>
     [% IF quotes_count > 0 %]
         <table id="quotes">
             <thead>

@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -316,7 +317,7 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
        <th>Qualifier</th>
        <th>SAN</th>
        <th>Standard</th>
-       <th>Quotes</th>
+       <th>[% tp('price offers', 'Quotes') | html %]</th>
        <th>Orders</th>
        <th>Invoices</th>
        <th>Responses</th>
