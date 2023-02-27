@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-02 02:23+0000\n"
+"PO-Revision-Date: 2023-02-10 05:22+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1667355836.730239\n"
+"X-POOTLE-MTIME: 1676006521.303824\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2744,6 +2744,34 @@ msgstr ""
 "<code>852abhi</code> будет искать в 852 подполях a, b, h и i.), с подполями, "
 "разделенными"
 
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record Structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+" (разделенных запятыми) в правильные поля автора при импорте записи с "
+"использованием Z39.50."
+
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr "(только представление без XSLT)."
@@ -4476,6 +4504,25 @@ msgid ""
 msgstr ""
 "автоматическое перенаправление к другому читателю при сканировании штрих-"
 "кода читателя вместо книги."
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Осуществлять"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Не проводить"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"автоматическую передачу экземпляров в свою домашнюю библиотеку при их "
+"возврате."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -10157,15 +10204,11 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Параметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
+"<br />Парметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">по умолчанию</a>\" "
-"для значений по умолчанию</li><li>Укажите путь для определения файла xslt</"
-"li><li>Укажите URL-адрес для внешней таблицы стилей.</li><li>ПРИМЕЧАНИЕ. "
-"Системные настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> должны "
-"быть включены, если ваша настраиваемая таблица стилей использует данные в "
-"полях элементов.</li></ul>Если у вас несколько таблиц стилей для разных "
-"языков {langcode} будет заменен текущим языком интерфейса."
+"для значений по умолчанию</li><li>Укажите путь для определения файла XSLT</"
+"li><li>Укажите URL-адрес для внешней таблицы стилей</li></ul> Для нескольких "
+"таблиц стилей шаблон {langcode} – будет заменен текущим языком интерфейса."
 
 # OPAC > Appearance
 msgid ""
@@ -10174,7 +10217,6 @@ msgid ""
 msgstr "Показать детали ЭК с помощью таблицы стилей XSLT по:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10183,15 +10225,11 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Параметры:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">по умолчанию</a>\" "
-"для значений по умолчанию</li><li>Указать путь для определения файла xslt</"
-"li><li>Указать URL-адрес для внешней таблицы стилей.</li><li>ПРИМЕЧАНИЕ. "
-"Системные настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> должны "
-"быть включены, если ваша таблица стилей использует данные в полях элементов</"
-"li></ul>Если у вас несколько таблиц стилей для разных языков {langcode} "
-"будет заменен текущим языком интерфейса."
+"<br />Параметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">по умолчанию</a>\" "
+"для значений по умолчанию</li><li>Укажите путь для определения файла XSLT</"
+"li><li>Укажите URL-адрес для внешней таблицы стилей</li></ul> Для нескольких "
+"таблиц стилей шаблон {langcode} – будет заменен текущим языком интерфейса."
 
 # OPAC > Appearance
 msgid ""
@@ -14250,7 +14288,6 @@ msgstr ""
 "редактор WYSIWYG при редактировании определенных системных настроек HTML."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14260,15 +14297,11 @@ msgid ""
 "languages the placeholder {langcode} will be replaced with current interface "
 "language."
 msgstr ""
-"<br />Опции:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
+"<br />Параметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">по умолчанию</a>\" для "
-"значений по умолчанию</li><li>Укажите путь для определения файла xslt</"
-"li><li>Укажите URL-адрес для внешней таблицы стилей.</li><li>Примечание: "
-"Системный параметр <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a > должен "
-"быть включен, если в вашей таблице стилей используются данные в полях "
-"элементов</li></ul>Если у вас несколько таблиц стилей для разных языков "
-"{langcode} будет заменен на текущий язык интерфейса."
+"значений по умолчанию</li><li>Укажите путь для определения файла XSLT</"
+"li><li>Укажите URL-адрес для внешней таблицы стилей</li></ul> Для нескольких "
+"таблиц стилей шаблон {langcode} – будет заменен текущим языком интерфейса."
 
 # Staff interface > Appearance
 msgid ""

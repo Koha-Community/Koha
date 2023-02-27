@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2022-11-25 15:58+0000\n"
-"Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
+"PO-Revision-Date: 2023-02-27 09:27+0000\n"
+"Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sv/22.05/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1669391931.180738\n"
+"X-POOTLE-MTIME: 1677490069.029314\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -148,10 +148,10 @@ msgid ""
 "when no payment types are defined in the PAYMENT_TYPE authorised value "
 "category."
 msgstr ""
-"Den här inställningen har ingen effekt om <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a> är aktiverad eller inga betalningssätt är angivna som "
-"auktoriserade värden i kategorin PAYMENT_TYPE."
+"Den här inställningen har ingen effekt om <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> "
+"är aktiverad eller inga betalningssätt är angivna som auktoriserade värden i "
+"kategorin PAYMENT_TYPE."
 
 # Accounting > Policy
 #, fuzzy
@@ -892,11 +892,12 @@ msgid ""
 msgstr ""
 "Du måste välja OAuth2 när du skapar en app i \"google cloud console\" och "
 "sätta \"web origin\" till your_opac_url och \"redirect url\" till "
-"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect . Kräver att <a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> och <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a> används."
+"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect . Kräver att <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> och <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> används."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -2661,6 +2662,34 @@ msgstr ""
 "<code>852abhi</code> leta i de underliggande fälten a, b, h och i för 852), "
 "med de underliggande fälten separerade av"
 
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"taggar (separerade av komman) till rätt författartaggar när poster "
+"importeras via Z39.50."
+
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr "(icke-XSLT-vy enbart)."
@@ -3805,9 +3834,8 @@ msgid ""
 "\">noissuescharge</a> system preference."
 msgstr ""
 "personal att manuellt åsidosätta och låna ut exemplar till låntagare som har "
-"högre böter än enligt systeminställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
-">noissuescharge</a>."
+"högre böter än enligt systeminställningen <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a>."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4380,6 +4408,23 @@ msgid ""
 msgstr ""
 "automatisk omdirigering till låntagarsökningen när ett kortnummer skannas "
 "istället för en streckkod."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Gör"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Gör inte"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr "överför automatiskt exemplar till sitt hembibliotek när de återlämnas."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -6024,10 +6069,9 @@ msgid ""
 "op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</a> is set to "
 "\"due date\", renewed items may still be overdue."
 msgstr ""
-"exemplaret automatiskt. Om systeminställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase\""
-">RenewalPeriodBase</a> är inställd på \"due date\" kan förnyade exemplar "
-"ändå vara försenade."
+"exemplaret automatiskt. Om systeminställningen <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=RenewalPeriodBase\">RenewalPeriodBase</"
+"a> är inställd på \"due date\" kan förnyade exemplar ändå vara försenade."
 
 # Circulation > Checkout policy
 msgid ""
@@ -7808,9 +7852,9 @@ msgid ""
 "op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
 "used as a prefix."
 msgstr ""
-"Om strängen börjar med '/'  kommer värdet <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=staffClientBaseURL\""
-">staffClientBaseURL</a> att användas som prefix."
+"Om strängen börjar med '/'  kommer värdet <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=staffClientBaseURL"
+"\">staffClientBaseURL</a> att användas som prefix."
 
 # Enhanced content > Manual
 #, fuzzy
@@ -7888,9 +7932,9 @@ msgid ""
 "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"https://www."
 "librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
 msgstr ""
-"enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\""
-"https://www.librarything.com/forlibraries/\">registrera dig</a>, och skriv "
-"sedan in ID nedan."
+"enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"https://www."
+"librarything.com/forlibraries/\">registrera dig</a>, och skriv sedan in ID "
+"nedan."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# Don't show"
@@ -9190,14 +9234,12 @@ msgstr ""
 "visning för deras vårdnadshavare."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
-msgstr "opac.pref#PatronSelfRegistration# Tillåt"
+msgstr "Tillåt"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
-msgstr "opac.pref#PatronSelfRegistration# Tillåt inte"
+msgstr "Tillåt inte"
 
 # OPAC > Privacy
 #, fuzzy
@@ -9225,9 +9267,8 @@ msgid ""
 "system preference."
 msgstr ""
 "låntagare som inte är inloggade att lämna inköpsförslag. Förslag är kopplade "
-"till systeminställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron\""
-">AnonymousPatron</a>."
+"till systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -9724,9 +9765,9 @@ msgid ""
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a> enabled."
 msgstr ""
-"<strong>Obs:</strong> Du måste ha <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress\""
-">KohaAdminEmailAddress</a> aktiverad."
+"<strong>Obs:</strong> Du måste ha <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a> "
+"aktiverad."
 
 # OPAC > Privacy
 #, fuzzy
@@ -9983,10 +10024,9 @@ msgid ""
 "op=search&searchfield=OPACSuggestionMandatoryFields"
 "\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
-"<br />Obs: Gör inte <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACSuggestionMandatoryFields\">OPACSuggestionMandatoryFields</a> till "
-"oönskade/gömda fält "
+"<br />Obs: Gör inte <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACSuggestionMandatoryFields"
+"\">OPACSuggestionMandatoryFields</a> till oönskade/gömda fält "
 
 # OPAC > Policy
 msgid ""
@@ -10082,9 +10122,9 @@ msgid ""
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
-"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
-"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
+"li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har flera "
+"stilmallar för olika språk så kommer biten {langcode} att ersättas med "
 "nuvarande gränssnitts språk."
 
 # OPAC > Appearance
@@ -10919,7 +10959,8 @@ msgstr ""
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />Can be an absolute URL starting with "
 "<code>http://</code> or"
-msgstr "<br />Kan vara en absolut URL som börjar med <code>http://</code> eller"
+msgstr ""
+"<br />Kan vara en absolut URL som börjar med <code>http://</code> eller"
 
 # OPAC > Features
 msgid "opac.pref#OpenURLImageLocation# <br />Examples:"
@@ -10945,9 +10986,9 @@ msgid ""
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a> is defined):"
 msgstr ""
-"Text till OpenURL-länkar (eller bildtitel om <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation\""
-">OpenURLImageLocation</a> är definierad):"
+"Text till OpenURL-länkar (eller bildtitel om <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a> är definierad):"
 
 # OPAC > Self registration and modification
 #, fuzzy
@@ -10980,10 +11021,10 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
-"<br><strong>NOTERA:</strong> Den här systeminställningen kräver att <a href"
-"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistra"
-"tionDefaultCategory'>PatronSelfRegistrationDefaultCategory</a> är en giltig "
-"låntagarkategorikod."
+"<br><strong>NOTERA:</strong> Den här systeminställningen kräver att <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
+"a> är en giltig låntagarkategorikod."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -10994,11 +11035,10 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Tillåt inte"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistration# library patrons to register for an account "
 "via the OPAC."
-msgstr "(separera bibliotek/filialer med |)."
+msgstr "bibliotekslåntagare att registrera sig för ett konto via OPAC."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11983,10 +12023,9 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferencesOPAC"
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
-"<br><strong>OBS:</strong> <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"EnhancedMessagingPreferencesOPAC\">EnhancedMessagingPreferencesOPAC</a> "
-"måste vara aktiverad."
+"<br><strong>OBS:</strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a> måste vara aktiverad."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -11996,9 +12035,8 @@ msgid ""
 "your system administrator to schedule them."
 msgstr ""
 "<br><strong>OBS:</strong> Den här systeminställningen kräver cronjobben "
-"<code>misc/cronjobs/process_message_queue.pl</code> och "
-"<code>misc/cronjobs/advance_notices.pl</code>. Be din systemadministratör "
-"att schemalägga dem."
+"<code>misc/cronjobs/process_message_queue.pl</code> och <code>misc/cronjobs/"
+"advance_notices.pl</code>. Be din systemadministratör att schemalägga dem."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
@@ -12262,12 +12300,11 @@ msgid ""
 "op=search&searchfield=TalkingTechItivaPhoneNotification"
 "\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
-"<br/><i class=\"fa fa-exclamation-triangle\"></i> Om <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification\""
-">PhoneNotification</a> är aktiverad, bör <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"TalkingTechItivaPhoneNotification\">TalkingTechItivaPhoneNotification</a> "
-"vara inaktiverad."
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Om <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a> är aktiverad, bör <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a> vara inaktiverad."
 
 # Patrons > Notices and notifications
 #, fuzzy
@@ -14120,9 +14157,9 @@ msgid ""
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
-"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
-"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
+"li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har flera "
+"stilmallar för olika språk så kommer biten {langcode} att ersättas med "
 "nuvarande gränssnitts språk."
 
 # Staff interface > Appearance
@@ -14142,9 +14179,9 @@ msgid ""
 msgstr ""
 "<br />Alternativ:<ul><li>Ange \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" för "
-"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-"
-"fil</li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har "
-"flera stilmallar för olika språk så kommer biten {langcode} att ersättas med "
+"standardstilmallen</li><li>Ange en sökväg för att definiera en XSLT-fil</"
+"li><li>Ange en URL för en extern specifik stilmall.</li></ul>Om du har flera "
+"stilmallar för olika språk så kommer biten {langcode} att ersättas med "
 "nuvarande gränssnitts språk."
 
 # Staff interface > Appearance
@@ -14762,8 +14799,8 @@ msgid ""
 "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/"
 "OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
 msgstr ""
-"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\""
-">Riktlinjer för implementering</a>. "
+"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm"
+"\">Riktlinjer för implementering</a>. "
 
 # Web services > OAI-PMH
 #, fuzzy

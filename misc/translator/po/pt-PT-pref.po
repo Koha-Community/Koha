@@ -155,9 +155,9 @@ msgid ""
 "when no payment types are defined in the PAYMENT_TYPE authorised value "
 "category."
 msgstr ""
-"Esta preferência não tem efeito quando a preferência <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a> estiver ativa ou quando não existem tipos de "
+"Esta preferência não tem efeito quando a preferência <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a> estiver ativa ou quando não existem tipos de "
 "pagamentos definidos na categoria de valor autorizado PAYMENT_TYPE."
 
 # Accounting > Policy
@@ -2449,10 +2449,12 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Usar o seguinte texto como o valor por omissão do campo 667$a dos registos "
-"de autoridade MARC21 (as preferências <a href='/cgi-bin/koha/admin/preference"
-"s.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> "
-"e <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreat"
-"eAuthorities'>AutoCreateAuthorities</a> têm de estar ativas):"
+"de autoridade MARC21 (as preferências <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> têm "
+"de estar ativas):"
 
 # OPAC > Privacy
 msgid ""
@@ -2464,10 +2466,12 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Usar o seguinte texto como o valor por omissão do campo 670$a dos registos "
-"de autoridade MARC21 (as preferências <a href='/cgi-bin/koha/admin/preference"
-"s.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> "
-"e <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreat"
-"eAuthorities'>AutoCreateAuthorities</a> têm de estar ativas):"
+"de autoridade MARC21 (as preferências <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> têm "
+"de estar ativas):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -2695,6 +2699,34 @@ msgstr ""
 "exemplares (pode conter múltiplos subcampos para pesquisa, por exemplo "
 "<code>852abhi</code> irá pesquisar nos subcampos a, b, h e i do campo 852), "
 "com os subcampos separados por"
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"(separados por virgulas) para os campos de autor correctos quando importar "
+"um registo usando Z39.50."
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -4402,6 +4434,25 @@ msgstr ""
 "leitor é digitalizado em vez de um exemplar."
 
 # Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Fazer"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Não fazer"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+"a transferência automática dos exemplares para a biblioteca de origem quando "
+"forem devolvidos."
+
+# Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr "Fazer"
 
@@ -5765,11 +5816,11 @@ msgid ""
 "a> are enabled."
 msgstr ""
 "<br><strong>NOTA:</strong> A data de início de reserva apenas tem efeito e é "
-"mostrada no formulário de reserva se as preferências <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
-">AllowHoldDateInFuture</a> e <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a> estiverem ativas."
+"mostrada no formulário de reserva se as preferências <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
+"\">AllowHoldDateInFuture</a> e <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> estiverem ativas."
 
 # Circulation > Holds policy
 msgid ""
@@ -6270,8 +6321,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'comparator' is the type of "
 "comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
 msgstr ""
-"- 'comparator' é o tipo de comparação, possíveis valores são: "
-"eq,<,<=,>,>=,ne<br/>"
+"- 'comparator' é o tipo de comparação, possíveis valores são: eq,<,<=,>,>=,"
+"ne<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6304,8 +6355,8 @@ msgid ""
 "branch than CPL).<br/><br/>"
 msgstr ""
 "CPL:homebranch:ne:\\$holdingbranch:X - Vai retornar 'X' para um exemplar "
-"devolvido à biblioteca CPL onde a holdingbranch não é igual à homebranch ("
-"qualquer exemplar que não pertença à CPL).<br/><br/>"
+"devolvido à biblioteca CPL onde a holdingbranch não é igual à homebranch "
+"(qualquer exemplar que não pertença à CPL).<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -10058,10 +10109,10 @@ msgid ""
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para "
-"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</li><li>"
-"Coloque um URL para uma stylesheet externa específica</li></ul>Se tiver "
-"folhas de estilo distintas para idiomas distintos o atributo {langcode} será "
-"substituído pelo idioma actual da interface."
+"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</"
+"li><li>Coloque um URL para uma stylesheet externa específica</li></ul>Se "
+"tiver folhas de estilo distintas para idiomas distintos o atributo "
+"{langcode} será substituído pelo idioma actual da interface."
 
 # OPAC > Appearance
 msgid ""
@@ -10080,10 +10131,10 @@ msgid ""
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para "
-"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</li><li>"
-"Coloque um URL para uma stylesheet externa específica</li></ul>Se tiver "
-"folhas de estilo distintas para idiomas distintos o atributo {langcode} será "
-"substituído pelo idioma actual da interface."
+"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</"
+"li><li>Coloque um URL para uma stylesheet externa específica</li></ul>Se "
+"tiver folhas de estilo distintas para idiomas distintos o atributo "
+"{langcode} será substituído pelo idioma actual da interface."
 
 # OPAC > Appearance
 msgid ""
@@ -11905,10 +11956,10 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
-"Se deixado em branco, o Koha utilizará por omissão \""
-"firstname,surname,othernames,cardnumber,userid\". Campos adicionados nesta "
-"preferência serão adicionados como opções de pesquisa na caixa de selecção "
-"da página de pesquisa de leitores."
+"Se deixado em branco, o Koha utilizará por omissão \"firstname,surname,"
+"othernames,cardnumber,userid\". Campos adicionados nesta preferência serão "
+"adicionados como opções de pesquisa na caixa de selecção da página de "
+"pesquisa de leitores."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -13848,8 +13899,8 @@ msgid ""
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
 "<br />Opções:<ul><li>Insira o caminho para um ficheiro XSLT</li><li>Insira "
-"um endereço URL para uma folha de estilo específica "
-"externa.</li></ul>{langcode} será substituído pelo idioma da interface"
+"um endereço URL para uma folha de estilo específica externa.</li></"
+"ul>{langcode} será substituído pelo idioma da interface"
 
 # Staff interface > Appearance
 msgid ""
@@ -14115,10 +14166,10 @@ msgid ""
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" para "
-"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</li><li>"
-"Coloque um URL para uma stylesheet externa específica</li></ul>Se tiver "
-"folhas de estilo distintas para idiomas distintos o atributo {langcode} será "
-"substituído pelo idioma actual da interface."
+"usar o por omissão</li><li>Coloque o caminho para um ficheiro xslt</"
+"li><li>Coloque um URL para uma stylesheet externa específica</li></ul>Se "
+"tiver folhas de estilo distintas para idiomas distintos o atributo "
+"{langcode} será substituído pelo idioma actual da interface."
 
 # Staff interface > Appearance
 msgid ""
@@ -14138,10 +14189,10 @@ msgid ""
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para usar "
-"o por omissão</li><li>Coloque o caminho para um ficheiro xslt</li><li>"
-"Coloque um URL para uma stylesheet externa específica</li></ul>Se tiver "
-"folhas de estilo distintas para idiomas distintos o atributo {langcode} será "
-"substituído pelo idioma actual da interface."
+"o por omissão</li><li>Coloque o caminho para um ficheiro xslt</"
+"li><li>Coloque um URL para uma stylesheet externa específica</li></ul>Se "
+"tiver folhas de estilo distintas para idiomas distintos o atributo "
+"{langcode} será substituído pelo idioma actual da interface."
 
 # Staff interface > Appearance
 msgid ""

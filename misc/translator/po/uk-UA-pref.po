@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /uk/22.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
@@ -200,8 +200,8 @@ msgid ""
 "device.</p>"
 msgstr ""
 "<p class='text-danger'><strong>Попередження:</strong> увімкнення цього "
-"параметра зробить реєстр обов’язковим полем для усіх готівкових операцій ("
-"типу CASH); це включає транзакції SIP00, тому переконайтеся, що Ваші "
+"параметра зробить реєстр обов’язковим полем для усіх готівкових операцій "
+"(типу CASH); це включає транзакції SIP00, тому переконайтеся, що Ваші "
 "конфігурації SIP оновлено, щоб зіставити реєстр із вашим SIP-пристроєм.</p>"
 
 # Accounting > Features
@@ -2715,6 +2715,34 @@ msgstr ""
 "code> (MARC21) чи <code>942chijtv</code> (UNIMARC)), а значення підполів "
 "будуть відокремлені один від одного цим значенням:"
 
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+" (розділених комами) у правильні поля автора при імпорті запису з "
+"використанням Z39.50."
+
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr "(лише перегляд без XSLT)."
@@ -2750,8 +2778,8 @@ msgid ""
 "BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )."
 msgstr ""
 "Щоб вказати кілька МАРК-теґів/підполів як цілі для повторюваного теґу "
-"BibTeX, використовуйте такий формат: BT_ТЕҐ: [ТЕҐ2$ПІДПОЛЕ1, ТЕҐ2$ПІДПОЛЕ2] ("
-"наприклад, примітки: [501$a, 505$g] (MARC21) чи [300$a, 320$a] (UNIMARC))."
+"BibTeX, використовуйте такий формат: BT_ТЕҐ: [ТЕҐ2$ПІДПОЛЕ1, ТЕҐ2$ПІДПОЛЕ2] "
+"(наприклад, примітки: [501$a, 505$g] (MARC21) чи [300$a, 320$a] (UNIMARC))."
 
 # Cataloging > Exporting
 msgid ""
@@ -2785,8 +2813,8 @@ msgid ""
 "subpermission."
 msgstr ""
 "створювати допустимі значення з модуля каталогізації. Бібліотекарю "
-"знадобиться підпривілей „manage_auth_values“ "
-"(керування_допустимими_значеннями)."
+"знадобиться підпривілей "
+"„manage_auth_values“ (керування_допустимими_значеннями)."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -3217,8 +3245,8 @@ msgid ""
 "RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )."
 msgstr ""
 "Щоб вказати декілька MARC-теґів/підполів як цілі для повторюваного RIS-теґу, "
-"використовуйте наступний формат: RIS_ТЕҐ: [ТЕҐ2$ПІДПОЛЕ1, ТЕҐ2$ПІДПОЛЕ2] ("
-"наприклад, NT: [501$a, 505$g] для MARC21 чи NT: [300$a, 320$a] для UNIMARC)."
+"використовуйте наступний формат: RIS_ТЕҐ: [ТЕҐ2$ПІДПОЛЕ1, ТЕҐ2$ПІДПОЛЕ2] "
+"(наприклад, NT: [501$a, 505$g] для MARC21 чи NT: [300$a, 320$a] для UNIMARC)."
 
 # Cataloging > Exporting
 msgid ""
@@ -3437,8 +3465,8 @@ msgid ""
 "permission is enabled, separated by spaces:"
 msgstr ""
 "Перелік підполів (розділених пробілами), для яких дозволено редагування, "
-"коли увімкнено привілей „items_batchmod_restricted“ "
-"(обмеження_пакетного_редагування_примірників): "
+"коли увімкнено привілей "
+"„items_batchmod_restricted“ (обмеження_пакетного_редагування_примірників): "
 
 # Cataloging > Record structure
 msgid ""
@@ -3475,8 +3503,8 @@ msgid ""
 "enabled, separated by spaces:"
 msgstr ""
 "Перелік підполів (розділених пробілами), для яких дозволено редагування, "
-"коли увімкнено привілей „edit_items_restricted“ "
-"(обмеження_редагування_примірників): "
+"коли увімкнено привілей "
+"„edit_items_restricted“ (обмеження_редагування_примірників): "
 
 # Cataloging > Record structure
 msgid ""
@@ -4436,6 +4464,25 @@ msgstr ""
 " автоматичне перенаправлення на іншого користувача, коли сканується штрих-"
 "код користувача замість книги. Це має бути виключеним, якщо у вас "
 "перекриваються штрих-коди користувачів та книг."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr "Здійснювати"
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr "Не проводити"
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+" автоматичне переміщення примірників у їхню джерельну бібліотеку/підрозділ "
+"при їх поверненні."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -9358,8 +9405,8 @@ msgid ""
 "results.  <br/>Warning: Enabling this feature will slow OPAC search response "
 "times."
 msgstr ""
-"COinS / OpenURL / Z39.88 у результатах пошуку в електронному каталозі. "
-"<br/>Попередження: увімкнення цієї функції сповільнить час відповіді на "
+"COinS / OpenURL / Z39.88 у результатах пошуку в електронному каталозі. <br/"
+">Попередження: увімкнення цієї функції сповільнить час відповіді на "
 "результат пошуку в електронному каталозі."
 
 # Circulation > Fines Policy
@@ -10228,13 +10275,13 @@ msgid ""
 "language within the Koha templates directory. A full local path is expected "
 "to start from your HTTP document root."
 msgstr ""
-"для перевизначення певних налаштувань з таблиці стилів за умовчанням ("
-"залиште порожнім, щоб вимкнути). Введіть лише назву файлу, повний локальний "
+"для перевизначення певних налаштувань з таблиці стилів за умовчанням "
+"(залиште порожнім, щоб вимкнути). Введіть лише назву файлу, повний локальний "
 "шлях або повну URL-адресу, яка починається з <code>http://</code> (якщо файл "
-"знаходиться на віддаленому сервері). Зауважте, що якщо Ви просто вводите ім’"
-"я файлу, файл має бути у підкаталозі css для кожної активної теми та мови у "
-"каталозі шаблонів Коха. Очікується, що повний локальний шлях буде починатися "
-"з кореня Ваших HTTP-документів."
+"знаходиться на віддаленому сервері). Зауважте, що якщо Ви просто вводите "
+"ім’я файлу, файл має бути у підкаталозі css для кожної активної теми та мови "
+"у каталозі шаблонів Коха. Очікується, що повний локальний шлях буде "
+"починатися з кореня Ваших HTTP-документів."
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
@@ -10721,9 +10768,9 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
 msgstr ""
-"Показувати наступний HTML-код, коли параметр „<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance\""
-">OpacMaintenance</a>“ увімкнено:"
+"Показувати наступний HTML-код, коли параметр „<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpacMaintenance\">OpacMaintenance</a>“ "
+"увімкнено:"
 
 # OPAC > Features
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -13112,9 +13159,9 @@ msgid ""
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
 "query.html#type-cross-fields"
 msgstr ""
-"Перегляньте документацію за адресою "
-"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
-"multi-match-query.html#type-cross-fields"
+"Перегляньте документацію за адресою https://www.elastic.co/guide/en/"
+"elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-"
+"fields"
 
 # Searching > Features > ElasticsearchCrossFields
 msgid ""
@@ -13232,7 +13279,8 @@ msgstr "Основна URL-адреса LIBRIS "
 msgid ""
 "searching.pref#LibrisURL# Please only change this if you are sure it needs "
 "changing."
-msgstr "Будь ласка, змінюйте це, лише якщо Ви впевнені, що це потрібно змінити."
+msgstr ""
+"Будь ласка, змінюйте це, лише якщо Ви впевнені, що це потрібно змінити."
 
 # Searching > Features
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
@@ -14352,12 +14400,12 @@ msgid ""
 "and language within the Koha templates directory. A full local path is "
 "expected to start from your HTTP document root."
 msgstr ""
-"для перевизначення певних налаштувань з таблиці стилів за умовчанням ("
-"залиште порожнім, щоб вимкнути). Введіть лише назву файлу, повний локальний "
+"для перевизначення певних налаштувань з таблиці стилів за умовчанням "
+"(залиште порожнім, щоб вимкнути). Введіть лише назву файлу, повний локальний "
 "шлях або повну URL-адресу, яка починається з <code>http://</code> (якщо файл "
-"знаходиться на віддаленому сервері). Зауважте, що якщо Ви просто вводите ім’"
-"я файлу, файл має бути у підкаталозі „css“ для кожної активної теми та мови "
-"у каталозі шаблонів Коха. Очікується, що повний локальний шлях буде "
+"знаходиться на віддаленому сервері). Зауважте, що якщо Ви просто вводите "
+"ім’я файлу, файл має бути у підкаталозі „css“ для кожної активної теми та "
+"мови у каталозі шаблонів Коха. Очікується, що повний локальний шлях буде "
 "починатися з кореня Ваших HTTP-документів."
 
 # Staff interface > Appearance
@@ -14550,7 +14598,8 @@ msgstr ""
 msgid ""
 "tools.pref#ImageLimit# Limit the number of creator images stored in the "
 "database to"
-msgstr "Обмежте кількість зображень користувача, що зберігаються у базі даних, "
+msgstr ""
+"Обмежте кількість зображень користувача, що зберігаються у базі даних, "
 
 # Tools > Patron cards
 msgid "tools.pref#ImageLimit# images."
@@ -14691,8 +14740,8 @@ msgid ""
 "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-"
 "bin/koha/ilsdi.pl)"
 msgstr ""
-"служби ILS-DI для користувачів електронного каталогу (доступні за адресою: "
-"/cgi-bin/koha/ilsdi.pl)."
+"служби ILS-DI для користувачів електронного каталогу (доступні за адресою: /"
+"cgi-bin/koha/ilsdi.pl)."
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
@@ -14763,8 +14812,8 @@ msgid ""
 "web_services.pref#ManaToken# Get a security token on the <a href=\"/cgi-bin/"
 "koha/admin/share_content.pl\">Mana KB administration page</a>."
 msgstr ""
-"Отримайте маркер безпеки на <a href=\"/cgi-bin/koha/admin/share_content.pl\">"
-"сторінці адміністрування бази знань Mana</a>."
+"Отримайте маркер безпеки на <a href=\"/cgi-bin/koha/admin/share_content.pl"
+"\">сторінці адміністрування бази знань Mana</a>."
 
 # Web services > Mana KB
 msgid ""
@@ -14777,8 +14826,8 @@ msgid ""
 "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-"
 "PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)"
 msgstr ""
-"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a>-сервер у Koha ("
-"доступний за адресою: /cgi-bin/koha/oai.pl?verb=Identify)."
+"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a>-сервер у Koha "
+"(доступний за адресою: /cgi-bin/koha/oai.pl?verb=Identify)."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# Disable"
@@ -14847,11 +14896,11 @@ msgid ""
 msgstr ""
 ". Якщо порожньо, то Koha OAI сервер працює у звичайному режимі, в іншому "
 "випадку він працює у розширеному режимі. У розширеному режимі можна задавати "
-"інші формати, окрім marcxml або Dublin Core. <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:ConfFile\">OAI-"
-"PMH:ConfFile</a> вказує на файл конфігурації YAML, який містить список "
-"доступних форматів метаданих та XSL файл, який використовується для їх "
-"створення із marcxml-записів."
+"інші формати, окрім marcxml або Dublin Core. <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OAI-PMH:ConfFile\">OAI-PMH:ConfFile</a> "
+"вказує на файл конфігурації YAML, який містить список доступних форматів "
+"метаданих та XSL файл, який використовується для їх створення із marcxml-"
+"записів."
 
 # Web services > OAI-PMH
 msgid ""
@@ -14928,8 +14977,8 @@ msgid ""
 "HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for "
 "the REST API."
 msgstr ""
-"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\""
-"_blank\">базову автентифікацію</a> для REST API."
+"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target="
+"\"_blank\">базову автентифікацію</a> для REST API."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#RESTBasicAuth# Disable"
