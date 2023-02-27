@@ -25,7 +25,7 @@ use Koha::Database;
 use Koha::Biblio;
 use Koha::Libraries;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Record::Collections);
 
 =head1 NAME
 
