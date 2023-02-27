@@ -10,7 +10,7 @@
       <item>
         <title>[% newsitem.title | html %]</title>
         <description>[% newsitem.content | $raw %]</description>
-        <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.idnew | html %]</guid>
+        <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.additional_content_id | html %]</guid>
       </item>
       [% END %]
    </channel>

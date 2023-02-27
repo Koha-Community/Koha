@@ -461,40 +461,24 @@ sub IssueSlip {
                 issues      => $all,
             };
         }
-        my $news = Koha::AdditionalContents->search_for_display(
+        my @news_ids = Koha::AdditionalContents->search_for_display(
             {
                 category   => 'news',
                 location   => 'slip',
                 lang       => $patron->lang,
                 library_id => $branch,
             }
-        );
-        my @news;
-        while ( my $n = $news->next ) {
-            my $all = $n->unblessed_all_relateds;
-
-            # FIXME We keep newdate and timestamp for backward compatibility (from GetNewsToDisplay)
-            # But we should remove them and adjust the existing templates in a db rev
-            # FIXME This must be formatted in the notice template
-            my $published_on_dt = output_pref({ dt => dt_from_string( $all->{published_on} ), dateonly => 1 });
-            $all->{newdate} = $published_on_dt;
-            $all->{timestamp} = $published_on_dt;
-
-            push @news, {
-                additional_contents => $all,
-            };
-        }
+        )->get_column('id');
         $letter_code = 'ISSUESLIP';
         %repeat      = (
             checkedout => \@checkouts,
             overdue    => \@overdues,
-            news       => \@news,
         );
         %loops = (
             issues => [ map { $_->{issues}{itemnumber} } @checkouts ],
             overdues   => [ map { $_->{issues}{itemnumber} } @overdues ],
-            opac_news => [ map { $_->{additional_contents}{idnew} } @news ],
-            additional_contents => [ map { $_->{additional_contents}{idnew} } @news ],
+            opac_news => \@news_ids,
+            additional_contents => \@news_ids,
         );
     }
 

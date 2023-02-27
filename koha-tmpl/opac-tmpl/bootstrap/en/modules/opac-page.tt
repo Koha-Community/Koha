@@ -9,7 +9,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
-[% INCLUDE 'bodytag.inc' bodyid='opac-page-' _ page.idnew %]
+[% INCLUDE 'bodytag.inc' bodyid='opac-page-' _ page.additional_content_id %]
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
@@ -44,7 +44,7 @@
             [% END %]
 
             [% IF page %]
-                <div class="maincontent">
+                <div id="page_[% page.additional_content_id | html %]" class="maincontent">
                     <h1>[% page.title | html %]</h1>
 
                         <div class="page_content">

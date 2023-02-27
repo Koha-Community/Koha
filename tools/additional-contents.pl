@@ -24,6 +24,8 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use Try::Tiny;
+use Array::Utils qw( array_minus );
 use C4::Auth qw(get_template_and_user);
 use C4::Koha;
 use C4::Context;
@@ -65,18 +67,9 @@ if ( $op eq 'add_form' ) {
 
     my $additional_content = Koha::AdditionalContents->find($id);
     my $translated_contents;
-    if ( $additional_content ) {
-        $translated_contents = {
-            map { $_->lang => $_ } Koha::AdditionalContents->search(
-                {
-                    category   => $additional_content->category,
-                    code       => $additional_content->code,
-                    location   => $additional_content->location,
-                    branchcode => $additional_content->branchcode,
-                }
-            )->as_list
-        };
-        $category = $additional_content->category;
+    if ($additional_content) {
+        $translated_contents = { map { $_->lang => $_ } $additional_content->translated_contents->as_list };
+        $category            = $additional_content->category;
     }
     $template->param(
         additional_content => $additional_content,
@@ -88,7 +81,6 @@ elsif ( $op eq 'add_validate' ) {
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
-    my $idnew      = $cgi->param('idnew');
 
     my @lang       = $cgi->multi_param('lang');
 
@@ -96,101 +88,92 @@ elsif ( $op eq 'add_validate' ) {
     my $published_on = $cgi->param('published_on');
     my $number = $cgi->param('number');
 
-    my $original_default = $idnew ? Koha::AdditionalContents->find($idnew) : undef;
-
-    my $success = 1;
-    for my $lang ( sort {$a ne 'default'} @lang ) { # Process 'default' first
-        my $title   = $cgi->param( 'title_' . $lang );
-        my $content = $cgi->param( 'content_' . $lang );
-        # Force a default record
-        $content ||= '<!-- no_content -->' if $lang eq 'default';
-
-        my $additional_content = Koha::AdditionalContents->find(
-            {
-                category   => $category,
-                code       => $code,
-                branchcode => $original_default ? $original_default->branchcode : $branchcode,
-                lang       => $lang,
-            }
-        );
-        # Delete if title or content is empty
-        if( $lang ne 'default' && !$title && !$content ) {
-            if ( $additional_content ) {
-                eval { $additional_content->delete };
-                unless ($@) {
-                    logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $additional_content->code, $additional_content->title, $additional_content->lang, $additional_content->content));
-                }
-            }
-            next;
-        } elsif ( $additional_content ) {
-            my $updated;
-            eval {
-                $additional_content->set(
-                    {
-                        category       => $category,
-                        code           => $code,
+    try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $additional_content;
+                my $params = {
                         location       => $location,
                         branchcode     => $branchcode,
-                        title          => $title,
-                        content        => $content,
-                        lang           => $lang,
                         expirationdate => $expirationdate,
                         published_on   => $published_on,
                         number         => $number,
                         borrowernumber => $borrowernumber,
-                    }
-                );
-                $updated = $additional_content->_result->get_dirty_columns;
-                $additional_content->store;
-                $id = $additional_content->idnew;
-            };
-            if ($@) {
-                $success = 0;
-                push @messages, { type => 'error', code => 'error_on_update' };
-                last;
-            }
+                    };
 
-            logaction('NEWS', 'MODIFY' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
-                if C4::Context->preference("NewsLog") && $updated;
-        }
-        else {
-            my $additional_content = Koha::AdditionalContent->new(
-                {
-                    category       => $category,
-                    code           => $code || 'tmp_code',
-                    location       => $location,
-                    branchcode     => $branchcode,
-                    title          => $title,
-                    content        => $content,
-                    lang           => $lang,
-                    expirationdate => $expirationdate,
-                    published_on   => $published_on,
-                    number         => $number,
-                    borrowernumber => $borrowernumber,
+                if ( $id ) {
+                    $additional_content = Koha::AdditionalContents->find($id);
+                    $additional_content->set($params)->store;
+                } else {
+                    $additional_content = Koha::AdditionalContent->new(
+                        {
+                            category   => $category,
+                            code       => $code,
+                            branchcode => $branchcode,
+                            %$params,
+                        }
+                    )->store;
                 }
-            )->store;
-            eval {
-                $additional_content->store;
                 unless ($code) {
                     $additional_content->discard_changes;
-                    $code = $category eq 'news'
-                      ? 'News_' . $additional_content->idnew
-                      : $location . '_' . $additional_content->idnew;
+                    $code =
+                      $category eq 'news'
+                      ? 'News_' . $additional_content->id
+                      : $location . '_' . $additional_content->id;
                     $additional_content->code($code)->store;
-                    $id = $additional_content->idnew;
+                    $id = $additional_content->id;
                 }
-            };
-            if ($@) {
-                $success = 0;
-                push @messages, { type => 'error', code => 'error_on_insert' };
-                last;
+                my @translated_contents;
+                my $existing_contents = $additional_content->translated_contents;
+                my @seen_ids;
+                for my $lang (@lang) {
+                    my $id      = $cgi->param( 'id_' . $lang );
+                    my $title   = $cgi->param( 'title_' . $lang );
+                    my $content = $cgi->param( 'content_' . $lang );
+                    $content ||= '<!-- no_content -->' if $lang eq 'default';
+
+                    next unless $title || $content;
+
+                    push @seen_ids, $id;
+                    push @translated_contents,
+                      {
+                        title   => $title,
+                        content => $content,
+                        lang    => $lang,
+                      };
+
+                    if ( C4::Context->preference("NewsLog") ) {
+                        my $existing_content = $existing_contents->find($id);
+                        if ( $existing_content ) {
+                            if ( $existing_content->title ne $title || $existing_content->content ne $content ) {
+                                logaction('NEWS', 'MODIFY' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content));
+                            }
+                        } else {
+                            logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
+                        }
+                    }
+                }
+
+                if ( C4::Context->preference("NewsLog") ) {
+                    my @existing_ids = $existing_contents->get_column('id');
+                    my @deleted_ids = array_minus( @existing_ids, @seen_ids );
+                    for my $id ( @deleted_ids ) {
+                        my $c = $existing_contents->find($id);
+                        logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s", $code, $c->lang, $c->content));
+                    }
+                }
+
+                $additional_content->translated_contents( \@translated_contents );
             }
-
-            logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
-                if C4::Context->preference("NewsLog");
+        );
+    } catch {
+        warn $_;
+        if ( $id ) {
+            push @messages, { type => 'error', code => 'error_on_update' };
+        } else {
+            push @messages, { type => 'error', code => 'error_on_insert' };
         }
-
-    }
+    };
 
     if( $redirect eq "just_save" ){
         print $cgi->redirect("/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&category=$category&editmode=$editmode&redirect=done");
@@ -202,38 +185,37 @@ elsif ( $op eq 'add_validate' ) {
 elsif ( $op eq 'delete_confirmed' ) {
     output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
     my @ids = $cgi->multi_param('ids');
-    my $deleted = eval {
 
-        my $schema = Koha::Database->new->schema;
-        $schema->txn_do(
+    try {
+        Koha::Database->new->schema->txn_do(
             sub {
                 my $contents =
-                  Koha::AdditionalContents->search( { idnew => \@ids } );
+                  Koha::AdditionalContents->search( { id => \@ids } );
 
-                while ( my $c = $contents->next ) {
-                    Koha::AdditionalContents->search( { code => $c->code } )->delete;
-                    if ( C4::Context->preference("NewsLog") ) {
-                        logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $c->code, $c->title, $c->lang, $c->content));
+                if ( C4::Context->preference("NewsLog") ) {
+                    while ( my $c = $contents->next ) {
+                        my $translated_contents = $c->translated_contents;
+                        while ( my $translated_content = $translated_contents->next ) {
+                            logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $c->code, $translated_content->lang, $translated_content->content));
+                        }
                     }
                 }
+                $contents->delete;
             }
         );
-    };
-
-    if ( $@ or not $deleted ) {
-        push @messages, { type => 'error', code => 'error_on_delete' };
-    }
-    else {
         push @messages, { type => 'message', code => 'success_on_delete' };
-    }
+    } catch {
+        warn $_;
+        push @messages, { type => 'error', code => 'error_on_delete' };
+    };
 
     $op = 'list';
 }
 
 if ( $op eq 'list' ) {
     my $additional_contents = Koha::AdditionalContents->search(
-        { category => $category, lang => 'default' },
-        { order_by => { -desc => 'published_on' } }
+        { category => $category, 'additional_contents_localizations.lang' => 'default' },
+        { order_by => { -desc => 'published_on' }, join => 'additional_contents_localizations' }
     );
     $template->param( additional_contents => $additional_contents );
 }
@@ -269,6 +251,7 @@ $template->param(
     wysiwyg   => $wysiwyg,
     editmode  => $editmode,
     languages => \@languages,
+    messages  => \@messages,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

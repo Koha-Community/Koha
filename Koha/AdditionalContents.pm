@@ -19,9 +19,12 @@ package Koha::AdditionalContents;
 
 use Modern::Perl;
 
+use Array::Utils qw( array_minus );
+
 use Koha::Database;
 use Koha::Exceptions;
 use Koha::AdditionalContent;
+use Koha::AdditionalContentsLocalizations;
 
 use base qw(Koha::Objects);
 
@@ -72,44 +75,42 @@ sub search_for_display {
     my ( $self, $params ) = @_;
 
     my $search_params;
-    $search_params->{location} = $params->{location};
-    $search_params->{branchcode} = $params->{library_id} ? [ $params->{library_id}, undef ] : undef;
+    $search_params->{location}     = $params->{location};
+    $search_params->{branchcode}   = $params->{library_id} ? [ $params->{library_id}, undef ] : undef;
     $search_params->{published_on} = { '<=' => \'CAST(NOW() AS DATE)' };
-    $search_params->{-or} = [ expirationdate => { '>=' => \'CAST(NOW() AS DATE)' },
-                              expirationdate => undef ];
+    $search_params->{-or}          = [
+        expirationdate => { '>=' => \'CAST(NOW() AS DATE)' },
+        expirationdate => undef
+    ];
     $search_params->{category} = $params->{category} if $params->{category};
 
-    if ( $params->{lang} ) {
-        # FIXME I am failing to translate the following query
-        # SELECT   a1.category,   a1.code,   COALESCE(a2.title, a1.title)
-        # FROM additional_contents a1
-        # LEFT JOIN additional_contents a2 on a1.code=a2.code AND a2.lang="es-ES"
-        # WHERE a1.lang = 'default';
+    my $contents = $self->SUPER::search( $search_params, { order_by => 'number' } );
 
-        # So we are retrieving the code with a translated content, then the other ones
-        my $translated_contents =
-          $self->SUPER::search( { %$search_params, lang => $params->{lang} } );
-        my $default_contents = $self->SUPER::search(
+    if ( $params->{lang} ) {
+        my $translated_contents = Koha::AdditionalContentsLocalizations->search(
             {
-                %$search_params,
-                lang => 'default',
-                code =>
-                  { '-not_in' => [ $translated_contents->get_column('code') ] }
+                additional_content_id => [$contents->get_column('id')],
+                lang => $params->{lang},
             }
         );
-
-        return $self->SUPER::search(
+        my @all_content_id = $contents->get_column('id');
+        my @translated_content_id = $translated_contents->get_column('additional_content_id');
+        my $default_contents    = Koha::AdditionalContentsLocalizations->search(
             {
-                idnew => [
-                    $translated_contents->get_column('idnew'),
-                    $default_contents->get_column('idnew')
+                additional_content_id => [array_minus(@all_content_id, @translated_content_id)],
+                lang                  => 'default',
+            }
+        );
+        return Koha::AdditionalContentsLocalizations->search(
+            {
+                id => [
+                    $translated_contents->get_column('id'),
+                    $default_contents->get_column('id'),
                 ]
             },
-            { order_by => 'number' }
         );
     }
-
-    return $self->SUPER::search({%$search_params, lang => 'default'}, { order_by => 'number'});
+    return $contents->search( { lang => 'default' }, { order_by => 'number' } )->translated_contents;
 }
 
 =head3 find_best_match
@@ -129,12 +130,16 @@ sub find_best_match {
     my $library_id = $params->{library_id};
     my $lang = $params->{lang};
 
-    my $rs = $self->SUPER::search({
+    my $contents = $self->SUPER::search({
         category => $params->{category},
         location => $params->{location},
-        lang => [ $lang, 'default' ],
         branchcode => [ $library_id, undef ],
     });
+
+    my $rs = Koha::AdditionalContentsLocalizations->search({
+            additional_content_id => [ $contents->get_column('id') ],
+            lang => [ $lang, 'default' ],
+        });
 
     # Pick the best
     my ( $alt1, $alt2, $alt3 );

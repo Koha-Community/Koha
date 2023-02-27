@@ -27,7 +27,6 @@ use C4::Members;
 use C4::Overdues qw( checkoverdues );
 use Koha::Checkouts;
 use Koha::Holds;
-use Koha::AdditionalContents;
 use Koha::Patron::Messages;
 
 my $input = CGI->new;

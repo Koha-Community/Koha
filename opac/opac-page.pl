@@ -20,6 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
+use C4::Languages qw( getlanguage );
 use Koha::AdditionalContents;
 
 my $query = CGI->new();
@@ -34,21 +35,22 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $page_id = $query->param('page_id');
-my $code = $query->param('code');
-my $page;
+my $lang = $query->param('language');
 
 my $homebranch = $ENV{OPAC_BRANCH_DEFAULT};
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
 
-if( $page_id ) {
-    $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['opac_only', 'staff_and_opac'], branchcode => [ $homebranch, undef ] });
-} elsif( $code ) {
-    my $lang = $query->param('language') || $query->cookie('KohaOpacLanguage') || $template->lang;
-    # In the next query we make sure that the 'default' records come after the regular languages
-    $page = Koha::AdditionalContents->search({ code => $code, lang => ['default', $lang], location => ['opac_only', 'staff_and_opac'], branchcode => [ $homebranch, undef ] }, { order_by => { -desc => \[ 'CASE WHEN lang="default" THEN "" ELSE lang END' ]}} );
+my $page = Koha::AdditionalContents->find($page_id);
+
+if ( !$page || $page->category ne 'pages' || $page->branchcode && $page->branchcode != $homebranch || $page->location ne 'opac_only' && $page->location ne 'staff_and_opac' ) {
+    print $query->redirect('/cgi-bin/koha/errors/404.pl');
+    exit;
 }
-$template->param( $page && $page->count ? ( page => $page->next ) : ( page_error => 1 ) );
+
+my $content = $page->translated_content( $lang || C4::Languages::getlanguage($query) );
+
+$template->param( page => $content );
 
 output_html_with_http_headers $query, $cookie, $template->output;

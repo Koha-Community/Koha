@@ -762,7 +762,7 @@ sub _parseletter_sth {
     ($table eq 'subscription') ? "SELECT * FROM $table WHERE subscriptionid = ?" :
     ($table eq 'serial') ? "SELECT * FROM $table WHERE serialid = ?" :
     ($table eq 'problem_reports') ? "SELECT * FROM $table WHERE reportid = ?" :
-    ($table eq 'additional_contents' || $table eq 'opac_news') ? "SELECT * FROM additional_contents WHERE idnew = ?" :
+    ($table eq 'additional_contents' || $table eq 'opac_news') ? "SELECT * FROM additional_contents_localizations WHERE id = ?" :
     ($table eq 'recalls') ? "SELECT * FROM $table WHERE recall_id = ?" :
     undef ;
     unless ($query) {
@@ -1766,16 +1766,16 @@ sub _get_tt_params {
             pk       => 'itemnumber',
         },
         additional_contents => {
-            module   => 'Koha::AdditionalContents',
+            module   => 'Koha::AdditionalContentsLocalizations',
             singular => 'additional_content',
             plural   => 'additional_contents',
-            pk       => 'idnew',
+            pk       => 'id',
         },
         opac_news => {
-            module   => 'Koha::AdditionalContents',
+            module   => 'Koha::AdditionalContentsLocalizations',
             singular => 'news',
             plural   => 'news',
-            pk       => 'idnew',
+            pk       => 'id',
         },
         aqorders => {
             module   => 'Koha::Acquisition::Orders',

@@ -19,11 +19,11 @@ package Koha::AdditionalContent;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::AdditionalContentsLocalizations;
 
 use base qw(Koha::Object);
 
@@ -61,7 +61,7 @@ Returns 1 if the additional content is expired or 0;
 =cut
 
 sub is_expired {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return 0 unless $self->expirationdate;
     return 1 if dt_from_string( $self->expirationdate ) < dt_from_string->truncate( to => 'day' );
@@ -77,13 +77,69 @@ Returns Koha::Library object or undef
 =cut
 
 sub library {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $library_rs = $self->_result->branchcode;
     return unless $library_rs;
-    return Koha::Library->_new_from_dbic( $library_rs );
+    return Koha::Library->_new_from_dbic($library_rs);
 }
 
+=head3 translated_contents
+
+my $translated_contents = $additional_content->translated_contents;
+$additional_content->translated_contents(\@contents)
+
+=cut
+
+sub translated_contents {
+    my ( $self, $localizations ) = @_;
+    if ($localizations) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->translated_contents->delete;
+
+                for my $localization (@$localizations) {
+                    $self->_result->add_to_additional_contents_localizations($localization);
+                }
+            }
+        );
+    }
+
+    my $rs = $self->_result->additional_contents_localizations;
+    return Koha::AdditionalContentsLocalizations->_new_from_dbic($rs);
+}
+
+=head3 default_localization
+
+my $default_content = $additional_content->default_localization;
+
+Return the default content.
+
+=cut
+
+sub default_localization {
+    my ($self) = @_;
+    my $rs = $self->_result->additional_contents_localizations->find( { lang => 'default' } );
+    return Koha::AdditionalContentsLocalization->_new_from_dbic($rs);
+}
+
+=head3 translated_content
+
+my $translated_content = $additional_content->translated_content($lang);
+
+Return the translated content for a given language. The default is returned if none exist.
+
+=cut
+
+sub translated_content {
+    my ( $self, $lang ) = @_;
+    my $content = $self->translated_contents->search(
+        { lang => [ 'default', ( $lang ? $lang : () ) ] },
+        { ( $lang ? ( order_by => \[ "field(lang, '" . $lang . "', 'default')" ] ) : () ) }
+    )->next;
+    return $content;
+}
 
 =head3 _type
 
