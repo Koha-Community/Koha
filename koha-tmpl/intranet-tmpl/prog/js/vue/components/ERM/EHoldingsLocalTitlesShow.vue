@@ -10,11 +10,12 @@
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
-                <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/local/titles/delete/${title.title_id}`"
-                    :title="$__('Delete')"
+                <a
+                    @click="
+                        delete_title(title.title_id, title.publication_title)
+                    "
                     ><i class="fa fa-trash"></i
-                ></router-link>
+                ></a>
             </span>
         </h2>
         <div>
@@ -264,9 +265,12 @@ export default {
     setup() {
         const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
 
         return {
             get_lib_from_av,
+            setConfirmationDialog,
+            setMessage,
         }
     },
     data() {
@@ -322,6 +326,34 @@ export default {
                 error => {}
             )
         },
+        delete_title: function (title_id, title_publication_title) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this title?"
+                    ),
+                    message: title_publication_title,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.localTitles.delete(title_id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("Local title %s deleted").format(
+                                    title_publication_title
+                                )
+                            )
+                            this.$router.push(
+                                "/cgi-bin/koha/erm/eholdings/local/titles"
+                            )
+                        },
+                        error => {}
+                    )
+                }
+            )
+        },
     },
     components: {
         EHoldingsTitlePackagesList,
@@ -333,6 +365,7 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+    cursor: pointer;
 }
 fieldset.rows label {
     width: 25rem;
