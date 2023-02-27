@@ -2,7 +2,6 @@ import Home from "../components/ERM/Home.vue";
 import AgreementsList from "../components/ERM/AgreementsList.vue";
 import AgreementsShow from "../components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "../components/ERM/AgreementsFormAdd.vue";
-import AgreementsFormConfirmDelete from "../components/ERM/AgreementsFormConfirmDelete.vue";
 import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
@@ -145,17 +144,6 @@ export const routes = [
                         build_breadcrumb(
                             breadcrumb_paths.agreements,
                             "Show agreement" // $t("Show agreement")
-                        ),
-                },
-            },
-            {
-                path: "delete/:agreement_id",
-                component: AgreementsFormConfirmDelete,
-                meta: {
-                    breadcrumb: () =>
-                        build_breadcrumb(
-                            breadcrumb_paths.agreements,
-                            "Delete agreement" // $t("Delete agreement")
                         ),
                 },
             },
