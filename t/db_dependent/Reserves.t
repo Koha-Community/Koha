@@ -1452,7 +1452,7 @@ $schema->storage->txn_rollback();
 
 subtest 'IsAvailableForItemLevelRequest() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -1484,6 +1484,21 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
         "Item not available for item-level hold because no effective item type"
     );
 
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                onshelfholds => 0,
+            }
+        }
+    );
+    my $item_1 = $builder->build_sample_item( { notforloan => -1 } );
+    ok(
+        C4::Reserves::IsAvailableForItemLevelRequest( $item_1, $patron ),
+        "We can placing hold on item with negative not for loan values when 'On shelf holds allowed' is set to 'If any unavailable'"
+    );
     $schema->storage->txn_rollback;
 };
 
