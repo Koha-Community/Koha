@@ -50,7 +50,7 @@ subtest 'enqueue() tests' => sub {
 
     is( $job->size,   1,         'Size is correct' );
     is( $job->status, 'new',     'Initial status set correctly' );
-    is( $job->queue,  'default', 'BatchUpdateItem should use the default queue' );
+    is( $job->queue,  'elastic_index', 'BatchUpdateItem should use the default queue' );
 
     $schema->storage->txn_rollback;
 };
