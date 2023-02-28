@@ -23,14 +23,14 @@ __PACKAGE__->table("additional_contents");
 
 =head1 ACCESSORS
 
-=head2 idnew
+=head2 id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_auto_increment: 1
   is_nullable: 0
 
-unique identifier for the additional content
+unique identifier for the additional content category
 
 =head2 category
 
@@ -64,31 +64,6 @@ location of the additional content
   size: 10
 
 branch code users to create branch specific additional content, NULL is every branch.
-
-=head2 title
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 250
-
-title of the additional content
-
-=head2 content
-
-  data_type: 'mediumtext'
-  is_nullable: 0
-
-the body of your additional content
-
-=head2 lang
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 50
-
-location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
 
 =head2 published_on
 
@@ -133,7 +108,7 @@ The user who created the additional content
 =cut
 
 __PACKAGE__->add_columns(
-  "idnew",
+  "id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
@@ -148,12 +123,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
-  "title",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 250 },
-  "content",
-  { data_type => "mediumtext", is_nullable => 0 },
-  "lang",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "published_on",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "updated_on",
@@ -175,13 +144,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</idnew>
+=item * L</id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("idnew");
+__PACKAGE__->set_primary_key("id");
 
 =head1 UNIQUE CONSTRAINTS
 
@@ -195,18 +164,31 @@ __PACKAGE__->set_primary_key("idnew");
 
 =item * L</branchcode>
 
-=item * L</lang>
-
 =back
 
 =cut
 
 __PACKAGE__->add_unique_constraint(
   "additional_contents_uniq",
-  ["category", "code", "branchcode", "lang"],
+  ["category", "code", "branchcode"],
 );
 
 =head1 RELATIONS
+
+=head2 additional_contents_localizations
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AdditionalContentsLocalization>
+
+=cut
+
+__PACKAGE__->has_many(
+  "additional_contents_localizations",
+  "Koha::Schema::Result::AdditionalContentsLocalization",
+  { "foreign.additional_content_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 borrowernumber
 
@@ -249,8 +231,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-02 07:12:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/h/wWfmyVxW7skwrMn3scg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-03 07:19:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0w/fOUAy+4V4aVls/i7Wig
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
