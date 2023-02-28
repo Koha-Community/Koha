@@ -22,7 +22,7 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user get_session );
+use C4::Auth qw( get_template_and_user get_session haspermission );
 use Koha::BiblioFrameworks;
 use Koha::Cash::Registers;
 use Koha::Libraries;
@@ -49,7 +49,7 @@ my $userenv_register_id = C4::Context->userenv->{'register_id'} || '';
 my @updated;
 
 # $session lines here are doing the updating
-if ( $branch and my $library = Koha::Libraries->find($branch) and ( $flags->{loggedinlibrary} == 1 or $flags->{superlibrarian} == 1 ) ) {
+if ( $branch and my $library = Koha::Libraries->find($branch) and ( C4::Auth::haspermission(C4::Context->userenv->{'id'}, { 'loggedinlibrary' => 1 }) or C4::Context::IsSuperLibraian() ) ) {
     if ( !$userenv_branch or $userenv_branch ne $branch  )  {
         my $branchname = $library->branchname;
         $session->param('branchname', $branchname);         # update sesssion in DB

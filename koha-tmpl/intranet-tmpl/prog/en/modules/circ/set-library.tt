@@ -90,7 +90,7 @@ Updated:<ul>
     <ol>
         <li><label for="branch">Choose library:</label>
         <select name="branch" id="branch">
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
         </select></li>
     </ol>
 </fieldset>
