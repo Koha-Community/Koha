@@ -982,6 +982,13 @@ __PACKAGE__->has_many(
   }
 );
 
+__PACKAGE__->might_have(
+  "last_returned_by",
+  "Koha::Schema::Result::ItemsLastBorrower",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;
