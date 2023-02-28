@@ -90,12 +90,11 @@ Return the checkout linked to this account line if exists
 =cut
 
 sub checkout {
-    my ( $self ) = @_;
-    return unless $self->issue_id ;
+    my ($self) = @_;
+    return unless $self->issue_id;
 
-    $self->{_checkout} ||= Koha::Checkouts->find( $self->issue_id );
-    $self->{_checkout} ||= Koha::Old::Checkouts->find( $self->issue_id );
-    return $self->{_checkout};
+    return Koha::Checkouts->find( $self->issue_id )
+      || Koha::Old::Checkouts->find( $self->issue_id );
 }
 
 =head3 library

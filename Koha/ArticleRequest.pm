@@ -178,9 +178,9 @@ Returns the Koha::Biblio object for this article request
 sub biblio {
     my ($self) = @_;
 
-    $self->{_biblio} ||= Koha::Biblios->find( $self->biblionumber() );
-
-    return $self->{_biblio};
+    my $rs = $self->result->biblionumber;
+    return unless $rs;
+    return Koha::Biblio->_new_from_dbic($rs);
 }
 
 =head3 debit
@@ -208,10 +208,9 @@ Returns the Koha::Item object for this article request
 
 sub item {
     my ($self) = @_;
-
-    $self->{_item} ||= Koha::Items->find( $self->itemnumber() );
-
-    return $self->{_item};
+    my $rs = $self->_result->itemnumber;
+    return unless $rs;
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head3 borrower
@@ -222,10 +221,9 @@ Returns the Koha::Patron object for this article request
 
 sub borrower {
     my ($self) = @_;
-
-    $self->{_borrower} ||= Koha::Patrons->find( $self->borrowernumber() );
-
-    return $self->{_borrower};
+    my $rs = $self->_result->borrowernumber;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 branch
@@ -236,10 +234,9 @@ Returns the Koha::Library object for this article request
 
 sub branch {
     my ($self) = @_;
-
-    $self->{_branch} ||= Koha::Libraries->find( $self->branchcode() );
-
-    return $self->{_branch};
+    my $rs = $self->_result->branchcode;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 store
