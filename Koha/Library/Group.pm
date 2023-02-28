@@ -42,10 +42,9 @@ Koha::Library::Group - Koha Library::Group object class
 
 sub parent {
     my ($self) = @_;
-
-    $self->{_parent} ||= Koha::Library::Groups->find( $self->parent_id );
-
-    return $self->{_parent};
+    my $rs = $self->_result->parent;
+    return unless $rs;
+    return Koha::Library::Group->_new_from_dbic($rs);
 }
 
 =head3 my @children = $self->children()
@@ -86,12 +85,9 @@ Returns the library for this group if one exists
 
 sub library {
     my ($self) = @_;
-
-    return unless $self->branchcode;
-
-    $self->{_library} ||= Koha::Libraries->find( $self->branchcode );
-
-    return $self->{_library};
+    my $rs = $self->_result->branchcode;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 libraries

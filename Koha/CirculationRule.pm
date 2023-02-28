@@ -41,10 +41,9 @@ Koha::CirculationRule - Koha CirculationRule  object class
 
 sub library {
     my ($self) = @_;
-
-    $self->{_library} ||= Koha::Libraries->find( $self->branchcode );
-
-    return $self->{_library};
+    my $rs = $self->_result->branchcode;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 patron_category
@@ -53,10 +52,9 @@ sub library {
 
 sub patron_category {
     my ($self) = @_;
-
-    $self->{_patron_category} ||= Koha::Patron::Categories->find( $self->categorycode );
-
-    return $self->{_patron_category};
+    my $rs = $self->_result->categorycode;
+    return unless $rs;
+    return Koha::Patron::Category->_new_from_dbic($rs);
 }
 
 =head3 item_type
@@ -65,10 +63,9 @@ sub patron_category {
 
 sub item_type {
     my ($self) = @_;
-
-    $self->{_item_type} ||= Koha::ItemTypes->find( $self->itemtype );
-
-    return $self->{item_type};
+    my $rs = $self->_result->itemtype;
+    return unless $rs;
+    return Koha::ItemTypes->_new_from_dbic($rs);
 }
 
 =head3 clone

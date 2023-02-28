@@ -89,7 +89,7 @@ sub has_expired {
 
 sub sharee {
     my $self = shift;
-    return Koha::Patron->_new_from_dbic( $self->{_result}->borrowernumber );
+    return Koha::Patron->_new_from_dbic( $self->_result->borrowernumber );
 }
 
 =head3 _type

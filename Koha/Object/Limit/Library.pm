@@ -178,11 +178,7 @@ Returns the internal resultset for the branch limitation table or creates it if 
 
 sub _library_limit_rs {
     my ($self) = @_;
-
-    $self->{_library_limit_rs} ||= Koha::Database->new->schema->resultset(
-        $self->_library_limits->{class} );
-
-    return $self->{_library_limit_rs};
+    return Koha::Database->new->schema->resultset( $self->_library_limits->{class} );
 }
 
 1;
