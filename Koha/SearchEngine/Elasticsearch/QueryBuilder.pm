@@ -1131,6 +1131,15 @@ sub _fix_limit_special_cases {
         elsif ( $l =~ /^available$/ ) {
             push @new_lim, 'available:true';
         }
+        elsif ( $l =~ /^\s*(kw\b[\w,-]*?):(.*)/) {
+            my ( $field, $term ) = ($1, $2);
+            if ( defined($field) && defined($term) && $field =~ /,phr$/) {
+                push @new_lim, "(\"$term\")";
+            }
+            else {
+                push @new_lim, $term;
+            }
+        }
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
             $field =~ s/,phr$//; #We are quoting all the limits as phrase, this prevents from quoting again later
