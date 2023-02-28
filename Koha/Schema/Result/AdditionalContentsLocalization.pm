@@ -143,6 +143,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-08 08:09:35
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KRaaWslsavWVmDbZF/NwcQ
 
+sub koha_object_class {
+    'Koha::AdditionalContentsLocalization';
+}
+sub koha_objects_class {
+    'Koha::AdditionalContentsLocalizations';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
