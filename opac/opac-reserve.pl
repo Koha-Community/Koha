@@ -335,7 +335,7 @@ foreach my $biblioNumber (@biblionumbers) {
 
     my $items = Koha::Items->search_ordered(
         [
-            biblionumber => $biblioNumber,
+            'me.biblionumber' => $biblioNumber,
             'me.itemnumber' => {
                 -in => [
                     $biblio->host_items->get_column('itemnumber')
