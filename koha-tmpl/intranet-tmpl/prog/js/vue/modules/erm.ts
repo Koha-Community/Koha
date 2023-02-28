@@ -63,10 +63,13 @@ router.beforeEach((to, from) => {
 });
 router.afterEach((to, from) => {
     let tab_id = 1; // Agreements
-    if ( to.path.match(/\/erm\/eholdings\/local\/titles/)){
+    if (to.path.match(/\/erm\/eholdings\/local\/packages/)) {
         tab_id = 2;
-    } else if ( to.path.match(/\/erm\/eholdings\/local\/packages/)){
+    } else if (to.path.match(/\/erm\/eholdings\/local\/titles/)) {
         tab_id = 3;
     }
-    document.getElementById('ui-id-' + tab_id).click();
-})
+    let node = document.getElementById("ui-id-" + tab_id);
+    if (node) {
+        node.click();
+    }
+});
