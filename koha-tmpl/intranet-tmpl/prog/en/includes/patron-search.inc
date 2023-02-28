@@ -438,7 +438,7 @@
                                 "orderable": true,
                                  "render": function( data, type, row, meta ) {
                                     let r = '<div class="address"><ul>';
-                                    r += $format_address(row, { no_line_break: 1 });
+                                    r += $format_address(row, { no_line_break: true, include_li: true });
                                     r += '</div></ul>';
                                     return r;
                                 }
@@ -450,7 +450,7 @@
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
                                     let r = '<div class="address"><ul>';
-                                    r += $format_address(row, { no_line_break: 1 });
+                                    r += $format_address(row, { no_line_break: true, include_li: true });
                                     r += '</div></ul>';
                                     r += " " + escape_str(libraries_map[row.library_id].branchname);
                                     return r;
@@ -471,7 +471,7 @@
                                     [% END %]
                                     r += '<br/>';
                                     r += '<div class="address"><ul>';
-                                    r += $format_address(row, { no_line_break: 1 });
+                                    r += $format_address(row, { no_line_break: true, include_li: true });
 
                                     if ( row.email ) {
                                         r += "<li>" + _("Email: ") + "<a href='mailto:" + encodeURIComponent(row.email) + "'>" + escape_str(row.email) + "</a></li>";
@@ -496,7 +496,7 @@
                                     [% END %]
                                     r += '<br/>';
                                     r += '<div class="address"><ul>';
-                                    r += $format_address(row, { no_line_break: 1 });
+                                    r += $format_address(row, { no_line_break: true, include_li: true });
 
                                     if ( row.email ) {
                                         r += "<li>" + _("Email: ") + "<a href='mailto:" + encodeURIComponent(row.email) + "'>" + escape_str(row.email) + "</a></li>";
