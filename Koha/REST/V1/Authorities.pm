@@ -253,4 +253,70 @@ sub update {
     };
 }
 
+=head3 list
+
+Controller function that handles retrieving a list of authorities
+
+=cut
+
+sub list {
+    my $c = shift->openapi->valid_input or return;
+
+    my $authorities = $c->objects->search_rs( Koha::Authorities->new );
+
+    return try {
+
+        if ( $c->req->headers->accept =~ m/application\/json(;.*)?$/ ) {
+            return $c->render(
+                status => 200,
+                json   => $authorities->to_api
+            );
+        }
+        elsif (
+            $c->req->headers->accept =~ m/application\/marcxml\+xml(;.*)?$/ )
+        {
+            $c->res->headers->add( 'Content-Type', 'application/marcxml+xml' );
+            return $c->render(
+                status => 200,
+                text   => $authorities->print_collection('marcxml')
+            );
+        }
+        elsif (
+            $c->req->headers->accept =~ m/application\/marc-in-json(;.*)?$/ )
+        {
+            $c->res->headers->add( 'Content-Type', 'application/marc-in-json' );
+            return $c->render(
+                status => 200,
+                data   => $authorities->print_collection('mij')
+            );
+        }
+        elsif ( $c->req->headers->accept =~ m/application\/marc(;.*)?$/ ) {
+            $c->res->headers->add( 'Content-Type', 'application/marc' );
+            return $c->render(
+                status => 200,
+                text   => $authorities->print_collection('marc')
+            );
+        }
+        elsif ( $c->req->headers->accept =~ m/text\/plain(;.*)?$/ ) {
+            return $c->render(
+                status => 200,
+                text   => $authorities->print_collection('txt')
+            );
+        }
+        else {
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/json",         "application/marcxml+xml",
+                    "application/marc-in-json", "application/marc",
+                    "text/plain"
+                ]
+            );
+        }
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

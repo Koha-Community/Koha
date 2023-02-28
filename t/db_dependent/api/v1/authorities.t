@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -311,6 +311,81 @@ subtest 'put() tests' => sub {
     $subfield_a = $record->subfield('110', 'a');
 
     is($subfield_a, 'USMARCFormated');
+
+    $schema->storage->txn_rollback;
+};
+
+
+
+subtest 'list() tests' => sub {
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $authid1 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
+      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <controlfield tag="001">1001</controlfield>
+    <datafield tag="110" ind1=" " ind2=" ">
+        <subfield code="9">102</subfield>
+        <subfield code="a">My Corporation</subfield>
+    </datafield>
+</record>|
+    } })->authid;
+
+    my $authid2 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
+      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <controlfield tag="001">1001</controlfield>
+    <datafield tag="110" ind1=" " ind2=" ">
+        <subfield code="9">102</subfield>
+        <subfield code="a">My Corporation</subfield>
+    </datafield>
+</record>|
+    } })->authid;
+
+    my $search =
+"[{\"authid\": \"$authid1\"}, {\"authid\": \"$authid2\"}]";
+    $t->get_ok(
+        "//$userid:$password@/api/v1/authorities/" => { 'x-koha-query' => $search }
+    )->status_is(403);
+
+    $patron->flags(4)->store;
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'application/weird+format', 'x-koha-query' => $search } )
+      ->status_is(400);
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'application/json', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'application/marc', 'x-koha-query' => $search } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
+          { Accept => 'text/plain', 'x-koha-query' => $search } )
+      ->status_is(200);
 
     $schema->storage->txn_rollback;
 };
