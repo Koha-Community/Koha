@@ -106,10 +106,7 @@ function patron_autocomplete(node, options) {
                           + ")</span>,"
                         : ""
                     ) + " "
-                    + ( item.address     ? item.address.escapeHtml() : "" )     + " "
-                    + ( item.city        ? item.city.escapeHtml() : "" )        + " "
-                    + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
-                    + ( item.country     ? item.country.escapeHtml() : "" ) + " "
+                    + $format_address(item, { no_line_break: true, include_li: false }) + " "
                     + ( !singleBranchMode
                         ?
                               "<span class=\"ac-library\">"
