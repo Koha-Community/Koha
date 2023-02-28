@@ -968,6 +968,23 @@ __PACKAGE__->many_to_many(
   "ordernumber",
 );
 
+__PACKAGE__->has_many(
+  "current_branchtransfers",
+  "Koha::Schema::Result::Branchtransfer",
+  { 'foreign.itemnumber' => 'self.itemnumber' },
+  {
+      where => { datearrived => undef, datecancelled => undef },
+      order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ]
+  }
+);
+
+__PACKAGE__->might_have(
+  "last_returned_by",
+  "Koha::Schema::Result::ItemsLastBorrower",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;
