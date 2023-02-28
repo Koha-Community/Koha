@@ -21,7 +21,11 @@
                 <i class="fa fa-fw fa-check"></i>
                 <span v-html="confirmation.accept_label"></span>
             </button>
-            <button id="close_modal" class="deny" @click="removeMessages">
+            <button
+                id="close_modal"
+                class="deny"
+                @click="removeConfirmationMessages"
+            >
                 <i class="fa fa-fw fa-remove"></i>
                 <span v-html="confirmation.cancel_label"></span>
             </button>
@@ -52,7 +56,7 @@ export default {
             is_submitting,
             is_loading,
         } = storeToRefs(mainStore)
-        const { removeMessages } = mainStore
+        const { removeMessages, removeConfirmationMessages } = mainStore
         return {
             message,
             error,
@@ -62,6 +66,7 @@ export default {
             is_submitting,
             is_loading,
             removeMessages,
+            removeConfirmationMessages,
         }
     },
 }

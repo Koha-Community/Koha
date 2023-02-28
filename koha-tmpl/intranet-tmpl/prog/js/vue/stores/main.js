@@ -39,12 +39,9 @@ export const useMainStore = defineStore("main", {
             if(accept_callback) {
                 this._accept_callback = async () => {
                     await accept_callback()
-                    this.removeMessages()
+                    this.removeConfirmationMessages()
                 }
             }
-            this._error = null;
-            this._warning = null;
-            this._message = null;
             this._confirmation = confirmation;
             this.displayed_already = displayed; /* Is displayed on the current view */
         },
@@ -57,6 +54,10 @@ export const useMainStore = defineStore("main", {
                 this._accept_callback = null;
             }
             this.displayed_already = true;
+        },
+        removeConfirmationMessages(){
+            this._confirmation = null;
+            this._accept_callback = null;
         },
         submitting(){
             this._is_submitting = true;
