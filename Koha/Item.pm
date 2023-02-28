@@ -596,35 +596,17 @@ sub get_transfers {
 
 =head3 last_returned_by
 
-Gets and sets the last borrower to return an item.
-
-Accepts and returns Koha::Patron objects
-
-$item->last_returned_by( $borrowernumber );
+Gets the last borrower to return an item.
 
 $last_returned_by = $item->last_returned_by();
 
 =cut
 
 sub last_returned_by {
-    my ( $self, $borrower ) = @_;
-
-    my $items_last_returned_by_rs = Koha::Database->new()->schema()->resultset('ItemsLastBorrower');
-
-    if ($borrower) {
-        return $items_last_returned_by_rs->update_or_create(
-            { borrowernumber => $borrower->borrowernumber, itemnumber => $self->id } );
-    }
-    else {
-        unless ( $self->{_last_returned_by} ) {
-            my $result = $items_last_returned_by_rs->single( { itemnumber => $self->id } );
-            if ($result) {
-                $self->{_last_returned_by} = Koha::Patrons->find( $result->get_column('borrowernumber') );
-            }
-        }
-
-        return $self->{_last_returned_by};
-    }
+    my ( $self ) = @_;
+    my $rs = $self->_result->last_returned_by;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 can_article_request
