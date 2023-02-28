@@ -85,7 +85,8 @@ export default {
                             this.setMessage(
                                 this.$__("License %s deleted").format(
                                     license_name
-                                )
+                                ),
+                                true
                             )
                             $("#" + this.table_id)
                                 .DataTable()

@@ -98,7 +98,8 @@ export default {
                             this.setMessage(
                                 this.$__("Local title %s deleted").format(
                                     title_publication_title
-                                )
+                                ),
+                                true
                             )
                             $("#" + this.table_id)
                                 .DataTable()

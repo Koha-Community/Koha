@@ -343,7 +343,8 @@ export default {
                             this.setMessage(
                                 this.$__("Local title %s deleted").format(
                                     title_publication_title
-                                )
+                                ),
+                                true
                             )
                             this.$router.push(
                                 "/cgi-bin/koha/erm/eholdings/local/titles"

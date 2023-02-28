@@ -132,7 +132,8 @@ export default {
                             this.setMessage(
                                 this.$__("Agreement %s deleted").format(
                                     agreement_name
-                                )
+                                ),
+                                true
                             )
                             this.refresh_table()
                         },

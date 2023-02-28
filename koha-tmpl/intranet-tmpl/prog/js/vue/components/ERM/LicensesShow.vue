@@ -213,7 +213,8 @@ export default {
                             this.setMessage(
                                 this.$__("License %s deleted").format(
                                     license_name
-                                )
+                                ),
+                                true
                             )
                             this.$router.push("/cgi-bin/koha/erm/licenses")
                         },

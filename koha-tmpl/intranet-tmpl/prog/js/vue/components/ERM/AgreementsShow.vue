@@ -376,7 +376,8 @@ export default {
                             this.setMessage(
                                 this.$__("Agreement %s deleted").format(
                                     agreement_name
-                                )
+                                ),
+                                true
                             )
                             this.$router.push("/cgi-bin/koha/erm/agreements")
                         },

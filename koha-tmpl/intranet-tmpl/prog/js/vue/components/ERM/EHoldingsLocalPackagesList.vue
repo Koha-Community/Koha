@@ -99,7 +99,8 @@ export default {
                             this.setMessage(
                                 this.$__("Local package %s deleted").format(
                                     package_name
-                                )
+                                ),
+                                true
                             )
                             $("#" + this.table_id)
                                 .DataTable()

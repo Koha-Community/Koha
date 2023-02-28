@@ -177,7 +177,8 @@ export default {
                             this.setMessage(
                                 this.$__("Local package %s deleted").format(
                                     package_name
-                                )
+                                ),
+                                true
                             )
                             this.$router.push(
                                 "/cgi-bin/koha/erm/eholdings/local/packages"
