@@ -516,10 +516,8 @@ Returns the related Koha::Biblio object for this hold
 
 sub biblio {
     my ($self) = @_;
-
-    $self->{_biblio} ||= Koha::Biblios->find( $self->biblionumber() );
-
-    return $self->{_biblio};
+    my $rs = $self->_result->biblionumber;
+    return Koha::Biblio->_new_from_dbic($rs);
 }
 
 =head3 patron
@@ -530,9 +528,8 @@ Returns the related Koha::Patron object for this hold
 
 sub patron {
     my ($self) = @_;
-
-    my $patron_rs = $self->_result->patron;
-    return Koha::Patron->_new_from_dbic($patron_rs);
+    my $rs = $self->_result->patron;
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 item
@@ -543,10 +540,9 @@ Returns the related Koha::Item object for this Hold
 
 sub item {
     my ($self) = @_;
-
-    $self->{_item} ||= Koha::Items->find( $self->itemnumber() );
-
-    return $self->{_item};
+    my $rs = $self->_result->itemnumber;
+    return unless $rs;
+    return Koha::Item->_new_from_dbic($rs);
 }
 
 =head3 item_group
@@ -557,10 +553,9 @@ Returns the related Koha::Biblio::ItemGroup object for this Hold
 
 sub item_group {
     my ($self) = @_;
-
-    my $item_group_rs = $self->_result->item_group;
-    return unless $item_group_rs;
-    return Koha::Biblio::ItemGroup->_new_from_dbic($item_group_rs);
+    my $rs = $self->_result->item_group;
+    return unless $rs;
+    return Koha::Biblio::ItemGroup->_new_from_dbic($rs);
 }
 
 =head3 branch
@@ -571,10 +566,8 @@ Returns the related Koha::Library object for this Hold
 
 sub branch {
     my ($self) = @_;
-
-    $self->{_branch} ||= Koha::Libraries->find( $self->branchcode() );
-
-    return $self->{_branch};
+    my $rs = $self->_result->branchcode;
+    return Koha::Library->_new_from_dbic($rs);
 }
 
 =head3 desk
@@ -599,10 +592,8 @@ Returns the related Koha::Patron object for this Hold
 # FIXME Should be renamed with ->patron
 sub borrower {
     my ($self) = @_;
-
-    $self->{_borrower} ||= Koha::Patrons->find( $self->borrowernumber() );
-
-    return $self->{_borrower};
+    my $rs = $self->_result->borrowernumber;
+    return Koha::Patron->_new_from_dbic($rs);
 }
 
 =head3 is_suspended
