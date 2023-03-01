@@ -31,7 +31,7 @@
                                 <v-select
                                     id="license_vendor_id"
                                     v-model="license.vendor_id"
-                                    label="name"
+                                    label="display_name"
                                     :reduce="vendor => vendor.id"
                                     :options="vendors"
                                 />

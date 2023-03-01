@@ -46,7 +46,7 @@
                     <v-select
                         :id="`resource_vendor_id_${counter}`"
                         v-model="resource.vendor_id"
-                        label="name"
+                        label="display_name"
                         :reduce="vendor => vendor.id"
                         :options="vendors"
                     />

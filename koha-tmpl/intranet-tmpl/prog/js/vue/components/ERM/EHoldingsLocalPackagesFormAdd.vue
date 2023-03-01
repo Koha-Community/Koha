@@ -28,7 +28,7 @@
                             <v-select
                                 id="package_vendor_id"
                                 v-model="erm_package.vendor_id"
-                                label="name"
+                                label="display_name"
                                 :reduce="vendor => vendor.id"
                                 :options="vendors"
                             />

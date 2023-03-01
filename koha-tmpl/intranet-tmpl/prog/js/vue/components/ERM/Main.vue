@@ -163,13 +163,20 @@ export default {
             let promises = []
 
             const acq_client = APIClient.acquisition
-            promises.push(
-                acq_client.vendors.getAll().then(
-                    vendors => {
-                        this.vendorStore.vendors = vendors
-                    },
-                    error => {}
-                )
+            acq_client.vendors.getAll().then(
+                vendors => {
+                    this.vendorStore.vendors = vendors.map(v => ({
+                        ...v,
+                        display_name:
+                            v.name +
+                            (v.aliases.length > 0
+                                ? " (" +
+                                  v.aliases.map(a => a.alias).join(", ") +
+                                  ")"
+                                : ""),
+                    }))
+                },
+                error => {}
             )
 
             const av_client = APIClient.authorised_values

@@ -31,7 +31,7 @@
                                 <v-select
                                     id="agreement_vendor_id"
                                     v-model="agreement.vendor_id"
-                                    label="name"
+                                    label="display_name"
                                     :reduce="vendor => vendor.id"
                                     :options="vendors"
                                 />
