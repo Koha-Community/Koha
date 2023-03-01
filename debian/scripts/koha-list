@@ -29,37 +29,21 @@ fi
 
 show_instances()
 {
-    local show=$1
-    local show_email=$2
-    local show_sip=$3
-
     for instance in $( get_instances ); do
         case $show in
           "all")
-              if instance_filter_email       $instance $show_email && \
-                 instance_filter_letsencrypt $instance $show_letsencrypt && \
-                 instance_filter_plack       $instance $show_plack && \
-                 instance_filter_z3950       $instance $show_z3950 && \
-                 instance_filter_sip         $instance $show_sip; then
-                    echo $instance
+              if filter_ok $instance; then
+                  echo $instance
               fi ;;
           "enabled")
               if is_enabled $instance; then
-                  if instance_filter_email       $instance $show_email && \
-                     instance_filter_letsencrypt $instance $show_letsencrypt && \
-                     instance_filter_plack       $instance $show_plack && \
-                     instance_filter_z3950       $instance $show_z3950 && \
-                     instance_filter_sip         $instance $show_sip; then
+                  if filter_ok $instance; then
                       echo $instance
                   fi
               fi ;;
           "disabled")
               if ! is_enabled $instance; then
-                  if instance_filter_email       $instance $show_email && \
-                     instance_filter_letsencrypt $instance $show_letsencrypt && \
-                     instance_filter_plack       $instance $show_plack && \
-                     instance_filter_z3950       $instance $show_z3950 && \
-                     instance_filter_sip         $instance $show_sip; then
+                  if filter_ok $instance; then
                       echo $instance
                   fi
               fi ;;
@@ -67,21 +51,35 @@ show_instances()
     done
 }
 
+filter_ok()
+{
+    local instance=$1
+
+    if instance_filter_email         $instance && \
+       instance_filter_elasticsearch $instance && \
+       instance_filter_letsencrypt   $instance && \
+       instance_filter_plack         $instance && \
+       instance_filter_z3950         $instance && \
+       instance_filter_sip           $instance; then
+        return 0;
+    else
+        return 1;
+    fi
+}
 
 instance_filter_sip()
 {
-    local instancename=$1
-    local show_sip=$2;
+    local instance=$1
 
     case $show_sip in
         "all")
             return 0 ;;
         "enabled")
-            if is_sip_enabled $instancename; then
+            if is_sip_enabled $instance; then
                 return 0
             fi ;;
         "disabled")
-            if ! is_sip_enabled $instancename; then
+            if ! is_sip_enabled $instance; then
                 return 0
             fi ;;
     esac
@@ -92,18 +90,17 @@ instance_filter_sip()
 
 instance_filter_plack()
 {
-    local instancename=$1
-    local show_plack=$2;
+    local instance=$1
 
     case $show_plack in
         "all")
             return 0 ;;
         "enabled")
-            if is_plack_enabled $instancename; then
+            if is_plack_enabled $instance; then
                 return 0
             fi ;;
         "disabled")
-            if ! is_plack_enabled $instancename; then
+            if ! is_plack_enabled $instance; then
                 return 0
             fi ;;
     esac
@@ -114,18 +111,17 @@ instance_filter_plack()
 
 instance_filter_letsencrypt()
 {
-    local instancename=$1
-    local show_letsencrypt=$2;
+    local instance=$1
 
     case $show_letsencrypt in
         "all")
             return 0 ;;
         "enabled")
-            if is_letsencrypt_enabled $instancename; then
+            if is_letsencrypt_enabled $instance; then
                 return 0
             fi ;;
         "disabled")
-            if ! is_letsencrypt_enabled $instancename; then
+            if ! is_letsencrypt_enabled $instance; then
                 return 0
             fi ;;
     esac
@@ -136,18 +132,17 @@ instance_filter_letsencrypt()
 
 instance_filter_email()
 {
-    local instancename=$1
-    local show_email=$2;
+    local instance=$1
 
     case $show_email in
         "all")
             return 0 ;;
         "enabled")
-            if is_email_enabled $instancename; then
+            if is_email_enabled $instance; then
                 return 0
             fi ;;
         "disabled")
-            if ! is_email_enabled $instancename; then
+            if ! is_email_enabled $instance; then
                 return 0
             fi ;;
     esac
@@ -158,18 +153,38 @@ instance_filter_email()
 
 instance_filter_z3950()
 {
-    local instancename=$1
-    local show_z3950=$2;
+    local instance=$1
 
     case $show_z3950 in
         "all")
             return 0 ;;
         "enabled")
-            if is_z3950_enabled $instancename; then
+            if is_z3950_enabled $instance; then
                 return 0
             fi ;;
         "disabled")
-            if ! is_z3950_enabled $instancename; then
+            if ! is_z3950_enabled $instance; then
+                return 0
+            fi ;;
+    esac
+
+    # Didn't match any criteria
+    return 1
+}
+
+instance_filter_elasticsearch()
+{
+    local instance=$1
+
+    case $show_elasticsearch in
+        "all")
+            return 0 ;;
+        "enabled")
+            if is_elasticsearch_enabled $instance; then
+                return 0
+            fi ;;
+        "disabled")
+            if ! is_elasticsearch_enabled $instance; then
                 return 0
             fi ;;
     esac
@@ -186,6 +201,17 @@ set_show()
         show=$show_param
     else
         die "Error: --enabled and --disabled are mutually exclusive."
+    fi
+}
+
+set_show_elasticsearch()
+{
+    local elasticsearch_param=$1
+
+    if [ "$show_elasticsearch" = "all" ]; then
+        show_elasticsearch=$elasticsearch_param
+    else
+        die "Error: --elasticsearch and --noelasticsearch are mutually exclusive."
     fi
 }
 
@@ -254,19 +280,21 @@ email turned on.
     
 Usage: $scriptname [--enabled|--disabled] [--email|--noemail] [--sip|--nosip] [-h]
 Options:
-    --enabled       Show enabled instances
-    --disabled      Show disabled instances
-    --email         Show instances with email enabled
-    --noemail       Show instances with email disabled
-    --sip           Show instances with SIP enabled
-    --nosip         Show instances with SIP disabled
-    --plack         Show instances with Plack enabled
-    --noplack       Show instances with Plack disabled
-    --letsencrypt   Show instances with letsencrypt enabled
-    --noletsencrypt Show instances with letsencrypt disabled
-    --z3950         Show instances with Z39.50/SRU enabled
-    --noz3950       Show instances with Z39.50/SRU disabled
-    --help | -h     Show this help
+    --enabled        Show enabled instances
+    --disabled       Show disabled instances
+    --elasticsearch  Show instances with Elasticsearch enabled
+    --noelasticsarch Show instances with Elasticsearch disabled
+    --email          Show instances with email enabled
+    --noemail        Show instances with email disabled
+    --sip            Show instances with SIP enabled
+    --nosip          Show instances with SIP disabled
+    --plack          Show instances with Plack enabled
+    --noplack        Show instances with Plack disabled
+    --letsencrypt    Show instances with letsencrypt enabled
+    --noletsencrypt  Show instances with letsencrypt disabled
+    --z3950          Show instances with Z39.50/SRU enabled
+    --noz3950        Show instances with Z39.50/SRU disabled
+    --help | -h      Show this help
 
 The filtering options can be combined, and you probably want to do this
 (except --email and --noemail, or --enabled and --disabled, that's just silly.)
@@ -274,36 +302,39 @@ EOH
 }
 
 show="all"
+show_elasticsearch="all"
 show_email="all"
 show_sip="all"
 show_plack="all"
 show_letsencrypt="all"
 show_z3950="all"
 
-args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip,plack,noplack,letsencrypt,noletsencrypt,z3950,noz3950 -o h -n $0 -- "$@")
+args=$(getopt -l help,enabled,disabled,elasticsearch,noelasticsearch,email,noemail,sip,nosip,plack,noplack,letsencrypt,noletsencrypt,z3950,noz3950 -o h -n $0 -- "$@")
 set -- $args
 
 while [ ! -z "$1" ]
 do
     case "$1" in
-      -h|--help) usage; exit;;
-        --email) set_show_email "enabled" ;;
-      --noemail) set_show_email "disabled" ;;
-          --sip) set_show_sip "enabled" ;;
-        --nosip) set_show_sip "disabled" ;;
-        --plack) set_show_plack "enabled" ;;
-      --noplack) set_show_plack "disabled" ;;
-  --letsencrypt) set_show_letsencrypt "enabled" ;;
---noletsencrypt) set_show_letsencrypt "disabled" ;;
-        --z3950) set_show_z3950 "enabled" ;;
-      --noz3950) set_show_z3950 "disabled" ;;
-      --enabled) set_show "enabled" ;;
-     --disabled) set_show "disabled" ;;
-              *) break;;
+        -h|--help) usage; exit;;
+          --email) set_show_email "enabled" ;;
+        --noemail) set_show_email "disabled" ;;
+            --sip) set_show_sip "enabled" ;;
+          --nosip) set_show_sip "disabled" ;;
+          --plack) set_show_plack "enabled" ;;
+        --noplack) set_show_plack "disabled" ;;
+    --letsencrypt) set_show_letsencrypt "enabled" ;;
+  --noletsencrypt) set_show_letsencrypt "disabled" ;;
+          --z3950) set_show_z3950 "enabled" ;;
+        --noz3950) set_show_z3950 "disabled" ;;
+  --elasticsearch) set_show_elasticsearch "enabled" ;;
+--noelasticsearch) set_show_elasticsearch "disabled" ;;
+        --enabled) set_show "enabled" ;;
+       --disabled) set_show "disabled" ;;
+                *) break;;
     esac
     shift
 done
 
-show_instances $show $show_email $show_sip
+show_instances
 
 exit 0

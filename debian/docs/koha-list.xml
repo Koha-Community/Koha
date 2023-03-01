@@ -25,6 +25,7 @@
     <cmdsynopsis>
       <command>koha-list</command>
       <arg><option>--enabled</option>|<option>--disabled</option></arg>
+      <arg><option>--elasticsearch</option>|<option>--noelasticsearch</option></arg>
       <arg><option>--email</option>|<option>--noemail</option></arg>
       <arg><option>--sip</option>|<option>--nosip</option></arg>
       <arg><option>--plack</option>|<option>--noplack</option></arg>
@@ -47,6 +48,18 @@
         <para>Only show instances that are disabled.</para>
       </listitem>
     </varlistentry>
+    <varlistentry>
+      <term><option>--elasticsearch</option></term>
+        <listitem>
+          <para>Only show instances that have elasticsearch enabled.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>--noelasticsearch</option></term>
+        <listitem>
+          <para>Only show instances that do not have elasticsearch enabled.</para>
+        </listitem>
+      </varlistentry>
     <varlistentry>
       <term><option>--email</option></term>
       <listitem>
