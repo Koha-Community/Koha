@@ -243,15 +243,18 @@ sub add_debit {
           Koha::Account::Debit->new_from_api( $c->validation->param('body') )
           ->unblessed;
 
-        $data->{library_id}    = $data->{branchcode};
-        $data->{cash_register} = $data->{cash_register_id};
-        $data->{item_id}       = $data->{itemnumber};
-        $data->{interface}     = 'api'
+        $data->{library_id}       = delete $data->{branchcode};
+        $data->{type}             = delete $data->{debit_type_code};
+        $data->{cash_register}    = delete $data->{register_id};
+        $data->{item_id}          = delete $data->{itemnumber};
+        $data->{transaction_type} = delete $data->{payment_type};
+        $data->{interface}        = 'api'
           ; # Should this always be API, or should we allow the API consumer to choose?
         $data->{user_id} = $patron->borrowernumber
           ; # Should this be API user OR staff the API may be acting on behalf of?
 
         my $debit = $patron->account->add_debit($data);
+        $debit = Koha::Account::Debit->_new_from_dbic($debit->{_result});
 
         $c->res->headers->location(
             $c->req->url->to_string . '/' . $debit->id );
@@ -263,6 +266,27 @@ sub add_debit {
         );
     }
     catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Account::RegisterRequired') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => $_->description }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::Account::AmountNotPositive') ) {
+                return $c->render(
+                    status => 400,
+                    openapi => { error => $_->description }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::Account::UnrecognisedType') ) {
+                return $c->render(
+                    status => 400,
+                    openapi => { error => $_->description }
+                );
+            }
+        }
+
         $c->unhandled_exception($_);
     };
 }

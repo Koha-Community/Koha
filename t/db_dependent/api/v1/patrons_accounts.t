@@ -371,7 +371,7 @@ subtest 'list_debits() test' => sub {
 
 subtest 'add_debit() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -397,7 +397,7 @@ subtest 'add_debit() tests' => sub {
     my $debit = {
         amount      => 100,
         description => "A description",
-        debit_type  => "NEW_CARD",
+        type        => "NEW_CARD",
         user_id     => $patron->borrowernumber,
         interface   => 'test',
         library_id  => $library->id,
@@ -406,16 +406,16 @@ subtest 'add_debit() tests' => sub {
     my $ret = $t->post_ok(
         "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
           json => $debit )->status_is(201)->tx->res->json;
-    my $account_line = Koha::Account::Lines->find( $ret->{account_line_id} );
+    my $account_line = Koha::Account::Debits->find( $ret->{account_line_id} );
 
     is_deeply( $ret, $account_line->to_api, 'Line returned correctly' );
 
     is( $account_line->branchcode,
-        $library->id, 'Library id is sored correctly' );
+        $library->id, 'Library id is stored correctly' );
 
     my $outstanding_debits = $account->outstanding_debits;
-    is( $outstanding_debits->count,             1 );
-    is( $outstanding_debits->total_outstanding, 100 );
+    is( $outstanding_debits->count,             1, "One outstanding debit added" );
+    is( $outstanding_debits->total_outstanding, 100, "Outstanding debit is 100" );
 
     my $credit_1 = $account->add_credit(
         {
@@ -430,7 +430,7 @@ subtest 'add_debit() tests' => sub {
         }
     )->store()->apply( { debits => [$account_line] } );
 
-    is( $account->outstanding_credits->total_outstanding, 0 );
+    is( $account->outstanding_credits->total_outstanding, 0, "Credits all applied" );
     is( $account->outstanding_debits->total_outstanding,
         75, "Credits partially cancelled debit" );
 
@@ -442,6 +442,33 @@ subtest 'add_debit() tests' => sub {
 
     is( $account->outstanding_debits->total_outstanding,
         175, "Debit added to total outstanding debits" );
+
+    # Cash register handling and PAYOUTs
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    my $payout = {
+        amount      => 10,
+        description => "A description",
+        type        => "PAYOUT",
+        payout_type => "CASH",
+        user_id     => $patron->borrowernumber,
+        interface   => 'test',
+        library_id  => $library->id,
+    };
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
+          json => $payout )->status_is(400)
+      ->json_is( '/error' => 'Account transaction requires a cash register' );
+
+    my $register = $builder->build_object(
+        {
+            class => 'Koha::Cash::Registers',
+        }
+    );
+    $payout->{cash_register_id} = $register->id;
+    my $res = $t->post_ok(
+        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
+          json => $payout )->status_is(201)->tx->res->json;
 
     $schema->storage->txn_rollback;
 };
