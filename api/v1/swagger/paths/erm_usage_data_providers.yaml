@@ -360,3 +360,53 @@
     x-koha-authorization:
       permissions:
         erm: 1
+"/erm/usage_data_providers/{erm_usage_data_provider_id}/run":
+  get:
+    x-mojo-to: ERM::UsageDataProviders#run
+    operationId: runUsageDataProviderHarvester
+    tags:
+      - usage data provider harvester
+    summary: Run this data provider's harvester
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/erm_usage_data_provider_id_pp"
+      - description: begin_date to run harvest
+        in: query
+        name: begin_date
+        required: true
+        type: string
+        format: date
+      - description: end_date to run harvest
+        in: query
+        name: end_date
+        required: true
+        type: string
+        format: date
+    responses:
+      200:
+        description: Successful harvest run
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

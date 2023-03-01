@@ -57,9 +57,11 @@ sub get {
 
     return try {
         my $counter_file_id = $c->validation->param('erm_counter_files_id');
-        my $counter_file    = $c->objects->find( Koha::ERM::CounterFiles->search, $counter_file_id );
 
-        unless ($counter_file) {
+        # Do not use $c->objects->find here, we need the file_content
+        my $counter_file = Koha::ERM::CounterFiles->find($counter_file_id);
+
+        if ( !$counter_file ) {
             return $c->render(
                 status  => 404,
                 openapi => { error => "Counter file not found" }

@@ -420,6 +420,7 @@ sub core_types_to_classes {
         batch_biblio_record_modification    => 'Koha::BackgroundJob::BatchUpdateBiblio',
         batch_item_record_deletion          => 'Koha::BackgroundJob::BatchDeleteItem',
         batch_item_record_modification      => 'Koha::BackgroundJob::BatchUpdateItem',
+        erm_sushi_harvester                 => 'Koha::BackgroundJob::ErmSushiHarvester',
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
         create_eholdings_from_biblios       => 'Koha::BackgroundJob::CreateEHoldingsFromBiblios',
         update_elastic_index                => 'Koha::BackgroundJob::UpdateElasticIndex',

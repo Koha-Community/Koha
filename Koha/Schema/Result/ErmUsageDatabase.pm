@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::ErmUsageTitle;
+package Koha::Schema::Result::ErmUsageDatabase;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::ErmUsageTitle
+Koha::Schema::Result::ErmUsageDatabase
 
 =cut
 
@@ -15,15 +15,15 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<erm_usage_titles>
+=head1 TABLE: C<erm_usage_databases>
 
 =cut
 
-__PACKAGE__->table("erm_usage_titles");
+__PACKAGE__->table("erm_usage_databases");
 
 =head1 ACCESSORS
 
-=head2 title_id
+=head2 database_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -31,7 +31,7 @@ __PACKAGE__->table("erm_usage_titles");
 
 primary key
 
-=head2 title
+=head2 database
 
   data_type: 'varchar'
   is_nullable: 1
@@ -39,45 +39,13 @@ primary key
 
 item title
 
-=head2 usage_data_provider_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-platform the title is harvested by
-
-=head2 title_doi
+=head2 platform
 
   data_type: 'varchar'
   is_nullable: 1
   size: 24
 
-DOI number for the title
-
-=head2 print_issn
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 24
-
-Print ISSN number for the title
-
-=head2 online_issn
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 24
-
-Online ISSN number for the title
-
-=head2 title_uri
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 24
-
-URI number for the title
+database platform
 
 =head2 publisher
 
@@ -85,7 +53,7 @@ URI number for the title
   is_nullable: 1
   size: 24
 
-Publisher for the title
+Publisher for the database
 
 =head2 publisher_id
 
@@ -93,62 +61,44 @@ Publisher for the title
   is_nullable: 1
   size: 24
 
-Publisher ID for the title
+Publisher ID for the database
 
-=head2 yop
+=head2 usage_data_provider_id
 
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 24
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
 
-year of publication of the title
-
-=head2 isbn
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 24
-
-ISBN of the title
+data provider the database is harvested by
 
 =cut
 
 __PACKAGE__->add_columns(
-  "title_id",
+  "database_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "title",
+  "database",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "usage_data_provider_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "title_doi",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
-  "print_issn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
-  "online_issn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
-  "title_uri",
+  "platform",
   { data_type => "varchar", is_nullable => 1, size => 24 },
   "publisher",
   { data_type => "varchar", is_nullable => 1, size => 24 },
   "publisher_id",
   { data_type => "varchar", is_nullable => 1, size => 24 },
-  "yop",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
-  "isbn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  "usage_data_provider_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</title_id>
+=item * L</database_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("title_id");
+__PACKAGE__->set_primary_key("database_id");
 
 =head1 RELATIONS
 
@@ -163,7 +113,7 @@ Related object: L<Koha::Schema::Result::ErmUsageMus>
 __PACKAGE__->has_many(
   "erm_usage_muses",
   "Koha::Schema::Result::ErmUsageMus",
-  { "foreign.title_id" => "self.title_id" },
+  { "foreign.database_id" => "self.database_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -178,7 +128,7 @@ Related object: L<Koha::Schema::Result::ErmUsageYus>
 __PACKAGE__->has_many(
   "erm_usage_yuses",
   "Koha::Schema::Result::ErmUsageYus",
-  { "foreign.title_id" => "self.title_id" },
+  { "foreign.database_id" => "self.database_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -198,15 +148,9 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-08-02 16:27:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2ChttNyhXjVRUWg0nCfg8A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 11:45:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N/qxjz0Jz0NOI6lFVkUXhg
 
 
-sub koha_object_class {
-    'Koha::ERM::UsageTitle';
-}
-sub koha_objects_class {
-    'Koha::ERM::UsageTitles';
-}
-
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -303,4 +303,32 @@ sub delete {
     };
 }
 
+=head3 run
+
+=cut
+
+sub run {
+    my $c = shift->openapi->valid_input or return;
+
+    my $udprovider = Koha::ERM::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+
+    unless ($udprovider) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Usage data provider not found" }
+        );
+    }
+
+    return try {
+        my $jobs = $udprovider->run;
+
+        return $c->render(
+            status  => 200,
+            openapi => { jobs => [ @{$jobs} ] }
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
 1;

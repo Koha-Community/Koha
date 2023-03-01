@@ -197,16 +197,18 @@ export default {
                     () => {
                         const client = APIClient.erm
                         // TODO: below begin_date and end_date need to be dynamic, or are they needed at all?
+                        // FIXME: this is not even being used atm, API backend is using begin_date+end_date from data provider in database
                         client.usage_data_providers
-                            .run(id, "2022-06-01", "2022-12-31")
+                            .run(id, "2022-01-01", "2023-06-15")
                             .then(
                                 success => {
-                                    this.setMessage(
-                                        this.$__(
-                                            "Ran harvester for usage data provider %s"
-                                        ).format(name),
-                                        true
-                                    )
+                                    let message = ""
+                                    success.jobs.forEach((job, i) => {
+                                        message += this.$__(
+                                            '<li>Job for report type <strong>%s</strong> has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
+                                        ).format(job.report_type, job.job_id)
+                                    })
+                                    this.setMessage(message, true)
                                 },
                                 error => {}
                             )

@@ -1,4 +1,4 @@
-package Koha::ERM::UsageTitle;
+package Koha::ERM::UsageDatabase;
 
 # This file is part of Koha.
 #
@@ -26,14 +26,14 @@ use Koha::ERM::MonthlyUsages;
 
 =head1 NAME
 
-Koha::ERM::UsageTitle - Koha ErmUsageTitle Object class
+Koha::ERM::UsageDatabase - Koha ErmUsageDatabaseObject class
 
 =head1 API
 
 =head2 Class Methods
 =head3 erm_usage_muses
 
-Method to embed erm_usage_muses to titles for report formatting
+Method to embed erm_usage_muses to databases for report formatting
 
 =cut
 
@@ -45,7 +45,7 @@ sub erm_usage_muses {
 
 =head3 erm_usage_yuses
 
-Method to embed erm_usage_yuses to titles for report formatting
+Method to embed erm_usage_yuses to databases for report formatting
 
 =cut
 
@@ -57,7 +57,7 @@ sub erm_usage_yuses {
 
 =head3 yearly_usages
 
-Getter/setter for yearly_usages for this title
+Getter/setter for yearly_usages for this database
 Skips adding yearly_usage if it already exists
 
 =cut
@@ -83,7 +83,7 @@ sub yearly_usages {
 
 =head3 monthly_usages
 
-Getter/setter for monthly_usages for this title
+Getter/setter for monthly_usages for this database
 Skips adding monthly_usage if it already exists
 
 =cut
@@ -114,7 +114,7 @@ sub monthly_usages {
 =cut
 
 sub _type {
-    return 'ErmUsageTitle';
+    return 'ErmUsageDatabase';
 }
 
 1;

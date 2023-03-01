@@ -276,6 +276,10 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "usage_data_providers/" + id,
                     body: usage_data_provider,
                 }),
+            run: (id, begin_date, end_date) =>
+                this.get({
+                    endpoint: "usage_data_providers/" + id + "/run?begin_date="+ begin_date + "&end_date=" + end_date,
+                }),
             //count: () => this.count("usage_data_providers"), //TODO: Implement count method
         };
     }
