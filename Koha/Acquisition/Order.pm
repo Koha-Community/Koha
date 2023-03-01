@@ -21,6 +21,7 @@ use Carp qw( croak );
 
 use C4::Biblio qw( DelBiblio );
 use C4::Acquisition;
+use C4::Suggestions qw( ModSuggestion );
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
@@ -142,6 +143,18 @@ sub cancel {
                 }
             );
         }
+    }
+
+    # If ordered from a suggestion, revert the suggestion status to ACCEPTED
+    my $suggestion = Koha::Suggestions->find({ biblionumber => $self->biblionumber, status => "ORDERED" });
+    if ( $suggestion and $suggestion->id ) {
+        ModSuggestion(
+            {
+                suggestionid => $suggestion->id,
+                biblionumber => $self->biblionumber,
+                STATUS       => 'ACCEPTED',
+            }
+        );
     }
 
     my $biblio = $self->biblio;

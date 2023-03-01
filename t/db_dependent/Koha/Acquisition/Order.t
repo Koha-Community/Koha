@@ -655,7 +655,7 @@ subtest 'creator ()' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 54;
+    plan tests => 56;
 
     $schema->storage->txn_begin;
 
@@ -890,6 +890,47 @@ subtest 'cancel() tests' => sub {
     is( Koha::Biblios->find($biblio_id), undef, 'The biblio is not present' );
     @messages = @{ $order->object_messages };
     is( scalar @messages, 0, 'No errors' );
+
+    # Scenario:
+    # * order made from a suggestion with same biblionumber
+    # => order is cancelled
+    # => suggestion status is changed to ACCEPTED
+
+    $item      = $builder->build_sample_item;
+    $biblio_id = $item->biblionumber;
+
+    # Add the suggestion
+    my $suggestion = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => {
+                biblionumber => $biblio_id,
+                suggesteddate => dt_from_string,
+                STATUS => 'ORDERED',
+                archived => 0,
+            }
+        }
+    );
+
+    $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    );
+
+    $order->cancel({ reason => $reason })
+          ->discard_changes;
+
+    $suggestion = Koha::Suggestions->find( $suggestion->id );
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    is( $suggestion->STATUS, 'ACCEPTED', 'Suggestion status is correctly reverted after order is cancelled' );
 
     # Scenario:
     # * order with two items attached
