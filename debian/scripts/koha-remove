@@ -93,6 +93,10 @@ eof
     if is_sip_running $name; then
         koha-sip --stop $name || /bin/true
     fi
+    # Stop the ES indexing daemon if needed
+    if is_es_indexer_running $name; then
+        koha-es-indexer --stop $name || /bin/true
+    fi
 
     instancefile=$(get_apache_config_for $name)
     le_opacdomain=$(letsencrypt_get_opacdomain_for $name)
