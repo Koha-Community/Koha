@@ -175,7 +175,6 @@
                     <label for="aliases">Aliases: </label>
                     <div id="aliases" style="padding-left: 11rem;"></div>
                 </li>
-
             </ol>
         </fieldset>
         <fieldset class="rows">
@@ -191,6 +190,11 @@
                 </fieldset>
             [% END %]
             <button id="add-contact" class="btn btn-default"><i class="fa fa-plus"></i> Add another contact</button>
+        </fieldset>
+
+        <fieldset class="rows">
+            <legend>Interfaces</legend>
+            <div id="interfaces"></div>
         </fieldset>
 
         <fieldset class="rows">
@@ -348,6 +352,29 @@
                         <p><strong>Notes: </strong>[% notes | html %]</p>
                     [% END %]
                 </div> <!-- #supplier-ordering-information -->
+
+                [% IF vendor.interfaces.count %]
+                <div id="supplier-interfaces" class="page-section">
+                    <h2>Interfaces</h2>
+
+                    [% FOR interface IN vendor.interfaces %]
+                        <fieldset class="rows">
+                            <legend>[% interface.name | html %]</legend>
+                            <ul>
+                                <li>
+                                    <li>Type: [% interface.type | html %]</li>
+                                    <li>URI: [% interface.uri | html %]</li>
+                                    <li>Login: [% interface.login | html %]</li>
+                                    <li>Password: [% interface.password | html %]</li>
+                                    <li>Account email: [% interface.account_email | html %]</li>
+                                    <li>Notes : [% interface.notes | html %]</li>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    [% END %]
+                </div>
+                [% END %]
+
             </div> <!-- /.col-sm-6 -->
 
             <div class="col-sm-6">
@@ -500,6 +527,63 @@
             $("#aliases").html(nodes.html());
         }
 
+        [% IF vendor %]
+        let interfaces = [% To.json(vendor.interfaces.unblessed) | $raw %];
+        [% ELSE %]
+        let interfaces = [];
+        [% END %]
+        function serialize_interface_form(){
+            interfaces = [];
+            $("#interfaces > fieldset.supplier-interface > ol.interface-form").each( (index, interface_form )=> {
+                let interface = {};
+                $(interface_form).find('input,textarea').serializeArray().map(attr => {
+                    let name = attr.name.replace(/interface_([\w_]+)_\d+/, "$1");
+                    interface[name] = attr.value
+                })
+                interfaces.push(interface);
+            });
+            return interfaces;
+        }
+        function remove_interface(i){
+            interfaces = serialize_interface_form();
+            interfaces.splice(i, 1);
+            refresh_interfaces();
+        }
+        function add_interface(){
+            interfaces = serialize_interface_form();
+            interfaces.push({
+                type: "",
+                name: "",
+                uri: "",
+                login: "",
+                password: "",
+                account_email: "",
+                notes: "",
+            });
+            refresh_interfaces();
+        }
+        function refresh_interfaces(){
+            let nodes = $("<div id='interfaces'></div>");
+            interfaces.forEach((interface, i) => {
+                let n = $("<fieldset class='supplier-interface'></fieldset>");
+                n.append("<legend>" + _("Interface details") + "</legend>");
+                n.append(`<input type="hidden" name="interface_counter" value="${i}" />`);
+                let ol = $('<ol class="interface-form"></ol>');
+                ol.append(`<li><label for="interface_name_${i}">` + _("Name: ") + `</label><input type="text" size="40" id="interface_name_${i}" name="interface_name_${i}" value="${interface.name}" /></li>`);
+                ol.append(`<li><label for="interface_type_${i}">` + _("Type: ") + `</label><input type="text" size="40" id="interface_type_${i}" name="interface_type_${i}" value="${interface.type}" /></li>`);
+                ol.append(`<li><label for="interface_uri_${i}">` + _("URI: ") + `</label><input type="text" size="40" id="interface_uri_${i}" name="interface_uri_${i}" value="${interface.uri}" /></li>`);
+                ol.append(`<li><label for="interface_login_${i}">` + _("Login: ") + `</label><input type="text" size="40" id="interface_login_${i}" name="interface_login_${i}" value="${interface.login}" /></li>`);
+                ol.append(`<li><label for="interface_password_${i}">` + _("Password: ") + `</label><input type="text" size="40" id="interface_password_${i}" name="interface_password_${i}" value="${interface.password}" /></li>`);
+                ol.append(`<li><label for="interface_account_email_${i}">` + _("Account email: ") + `</label><input type="text" size="40" id="interface_account_email_${i}" name="interface_account_email_${i}" value="${interface.account_email}" /></li>`);
+                ol.append(`<li><label for="interface_notes_${i}">` + _("Notes: ") + `</label><textarea cols="40" rows="3" id="interface_notes_${i}" name="interface_notes_${i}">${interface.notes}</textarea></li>`);
+                ol.append(`<li><button class="btn btn-default" onclick="remove_interface(${i});"><i class="fa fa-trash"></i> Delete interface</li>`);
+                n.append(ol);
+                nodes.append(n);
+            });
+            nodes.append(`<button onclick="add_interface();" class="btn btn-default"><i class="fa fa-plus"></i> ` + _("Add another interface") + '</button>')
+            $("#interfaces").replaceWith(nodes);
+        }
+
         var Sticky;
 
          $(document).ready(function() {
@@ -540,6 +624,7 @@
             });
 
             refresh_aliases();
+            refresh_interfaces();
 
             Sticky = $("#toolbar");
             Sticky.hcSticky({

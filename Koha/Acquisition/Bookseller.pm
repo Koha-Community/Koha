@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Koha::Acquisition::Bookseller::Aliases;
 use Koha::Acquisition::Bookseller::Contacts;
+use Koha::Acquisition::Bookseller::Interfaces;
 use Koha::Subscriptions;
 
 use base qw( Koha::Object );
@@ -102,6 +103,33 @@ sub aliases {
 
     my $rs = $self->_result->aqbookseller_aliases;
     return Koha::Acquisition::Bookseller::Aliases->_new_from_dbic( $rs );
+}
+
+=head3 interfaces
+
+    my $interfaces = $vendor->interfaces
+
+    $vendor->interfaces(\@interfaces);
+
+=cut
+
+sub interfaces {
+    my ($self, $interfaces) = @_;
+
+    if ($interfaces) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->interfaces->delete;
+                for my $interface (@$interfaces) {
+                    $self->_result->add_to_aqbookseller_interfaces($interface);
+                }
+            }
+        );
+    }
+
+    my $rs = $self->_result->aqbookseller_interfaces;
+    return Koha::Acquisition::Bookseller::Interfaces->_new_from_dbic( $rs );
 }
 
 

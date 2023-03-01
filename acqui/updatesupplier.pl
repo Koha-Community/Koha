@@ -47,6 +47,7 @@ contact_serialsprimary.
 =cut
 
 use Modern::Perl;
+use List::MoreUtils qw( any );
 use C4::Context;
 use C4::Auth qw( checkauth );
 
@@ -130,7 +131,22 @@ if($data{'name'}) {
         $contact->{booksellerid} = $data{id};
         Koha::Acquisition::Bookseller::Contact->new( $contact )->store
     }
+
+    # Insert aliases
     $bookseller->aliases([ map { { alias => $_ } } @aliases ]);
+
+    # Insert interfaces
+    my @interface_counters = $input->multi_param('interface_counter');
+    my @interfaces;
+    for my $counter ( @interface_counters ) {
+        my $interface = {};
+        for my $attr (qw(name type uri login password account_email notes)){
+            my $v = $input->param("interface_${attr}_${counter}");
+            $interface->{$attr} = $v;
+        }
+        push @interfaces, $interface if any { defined && length } values %$interface;
+    }
+    $bookseller->interfaces(\@interfaces);
 
     #redirect to booksellers.pl
     print $input->redirect("booksellers.pl?booksellerid=".$data{id});
