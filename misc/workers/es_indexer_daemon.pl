@@ -17,16 +17,16 @@
 
 =head1 NAME
 
-background_jobs_worker_es.pl - Worker script that will process background Elasticsearch jobs
+es_indexer_daemon.pl - Worker script that will process background Elasticsearch jobs
 
 =head1 SYNOPSIS
 
-./background_jobs_worker_es.pl --batch_size=X
+./es_indexer_daemon.pl --batch_size=X
 
 Options:
 
+   -b --batch_size          how many jobs to commit (default: 10)
    --help                   brief help message
-   -b --batch_size          how many jobs to commit
 
 =head1 OPTIONS
 
