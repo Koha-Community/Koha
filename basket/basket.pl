@@ -64,7 +64,7 @@ foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
     my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
-    my $dat              = $biblio->unblessed;
+    my $dat              = { %{$biblio->unblessed}, %{$biblio->biblioitem->unblessed} };
     my $record           = $biblio->metadata->record;
     my $marcnotesarray   = $biblio->get_marc_notes;
     my $marcauthorsarray = $biblio->get_marc_contributors;

@@ -71,7 +71,7 @@ foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
     my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
-    my $dat              = $biblio->unblessed;
+    my $dat = { %{$biblio->unblessed}, %{$biblio->biblioitem->unblessed} };
 
     # No filtering on the item records needed for the record itself
     # since the only reason item information is grabbed is because of branchcodes.
