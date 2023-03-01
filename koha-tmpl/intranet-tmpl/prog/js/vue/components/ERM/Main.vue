@@ -1,10 +1,7 @@
 <template>
-    <div v-if="_is_loading">
-        <Dialog />
-    </div>
-    <div v-else-if="ERMModule">
+    <div>
         <Breadcrumb />
-        <div class="main container-fluid">
+        <div class="main container-fluid" v-if="ERMModule">
             <div class="row">
                 <div class="col-sm-10 col-sm-push-2">
                     <main>
@@ -111,13 +108,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div v-else>
-        {{
-            $__(
-                "The e-resource management module is disabled, turn on 'ERMModule' to use it"
-            )
-        }}
+        <div class="main container-fluid" v-else>
+            <Dialog />
+        </div>
     </div>
 </template>
 
@@ -137,17 +130,16 @@ export default {
 
         const mainStore = inject("mainStore")
 
-        // Note that we cannot use loading and loaded from messages
-        // Pinia is not initiated yet there
-        const { _is_loading } = storeToRefs(mainStore)
+        const { loading, loaded, setError } = mainStore
 
         return {
             vendorStore,
             AVStore,
-            mainStore,
+            setError,
             erm_providers,
             ERMModule,
-            _is_loading,
+            loading,
+            loaded,
         }
     },
     data() {
@@ -156,7 +148,15 @@ export default {
         }
     },
     beforeCreate() {
-        this.mainStore._is_loading = true
+        if (!this.ERMModule) {
+            return this.setError(
+                this.$__(
+                    'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
+                ),
+                false
+            )
+        }
+        this.loading()
 
         const acq_client = APIClient.acquisition
         acq_client.vendors.getAll().then(
@@ -200,7 +200,7 @@ export default {
                     }
                 )
             })
-            .then(() => (this.mainStore._is_loading = false))
+            .then(() => this.loaded())
     },
     components: {
         Breadcrumb,
