@@ -199,6 +199,20 @@ is_indexer_running()
     fi
 }
 
+is_es_indexer_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-es-indexer" \
+            --pidfiles="/var/run/koha/$instancename/" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_worker_running()
 {
     local instancename=$1
@@ -324,6 +338,20 @@ is_z3950_running()
     if start-stop-daemon --pidfile "/var/run/koha/${instancename}/z3950-responder.pid" \
             --user="$instancename-koha" \
             --status ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_elasticsearch_enabled()
+{
+    local instancename=$1
+
+    # is querying the DB fails then $searching won't match 'Elasticsearch'. Ditching STDERR
+    search_engine=$(koha-shell $instancename -c "/usr/share/koha/bin/admin/koha-preferences get SearchEngine 2> /dev/null")
+
+    if [ "$search_engine" = "Elasticsearch" ]; then
         return 0
     else
         return 1
