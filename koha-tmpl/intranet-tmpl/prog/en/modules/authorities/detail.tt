@@ -23,27 +23,20 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-        </li>
+        [% END %]
 
-        <li>
-            <a href="#" aria-current="page">
-                [% IF ( unknownauthid ) %]
-                    Unknown authority record
-                [% ELSE %]
-                    Details for authority #[% authid | html %] ([% authtypetext | html %])
-                [% END %]
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF ( unknownauthid ) %]
+                <span>Unknown authority record</span>
+            [% ELSE %]
+                <span>Details for authority #[% authid | html %] ([% authtypetext | html %])</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

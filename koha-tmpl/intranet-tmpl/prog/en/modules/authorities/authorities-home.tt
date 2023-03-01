@@ -1,3 +1,4 @@
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Authorities &rsaquo; Koha</title>
@@ -10,18 +11,11 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Authorities
-            </a>
-        </li>
-    </ol>
-</nav>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Authorities</span>
+        [% END %]
+    [% END %]
 [% END %]
 
 <div class="main container-fluid">
