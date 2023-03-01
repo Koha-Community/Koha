@@ -2962,13 +2962,28 @@ nav {
     border: 0;
 }
 
-.nav > li > a:hover,
-.nav > li > a:focus {
-    background-color: transparent;
-    padding: .4em 15px;
-    color: #fff;
-    text-decoration: underline 2px;
+.nav-pills {
+    li {
+        a {
+            background-color: transparent;
+        }
+        &.active {
+            a {
+                &:link,
+                &:visited {
+                    background-color: $background-color-primary;
+                }
+
+                &:active,
+                &:hover,
+                &:focus {
+                    background-color: $background-color-secondary;
+                }
+            }
+        }
+    }
 }
+
 
 .pagination {
     margin: .5em 0;

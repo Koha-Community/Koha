@@ -131,7 +131,7 @@
     [% ELSE %]
 
     <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a>Pay</a></li>
+        <li role="presentation" class="active"><a href="#">Pay</a></li>
         <li role="presentation"><a href="/cgi-bin/koha/members/paycollect.pl?writeoff_individual=1&borrowernumber=[% patron.borrowernumber | uri %]&debit_type_code=[% debit_type_code | uri %]&amount=[% amount | uri %]&amountoutstanding=[% amountoutstanding | uri %]&description=[% individual_description | uri %]&itemnumber=[% itemnumber | uri %]&accountlines_id=[% accountlines_id | uri %]&payment_note=[% payment_note | uri %]">Write off</a></li>
     </ul>
 
@@ -228,7 +228,7 @@
 [% ELSIF ( writeoff_individual ) %]
     <ul class="nav nav-pills">
         <li role="presentation"><a href="/cgi-bin/koha/members/paycollect.pl?pay_individual=1&borrowernumber=[% patron.borrowernumber | uri %]&debit_type_code=[% debit_type_code | uri %]&amount=[% amount | uri %]&amountoutstanding=[% amountoutstanding | uri %]&description=[% individual_description | uri %]&itemnumber=[% itemnumber | uri %]&accountlines_id=[% accountlines_id | uri %]&payment_note=[% payment_note | uri %]">Pay</a></li>
-        <li role="presentation" class="active"><a>Write off</a></li>
+        <li role="presentation" class="active"><a href="#">Write off</a></li>
     </ul>
 
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
