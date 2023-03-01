@@ -425,6 +425,22 @@ CREATE TABLE `aqbooksellers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `aqbookseller_aliases`
+--
+
+DROP TABLE IF EXISTS `aqbookseller_aliases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aqbookseller_aliases` (
+  `alias_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
+  `alias` varchar(255) NOT NULL COMMENT "the alias",
+  PRIMARY KEY (`alias_id`),
+  CONSTRAINT `aqbookseller_aliases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `aqbudgetborrowers`
 --
 
