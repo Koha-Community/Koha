@@ -902,6 +902,7 @@ sub PurgeEdifactMessages {
             SELECT id
             FROM edifact_messages
             WHERE transfer_date < date_sub(curdate(), INTERVAL ? DAY)
+            AND status != 'new';
         }
     );
     $sth->execute($days) or die $dbh->errstr;
