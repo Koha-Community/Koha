@@ -1,0 +1,247 @@
+#!/bin/bash
+#
+# Copyright 2023 Koha Development team
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /lib/lsb/init-functions
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage the ES indexing daemon for your Koha instances.
+
+Usage:
+$scriptname [--start|--stop|--restart] [--batch_size N] [--quiet|-q] instancename1 [instancename2...]
+$scriptname --status instancename1 [instancename2...]
+$scriptname -h|--help
+
+    --start               Start the ES indexing daemon for the specified instances
+    --stop                Stop the ES indexing daemon for the specified instances
+    --restart             Restart the ES indexing daemon for the specified instances
+    --batch_size N        Specify the batch size to commit at a time (default: 10)
+    --status              Show the status of the ES indexing for the specified instances
+    --quiet|-q            Make the script quiet about non existent instance names
+                          (useful for calling from another scripts).
+    --help|-h             Display this help message
+
+EOF
+}
+
+start_es_indexer()
+{
+    local name=$1
+
+    if ! is_es_indexer_running $name; then
+
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-es-indexer \
+            --errlog=/var/log/koha/$name/es-indexer-error.log \
+            --output=/var/log/koha/$name/es-indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Starting Koha ES indexing daemon for $name"
+
+        if daemon $DAEMONOPTS -- $worker_DAEMON --batch_size ${batch_size}; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: ES indexing daemon already running for $name"
+        log_end_msg 1
+    fi
+}
+
+stop_es_indexer()
+{
+    local name=$1
+
+    if is_es_indexer_running $name; then
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-es-indexer \
+            --errlog=/var/log/koha/$name/es-indexer-error.log \
+            --output=/var/log/koha/$name/es-indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Stopping Koha ES indexing daemon for $name"
+
+        if daemon $DAEMONOPTS --stop -- $worker_DAEMON; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: ES indexing daemon not running for $name"
+        log_end_msg 1
+    fi
+}
+
+restart_es_indexer()
+{
+    local name=$1
+    local queue=$2
+
+    if is_es_indexer_running $name; then
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-es-indexer \
+            --errlog=/var/log/koha/$name/es-indexer-error.log \
+            --output=/var/log/koha/$name/es-indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Restarting Koha ES indexing daemon for $name"
+
+        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --batch_size ${batch_size}; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_warning_msg "ES indexing daemon not running for $name."
+        start_es_indexer $name
+    fi
+}
+
+es_indexer_status()
+{
+    local name=$1
+
+    if is_es_indexer_running $name; then
+        log_daemon_msg "ES indexing daemon running for ${name}"
+        log_end_msg 0
+    else
+        log_daemon_msg "ES indexing daemon not running for ${name}"
+        log_end_msg 3
+    fi
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+op=""
+quiet="no"
+batch_size=10
+
+# Read command line parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            usage ; exit 0 ;;
+        -q|--quiet)
+            quiet="yes"
+            shift ;;
+        --batch_size)
+            batch_size="$2"
+            shift 2 ;;
+        --start)
+            set_action "start"
+            shift ;;
+        --stop)
+            set_action "stop"
+            shift ;;
+        --restart)
+            set_action "restart"
+            shift ;;
+        --status)
+            set_action "status"
+            shift ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+# Optionally use alternative paths for a dev install
+adjust_paths_dev_install $1
+
+if [ "$DEV_INSTALL" = "" ]; then
+    worker_DAEMON="${KOHA_HOME}/bin/workers/es_indexer_daemon.pl"
+else
+    worker_DAEMON="${KOHA_HOME}/misc/workers/es_indexer_daemon.pl"
+fi
+
+# PERL5LIB has been read from etc/default
+export PERL5LIB
+
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            case $op in
+                "start")
+                    start_es_indexer $name
+                    ;;
+                "stop")
+                    stop_es_indexer $name
+                    ;;
+                "restart")
+                    restart_es_indexer $name
+                    ;;
+                "status")
+                    es_indexer_status $name
+            esac
+
+        else
+            if [ "$quiet" = "no" ]; then
+                log_daemon_msg "Error: Invalid instance name $name"
+                log_end_msg 1
+            fi
+        fi
+
+    done
+else
+    if [ "$quiet" = "no" ]; then
+        warn "Error: you must provide at least one instance name"
+    fi
+fi
+
+exit 0

@@ -1,0 +1,100 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-es-indexer</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>https://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-es-indexer">
+
+  <refmeta>
+    <refentrytitle>koha-es-indexer</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-es-indexer</refname>
+    <refpurpose>Manage the ES indexer daemon for Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-es-indexer</command>
+      <arg choice="req"><option>--start</option>|<option>--stop</option>|<option>--restart</option>|<option>--status</option>|<option>--batch_size</option>|<option>--help</option>|<option>-h</option>|<option>--quiet</option>|<option>-q</option></arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+
+  <variablelist>
+
+    <varlistentry>
+      <term><option>--start</option></term>
+      <listitem>
+        <para>Start the ES indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--stop</option></term>
+      <listitem>
+        <para>Stop the ES indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--restart</option></term>
+      <listitem>
+        <para>Restart the ES indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--batch_size N</option></term>
+      <listitem>
+        <para>Specify the batch size to commit at a time (default: 10).</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--status</option></term>
+      <listitem>
+        <para>Show the status of the ES indexer for the specified instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--quiet|-q</option></term>
+      <listitem>
+        <para>Make the script quiet about non existent instance names. Useful when calling <command>koha-es-indexer</command> from another scripts.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--help|-h</option></term>
+      <listitem>
+        <para>Show usage information.</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para>The <command>koha-es-indexer</command> script lets you manage your Koha instances ES indexer daemon.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>/etc/default/koha-common</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
