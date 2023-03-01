@@ -20,7 +20,8 @@ INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     ('HOLD_CANCELLATION', 0),
     ('ROADTYPE', 0),
     ('AR_CANCELLATION', 0),
-    ('VENDOR_TYPE', 1);
+    ('VENDOR_TYPE', 1),
+    ('VENDOR_INTERFACE_TYPE', 1);
 
 INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
