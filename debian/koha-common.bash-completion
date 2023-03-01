@@ -131,7 +131,7 @@ _koha_list()
 
     COMPREPLY=()
     _get_comp_words_by_ref cur
-    opts="--enabled --disabled --email --noemail --plack --noplack --sip --nosip --help -h"
+    opts="--enabled --disabled --email --noemail --plack --noplack --sip --nosip --help -h --elasticsearch --noelasticsearch"
 
     # Build a list of the already used option switches
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
@@ -141,6 +141,10 @@ _koha_list()
                     substract="$substract -e --enabled"; ;;
                 --enabled)
                     substract="$substract -e --disabled"; ;;
+                --elasticsearch)
+                    substract="$substract -e --noelasticsearch"; ;;
+                --noelasticsearch)
+                    substract="$substract -e --elasticsearch"; ;;
                 --email)
                     substract="$substract -e --noemail"; ;;
                 --noemail)
