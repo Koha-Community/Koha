@@ -157,7 +157,7 @@ sub authenticate_api_request {
     # TODO: remove the latter 'openapi.op_spec' if minimum version is bumped to at least 1.17.
     my $spec = $c->openapi->spec || $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
 
-    $c->stash_embed();
+    $c->stash_embed( { spec => $spec } );
     $c->stash_overrides();
 
     my $cookie_auth = 0;

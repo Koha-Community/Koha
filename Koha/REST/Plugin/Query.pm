@@ -228,7 +228,7 @@ Merges parameters from $q_params into $filtered_params.
 
 =head3 stash_embed
 
-    $c->stash_embed();
+    $c->stash_embed( { spec => $op_spec } );
 
 Unwraps and stashes the x-koha-embed headers for use later query construction
 
@@ -237,14 +237,28 @@ Unwraps and stashes the x-koha-embed headers for use later query construction
     $app->helper(
         'stash_embed' => sub {
 
-            my ( $c ) = @_;
+            my ( $c, $args ) = @_;
+
             my $embed_header = $c->req->headers->header('x-koha-embed');
+            return $c unless $embed_header;
+
+            my $spec = $args->{spec} // {};
+            my $embed_spec;
+            for my $param ( @{ $spec->{parameters} } ) {
+                next unless $param->{name} eq 'x-koha-embed';
+                $embed_spec = $param->{items}->{enum};
+            }
+            Koha::Exceptions::BadParameter->throw(
+                "Embedding objects is not allowed on this endpoint.")
+              unless defined($embed_spec);
+
             if ($embed_header) {
                 my $THE_embed = {};
                 foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
                     if ( $embed_req eq '+strings' ) {    # special case
                         $c->stash( 'koha.strings' => 1 );
-                    } else {
+                    }
+                    else {
                         _merge_embed( _parse_embed($embed_req), $THE_embed );
                     }
                 }
