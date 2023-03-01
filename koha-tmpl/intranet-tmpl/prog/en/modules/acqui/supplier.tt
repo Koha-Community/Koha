@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE To %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
@@ -170,6 +171,11 @@
                     <label for="vendor_type">Vendor type: </label>
                     [% PROCESS 'av-build-dropbox.inc' name="vendor_type", category="VENDOR_TYPE", default=type, empty=1, size = 20 %]
                 </li>
+                <li>
+                    <label for="aliases">Aliases: </label>
+                    <div id="aliases" style="padding-left: 11rem;"></div>
+                </li>
+
             </ol>
         </fieldset>
         <fieldset class="rows">
@@ -311,6 +317,16 @@
                     [% IF ( accountnumber ) %]
                         <p><span class="label">Account number: </span>[% accountnumber | html %]</p>
                     [% END %]
+                    [% IF vendor.aliases.count %]
+                        <p>
+                            <span class="label">Aliases: </span>
+                            <ul>
+                            [% FOR alias IN vendor.aliases %]
+                                <li>[% alias.alias | html %]</li>
+                            [% END %]
+                            </ul>
+                        </p>
+                    [% END %]
                 </div> <!-- /#supplier-company-details -->
 
                 <div id="supplier-ordering-information" class="page-section">
@@ -441,6 +457,34 @@
             ev.preventDefault();
         }
 
+        [% IF vendor %]
+        let aliases = [% To.json(vendor.aliases.unblessed) | $raw %];
+        [% ELSE %]
+        let aliases = [];
+        [% END %]
+        function remove_alias(i){
+            aliases.splice(i, 1);
+            refresh_aliases();
+        }
+        function add_alias(){
+            let alias = $("#new_alias").val();
+            if ( !alias.length > 0 ) { return }
+            aliases.push({alias});
+            refresh_aliases();
+        }
+        function refresh_aliases(){
+            let nodes = $("<div></div>");
+            aliases.forEach((a, i) => {
+                let n = $("<div></div>").append(a.alias);
+                n.append(`<input type="hidden" name="alias" value="${a.alias}">`)
+                n.append(`<a onclick="remove_alias(${i});"><i class="fa fa-trash" aria-hidden="true"></i></a>`);
+                nodes.append(n);
+            });
+            nodes.append("<input id='new_alias' type='text' />");
+            nodes.append(`<a onclick="add_alias();"><i class="fa fa-plus" aria-hidden="true"></i></a>`);
+            $("#aliases").html(nodes.html());
+        }
+
         var Sticky;
 
          $(document).ready(function() {
@@ -479,6 +523,8 @@
             $('body').on('click', '.contact_claimissues', null, function () {
                 $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
             });
+
+            refresh_aliases();
 
             Sticky = $("#toolbar");
             Sticky.hcSticky({

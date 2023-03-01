@@ -17,6 +17,7 @@ package Koha::Acquisition::Bookseller;
 
 use Modern::Perl;
 
+use Koha::Acquisition::Bookseller::Aliases;
 use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Subscriptions;
 
@@ -75,6 +76,34 @@ sub subscriptions {
     # FIXME FK missing at DB level
     return Koha::Subscriptions->search( { aqbooksellerid => $self->id } );
 }
+
+=head3 aliases
+
+    my $aliases = $vendor->aliases
+
+    $vendor->aliases([{ alias => 'one alias'}]);
+
+=cut
+
+sub aliases {
+    my ($self, $aliases) = @_;
+
+    if ($aliases) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->aliases->delete;
+                for my $alias (@$aliases) {
+                    $self->_result->add_to_aqbookseller_aliases($alias);
+                }
+            }
+        );
+    }
+
+    my $rs = $self->_result->aqbookseller_aliases;
+    return Koha::Acquisition::Bookseller::Aliases->_new_from_dbic( $rs );
+}
+
 
 =head3 to_api_mapping
 

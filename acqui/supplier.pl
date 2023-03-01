@@ -85,6 +85,7 @@ if ( $op eq 'display' ) {
         listprice     => $supplier->listprice,
         basketcount   => $supplier->baskets->count,
         subscriptioncount => $supplier->subscriptions->count,
+        vendor        => $supplier,
         contracts     => $contracts,
     );
 } elsif ( $op eq 'delete' ) {
@@ -106,6 +107,7 @@ if ( $op eq 'display' ) {
         # set active ON by default for supplier add (id empty for add)
         active     => $supplier ? $supplier->active         : 1,
         tax_rate   => $supplier ? $supplier->tax_rate + 0.0 : 0,
+        vendor        => $supplier,
         gst_values    => \@gst_values,
         currencies    => Koha::Acquisition::Currencies->search,
         enter         => 1,

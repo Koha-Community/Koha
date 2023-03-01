@@ -93,6 +93,8 @@ $data{'tax_rate'} = $input->param('tax_rate');
 $data{'discount'} = $input->param('discount');
 $data{deliverytime} = $input->param('deliverytime');
 $data{'active'}=$input->param('status');
+
+my @aliases = $input->multi_param('alias');
 my @contacts;
 my %contact_info;
 
@@ -111,15 +113,16 @@ for my $cnt (0..scalar(@{$contact_info{'id'}})) {
 }
 
 if($data{'name'}) {
+    my $bookseller;
     if ( $data{id} ) {
         # Update
-        my $bookseller = Koha::Acquisition::Booksellers->find( $data{id} )->set(\%data)->store;
+        $bookseller = Koha::Acquisition::Booksellers->find( $data{id} )->set(\%data)->store;
         # Delete existing contacts
         $bookseller->contacts->delete;
     } else {
         # Insert
         delete $data{id}; # Remove the key if exists
-        my $bookseller = Koha::Acquisition::Bookseller->new( \%data )->store;
+        $bookseller = Koha::Acquisition::Bookseller->new( \%data )->store;
         $data{id} = $bookseller->id;
     }
     # Insert contacts
@@ -127,6 +130,7 @@ if($data{'name'}) {
         $contact->{booksellerid} = $data{id};
         Koha::Acquisition::Bookseller::Contact->new( $contact )->store
     }
+    $bookseller->aliases([ map { { alias => $_ } } @aliases ]);
 
     #redirect to booksellers.pl
     print $input->redirect("booksellers.pl?booksellerid=".$data{id});
