@@ -439,7 +439,7 @@
         <ol>
             [%# Include the Home link every time %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+                <a href="/cgi-bin/koha/mainpage.pl" title="Home">Home</a>
             [% END %]
             [% content | $raw %]
         </ol>
