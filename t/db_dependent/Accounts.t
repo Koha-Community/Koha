@@ -835,16 +835,16 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         }
     )->store;
 
-    my ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
-    my $other_charges = $total - $non_issues_charges;
+    my ( $new_total, $new_non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    my $new_other_charges = $new_total - $new_non_issues_charges;
     is(
         $account->balance,
         $res + $rent + $manual + $print,
         'Total charges should be Res + Rent + Manual + Print'
     );
-    is( $non_issues_charges, 15,
+    is( $new_non_issues_charges, 15,
         'All types except Print should count towards the non issue charge' );
-    is( $other_charges, 4, 'There should be non-included charges for Print' );
+    is( $new_other_charges, 4, 'There should be non-included charges for Print' );
 
 };
 
