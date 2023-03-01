@@ -163,16 +163,16 @@ elsif ( $phase eq 'Delete Multiple') {
 }
 
 elsif ( $phase eq 'Delete Saved') {
-	
+
 	# delete a report from the saved reports list
     my $ids = $input->param('reports');
     delete_report($ids);
     print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved");
 	exit;
-}		
+}
 
 elsif ( $phase eq 'Show SQL'){
-	
+
     my $id = $input->param('reports');
     my $report = Koha::Reports->find($id);
     $template->param(
@@ -192,6 +192,7 @@ elsif ( $phase eq 'Edit SQL'){
     my $report = Koha::Reports->find($id);
     my $group = $report->report_group;
     my $subgroup  = $report->report_subgroup;
+    my $tables = get_tables();
     $template->param(
         'sql'        => $report->savedsql,
         'reportname' => $report->report_name,
@@ -203,7 +204,8 @@ elsif ( $phase eq 'Edit SQL'){
         'usecache' => $usecache,
         'editsql'    => 1,
         'mana_id' => $report->{mana_id},
-        'mana_comments' => $report->{comments}
+        'mana_comments' => $report->{comments},
+        'tables' => $tables
     );
 }
 
@@ -219,6 +221,7 @@ elsif ( $phase eq 'Update SQL'){
     my $public = $input->param('public');
     my $save_anyway = $input->param('save_anyway');
     my @errors;
+    my $tables = get_tables();
 
     # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
     if( $cache_expiry_units ){
@@ -263,7 +266,7 @@ elsif ( $phase eq 'Update SQL'){
                 'public' => $public,
                 'problematic_authvals' => $problematic_authvals,
                 'warn_authval_problem' => 1,
-                'phase_update' => 1
+                'phase_update' => 1,
             );
 
         } else {
@@ -288,6 +291,7 @@ elsif ( $phase eq 'Update SQL'){
                 'cache_expiry'          => $cache_expiry,
                 'public'                => $public,
                 'usecache'              => $usecache,
+                'tables'                => $tables
             );
             logaction( "REPORTS", "MODIFY", $id, "$reportname | $sql" ) if C4::Context->preference("ReportsLog");
         }
@@ -556,6 +560,7 @@ elsif ( $phase eq 'Save Report' ) {
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public = $input->param('public');
     my $save_anyway = $input->param('save_anyway');
+    my $tables = get_tables();
 
 
     # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
@@ -640,6 +645,7 @@ elsif ( $phase eq 'Save Report' ) {
                 'cache_expiry' => $cache_expiry,
                 'public' => $public,
                 'usecache' => $usecache,
+                'tables' => $tables
             );
         }
     }
@@ -998,6 +1004,8 @@ elsif ( $phase eq 'Create report from SQL' || $phase eq 'Create report from exis
         $notes      = $report->notes // '';
     }
 
+    my $tables = get_tables();
+
     $template->param(
         sql        => $sql,
         reportname => $reportname,
@@ -1007,6 +1015,7 @@ elsif ( $phase eq 'Create report from SQL' || $phase eq 'Create report from exis
         'public' => '0',
         'cache_expiry' => 300,
         'usecache' => $usecache,
+        'tables' => $tables,
 
     );
 }
@@ -1022,6 +1031,20 @@ sub header_cell_values {
 sub header_cell_loop {
     my @headers = map { +{ cell => decode('UTF-8',$_) } } header_cell_values (shift);
     return \@headers;
+}
+
+#get a list of available tables for auto-complete
+sub get_tables {
+    my $result = {};
+    my $tables = C4::Reports::Guided->get_all_tables();
+    for my $table (@{$tables}) {
+        my $sql = "SHOW COLUMNS FROM $table";
+        my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
+        for my $row (@{$rows}) {
+            push @{$result->{$table}}, $row->{Field};
+        }
+    }
+    return $result;
 }
 
 foreach (1..6) {

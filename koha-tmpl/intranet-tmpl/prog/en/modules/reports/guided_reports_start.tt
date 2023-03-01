@@ -1563,6 +1563,9 @@
                 },
                 extraKeys: {"Tab": "autocomplete"}, //enable tab to accept auto-complete
                 hint: CodeMirror.hint.sql,
+                hintOptions: {
+                    tables: [% To.json(tables) | $raw %]
+                }
             });
             var ExcludedTriggerKeys = { //key-code combinations of keys that will not fire the auto-complete script
                 "8": "backspace",
