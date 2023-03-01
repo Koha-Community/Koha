@@ -252,34 +252,25 @@
 
     [% INCLUDE 'header.inc' %]
 
-    [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-            </li>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+        [% END %]
 
-            [% IF ( authid ) %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify authority #[% authid | html %] ([% authtypetext | html %])
-                    </a>
-                </li>
-
-            [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Adding authority [% authtypetext | html %]
-                    </a>
-                </li>
-
+        [% IF ( authid ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Modify authority #[% authid | html %] ([% authtypetext | html %])
             [% END %]
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
-    [% END %]
+
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Adding authority [% authtypetext | html %]
+            [% END %]
+
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
