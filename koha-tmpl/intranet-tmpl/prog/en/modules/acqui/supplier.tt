@@ -362,7 +362,7 @@
                             <legend>[% i.name | html %]</legend>
                             <ul>
                                 [% IF i.type %]
-                                    <li>Type: [% i.type | html %]</li>
+                                    <li>Type: [% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</li>
                                 [% END %]
                                 [% IF i.uri %]
                                     <li>URI: [% i.uri | html %]</li>
@@ -577,6 +577,9 @@
             });
             refresh_interfaces();
         }
+        let av_select = {
+            VENDOR_INTERFACE_TYPE: $("[% PROCESS 'av-build-dropbox.inc', category="VENDOR_INTERFACE_TYPE" empty=1 | replace('\n', '') | replace('"', '\"') %]"),
+        };
         function refresh_interfaces(){
             let nodes = $("<div id='interfaces'></div>");
             interfaces.forEach((interface, i) => {
@@ -586,7 +589,7 @@
                 let ol = $('<ol class="interface-form"></ol>');
                 let attributes = [
                     { label: _("Name"),          name: 'name',          node: 'input' },
-                    { label: _("Type"),          name: 'type',          node: 'input' },
+                    { label: _("Type"),          name: 'type',          node: 'av_select', av_cat: 'VENDOR_INTERFACE_TYPE' },
                     { label: _("URI"),           name: 'uri',           node: 'input' },
                     { label: _("Login"),         name: 'login',         node: 'input' },
                     { label: _("Password"),      name: 'password',      node: 'input' },
@@ -600,6 +603,11 @@
                         li.append(`<input type="text" size="40" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}" value="${interface[attribute.name]}" />`);
                     } else if ( attribute.node == 'textarea' ) {
                         li.append(`<textarea cols="40" rows="3" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}">${interface[attribute.name]}</textarea>`);
+                    } else if ( attribute.node == 'av_select' ) {
+                        let select = av_select[attribute.av_cat].clone();
+                        select.attr('name', `interface_${attribute.name}_${i}`);
+                        select.find(`option[value='${interface[attribute.name]}']`).prop("selected", true);
+                        li.append(select);
                     }
                     ol.append(li);
                 });
