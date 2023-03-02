@@ -73,7 +73,7 @@ pod2usage(0) if $help;
 
 $batch_size //= 10;
 
-die "Not using Elasticsearch" unless C4::Context->preference('SearchEngine') eq 'Elasticsearch';
+warn "Not using Elasticsearch" unless C4::Context->preference('SearchEngine') eq 'Elasticsearch';
 
 my $logger = Koha::Logger->get({ interface =>  'worker' });
 
