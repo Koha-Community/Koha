@@ -108,7 +108,7 @@ subtest 'q handling tests' => sub {
 
 subtest 'x-koha-embed tests' => sub {
 
-    plan tests => 5;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -137,6 +137,14 @@ subtest 'x-koha-embed tests' => sub {
               'extended_attributes,custom_bad_embed,another_bad_embed'
         }
     )->status_is(400);
+
+    $res = $t->get_ok(
+        "//$userid:$password@/api/v1/cities" => {
+            'x-koha-embed' => 'any_embed'
+        }
+    )->status_is(400)->tx->res->json;
+
+    is($res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned');
 
     $schema->storage->txn_rollback;
 };
