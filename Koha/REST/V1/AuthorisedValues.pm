@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
 
 use Try::Tiny;
@@ -49,7 +48,7 @@ sub list_av_from_category {
     }
 
     return try {
-        my $av_set = Koha::AuthorisedValues->search( { category => $category_name } )->search_with_library_limits;
+        my $av_set = $category->authorised_values->search_with_library_limits;
         my $avs    = $c->objects->search($av_set);
         return $c->render( status => 200, openapi => $avs );
     } catch {

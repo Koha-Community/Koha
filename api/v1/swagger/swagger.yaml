@@ -145,8 +145,8 @@ paths:
     $ref: paths/auth.yaml#/~1auth~1identity_providers~1{identity_provider_id}~1domains~1{identity_provider_domain_id}
   /authorised_value_categories:
     $ref: paths/authorised_value_categories.yaml#/~1authorised_value_categories
-  "/authorised_value_categories/{authorised_value_category_name}/values":
-    $ref: "./paths/authorised_values.yaml#/~1authorised_value_categories~1{authorised_value_category_name}~1values"
+  "/authorised_value_categories/{authorised_value_category_name}/authorised_values":
+    $ref: "./paths/authorised_values.yaml#/~1authorised_value_categories~1{authorised_value_category_name}~1authorised_values"
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
   "/biblios/{biblio_id}/checkouts":
