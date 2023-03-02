@@ -1710,7 +1710,7 @@ subtest "Test _checkHoldPolicy" => sub {
         }
     );
     ok( $reserve_id, "Hold was created");
-    my $requests = C4::HoldsQueue::GetPendingHoldRequestsForBib($biblio->biblionumber);
+    my $requests = C4::HoldsQueue::GetPendingHoldRequestsForBib({ biblionumber => $biblio->biblionumber});
     is( @$requests, 1, "Got correct number of holds");
 
     my $request = $requests->[0];
