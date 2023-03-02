@@ -168,10 +168,14 @@ Top level function that turns reserves into tmp_holdsqueue and hold_fill_targets
 =cut
 
 sub CreateQueue {
+    my $params = shift;
+    my $unallocated = $params->{unallocated};
     my $dbh   = C4::Context->dbh;
 
-    $dbh->do("DELETE FROM tmp_holdsqueue");  # clear the old table for new info
-    $dbh->do("DELETE FROM hold_fill_targets");
+    unless( $unallocated ){
+        $dbh->do("DELETE FROM tmp_holdsqueue");  # clear the old table for new info
+        $dbh->do("DELETE FROM hold_fill_targets");
+    }
 
     my $total_bibs            = 0;
     my $total_requests        = 0;
@@ -201,6 +205,7 @@ sub CreateQueue {
             {   biblio_id             => $biblionumber,
                 branches_to_use       => $branches_to_use,
                 transport_cost_matrix => $transport_cost_matrix,
+                unallocated           => $unallocated
             }
         );
 
@@ -228,6 +233,7 @@ sub GetBibsWithPendingHoldRequests {
                      AND priority > 0
                      AND reservedate <= CURRENT_DATE()
                      AND suspend = 0
+                     AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets)
                      ";
     my $sth = $dbh->prepare($bib_query);
 
@@ -239,10 +245,10 @@ sub GetBibsWithPendingHoldRequests {
 
 =head2 GetPendingHoldRequestsForBib
 
-  my $requests = GetPendingHoldRequestsForBib($biblionumber);
+  my $requests = GetPendingHoldRequestsForBib({ biblionumber => $biblionumber, unallocated => $unallocated });
 
 Returns an arrayref of hashrefs to pending, unfilled hold requests
-on the bib identified by $biblionumber.  The following keys
+on the bib identified by $biblionumber. Optionally returns only unallocated holds.  The following keys
 are present in each hashref:
 
     biblionumber
@@ -259,7 +265,9 @@ The arrayref is sorted in order of increasing priority.
 =cut
 
 sub GetPendingHoldRequestsForBib {
-    my $biblionumber = shift;
+    my $params = shift;
+    my $biblionumber = $params->{biblionumber};
+    my $unallocated = $params->{unallocated};
 
     my $dbh = C4::Context->dbh;
 
@@ -271,8 +279,9 @@ sub GetPendingHoldRequestsForBib {
                          AND found IS NULL
                          AND priority > 0
                          AND reservedate <= CURRENT_DATE()
-                         AND suspend = 0
-                         ORDER BY priority";
+                         AND suspend = 0 ";
+    $request_query .=   "AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets) " if $unallocated;
+    $request_query .=   "ORDER BY priority";
     my $sth = $dbh->prepare($request_query);
     $sth->execute($biblionumber);
 
@@ -330,10 +339,15 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
                            AND itemnumber IS NOT NULL
                            AND (found IS NOT NULL OR priority = 0)
                         )
+                        AND items.itemnumber NOT IN (
+                           SELECT itemnumber
+                           FROM tmp_holdsqueue
+                           WHERE biblionumber = ?
+                        )
                        AND items.biblionumber = ?
                        AND branchtransfers.itemnumber IS NULL";
 
-    my @params = ($biblionumber, $biblionumber);
+    my @params = ($biblionumber, $biblionumber, $biblionumber);
     if ($branches_to_use && @$branches_to_use) {
         $items_query .= " AND holdingbranch IN (" . join (",", map { "?" } @$branches_to_use) . ")";
         push @params, @$branches_to_use;
@@ -1120,7 +1134,8 @@ sub least_cost_branch {
             biblio_id             => $biblio_id,
           [ branches_to_use       => $branches_to_use,
             transport_cost_matrix => $transport_cost_matrix,
-            delete                => $delete, ]
+            delete                => $delete,
+            unallocated           => $unallocated, ]
         }
     );
 
@@ -1151,6 +1166,9 @@ It return a hashref containing:
 
 =item I<delete> tells the method to delete prior entries on the related tables for the biblio_id.
 
+=item I<unallocated> tells the method to limit the holds to those not in the holds queue, should not
+    be passed at the same time as delete.
+
 =back
 
 Note: All the optional parameters will be calculated in the method if omitted. They
@@ -1171,7 +1189,7 @@ sub update_queue_for_biblio {
         $dbh->do("DELETE FROM hold_fill_targets WHERE biblionumber=$biblio_id");
     }
 
-    my $hold_requests   = GetPendingHoldRequestsForBib($biblio_id);
+    my $hold_requests   = GetPendingHoldRequestsForBib({ biblionumber => $biblio_id, unallocated => $args->{unallocated} });
     $result->{requests} = scalar( @{$hold_requests} );
     # No need to check anything else if there are no holds to fill
     return $result unless $result->{requests};
