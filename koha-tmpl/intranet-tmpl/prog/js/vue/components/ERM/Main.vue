@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div v-if="ERMModule">
         <Breadcrumb />
-        <div class="main container-fluid" v-if="ERMModule">
+        <div class="main container-fluid">
             <div class="row">
                 <div class="col-sm-10 col-sm-push-2">
                     <main>
@@ -108,9 +108,9 @@
                 </div>
             </div>
         </div>
-        <div class="main container-fluid" v-else>
-            <Dialog />
-        </div>
+    </div>
+    <div class="main container-fluid" v-else>
+        <Dialog />
     </div>
 </template>
 
