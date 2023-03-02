@@ -36,7 +36,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() and delete() tests | authorized user' => sub {
 
-    plan tests => 35;
+    plan tests => 40;
 
     $schema->storage->txn_begin;
 
@@ -90,6 +90,15 @@ subtest 'list() and delete() tests | authorized user' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?accountnumber=" . $other_vendor->accountnumber )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Amerindia/ );
+
+    my @aliases = ( { alias => 'alias 1' }, { alias => 'alias 2' } );
+    $vendor->aliases( \@aliases );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" =>
+        { 'x-koha-embed' => 'aliases' } )
+      ->status_is(200)
+      ->json_has('/0/aliases', 'aliases are embeded')
+      ->json_is('/0/aliases/0/alias' => 'alias 1', 'alias 1 is embeded')
+      ->json_is('/0/aliases/1/alias' => 'alias 2', 'alias 2 is embeded');
 
     $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(204, 'SWAGGER3.2.4')
