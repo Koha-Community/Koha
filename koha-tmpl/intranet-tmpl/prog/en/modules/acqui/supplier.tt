@@ -569,13 +569,25 @@
                 n.append("<legend>" + _("Interface details") + "</legend>");
                 n.append(`<input type="hidden" name="interface_counter" value="${i}" />`);
                 let ol = $('<ol class="interface-form"></ol>');
-                ol.append(`<li><label for="interface_name_${i}">` + _("Name: ") + `</label><input type="text" size="40" id="interface_name_${i}" name="interface_name_${i}" value="${interface.name}" /></li>`);
-                ol.append(`<li><label for="interface_type_${i}">` + _("Type: ") + `</label><input type="text" size="40" id="interface_type_${i}" name="interface_type_${i}" value="${interface.type}" /></li>`);
-                ol.append(`<li><label for="interface_uri_${i}">` + _("URI: ") + `</label><input type="text" size="40" id="interface_uri_${i}" name="interface_uri_${i}" value="${interface.uri}" /></li>`);
-                ol.append(`<li><label for="interface_login_${i}">` + _("Login: ") + `</label><input type="text" size="40" id="interface_login_${i}" name="interface_login_${i}" value="${interface.login}" /></li>`);
-                ol.append(`<li><label for="interface_password_${i}">` + _("Password: ") + `</label><input type="text" size="40" id="interface_password_${i}" name="interface_password_${i}" value="${interface.password}" /></li>`);
-                ol.append(`<li><label for="interface_account_email_${i}">` + _("Account email: ") + `</label><input type="text" size="40" id="interface_account_email_${i}" name="interface_account_email_${i}" value="${interface.account_email}" /></li>`);
-                ol.append(`<li><label for="interface_notes_${i}">` + _("Notes: ") + `</label><textarea cols="40" rows="3" id="interface_notes_${i}" name="interface_notes_${i}">${interface.notes}</textarea></li>`);
+                let attributes = [
+                    { label: _("Name"),          name: 'name',          node: 'input' },
+                    { label: _("Type"),          name: 'type',          node: 'input' },
+                    { label: _("URI"),           name: 'uri',           node: 'input' },
+                    { label: _("Login"),         name: 'login',         node: 'input' },
+                    { label: _("Password"),      name: 'password',      node: 'input' },
+                    { label: _("Account email"), name: 'account_email', node: 'input' },
+                    { label: _("Notes"),         name: 'notes',         node: 'textarea' }
+                ];
+                attributes.forEach((attribute, ii) => {
+                    let li = $('<li></li>');
+                    li.append(`<label for="interface_${attribute.name}_${i}">${attribute.label}</label>`);
+                    if( attribute.node == 'input' ) {
+                        li.append(`<input type="text" size="40" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}" value="${interface[attribute.name]}" />`);
+                    } else if ( attribute.node == 'textarea' ) {
+                        li.append(`<textarea cols="40" rows="3" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}">${interface[attribute.name]}</textarea>`);
+                    }
+                    ol.append(li);
+                });
                 ol.append(`<li><button class="btn btn-default" onclick="remove_interface(${i});"><i class="fa fa-trash"></i> Delete interface</li>`);
                 n.append(ol);
                 nodes.append(n);
