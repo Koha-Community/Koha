@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::TestBuilder;
 
@@ -169,6 +169,26 @@ subtest '->contacts() tests' => sub {
     my $contacts = $vendor->contacts;
     is( $contacts->count, 2, 'Vendor has two contacts' );
     is( ref($contacts), 'Koha::Acquisition::Bookseller::Contacts', 'Type is correct' );
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'aliases' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin();
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( $vendor->aliases->count, 0, 'Vendor has no aliases' );
+
+    $vendor->aliases( [ { alias => 'alias 1' }, { alias => 'alias 2' } ] );
+
+    $vendor = $vendor->get_from_storage;
+    my $aliases = $vendor->aliases;
+    is( $aliases->count, 2 );
+    is( ref($aliases), 'Koha::Acquisition::Bookseller::Aliases', 'Type is correct' );
 
     $schema->storage->txn_rollback();
 };
