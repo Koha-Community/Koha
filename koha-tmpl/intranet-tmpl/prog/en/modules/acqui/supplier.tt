@@ -357,18 +357,28 @@
                 <div id="supplier-interfaces" class="page-section">
                     <h2>Interfaces</h2>
 
-                    [% FOR interface IN vendor.interfaces %]
+                    [% FOR i IN vendor.interfaces %]
                         <fieldset class="rows">
-                            <legend>[% interface.name | html %]</legend>
+                            <legend>[% i.name | html %]</legend>
                             <ul>
-                                <li>
-                                    <li>Type: [% interface.type | html %]</li>
-                                    <li>URI: [% interface.uri | html %]</li>
-                                    <li>Login: [% interface.login | html %]</li>
-                                    <li>Password: [% interface.password | html %]</li>
-                                    <li>Account email: [% interface.account_email | html %]</li>
-                                    <li>Notes : [% interface.notes | html %]</li>
-                                </li>
+                                [% IF i.type %]
+                                    <li>Type: [% i.type | html %]</li>
+                                [% END %]
+                                [% IF i.uri %]
+                                    <li>URI: [% i.uri | html %]</li>
+                                [% END %]
+                                [% IF i.login %]
+                                    <li>Login: [% i.login | html %]</li>
+                                [% END %]
+                                [% IF i.password %]
+                                    <li>Password: <span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></li>
+                                [% END %]
+                                [% IF i.account_email %]
+                                    <li>Account email: [% i.account_email | html %]</li>
+                                [% END %]
+                                [% IF i.notes %]
+                                    <li>Notes : [% i.notes | html %]</li>
+                                [% END %]
                             </ul>
                         </fieldset>
                     [% END %]
@@ -528,9 +538,14 @@
         }
 
         [% IF vendor %]
-        let interfaces = [% To.json(vendor.interfaces.unblessed) | $raw %];
+            let interfaces = [];
+            [% FOR i_object IN vendor.interfaces %]
+                [% SET i = i_object.unblessed %]
+                [% SET i.password = i_object.plain_text_password %]
+                interfaces.push([% To.json(i) | $raw %]);
+            [% END %]
         [% ELSE %]
-        let interfaces = [];
+            let interfaces = [];
         [% END %]
         function serialize_interface_form(){
             interfaces = [];
@@ -635,6 +650,10 @@
                 $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
             });
 
+            $('body').on('click', '.show_password', null, function(e){
+                e.preventDefault();
+                $(this).parent().replaceWith($(this).data('plain-text-password'));
+            });
             refresh_aliases();
             refresh_interfaces();
 

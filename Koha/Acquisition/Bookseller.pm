@@ -122,7 +122,12 @@ sub interfaces {
             sub {
                 $self->interfaces->delete;
                 for my $interface (@$interfaces) {
-                    $self->_result->add_to_aqbookseller_interfaces($interface);
+                    Koha::Acquisition::Bookseller::Interface->new(
+                        {
+                            %$interface,
+                            vendor_id => $self->id,
+                        }
+                    )->store;
                 }
             }
         );

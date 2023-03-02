@@ -16,6 +16,7 @@ package Koha::Acquisition::Bookseller::Interface;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Koha::Encryption;
 
 use base qw( Koha::Object );
 
@@ -28,6 +29,38 @@ Koha::Acquisition::Bookseller::Interface - Koha Bookseller interface Object clas
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+    $self->store;
+
+Specific store method to encrypt the password.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    if ( $self->password ) {
+        $self->password(Koha::Encryption->new->encrypt_hex($self->password));
+    }
+
+    return $self->SUPER::store;
+}
+
+=head3 plain_text_password
+
+    my $plain_text_password = $self->plain_text_password;
+
+Decrypt the password and return its plain text form.
+
+=cut
+
+sub plain_text_password {
+    my ($self) = @_;
+    return Koha::Encryption->new->decrypt_hex($self->password)
+        if $self->password;
+}
 
 =head3 _type
 
