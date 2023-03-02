@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 
@@ -189,6 +189,39 @@ subtest 'aliases' => sub {
     my $aliases = $vendor->aliases;
     is( $aliases->count, 2 );
     is( ref($aliases), 'Koha::Acquisition::Bookseller::Aliases', 'Type is correct' );
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'interfaces' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin();
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( $vendor->interfaces->count, 0, 'Vendor has no interfaces' );
+
+    $vendor->interfaces( [ { name => 'first interface' }, { name => 'second interface', login => 'one_login' } ] );
+
+    $vendor = $vendor->get_from_storage;
+    my $interfaces = $vendor->interfaces;
+    is( $interfaces->count, 2, '2 interfaces stored' );
+    is( ref($interfaces), 'Koha::Acquisition::Bookseller::Interfaces', 'Type is correct' );
+
+    $vendor->interfaces( [ { name => 'first interface', login => 'one_login', password => 'oneP@sswOrd' } ] );
+    $vendor     = $vendor->get_from_storage;
+    $interfaces = $vendor->interfaces;
+    is( $interfaces->count, 1, '1 interface stored' );
+    my $interface = $interfaces->next;
+    is( $interface->name,  'first interface', 'name correctly saved' );
+    is( $interface->login, 'one_login',       'login correctly saved' );
+    is( $interface->uri,   undef,             'no value is stored as NULL' );
+    isnt( $interface->password, 'oneP@sswOrd', 'Password is not stored in plain text' );
+    isnt( $interface->password, '',            'Password is not removed' );
+    isnt( $interface->password, undef,         'Password is not set to NULL' );
+    is( $interface->plain_text_password, 'oneP@sswOrd', 'Password can be retrieved using ->plain_text_password' );
 
     $schema->storage->txn_rollback();
 };
