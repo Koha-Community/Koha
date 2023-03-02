@@ -31,26 +31,29 @@ use constant DEFAULT_JOBS_PURGEDAYS               => 1;
 use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
 use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
 
-use Koha::Script -cron;
-use C4::Context;
-use C4::Search;
-use C4::Search::History;
 use Getopt::Long qw( GetOptions );
-use C4::Log qw( cronlogaction );
+
+use Koha::Script -cron;
+
 use C4::Accounts qw( purge_zero_balance_fees );
-use Koha::UploadedFiles;
+use C4::Context;
+use C4::Log qw( cronlogaction );
+use C4::Search::History;
+use C4::Search;
 use Koha::BackgroundJobs;
-use Koha::Old::Biblios;
-use Koha::Old::Items;
+use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Item::Transfers;
 use Koha::Old::Biblioitems;
+use Koha::Old::Biblios;
 use Koha::Old::Checkouts;
 use Koha::Old::Holds;
+use Koha::Old::Items;
 use Koha::Old::Patrons;
-use Koha::Item::Transfers;
-use Koha::PseudonymizedTransactions;
-use Koha::Patron::Messages;
 use Koha::Patron::Debarments qw( DelDebarment );
-use Koha::Database;
+use Koha::Patron::Messages;
+use Koha::PseudonymizedTransactions;
+use Koha::UploadedFiles;
 
 sub usage {
     print STDERR <<USAGE;
@@ -116,7 +119,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --jobs-type TYPES       What type of background job to purge. Defaults to "update_elastic_index" if omitted
                            Specifying "all" will purge all types. Repeatable.
    --reports DAYS          Purge reports data saved more than DAYS days ago. The data is created by running runreport.pl with the --store-results option.
-   --edifact-messages DAYS   Purge entries from the edifact_messages table older than DAYS days.
+   --edifact-messages DAYS   Purge process and failed EDIFACT messages handled more than DAYS days.
                              Defaults to 365 days if no days specified.
 USAGE
     exit $_[0];
@@ -894,23 +897,19 @@ sub PurgeSavedReports {
 sub PurgeEdifactMessages {
     my ( $days, $doit ) = @_;
 
-    my $count = 0;
     my $schema = Koha::Database->new()->schema();
-
-    $sth = $dbh->prepare(
-        q{
-            SELECT id
-            FROM edifact_messages
-            WHERE transfer_date < date_sub(curdate(), INTERVAL ? DAY)
-            AND status != 'new';
+    my $dtf = $schema->storage->datetime_parser;
+    my $resultset = $schema->resultset('EdifactMessage')->search(
+        {
+            transfer_date => {
+                '<' => $dtf->format_datetime(dt_from_string->subtract( days => $days ))
+            },
+            status => { '!=' => 'new' },
         }
     );
-    $sth->execute($days) or die $dbh->errstr;
+    my $count = $resultset->count;
 
-    while ( my ($msg_id) = $sth->fetchrow_array) {
-        my $msg = $schema->resultset('EdifactMessage')->find($msg_id);
-        $msg->delete if $doit;
-        $count++;
-    }
+    $resultset->delete if $doit;
+
     return $count;
 }
