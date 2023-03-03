@@ -101,22 +101,52 @@ subtest 'opac_info tests' => sub {
     my $library01 = $builder->build_object({ class => 'Koha::Libraries' });
     my $library02 = $builder->build_object({ class => 'Koha::Libraries' });
 
-    my $html01 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, lang => 'default', content => '1', expirationdate => undef },
-    });
-    my $html02 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => $library01->id, lang => 'default', content => '2', expirationdate => undef },
-    });
-    my $html03 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => $library01->id, lang => 'nl-NL', content => '3', expirationdate => undef },
-    });
-    my $html04 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, lang => 'fr-FR', content => '4', expirationdate => undef },
-    });
+    my $html01 = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, expirationdate => undef },
+        }
+    );
+    $html01->translated_contents(
+        [
+            {
+                lang    => 'default',
+                content => '1',
+            }
+        ]
+    );
+    my $html02 = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => $library01->id, expirationdate => undef },
+        }
+    );
+    $html02->translated_contents(
+        [
+            {
+                lang    => 'default',
+                content => '2',
+            },
+            {
+                lang    => 'nl-NL',
+                content => '3',
+            }
+        ]
+    );
+    my $html04 = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, expirationdate => undef },
+        }
+    );
+    $html04->translated_contents(
+        [
+            {
+                lang    => 'fr-FR',
+                content => '4',
+            }
+        ]
+    );
 
     # Start testing
     is( $library01->opac_info->content, '2', 'specific library, default language' );

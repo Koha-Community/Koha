@@ -85,7 +85,9 @@ sub search_for_display {
     $search_params->{category} = $params->{category} if $params->{category};
 
     my $contents = $self->SUPER::search( $search_params, { order_by => 'number' } );
+    my @all_content_id = $contents->get_column('id');
 
+    my @translated_content_id;
     if ( $params->{lang} ) {
         my $translated_contents = Koha::AdditionalContentsLocalizations->search(
             {
@@ -93,24 +95,22 @@ sub search_for_display {
                 lang => $params->{lang},
             }
         );
-        my @all_content_id = $contents->get_column('id');
-        my @translated_content_id = $translated_contents->get_column('additional_content_id');
-        my $default_contents    = Koha::AdditionalContentsLocalizations->search(
-            {
-                additional_content_id => [array_minus(@all_content_id, @translated_content_id)],
-                lang                  => 'default',
-            }
-        );
-        return Koha::AdditionalContentsLocalizations->search(
-            {
-                id => [
-                    $translated_contents->get_column('id'),
-                    $default_contents->get_column('id'),
-                ]
-            },
-        );
+        @translated_content_id = $translated_contents->get_column('additional_content_id');
     }
-    return $contents->search( { lang => 'default' }, { order_by => 'number' } )->translated_contents;
+
+    my $default_contents    = Koha::AdditionalContentsLocalizations->search(
+        {
+            additional_content_id => [array_minus(@all_content_id, @translated_content_id)],
+            lang                  => 'default',
+        }
+    );
+
+    return Koha::AdditionalContentsLocalizations->search(
+        {
+            id => [@translated_content_id, $default_contents->get_column('id')]
+        },
+    );
+
 }
 
 =head3 find_best_match
