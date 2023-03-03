@@ -349,15 +349,15 @@
 [% END %]
 
 [%# BOOTSTRAP TAB WRAPPER USAGE
-    [ WRAPPER tabs id= "tabs container id" ]
+    [ WRAPPER tabs id= "tabs_container_id" ]
         [ WRAPPER tabs_nav ]
-            [ WRAPPER tab_item tabname= "tab name 1" bt_active= 1 ] [ content ] [ END ]
-            [ WRAPPER tab_item tabname= "tab name 2" ] [ content ] [ END ]
+            [ WRAPPER tab_item tabname= "tab_name_1" bt_active= 1 ] Tab text 1 [ END ]
+            [ WRAPPER tab_item tabname= "tab_name_2" ] Tab text 2 [ END ]
             ...
         [ END ]
         [ WRAPPER tab_panels ]
-            [ WRAPPER tab_panel id="tab name 1" bt_active= 1 ] [ content ] [ END ]
-            [ WRAPPER tab_panel id="tab name 2"] [ content ] [ END ]
+            [ WRAPPER tab_panel tabname="tab_name_1" bt_active= 1 ] Panel contents 1 [ END ]
+            [ WRAPPER tab_panel tabname="tab_name_2" ] Panel contents 2 [ END ]
             ...
         [ END ]
     [ END ]
@@ -388,7 +388,7 @@
         <a href="#[% tabname | uri %]_panel" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
             [% content | $raw %]
         </a>
-    <li>
+    </li>
 [% END %]
 
 [% BLOCK tab_panels %]
