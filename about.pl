@@ -588,7 +588,9 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
     my @frameworkcodes = Koha::BiblioFrameworks->search->get_column('frameworkcode');
     my @hidden_biblionumbers;
     push @frameworkcodes, ""; # it's not in the biblio_frameworks table!
+    my $no_FA_framework = 1;
     for my $frameworkcode ( @frameworkcodes ) {
+        $no_FA_framework = 0 if $frameworkcode eq 'FA';
         my $shouldhidemarc_opac = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
             {
                 frameworkcode => $frameworkcode,
@@ -608,6 +610,7 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
           if $shouldhidemarc_intranet->{biblionumber};
     }
     $template->param( warnHiddenBiblionumbers => \@hidden_biblionumbers );
+    $template->param( warnFastCataloging => $no_FA_framework );
 }
 
 {
