@@ -214,18 +214,21 @@ case "$1" in
 	do_stop
 	case "$?" in
 	  0)
-		do_start
-		case "$?" in
-			0) log_end_msg 0 ;;
-			*) log_end_msg 1 ;; # Failed to start
-		esac
-		;;
+        log_daemon_msg "Successfully stopped all services for instance $NAME"
+        log_end_msg 0
+        ;;
 	  *)
-	  	# Failed to stop
-		log_end_msg 1
-		;;
+        # Failed to stop something
+        log_daemon_msg "Failed to stop some services for instance $NAME"
+        log_end_msg 0
+        ;;
 	esac
-	;;
+    do_start
+    case "$?" in
+        0) log_end_msg 0 ;;
+        *) log_end_msg 1 ;; # Failed to start
+    esac
+    ;;
   status)
         zebra_status
         sip_status
