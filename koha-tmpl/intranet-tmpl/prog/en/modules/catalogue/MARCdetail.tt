@@ -20,34 +20,25 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-        </li>
+        [% END %]
 
         [% IF ( unknownbiblionumber ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Unknown record
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Unknown record</span>
+            [% END %]
         [% ELSE %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 [% INCLUDE 'biblio-title.inc' link = 1 %]
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    MARC details
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>MARC details</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
