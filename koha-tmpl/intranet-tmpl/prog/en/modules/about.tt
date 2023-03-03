@@ -382,10 +382,16 @@
                                 Contact your system administrator.
                             [% END # /IF warnConnectBroker %]
 
-                            [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size %]
+                            [% IF warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnFastCataloging %]
                                 <h2>Warnings regarding the system configuration</h2>
                                 <table>
                                     <caption>Preferences and parameters</caption>
+                                    [% IF (warnFastCataloging) %]
+                                        <tr>
+                                            <th scope="row"><strong>Warning</strong> </th>
+                                            <td>There is no "Fast add" (FA) framework defined in administration->MARC frameworks. This disables the 'Fast cataloging' feature in cataloging/circulation.</td>
+                                        </tr>
+                                    [% END %]
                                     [% IF (warnPrefRequireChoosingExistingAuthority) %]
                                         <tr>
                                             <th scope="row"><strong>Warning</strong> </th>
