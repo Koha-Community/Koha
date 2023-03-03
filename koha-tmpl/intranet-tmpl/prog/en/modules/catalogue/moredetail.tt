@@ -17,25 +17,18 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-            </li>
-            <li>
-                [% INCLUDE 'biblio-title.inc' link = 1 %]
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Item details
-                </a>
-            </li>
-        </ol>
-    </nav>
-[% END %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            [% INCLUDE 'biblio-title.inc' link = 1 %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Item details</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
