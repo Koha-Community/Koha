@@ -101,8 +101,9 @@ our $RULE_KINDS = {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
     fine => {
-        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
-    },
+        scope       => [ 'branchcode', 'categorycode', 'itemtype' ],
+        is_monetary => 1,
+      },
     finedays => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
@@ -159,8 +160,9 @@ our $RULE_KINDS = {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
     overduefinescap => {
-        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
-    },
+        scope       => [ 'branchcode', 'categorycode', 'itemtype' ],
+        is_monetary => 1,
+      },
     renewalperiod => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
@@ -376,6 +378,8 @@ sub set_rule {
     my $rule_value   = $params->{rule_value};
     my $can_be_blank = defined $kind_info->{can_be_blank} ? $kind_info->{can_be_blank} : 1;
     $rule_value = undef if defined $rule_value && $rule_value eq "" && !$can_be_blank;
+    my $is_monetary = defined $kind_info->{is_monetary} ? $kind_info->{is_monetary} : 0;
+    $rule_value = Koha::Number::Price->new($rule_value)->unformat if defined $rule_value && $is_monetary;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
@@ -388,12 +392,6 @@ sub set_rule {
             itemtype     => $itemtype,
         }
     )->next();
-
-    if ( $rule
-    && ( $rule->rule_name eq 'overduefinescap' || $rule->rule_name eq 'fine' ) )
-    {
-        $rule_value = Koha::Number::Price->new($rule_value)->unformat;
-    }
 
     if ($rule) {
         if ( defined $rule_value ) {
