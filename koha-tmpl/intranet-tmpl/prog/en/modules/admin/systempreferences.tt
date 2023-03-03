@@ -31,76 +31,55 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
+        [% END %]
+
+        [% IF ( add_form || add_validate || delete_confirm || delete_confirmed ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
+            [% END %]
+        [% END %]
 
         [% IF ( add_form ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ( modify ) %]
-                        Modify system preference '[% searchfield | html %]'
-                    [% ELSE %]
-                        Add a system preference
-                    [% END %]
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF ( modify ) %]
+                    <span>Modify system preference '[% searchfield | html %]'</span>
+                [% ELSE %]
+                    <span>Add a system preference</span>
+                [% END %]
+            [% END %]
         [% END %]
 
         [% IF ( add_validate ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Data added
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Data added</span>
+            [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
-            </li>
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | uri %]">[% searchfield | html %]</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Confirm deletion of parameter '[% searchfield | html %]'
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Confirm deletion of parameter '[% searchfield | html %]'</span>
+            [% END %]
         [% END %]
 
         [% IF ( delete_confirmed ) %]
-            <li>
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Parameter deleted
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Parameter deleted</span>
+            [% END %]
         [% END %]
 
         [% IF ( else ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    System preferences
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>System preferences</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

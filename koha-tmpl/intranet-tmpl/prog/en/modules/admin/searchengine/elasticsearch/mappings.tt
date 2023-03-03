@@ -18,22 +18,15 @@ a.add, a.delete {
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Search engine configuration (Elasticsearch)
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Search engine configuration (Elasticsearch)</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% INCLUDE 'blocking_errors.inc' %]
 
