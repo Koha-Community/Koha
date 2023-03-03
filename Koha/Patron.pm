@@ -1794,14 +1794,14 @@ sub has_valid_userid {
     $patron->generate_userid;
 
     If you do not have a plugin for generating a userid, we will call
-    the legacy method here that returns firstname.surname[.number],
+    the internal method here that returns firstname.surname[.number],
     where number is an optional suffix to make the userid unique.
     (Its behavior has not been changed on bug 32426.)
 
     If you have plugin(s), the first valid response will be used.
     A plugin is assumed to return a valid userid as suggestion, but not
     assumed to save it already.
-    Does not fallback to legacy (you could arrange for that in your plugin).
+    Does not fallback to internal (you could arrange for that in your plugin).
     Clears userid when there are no valid plugin responses.
 
 =cut
@@ -1813,12 +1813,12 @@ sub generate_userid {
     );
     unless( @responses ) {
         # Empty list only possible when there are NO enabled plugins for this method.
-        # In that case we provide legacy response.
-        return $self->_generate_userid_legacy;
+        # In that case we provide internal response.
+        return $self->_generate_userid_internal;
     }
     # If a plugin returned false value or invalid value, we do however not return
-    # legacy response. The plugins should deal with that themselves. So we prevent
-    # unexpected/unwelcome legacy codes for plugin failures.
+    # internal response. The plugins should deal with that themselves. So we prevent
+    # unexpected/unwelcome internal codes for plugin failures.
     foreach my $response ( grep { $_ } @responses ) {
         $self->userid( $response );
         return $self if $self->has_valid_userid;
@@ -1827,7 +1827,7 @@ sub generate_userid {
     return $self;
 }
 
-sub _generate_userid_legacy { # as we always did
+sub _generate_userid_internal { # as we always did
     my ($self) = @_;
     my $offset = 0;
     my $firstname = $self->firstname // q{};
