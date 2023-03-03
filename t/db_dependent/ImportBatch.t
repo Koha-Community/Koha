@@ -361,9 +361,11 @@ subtest "BatchCommitRecords overlay into framework" => sub {
 };
 
 subtest "Do not adjust biblionumber when replacing items during import" => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     my $item1 = $builder->build_sample_item;
+    my $original_biblionumber = $item1->biblionumber;
+    my $original_biblioitemnumber = $item1->biblioitemnumber;
     my $item2 = $builder->build_sample_item;
 
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
@@ -401,7 +403,8 @@ subtest "Do not adjust biblionumber when replacing items during import" => sub {
     is( $import_item->status, 'imported', 'Import was successful');
     is( $import_item->import_error, undef, 'No error was reported' );
 
-    is( $item1->biblionumber, $item1->biblioitemnumber, "Item's biblionumber and biblioitemnumber match" );
+    is( $item1->biblionumber, $original_biblionumber, "Item's biblionumber has not changed" );
+    is( $item1->biblionumber, $original_biblioitemnumber, "Item's biblioitemnumber has not changed" );
     is( $item1->homebranch, $library->branchcode, "Item was overlaid successfully" );
 };
 
