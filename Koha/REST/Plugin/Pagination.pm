@@ -38,21 +38,52 @@ sub register {
 
 =head3 add_pagination_headers
 
-    my $patrons = Koha::Patrons->search( ... );
-    $c->add_pagination_headers({
-        total  => $patrons->count,
-        params => {
-            _page     => ...
-            _per_page => ...
-            ...
+    $c->add_pagination_headers();
+    $c->add_pagination_headers(
+        {
+            base_total   => $base_total,
+            page         => $page,
+            per_page     => $per_page,
+            query_params => $query_params,
+            total        => $total,
         }
-    });
+    );
 
-Adds a Link header to the response message $c carries, following RFC5988, including
-the following relation types: 'prev', 'next', 'first' and 'last'.
-It also adds X-Total-Count containing the total results count, and X-Base-Total-Count containing the total of the non-filtered results count.
+Adds RFC5988 compliant I<Link> headers for pagination to the response message carried
+by our controller.
 
-If page size is omitted, it defaults to the value of the RESTdefaultPageSize syspref.
+Additionally, it also adds the customer I<X-Total-Count> header containing the total results
+count, and I<X-Base-Total-Count> header containing the total of the non-filtered results count.
+
+Optionally accepts the any of the following parameters to override the values stored in the
+stash by the I<search_rs> helper.
+
+=over
+
+=item base_total
+
+Total records for the search domain (e.g. all patron records, filtered only by visibility)
+
+=item page
+
+The requested page number, usually extracted from the request query.
+See I<objects.search_rs> for more information.
+
+=item per_page
+
+The requested maximum results per page, usually extracted from the request query.
+See I<objects.search_rs> for more information.
+
+=item query_params
+
+The request query, usually extracted from the request query and used to build the I<Link> headers.
+See I<objects.search_rs> for more information.
+
+=item total
+
+Total records for the search with filters applied.
+
+=back
 
 =cut
 
@@ -60,11 +91,11 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
         'add_pagination_headers' => sub {
             my ( $c, $args ) = @_;
 
-            my $total    = $args->{total};
-            my $base_total = $args->{base_total};
-            my $req_page = $args->{params}->{_page} // 1;
-            my $per_page = $args->{params}->{_per_page} //
-                            C4::Context->preference('RESTdefaultPageSize') // 20;
+            my $base_total = $args->{base_total} // $c->stash('koha.pagination.base_total');
+            my $req_page   = $args->{page}         // $c->stash('koha.pagination.page')     // 1;
+            my $per_page   = $args->{per_page}     // $c->stash('koha.pagination.per_page') // C4::Context->preference('RESTdefaultPageSize') // 20;
+            my $params     = $args->{query_params} // $c->stash('koha.pagination.query_params');
+            my $total      = $args->{total}        // $c->stash('koha.pagination.total');
 
             my $pages;
             if ( $per_page == -1 ) {
@@ -86,7 +117,7 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
                     {   page     => $req_page - 1,
                         per_page => $per_page,
                         rel      => 'prev',
-                        params   => $args->{params}
+                        params   => $params
                     }
                     );
             }
@@ -98,17 +129,17 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
                     {   page     => $req_page + 1,
                         per_page => $per_page,
                         rel      => 'next',
-                        params   => $args->{params}
+                        params   => $params
                     }
                     );
             }
 
             push @links,
                 _build_link( $c,
-                { page => 1, per_page => $per_page, rel => 'first', params => $args->{params} } );
+                { page => 1, per_page => $per_page, rel => 'first', params => $params } );
             push @links,
                 _build_link( $c,
-                { page => $pages, per_page => $per_page, rel => 'last', params => $args->{params} } );
+                { page => $pages, per_page => $per_page, rel => 'last', params => $params } );
 
             # Add Link header
             foreach my $link (@links) {
@@ -116,8 +147,10 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
             }
 
             # Add X-Total-Count header
-            $c->res->headers->add( 'X-Total-Count' => $total );
-            $c->res->headers->add( 'X-Base-Total-Count' => $base_total ) if defined $base_total;
+            $c->res->headers->add( 'X-Total-Count'      => $total );
+            $c->res->headers->add( 'X-Base-Total-Count' => $base_total )
+              if defined $base_total;
+
             return $c;
         }
     );
