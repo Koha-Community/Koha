@@ -43,6 +43,7 @@ my $servers = Koha::Z3950Servers->search(
 );
 
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+$template->param( fast_cataloging => 1 ) if $frameworks->find({ frameworkcode => 'FA' });
 
 $template->param(
     servers           => $servers,
