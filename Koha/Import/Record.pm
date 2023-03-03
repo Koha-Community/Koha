@@ -112,9 +112,10 @@ sub get_import_record_matches {
 
 =head3 replace
 
-Import the record to replace an existing record which is passed to this sub
+Replace an existing record ($auth or $biblio) with the import record.
 
-    $import_record->replace({ biblio => $biblio_object });
+    $import_record->replace({ biblio => $biblio | authority => $auth });
+    # where $biblio and $auth are Koha objects
 
 =cut
 
