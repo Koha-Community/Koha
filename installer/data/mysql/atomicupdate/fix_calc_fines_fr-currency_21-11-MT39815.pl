@@ -31,6 +31,7 @@ q|select * from circulation_rules where rule_name IN ('fine', 'overduefinescap')
                 if ( $rule_value =~ /,/ ) {
                     if ( $rule_value !~ /,.*?,/ ) {
                         $rule_value =~ s/,/./;
+                        $rule_value =~ s/\.0+$//;
                         $query->execute( $rule_value, $rule_id );
                     }
                     else {
