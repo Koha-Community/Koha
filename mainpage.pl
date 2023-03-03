@@ -30,6 +30,7 @@ use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
 use Koha::Reviews;
 use Koha::ArticleRequests;
+use Koha::BiblioFrameworks;
 use Koha::ProblemReports;
 use Koha::Quotes;
 use Koha::Suggestions;
@@ -48,6 +49,9 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
 my $homebranch;
 if (C4::Context->userenv) {

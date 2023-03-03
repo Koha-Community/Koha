@@ -124,7 +124,7 @@
                             </li>
                             [% END %]
 
-                            [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
+                            [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || ( fast_cataloging && CAN_user_editcatalogue_fast_cataloging ) ) %]
                             <li>
                                 <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/cataloging-home.pl"><i class="fa fa-fw fa-tag"></i>Cataloging</a>
                             </li>
