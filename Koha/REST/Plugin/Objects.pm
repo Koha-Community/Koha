@@ -44,7 +44,7 @@ sub register {
 Performs a database search using given Koha::Objects object and the $id.
 
 Returns I<undef> if no object is found or the I<API representation> of
-the requested object. It passes through any embeds if specified.
+the requested object including any embeds specified in the request.
 
 =cut
 
@@ -65,10 +65,10 @@ the requested object. It passes through any embeds if specified.
     . . .
     return $c->render({ status => 200, openapi => $patron_rs->to_api });
 
-Returns the passed Koha::Objects resultset filtered to the passed $id and
+Returns the passed Koha::Object result filtered to the passed $id and
 with any embeds requested by the api applied.
 
-The resultset can then be used for further processing.
+The result object can then be used for further processing.
 
 =cut
 
@@ -102,8 +102,8 @@ The resultset can then be used for further processing.
 Performs a database search using given Koha::Objects object with any api
 query parameters applied.
 
-Returns an arrayref of the hashrefs representing the resulting objects
-for API rendering.
+Returns an arrayref of I<API representations> of the requested objects
+including any embeds specified in the request.
 
 Warning: this helper adds pagination headers to the calling controller, and thus
 shouldn't be called twice in it.
@@ -114,22 +114,28 @@ shouldn't be called twice in it.
         'objects.search' => sub {
             my ( $c, $result_set ) = @_;
 
-            return $c->objects->to_api( $c->objects->search_rs($result_set) );
+            # Generate the resultset using the HTTP request information
+            my $objects_rs = $c->objects->search_rs($result_set);
+
+            # Add pagination headers
+            $c->add_pagination_headers();
+
+            return $c->objects->to_api($objects_rs);
         }
     );
 
 =head3 objects.search_rs
 
-    my $patrons_rs = Koha::Patrons->new;
-    my $patrons_rs = $c->objects->search_rs( $patrons_rs );
+    my $patrons_object = Koha::Patrons->new;
+    my $patrons_rs = $c->objects->search_rs( $patrons_object );
     . . .
     return $c->render({ status => 200, openapi => $patrons_rs->to_api });
 
 Returns the passed Koha::Objects resultset filtered as requested by the api query
 parameters and with requested embeds applied.
 
-Warning: this helper adds pagination headers to the calling controller, and thus
-shouldn't be called twice in it.
+Warning: this helper stashes base values for the pagination headers to the calling
+controller, and thus shouldn't be called twice in it.
 
 =cut
 
@@ -155,8 +161,11 @@ shouldn't be called twice in it.
 
             # If no pagination parameters are passed, default
             $reserved_params->{_per_page} //=
-              C4::Context->preference('RESTdefaultPageSize');
+              C4::Context->preference('RESTdefaultPageSize') // 20;
             $reserved_params->{_page} //= 1;
+
+            $c->stash('koha.pagination.page'     => $reserved_params->{_page});
+            $c->stash('koha.pagination.per_page' => $reserved_params->{_per_page});
 
             unless ( $reserved_params->{_per_page} == -1 ) {
 
@@ -244,23 +253,15 @@ shouldn't be called twice in it.
             $result_set = $result_set->search_limited,
               if $result_set->can('search_limited');
 
-            # Perform search
-            my $objects = $result_set->search( $filtered_params, $attributes );
-            my $total   = $result_set->search->count;
+            $c->stash('koha.pagination.base_total'   => $result_set->count);
+            $c->stash('koha.pagination.query_params' => $args);
 
-            $c->add_pagination_headers(
-                {
-                    total => (
-                          $objects->is_paged
-                        ? $objects->pager->total_entries
-                        : $objects->count
-                    ),
-                    base_total => $total,
-                    params     => $args,
-                }
-            );
+            # Generate the resultset
+            my $objects_rs = $result_set->search( $filtered_params, $attributes );
+            # Stash the page total if requires, total otherwise
+            $c->stash('koha.pagination.total' => $objects_rs->is_paged ? $objects_rs->pager->total_entries : $objects_rs->count);
 
-            return $objects;
+            return $objects_rs;
         }
     );
 
