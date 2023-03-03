@@ -2317,3 +2317,1106 @@ VALUES ( 'zxx', 'language', 'de', 'Kein sprachlicher Inhalt');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'zxx', 'language', 'pl', 'Dokument nietekstowy');
+
+-- Ancient Greek (to 1453)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'grc', 'language', 'Ancient Greek (to 1453)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'grc','grc');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'grc', 'language', 'en', 'Greek, Ancient (to 1453)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'grc', 'language', 'pl', 'Grecki starożytny (do 1453)');
+
+-- Syriac
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'syr', 'language', 'Syriac', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'syr','syr');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'syr', 'language', 'en', 'Syriac, Modern');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'syr', 'language', 'pl', 'Syryjski');
+
+-- Church Slavic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cu', 'language', 'Church Slavic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cu','chu');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cu', 'language', 'en', 'Church Slavic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cu', 'language', 'pl', 'Staro-cerkiewno-słowiański');
+
+-- Coptic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cop', 'language', 'Coptic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cop','cop');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cop', 'language', 'en', 'Coptic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cop', 'language', 'pl', 'Koptyjski');
+
+-- Official Aramaic (700-300 BCE)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'arc', 'language', 'Official Aramaic (700-300 BCE)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'arc','arc');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'arc', 'language', 'en', 'Aramaic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'arc', 'language', 'pl', 'Aramejski');
+
+-- Old English (ca. 450-1100)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ang', 'language', 'Old English (ca. 450-1100)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ang','ang');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ang', 'language', 'en', 'English, Old (ca. 450-1100)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ang', 'language', 'pl', 'Staroangielski (ok. 450-1100)');
+
+-- Esperanto
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'eo', 'language', 'Esperanto', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'eo','epo');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'eo', 'language', 'en', 'Esperanto');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'eo', 'language', 'pl', 'Esperanto');
+
+-- Classical Syriac
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'syc', 'language', 'Classical Syriac', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'syc','syc');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'syc', 'language', 'en', 'Syriac');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'syc', 'language', 'pl', 'Syryjski klasyczny');
+
+-- Geez
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gez', 'language', 'Geez', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'gez','gez');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gez', 'language', 'en', 'Ethiopic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gez', 'language', 'pl', 'Ge''ez (gyyz)');
+
+-- Slavic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sla', 'language', 'Slavic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'sla','sla');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sla', 'language', 'en', 'Slavic (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sla', 'language', 'pl', 'Słowiańskie (inne)');
+
+-- Sanskrit
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sa', 'language', 'Sanskrit', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'sa','san');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sa', 'language', 'en', 'Sanskrit');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sa', 'language', 'pl', 'Sanskryt');
+
+-- Kashubian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'csb', 'language', 'Kashubian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'csb','csb');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'csb', 'language', 'en', 'Kashubian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'csb', 'language', 'pl', 'Kaszubski');
+
+-- Akkadian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'akk', 'language', 'Akkadian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'akk','akk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'akk', 'language', 'en', 'Akkadian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'akk', 'language', 'pl', 'Akadyjski');
+
+-- Middle High German (ca. 1050-1500)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gmh', 'language', 'Middle High German (ca. 1050-1500)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'gmh','gmh');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gmh', 'language', 'en', 'German, Middle High (ca. 1050-1500)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gmh', 'language', 'pl', 'Średnio-wysoko-niemiecki (ok. 1050-1500)');
+
+-- Egyptian (Ancient)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'egy', 'language', 'Egyptian (Ancient)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'egy','egy');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'egy', 'language', 'en', 'Egyptian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'egy', 'language', 'pl', 'Egipski starożytny');
+
+-- Sorbian languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'wen', 'language', 'Sorbian languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'wen','wen');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'wen', 'language', 'en', 'Sorbian (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'wen', 'language', 'pl', 'Łużyckie (inne)');
+
+-- Irish
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ga', 'language', 'Irish', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ga','gle');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ga', 'language', 'en', 'Irish');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ga', 'language', 'pl', 'Irlandzki');
+
+-- Old French (842-ca. 1400)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'fro', 'language', 'Old French (842-ca. 1400)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'fro','fro');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'fro', 'language', 'en', 'French, Old (ca. 842-1300)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'fro', 'language', 'pl', 'Starofrancuski (ok. 842-1300)');
+
+-- Romany
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'rom', 'language', 'Romany', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'rom','rom');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'rom', 'language', 'en', 'Romani');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'rom', 'language', 'pl', 'Romani (cygański)');
+
+-- Macedonian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mk', 'language', 'Macedonian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mk','mac');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mk', 'language', 'en', 'Macedonian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mk', 'language', 'pl', 'Macedoński');
+
+-- Malayalam
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ml', 'language', 'Malayalam', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ml','mal');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ml', 'language', 'en', 'Malayalam');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ml', 'language', 'pl', 'Malajalam');
+
+-- Ugaritic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'uga', 'language', 'Ugaritic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'uga','uga');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'uga', 'language', 'en', 'Ugaritic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'uga', 'language', 'pl', 'Ugarycki');
+
+-- Uncoded languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mis', 'language', 'Uncoded languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mis','mis');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mis', 'language', 'en', 'Miscellaneous languages');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mis', 'language', 'pl', 'Różne języki');
+
+-- Semitic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sem', 'language', 'Semitic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'sem','sem');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sem', 'language', 'en', 'Semitic (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sem', 'language', 'pl', 'Semickie (inne)');
+
+-- Sumerian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sux', 'language', 'Sumerian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'sux','sux');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sux', 'language', 'en', 'Sumerian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sux', 'language', 'pl', 'Sumeryjski');
+
+-- Pali
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'pi', 'language', 'Pali', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'pi','pli');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pi', 'language', 'en', 'Pali');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pi', 'language', 'pl', 'Pali');
+
+-- Bosnian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'bs', 'language', 'Bosnian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'bs','bos');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bs', 'language', 'en', 'Bosnian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bs', 'language', 'pl', 'Bośniacki');
+
+-- Chechen
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ce', 'language', 'Chechen', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ce','che');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ce', 'language', 'en', 'Chechen');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ce', 'language', 'pl', 'Czeczeński');
+
+-- Middle Dutch (ca. 1050-1350)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'dum', 'language', 'Middle Dutch (ca. 1050-1350)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'dum','dum');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'dum', 'language', 'en', 'Dutch, Middle (ca. 1050-1350)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'dum', 'language', 'pl', 'Średnioniderlandzki (ok. 1050-1350)');
+
+-- Kazakh
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'kk', 'language', 'Kazakh', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'kk','kaz');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kk', 'language', 'en', 'Kazakh');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kk', 'language', 'pl', 'Kazachski');
+
+-- Tibetan
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'bo', 'language', 'Tibetan', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'bo','tib');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bo', 'language', 'en', 'Tibetan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bo', 'language', 'pl', 'Tybetański');
+
+-- Middle English (1100-1500)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'enm', 'language', 'Middle English (1100-1500)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'enm','enm');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'enm', 'language', 'en', 'English, Middle (1100-1500)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'enm', 'language', 'pl', 'Średnioangielski (1100-1500)');
+
+-- Middle French (ca. 1400-1600)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'frm', 'language', 'Middle French (ca. 1400-1600)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'frm','frm');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'frm', 'language', 'en', 'French, Middle (ca. 1300-1600)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'frm', 'language', 'pl', 'Średniofrancuski (ok. 1300-1600)');
+
+-- Maltese
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mt', 'language', 'Maltese', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mt','mlt');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mt', 'language', 'en', 'Maltese');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mt', 'language', 'pl', 'Maltański');
+
+-- Gothic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'got', 'language', 'Gothic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'got','got');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'got', 'language', 'en', 'Gothic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'got', 'language', 'pl', 'Gocki');
+
+-- Low German
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'nds', 'language', 'Low German', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'nds','nds');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nds', 'language', 'en', 'Low German');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nds', 'language', 'pl', 'Dolnoniemiecki');
+
+-- Iranian languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ira', 'language', 'Iranian languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ira','ira');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ira', 'language', 'en', 'Iranian (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ira', 'language', 'pl', 'Irańskie (inne)');
+
+-- Lingala
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ln', 'language', 'Lingala', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ln','lin');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ln', 'language', 'en', 'Lingala');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ln', 'language', 'pl', 'Lingala');
+
+-- Uzbek
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'uz', 'language', 'Uzbek', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'uz','uzb');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'uz', 'language', 'en', 'Uzbek');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'uz', 'language', 'pl', 'Uzbecki');
+
+-- Avestan
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ae', 'language', 'Avestan', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ae','ave');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ae', 'language', 'en', 'Avestan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ae', 'language', 'pl', 'Awestyjski');
+
+-- Choctaw
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cho', 'language', 'Choctaw', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cho','cho');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cho', 'language', 'en', 'Choctaw');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cho', 'language', 'pl', 'Choctaw');
+
+-- Judeo-Arabic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'jrb', 'language', 'Judeo-Arabic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'jrb','jrb');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'jrb', 'language', 'en', 'Judeo-Arabic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'jrb', 'language', 'pl', 'Judeo-arabski');
+
+-- Bantu languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'bnt', 'language', 'Bantu languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'bnt','bnt');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bnt', 'language', 'en', 'Bantu (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bnt', 'language', 'pl', 'Bantu (inne)');
+
+-- Pahlavi
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'pal', 'language', 'Pahlavi', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'pal','pal');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pal', 'language', 'en', 'Pahlavi');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pal', 'language', 'pl', 'Pahlawi');
+
+-- Altaic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'tut', 'language', 'Altaic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'tut','tut');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tut', 'language', 'en', 'Altaic (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tut', 'language', 'pl', 'Ałtajskie (inne)');
+
+-- Old High German (ca. 750-1050)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'goh', 'language', 'Old High German (ca. 750-1050)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'goh','goh');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'goh', 'language', 'en', 'German, Old High (ca. 750-1050)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'goh', 'language', 'pl', 'Staro-wysoko-niemiecki (ok.750-1050)');
+
+-- Upper Sorbian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'hsb', 'language', 'Upper Sorbian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'hsb','hsb');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hsb', 'language', 'en', 'Upper Sorbian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hsb', 'language', 'pl', 'Górnołużycki');
+
+-- Indic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'inc', 'language', 'Indic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'inc','inc');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'inc', 'language', 'en', 'Indic (Other)');
+
+-- Malagasy
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mg', 'language', 'Malagasy', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mg','mlg');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mg', 'language', 'en', 'Malagasy');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mg', 'language', 'pl', 'Malgaski');
+
+-- Romance languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'roa', 'language', 'Romance languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'roa','roa');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'roa', 'language', 'en', 'Romance (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'roa', 'language', 'pl', 'Romańskie (inne)');
+
+-- Celtic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cel', 'language', 'Celtic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cel','cel');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cel', 'language', 'en', 'Celtic (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cel', 'language', 'pl', 'Celtyckie (inne)');
+
+-- Samaritan Aramaic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sam', 'language', 'Samaritan Aramaic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'sam','sam');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sam', 'language', 'en', 'Samaritan Aramaic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sam', 'language', 'pl', 'Samarytański');
+
+-- Bemba (Zambia)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'bem', 'language', 'Bemba (Zambia)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'bem','bem');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bem', 'language', 'en', 'Bemba');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bem', 'language', 'pl', 'Bemba');
+
+-- Friulian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'fur', 'language', 'Friulian', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'fur','fur');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'fur', 'language', 'en', 'Friulian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'fur', 'language', 'pl', 'Friulski');
+
+-- Germanic languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gem', 'language', 'Germanic languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'gem','gem');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gem', 'language', 'en', 'Germanic (Other)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gem', 'language', 'pl', 'Germańskie (inne)');
+
+-- Hittite
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'hit', 'language', 'Hittite', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'hit','hit');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hit', 'language', 'en', 'Hittite');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hit', 'language', 'pl', 'Hetycki');
+
+-- Ladino
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'lad', 'language', 'Ladino', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'lad','lad');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'lad', 'language', 'en', 'Ladino');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'lad', 'language', 'pl', 'Ladino');
+
+-- Nahuatl languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'nah', 'language', 'Nahuatl languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'nah','nah');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nah', 'language', 'en', 'Nahuatl');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nah', 'language', 'pl', 'Nahuatl');
+
+-- Ottoman Turkish (1500-1928)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ota', 'language', 'Ottoman Turkish (1500-1928)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ota','ota');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ota', 'language', 'en', 'Turkish, Ottoman');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ota', 'language', 'pl', 'Turecko-osmański (1500-1928)');
+
+-- Old Persian (ca. 600-400 B.C.)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'peo', 'language', 'Old Persian (ca. 600-400 B.C.)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'peo','peo');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'peo', 'language', 'en', 'Old Persian (ca. 600-400 B.C.)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'peo', 'language', 'pl', 'Staroperski (ok. 600-400 p.n.e.)');
+
+-- Old Provençal (to 1500)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'pro', 'language', 'Old Provençal (to 1500)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'pro','pro');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pro', 'language', 'en', 'Provençal (to 1500)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pro', 'language', 'pl', 'Staroprowansalski (do1500)');
+
+-- Tatar
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'tt', 'language', 'Tatar', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'tt','tat');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tt', 'language', 'en', 'Tatar');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tt', 'language', 'pl', 'Tatarski');
+
+-- Welsh
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cy', 'language', 'Welsh', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cy','wel');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cy', 'language', 'en', 'Welsh');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cy', 'language', 'pl', 'Walijski');
+
+-- Yoruba
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'yo', 'language', 'Yoruba', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'yo','yor');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yo', 'language', 'en', 'Yoruba');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'yo', 'language', 'pl', 'Joruba');
+
+-- Braj
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'bra', 'language', 'Braj', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'bra','bra');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bra', 'language', 'en', 'Braj');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'bra', 'language', 'pl', 'Bradź');
+
+-- Slave (Athapascan)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'den', 'language', 'Slave (Athapascan)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'den','den');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'den', 'language', 'en', 'Slavey');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'den', 'language', 'pl', 'Niewolnicze (atapaskańskie)');
+
+-- Hausa
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ha', 'language', 'Hausa', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ha','hau');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ha', 'language', 'en', 'Hausa');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ha', 'language', 'pl', 'Hausa');
+
+-- Herero
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'hz', 'language', 'Herero', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'hz','her');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hz', 'language', 'en', 'Herero');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hz', 'language', 'pl', 'Herero');
+
+-- Kashmiri
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ks', 'language', 'Kashmiri', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ks','kas');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ks', 'language', 'en', 'Kashmiri');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ks', 'language', 'pl', 'Kaszmirski');
+
+-- Middle Irish (900-1200)
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mga', 'language', 'Middle Irish (900-1200)', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mga','mga');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mga', 'language', 'en', 'Irish, Middle (ca. 1100-1550)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mga', 'language', 'pl', 'Średnioirlandzki (1100-1550)');
+
+-- Mayan languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'myn', 'language', 'Mayan languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'myn','myn');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'myn', 'language', 'en', 'Mayan languages');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'myn', 'language', 'pl', 'Majańskie');
+
+-- Nyanja
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ny', 'language', 'Nyanja', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ny','nya');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ny', 'language', 'en', 'Nyanja');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ny', 'language', 'pl', 'Nyanja');
+
+-- Prakrit languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'pra', 'language', 'Prakrit languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'pra','pra');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pra', 'language', 'en', 'Prakrit languages');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pra', 'language', 'pl', 'Prakryty');
+
+-- Quechua
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'qu', 'language', 'Quechua', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'qu','que');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'qu', 'language', 'en', 'Quechua');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'qu', 'language', 'pl', 'Keczua');
+
+-- Tigrinya
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ti', 'language', 'Tigrinya', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'ti','tir');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ti', 'language', 'en', 'Tigrinya');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ti', 'language', 'pl', 'Tigrinia');
+
+-- Turkmen
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'tk', 'language', 'Turkmen', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'tk','tuk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tk', 'language', 'en', 'Turkmen');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'tk', 'language', 'pl', 'Turkmeński');
+
+-- Gwich'in
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gwi', 'language', 'Gwichʼin', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'gwi','gwi');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gwi', 'language', 'en', 'Gwichʼin');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gwi', 'language', 'pl', 'Gwichʼin');
+
+-- Dogrib
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'dgr', 'language', 'Dogrib', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'dgr','dgr');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'dgr', 'language', 'en', 'Dogrib');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'dgr', 'language', 'pl', 'Dogrib');
+
+-- Chipewyan
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'chp', 'language', 'Chipewyan', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'chp','chp');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'chp', 'language', 'en', 'Chipewyan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'chp', 'language', 'pl', 'Chipewyan');
