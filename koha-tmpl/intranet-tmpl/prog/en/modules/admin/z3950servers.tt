@@ -29,46 +29,34 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-
-        [% IF op == 'edit' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Modify [% PROCESS ServerType %] server [% server.servername | html %]
-                </a>
-            </li>
-
-        [% ELSIF op == 'add' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    New [% PROCESS ServerType %] server
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Z39.50/SRU servers
-                </a>
-            </li>
         [% END %]
 
-    </ol>
-</nav>
-[% END %]
+        [% IF op == 'edit' || op == 'add' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
+           [% END %]
+        [% END %]
+
+        [% IF op == 'edit' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Modify [% PROCESS ServerType %] server [% server.servername | html %]</span>
+           [% END %]
+
+        [% ELSIF op == 'add' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>New [% PROCESS ServerType %] server</span>
+           [% END %]
+
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Z39.50/SRU servers</span>
+           [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
