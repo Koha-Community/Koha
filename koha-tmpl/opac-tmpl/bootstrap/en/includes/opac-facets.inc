@@ -73,7 +73,7 @@
                                     [% IF ( displayFacetCount ) %]
                                       <span class="facet-count-selected">([% facet.facet_count | html %])</span>
                                     [% END %]
-                                    [<a href="[% local_url | $raw %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+                                    [<a href="[% local_url | $raw %]" title="Remove facet [% facet.facet_label_value | html %]">x</a>]
                                   [% ELSE %]
                                     [% local_url = BLOCK %][% url | $raw %][% "&limit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
                                     <span class="facet-label"><a href="[% local_url | $raw %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
