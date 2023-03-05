@@ -62,7 +62,7 @@
       [% IF facet.active %]
         [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
         <span class="facet-label">[% facet.facet_label_value | html %]</span>
-        [<a href="[% local_url | $raw %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+        [<a href="[% local_url | $raw %]" title="Remove facet [% facet.facet_label_value | html %]">x</a>]
       [% ELSE %]
         [% local_url = BLOCK %][% url | $raw %][% "&limit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
         <span class="facet-label"><a href="[% local_url | $raw %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
