@@ -141,17 +141,7 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
       ->status_is(403, 'Not enough permissions makes it return the right code');
 
-    # Add permissions
-    $builder->build(
-        {
-            source => 'UserPermission',
-            value  => {
-                borrowernumber => $patron->borrowernumber,
-                module_bit     => 9,
-                code           => 'edit_catalogue'
-            }
-        }
-    );
+    $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
 
     $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
       ->status_is(204, 'SWAGGER3.2.4')
