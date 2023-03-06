@@ -17,28 +17,27 @@ library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
 
 import App from "../components/ERM/Main.vue";
 
-import { routes } from "../routes/erm";
-
-const router = createRouter({
-    history: createWebHistory(),
-    linkActiveClass: "current",
-    routes,
-});
+import { routes as routesDef } from "../routes/erm";
 
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
 import { useAVStore } from "../stores/authorised-values";
 import { useERMStore } from "../stores/erm";
+import { useNavigationStore } from "../stores/navigation";
+import i18n from "../i18n";
 
 const pinia = createPinia();
 
-const i18n = {
-    install: (app, options) => {
-        app.config.globalProperties.$__ = key => {
-            return window["__"](key);
-        };
-    },
-};
+const mainStore = useMainStore(pinia);
+const AVStore = useAVStore(pinia);
+const navigationStore = useNavigationStore(pinia);
+const routes = navigationStore.setRoutes(routesDef);
+
+const router = createRouter({
+    history: createWebHistory(),
+    linkExactActiveClass: "current",
+    routes,
+});
 
 const app = createApp(App);
 
@@ -51,10 +50,9 @@ const rootComponent = app
 
 app.config.unwrapInjectedRef = true;
 app.provide("vendorStore", useVendorStore(pinia));
-const mainStore = useMainStore(pinia);
 app.provide("mainStore", mainStore);
-const AVStore = useAVStore(pinia);
 app.provide("AVStore", AVStore);
+app.provide("navigationStore", navigationStore);
 const ERMStore = useERMStore(pinia);
 app.provide("ERMStore", ERMStore);
 
@@ -62,6 +60,7 @@ app.mount("#erm");
 
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
+    navigationStore.$patch({current: to.matched, params: to.params||{}});
     removeMessages(); // This will actually flag the messages as displayed already
 });
 router.afterEach((to, from) => {
