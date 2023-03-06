@@ -99,7 +99,7 @@
                                         <span>Holds waiting:</span> [% reservecount | html %]
                                     [% END %]
                                     [% WRAPPER tab_item tabname= "holdsover" %]
-                                        [% tx("Holds waiting over {count} days:", { count = Koha.Preference('ReservesMaxPickUpDelay') }) %] [% overcount | html %]
+                                        Holds waiting past their expiration date: [% overcount | html %]
                                     [% END %]
                                     [% WRAPPER tab_item tabname= "holdscancelled" %]
                                         <span>Holds with cancellation requests:</span> [% cancel_reqs_count | html %]
@@ -119,9 +119,6 @@
                                     [% END # /tab_panel#holdswaiting %]
 
                                     [% WRAPPER tab_panel tabname="holdsover" %]
-                                        [% IF ( ReservesMaxPickUpDelay ) %]
-                                            <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>
-                                        [% END %]
                                         [% IF ( overloop ) %]
                                             <span id="holdsover-cancel-all">
                                                 <button class="cancel_selected_holds" data-bulk="true"></button>
