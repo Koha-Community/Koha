@@ -1,7 +1,7 @@
 <template>
     <div v-if="initialized && sysprefs.ERMModule == 1">
         <div id="sub-header">
-            <Breadcrumb />
+            <Breadcrumbs />
             <Help />
         </div>
         <div class="main container-fluid">
@@ -14,100 +14,10 @@
                 </div>
 
                 <div class="col-sm-2 col-sm-pull-10">
-                    <aside>
-                        <div id="navmenu">
-                            <div id="navmenulist">
-                                <h5>{{ $__("E-resource management") }}</h5>
-                                <ul>
-                                    <li>
-                                        <router-link
-                                            :to="{ name: 'AgreementsList' }"
-                                        >
-                                            <i class="fa fa-check-circle"></i>
-                                            {{ $__("Agreements") }}</router-link
-                                        >
-                                    </li>
-                                    <li>
-                                        <router-link
-                                            :to="{ name: 'LicensesList' }"
-                                        >
-                                            <i class="fa fa-gavel"></i>
-                                            {{ $__("Licenses") }}</router-link
-                                        >
-                                    </li>
-                                    <li>
-                                        <router-link
-                                            to="/cgi-bin/koha/erm/eholdings"
-                                            class="disabled"
-                                        >
-                                            <i class="fa fa-crosshairs"></i>
-                                            {{ $__("eHoldings") }}
-                                        </router-link>
-                                    </li>
-
-                                    <li>
-                                        <ul>
-                                            <li
-                                                v-for="provider in sysprefs.ERMProviders"
-                                                :key="provider"
-                                            >
-                                                <router-link
-                                                    v-if="provider == 'local'"
-                                                    :to="`/cgi-bin/koha/erm/eholdings/local`"
-                                                    class="disabled"
-                                                >
-                                                    <i
-                                                        class="fa-solid fa-location-dot"
-                                                    ></i>
-                                                    {{
-                                                        $__("Local")
-                                                    }}</router-link
-                                                >
-                                                <router-link
-                                                    v-else-if="
-                                                        provider == 'ebsco'
-                                                    "
-                                                    :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
-                                                    class="disabled"
-                                                >
-                                                    <i class="fa fa-globe"></i>
-                                                    {{
-                                                        $__("EBSCO")
-                                                    }}</router-link
-                                                >
-                                                <ul>
-                                                    <li>
-                                                        <router-link
-                                                            :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
-                                                        >
-                                                            <i
-                                                                class="fa fa-archive"
-                                                            ></i>
-                                                            {{
-                                                                $__("Packages")
-                                                            }}</router-link
-                                                        >
-                                                    </li>
-                                                    <li>
-                                                        <router-link
-                                                            :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
-                                                        >
-                                                            <i
-                                                                class="fa-solid fa-arrow-down-a-z"
-                                                            ></i>
-                                                            {{
-                                                                $__("Titles")
-                                                            }}</router-link
-                                                        >
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </aside>
+                    <LeftMenu
+                        :title="$__('E-resource management')"
+                        :condition="filterProviders"
+                    ></LeftMenu>
                 </div>
             </div>
         </div>
@@ -119,9 +29,10 @@
 
 <script>
 import { inject } from "vue"
-import Breadcrumb from "../../components/Breadcrumb.vue"
-import Help from "../../components/Help.vue"
-import Dialog from "../../components/Dialog.vue"
+import Breadcrumbs from "../Breadcrumbs.vue"
+import Help from "../Help.vue"
+import LeftMenu from "../LeftMenu.vue"
+import Dialog from "../Dialog.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import "vue-select/dist/vue-select.css"
 import { storeToRefs } from "pinia"
@@ -248,10 +159,25 @@ export default {
                 this.initialized = true
             })
     },
+    methods: {
+        async filterProviders(navigationTree) {
+            const eHoldings = navigationTree.find(
+                element => element.path === "/cgi-bin/koha/erm/eholdings"
+            )
+            const providers = this.sysprefs.ERMProviders
+            eHoldings.children = eHoldings.children.filter(element =>
+                providers
+                    .map(provider => `${eHoldings.path}/${provider}`)
+                    .includes(element.path)
+            )
+            return navigationTree
+        },
+    },
     components: {
-        Breadcrumb,
+        Breadcrumbs,
         Dialog,
         Help,
+        LeftMenu,
     },
 }
 </script>
