@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-10-05 10:18+0000\n"
+"PO-Revision-Date: 2023-03-02 16:51+0000\n"
 "Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1664965136.953895\n"
+"X-POOTLE-MTIME: 1677775904.038622\n"
 "X-Pootle-Path: /el/21.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -739,7 +739,7 @@ msgstr "Να αποστέλλεται"
 msgid ""
 "admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
 "address to staff."
-msgstr ""
+msgstr "ειδοποιήσεις ληξιπρόθεσμων στα μέλη χωρίς email στο προσωπικό."
 
 # Administration > Google OpenID Connect > GoogleOAuth2ClientID
 msgid ""
@@ -883,6 +883,9 @@ msgid ""
 "superlibrarians) from viewing and approving/denying patron modification "
 "requests for patrons belonging to other libraries: "
 msgstr ""
+"να αποτρέπεται το προσωπικό (εκτός των superlibrarians) να έχει τη "
+"δυνατότητα να βλέπει, να εγκρίνει ή απορρίπτει αιτήσεις μελών για "
+"τροποποιήσεις, όταν τα μέλη ανήκουν σε άλλες βιβλιοθήκες: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesPatronModifications# Yes"
@@ -897,6 +900,8 @@ msgid ""
 "admin.pref#IndependentBranchesTransfers# Prevent staff (but not "
 "superlibrarians) from transfering items to other libraries: "
 msgstr ""
+"να αποτρέπεται το προσωπικό (εκτός των superlibrarians) να έχει τη "
+"δυνατότητα μεταφοράς αντιτύπων σε άλλες βιβλιοθήκες: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesTransfers# Yes"
@@ -2076,7 +2081,7 @@ msgstr "Όχι"
 # Administration > Interface options
 msgid ""
 "admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr ""
+msgstr "προβολή εικονιδίων των τύπων τεκμηρίων στη διεπαφή προσωπικού: "
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Yes"
@@ -2102,7 +2107,7 @@ msgid ""
 "admin.pref#virtualshelves# Allow staff and patrons to create and view saved "
 "lists of books: "
 msgstr ""
-"Να επιτρέπεται στο προσωπικό και στα μέλη να δημιουργούν και να βλέπουν "
+"να επιτρέπεται στο προσωπικό και στα μέλη να δημιουργούν και να βλέπουν "
 "αποθηκευμένες λίστες βιβλίων: "
 
 # Administration > Interface options
@@ -2490,6 +2495,34 @@ msgid ""
 "with the subfields separated by"
 msgstr ""
 
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
+"editing the existing record"
+msgstr ""
+
+# Cataloging > Record structure > ApplyFrameworkDefaults
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
+"(duplicating)"
+msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid ""
+"cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
+msgstr ""
+"(διαχωρισμένων με κόμματα) στα σωστά πεδία συγγραφέα όταν εισάγεται μία "
+"εγγραφή μέσω Z39.50."
+
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr ""
@@ -2657,7 +2690,7 @@ msgstr ""
 msgid ""
 "cataloguing.pref#ISBD# Use the following as the staff interface ISBD "
 "template:"
-msgstr ""
+msgstr "να χρησιμοποιείτε το ακόλουθο ως πρότυπο ISBD για το προσωπικό:"
 
 # Cataloging > Display
 msgid ""
@@ -3042,9 +3075,8 @@ msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
 msgstr "Εμφάνιση"
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
-msgstr "Διεπαφή"
+msgstr "διεπαφή προσωπικού"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3449,6 +3481,12 @@ msgid ""
 "Enabling this system preference will block all checkouts for patrons with "
 "fines both via the web-based self checkout system and via SIP."
 msgstr ""
+"χειροκίνητη παράκαμψη όλων των προστίμων, ακόμα και μικρότερων από το όριο "
+"της προτίμησης συστήματος <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
+">noissuescharge</a>. Η ενεργοποίηση αυτής της προτίμησης συστήματος θα "
+"εμποδίσει όλους τους δανεισμούς μελών με πρόστιμα και μέσω αυτόματο "
+"δανεισμού και μέσω SIP."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3697,6 +3735,10 @@ msgid ""
 "or be premature for the \"No renewal before\" setting in the circulation "
 "policy or has been scheduled for automatic renewal."
 msgstr ""
+"στο προσωπικό να παρακάμπτει το μπλοκάρισμα των ανανεώσεων και να ανανεώνει "
+"ένα δανεισμό όταν περνάει το όριο ανανεώσεων ή είναι πρόωρος σύμφωνα με τη "
+"ρύθμιση \"Δεν επιτρέπεται ανανέωση πριν από\" στην πολιτική της κυκλοφορίας "
+"υλικού ή έχει προγραμματιστεί για αυτόματη ανανέωση."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowRenewalOnHoldOverride# Allow"
@@ -3711,6 +3753,8 @@ msgid ""
 "circulation.pref#AllowRenewalOnHoldOverride# staff to renew items that are "
 "on hold by manually specifying a due date."
 msgstr ""
+"στο προσωπικό να ανανεώσει τεκμήρια σε κράτηση συμπληρώνοντας χειροκίνητα "
+"την ημερομηνία επιστροφής."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowReturnToBranch# Allow items to be checked in"
@@ -4004,6 +4048,8 @@ msgid ""
 "circulation.pref#AutoSelfCheckAllowed# the web-based self checkout system to "
 "automatically log in with this staff login"
 msgstr ""
+"στο διαδικτυακό σύστημα αυτόματου δανεισμού να συνδέεται αυτόματα με αυτή τη "
+"σύνδεση προσωπικού"
 
 # Circulation > Interface
 msgid "circulation.pref#AutoSwitchPatron# Don't enable"
@@ -4649,8 +4695,8 @@ msgid ""
 "circulation.pref#FilterBeforeOverdueReport# staff to choose which checkouts "
 "to show before running the overdues report."
 msgstr ""
-"από το προσωπικό να επιλέγει ποιοι δανεισμοί θα εμφανιστούν προτού τρέξει η "
-"έκθεση εκπρόθεσμων."
+"από το προσωπικό να επιλέγει ποιοι δανεισμοί θα εμφανιστούν προτού "
+"εκτελεστεί η έκθεση εκπρόθεσμων."
 
 # Circulation > Interface
 msgid "circulation.pref#FineNotifyAtCheckin# Don't notify"
@@ -5439,27 +5485,22 @@ msgid ""
 msgstr "η τοπική χρήση όταν ένα μη δανεισμένο τεκμήριο επιστρέφεται."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "Να χρησιμοποιούνται οι κανόνες δανεισμού και προστίμων"
+msgstr "όταν δανείζεται ένα τεκμήριο, "
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
-msgstr "Να μην καταγράφεται"
+msgstr "να μην καταγράφεται"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#RecordStaffUserOnCheckout# record"
-msgstr "Να καταγράφεται"
+msgstr "να καταγράφεται"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr ""
-"στους χρήστες να υποβάλουν σημειώσεις σχετικά με τα δανεισμένα τεκμήρια."
+msgstr "ο χρήστης που δανείζεται το τεκμήριο."
 
 # Circulation > Fines Policy
 msgid ""
@@ -5891,19 +5932,19 @@ msgstr ""
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the "
 "staff interface, display"
-msgstr ""
+msgstr "στα αποτελέσματα αναζήτησης στην διεπαφή προσωπικού, να εμφανίζεται"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is "
 "from."
-msgstr "βιβλιοθήκης που ανήκει το αντίτυπο."
+msgstr "η βιβλιοθήκη που ανήκει το αντίτυπο."
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is "
 "held by."
-msgstr ""
+msgstr "βιβλιοθήκης που βρίσκεται."
 
 # Circulation > Holds policy
 msgid ""
@@ -5996,7 +6037,7 @@ msgstr "Να μην επιτρέπεται"
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr ""
+msgstr "η αναστολή των κρατήσεων από τη διεπαφή προσωπικού."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -7257,11 +7298,11 @@ msgstr ""
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffEnabled# Add"
-msgstr ""
+msgstr "εισαγωγή"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffEnabled# Don't add"
-msgstr ""
+msgstr "χωρίς εισαγωγή"
 
 # Enhanced content > Novelist Select
 msgid ""
@@ -7269,21 +7310,24 @@ msgid ""
 "the staff interface (requires that you have entered in a user profile and "
 "password, which can be seen in image links)."
 msgstr ""
+"περιεχομένου Novelist Select στη διεπαφή προσωπικού (προϋποθέτει ότι έχετε "
+"εισάγει ένα προφίλ χρήστη και κωδικό, που μπορεί να εμφανιστεί σε συνδέσμους "
+"εικόνας)."
 
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# Access Novelist Select "
 "using user profile"
-msgstr ""
+msgstr "πρόσβαση στο Novelist Select με το προφίλ χρήστη"
 
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# on the staff interface."
-msgstr ""
+msgstr "στη διεπαφή προσωπικού."
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# ."
-msgstr ""
+msgstr "."
 
 # Enhanced content > Novelist Select
 msgid ""
@@ -7301,7 +7345,7 @@ msgstr ""
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# in a tab"
-msgstr ""
+msgstr "σε μία καρτέλα"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectView# ."
@@ -10374,7 +10418,7 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr ""
+msgstr "διεπαφή προσωπικού"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid "opac.pref#Reference_NFL_Statuses# (Use | as delimiter.)"
@@ -10692,7 +10736,7 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# Allow only staff"
-msgstr ""
+msgstr "να επιτρέπεται μόνο το προσωπικό"
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# Allow patrons"
@@ -11002,7 +11046,7 @@ msgstr ""
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# OPAC/Staff interface login"
-msgstr ""
+msgstr "OPAC/Σύνδεση διεπαφής προσωπικού"
 
 # Patrons > Patron forms
 msgid ""
@@ -12517,6 +12561,8 @@ msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
+"εξ ορισμού, να ταξινομούνται τα αποτελέσματα αναζήτησης στη διεπαφή "
+"προσωπικού κατά"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
@@ -12628,7 +12674,7 @@ msgstr "Εξ ορισμού, να εμφανίζονται"
 # Searching > Results display
 msgid ""
 "searching.pref#numSearchResults# results per page in the staff interface."
-msgstr ""
+msgstr "αποτελέσματα ανά σελίδα στη διεπαφή προσωπικού."
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# Don't show"
@@ -12729,7 +12775,7 @@ msgstr "Να εμφανίζονται τα"
 msgid ""
 "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on "
 "the staff interface."
-msgstr ""
+msgstr "προηγούμενα τεύχη μίας περιοδικής έκδοσης στη διεπαφή προσωπικού."
 
 # Serials
 msgid ""
@@ -12822,11 +12868,11 @@ msgstr ""
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Don't enable"
-msgstr ""
+msgstr "απενεργοποίηση"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Enable"
-msgstr ""
+msgstr "ενεργοποίηση"
 
 # Staff interface > Options > AudioAlerts
 msgid ""
@@ -12861,11 +12907,11 @@ msgstr ""
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#Display856uAsImage# Result page"
-msgstr ""
+msgstr "σελίδα αποτελεσμάτων"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#DisplayIconsXSLT# Don't show"
-msgstr ""
+msgstr "να μην εμφανίζεται"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#DisplayIconsXSLT# Show"
@@ -12880,25 +12926,27 @@ msgstr ""
 
 # Staff interface > Options
 msgid "staff_interface.pref#HidePatronName# Don't show"
-msgstr ""
+msgstr "να μην εμφανίζεται"
 
 # Staff interface > Options
 msgid "staff_interface.pref#HidePatronName# Show"
-msgstr ""
+msgstr "να εμφανίζονται"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
+"τα ονόματα των μελών που έχουν δανειστεί ή έχουν σε κράτηση τεκμήρια στις "
+"σελίδες στοιχείων της οθόνης \"Κράτηση\"."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
-msgstr ""
+msgstr "να μην εμφανίζεται"
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Show"
-msgstr ""
+msgstr "να εμφανίζεται"
 
 # Staff interface > Options
 msgid ""
@@ -12914,13 +12962,15 @@ msgstr ""
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#IntranetFavicon# Use the image at"
-msgstr ""
+msgstr "να χρησιμοποιηθεί η εικόνα"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetFavicon# for the staff interface's favicon. "
 "(This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
+"ως η favicon στη διεπαφή προσωπικού. (Αυτό πρέπει να είναι ένα ολοκληρωμένο "
+"URL, που ξεκινάει με <code>http://</code>.)"
 
 # Staff interface > Appearance
 msgid ""
@@ -12928,12 +12978,17 @@ msgid ""
 "More menu at the top of each page on the staff interface (should be a list "
 "of links or blank):"
 msgstr ""
+"να εμφανίζεται η ακόλουθη HTML στα αριστερά του μενού Περισσότερα στην "
+"κορυφή κάθε σελίδας στη διεπαφή προσωπικού (πρέπει να είναι μία λίστα "
+"συνδέσμων ή κενό):"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#IntranetReportsHomeHTML# Show the following HTML in its "
 "own div on the bottom of the home page of the reports module:"
 msgstr ""
+"να εμφανίζεται η ακόλουθη HTML σε δικιά της div στο υποσέλιδο της αρχικής "
+"σελίδας του αρθρώματος αναφορών:"
 
 # Staff interface > Appearance
 msgid ""
@@ -12961,24 +13016,28 @@ msgid ""
 "staff_interface.pref#IntranetmainUserblock# Show the following HTML in its "
 "own column on the main page of the staff interface:"
 msgstr ""
+"να εμφανίζεται η ακόλουθη HTML σε δικιά της στήλη στην κύρια σελίδα της "
+"διεπαφής προσωπικού:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#SlipCSS# Include the stylesheet at"
-msgstr ""
+msgstr "να συμπεριληφθεί το stylesheet"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#SlipCSS# on Issue and Hold Slips. (This should be a "
 "complete URL, starting with <code>http://</code>.)"
 msgstr ""
+"για τις σημειώσεις Τευχών και Κρατήσεων (Πρέπει να είναι πλήρες URL, το "
+"οποίο θα ξεκινά με <code>http://</code>.)"
 
 # Staff interface > Options
 msgid "staff_interface.pref#StaffDetailItemSelection# Disable"
-msgstr ""
+msgstr "απενεργοποίηση"
 
 # Staff interface > Options
 msgid "staff_interface.pref#StaffDetailItemSelection# Enable"
-msgstr ""
+msgstr "ενεργοποίηση"
 
 # Staff interface > Options
 msgid ""
@@ -13001,7 +13060,7 @@ msgstr ""
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#StaffLangSelectorMode# top"
-msgstr ""
+msgstr "κορυφή"
 
 # Staff interface > Appearance
 msgid ""
@@ -13011,17 +13070,19 @@ msgstr ""
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
-msgstr ""
+msgstr "να μην εμφανίζεται"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Show"
-msgstr ""
+msgstr "να εμφανίζεται"
 
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#UseWYSIWYGinSystemPreferences# WYSIWYG editor when "
 "editing certain HTML system preferences."
 msgstr ""
+"ο WYSIWYG επεξεργαστής όταν γίνεται επεξεργασία συγκεκριμένων HTML "
+"προτιμήσεων του συστήματος."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
 msgid ""
@@ -13054,7 +13115,7 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# Display lists in the staff interface "
 "using XSLT stylesheet at: "
-msgstr ""
+msgstr "προβολή καταλόγων στην διεπαφή προσωπικού με τη χρήση XSLT stylesheet: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
@@ -13088,11 +13149,11 @@ msgstr ""
 
 # Staff interface > Options
 msgid "staff_interface.pref#intranetbookbag# Don't show"
-msgstr ""
+msgstr "να μην εμφανίζεται"
 
 # Staff interface > Options
 msgid "staff_interface.pref#intranetbookbag# Show"
-msgstr ""
+msgstr "να εμφανίζεται"
 
 # Staff interface > Options
 msgid ""
@@ -13361,7 +13422,7 @@ msgstr ""
 msgid ""
 "tools.pref#UploadPurgeTemporaryFilesDays# Automatically delete temporary "
 "uploads older than"
-msgstr ""
+msgstr "αυτόματη διαγραφή προσωρινών μεταφορτώσεων παλαιότερων από"
 
 # Tools > Upload
 msgid ""
@@ -13369,6 +13430,9 @@ msgid ""
 "NOTE: If you leave this field empty, the cron job will not delete any files. "
 "On the other hand a value of 0 means: delete all temporary files."
 msgstr ""
+"ημέρες στον χρονοπρογραμματισμό cleanup_database. ΣΗΜΕΙΩΣΗ: Αν αφήσετε το "
+"πεδίο κενό ο χρονοπρογραμματισμος δεν θα διαγράψει κανένα αρχείο. Η χρήση "
+"της τιμής 0 σημαίνει: διαγραφή όλων των προσωρινών αρχείων."
 
 # Web services
 msgid "web_services.pref"

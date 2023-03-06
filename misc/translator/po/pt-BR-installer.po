@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"PO-Revision-Date: 2021-12-06 15:35+0000\n"
-"Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
+"PO-Revision-Date: 2023-03-01 03:13+0000\n"
+"Last-Translator: Tiago Murakami <trmurakami@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1638804905.111904\n"
+"X-POOTLE-MTIME: 1677640408.914514\n"
 "X-Pootle-Path: /pt_BR/21.05/pt-BR-installer.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -24,7 +24,7 @@ msgstr "                BH  - Homebound"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:14
 msgid "                ILL - Inter-library Loan"
-msgstr "                ILL - Empréstimo entre bibliotecas"
+msgstr "                EEB - Empréstimo entre bibliotecas"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:10
 msgid "                J   - Juvenile"
@@ -655,14 +655,12 @@ msgid "Article request - completed"
 msgstr "Solicitação de artigo - concluída"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:9
-#, fuzzy
 msgid "Article request - new"
-msgstr "Pedido de artigo - aberto"
+msgstr "Solicitação de artigo - novo"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:8
-#, fuzzy
 msgid "Article request - pending"
-msgstr "Pedido de artigo - aberto"
+msgstr "Solicitação de artigo - pendente"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:11
 msgid "Article request - print slip"
@@ -715,6 +713,7 @@ msgstr "Nome associado"
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:35
 msgid "At the end of the day, we can endure much more than we think we can."
 msgstr ""
+"No final do dia, podemos suportar muito mais do que pensamos que podemos."
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:17
 msgid "Attributed name"
@@ -765,9 +764,8 @@ msgid "Author: %s"
 msgstr "Autores: %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:63
-#, fuzzy
 msgid "Auto renewals (Digest)"
-msgstr "Aviso de renovação automática"
+msgstr "Aviso de renovação automática (Recibo)"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:61
 msgid "Automatic renewal notice"
@@ -775,16 +773,15 @@ msgstr "Aviso de renovação automática"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:4
 msgid "Available via ILL"
-msgstr "Disponível via ILL"
+msgstr "Disponível via EEB"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:11:mul:6
 msgid "Barcode: %s"
 msgstr "Códigos de barra: %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62:mul:12
-#, fuzzy
 msgid "Barcode: %s %s"
-msgstr "Código de Barra: %s%s"
+msgstr "Código de Barras: %s%s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:18:mul:11
 msgid "Barcode: %s%s"
@@ -889,7 +886,7 @@ msgstr "Calígrafo"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:27
 msgid "Cancelled from the OPAC user page"
-msgstr ""
+msgstr "Página de usuário cancelada no OPAC"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:64
 msgid "Cartographer"
@@ -964,18 +961,16 @@ msgid "Check-ins"
 msgstr "Registro de entrada"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62:mul:2
-#, fuzzy
 msgid "Checked in items for %s %s %s %s %s"
-msgstr "Registro de saída para %s %s %s %s %s"
+msgstr "Itens devolvidos para %s %s %s %s %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:18:mul:2
 msgid "Checked out to %s %s %s %s %s"
 msgstr "Registro de saída para %s %s %s %s %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62
-#, fuzzy
 msgid "Checkin slip"
-msgstr "Registro de entrada"
+msgstr "Comprovante de devolução"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:14
 msgid "Checkout note"
@@ -1291,6 +1286,13 @@ msgid ""
 "    %s : waiting since %s\n"
 "%s"
 msgstr ""
+"Prezado (a) %s %s,\n"
+"\n"
+"As suas solicitações estão esperando no %s:\n"
+"\n"
+"%s\n"
+"    %s : aguardando desde %s\n"
+"%s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:32:mul:1
 msgid "Dear Sir/Madam,"
@@ -1330,7 +1332,7 @@ msgstr "Valores autorizados padrão do sistema do Koha"
 
 #: installer/data/mysql/en/mandatory/class_sources.yml:description:1
 msgid "Default classification sources and filing rules for Koha."
-msgstr "Fontes de classficiação e regras de arquivamento padrão para o Koha."
+msgstr "Fontes de classificação e regras de arquivamento padrão para o Koha."
 
 #: installer/data/mysql/en/optional/sample_creator_data.yml:creator_templates:2:row:4
 msgid "Default description"
@@ -1535,7 +1537,7 @@ msgstr "Falsificador"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:16
 msgid "Format: %sCopy%sScan%s"
-msgstr ""
+msgstr "Formato: %sCópia%sDigitalizada%s"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:101
 msgid "Former owner"
@@ -1727,23 +1729,23 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:30
 msgid "ILL request cancelled"
-msgstr "Solicitação ILL cancelada"
+msgstr "Solicitação de EEB cancelada"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:31
 msgid "ILL request modified"
-msgstr "Solicitação ILL modificada"
+msgstr "Solicitação de EEB modificada"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:28
 msgid "ILL request ready for pickup"
-msgstr "Solicitação ILL pronta para retirada"
+msgstr "Solicitação de EEB pronta para retirada"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:32
 msgid "ILL request to partners"
-msgstr "Solicitação ILL para parceiros"
+msgstr "Solicitação de EEB para parceiros"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:29
 msgid "ILL request unavailable"
-msgstr "Pedido ILL indisponível"
+msgstr "Pedido de EEB indisponível"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:30
 msgid ""
@@ -1766,13 +1768,12 @@ msgstr ""
 "mensagem única. A solicitação expirará em breve."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:38:mul:9
-#, fuzzy
 msgid ""
 "If you do not have your account password, please contact your Koha "
 "Administrator."
 msgstr ""
-"Se você tiver algum problema ou dúvida em relação à sua conta, entre em "
-"contato com o administrador da Koha."
+"Se você não possue a senha da sua conta, por favor, entre em contato com o "
+"administrador da Koha."
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:38
 msgid ""
@@ -1974,9 +1975,9 @@ msgid "Item renewals"
 msgstr "Renovações de itens"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:26
-#, fuzzy
 msgid "Item was found to be too damaged to fill article request"
-msgstr "O item foi considerado muito danificado para preencher"
+msgstr ""
+"O item foi considerado muito danificado para atender a solicitação de artigo"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:24
 msgid "Item was found to be too damaged to fill hold"
@@ -2425,9 +2426,8 @@ msgid "Notification of automatic renewal"
 msgstr "Notificação de renovação automática"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:63
-#, fuzzy
 msgid "Notification on auto renewals"
-msgstr "Notificação de renovação automática"
+msgstr "Notificação sobre renovações automáticas"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:1
 msgid "Notification on receiving"
@@ -2576,9 +2576,8 @@ msgid "Patrons"
 msgstr "Usuários"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:8
-#, fuzzy
 msgid "Pending article request"
-msgstr "Pedido de artigo"
+msgstr "Solicitação de artigo pendente"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:22
 msgid ""
@@ -3339,7 +3338,7 @@ msgid ""
 "has modified this ILL request:"
 msgstr ""
 "O usuário da solicitação de empréstimos entre bibliotecas %s, com os "
-"seguintes detalhes, modificou esta solicitação de ILL:"
+"seguintes detalhes, modificou esta solicitação de EEB:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:30:mul:1
 msgid ""
@@ -3553,9 +3552,8 @@ msgid "Volume: %s"
 msgstr "Volume: %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:51
-#, fuzzy
 msgid "Waiting hold reminder"
-msgstr "Lembrete de item devido"
+msgstr "Lembrete de reserva em espera"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:10:mul:3
 msgid "We are now processing your request for an article from %s (%s)."
@@ -3714,9 +3712,8 @@ msgid "You have overdue items."
 msgstr "Você possui exemplares em atraso."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:61:mul:5
-#, fuzzy
 msgid "You have reached the maximum number of renewals possible."
-msgstr "Você atingiu o número máximo de caixas possíveis."
+msgstr "Você atingiu o número máximo de renovações possíveis."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:53:mul:3
 msgid "You have suggested that the library acquire %s by %s."
@@ -3775,10 +3772,10 @@ msgstr ""
 "Sua solicitação de um artigo de %s (%s) foi cancelada pelo seguinte motivo:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:8:mul:3
-#, fuzzy
 msgid "Your request for an article from %s (%s) is now in pending state."
 msgstr ""
-"Sua solicitação de um artigo de %s (%s) foi cancelada pelo seguinte motivo:"
+"Sua solicitação para um artigo de %s (%s) está no momentos com status "
+"pendente."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:61:mul:15
 msgid "Your total unpaid fines are too high."

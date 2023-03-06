@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-16 18:58-0300\n"
+"POT-Creation-Date: 2023-02-18 00:45-0300\n"
 "PO-Revision-Date: 2022-12-01 02:53+0000\n"
 "Last-Translator: Alexandra <Alexandra.goznaya@letovo.ru>\n"
 "Language-Team: Koha Translation Team\n"
@@ -2547,19 +2547,11 @@ msgstr ""
 #. %14$s:  ELSIF m.data.items_count 
 #. %15$s:  m.data.items_count | html 
 #. %16$s:  END 
-#. %17$s:  CASE 'error_on_update_category' 
-#. %18$s:  CASE 'error_on_insert_category' 
-#. %19$s:  CASE 'error_on_delete_category' 
-#. %20$s:  CASE 'success_on_update_category' 
-#. %21$s:  CASE 'success_on_insert_category' 
-#. %22$s:  CASE 'success_on_delete_category' 
-#. %23$s:  CASE 'cannot_delete_category' 
-#. %24$s:  m.data.libraries_count | html 
-#. %25$s:  CASE 
-#. %26$s:  m.code | html 
-#. %27$s:  END 
+#. %17$s:  CASE 
+#. %18$s:  m.code | html 
+#. %19$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:77
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s An error occurred when updating this library. Perhaps it already "
 "exists. %s An error occurred when adding this library. The branchcode might "
@@ -2567,28 +2559,14 @@ msgid ""
 "logs. %s Library updated successfully. %s Library added successfully. %s "
 "Library deleted successfully. %s This library cannot be deleted. Patrons or "
 "items are still using it %s (%s patrons and %s items). %s (%s patrons). %s "
-"(%s items). %s %s An error occurred when updating this library category. "
-"Perhaps it already exists. %s An error occurred when adding this library "
-"category. The categorycode might already exist. %s An error occurred when "
-"deleting this library category. Check the logs. %s Library category updated "
-"successfully. %s Library category added successfully. %s Library category "
-"deleted successfully. %s This library category cannot be deleted. %s "
-"libraries are still using it. %s %s %s "
+"(%s items). %s %s %s %s "
 msgstr ""
-"%s %s Произошла ошибка при обновлении этой библиотеки. Возможно, она уже "
-"существует. %s Произошла ошибка при добавлении этой библиотеки. Код "
-"организации может уже существовать. %s Произошла ошибка при удалении этой "
-"библиотеки. Проверьте журнал ошибок. %s Библиотека успешно обновлена. %s "
-"Библиотека успешно добавлена. %s Библиотека успешно удалена. %s Эту "
-"библиотеку нельзя удалить. Читатели или экземпляры все еще используют ее %s "
-"(%s читателей and %s экземпляров). %s (%s читателей). %s (%s экземпляров). "
-"%s %s Произошла ошибка при обновлении этой категории библиотеки. Возможно, "
-"она уже существует. %s Произошла ошибка при добавлении этой категории "
-"библиотеки. Код категории может уже существовать. %s Произошла ошибка при "
-"удалении этой категории библиотеки. Проверьте журнал ошибок. %s Категория "
-"библиотеки успешно обновлена. %s Категория библиотеки успешно добавлена. %s "
-"Категория библиотеки успешно удалена. %s Эту категорию библиотеки нельзя "
-"удалить. %s библиотек(и) еще используют ее. %s %s %s "
+"%s %s Произошла ошибка при обновлении этого населенного пункта. Возможно, он "
+"уже существует. %s Произошла ошибка при добавлении этого населенного пункта. "
+"Идентификатор населенного пункта может уже существовать. %s Произошла ошибка "
+"при удалении этого населенного пункта. Проверьте лог-файлы. %s Населенный "
+"пункт успешно обновлен. %s Населенный пункт успешно добавлен. %s Населенный "
+"пункт успешно удален. %s Этот населенный пункт уже существует. %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  SWITCH m.code 
@@ -3799,7 +3777,7 @@ msgstr "%s %s дней %s Нет возраста для этого правил
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:400
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s для посетителя — "
@@ -5829,9 +5807,9 @@ msgstr "%s По умолчанию %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
 #, fuzzy, c-format
 msgid "%s Default: "
 msgstr "%s По умолчанию "
@@ -6160,7 +6138,7 @@ msgid "%s Hold(s)"
 msgstr "Резервирования (%s)"
 
 #. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
 #, c-format
 msgid "%s If not filled in defaults to system preference "
 msgstr "%s если не заполнено, по умолчанию используется системная настройка "
@@ -9772,7 +9750,7 @@ msgstr ""
 #. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
 #. %13$s:  ELSE 
 #. %14$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:23
 #, fuzzy, c-format
 msgid ""
 "%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
@@ -9917,7 +9895,7 @@ msgstr "%s Изменяем название структуры %s Добавл�
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%sИзменить библиотеку%sНовая библиотека%s"
@@ -11631,7 +11609,7 @@ msgstr "-- пожалуйста, выберите --"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
 #, c-format
 msgid ""
 ". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
@@ -12524,7 +12502,7 @@ msgstr "Действие, если соответствия не найдено:
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:318
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:551
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -13741,7 +13719,7 @@ msgstr "Дополнительная благодарность..."
 msgid "Additional tools"
 msgstr "Дополнительные инструменты"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:312
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
@@ -13779,7 +13757,7 @@ msgstr "Адрес под вопросом"
 msgid "Address line 1:"
 msgstr "Адрес 1 строка: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
 #, c-format
 msgid "Address line 1: "
 msgstr "Адрес 1 строка: "
@@ -13789,12 +13767,12 @@ msgstr "Адрес 1 строка: "
 msgid "Address line 2:"
 msgstr "Адрес 2 строка: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, c-format
 msgid "Address line 2: "
 msgstr "Адрес 2 строка: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, c-format
 msgid "Address line 3: "
 msgstr "Адрес 3 строка: "
@@ -14011,8 +13989,8 @@ msgstr "Koha &rsaquo; Администрирование &rsaquo; Звуковы
 msgid "Advanced prediction pattern: "
 msgstr "Расширенный шаблон прогноза: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:18
@@ -14193,10 +14171,10 @@ msgstr "Публичная библиотека Алингсоса, Швеция
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:254
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:261
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
@@ -15499,7 +15477,7 @@ msgstr "Вы действительно хотите удалить %s %s?"
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:292
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "Вы действительно хотите удалить %s (%s)?"
@@ -16230,11 +16208,11 @@ msgid "Authname"
 msgstr "Authname"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:372
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:373
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:303
@@ -17812,7 +17790,7 @@ msgid "Bibliographic record"
 msgstr "Библиографическая запись"
 
 #. %1$s:  object | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:400
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "Авторитетная запись № %s"
@@ -18252,13 +18230,6 @@ msgstr "Подразделение "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:32
@@ -18271,6 +18242,13 @@ msgstr "Подразделение "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
@@ -19042,7 +19020,7 @@ msgstr "Calyx, Австралия"
 msgid "Camden County, USA"
 msgstr "Камден Каунти, США"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr "Может быть введено как одна IP или как подсеть, например 192.168.1 .*"
@@ -19213,7 +19191,7 @@ msgstr "Не удается сохранить запись, потому что
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:511
@@ -20145,7 +20123,6 @@ msgstr "касетная запись"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:58
@@ -20158,6 +20135,7 @@ msgstr "касетная запись"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:56
@@ -21857,7 +21835,7 @@ msgstr "Искать населённый пункт: "
 msgid "City:"
 msgstr "Город:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:607
 #, c-format
@@ -22076,10 +22054,10 @@ msgstr "Очистить"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:409
@@ -22386,10 +22364,10 @@ msgstr "Продублировать правила книговыдачи и н
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:277
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1013
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1013
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:101
@@ -22426,8 +22404,8 @@ msgstr "Продублировать правила книговыдачи и н
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:435
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:451
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:433
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
@@ -22621,7 +22599,7 @@ msgstr "Изображение Coce из Open Library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:532
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -22770,7 +22748,7 @@ msgid "Collection:"
 msgstr "Собрание:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:131
 #, c-format
 msgid "Collection: "
@@ -22986,8 +22964,8 @@ msgstr "Информация о компании"
 msgid "Company name: "
 msgstr "Название коммерческой организации: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:384
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:378
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:383
 #, c-format
 msgid "Compare"
 msgstr "Сравнить"
@@ -23021,7 +22999,7 @@ msgstr "Импорт читателей"
 msgid "Compare patrons for merging"
 msgstr "Номера читательских билетов не указаны."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:434
 #, c-format
 msgid "Compare preference values"
 msgstr "Сравнить значения настроек"
@@ -24082,7 +24060,7 @@ msgstr "Страна"
 msgid "Country:"
 msgstr "Страна:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:626
 #, c-format
@@ -25187,11 +25165,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:894
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:428
@@ -25497,7 +25475,7 @@ msgstr "День: "
 msgid "Days"
 msgstr "Дни"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:12
 #, c-format
 msgid "Days in advance"
 msgstr "Дней заранее"
@@ -25561,9 +25539,9 @@ msgstr "Уменьшенный срок выдачи для высоких ре�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:396
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
@@ -25575,9 +25553,9 @@ msgstr "Уменьшенный срок выдачи для высоких ре�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:748
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1022
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:94
@@ -26014,7 +25992,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:680
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -26051,12 +26029,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:450
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
@@ -27229,7 +27207,7 @@ msgstr "Diff"
 msgid "Differences between the original bibliographic record and the imported"
 msgstr "Отличия между исходной библиографической записью и импортированной"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:16
 #, c-format
 msgid "Digests only "
 msgstr "Только дайджесты "
@@ -28163,7 +28141,7 @@ msgstr "Ранняя дата резервирования"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -28188,9 +28166,9 @@ msgstr "Ранняя дата резервирования"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:450
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:238
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:581
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:587
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:385
@@ -28236,8 +28214,8 @@ msgstr "Редактировать"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:428
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:216
@@ -28569,8 +28547,8 @@ msgid "Edit quotes for quote-of-the-day feature "
 msgstr "Редактирование цитат для функции Цитата дня "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:533
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:33
@@ -28797,7 +28775,7 @@ msgid "Elasticsearch: "
 msgstr "Elasticsearch:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:15
 #, c-format
 msgid "Email"
 msgstr "Электронная почта"
@@ -28833,7 +28811,7 @@ msgstr "Электронная почта: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:552
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
@@ -30282,8 +30260,8 @@ msgstr "Факс"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:184
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:148
 #, c-format
@@ -32085,7 +32063,7 @@ msgstr "Код группы"
 msgid "Group name"
 msgstr "Название группы"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
 #, c-format
 msgid "Group(s):"
 msgstr "Группа(ы): "
@@ -33145,13 +33123,6 @@ msgstr "Выходные дни повторяются ежегодно в ди�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:35
@@ -33164,6 +33135,13 @@ msgstr "Выходные дни повторяются ежегодно в ди�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:14
@@ -33644,12 +33622,12 @@ msgstr "Koha &rsaquo; Читатели &rsaquo; %s"
 msgid "ILL requests:"
 msgstr "Запросы МБА"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
 #, c-format
 msgid "ILL staff email: "
 msgstr "E-mail библиотекаря МБА:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr ""
@@ -33669,7 +33647,7 @@ msgstr "INSTID:12345,LANG:fr"
 msgid "INTERMARC"
 msgstr "INTERMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
 #, c-format
 msgid "IP"
 msgstr "IP"
@@ -33684,7 +33662,7 @@ msgstr "IP-адрес изменился, пожалуйста войдите в
 msgid "IP address has changed. Please log in again "
 msgstr "IP-адрес изменился. Пожалуйста ввойдите снова "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
 #, c-format
 msgid "IP: "
 msgstr "IP:"
@@ -33702,11 +33680,11 @@ msgstr "Информация об экземпляре"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:384
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:385
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:204
@@ -33735,9 +33713,9 @@ msgstr "ISBN или ISSN или другой стандартный номер: 
 msgid "ISBN/EAN/ISSN: %s"
 msgstr "ISBN/EAN/ISSN: %s"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:162
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 #, c-format
 msgid "ISBN:"
@@ -36409,7 +36387,7 @@ msgstr "Тип единицы: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:121
@@ -37714,7 +37692,7 @@ msgstr "Библиотекарь: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2348
@@ -37764,8 +37742,8 @@ msgstr "Библиотеки: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:116
@@ -37857,8 +37835,8 @@ msgid ""
 "Library checkin and transfer policy &rsaquo; Administration &rsaquo; Koha"
 msgstr "Koha &rsaquo; Администрирование &rsaquo; Звуковые уведомления"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -37937,7 +37915,7 @@ msgstr "Библиотечное заведование"
 msgid "Library name: "
 msgstr "Название библиотеки: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "Library of Congress"
 msgstr "Библиотека Конгресса"
@@ -37976,9 +37954,9 @@ msgstr "Библиотечное использование"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
@@ -38418,9 +38396,9 @@ msgstr "Списки, которые включают этот заголово�
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1036
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:198
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1036
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1412
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:279
@@ -38434,11 +38412,11 @@ msgstr "Загружается"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:308
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1010
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:253
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1010
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -38599,8 +38577,8 @@ msgstr "Добавлены данные локализации"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:436
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
@@ -38915,11 +38893,11 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:176
@@ -39078,8 +39056,8 @@ msgstr "Шаблоны изменения MARC %s"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Шаблоны изменения MARC %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
 #, c-format
 msgid "MARC organization code"
 msgstr "MARC код организации"
@@ -39097,12 +39075,12 @@ msgstr "Koha &rsaquo; Администрирование &rsaquo; Звуковы
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1007
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1007
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:434
 #, c-format
@@ -39188,7 +39166,7 @@ msgstr "MARC записи без экземпляров"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
 #, c-format
 msgid "MARCOrgCode"
 msgstr ""
@@ -41587,17 +41565,17 @@ msgstr "УТ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:310
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:113
@@ -41714,7 +41692,7 @@ msgid "Name:"
 msgstr "Имя: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
@@ -42281,7 +42259,7 @@ msgstr "Настройка макетов этикеток"
 msgid "New label template"
 msgstr "Новый шаблон клуба"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
 #, c-format
 msgid "New library"
 msgstr "Новая библиотека"
@@ -42515,7 +42493,7 @@ msgstr "Новое окно"
 msgid "Newcastle City Council, United Kingdom"
 msgstr "Городской совет Ньюкасла, Соединенное Королевство"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:445
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:443
 #, c-format
 msgid "Newer version"
 msgstr "Более новая версия"
@@ -42624,11 +42602,11 @@ msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Николас Розаско (составитель документации)"
 
 # нет (memberentrygen)
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:272
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:322
@@ -43203,7 +43181,7 @@ msgid "No limit"
 msgstr "Без ограничений"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:397
 #, c-format
 msgid "No log found %s for "
 msgstr "В журнале действий ничего не найдено%s относительно "
@@ -43403,9 +43381,10 @@ msgid "No plugins that can create a report are installed"
 msgstr "Не установленно ни одного плагина, котрый мог бы создавать отчёт"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:110
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"No plugins that can enhance the intranet catalog biblio records are installed"
+"No plugins that can enhance the bibliographic records in the staff interface "
+"are installed"
 msgstr ""
 "Плагины, которые могут улучшить библ.записи каталога внутренней сети, не "
 "установлены"
@@ -43500,10 +43479,10 @@ msgid "No results for your query"
 msgstr "Нет результатов по вашему запросу"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:327
 #, c-format
 msgid "No results found"
 msgstr "Ничего не найдено"
@@ -43614,7 +43593,7 @@ msgstr "Нет, не удалять"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -44232,7 +44211,7 @@ msgstr "Примечание: одно из двух следующих поле
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:89
@@ -44278,7 +44257,6 @@ msgstr "Заметки/комментарии"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:654
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:787
@@ -44302,7 +44280,7 @@ msgstr "Заметки:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, c-format
 msgid "Notes: "
@@ -44833,7 +44811,7 @@ msgstr "Электронный каталог"
 msgid "OPAC - %s %s"
 msgstr "ЭК - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:238
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
 #, c-format
 msgid "OPAC info: "
 msgstr "Информация для ЭК: "
@@ -44863,6 +44841,7 @@ msgid "OPAC notes"
 msgstr "Примечания к ЭК"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
 #, fuzzy, c-format
 msgid "OPAC notes:"
 msgstr "Примечания к ЭК"
@@ -44899,8 +44878,8 @@ msgstr "Отчеты о проблемах ЭК в ожидании"
 msgid "OPAC tables"
 msgstr "Таблицы ЭК"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:547
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:116
 #, c-format
 msgid "OPAC view"
 msgstr "Просмотр в ЭК"
@@ -45090,7 +45069,7 @@ msgstr ""
 msgid "Older transactions"
 msgstr "Старые транзакции"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:441
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:439
 #, c-format
 msgid "Older version"
 msgstr "Старая версия"
@@ -47880,12 +47859,12 @@ msgid "Permissions (code)"
 msgstr "Разрешения (code)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 msgid "Ph: "
 msgstr "Тел.:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:10
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:14
 #, c-format
 msgid "Phone"
 msgstr "Телефон"
@@ -47895,7 +47874,7 @@ msgstr "Телефон"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:632
 #, c-format
@@ -47973,14 +47952,14 @@ msgstr "Библиотека самовывоза другая."
 msgid "Pickup library:"
 msgstr "Библиотека самовывоза:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:814
 #, c-format
 msgid "Pickup location"
 msgstr "Место получения"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
 #, c-format
 msgid "Pickup location: "
 msgstr "Место получения: "
@@ -49442,8 +49421,8 @@ msgstr "Распечатать квитанцию ​​за сегодня"
 msgid "Print hold/transfer slip"
 msgstr "Распечатать бланк передачи"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:573
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:112
 #, c-format
 msgid "Print label"
 msgstr "Распечатать наклейку"
@@ -49849,7 +49828,7 @@ msgstr ""
 msgid "Protect from deletion"
 msgstr "Подтвердите удаление"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:316
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:277
@@ -49932,7 +49911,7 @@ msgstr "Общедоступное примечание: "
 msgid "Public notes"
 msgstr "Общедоступные примечания"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #, fuzzy, c-format
 msgid "Public: "
@@ -51730,12 +51709,12 @@ msgstr "Цена для замены: "
 msgid "Replied"
 msgstr "Ответил"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
 #, c-format
 msgid "Reply-To: "
 msgstr "Ответить: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
 #, fuzzy, c-format
 msgid "ReplyToDefault"
 msgstr "По умолчанию"
@@ -52033,8 +52012,8 @@ msgstr "Система модулей Require.js JS"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -52477,13 +52456,13 @@ msgstr "Описание (%s)"
 msgid "Result"
 msgstr "Результат"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:188
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:165
@@ -52734,7 +52713,7 @@ msgstr "Вернуться к инструментам"
 msgid "Return to where you were"
 msgstr "Вернуться туда, где вы были"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
 #, c-format
 msgid "Return-Path: "
 msgstr "Return-Path: "
@@ -52746,7 +52725,7 @@ msgstr "Return-Path: "
 msgid "Returned to patron: "
 msgstr "Возвращено читателю:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
 #, fuzzy, c-format
 msgid "ReturnpathDefault"
 msgstr "Дата возвращения"
@@ -53145,7 +53124,7 @@ msgstr "SIL Open Font License (OFL) v1.1"
 msgid "SIP media type: "
 msgstr "Тип носителя SIP: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:9
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:13
 #, c-format
 msgid "SMS"
 msgstr "SMS"
@@ -53190,12 +53169,12 @@ msgstr "SMS провайдер"
 msgid "SMS provider:"
 msgstr "SMS провайдер:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:317
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #, c-format
 msgid "SMTP server"
 msgstr "SMTP сервер"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:221
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
 #, c-format
 msgid "SMTP server: "
 msgstr "SMTP сервер: "
@@ -53717,16 +53696,16 @@ msgstr "Экран"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:102
@@ -54759,10 +54738,10 @@ msgstr "Выбрать время"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:409
@@ -55722,7 +55701,7 @@ msgstr "Установить статус"
 msgid "Set the date received to today?"
 msgstr "Установить дату получения на сегодня?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr ""
@@ -55954,7 +55933,7 @@ msgstr "Выбрано полочное местоположение:"
 msgid "Shelving location:"
 msgstr "Полочное местоположение:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:138
 #, c-format
 msgid "Shelving location: "
@@ -57244,8 +57223,8 @@ msgstr "Дата начала: "
 msgid "Start date: "
 msgstr "Дата начала: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #, c-format
 msgid "Start defining libraries"
 msgstr "Начните определение библиотек"
@@ -57336,7 +57315,7 @@ msgstr "Область/штат/провинция"
 msgid "State:"
 msgstr "Область/край/регион: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:614
 #, c-format
@@ -57850,7 +57829,7 @@ msgstr "Темы: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:153
@@ -57864,15 +57843,15 @@ msgstr "Темы: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:289
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/renew.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:126
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:270
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:46
@@ -60099,7 +60078,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -60756,11 +60735,11 @@ msgid "There are no late orders."
 msgstr "Нет задержанных заказов."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 msgid "There are no libraries defined."
 msgstr "Библиотеки не определены."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "There are no libraries defined. "
@@ -61350,9 +61329,10 @@ msgid "This item can not be renewed, it's an on-site checkout"
 msgstr "Этот экземпляр не подлежит продлению, это внутренняя выдача"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:150
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"This item cannot be issued as it has no biblio record associated with it"
+"This item cannot be checked out out as there is no bibliographic record "
+"associated with it"
 msgstr ""
 "Этот экземпляр не может быть выдан, поскольку с ним не связана "
 "библиографическая запись"
@@ -61950,14 +61930,14 @@ msgstr "Редактор TinyMCE WYSIWYG v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:281
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:369
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:310
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:416
@@ -63342,7 +63322,7 @@ msgstr "URL"
 msgid "URL(s)"
 msgstr "URL-ссылка(и)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
 #, c-format
 msgid "URL: "
 msgstr "URL: "
@@ -63998,10 +63978,10 @@ msgstr "Обновление структуры базы данных"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:270
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
@@ -65196,9 +65176,12 @@ msgstr "Новая корзина заказов"
 msgid "View biblio details"
 msgstr "Просмотр информации о библиотеке"
 
-#. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:49
+#, c-format
+msgid "View bibliographic record enhancement plugins for the staff interface"
+msgstr ""
+
+#. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 msgid "View borrower details"
 msgstr "Просмотреть информацию о читателе"
@@ -65273,6 +65256,13 @@ msgstr "Просмотреть примечание"
 msgid "View online payment plugins"
 msgstr "Посмотреть плагины онлайн-платежей"
 
+#. A
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#, fuzzy
+msgid "View patron details"
+msgstr "Подробная информация о читателе"
+
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:284
 #, c-format
 msgid ""
@@ -65312,11 +65302,6 @@ msgstr "Посмотреть ограничения"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:41
 msgid "View spine label"
 msgstr "Просмотр наклейки на корешке"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:49
-#, c-format
-msgid "View staff catalog biblio enhancement plugins"
-msgstr "Просмотр служебного каталога biblio расширения плагинов"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:297
 #, c-format
@@ -66205,11 +66190,11 @@ msgid "Yellow"
 msgstr "Желтый"
 
 # да (memberentrygen)
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:271
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:343
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:321
@@ -66361,7 +66346,7 @@ msgstr "Да, закрыть (Y)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:263
@@ -66681,7 +66666,7 @@ msgstr ""
 "равенства."
 
 #. I
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:16
 msgid ""
 "You can ask for a digest to reduce the number of messages. Messages will be "
 "saved and sent as a single message."
@@ -67025,15 +67010,15 @@ msgstr ""
 msgid "You must be online to use these options."
 msgstr "Вы должны быть в сети, чтобы использовать эти параметры."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:246
-#, c-format
-msgid "You must choose a branch"
-msgstr "Вы должны выбрать подразделение"
-
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:550
 msgid "You must choose a first publication date"
 msgstr "Вы должны выбрать дату первой публикации"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:246
+#, fuzzy, c-format
+msgid "You must choose a library"
+msgstr "Вы должны выбрать подразделение"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:550
@@ -67141,10 +67126,10 @@ msgid "You must reset your password"
 msgstr "Вы должны сбросить свой пароль"
 
 #. INPUT type=checkbox name=digest
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:188
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:193
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:200
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:205
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:192
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:197
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:204
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:209
 #, fuzzy
 msgid "You must select a digestible transport to select digests"
 msgstr "Вы должны выбрать хотя бы один сериальное издание для редактирования"
@@ -67541,10 +67526,10 @@ msgid "Z39.50 can send records in various formats. Choose one."
 msgstr " записи в различных форматах. Выберите один): "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:894
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:894
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
 msgstr "Поиск Z39.50/SRU"
@@ -67616,7 +67601,7 @@ msgstr "Почтовый индекс"
 msgid "ZIP/Postal code:"
 msgstr "Почтовый индекс:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:620
 #, c-format
@@ -70237,7 +70222,7 @@ msgstr "супербиблиотекарь"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
 #, fuzzy, c-format
 msgid ""
 "system preference %s Default: ILLDefaultStaffEmail system preference %s "
@@ -70245,14 +70230,14 @@ msgstr "По умолчанию: системная настройка ILLDefaul
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
 #, fuzzy, c-format
 msgid "system preference %s Default: ReplyToDefault system preference %s "
 msgstr "По умолчанию: системная настройка ReplyToDefault"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
 #, fuzzy, c-format
 msgid "system preference %s Default: ReturnpathDefault system preference %s "
 msgstr "По умолчанию: системная настройка ReturnpathDefault"
@@ -70773,6 +70758,7 @@ msgstr "| Статус: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1006
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:223
@@ -70780,7 +70766,6 @@ msgstr "| Статус: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1006
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:147
@@ -70851,6 +70836,38 @@ msgstr ""
 
 #~ msgid "%s %s %sJob type \"%s\" not handled in the template %s "
 #~ msgstr "%s %s %sТип задачи \"%s\" не обрабатывается в шаблоне %s "
+
+#~ msgid ""
+#~ "%s %s An error occurred when updating this library. Perhaps it already "
+#~ "exists. %s An error occurred when adding this library. The branchcode "
+#~ "might already exist. %s An error occurred when deleting this library. "
+#~ "Check the logs. %s Library updated successfully. %s Library added "
+#~ "successfully. %s Library deleted successfully. %s This library cannot be "
+#~ "deleted. Patrons or items are still using it %s (%s patrons and %s "
+#~ "items). %s (%s patrons). %s (%s items). %s %s An error occurred when "
+#~ "updating this library category. Perhaps it already exists. %s An error "
+#~ "occurred when adding this library category. The categorycode might "
+#~ "already exist. %s An error occurred when deleting this library category. "
+#~ "Check the logs. %s Library category updated successfully. %s Library "
+#~ "category added successfully. %s Library category deleted successfully. %s "
+#~ "This library category cannot be deleted. %s libraries are still using it. "
+#~ "%s %s %s "
+#~ msgstr ""
+#~ "%s %s Произошла ошибка при обновлении этой библиотеки. Возможно, она уже "
+#~ "существует. %s Произошла ошибка при добавлении этой библиотеки. Код "
+#~ "организации может уже существовать. %s Произошла ошибка при удалении этой "
+#~ "библиотеки. Проверьте журнал ошибок. %s Библиотека успешно обновлена. %s "
+#~ "Библиотека успешно добавлена. %s Библиотека успешно удалена. %s Эту "
+#~ "библиотеку нельзя удалить. Читатели или экземпляры все еще используют ее "
+#~ "%s (%s читателей and %s экземпляров). %s (%s читателей). %s (%s "
+#~ "экземпляров). %s %s Произошла ошибка при обновлении этой категории "
+#~ "библиотеки. Возможно, она уже существует. %s Произошла ошибка при "
+#~ "добавлении этой категории библиотеки. Код категории может уже "
+#~ "существовать. %s Произошла ошибка при удалении этой категории библиотеки. "
+#~ "Проверьте журнал ошибок. %s Категория библиотеки успешно обновлена. %s "
+#~ "Категория библиотеки успешно добавлена. %s Категория библиотеки успешно "
+#~ "удалена. %s Эту категорию библиотеки нельзя удалить. %s библиотек(и) еще "
+#~ "используют ее. %s %s %s "
 
 #~ msgid ""
 #~ "%s %s Email %s Print %s SMS %s Feed %s Phone ( Itiva ) %s Phone %s %s %s "
@@ -71761,6 +71778,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "View record"
 #~ msgstr "Новая запись"
+
+#~ msgid "View staff catalog biblio enhancement plugins"
+#~ msgstr "Просмотр служебного каталога biblio расширения плагинов"
 
 #~ msgid ""
 #~ "Warning: This report was written for a newer version of Koha. Run at your "

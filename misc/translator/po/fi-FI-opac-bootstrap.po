@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-01-16 18:38-0300\n"
-"PO-Revision-Date: 2022-03-17 14:07+0000\n"
+"POT-Creation-Date: 2023-02-17 12:46-0300\n"
+"PO-Revision-Date: 2023-02-22 11:04+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1647526044.009035\n"
+"X-POOTLE-MTIME: 1677063883.983373\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -568,9 +568,9 @@ msgstr "%s (Tietue nro %s)"
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "%s (default)"
-msgstr "Oletus"
+msgstr "%s (oletus)"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1147,11 +1147,11 @@ msgstr "%s / %s %s %s %s "
 #. %11$s:  END 
 #. %12$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s for patron %s at %s expected at %s %s since %s %s %s %s %s %s %s. "
 msgstr ""
-"%s Odottaa noutoa %s Varauksessa %s asiakkaalle %s toimipisteessä %s %s %s , "
-"%s %s %s %s %s %s %s lähtien. "
+"%s asiakkaalle %s toimipisteessä %s odotetaan toimipisteessä %s %s %s %s %s %"
+"s %s lähtien %s %s. "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
@@ -5333,10 +5333,10 @@ msgstr "Syötä hakusanat"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:41
-#, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:42
+#, fuzzy, c-format
 msgid ""
-"Enter your User ID%s and password%s, and click the submit button (or press "
+"Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
 "Syötä kirjastokortin numero %s ja salasana%s sekä paina näppäimistön enter-"
@@ -6348,7 +6348,7 @@ msgid ""
 "at your local library and the error will be corrected."
 msgstr "Jos tämä on virhe, ota yhteyttä kirjaston henkilökuntaan."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:35
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:36
 #, c-format
 msgid ""
 "If this is your first time using the self checkout system, or if the system "
@@ -6367,7 +6367,7 @@ msgid "If you did not receive this email, you can request a new one: "
 msgstr "Jos et saanut sähköpostia, voit pyytää uuden: "
 
 #. %1$s:  SelfCheckTimeout | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:53
 #, c-format
 msgid ""
 "If you do not click the 'Finish' button, your session will automatically "
@@ -8228,9 +8228,9 @@ msgstr ""
 #. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
 #. %2$s:  itemLoo.reservedate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
-#, fuzzy, c-format
+#, c-format
 msgid "On hold for patron expected at %s since %s"
-msgstr "Kuljetettavana kirjastosta %s kirjastoon %s %s."
+msgstr "Varausta odotetaan kirjastossa %s %s lähtien"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:90
 #, c-format
@@ -9880,7 +9880,7 @@ msgstr "Palaa edelliseen tarkkaan hakuun"
 msgid "Return to the main page"
 msgstr "Palaa etusivulle"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:58
 #, c-format
 msgid "Return to the self-checkout"
 msgstr "Palaa itsepalvelulainaukseen"
@@ -10027,7 +10027,7 @@ msgstr "Lue viivakoodi "
 msgid "Scan a new item or enter its barcode:"
 msgstr "Lue viivakoodi:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:47
 #, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
@@ -10923,17 +10923,17 @@ msgstr "Tila:"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:39
-#, c-format
-msgid "Step one: Enter your user id%s and password%s"
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:40
+#, fuzzy, c-format
+msgid "Step one: Enter your user ID%s and password%s"
 msgstr "Vaihe 1: Syötä kirjastokortin numero%s ja salasana%s."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:51
 #, c-format
 msgid "Step three: Click the 'Finish' button"
 msgstr "Vaihe 3: Klikkaa 'Valmis'"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:44
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:45
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "Vaihe 2: Lue lukijalla teosten viivakoodit yksi kerrallaan."
@@ -12419,9 +12419,9 @@ msgstr "Odotuspvm"
 #. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
 #. %2$s:  itemLoo.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting for patron at %s since %s"
-msgstr "Kuljetettavana kirjastosta %s kirjastoon %s %s."
+msgstr "Odottaa kirjastossa %s %s lähtien"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
@@ -12986,7 +12986,7 @@ msgstr "Valitse noutopaikka. "
 msgid "You must select at least one item. "
 msgstr "Valitse ainakin yksi teos. "
 
-#. %1$s:  DEBT | $Price 
+#. %1$s:  DEBT | $Price with_symbol => 1
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
 #, c-format
 msgid "You owe the library %s and cannot check out."
