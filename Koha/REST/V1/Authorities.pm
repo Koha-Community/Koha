@@ -119,17 +119,9 @@ sub delete {
     }
 
     return try {
-        my $error = DelAuthority( { authid => $authority->authid } );
+        DelAuthority( { authid => $authority->authid } );
 
-        if ($error) {
-            return $c->render(
-                status  => 409,
-                openapi => { error => $error }
-            );
-        }
-        else {
-            return $c->render( status => 204, openapi => "" );
-        }
+        return $c->render( status => 204, openapi => q{} );
     }
     catch {
         $c->unhandled_exception($_);
