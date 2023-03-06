@@ -372,7 +372,13 @@
                                                         <span>Don't allow</span>
                                                     [% END %]
                                                 </td>
-                                                <td>[% holds_pickup_period | html %]</td>
+                                                <td>
+                                                    [% IF holds_pickup_period == '' %]
+                                                        <span title="Will use ReservesMaxPickupDelay system preference value ([% Koha.Preference('ReservesMaxPickupDelay') | html %])">Default</span>
+                                                    [% ELSE %]
+                                                        [% holds_pickup_period | html %]
+                                                    [% END %]
+                                                </td>
                                                 [% IF Koha.Preference('ArticleRequests') %]
                                                 <td data-code="[% article_requests | html %]">
                                                     [% IF article_requests == 'no' %]
