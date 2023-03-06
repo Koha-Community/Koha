@@ -217,83 +217,11 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     </li>
                 [% END %]
             </ol>
+
             [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
-                <div id="icons" class="toptabs">
-                    <h5>Choose an icon:</h5>
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation">
-                            <a aria-controls="non" role="tab" data-toggle="tab" href="#none">None</a>
-                        </li>
-                        [% FOREACH imageset IN imagesets %]
-                            [% IF ( imageset.imagesetactive ) %]
-                                <li role="presentation" class="active">
-                            [% ELSE %]
-                                <li role="presentation">
-                            [% END %]
-                                <a aria-controls="[% imageset.imagesetname | uri %]" role="tab" data-toggle="tab" href="#[% imageset.imagesetname | uri %]">[% imageset.imagesetname | html %]</a>
-                            </li>
-                        [% END %]
-                        [% IF itemtype.image_location('intranet').match('^http') %]
-                            <li role="presentation" class="active">
-                        [% ELSE %]
-                            <li role="presentation">
-                        [% END %]
-                            <a aria-controls="remote" role="tab" data-toggle="tab" href="#remote">Remote image</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="none" role="tabpanel" class="tab-pane">
-                            <div class="itemtype-icons">
-                                <label for="noimage">No image:
-                                    <input type="radio" name="image" id="noimage" value="removeImage" />
-                                </label>
-                            </div>
-                        </div> <!-- /.tab-pane -->
-
-                        [% FOREACH imageset IN imagesets %]
-                            [% IF ( imageset.imagesetactive ) %]
-                                <div id="[% imageset.imagesetname | html %]" role="tabpanel" class="tab-pane active">
-                            [% ELSE %]
-                                <div id="[% imageset.imagesetname | html %]" role="tabpanel" class="tab-pane">
-                            [% END %]
-                                <div class="itemtype-icons">
-                                    [% FOREACH image IN imageset.images %]
-                                        <label>
-                                            [% IF image.StaffImageUrl %]
-                                                <img src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
-                                            [% END %]
-                                            [% IF image.checked %]
-                                                <input type="radio" name="image" value="[% image.KohaImage | html %]" checked="checked" />
-                                            [% ELSIF image.KohaImage %] <!-- to delete the radio button if there is no image after -->
-                                                <input type="radio" name="image" value="[% image.KohaImage | html %]" />
-                                            [% END %]
-                                        </label>
-                                    [% END #/ FOREACH image %]
-                                </div> <!-- /.itemtype-icons -->
-                            </div> <!-- /.tab-pane -->
-                        [% END #/FOREACH imageset %]
-
-                        [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location.match('^http') %]
-                            <div id="remote" role="tabpanel" class="tab-pane active">
-                        [% ELSE %]
-                            <div id="remote" role="tabpanel" class="tab-pane">
-                        [% END %]
-                            <label for="remote_image_check"> Remote image:</label>
-                            [% IF image_location.match('^http') %]
-                                <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
-                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% image_location | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-                                [% IF itemtype.imageurl %]
-                                    <img src="[% image_location | html %]" alt="" />
-                                [% END %]
-                            [% ELSE %]
-                                <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-                                <input type="text" name="remoteImage" size="48" maxlength="200" value="" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-                            [% END %]
-                        </div> <!-- /#remote -->
-                    </div> <!-- /.tab-content -->
-                </div> <!-- /#icons -->
+                [% INCLUDE 'admin-icon-selection.inc' context = "itemtype" %]
             [% END %]
+
             <ol class="oladditemtype">
                 <li>
                     <label for="hideinopac">Hide in OPAC: </label>
