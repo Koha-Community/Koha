@@ -24,23 +24,23 @@
 [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Search [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %]
-                [% IF ( limit_desc ) %] &nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF ( query_desc ) %]
+                [% IF ( limit_desc ) %]
+                    <span>Search for '[% query_desc | html %]' with limit(s): '[% limit_desc | html %]'</span>
+                [% ELSE %]
+                    <span>Search for '[% query_desc | html %]'</span>
+                [% END %]
+            [% ELSE %]
+                <span>Search</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
