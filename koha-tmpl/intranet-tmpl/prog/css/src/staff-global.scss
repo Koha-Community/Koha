@@ -3291,6 +3291,20 @@ code {
     padding: 1em;
 }
 
+.tab-pane {
+    &.active {
+        &::after,
+        &::before {
+            content: " ";
+            display: table;
+        }
+
+        &::after {
+            clear: both;
+        }
+    }
+}
+
 .nav-tabs {
     border-bottom: 0;
     padding: .2em 1.4em 0 0;
