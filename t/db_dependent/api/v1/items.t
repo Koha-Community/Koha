@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -99,6 +99,146 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'list_public() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Clean out all demo items
+    Koha::Items->delete();
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
+    my $exception = 1;
+    $mocked_category->mock( 'override_hidden_items', sub {
+        return $exception;
+    });
+
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    # have a fresh biblio
+    my $biblio = $builder->build_sample_biblio;
+    # have two itemtypes
+    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    # have 5 items on that biblio
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => -1,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 1,
+            copynumber   => undef
+        }
+    );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 2,
+            copynumber   => undef
+        }
+    );
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 1,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 3,
+            copynumber   => undef
+        }
+    );
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 4,
+            copynumber   => undef
+        }
+    );
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5,
+            copynumber   => undef
+        }
+    );
+    my $item_6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 2,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5,
+            copynumber   => undef
+        }
+    );
+
+    my $rules = undef;
+    my $mocked_context = Test::MockModule->new('C4::Context');
+    $mocked_context->mock( 'yaml_preference', sub {
+        return $rules;
+    });
+
+    subtest 'anonymous access' => sub {
+        plan tests => 21;
+
+        t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
+        my $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 6, 'No rules set, hidelostitems unset, all items returned');
+
+        t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
+        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 3, 'No rules set, hidelostitems set, 3 items hidden');
+
+        t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
+        $rules = { biblionumber => [ $biblio->biblionumber ] };
+        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 0, 'Biblionumber rule set, hidelostitems unset, all items hidden');
+
+        $rules = { withdrawn => [ 1, 2 ] };
+        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 4, 'Withdrawn rule set, hidelostitems unset, 2 items hidden');
+
+        $rules = { itype => [ $itype_1->itemtype ] };
+        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 2, 'Itype rule set, hidelostitems unset, 4 items hidden');
+
+        $rules = { withdrawn => [ 1 ] };
+        $res = $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )
+          ->status_is(200)->tx->res->json;
+        is( scalar @{ $res }, 0, 'Withdrawn rule set, hidelostitems unset, search on barcode returns no item');
+
+        $rules = undef;
+        $t->get_ok( "/api/v1/public/items?external_id=" . $item_1->barcode )
+          ->status_is(200)->json_is(
+            '/0' => $item_1->to_api( { public => 1 } ),
+'No rules set, hidelostitems unset, public form of item returned on barcode search'
+          );
+    };
+
+    subtest 'logged in user access' => sub {
+        plan tests => 3;
+
+        t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
+        $rules = { withdrawn => [ 1, 2 ] };
+        my $res = $t->get_ok("//$userid:$password@/api/v1/public/items")
+          ->status_is(200)->tx->res->json;
+        is(
+            scalar @{$res},
+            3,
+'Rules on withdrawn but patron with override passed, hidelostitems set'
+        );
+    };
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'get() tests' => sub {
 
