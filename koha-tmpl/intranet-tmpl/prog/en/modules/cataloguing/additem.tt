@@ -5,6 +5,7 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Items &rsaquo; [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -35,25 +36,24 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">Edit <em>[% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</em></a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Items
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblio.biblionumber | uri %]">
+                [% IF ( biblio.author ) %]
+                    [% tx('Edit {title} by {author}', { title = biblio.title, author = biblio.author }) | html %] ([% tp('Bibliographic record number', 'Record #') | html %] [% biblio.biblionumber | html %])
+                [% ELSE %]
+                    [% tx('Edit {title}', title = biblio.title) | html %] ([% tp('Bibliographic record number', 'Record #') | html %] [% biblio.biblionumber | html %])
+                [% END %]
             </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [%  tp('Items attached to a bibliographic record', 'Items') | html %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

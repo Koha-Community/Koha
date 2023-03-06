@@ -1,4 +1,5 @@
-
+[% USE raw %]
+[% USE HtmlTags %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Link to host record &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -9,22 +10,15 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Link a host record to <em>[% bibliotitle | html %]</em>
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            Link a host record to [% bibliotitle | html %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="container-fluid">
     <div class="row">
