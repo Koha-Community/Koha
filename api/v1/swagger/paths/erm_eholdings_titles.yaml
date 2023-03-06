@@ -190,6 +190,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - description: A JSON object containing information about the new title
         in: body
         name: body
@@ -304,6 +309,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
       - name: body
         in: body
@@ -366,6 +376,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
     responses:
       204:
@@ -403,7 +418,6 @@
     x-koha-authorization:
       permissions:
         erm: 1
-
 /erm/eholdings/local/titles/import:
   post:
     x-mojo-to: ERM::EHoldings::Titles#import_from_list
