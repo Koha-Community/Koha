@@ -68,6 +68,7 @@ for my $library ( @$libraries ) {
 }
 
 $template->param(
+    biblio                  => $biblio,
     biblionumber            => $biblionumber,
     title                   => $biblio->title,
     author                  => $biblio->author,
