@@ -25,34 +25,21 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-        </li>
+        [% END %]
 
         [% IF patron %]
-            <li>
-                <a href="/cgi-bin/koha/circ/circulation.pl">Batch check out</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% INCLUDE 'patron-title.inc' %]
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Batch check out
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrowernumber | uri %]">Check out to [% INCLUDE 'patron-title.inc' %]</a>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Batch check out</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
