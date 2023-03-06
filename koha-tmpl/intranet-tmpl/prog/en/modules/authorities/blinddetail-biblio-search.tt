@@ -22,6 +22,8 @@
             [% IF rancor %]
                 function RancorReplaceField( new_text, ind_1, ind_2 ){
                     var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
+                    // The new_text is entity-encoded and we want decoded text
+                    new_text = new DOMParser().parseFromString(new_text, 'text/html').body.innerText;
                     cur_field.setText(new_text);
                     [% IF update_ind1 %]cur_field.setIndicator1(ind_1);[% END %]
                     [% IF update_ind2 %]cur_field.setIndicator2(ind_2);[% END %]
