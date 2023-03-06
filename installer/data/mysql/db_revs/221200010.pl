@@ -51,7 +51,7 @@ return {
                 ('OpacCatalogConcerns', '0', NULL, 'Allow logged in OPAC users to report catalog concerns', 'YesNo')
             }
         );
-        say $out "`OpacCatalogConcerns` preference added";
+        say $out "Added new system preference 'OpacCatalogConcerns'";
 
         if ( ( $dbh->selectrow_array('SELECT COUNT(*) FROM additional_contents WHERE location=?', undef, 'CatalogConcernHelp') )[0] == 0 ) { # Check to make idempotent
             $dbh->do(
@@ -116,7 +116,7 @@ return {
                 ('CatalogerEmails', '', '', 'Notify these catalogers by email when a catalog concern is submitted', 'free')
             }
         );
-        say $out "`CatalogerEmails` preference added";
+        say $out "Added new system preference 'CatalogerEmails'";
 
         $dbh->do(
             q{
@@ -132,6 +132,6 @@ return {
                 ('CatalogConcerns', '0', NULL, 'Allow users to report catalog concerns', 'YesNo')
             }
         );
-        say $out "`CatalogConcerns` preference added";
+        say $out "Added new system preference 'CatalogConcerns'";
     }
 }
