@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE HtmlTags %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %] &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -795,28 +796,28 @@ function PopupMARCFieldDoc(field) {
        <div>Loading, please wait...</div>
    </div>
 
-    [% INCLUDE 'header.inc' %]
-    [% INCLUDE 'cataloging-search.inc' %]
+    [% WRAPPER 'header.inc' %]
+        [% INCLUDE 'cataloging-search.inc' %]
+    [% END %]
 
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ( biblionumber ) %]
-                        Editing <em>[% title | html %]</em> (Record number [% biblionumber | html %])
-                    [% ELSE %]
-                        Add MARC record
-                    [% END %]
-                </a>
-            </li>
-        </ol>
-    </nav>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF ( biblionumber ) %]
+                <span>[% tp('Editing MARC record titled:', "Editing") | html %] [% title | html %] (Record number [% biblionumber | html %])</span>
+            [% ELSE %]
+                [% IF ( circborrowernumber ) %]
+                    <span>Add MARC record (fast cataloging)</span>
+                [% ELSE %]
+                    <span>Add MARC record</span>
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
@@ -826,9 +827,13 @@ function PopupMARCFieldDoc(field) {
 
                 <h1>
                     [% IF ( biblionumber ) %]
-                        Editing <em>[% title | html %]</em> (Record number [% biblionumber | html %])
+                        Editing [% title | $HtmlTags tag="em" %] (Record number [% biblionumber | html %])
                     [% ELSE %]
-                        Add MARC record [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]
+                        [% IF (circborrowernumber) %]
+                            <span>Add MARC record (fast cataloging)</span>
+                        [% ELSE %]
+                            <span>Add MARC record</span>
+                        [% END %]
                     [% END %]
                 </h1>
 
