@@ -414,6 +414,23 @@ reports received from suppliers
 
 Estimated delivery date
 
+=head2 invoice_unitprice
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+the unit price in foreign currency
+
+=head2 invoice_currency
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
+the currency of the invoice_unitprice
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -527,6 +544,10 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "estimated_delivery_date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "invoice_unitprice",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "invoice_currency",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -713,6 +734,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 invoice_currency
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Currency>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "invoice_currency",
+  "Koha::Schema::Result::Currency",
+  { currency => "invoice_currency" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
 =head2 invoiceid
 
 Type: belongs_to
@@ -764,8 +805,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-16 13:56:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M8HvWBKYFNGspSTakU6Qdg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-06 16:45:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7vMNLDNO0/Bpng9sBFyyBg
 
 __PACKAGE__->belongs_to(
   "basket",

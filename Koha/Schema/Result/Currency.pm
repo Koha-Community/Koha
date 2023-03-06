@@ -157,9 +157,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqorders_invoice_currencies
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-01 14:23:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PnJEcCgrM1Edf99phWFdyQ
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqorder>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorders_invoice_currencies",
+  "Koha::Schema::Result::Aqorder",
+  { "foreign.invoice_currency" => "self.currency" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-06 16:45:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FmTABTXRmT/kwlkKkO/0pw
 
 
 sub koha_object_class {
