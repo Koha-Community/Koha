@@ -365,6 +365,8 @@
                                                                     <span>This is a on-site checkout, it cannot be renewed.</span>
                                                                 [% ELSIF ISSUE.renew_error == 'too_unseen' %]
                                                                     <span>You have renewed this item the maximum number of consecutive times without it being seen by the library.</span>
+                                                                [% ELSIF ISSUE.renew_error == 'too_soon' %]
+                                                                    <span>This item cannot yet be renewed.</span>
                                                                 [% ELSE %]
                                                                     <span>No renewals allowed</span>
                                                                 [% END %]
