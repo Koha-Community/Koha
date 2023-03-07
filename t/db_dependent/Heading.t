@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::Mocks;
 
@@ -60,4 +60,38 @@ subtest "UNIMARC tests" => sub {
     ok(!C4::Heading::valid_heading_subfield('600', 'i'), '600i not valid for bib');
 
     ok(!C4::Heading::valid_heading_subfield('012', 'a'), '012a invalid field for bib');
-}
+};
+
+subtest "_search tests" => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
+    my $search = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
+
+    $search->mock('search_auth_compat', sub {
+        my $self = shift;
+        my $search_query = shift;
+        return $search_query;
+    });
+
+    my $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,' );
+    my $heading = C4::Heading->new_from_field($field);
+    my $search_query = $heading->_search( 'match-heading' );
+    my $terms = $search_query->{query}->{bool}->{must};
+    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with single punctuation mark");
+
+
+    my $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,', e => '[author]' );
+    my $heading = C4::Heading->new_from_field($field);
+    my $search_query = $heading->_search( 'match-heading' );
+    my $terms = $search_query->{query}->{bool}->{must};
+    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with doulbe punctuation, hyphen+comma");
+
+    $field = MARC::Field->new( '100', ' ', '', a => 'Tolkien, J.R.R.,', e => '[author]' );
+    $heading = C4::Heading->new_from_field($field);
+    $search_query = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Tolkien, J.R.R' } }, "Search formed as expected for a non-subject field with double punctuation, period+comma ");
+
+};
