@@ -110,8 +110,7 @@ export default {
             vm.before_route_entered = true // FIXME This is ugly, but we need to distinguish when it's used as main component or child component (from EHoldingsEBSCOPAckagesShow for instance)
             if (!vm.building_table) {
                 vm.building_table = true
-                vm.getAgreementCount()
-                vm.initialized = true
+                vm.getAgreementCount().then(() => vm.initialized = true)
             }
         })
     },
