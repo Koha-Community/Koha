@@ -46,6 +46,7 @@ export default {
                 },
                 buttons,
                 default_search: this.$route.query.q,
+                ...this.options,
             },
             hidden_ids,
             included_ids,
