@@ -1294,6 +1294,10 @@ sub to_api {
     my ($self, $args) = @_;
 
     my $response = $self->SUPER::to_api( $args );
+
+    $args = defined $args ? {%$args} : {};
+    delete $args->{embed};
+
     my $biblioitem = $self->biblioitem->to_api( $args );
 
     return { %$response, %$biblioitem };
