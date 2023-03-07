@@ -21,6 +21,7 @@ use warnings;
 use Test::More tests => 4;
 
 use t::lib::Mocks;
+use Test::MockModule;
 
 BEGIN {
     use_ok('C4::Heading', qw( field valid_heading_subfield ));
@@ -63,40 +64,79 @@ subtest "UNIMARC tests" => sub {
 };
 
 subtest "_search tests" => sub {
-    plan tests => 3;
+
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
     my $search = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
 
-    $search->mock(
-        'search_auth_compat',
-        sub {
-            my $self         = shift;
-            my $search_query = shift;
-            return $search_query;
-        }
-    );
+    $search->mock('search_auth_compat', sub {
+        my $self = shift;
+        my $search_query = shift;
+        return $search_query;
+    });
 
-    my ( $field, $heading, $search_query, $terms );
+
+    my $field = MARC::Field->new( '650', ' ', '0', a => 'Uncles', x => 'Fiction' );
+    my $heading = C4::Heading->new_from_field($field);
+    my $search_query = $heading->_search( 'match-heading' );
+    my $terms = $search_query->{query}->{bool}->{must};
+    my $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected for a subject with second indicator 0");
+
+    $field = MARC::Field->new( '650', ' ', '3', a => 'Uncles', x => 'Fiction' );
+    $heading = C4::Heading->new_from_field($field);
+    $search_query = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'd' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected with second indicator 3");
+
+    $field = MARC::Field->new( '650', ' ', '7', a => 'Uncles', x => 'Fiction', 2 => 'special_sauce' );
+    $heading = C4::Heading->new_from_field($field);
+    $search_query = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+        { term => { 'subject-heading-thesaurus-conventions.ci_raw' => 'special_sauce' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'z' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected with second indicator 7 and subfield 2");
 
     $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,' );
     $heading = C4::Heading->new_from_field($field);
     $search_query = $heading->_search( 'match-heading' );
     $terms = $search_query->{query}->{bool}->{must};
-    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with single punctuation mark");
-
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with single punctuation mark");
 
     $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,', e => '[author]' );
     $heading = C4::Heading->new_from_field($field);
     $search_query = $heading->_search( 'match-heading' );
     $terms = $search_query->{query}->{bool}->{must};
-    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with double punctuation, hyphen+comma");
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with double punctuation, hyphen+comma");
 
     $field = MARC::Field->new( '100', ' ', '', a => 'Tolkien, J.R.R.,', e => '[author]' );
     $heading = C4::Heading->new_from_field($field);
     $search_query = $heading->_search( 'match-heading' );
     $terms = $search_query->{query}->{bool}->{must};
-    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Tolkien, J.R.R' } }, "Search formed as expected for a non-subject field with double punctuation, period+comma ");
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Tolkien, J.R.R' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with double punctuation, period+comma ");
 
 };
