@@ -466,6 +466,18 @@
             aliases.splice(i, 1);
             refresh_aliases();
         }
+
+        function encodeHTMLEntities(str){
+            return str.replace(/[&<>'"]/g,
+              tag => ({
+                  '&': '&amp;',
+                  '<': '&lt;',
+                  '>': '&gt;',
+                  "'": '&#39;',
+                  '"': '&quot;'
+                }[tag]));
+        }
+
         function add_alias(){
             let alias = $("#new_alias").val();
             if ( !alias.length > 0 ) { return }
@@ -475,8 +487,11 @@
         function refresh_aliases(){
             let nodes = $("<div></div>");
             aliases.forEach((a, i) => {
-                let n = $("<div></div>").append(a.alias);
-                n.append(`<input type="hidden" name="alias" value="${a.alias}">`)
+                let alias_str = encodeHTMLEntities(a.alias);
+                let n = $("<div></div>").append(alias_str);
+                let input = $('<input type="hidden" name="alias" />');
+                input.val(a.alias);
+                n.append(input);
                 n.append(`<a onclick="remove_alias(${i});"><i class="fa fa-trash" aria-hidden="true"></i></a>`);
                 nodes.append(n);
             });
