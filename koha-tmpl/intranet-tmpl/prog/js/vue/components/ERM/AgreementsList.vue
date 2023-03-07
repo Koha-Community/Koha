@@ -98,6 +98,25 @@ export default {
                 url: () => this.table_url(),
                 table_settings: this.agreement_table_settings,
                 add_filters: true,
+                filters_options: {
+                    1: () =>
+                        this.vendors.map(e => {
+                            e["_id"] = e["id"]
+                            e["_str"] = e["name"]
+                            return e
+                        }),
+                    3: () => this.map_av_dt_filter("av_agreement_statuses"),
+                    4: () =>
+                        this.map_av_dt_filter("av_agreement_closure_reasons"),
+                    5: [
+                        { _id: 0, _str: _("No") },
+                        { _id: 1, _str: _("Yes") },
+                    ],
+                    6: () =>
+                        this.map_av_dt_filter(
+                            "av_agreement_renewal_priorities"
+                        ),
+                },
                 actions: {
                     0: ["show"],
                     "-1": ["edit", "delete"],
@@ -110,7 +129,7 @@ export default {
             vm.before_route_entered = true // FIXME This is ugly, but we need to distinguish when it's used as main component or child component (from EHoldingsEBSCOPAckagesShow for instance)
             if (!vm.building_table) {
                 vm.building_table = true
-                vm.getAgreementCount().then(() => vm.initialized = true)
+                vm.getAgreementCount().then(() => (vm.initialized = true))
             }
         })
     },
@@ -491,29 +510,11 @@ export default {
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
             let escape_str = this.escape_str
-            window["vendors"] = this.vendors.map(e => {
-                e["_id"] = e["id"]
-                e["_str"] = e["name"]
-                return e
-            })
             let vendors_map = this.vendors.reduce((map, e) => {
                 map[e.id] = e
                 return map
             }, {})
-            let avs = [
-                "av_agreement_statuses",
-                "av_agreement_closure_reasons",
-                "av_agreement_renewal_priorities",
-            ]
-            let c = this
-            avs.forEach(function (av_cat) {
-                window[av_cat] = c.map_av_dt_filter(av_cat)
-            })
 
-            window["av_agreement_is_perpetual"] = [
-                { _id: 0, _str: _("No") },
-                { _id: 1, _str: _("Yes") },
-            ]
             return [
                 {
                     title: __("Name"),
@@ -536,7 +537,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return row.vendor_id != undefined
-                            ? escape_str(vendors_map[row.vendor_id].name)
+                            ? row.vendor_id //escape_str(vendors_map[row.vendor_id].name)
                             : ""
                     },
                 },
