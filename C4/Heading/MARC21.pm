@@ -404,7 +404,7 @@ sub _get_search_heading {
         my $code    = $subfields[$i]->[0];
         my $code_re = quotemeta $code;
         my $value   = $subfields[$i]->[1];
-        $value =~ s/[\s]*[-,.:=;!%\/][\s]*$//;
+        $value =~ s/[\s]*[-,.:=;!%\/]*[\s]*$//;
         next unless $subfields =~ qr/$code_re/;
         if ($first) {
             $first   = 0;
