@@ -219,14 +219,14 @@
                                         </tr>
                                     [% END %]
 
-                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
                                         <tr>
                                             <th scope="row">In</th>
                                             <td>
                                                 [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                                                     <p>[% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]</p>
                                                 [% ELSE %]
-                                                    <p>[% BIBLIO_RESULT.HOSTITEMENTRIES | html %]</p>
+                                                    <p>[% BIBLIO_RESULT.HOSTINFO | html %]</p>
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -298,12 +298,12 @@
                                             [% IF ( BIBLIO_RESULT.notes ) %]
                                                 <p>[% BIBLIO_RESULT.notes | html %]</p>
                                             [% END %]
-                                            [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                            [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
                                                 <p>In:
                                                 [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                                                     [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]
                                                 [% ELSE %]
-                                                    [% BIBLIO_RESULT.HOSTITEMENTRIES | html %]
+                                                    [% BIBLIO_RESULT.HOSTINFO | html %]
                                                 [% END %]
                                                 </p>
                                             [% END %]
