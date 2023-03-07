@@ -292,15 +292,6 @@ export default {
                         )
                     },
                 },
-                {
-                    title: __("Actions"),
-                    data: function (row, type, val, meta) {
-                        return '<div class="actions"></div>'
-                    },
-                    className: "actions noExport",
-                    searchable: false,
-                    orderable: false,
-                },
             ]
         },
     },
