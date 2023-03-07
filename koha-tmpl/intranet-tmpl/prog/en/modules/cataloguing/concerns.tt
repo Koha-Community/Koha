@@ -78,6 +78,17 @@
 
             var table_settings = [% TablesSettings.GetTableSettings('cataloguing', 'concerns', 'table_concerns', 'json') | $raw %];
 
+            var filtered = false;
+            let additional_filters = {
+                resolved_date: function(){
+                    if ( filtered ) {
+                        return { "=": null };
+                    } else {
+                        return;
+                    }
+                }
+            };
+
             var tickets_url = '/api/v1/tickets';
             var tickets = $("#table_concerns").kohaTable({
                 "ajax": {
@@ -168,15 +179,16 @@
                         "orderable": false
                     },
                 ]
-            }, table_settings, 1);
+            }, table_settings, 1, additional_filters);
 
             $('#hideResolved').on("click", function() {
-                // It would be great if we could pass null here but it gets stringified
-                tickets.DataTable().columns('3').search('special:undefined').draw();
+                filtered = true;
+                tickets.DataTable().draw();
             });
 
             $('#showAll').on("click", function() {
-                tickets.DataTable().columns('3').search('').draw();
+                filtered = false;
+                tickets.DataTable().draw();
             });
         });
     </script>

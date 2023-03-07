@@ -1353,6 +1353,18 @@ Note that permanent location is a code, and location may be an authval.
             $(document).ready(function() {
                 var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'concerns', 'table_concerns', 'json' ) | $raw %];
 
+                var filtered = false;
+                let additional_filters = {
+                    resolved_date: function(){
+                        if ( filtered ) {
+                            return { "=": null };
+                        } else {
+                            return;
+                        }
+                    },
+                    biblio_id: [% biblionumber | uri %]
+                };
+
                 var tickets_url = '/api/v1/tickets';
                 var tickets = $("#table_concerns").kohaTable({
                     "ajax": {
@@ -1434,15 +1446,16 @@ Note that permanent location is a code, and location may be an authval.
                             "orderable": false
                         },
                     ]
-                }, table_settings, 0, { biblio_id: [% biblionumber | uri %]});
+                }, table_settings, 0, additional_filters);
 
-                $('#hideResolved').on( "click", function() {
-                    // It would be great if we could pass null here but it gets stringified
-                    concerns.DataTable().columns('3').search('special:undefined').draw();
+                $('#hideResolved').on("click", function() {
+                    filtered = true;
+                    tickets.DataTable().draw();
                 });
 
-                $('#showAll').on( "click", function() {
-                    concerns.DataTable().columns('3').search('').draw();
+                $('#showAll').on("click", function() {
+                    filtered = false;
+                    tickets.DataTable().draw();
                 });
             });
         </script>
