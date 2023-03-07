@@ -50,6 +50,17 @@ export default {
                 },
                 buttons,
                 search: { search: this.$route.query.q },
+                columnDefs: [
+                    {
+                        targets: "_all",
+                        render: function (data, type, row, meta) {
+                            if (type == "display") {
+                                return escape_str(data)
+                            }
+                            return data
+                        },
+                    },
+                ],
                 ...this.options,
             },
             hidden_ids,

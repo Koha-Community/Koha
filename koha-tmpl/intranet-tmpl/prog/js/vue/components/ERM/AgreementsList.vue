@@ -224,7 +224,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/agreements/' +
                             row.agreement_id +
                             '" class="show">' +
-                            row.name +
+                            escape_str(row.name) +
                             "</a>"
                         )
                     },
@@ -235,7 +235,9 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.vendor_id != undefined ? row.vendor.name : ""
+                        return row.vendor_id != undefined
+                            ? escape_str(row.vendor.name)
+                            : ""
                     },
                 },
                 {
