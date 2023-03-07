@@ -45,7 +45,7 @@ export default {
                     ..._dt_default_ajax({ options: this.options }),
                 },
                 buttons,
-                default_search: this.$route.query.q,
+                search: { search: this.$route.query.q },
                 ...this.options,
             },
             hidden_ids,
@@ -180,10 +180,6 @@ export default {
         },
         table_settings: {
             type: Object,
-            required: false,
-        },
-        default_search: {
-            type: String,
             required: false,
         },
         add_filters: {
