@@ -95,6 +95,7 @@ export default {
             building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
+                options: { embed: "vendor" },
                 url: () => this.table_url(),
                 table_settings: this.agreement_table_settings,
                 add_filters: true,
@@ -211,10 +212,6 @@ export default {
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
             let escape_str = this.escape_str
-            let vendors_map = this.vendors.reduce((map, e) => {
-                map[e.id] = e
-                return map
-            }, {})
 
             return [
                 {
@@ -238,9 +235,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.vendor_id != undefined
-                            ? row.vendor_id //escape_str(vendors_map[row.vendor_id].name)
-                            : ""
+                        return row.vendor_id != undefined ? row.vendor.name : ""
                     },
                 },
                 {
