@@ -3,7 +3,13 @@
     <div v-else id="licenses_list">
         <Toolbar />
         <div v-if="license_count > 0" class="page-section">
-            <table :id="table_id"></table>
+            <KohaTable
+                ref="table"
+                v-bind="tableOptions"
+                @show="doShow"
+                @edit="doEdit"
+                @delete="doDelete"
+            ></KohaTable>
         </div>
         <div v-else class="dialog message">
             {{ $__("There are no licenses defined") }}
@@ -13,10 +19,10 @@
 
 <script>
 import Toolbar from "./LicensesToolbar.vue"
-import { inject, createVNode, render } from "vue"
+import { inject, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
-import { useDataTable } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -28,27 +34,48 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
-        const table_id = "license_list"
-        useDataTable(table_id)
+        const table = ref()
 
         return {
             vendors,
             get_lib_from_av,
             map_av_dt_filter,
-            table_id,
+            table,
             setConfirmationDialog,
             setMessage,
+            license_table_settings,
         }
     },
     data: function () {
         return {
             license_count: 0,
             initialized: false,
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: "/api/v1/erm/licenses",
+                options: { embed: "vendor" },
+                table_settings: this.license_table_settings,
+                add_filters: true,
+                filters_options: {
+                    1: () =>
+                        this.vendors.map(e => {
+                            e["_id"] = e["id"]
+                            e["_str"] = e["name"]
+                            return e
+                        }),
+                    3: () => this.map_av_dt_filter("av_license_types"),
+                    4: () => this.map_av_dt_filter("av_license_statuses"),
+                },
+                actions: {
+                    0: ["show"],
+                    "-1": ["edit", "delete"],
+                },
+            },
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getLicenseCount().then(() => vm.build_datatable())
+            vm.getLicenseCount().then(() => (vm.initialized = true))
         })
     },
     methods: {
@@ -57,277 +84,131 @@ export default {
             await client.licenses.count().then(
                 count => {
                     this.license_count = count
-                    this.initialized = true
                 },
                 error => {}
             )
         },
-        show_license: function (license_id) {
-            this.$router.push("/cgi-bin/koha/erm/licenses/" + license_id)
+        doShow: function (license, dt, event) {
+            event.preventDefault()
+            this.$router.push(
+                "/cgi-bin/koha/erm/licenses/" + license.license_id
+            )
         },
-        edit_license: function (license_id) {
-            this.$router.push("/cgi-bin/koha/erm/licenses/edit/" + license_id)
+        doEdit: function (license, dt, event) {
+            this.$router.push(
+                "/cgi-bin/koha/erm/licenses/edit/" + license.license_id
+            )
         },
-        delete_license: function (license_id, license_name) {
+        doDelete: function (license, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
                         "Are you sure you want to remove this license?"
                     ),
-                    message: license_name,
+                    message: license.name,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm
-                    client.licenses.delete(license_id).then(
+                    client.licenses.delete(license.license_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("License %s deleted").format(
-                                    license_name
+                                    license.name
                                 ),
                                 true
                             )
-                            $("#" + this.table_id)
-                                .DataTable()
-                                .ajax.url("/api/v1/erm/licenses")
-                                .draw()
+                            dt.draw()
                         },
                         error => {}
                     )
                 }
             )
         },
-        build_datatable: function () {
-            let show_license = this.show_license
-            let edit_license = this.edit_license
-            let delete_license = this.delete_license
+        getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
-            let map_av_dt_filter = this.map_av_dt_filter
-            let default_search = this.$route.query.q
-            let table_id = this.table_id
 
-            window["vendors"] = this.vendors.map(e => {
-                e["_id"] = e["id"]
-                e["_str"] = e["name"]
-                return e
-            })
-            let vendors_map = this.vendors.reduce((map, e) => {
-                map[e.id] = e
-                return map
-            }, {})
-            let avs = ["av_license_types", "av_license_statuses"]
-            avs.forEach(function (av_cat) {
-                window[av_cat] = map_av_dt_filter(av_cat)
-            })
-
-            $("#" + table_id).kohaTable(
+            return [
                 {
-                    ajax: {
-                        url: "/api/v1/erm/licenses",
-                    },
-                    order: [[0, "asc"]],
-                    search: { search: default_search },
-                    columnDefs: [
-                        {
-                            targets: [0, 1],
-                            render: function (data, type, row, meta) {
-                                if (type == "display") {
-                                    return escape_str(data)
-                                }
-                                return data
-                            },
-                        },
-                    ],
-                    columns: [
-                        {
-                            title: __("Name"),
-                            data: "me.license_id:me.name",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                // Rendering done in drawCallback
-                                return ""
-                            },
-                        },
-                        {
-                            title: __("Vendor"),
-                            data: "vendor_id",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return row.vendor_id != undefined
-                                    ? escape_str(
-                                          vendors_map[row.vendor_id].name
-                                      )
-                                    : ""
-                            },
-                        },
-
-                        {
-                            title: __("Description"),
-                            data: "description",
-                            searchable: true,
-                            orderable: true,
-                        },
-                        {
-                            title: __("Type"),
-                            data: "type",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_license_types",
-                                        row.type
-                                    )
-                                )
-                            },
-                        },
-                        {
-                            title: __("Status"),
-                            data: "status",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_license_statuses",
-                                        row.status
-                                    )
-                                )
-                            },
-                        },
-                        {
-                            title: __("Started on"),
-                            data: "started_on",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return $date(row.started_on)
-                            },
-                        },
-                        {
-                            title: __("Ended on"),
-                            data: "ended_on",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return $date(row.ended_on)
-                            },
-                        },
-                        {
-                            title: __("Actions"),
-                            data: function (row, type, val, meta) {
-                                return '<div class="actions"></div>'
-                            },
-                            className: "actions noExport",
-                            searchable: false,
-                            orderable: false,
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
-
-                        $.each(
-                            $(this).find("td .actions"),
-                            function (index, e) {
-                                let tr = $(this).parent().parent()
-                                let license_id = api.row(tr).data().license_id
-                                let license_name = api.row(tr).data().name
-                                let editButton = createVNode(
-                                    "a",
-                                    {
-                                        class: "btn btn-default btn-xs",
-                                        role: "button",
-                                        onClick: () => {
-                                            edit_license(license_id)
-                                        },
-                                    },
-                                    [
-                                        createVNode("i", {
-                                            class: "fa fa-pencil",
-                                            "aria-hidden": "true",
-                                        }),
-                                        __("Edit"),
-                                    ]
-                                )
-
-                                let deleteButton = createVNode(
-                                    "a",
-                                    {
-                                        class: "btn btn-default btn-xs",
-                                        role: "button",
-                                        onClick: () => {
-                                            delete_license(
-                                                license_id,
-                                                license_name
-                                            )
-                                        },
-                                    },
-                                    [
-                                        createVNode("i", {
-                                            class: "fa fa-trash",
-                                            "aria-hidden": "true",
-                                        }),
-                                        __("Delete"),
-                                    ]
-                                )
-
-                                let n = createVNode("span", {}, [
-                                    editButton,
-                                    " ",
-                                    deleteButton,
-                                ])
-                                render(n, e)
-                            }
+                    title: __("Name"),
+                    data: "me.license_id:me.name",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/cgi-bin/koha/erm/licenses/' +
+                            row.license_id +
+                            '" class="show">' +
+                            row.name +
+                            "</a>"
                         )
-
-                        $.each(
-                            $(this).find("tbody tr td:first-child"),
-                            function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
-                                let n = createVNode(
-                                    "a",
-                                    {
-                                        role: "button",
-                                        onClick: () => {
-                                            show_license(row.license_id)
-                                        },
-                                    },
-                                    `${row.name} (#${row.license_id})`
-                                )
-                                render(n, e)
-                            }
-                        )
-                    },
-                    preDrawCallback: function (settings) {
-                        $("#" + table_id)
-                            .find("thead th")
-                            .eq(1)
-                            .attr("data-filter", "vendors")
-                        $("#" + table_id)
-                            .find("thead th")
-                            .eq(3)
-                            .attr("data-filter", "av_license_types")
-                        $("#" + table_id)
-                            .find("thead th")
-                            .eq(4)
-                            .attr("data-filter", "av_license_statuses")
                     },
                 },
-                license_table_settings,
-                1
-            )
+                {
+                    title: __("Vendor"),
+                    data: "vendor_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.vendor_id != undefined ? row.vendor.name : ""
+                    },
+                },
+
+                {
+                    title: __("Description"),
+                    data: "description",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Type"),
+                    data: "type",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av("av_license_types", row.type)
+                        )
+                    },
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av("av_license_statuses", row.status)
+                        )
+                    },
+                },
+                {
+                    title: __("Started on"),
+                    data: "started_on",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return $date(row.started_on)
+                    },
+                },
+                {
+                    title: __("Ended on"),
+                    data: "ended_on",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return $date(row.ended_on)
+                    },
+                },
+            ]
         },
     },
     props: {
         av_license_types: Array,
         av_license_statuses: Array,
     },
-    components: { Toolbar },
+    components: { Toolbar, KohaTable },
     name: "LicensesList",
 }
 </script>

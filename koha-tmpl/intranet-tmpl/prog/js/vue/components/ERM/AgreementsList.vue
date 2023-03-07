@@ -50,7 +50,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
-import { inject, createVNode, render, ref } from "vue"
+import { inject, ref } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 import { build_url } from "../../composables/datatables"

@@ -62,7 +62,7 @@ export class ERMAPIClient extends HttpClient {
                 this.get({
                     endpoint: "licenses?" + (query || "_per_page=-1"),
                     headers: {
-                        "x-koha-embed": "vendor.name",
+                        "x-koha-embed": "vendor",
                     },
                 }),
             delete: (id) =>
