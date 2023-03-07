@@ -822,7 +822,7 @@ function _dt_on_visibility(add_filters, table_node, table_dt){
     }
 }
 
-function _dt_add_filters(table_node, table_dt) {
+function _dt_add_filters(table_node, table_dt, filters_options = {}) {
     $(table_node).find('thead tr').clone().appendTo( $(table_node).find('thead') );
 
     $(table_node).find('thead tr:eq(1) th').each( function (i) {
@@ -831,14 +831,19 @@ function _dt_add_filters(table_node, table_dt) {
         $(this).data('th-id', i);
         if ( is_searchable ) {
             let input_type = 'input';
-            if ( $(this).data('filter') ) {
+            if ( $(this).data('filter') || filters_options.hasOwnProperty(i)) {
                 input_type = 'select'
                 let filter_type = $(this).data('filter');
-                var existing_search = table_dt.column(i).search();
+                let existing_search = table_dt.column(i).search();
                 let select = $('<select><option value=""></option></select');
 
                 // FIXME eval here is bad and dangerous, how do we workaround that?
-                $(eval(filter_type)).each(function(){
+                if ( !filters_options.hasOwnProperty(i) ) {
+                    filters_options[i] = eval(filter_type)
+                } else if ( typeof filters_options[i] === "function" ) {
+                    filters_options[i] = filters_options[i]()
+                }
+                $(filters_options[i]).each(function(){
                     let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
                     if ( existing_search === this._id ) {
                         o.prop("selected", "selected");

@@ -120,7 +120,7 @@ export default {
         let dt = this.$refs.table.dt()
         let table_node = dt.table().node()
         if (this.add_filters) {
-            _dt_add_filters(table_node, dt)
+            _dt_add_filters(table_node, dt, this.filters_options)
         }
 
         dt.on("column-visibility.dt", function () {
@@ -187,6 +187,10 @@ export default {
         },
         add_filters: {
             type: Boolean,
+            required: false,
+        },
+        filters_options: {
+            type: Object,
             required: false,
         },
     },
