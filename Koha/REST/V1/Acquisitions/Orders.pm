@@ -183,9 +183,11 @@ sub list {
 
         $c->add_pagination_headers(
             {
-                total      => ($orders->is_paged ? $orders->pager->total_entries : $orders->count),
-                base_total => $total,
-                params     => $args,
+                base_total   => $total,
+                page         => $reserved_params->{_page},
+                per_page     => $reserved_params->{_per_page},
+                query_params => $args,
+                total        => ( $orders->is_paged ? $orders->pager->total_entries : $orders->count ),
             }
         );
 

@@ -60,9 +60,11 @@ sub list {
 
         $c->add_pagination_headers(
             {
-                base_total => $base_total,
-                total      => $total,
-                params     => $args,
+                base_total   => $base_total,
+                page         => $args->{_page},
+                per_page     => $args->{_per_page},
+                query_params => $args,
+                total        => $total,
             }
         );
         return $c->render( status => 200, openapi => \@packages );

@@ -104,9 +104,11 @@ sub list {
         $total = 10000 if $total > 10000;
         $c->add_pagination_headers(
             {
-                base_total => $base_total,
-                total      => $total,
-                params     => $args,
+                base_total   => $base_total,
+                page         => $page,
+                per_page     => $per_page,
+                query_params => $args,
+                total        => $total,
             }
         );
         return $c->render( status => 200, openapi => \@resources );
