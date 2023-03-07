@@ -2059,6 +2059,76 @@ sub is_denied_renewal {
     return 0;
 }
 
+=head3 api_strings_mapping
+
+Retrieves for each column name the unblessed authorised value.
+
+=cut
+
+sub api_strings_mapping {
+    my ( $self, $params ) = @_;
+
+    my $columns_info  = $self->_result->result_source->columns_info;
+    my $frameworkcode = $self->biblio->frameworkcode;
+    my $tagslib       = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
+    my $mss           = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
+
+    my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+
+    my $public_read_list = $params->{public} ? $self->public_read_list : [];
+    my $to_api_mapping   = $self->to_api_mapping;
+
+    # Hardcoded known 'authorised_value' values mapped to API codes
+    my $code_to_type = {
+        branches  => 'library',
+        cn_source => 'call_number_source',
+        itemtypes => 'item_type',
+    };
+
+    # Handle not null and default values for integers and dates
+    my $strings = {};
+
+    foreach my $col ( keys %{$columns_info} ) {
+
+        # Skip columns not in public read list
+        next
+          unless !$params->{public}
+          || any { $col eq $_ } $public_read_list;
+
+        # Skip columns that are not exposed on the API by to_api_mapping
+        # i.e. mapping exists but points to undef
+        next
+          if $col eq 'more_subfields_xml'    # not dealt with as a regular field
+          || ( exists $to_api_mapping->{$col} && !defined $to_api_mapping->{$col} );
+
+        # By now, we are done with known columns, now check the framework for mappings
+        my $field = $self->_result->result_source->name . '.' . $col;
+
+        # Check there's an entry in the MARC subfield structure for the field
+        if (   exists $mss->{$field}
+            && scalar @{ $mss->{$field} } > 0
+            && $mss->{$field}[0]->{authorised_value} )
+        {
+            my $subfield = $mss->{$field}[0];
+            my $code     = $subfield->{authorised_value};
+
+            my $str  = C4::Biblio::GetAuthorisedValueDesc( $itemtagfield, $subfield->{tagsubfield}, $self->$col, '', $tagslib, undef, $params->{public} );
+            my $type = exists $code_to_type->{$code} ? $code_to_type->{$code} : 'av';
+
+            # The _strings entry should match the API attribute name
+            my $mapped_attr = exists $to_api_mapping->{$col} ? $to_api_mapping->{$col} : $col;
+
+            $strings->{$mapped_attr} = {
+                str  => $str,
+                type => $type,
+                ( $type eq 'av' ? ( category => $code ) : () ),
+            };
+        }
+    }
+
+    return $strings;
+}
+
 =head3 _type
 
 =cut

@@ -12,6 +12,16 @@
         description: Search on the item's barcode
         required: false
         type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - +strings
+        collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"
@@ -62,6 +72,16 @@
     summary: Get item
     parameters:
       - $ref: "../swagger.yaml#/parameters/item_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - +strings
+        collectionFormat: csv
     consumes:
       - application/json
     produces:
