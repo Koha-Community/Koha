@@ -194,7 +194,7 @@ sub _search {
     my $self         = shift;
     my $index        = shift || undef;
     my $skipmetadata = shift || undef;
-    my $ind2         = $self->{field}->{_ind2};
+    my $thesaurus = $self->{thesaurus};
     my $subject_heading_thesaurus = '';
     my @marclist;
     my @and_or;
@@ -209,37 +209,35 @@ sub _search {
         push @value,    $self->{'search_form'};
     }
 
-    if ($self->{'thesaurus'}) {
-        if ($ind2 eq '0') {
+    if ( $thesaurus ) {
+    # This is calculated in C4/Heading/MARC21.pm - not used for UNIMARC
+        if ($thesaurus eq 'lcsh') {
             $subject_heading_thesaurus = 'a';
-        } elsif ($ind2 eq '1') {
+        } elsif ($thesaurus eq 'lcac') {
             $subject_heading_thesaurus = 'b';
-        } elsif ($ind2 eq '2') {
+        } elsif ($thesaurus eq 'mesh') {
             $subject_heading_thesaurus = 'c';
-        } elsif ($ind2 eq '3') {
+        } elsif ($thesaurus eq 'nal') {
             $subject_heading_thesaurus = 'd';
-        } elsif ($ind2 eq '4') {
+        } elsif ($thesaurus eq 'notspecified') {
             $subject_heading_thesaurus = 'n';
-        } elsif ($ind2 eq '5') {
+        } elsif ($thesaurus eq 'cash') {
             $subject_heading_thesaurus = 'k';
-        } elsif ($ind2 eq '6') {
+        } elsif ($thesaurus eq 'rvm') {
             $subject_heading_thesaurus = 'v';
-        } else {
+        } else { # We stored the value from $7 as the thesaurus if there was one
             $subject_heading_thesaurus = 'z';
+            push @marclist, 'thesaurus-conventions';
+            push @and_or, 'and';
+            push @excluding, '';
+            push @operator, 'is';
+            push @value, $self->{'thesaurus'};
         }
         push @marclist, 'thesaurus';
         push @and_or, 'and';
         push @excluding, '';
         push @operator, 'is';
         push @value, $subject_heading_thesaurus;
-    }
-
-    if ($ind2 eq '7') {
-        push @marclist, 'thesaurus-conventions';
-        push @and_or, 'and';
-        push @excluding, '';
-        push @operator, 'is';
-        push @value, $self->{'thesaurus'};
     }
 
     require Koha::SearchEngine::QueryBuilder;
