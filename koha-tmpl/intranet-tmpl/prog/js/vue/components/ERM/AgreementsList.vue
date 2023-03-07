@@ -522,11 +522,12 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        // Rendering done in drawCallback
                         return (
                             '<a href="/cgi-bin/koha/erm/agreements/' +
                             row.agreement_id +
-                            '" class="show">show</a>'
+                            '" class="show">' +
+                            row.name +
+                            "</a>"
                         )
                     },
                 },
