@@ -83,9 +83,11 @@ sub list {
 
         $c->add_pagination_headers(
             {
-                #base_total => $base_total,
-                total  => $total,
-                params => $args,
+               #base_total   => $base_total,
+                page         => $page,
+                per_page     => $per_page,
+                query_params => $args,
+                total        => $total,
             }
         );
         return $c->render( status => 200, openapi => \@titles );
