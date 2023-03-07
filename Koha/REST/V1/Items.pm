@@ -68,14 +68,15 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $item = Koha::Items->find($c->validation->param('item_id'));
+        my $items_rs = Koha::Items->new;
+        my $item = $c->objects->find($items_rs, $c->validation->param('item_id'));
         unless ( $item ) {
             return $c->render(
                 status => 404,
                 openapi => { error => 'Item not found'}
             );
         }
-        return $c->render( status => 200, openapi => $item->to_api );
+        return $c->render( status => 200, openapi => $item );
     }
     catch {
         $c->unhandled_exception($_);
