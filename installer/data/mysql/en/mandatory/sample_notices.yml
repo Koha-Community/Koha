@@ -718,6 +718,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
+            - "[%~ USE KohaDates ~%]"
             - "<h3><<branches.branchname>></h3>"
             - "Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />"
             - "(<<borrowers.cardnumber>>) <br />"
@@ -768,15 +769,17 @@ tables:
             - ""
             - "<hr>"
             - ""
+            - "[% IF additional_contents.count %]"
             - "<h4 style=\"text-align: center; font-style:italic;\">News</h4>"
-            - "<news>"
+            - "[% FOREACH content IN additional_contents %]"
             - "<div class=\"newsitem\">"
-            - "<h5 style=\"margin-bottom: 1px; margin-top: 1px\"><b><<additional_contents.title>></b></h5>"
-            - "<p style=\"margin-bottom: 1px; margin-top: 1px\"><<additional_contents.content>></p>"
-            - "<p class=\"newsfooter\" style=\"font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px\">Posted on <<additional_contents.published_on>></p>"
+            - "<h5 style=\"margin-bottom: 1px; margin-top: 1px\"><b>[% content.title %]</b></h5>"
+            - "<p style=\"margin-bottom: 1px; margin-top: 1px\">[% content.content %]</p>"
+            - "<p class=\"newsfooter\" style=\"font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px\">Posted on [% content.published_on | $KohaDates %]</p>"
             - "<hr />"
             - "</div>"
-            - "</news>"
+            - "[% END %]"
+            - "[% END %]"
 
         - module: circulation
           code: ODUE

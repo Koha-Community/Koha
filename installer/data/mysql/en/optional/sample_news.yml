@@ -22,24 +22,48 @@ description:
 
 tables:
   - additional_contents:
-      translatable: [ title, content ]
-      multiline: [ content ]
+      translatable: []
+      multiline: []
       rows:
-        - title: "Welcome to Koha"
+        - code: "News_1"
           category: "news"
-          code: "News_1"
           location: "staff_only"
-          content:
-            - "Welcome to Koha. Koha is a full-featured open-source ILS. Developed initially in New Zealand by Katipo Communications Ltd and first deployed in January of 2000 for Horowhenua Library Trust, Koha is currently maintained by a team of software providers and library technology staff from around the globe."
-          lang: "default"
           published_on: "2007-10-29 05:25:58"
           expirationdate: "2099-01-10"
           number: 1
 
-        - title: "What's Next?"
+        - code: "News_2"
           category: "news"
           location: "staff_only"
-          code: "News_2"
+          published_on: "2007-10-29 05:34:45"
+          expirationdate: "2099-01-10"
+          number: 2
+
+        - code: "CatalogConcernHelp_1"
+          category: "html_customizations"
+          location: "CatalogConcernHelp"
+          published_on: "2007-10-29 05:25:58"
+          expirationdate: "2099-01-10"
+          number: 1
+
+        - code: "CatalogConcernTemplate_1"
+          category: "html_customizations"
+          location: "CatalogConcernTemplate"
+          published_on: "2007-10-29 05:25:58"
+          expirationdate: "2099-01-10"
+          number: 1
+
+  - additional_contents_localizations:
+      translatable: [ title, content ]
+      multiline: [ content ]
+      rows:
+        - additional_content_id: 1
+          title: "Welcome to Koha"
+          content:
+            - "Welcome to Koha. Koha is a full-featured open-source ILS. Developed initially in New Zealand by Katipo Communications Ltd and first deployed in January of 2000 for Horowhenua Library Trust, Koha is currently maintained by a team of software providers and library technology staff from around the globe."
+          lang: "default"
+        - additional_content_id: 2
+          title: "What's Next?"
           content:
             - "Now that you've installed Koha, what's next? Here are some suggestions:"
             - "<ul>"
@@ -52,25 +76,15 @@ tables:
             - "</ul>"
             - ""
           lang: "default"
-          published_on: "2007-10-29 05:34:45"
-          expirationdate: "2099-01-10"
-          number: 2
 
-        - title: "Catalog concern help text"
-          category: "html_customizations"
-          location: "CatalogConcernHelp"
-          code: "CatalogConcernHelp_1"
+        - additional_content_id: 3
+          title: "Catalog concern help text"
           content:
               - "Please describe your concern clearly and the library will try to deal with it as quickly as possible"
           lang: "default"
-          published_on: "2007-10-29 05:25:58"
-          expirationdate: "2099-01-10"
-          number: 1
 
-        - title: "Catalog concern template text"
-          category: "html_customizations"
-          location: "CatalogConcernTemplate"
-          code: "CatalogConcernTemplate_1"
+        - additional_content_id: 4
+          title: "Catalog concern template text"
           content:
             - "**Describe the concern**"
             - "A clear and concise description of what the concern is."
@@ -85,6 +99,3 @@ tables:
             - "**Expected behavior**"
             - "A clear and concise description of what you expected to happen."
           lang: "default"
-          published_on: "2007-10-29 05:25:58"
-          expirationdate: "2099-01-10"
-          number: 1
