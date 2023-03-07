@@ -66,11 +66,11 @@
                     <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
                         [% WRAPPER tabs id= "tabs" %]
                             [% WRAPPER tabs_nav %]
-                                [% WRAPPER tab_item tabname= "records_to_import" bt_active= 1 %] Select to import [% END %]
+                                [% WRAPPER tab_item tabname= "records_to_import" bt_active= 1 %] <span>Select to import</span> [% END %]
                                 [% IF items %]
-                                    [% WRAPPER tab_item tabname= "items_info" %] Item information [% END %]
+                                    [% WRAPPER tab_item tabname= "items_info" %] <span>Item information</span> [% END %]
                                 [% END %]
-                                [% WRAPPER tab_item tabname= "accounting_details" %] Default accounting details [% END %]
+                                [% WRAPPER tab_item tabname= "accounting_details" %] <span>Default accounting details</span> [% END %]
                             [% END %]
 
                             [% WRAPPER tab_panels %]
