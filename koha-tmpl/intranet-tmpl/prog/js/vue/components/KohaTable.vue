@@ -42,7 +42,10 @@ export default {
                 processing: true,
                 ajax: {
                     url: typeof this.url === "function" ? this.url() : this.url,
-                    ..._dt_default_ajax({ options: this.options }),
+                    ..._dt_default_ajax({
+                        options: this.options,
+                        default_filters: this.default_filters,
+                    }),
                 },
                 buttons,
                 search: { search: this.$route.query.q },
