@@ -283,7 +283,13 @@
                 [% END # /IF no_op_set %]
 
                 [% IF add_form or copy_form %]
-                    <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
+                    <h1>
+                        [% IF ( modify ) %]
+                            <span>Modify notice</span>
+                        [% ELSE %]
+                            <span>Add notice</span>
+                        [% END %]
+                    </h1>
 
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
@@ -435,7 +441,7 @@
                                             [% CASE 'HOLD_SLIP' %]
                                                 <input type="text" id="data_preview" name="data_preview" value="" placeholder="biblionumber|borrowernumber" />
                                             [% CASE %]
-                                                Not supported yet.
+                                                <span>Not supported yet.</span>
                                         [% END %]
                                     </li>
                                 [% END # /IF code %]
@@ -446,7 +452,7 @@
                             <div style="clear:both"></div>
                             [% WRAPPER tabs id= "tabs" %]
                                 [% WRAPPER tabs_nav %]
-                                    [% WRAPPER tab_item tabname= "lang_default" bt_active= 1 %] Default [% END %]
+                                    [% WRAPPER tab_item tabname= "lang_default" bt_active= 1 %] <span>Default</span> [% END %]
                                     [% FOR language IN languages %]
                                         [% FOR sublanguage IN language.sublanguages_loop %]
                                             [% IF language.plural %]

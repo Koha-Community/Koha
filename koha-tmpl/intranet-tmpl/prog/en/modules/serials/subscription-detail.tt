@@ -95,12 +95,12 @@
 
                 [% WRAPPER tabs id= "subscription_description" %]
                     [% WRAPPER tabs_nav %]
-                        [% WRAPPER tab_item tabname= "subscription_info" bt_active= 1 %] Information [% END %]
-                        [% WRAPPER tab_item tabname= "subscription_planning" %] Planning [% END %]
-                        [% WRAPPER tab_item tabname= "subscription_issues" %] Issues [% END %]
-                        [% WRAPPER tab_item tabname= "subscription_summary" %] Summary [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_info" bt_active= 1 %] <span>Information</span> [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_planning" %] <span>Planning</span> [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_issues" %] <span>Issues</span> [% END %]
+                        [% WRAPPER tab_item tabname= "subscription_summary" %] <span>Summary</span> [% END %]
                         [% IF orders_grouped.size %]
-                            [% WRAPPER tab_item tabname= "acquisition_details" %] Acquisition details [% END %]
+                            [% WRAPPER tab_item tabname= "acquisition_details" %] <span>Acquisition details</span> [% END %]
                         [% END %]
                     [% END # /WRAPPER tabs_nav %]
 
