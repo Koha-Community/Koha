@@ -40,6 +40,7 @@ export default {
                 searching: true,
                 pagingType: "full_numbers",
                 processing: true,
+                autoWidth: false,
                 ajax: {
                     url: typeof this.url === "function" ? this.url() : this.url,
                     ..._dt_default_ajax({
