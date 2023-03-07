@@ -36,7 +36,7 @@ $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'get_marc_host' => sub {
-    plan tests => 17;
+    plan tests => 18;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
@@ -97,6 +97,8 @@ subtest 'get_marc_host' => sub {
     is_deeply( $host_only, $host, "Host only retrieved successfully" );
     my $relatedparts_only = $bib1->get_marc_relatedparts_only;
     is_deeply( $relatedparts_only, $relatedparts, "Related parts only retrieved successfully" );
+    my $hostinfo_only = $bib1->get_marc_hostinfo_only;
+    is_deeply( $hostinfo_only, $info, "Host info only retrieved successfully");
 
     $marc->field('773')->delete_subfield( code => 't' ); # restore
 

@@ -11,6 +11,7 @@ return {
 ('catalogue','LIST','','Send list',1,'Your list: [% listname | html %]',"[%- USE Branches -%]
 [%- USE AuthorisedValues -%]
 [%- USE Koha -%]
+[%- PROCESS 'html_helpers.inc' -%]
 Hi,<br><br>
 [% borrower.firstname | html %] [% borrower.surname | html %] sent you a list from our online catalog called: [% listname | html %].<br>
 Please note that the attached file is a MARC bibliographic records file which can be imported into personal bibliographic software like EndNote, Reference Manager or ProCite.<br>
@@ -28,7 +29,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% IF ( biblio.unititle ) %]Unified title: [% biblio.unititle | html %]<br>[% END %]
 [% IF ( biblio.serial ) %]Serial: [% biblio.serial | html %]<br>[% END %]
 [% IF ( biblioitem.lccn ) %]LCCN: [% biblioitem.lccn | html %]<br>[% END %]
-[% IF ( biblio.get_marc_host_only ) %]In: [% FOREACH entry IN biblio.get_marc_host_only %][% entry.title | html %][% IF ( entry.subtitle ) %][% FOREACH subtitle IN entry.subtitle.split(' | ') %][% subtitle | html %][% END %][% END %][% entry.part_number | html %] [% entry.part_name | html %]<br>[% END %] [% biblio.get_marc_relatedparts_only %][% END %]
+[% IF ( biblio.get_marc_host_only || biblio.get_marc_hostinfo_only ) %]In: [% IF biblio.get_marc_host_only.biblionumber %][% INCLUDE 'biblio-title.inc'  biblio=biblio.get_marc_host_only %] [% biblio.get_marc_relatedparts_only %][% ELSE %][% biblio.get_marc_hostinfo_only %][% END %]<br>[% END %]
 [% IF ( biblioitem.url ) %]URL: [% biblioitem.url | html %]<br>[% END %]
 <a href='[% Koha.Preference('OpacBaseUrl') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]'>View in online catalog</a>
 [% IF ( biblio.items.count > 0 ) %]<br>Items: <ul>[% FOREACH item IN biblio.items %]<li>[% Branches.GetName( item.holdingbranch ) | html %]
@@ -39,6 +40,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 ('catalogue','CART','','Send cart',1,'Your cart',"[%- USE Branches -%]
 [%- USE AuthorisedValues -%]
 [%- USE Koha -%]
+[%- PROCESS 'html_helpers.inc' -%]
 Hi,<br><br>
 [% borrower.firstname | html %] [% borrower.surname | html %] sent you a cart from our online catalog.<br>
 Please note that the attached file is a MARC bibliographic records file which can be imported into personal bibliographic software like EndNote, Reference Manager or ProCite.<br>
@@ -56,7 +58,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% IF ( biblio.unititle ) %]Unified title: [% biblio.unititle | html %]<br>[% END %]
 [% IF ( biblio.serial ) %]Serial: [% biblio.serial | html %]<br>[% END %]
 [% IF ( biblioitem.lccn ) %]LCCN: [% biblioitem.lccn | html %]<br>[% END %]
-[% IF ( biblio.get_marc_host_only ) %]In: [% FOREACH entry IN biblio.get_marc_host_only %][% entry.title | html %][% IF ( entry.subtitle ) %][% FOREACH subtitle IN entry.subtitle.split(' | ') %][% subtitle | html %][% END %][% END %][% entry.part_number | html %] [% entry.part_name | html %]<br>[% END %] [% biblio.get_marc_relatedparts_only %][% END %]
+[% IF ( biblio.get_marc_host_only || biblio.get_marc_hostinfo_only ) %]In: [% IF biblio.get_marc_host_only.biblionumber %][% INCLUDE 'biblio-title.inc'  biblio=biblio.get_marc_host_only %] [% biblio.get_marc_relatedparts_only %][% ELSE %][% biblio.get_marc_hostinfo_only %][% END %]<br>[% END %]
 [% IF ( biblioitem.url ) %]URL: [% biblioitem.url | html %]<br>[% END %]
 <a href='[% Koha.Preference('OpacBaseUrl') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]'>View in online catalog</a>
 [% IF ( biblio.items.count > 0 ) %]<br>Items: <ul>[% FOREACH item IN biblio.items %]<li>[% Branches.GetName( item.holdingbranch ) | html %]

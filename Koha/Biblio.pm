@@ -1354,6 +1354,22 @@ sub get_marc_relatedparts_only {
     return $relatedparts;
 }
 
+=head3 get_marc_hostinfo_only
+
+    my $hostinfo = $biblio->get_marc_hostinfo_only;
+
+Return host info only
+
+=cut
+
+sub get_marc_hostinfo_only {
+    my ($self) = @_;
+
+    my ( $host, $relatedparts, $hostinfo ) = $self->get_marc_host;
+
+    return $hostinfo;
+}
+
 =head3 recalls
 
     my $recalls = $biblio->recalls;
