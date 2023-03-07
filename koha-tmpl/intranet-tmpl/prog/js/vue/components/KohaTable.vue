@@ -123,12 +123,13 @@ export default {
     mounted() {
         let dt = this.$refs.table.dt()
         let table_node = dt.table().node()
-        if (this.add_filters) {
+        let add_filters = this.add_filters
+        if (add_filters) {
             _dt_add_filters(table_node, dt, this.filters_options)
         }
 
         dt.on("column-visibility.dt", function () {
-            _dt_on_visibility(this.add_filters, table_node, dt)
+            _dt_on_visibility(add_filters, table_node, dt)
         })
             .columns(this.hidden_ids)
             .visible(false)
