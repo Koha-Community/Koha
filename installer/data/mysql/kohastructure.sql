@@ -217,6 +217,7 @@ CREATE TABLE `additional_contents_localizations` (
   `title` varchar(250) NOT NULL DEFAULT '' COMMENT 'title of the additional content',
   `content` mediumtext NOT NULL COMMENT 'the body of your additional content',
   `lang` varchar(50) NOT NULL DEFAULT '' COMMENT 'lang',
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
   PRIMARY KEY (`id`),
   UNIQUE KEY `additional_contents_localizations_uniq` (`additional_content_id`,`lang`),
   CONSTRAINT `additional_contents_localizations_ibfk1` FOREIGN KEY (`additional_content_id`) REFERENCES `additional_contents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

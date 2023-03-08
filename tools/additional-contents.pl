@@ -135,23 +135,26 @@ elsif ( $op eq 'add_validate' ) {
                     next unless $title || $content;
 
                     push @seen_ids, $id;
-                    push @translated_contents,
-                      {
+                    my $translated_content = {
                         title   => $title,
                         content => $content,
                         lang    => $lang,
-                      };
+                    };
 
-                    if ( C4::Context->preference("NewsLog") ) {
-                        my $existing_content = $existing_contents->find($id);
-                        if ( $existing_content ) {
-                            if ( $existing_content->title ne $title || $existing_content->content ne $content ) {
+                    my $existing_content = $existing_contents->find($id);
+                    if ( $existing_content ) {
+                        if ( $existing_content->title ne $title || $existing_content->content ne $content ) {
+                            if ( C4::Context->preference("NewsLog") ) {
                                 logaction('NEWS', 'MODIFY' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content));
                             }
                         } else {
-                            logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
+                            $translated_content->{updated_on} = $existing_content->updated_on;
                         }
+                    } elsif( C4::Context->preference("NewsLog") ) {
+                        logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
                     }
+
+                    push @translated_contents, $translated_content;
                 }
 
                 if ( C4::Context->preference("NewsLog") ) {

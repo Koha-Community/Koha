@@ -20,6 +20,7 @@ return {
                     `title` varchar(250) NOT NULL DEFAULT '' COMMENT 'title of the additional content',
                     `content` mediumtext NOT NULL COMMENT 'the body of your additional content',
                     `lang` varchar(50) NOT NULL DEFAULT '' COMMENT 'lang',
+                    `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
                     PRIMARY KEY (`id`),
                     UNIQUE KEY `additional_contents_localizations_uniq` (`additional_content_id`,`lang`),
                     CONSTRAINT `additional_contents_localizations_ibfk1` FOREIGN KEY (`additional_content_id`) REFERENCES `additional_contents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -29,19 +30,19 @@ return {
 
             my $contents = $dbh->selectall_arrayref(q{SELECT MIN(id) AS id, category, code, branchcode FROM additional_contents GROUP BY category, code, branchcode}, { Slice => {} });
             my $sth_insert = $dbh->prepare(q{
-                INSERT INTO additional_contents_localizations(additional_content_id, title, content, lang)
-                VALUES(?, ?, ?, ?)
+                INSERT INTO additional_contents_localizations(additional_content_id, title, content, lang, updated_on)
+                VALUES(?, ?, ?, ?, ?)
             });
             for my $content ( @$contents ) {
                 my $q = q{
-                    SELECT title, content, lang, branchcode
+                    SELECT title, content, lang, branchcode, updated_on
                     FROM additional_contents
                     WHERE category=? AND code=? AND
                 };
                 $q .= defined $content->{branchcode} ? " branchcode = ?" : " branchcode IS NULL";
                 my $translated_contents = $dbh->selectall_arrayref($q, { Slice => {} }, $content->{category}, $content->{code}, defined $content->{branchcode} ? $content->{branchcode} : ());
                 for my $translated_content ( @$translated_contents ) {
-                    $sth_insert->execute($content->{id}, $translated_content->{title}, $translated_content->{content}, $translated_content->{lang});
+                    $sth_insert->execute($content->{id}, $translated_content->{title}, $translated_content->{content}, $translated_content->{lang}, $translated_content->{updated_on});
                 }
             }
             $dbh->do(q{

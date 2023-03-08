@@ -66,6 +66,15 @@ the body of your additional content
 
 lang
 
+=head2 updated_on
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+last modification
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -89,6 +98,13 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 0 },
   "lang",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
+  "updated_on",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -140,8 +156,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-08 08:09:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KRaaWslsavWVmDbZF/NwcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-08 09:59:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7N/mHMqyPJJsYaA8V968wQ
 
 sub koha_object_class {
     'Koha::AdditionalContentsLocalization';

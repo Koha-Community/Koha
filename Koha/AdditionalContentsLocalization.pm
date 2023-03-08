@@ -150,19 +150,6 @@ sub published_on {
     return $self->additional_content->published_on(@params);
 }
 
-=head3 updated_on
-
-    $c->updated_on;
-
-Return the date of the last update of the content
-
-=cut
-
-sub updated_on {
-    my ( $self, @params ) = @_;
-    return $self->additional_content->updated_on(@params);
-}
-
 =head3 expirationdate
 
     $c->expirationdate;
