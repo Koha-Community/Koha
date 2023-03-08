@@ -175,7 +175,7 @@ export default {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
-                        "Are you sure you want to delete this agreement?"
+                        "Are you sure you want to remove this agreement?"
                     ),
                     message: agreement.name,
                     accept_label: this.$__("Yes, delete"),
@@ -240,7 +240,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/agreements/' +
                             row.agreement_id +
                             '" class="show">' +
-                            escape_str(row.name) +
+                            escape_str(`${row.name} (#${row.agreement_id})`) +
                             "</a>"
                         )
                     },
