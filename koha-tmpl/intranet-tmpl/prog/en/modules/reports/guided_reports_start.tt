@@ -2187,6 +2187,10 @@
                 mana_use( $(this).data("report_id") );
             });
 
+            $("#mana_search_result").on("shown.bs.modal", function(){
+                $("#mana_search_field").focus();
+            });
+
             $("#mana_search_result").on("hide.bs.modal", function(){
                 $("#mana_result_content").html("");
                 $("#mana_search_field").val("");
