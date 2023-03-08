@@ -509,9 +509,10 @@ sub import_biblios_list {
         my $sort1 = $infos->{sort1};
         my $sort2 = $infos->{sort2};
         my $budget_id;
-        if($budget_code) {
+
+        if ($budget_code) {
             my $biblio_budget = GetBudgetByCode($budget_code);
-            if($biblio_budget) {
+            if ($biblio_budget) {
                 $budget_id = $biblio_budget->{budget_id};
             }
         }
@@ -519,56 +520,30 @@ sub import_biblios_list {
         # Items
         my @itemlist = ();
         my $all_items_quantity = 0;
-        my $alliteminfos = get_infos_syspref_on_item('MarcItemFieldsToOrder', $marcrecord, ['homebranch', 'holdingbranch', 'itype', 'nonpublic_note', 'public_note', 'loc', 'ccode', 'notforloan', 'uri', 'copyno', 'price', 'replacementprice', 'itemcallnumber', 'quantity', 'budget_code']);
+        my $alliteminfos = get_marc_item_fields_to_order($marcrecord);
         if ($alliteminfos != -1) {
             foreach my $iteminfos (@$alliteminfos) {
-                my $item_homebranch = $iteminfos->{homebranch};
-                my $item_holdingbranch = $iteminfos->{holdingbranch};
-                my $item_itype = $iteminfos->{itype};
-                my $item_nonpublic_note = $iteminfos->{nonpublic_note};
-                my $item_public_note = $iteminfos->{public_note};
-                my $item_loc = $iteminfos->{loc};
-                my $item_ccode = $iteminfos->{ccode};
-                my $item_notforloan = $iteminfos->{notforloan};
-                my $item_uri = $iteminfos->{uri};
-                my $item_copyno = $iteminfos->{copyno};
-                my $item_quantity = $iteminfos->{quantity} || 1;
-                my $item_budget_code = $iteminfos->{budget_code};
-                my $item_budget_id;
-                if ( $iteminfos->{budget_code} ) {
-                    my $item_budget = GetBudgetByCode( $iteminfos->{budget_code} );
-                    if ( $item_budget ) {
-                        $item_budget_id = $item_budget->{budget_id};
-                    }
+                # Quantity is required, default to one if not supplied
+                my $quantity = delete $iteminfos->{quantity} || 1;
+
+                # Handle incorrectly named original parameters for MarcItemFieldsToOrder
+                $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
+                $iteminfos->{copynumber} = delete $iteminfos->{copyno} if $iteminfos->{copyno};
+
+                # Convert budge code to a budget id
+                my $item_budget_code = delete $iteminfos->{budget_code};
+                if ( $item_budget_code ) {
+                    my $item_budget = GetBudgetByCode( $item_budget_code );
+                    $iteminfos->{budget_id} = $item_budget->{budget_id} || $budget_id;
                 }
-                my $item_price = $iteminfos->{price};
-                my $item_replacement_price = $iteminfos->{replacementprice};
-                my $item_callnumber = $iteminfos->{itemcallnumber};
 
-                for (my $i = 0; $i < $item_quantity; $i++) {
-
-                    my %itemrecord = (
-                        'item_id' => $item_id++,
-                        'biblio_count' => $biblio_count,
-                        'homebranch' => $item_homebranch,
-                        'holdingbranch' => $item_holdingbranch,
-                        'itype' => $item_itype,
-                        'nonpublic_note' => $item_nonpublic_note,
-                        'public_note' => $item_public_note,
-                        'loc' => $item_loc,
-                        'ccode' => $item_ccode,
-                        'notforloan' => $item_notforloan,
-                        'uri' => $item_uri,
-                        'copyno' => $item_copyno,
-                        'quantity' => $item_quantity,
-                        'budget_id' => $item_budget_id || $budget_id,
-                        'itemprice' => $item_price || $price,
-                        'replacementprice' => $item_replacement_price || $replacementprice,
-                        'itemcallnumber' => $item_callnumber,
-                    );
+                # Clone the item data for the needed quantity
+                # Add the incremented item id for each item in that quantity
+                for (my $i = 0; $i < $quantity; $i++) {
+                    my $itemrecord = { %$iteminfos };
+                    $itemrecord->{item_id} = $item_id++;
                     $all_items_quantity++;
-                    push @itemlist, \%itemrecord;
-
+                    push @itemlist, $itemrecord;
                 }
             }
 
@@ -704,9 +679,10 @@ sub equal_number_of_fields {
     return $tags_count;
 }
 
-sub get_infos_syspref_on_item {
-    my ($syspref_name, $record, $field_list) = @_;
-    my $syspref = C4::Context->preference($syspref_name);
+sub get_marc_item_fields_to_order {
+    my ($record) = @_;
+
+    my $syspref = C4::Context->preference('MarcItemFieldsToOrder');
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
         YAML::XS::Load(Encode::encode_utf8($syspref));
@@ -715,12 +691,12 @@ sub get_infos_syspref_on_item {
         warn "Unable to parse $syspref syspref : $@";
         return ();
     }
+
     my @result;
     my @tags_list;
 
     # Check tags in syspref definition
-    for my $field_name ( @$field_list ) {
-        next unless exists $yaml->{$field_name};
+    for my $field_name ( keys %$yaml ) {
         my @fields = split /\|/, $yaml->{$field_name};
         for my $field ( @fields ) {
             my ( $f, $sf ) = split /\$/, $field;
@@ -746,8 +722,7 @@ sub get_infos_syspref_on_item {
 
     for (my $i = 0; $i < $tags_count; $i++) {
         my $r;
-        for my $field_name ( @$field_list ) {
-            next unless exists $yaml->{$field_name};
+        for my $field_name ( keys %$yaml ) {
             my @fields = split /\|/, $yaml->{$field_name};
             for my $field ( @fields ) {
                 my ( $f, $sf ) = split /\$/, $field;
