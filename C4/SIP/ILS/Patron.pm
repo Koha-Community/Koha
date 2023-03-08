@@ -26,10 +26,11 @@ use C4::Auth qw(checkpw);
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Checkouts;
 
 our $kp;    # koha patron
 
-=head1 Methods
+=head1 METHODS
 
 =cut
 
@@ -209,7 +210,6 @@ my %fields = (
     too_many_overdue        => 0,   # for patron_status[6]
     too_many_renewal        => 0,   # for patron_status[7]
     too_many_claim_return   => 0,   # for patron_status[8]
-    too_many_lost           => 0,   # for patron_status[9]
 #   excessive_fines         => 0,   # for patron_status[10]
 #   excessive_fees          => 0,   # for patron_status[11]
     recall_overdue          => 0,   # for patron_status[12]
@@ -287,6 +287,24 @@ sub check_password {
 }
 
 # A few special cases, not in AUTOLOADed %fields
+
+=head2 too_many_lost
+
+This method checks if number of checkouts of lost items exceeds a threshold (defined in server account).
+
+=cut
+
+sub too_many_lost {
+    my ( $self, $server ) = @_;
+    my $too_many_lost = 0;
+    if( $server && $server->{account} && ( my $lost_block_checkout = $server->{account}->{lost_block_checkout} )) {
+        my $lost_block_checkout_value = $server->{account}->{lost_block_checkout_value} // 1;
+        my $lost_checkouts = Koha::Checkouts->search({ borrowernumber => $self->borrowernumber, 'itemlost' => { '>=', $lost_block_checkout_value } }, { join => 'item'} )->count;
+        $too_many_lost = $lost_checkouts >= $lost_block_checkout;
+    }
+    return $too_many_lost;
+}
+
 sub fee_amount {
     my $self = shift;
     if ( $self->{fines} ) {
