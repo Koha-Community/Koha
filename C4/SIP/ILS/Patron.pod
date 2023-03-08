@@ -41,7 +41,7 @@ and to display information about the patron's borrowing activity.
 	$bool = $patron->too_many_overdue;
 	$bool = $patron->too_many_renewal;
 	$bool = $patron->too_many_claim_return;
-	$bool = $patron->too_many_lost;
+	$bool = $patron->too_many_lost( $server );
 	$bool = $patron->excessive_fines;
 	$bool = $patron->excessive_fees;
 	$bool = $patron->too_many_billed;
@@ -149,7 +149,7 @@ checking if they're authorized to perform various actions:
 	$bool = $patron-E<gt>too_many_overdue;
 	$bool = $patron-E<gt>too_many_renewal;
 	$bool = $patron-E<gt>too_many_claim_return;
-	$bool = $patron-E<gt>too_many_lost;
+	$bool = $patron-E<gt>too_many_lost( $server );
 	$bool = $patron-E<gt>excessive_fines;
 	$bool = $patron-E<gt>excessive_fees;
 	$bool = $patron-E<gt>too_many_billed;
