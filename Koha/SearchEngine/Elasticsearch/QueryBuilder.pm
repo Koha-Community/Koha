@@ -564,6 +564,16 @@ our $koha_to_index_name = {
     all             => ''
 };
 
+our $thesaurus_to_value = {
+   lcsh => 'a',
+   lcac => 'b',
+   mesh => 'c',
+   nal  => 'd',
+   notspecified => 'n',
+   cash => 'k',
+   rvm => 'v',
+};
+
 sub build_authorities_query_compat {
     my ( $self, $marclist, $and_or, $excluding, $operator, $value,
         $authtypecode, $orderby )
@@ -588,6 +598,8 @@ sub build_authorities_query_compat {
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
+        $value->[$i] = $thesaurus_to_value->{ $value->[$i] }
+            if( defined $thesaurus_to_value->{ $value->[$i] } && $indexes[$i] eq 'subject-heading-thesaurus' );
         push @searches,
           {
             where    => $indexes[$i],

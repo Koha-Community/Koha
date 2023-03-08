@@ -104,8 +104,7 @@ subtest "_search tests" => sub {
     $terms = $search_query->{query}->{bool}->{must};
     $expected_terms = [
         { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
-        { term => { 'subject-heading-thesaurus-conventions.ci_raw' => 'special_sauce' } },
-        { term => { 'subject-heading-thesaurus.ci_raw' => 'z' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => 'special_sauce' } },
     ];
     is_deeply( $terms, $expected_terms, "Search formed as expected with second indicator 7 and subfield 2");
 

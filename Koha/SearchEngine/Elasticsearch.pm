@@ -233,7 +233,10 @@ sub get_elasticsearch_mappings {
                 }
             }
         );
-        $mappings->{properties}{ 'match-heading' } = _get_elasticsearch_field_config('search', 'text') if $self->index eq 'authorities';
+        if( $self->index eq 'authorities' ){
+            $mappings->{properties}{ 'match-heading' } = _get_elasticsearch_field_config('search', 'text');
+            $mappings->{properties}{ 'subject-heading-thesaurus' } = _get_elasticsearch_field_config('search', 'text');
+        }
         $all_mappings{$self->index} = $mappings;
     }
     $self->sort_fields(\%{$sort_fields{$self->index}});
@@ -1164,6 +1167,11 @@ sub _get_marc_mapping_rules {
                 }
             }
         }
+    }
+
+    if( $self->index eq 'authorities' ){
+        push @{$rules->{control_fields}->{'008'}}, ['subject-heading-thesaurus', { 'substr' => [ 11, 1 ] } ];
+        push @{$rules->{data_fields}->{'040'}->{subfields}->{f}}, ['subject-heading-thesaurus', { } ];
     }
 
     return $rules;

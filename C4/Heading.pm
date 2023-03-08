@@ -210,34 +210,11 @@ sub _search {
     }
 
     if ( $thesaurus ) {
-    # This is calculated in C4/Heading/MARC21.pm - not used for UNIMARC
-        if ($thesaurus eq 'lcsh') {
-            $subject_heading_thesaurus = 'a';
-        } elsif ($thesaurus eq 'lcac') {
-            $subject_heading_thesaurus = 'b';
-        } elsif ($thesaurus eq 'mesh') {
-            $subject_heading_thesaurus = 'c';
-        } elsif ($thesaurus eq 'nal') {
-            $subject_heading_thesaurus = 'd';
-        } elsif ($thesaurus eq 'notspecified') {
-            $subject_heading_thesaurus = 'n';
-        } elsif ($thesaurus eq 'cash') {
-            $subject_heading_thesaurus = 'k';
-        } elsif ($thesaurus eq 'rvm') {
-            $subject_heading_thesaurus = 'v';
-        } else { # We stored the value from $7 as the thesaurus if there was one
-            $subject_heading_thesaurus = 'z';
-            push @marclist, 'thesaurus-conventions';
-            push @and_or, 'and';
-            push @excluding, '';
-            push @operator, 'is';
-            push @value, $self->{'thesaurus'};
-        }
         push @marclist, 'thesaurus';
         push @and_or, 'and';
         push @excluding, '';
         push @operator, 'is';
-        push @value, $subject_heading_thesaurus;
+        push @value, $thesaurus;
     }
 
     require Koha::SearchEngine::QueryBuilder;
