@@ -53,14 +53,19 @@
                 >
             </div>
             <div id="package_list_result" class="page-section">
-                <table :id="table_id"></table>
+                <KohaTable
+                    v-if="show_table"
+                    ref="table"
+                    v-bind="tableOptions"
+                    @show="doShow"
+                ></KohaTable>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { inject, createVNode, render } from "vue"
+import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 import {
@@ -68,6 +73,7 @@ import {
     build_url_params,
     build_url,
 } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -79,29 +85,62 @@ export default {
             storeToRefs(AVStore)
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
-        const table_id = "package_list"
-        useDataTable(table_id)
+        const table = ref()
+        const filters = reactive({
+            package_name: "",
+            content_type: "",
+            selection_type: "",
+        })
 
         return {
             vendors,
             av_package_types,
             av_package_content_types,
             get_lib_from_av,
+            escape_str,
             map_av_dt_filter,
             erm_providers,
-            table_id,
+            table,
         }
     },
     data: function () {
+        this.filters = {
+            package_name: this.$route.query.package_name || "",
+            content_type: this.$route.query.content_type || "",
+            selection_type: this.$route.query.selection_type || "",
+        }
+        let filters = this.filters
+
         return {
             packages: [],
             initialized: true,
-            filters: {
-                package_name: this.$route.query.package_name || "",
-                content_type: this.$route.query.content_type || "",
-                selection_type: this.$route.query.selection_type || "",
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: "/api/v1/erm/eholdings/ebsco/packages",
+                options: {
+                    embed: "resources+count,vendor.name",
+                    ordering: false,
+                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                    aLengthMenu: [
+                        [10, 20, 50, 100],
+                        [10, 20, 50, 100],
+                    ],
+                },
+                table_settings: this.eholdings_titles_table_settings,
+                actions: { 0: ["show"] },
+                default_filters: {
+                    name: function () {
+                        return filters.package_name || ""
+                    },
+                    content_type: function () {
+                        return filters.content_type || ""
+                    },
+                    selection_type: function () {
+                        return filters.selection_type || ""
+                    },
+                },
             },
-            show_table: false,
+            show_table: build_url_params(filters).length ? true : false,
             local_count_packages: null,
         }
     },
@@ -113,15 +152,12 @@ export default {
             )
         },
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.build_datatable()
-        })
-    },
     methods: {
-        show_package: function (package_id) {
+        doShow: function (erm_package, dt, event) {
+            event.preventDefault()
             this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/packages/" + package_id
+                "/cgi-bin/koha/erm/eholdings/ebsco/packages/" +
+                    erm_package.package_id
             )
         },
         filter_table: async function () {
@@ -132,9 +168,7 @@ export default {
             this.$router.push(new_route)
             this.show_table = true
             this.local_count_packages = null
-            $("#" + this.table_id)
-                .DataTable()
-                .draw()
+
             if (this.erm_providers.includes("local")) {
                 const client = APIClient.erm
                 const query = this.filters
@@ -152,159 +186,78 @@ export default {
                     error => {}
                 )
             }
+
+            if (this.$refs.table) {
+                this.$refs.table.redraw("/api/v1/erm/eholdings/ebsco/packages")
+            }
         },
-        build_datatable: function () {
-            let show_package = this.show_package
+        getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
-            let map_av_dt_filter = this.map_av_dt_filter
+            let escape_str = this.escape_str
 
-            if (!this.show_table) {
-                this.show_table = build_url_params(this.filters).length
-                    ? true
-                    : false
-            }
-            let filters = this.filters
-            let show_table = this.show_table
-            let table_id = this.table_id
-
-            window["vendors"] = this.vendors.map(e => {
-                e["_id"] = e["id"]
-                e["_str"] = e["name"]
-                return e
-            })
-            let avs = ["av_package_types", "av_package_content_types"]
-            avs.forEach(function (av_cat) {
-                window[av_cat] = map_av_dt_filter(av_cat)
-            })
-
-            let additional_filters = {
-                name: function () {
-                    return filters.package_name || ""
-                },
-                content_type: function () {
-                    return filters.content_type || ""
-                },
-                selection_type: function () {
-                    return filters.selection_type || ""
-                },
-            }
-
-            $("#" + table_id).kohaTable(
+            return [
                 {
-                    ajax: {
-                        url: "/api/v1/erm/eholdings/ebsco/packages",
+                    title: __("Name"),
+                    data: "me.package_id:me.name",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        let node =
+                            '<a href="/cgi-bin/koha/erm/eholdings/ebsco/packages/' +
+                            row.package_id +
+                            '" class="show">' +
+                            escape_str(`${row.name} (#${row.package_id})`) +
+                            "</a>"
+                        if (row.is_selected) {
+                            node +=
+                                " " +
+                                '<i class="fa fa-check-square-o" style="color: green; float: right;" title="' +
+                                __("Is selected") +
+                                '" />'
+                        }
+                        return node
                     },
-                    embed: ["resources+count", "vendor.name"],
-                    ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    aLengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                    deferLoading: show_table ? false : true,
-                    autoWidth: false,
-                    columns: [
-                        {
-                            title: __("Name"),
-                            data: "me.package_id:me.name",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                // Rendering done in drawCallback
-                                return ""
-                            },
-                        },
-                        {
-                            title: __("Vendor"),
-                            data: "vendor_id",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return row.vendor
-                                    ? escape_str(row.vendor.name)
-                                    : ""
-                            },
-                        },
-                        {
-                            title: __("Type"),
-                            data: "package_type",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_package_types",
-                                        row.package_type
-                                    )
-                                )
-                            },
-                        },
-                        {
-                            title: __("Content type"),
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_package_content_types",
-                                        row.content_type
-                                    )
-                                )
-                            },
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
-
-                        $.each(
-                            $(this).find("tbody tr td:first-child"),
-                            function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
-                                let n = createVNode(
-                                    "a",
-                                    {
-                                        role: "button",
-                                        href:
-                                            "/cgi-bin/koha/erm/eholdings/ebsco/packages/" +
-                                            row.package_id,
-                                        onClick: e => {
-                                            e.preventDefault()
-                                            show_package(row.package_id)
-                                        },
-                                    },
-                                    `${row.name} (#${row.package_id})`
-                                )
-                                if (row.is_selected) {
-                                    n = createVNode("span", {}, [
-                                        n,
-                                        " ",
-                                        createVNode("i", {
-                                            class: "fa fa-check-square-o",
-                                            style: {
-                                                color: "green",
-                                                float: "right",
-                                            },
-                                            title: __("Is selected"),
-                                        }),
-                                    ])
-                                }
-                                render(n, e)
-                            }
+                },
+                {
+                    title: __("Vendor"),
+                    data: "vendor_id",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return row.vendor ? escape_str(row.vendor.name) : ""
+                    },
+                },
+                {
+                    title: __("Type"),
+                    data: "package_type",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_package_types",
+                                row.package_type
+                            )
                         )
                     },
                 },
-                null,
-                0,
-                additional_filters
-            )
-
-            if (filters.package_name.length) {
-                this.filter_table()
-            }
+                {
+                    title: __("Content type"),
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_package_content_types",
+                                row.content_type
+                            )
+                        )
+                    },
+                },
+            ]
         },
     },
+    components: { KohaTable },
     name: "EHoldingsEBSCOPackagesList",
 }
 </script>
