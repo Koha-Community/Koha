@@ -86,6 +86,7 @@
     <th>Checkin date</th>
     <th>Checkout date</th>
     <th class="checked_out_from">Checked out from</th>
+    <th>Home library</th>
     <th class="NoSort">Payment note</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
@@ -148,6 +149,11 @@
     <td class="checked_out_from">
         [% IF line.issue_id && line.checkout.library %]
             [% line.checkout.library.branchname | html %]
+        [% END %]
+    </td>
+    <td>
+        [% IF line.itemnumber %]
+            [% Branches.GetName( line.item.homebranch ) | html %]
         [% END %]
     </td>
     <td class="actions">
