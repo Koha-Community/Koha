@@ -82,6 +82,7 @@
     <th>Description</th>
     <th>Date</th>
     <th>Barcode</th>
+    <th>Call number</th>
     <th>Due date</th>
     <th>Checkin date</th>
     <th>Checkout date</th>
@@ -129,6 +130,11 @@
     <td>
         [% IF line.itemnumber %]
             <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% line.itemnumber | uri %]&amp;biblionumber=[% line.item.biblionumber | uri %]#item[% line.itemnumber | uri %]">[% line.item.barcode | html %]</a>
+        [% END %]
+    </td>
+    <td>
+        [% IF line.itemnumber %]
+            [% line.item.itemcallnumber | html %]
         [% END %]
     </td>
     <td>
