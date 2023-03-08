@@ -8,7 +8,13 @@
                 id="title_list_result"
                 class="page-section"
             >
-                <table :id="table_id"></table>
+                <KohaTable
+                    ref="table"
+                    v-bind="tableOptions"
+                    @show="doShow"
+                    @edit="doEdit"
+                    @delete="doDelete"
+                ></KohaTable>
             </div>
             <div v-else class="dialog message">
                 {{ $__("There are no titles defined") }}
@@ -19,10 +25,11 @@
 
 <script>
 import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
-import { inject, createVNode, render } from "vue"
+import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 import { useDataTable } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -32,32 +39,63 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
-        const table_id = "title_list"
-        useDataTable(table_id)
+        const table = ref()
+        const filters = reactive({
+            publication_title: "",
+            publication_type: "",
+        })
 
         return {
             av_title_publication_types,
             get_lib_from_av,
             map_av_dt_filter,
-            table_id,
+            escape_str,
+            table,
+            filters,
             setConfirmationDialog,
             setMessage,
+            eholdings_titles_table_settings,
         }
     },
     data: function () {
+        this.filters = {
+            publication_title: this.$route.query.publication_title || "",
+            publication_type: this.$route.query.publication_type || "",
+        }
+        let filters = this.filters
+
         return {
             title_count: 0,
             initialized: false,
-            filters: {
-                publication_title: this.$route.query.publication_title || "",
-                publication_type: this.$route.query.publication_type || "",
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: "/api/v1/erm/eholdings/local/titles",
+                options: {
+                    embed: "resources.package",
+                    searchCols: [
+                        { search: filters.publication_title },
+                        null,
+                        { search: filters.publication_type },
+                        null,
+                    ],
+                },
+                table_settings: this.eholdings_titles_table_settings,
+                add_filters: true,
+                filters_options: {
+                    2: () =>
+                        this.map_av_dt_filter("av_title_publication_types"),
+                },
+                actions: {
+                    0: ["show"],
+                    "-1": ["edit", "delete"],
+                },
             },
             cannot_search: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getTitleCount().then(() => vm.build_datatable())
+            vm.getTitleCount().then(() => (vm.initialized = true))
         })
     },
     methods: {
@@ -66,250 +104,130 @@ export default {
             await client.localTitles.count().then(
                 count => {
                     this.title_count = count
-                    this.initialized = true
                 },
                 error => {}
             )
         },
-        show_title: function (title_id) {
+        doShow: function (title, dt, event) {
+            event.preventDefault()
             this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/titles/" + title_id
+                "/cgi-bin/koha/erm/eholdings/local/titles/" + title.title_id
             )
         },
-        edit_title: function (title_id) {
+        doEdit: function (title, dt, event) {
             this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/titles/edit/" + title_id
+                "/cgi-bin/koha/erm/eholdings/local/titles/edit/" +
+                    title.title_id
             )
         },
-        delete_title: function (title_id, title_publication_title) {
+        doDelete: function (title, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
                         "Are you sure you want to remove this title?"
                     ),
-                    message: title_publication_title,
+                    message: title.publication_title,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm
-                    client.localTitles.delete(title_id).then(
+                    client.localTitles.delete(title.title_id).then(
                         success => {
                             this.setMessage(
                                 this.$__("Local title %s deleted").format(
-                                    title_publication_title
+                                    title.publication_title
                                 ),
                                 true
                             )
-                            $("#" + this.table_id)
-                                .DataTable()
-                                .ajax.url("/api/v1/erm/eholdings/local/titles")
-                                .draw()
+                            dt.draw()
                         },
                         error => {}
                     )
                 }
             )
         },
-        build_datatable: function () {
-            let show_title = this.show_title
-            let edit_title = this.edit_title
-            let delete_title = this.delete_title
+        getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
-            let map_av_dt_filter = this.map_av_dt_filter
-            let filters = this.filters
-            let table_id = this.table_id
+            let escape_str = this.escape_str
 
-            window["av_title_publication_types"] = map_av_dt_filter(
-                "av_title_publication_types"
-            )
-
-            $("#" + table_id).kohaTable(
+            return [
                 {
-                    ajax: {
-                        url: "/api/v1/erm/eholdings/local/titles",
-                    },
-                    embed: ["resources.package"],
-                    order: [[0, "asc"]],
-                    autoWidth: false,
-                    searchCols: [
-                        { search: filters.publication_title },
-                        null,
-                        { search: filters.publication_type },
-                        null,
-                    ],
-                    columns: [
-                        {
-                            title: __("Title"),
-                            data: "me.publication_title",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                // Rendering done in drawCallback
-                                return ""
-                            },
-                        },
-                        {
-                            title: __("Contributors"),
-                            data: "first_author:first_editor",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return (
-                                    escape_str(row.first_author) +
-                                    (row.first_author && row.first_editor
-                                        ? "<br/>"
-                                        : "") +
-                                    escape_str(row.first_editor)
-                                )
-                            },
-                        },
-                        {
-                            title: __("Publication type"),
-                            data: "publication_type",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_title_publication_types",
-                                        row.publication_type
-                                    )
-                                )
-                            },
-                        },
-                        {
-                            title: __("Identifier"),
-                            data: "print_identifier:online_identifier",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                let print_identifier = row.print_identifier
-                                let online_identifier = row.online_identifier
-                                return (
-                                    (print_identifier
-                                        ? escape_str(
-                                              _("ISBN (Print): %s").format(
-                                                  print_identifier
-                                              )
-                                          )
-                                        : "") +
-                                    (online_identifier
-                                        ? escape_str(
-                                              _("ISBN (Online): %s").format(
-                                                  online_identifier
-                                              )
-                                          )
-                                        : "")
-                                )
-                            },
-                        },
-                        {
-                            title: __("Actions"),
-                            data: function (row, type, val, meta) {
-                                return '<div class="actions"></div>'
-                            },
-                            className: "actions noExport",
-                            searchable: false,
-                            orderable: false,
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
-
-                        $.each(
-                            $(this).find("td .actions"),
-                            function (index, e) {
-                                let tr = $(this).parent().parent()
-                                let title_id = api.row(tr).data().title_id
-                                let title_publication_title = api
-                                    .row(tr)
-                                    .data().publication_title
-                                let editButton = createVNode(
-                                    "a",
-                                    {
-                                        class: "btn btn-default btn-xs",
-                                        role: "button",
-                                        onClick: () => {
-                                            edit_title(title_id)
-                                        },
-                                    },
-                                    [
-                                        createVNode("i", {
-                                            class: "fa fa-pencil",
-                                            "aria-hidden": "true",
-                                        }),
-                                        __("Edit"),
-                                    ]
-                                )
-
-                                let deleteButton = createVNode(
-                                    "a",
-                                    {
-                                        class: "btn btn-default btn-xs",
-                                        role: "button",
-                                        onClick: () => {
-                                            delete_title(
-                                                title_id,
-                                                title_publication_title
-                                            )
-                                        },
-                                    },
-                                    [
-                                        createVNode("i", {
-                                            class: "fa fa-trash",
-                                            "aria-hidden": "true",
-                                        }),
-                                        __("Delete"),
-                                    ]
-                                )
-
-                                let n = createVNode("span", {}, [
-                                    editButton,
-                                    " ",
-                                    deleteButton,
-                                ])
-                                render(n, e)
-                            }
+                    title: __("Title"),
+                    data: "me.publication_title",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/cgi-bin/koha/erm/eholdings/local/titles/' +
+                            row.title_id +
+                            '" class="show">' +
+                            escape_str(
+                                `${row.publication_title} (#${row.title_id})`
+                            ) +
+                            "</a>"
                         )
-
-                        $.each(
-                            $(this).find("tbody tr td:first-child"),
-                            function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
-                                let n = createVNode(
-                                    "a",
-                                    {
-                                        role: "button",
-                                        href:
-                                            "/cgi-bin/koha/erm/eholdings/local/titles/" +
-                                            row.title_id,
-                                        onClick: e => {
-                                            e.preventDefault()
-                                            show_title(row.title_id)
-                                        },
-                                    },
-                                    `${row.publication_title} (#${row.title_id})`
-                                )
-                                render(n, e)
-                            }
-                        )
-                    },
-                    preDrawCallback: function (settings) {
-                        $("#" + table_id)
-                            .find("thead th")
-                            .eq(2)
-                            .attr("data-filter", "av_title_publication_types")
                     },
                 },
-                eholdings_titles_table_settings,
-                1
-            )
+                {
+                    title: __("Contributors"),
+                    data: "first_author:first_editor",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            escape_str(row.first_author) +
+                            (row.first_author && row.first_editor
+                                ? "<br/>"
+                                : "") +
+                            escape_str(row.first_editor)
+                        )
+                    },
+                },
+                {
+                    title: __("Publication type"),
+                    data: "publication_type",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_title_publication_types",
+                                row.publication_type
+                            )
+                        )
+                    },
+                },
+                {
+                    title: __("Identifier"),
+                    data: "print_identifier:online_identifier",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        let print_identifier = row.print_identifier
+                        let online_identifier = row.online_identifier
+                        return (
+                            (print_identifier
+                                ? escape_str(
+                                      _("ISBN (Print): %s").format(
+                                          print_identifier
+                                      )
+                                  )
+                                : "") +
+                            (online_identifier
+                                ? escape_str(
+                                      _("ISBN (Online): %s").format(
+                                          online_identifier
+                                      )
+                                  )
+                                : "")
+                        )
+                    },
+                },
+            ]
         },
     },
-    components: { Toolbar },
+    components: { Toolbar, KohaTable },
     name: "EHoldingsLocalTitlesList",
 }
 </script>
