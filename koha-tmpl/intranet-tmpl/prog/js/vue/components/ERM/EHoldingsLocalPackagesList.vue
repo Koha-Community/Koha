@@ -170,7 +170,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/eholdings/local/packages/' +
                             row.package_id +
                             '" class="show">' +
-                            escape_str(row.name) +
+                            escape_str(`${row.name} (#${row.package_id})`) +
                             "</a>"
                         )
                     },
