@@ -537,7 +537,7 @@ sub _core_status_graph {
             prev_actions   => [ 'REQ', 'GENREQ' ],
             id             => 'REQREV',
             name           => 'Request reverted',
-            ui_method_name => 'Revert Request',
+            ui_method_name => 'Revert request',
             method         => 'cancel',
             next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],
             ui_method_icon => 'fa-times',
