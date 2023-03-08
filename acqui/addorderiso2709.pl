@@ -228,6 +228,9 @@ if ($op eq ""){
         my @itemprices = $input->multi_param('itemprice_' . $import_record->import_record_id);
         my @replacementprices = $input->multi_param('replacementprice_' . $import_record->import_record_id);
         my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $import_record->import_record_id);
+        my @coded_location_qualifiers = $input->multi_param('coded_location_qualifier_' . $import_record->import_record_id);
+        my @barcodes = $input->multi_param('barcode_' . $import_record->import_record_id);
+        my @enumchrons = $input->multi_param('enumchron_' . $import_record->import_record_id);
         my $itemcreation = 0;
 
         my @itemnumbers;
@@ -235,20 +238,23 @@ if ($op eq ""){
             $itemcreation = 1;
             my $item = Koha::Item->new(
                 {
-                    biblionumber        => $biblionumber,
-                    homebranch          => $homebranches[$i],
-                    holdingbranch       => $holdingbranches[$i],
-                    itemnotes_nonpublic => $nonpublic_notes[$i],
-                    itemnotes           => $public_notes[$i],
-                    location            => $locs[$i],
-                    ccode               => $ccodes[$i],
-                    itype               => $itypes[$i],
-                    notforloan          => $notforloans[$i],
-                    uri                 => $uris[$i],
-                    copynumber          => $copynos[$i],
-                    price               => $itemprices[$i],
-                    replacementprice    => $replacementprices[$i],
-                    itemcallnumber      => $itemcallnumbers[$i],
+                    biblionumber             => $biblionumber,
+                    homebranch               => $homebranches[$i],
+                    holdingbranch            => $holdingbranches[$i],
+                    itemnotes_nonpublic      => $nonpublic_notes[$i],
+                    itemnotes                => $public_notes[$i],
+                    location                 => $locs[$i],
+                    ccode                    => $ccodes[$i],
+                    itype                    => $itypes[$i],
+                    notforloan               => $notforloans[$i],
+                    uri                      => $uris[$i],
+                    copynumber               => $copynos[$i],
+                    price                    => $itemprices[$i],
+                    replacementprice         => $replacementprices[$i],
+                    itemcallnumber           => $itemcallnumbers[$i],
+                    coded_location_qualifier => $coded_location_qualifiers[$i],
+                    barcode                  => $barcodes[$i],
+                    enumchron                => $enumchrons[$i],
                 }
             )->store;
             push( @itemnumbers, $item->itemnumber );

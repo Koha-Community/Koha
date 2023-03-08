@@ -375,6 +375,18 @@
                                                                                     <label for="callnumber_item_[% item.item_id | html %]">callnumber</label>
                                                                                     <input type="text" id="callnumber_item_[% item.item_id | html %]" name="itemcallnumber_[% biblio.import_record_id | html %]" value="[% item.itemcallnumber | html %]">
                                                                                 </li>
+                                                                                <li>
+                                                                                    <label for="coded_location_qualifier_item_[% item.item_id | html %]">coded location qualifier</label>
+                                                                                    <input type="text" id="coded_location_qualifier_item_[% item.item_id | html %]" name="coded_location_qualifier_[% biblio.import_record_id | html %]" value="[% item.coded_location_qualifier | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="barcode_item_[% item.item_id | html %]">barcode</label>
+                                                                                    <input type="text" id="barcode_item_[% item.item_id | html %]" name="barcode_[% biblio.import_record_id | html %]" value="[% item.barcode | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="enumchron_item_[% item.item_id | html %]">enumchron</label>
+                                                                                    <input type="text" id="enumchron_item_[% item.item_id | html %]" name="enumchron_[% biblio.import_record_id | html %]" value="[% item.enumchron | html %]">
+                                                                                </li>
                                                                             </ol>
                                                                         </fieldset>
                                                                     [% END # /FOREACH item %]
