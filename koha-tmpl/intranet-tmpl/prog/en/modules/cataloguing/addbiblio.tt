@@ -129,8 +129,7 @@
         });
         $("#saveandcontinue").click(function(){
             $(".btn-group").removeClass("open");
-            var tab = $("#addbibliotabs li.ui-tabs-active:first a").attr('href');
-            tab = tab.replace('#', '');
+            var tab = $("#addbibliotabs div.active:first").attr('id');
             $("#current_tab").val(tab);
             redirect("just_save", tab);
             return false;
