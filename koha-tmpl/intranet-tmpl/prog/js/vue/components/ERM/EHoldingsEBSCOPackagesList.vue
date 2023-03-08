@@ -14,9 +14,9 @@
                 <option
                     v-for="type in av_package_content_types"
                     :key="type.authorised_values"
-                    :value="type.authorised_value"
+                    :value="type.value"
                 >
-                    {{ type.lib }}
+                    {{ type.description }}
                 </option>
             </select>
             {{ $__("Selection status") }}:
