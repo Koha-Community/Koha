@@ -50,7 +50,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
-import { inject, ref } from "vue"
+import { inject, ref, reactive } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 import { build_url } from "../../composables/datatables"
@@ -68,6 +68,12 @@ export default {
 
         const table = ref()
 
+        const filters = reactive({
+            by_expired: false,
+            max_expiration_date: "",
+            by_mine: "",
+        })
+
         return {
             vendors,
             get_lib_from_av,
@@ -78,24 +84,27 @@ export default {
             setMessage,
             escape_str,
             agreement_table_settings,
+            filters,
         }
     },
     data: function () {
+        this.filters = {
+            by_expired: this.$route.query.by_expired || false,
+            max_expiration_date: this.$route.query.max_expiration_date || "",
+            by_mine: this.$route.query.by_mine || false,
+        }
+        let filters = this.filters
+
+        let logged_in_user = this.logged_in_user
         return {
             fp_config: flatpickr_defaults,
             agreement_count: 0,
             initialized: false,
-            filters: {
-                by_expired: this.$route.query.by_expired || false,
-                max_expiration_date:
-                    this.$route.query.max_expiration_date || "",
-                by_mine: this.$route.query.by_mine || false,
-            },
             before_route_entered: false,
             building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "vendor" },
+                options: { embed: "user_roles,vendor" },
                 url: () => this.table_url(),
                 table_settings: this.agreement_table_settings,
                 add_filters: true,
@@ -121,6 +130,13 @@ export default {
                 actions: {
                     0: ["show"],
                     "-1": ["edit", "delete"],
+                },
+                default_filters: {
+                    "user_roles.user_id": function () {
+                        return filters.by_mine
+                            ? logged_in_user.borrowernumber
+                            : ""
+                    },
                 },
             },
         }
