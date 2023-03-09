@@ -2089,17 +2089,6 @@ sub api_strings_mapping {
 
     foreach my $col ( keys %{$columns_info} ) {
 
-        # Skip columns not in public read list
-        next
-          unless !$params->{public}
-          || any { $col eq $_ } $public_read_list;
-
-        # Skip columns that are not exposed on the API by to_api_mapping
-        # i.e. mapping exists but points to undef
-        next
-          if $col eq 'more_subfields_xml'    # not dealt with as a regular field
-          || ( exists $to_api_mapping->{$col} && !defined $to_api_mapping->{$col} );
-
         # By now, we are done with known columns, now check the framework for mappings
         my $field = $self->_result->result_source->name . '.' . $col;
 
@@ -2113,11 +2102,7 @@ sub api_strings_mapping {
 
             my $str  = C4::Biblio::GetAuthorisedValueDesc( $itemtagfield, $subfield->{tagsubfield}, $self->$col, '', $tagslib, undef, $params->{public} );
             my $type = exists $code_to_type->{$code} ? $code_to_type->{$code} : 'av';
-
-            # The _strings entry should match the API attribute name
-            my $mapped_attr = exists $to_api_mapping->{$col} ? $to_api_mapping->{$col} : $col;
-
-            $strings->{$mapped_attr} = {
+            $strings->{$col} = {
                 str  => $str,
                 type => $type,
                 ( $type eq 'av' ? ( category => $code ) : () ),
