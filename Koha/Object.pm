@@ -570,13 +570,14 @@ sub to_api {
     # Remove forbidden attributes if required (including their coded values)
     if ( $params->{public} ) {
         for my $field ( keys %{$json_object} ) {
-            delete $json_object->{$field} unless any { $_ eq $field } @{ $self->public_read_list };
+            delete $json_object->{$field}
+              unless any { $_ eq $field } @{ $self->public_read_list };
         }
 
-        if ( $strings ) {
-            foreach my $field (keys %{$avs}) {
+        if ($strings) {
+            foreach my $field ( keys %{$avs} ) {
                 delete $avs->{$field}
-                    unless any { $_ eq $field } @{ $self->public_read_list };
+                  unless any { $_ eq $field } @{ $self->public_read_list };
             }
         }
     }
@@ -588,15 +589,18 @@ sub to_api {
         foreach my $column ( keys %{ $self->to_api_mapping } ) {
             my $mapped_column = $self->to_api_mapping->{$column};
             if ( exists $json_object->{$column}
-                && defined $mapped_column ) {
+                && defined $mapped_column )
+            {
 
                 # key != undef
                 $json_object->{$mapped_column} = delete $json_object->{$column};
                 $avs->{$mapped_column}         = delete $avs->{$column}
                   if exists $avs->{$column};
 
-            } elsif ( exists $json_object->{$column}
-                && !defined $mapped_column ) {
+            }
+            elsif ( exists $json_object->{$column}
+                && !defined $mapped_column )
+            {
 
                 # key == undef
                 delete $json_object->{$column};
@@ -610,8 +614,9 @@ sub to_api {
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
-            if ( $embed =~ m/^(?<relation>.*)_count$/
-                and $embeds->{$embed}->{is_count} ) {
+            if (    $embed =~ m/^(?<relation>.*)_count$/
+                and $embeds->{$embed}->{is_count} )
+            {
 
                 my $relation = $+{relation};
                 $json_object->{$embed} = $self->$relation->count;
@@ -668,6 +673,27 @@ own mapping returned.
 =cut
 
 sub to_api_mapping {
+    return {};
+}
+
+=head3 api_strings_mapping
+
+    my $params = { is_public => 1 };
+    my $string_map = $object->api_strings_mapping($params);
+
+Generic method that returns the string map for coded attributes.
+
+Return should be a hashref keyed on database field name with the values
+being hashrefs containing 'str', 'type' and optionally 'category'.
+
+This is then use in to_api to render the _strings embed when requested.
+
+Note: this only returns an empty I<hashref>. Each class should have its
+own mapping returned.
+
+=cut
+
+sub api_strings_mapping {
     return {};
 }
 
