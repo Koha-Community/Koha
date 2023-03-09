@@ -190,15 +190,10 @@ $template->param(
 );
 
 my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_localization->as_list } };
-my $all_items = $biblio->items->search_ordered;
-my @items;
+my $params;
 my $patron = Koha::Patrons->find( $borrowernumber );
-while ( my $item = $all_items->next ) {
-    push @items, $item
-      unless $item->itemlost
-      && $patron->category->hidelostitems
-      && !$showallitems;
-}
+$params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
+my @items = $biblio->items->search_ordered( $params )->as_list;
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords;
@@ -210,6 +205,9 @@ if ( $hostitems->count ) {
 }
 
 my $dat = &GetBiblioData($biblionumber);
+$dat->{'count'} = $biblio->items->count + $hostitems->count;
+$dat->{'showncount'} = scalar @items;
+$dat->{'hiddencount'} = $dat->{'count'} - $dat->{'showncount'};
 
 #is biblio a collection and are bundles enabled
 my $leader = $marc_record->leader();
@@ -320,16 +318,6 @@ if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }->imageurl );
 }
 
-$dat->{'count'} = $all_items->count + $hostitems->count;
-$dat->{'showncount'} = scalar @items + $hostitems->count;
-$dat->{'hiddencount'} = $all_items->count + $hostitems->count - scalar @items;
-
-my $shelflocations =
-  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.location' } ) };
-my $collections =
-  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
-my $copynumbers =
-  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
 my (@itemloop, @otheritemloop, %itemfields);
 
 my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
@@ -371,14 +359,6 @@ foreach my $item (@items) {
     my $item_info = $item->unblessed;
     $item_info->{itemtype} = $itemtypes->{$item->effective_itemtype};
 
-    #get shelf location and collection code description if they are authorised value.
-    # same thing for copy number
-    my $shelfcode = $item->location;
-    $item_info->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
-    my $ccode = $item->ccode;
-    $item_info->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
-    my $copynumber = $item->copynumber;
-    $item_info->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
     foreach (qw(ccode enumchron copynumber stocknumber itemnotes itemnotes_nonpublic uri )) {
         $itemfields{$_} = 1 if $item->$_;
     }
@@ -397,21 +377,6 @@ foreach my $item (@items) {
     my $holds = $item->current_holds;
     if ( my $first_hold = $holds->next ) {
         $item_info->{first_hold} = $first_hold;
-    }
-
-    $item_info->{checkout} = $item->checkout;
-
-    # Check the transit status
-    my $transfer = $item->get_transfer;
-    if ( $transfer ) {
-        $item_info->{transfer} = $transfer;
-    }
-
-    foreach my $f (qw( itemnotes )) {
-        if ($item_info->{$f}) {
-            $item_info->{$f} =~ s|\n|<br />|g;
-            $itemfields{$f} = 1;
-        }
     }
 
     #item has a host number if its biblio number does not match the current bib
@@ -444,23 +409,6 @@ foreach my $item (@items) {
     }
 
     $item_info->{can_be_edited} = $patron->can_edit_items_from( $item->homebranch );
-
-    if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-        $item_info->{cover_images} = $item->cover_images;
-    }
-
-    if ( C4::Context->preference('UseRecalls') ) {
-        $item_info->{recall} = $item->recall;
-    }
-
-    if ( C4::Context->preference('IndependentBranches') ) {
-        my $userenv = C4::Context->userenv();
-        if ( not C4::Context->IsSuperLibrarian()
-            and $userenv->{branch} ne $item->homebranch ) {
-            $item_info->{cannot_be_edited} = 1;
-            $item_info->{not_same_branch} = 1;
-        }
-    }
 
     if ( $item->is_bundle ) {
         $item_info->{bundled} =
