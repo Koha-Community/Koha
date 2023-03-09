@@ -172,28 +172,21 @@
                     </button>
                 </form>
 
-                <div id="article-request-tabs" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#article-requests-requested" aria-controls="article-requests-requested" role="tab" data-toggle="tab">
-                                New (<span id="ar_requested_count">[% article_requests_requested.count | html %]</span>)
-                            </a>
-                        </li>
+                [% WRAPPER tabs id= "article-request-tabs" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "article-requests-requested" bt_active= 1 %]
+                            <span>New</span> (<span id="ar_requested_count">[% article_requests_requested.count | html %]</span>)
+                        [% END %]
+                        [% WRAPPER tab_item tabname= "article-requests-pending" %]
+                            <span>Pending</span> (<span id="ar_pending_count">[% article_requests_pending.count | html %]</span>)
+                        [% END %]
+                        [% WRAPPER tab_item tabname= "article-requests-processing" %]
+                            <span>Processing</span> (<span id="ar_processing_count">[% article_requests_processing.count | html %]</span>)
+                        [% END %]
+                    [% END # /WRAPPER tabs_nav %]
 
-                        <li role="presentation">
-                            <a href="#article-requests-pending" aria-controls="article-requests-pending" role="tab" data-toggle="tab">
-                                Pending (<span id="ar_pending_count">[% article_requests_pending.count | html %]</span>)
-                            </a>
-                        </li role="presentation">
-
-                        <li>
-                            <a href="#article-requests-processing" aria-controls="article-requests-processing" role="tab" data-toggle="tab">
-                                Processing (<span id="ar_processing_count">[% article_requests_processing.count | html %]</span>)
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="article-requests-requested" role="tabpanel" class="tab-pane active">
+                    [% WRAPPER tab_panels %]
+                        [% WRAPPER tab_panel tabname="article-requests-requested" bt_active= 1 %]
                             <div class="article-requests-requested_table_controls">
                                 <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-requested' id_arg=0 pull_right='' aria_menu='table_controls' %]
@@ -298,9 +291,9 @@
                                     [% END %]
                                 </tbody>
                             </table>
-                        </div>
+                        [% END # /tab_panel#article-requests-requested %]
 
-                        <div id="article-requests-pending" role="tabpanel" class="tab-pane">
+                        [% WRAPPER tab_panel tabname="article-requests-pending" %]
                             <div class="article-requests-pending_table_controls">
                                 <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-pending' id_arg=0 pull_right='' aria_menu='table_controls' %]
@@ -405,9 +398,9 @@
                                     [% END %]
                                 </tbody>
                             </table>
-                        </div>
+                        [% END # /tab_panel#article-requests-pending %]
 
-                        <div id="article-requests-processing" role="tabpanel" class="tab-pane">
+                        [% WRAPPER tab_panel tabname="article-requests-processing" %]
                             <div class="article-requests-processing_table_controls">
                                 <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
                                 [% PROCESS actions menuid='article-menu-processing' id_arg=0 pull_right='' aria_menu='table_controls' %]
@@ -509,10 +502,9 @@
                                     [% END %]
                                 </tbody>
                             </table>
-                        </div>
-                    </div> <!-- /.tab-content -->
-                    <br/>
-                </div>
+                        [% END # /tab_panel#article-requests-processing %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
             </div>
 
             [% IF Koha.Preference('CircSidebar') %]
