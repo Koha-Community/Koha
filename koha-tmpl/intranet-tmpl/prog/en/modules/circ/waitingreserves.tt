@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Holds awaiting pickup &rsaquo; Circulation &rsaquo; Koha</title>
@@ -87,22 +88,22 @@
                                     <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a></p>
                                 </div>
                             [% END %]
-                            <div id="resultlist" class="toptabs">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#holdswaiting" aria-controls="holdswaiting" role="tab" data-toggle="tab">Holds waiting: [% reservecount | html %]</a></li>
-                                    <li role="presentation">
-                                        <a href="#holdsover" aria-controls="holdsover" role="tab" data-toggle="tab">
-                                            Holds waiting over [% Koha.Preference('ReservesMaxPickUpDelay') | html %] days: [% overcount | html %]
-                                        </a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#holdscancelled" aria-controls="holdscancelled" role="tab" data-toggle="tab">
-                                            Holds with cancellation requests: [% cancel_reqs_count | html %]
-                                        </a>
-                                    </li>
-                                </ul> <!-- /.nav.nav-tabs -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="holdswaiting">
+
+                            [% WRAPPER tabs id= "resultlist" %]
+                                [% WRAPPER tabs_nav %]
+                                    [% WRAPPER tab_item tabname= "holdswaiting" bt_active= 1 %]
+                                        <span>Holds waiting:</span> [% reservecount | html %]
+                                    [% END %]
+                                    [% WRAPPER tab_item tabname= "holdsover" %]
+                                        [% tx("Holds waiting over {count} days:", { count = Koha.Preference('ReservesMaxPickUpDelay') }) %] [% overcount | html %]
+                                    [% END %]
+                                    [% WRAPPER tab_item tabname= "holdscancelled" %]
+                                        <span>Holds with cancellation requests:</span> [% cancel_reqs_count | html %]
+                                    [% END %]
+                                [% END # /WRAPPER tabs_nav %]
+
+                                [% WRAPPER tab_panels %]
+                                    [% WRAPPER tab_panel tabname="holdswaiting" bt_active= 1 %]
                                         [% IF ( reserveloop ) %]
                                             <div id="toolbar" class="btn-toolbar">
                                                 <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
@@ -111,8 +112,9 @@
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
                                         [% END %]
-                                    </div> <!-- /#holdswaiting -->
-                                    <div role="tabpanel" class="tab-pane" id="holdsover">
+                                    [% END # /tab_panel#holdswaiting %]
+
+                                    [% WRAPPER tab_panel tabname="holdsover" %]
                                         [% IF ( ReservesMaxPickUpDelay ) %]
                                             <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>
                                         [% END %]
@@ -137,16 +139,18 @@
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
                                         [% END # /IF( overloop ) %]
-                                    </div> <!-- /#holdsover -->
-                                    <div role="tabpanel" class="tab-pane" id="holdscancelled">
+                                    [% END # /tab_panel#holdsover %]
+
+                                    [% WRAPPER tab_panel tabname="holdscancelled" %]
                                         [% IF cancel_reqs_count %]
                                             [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
                                         [% ELSE %]
                                             <div class="dialog message">No holds found.</div>
                                         [% END %]
-                                    </div> <!-- /#holdscancelled -->
-                                </div> <!-- /.tab-content -->
-                            </div> <!-- /#resultlist.toptabs -->
+                                    [% END # /tab_panel#holdscancelled %]
+                                [% END # /WRAPPER tab_panels %]
+                            [% END # /WRAPPER tabs %]
+
                         [% END # /IF ( cancel_result ) %]
                     </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
