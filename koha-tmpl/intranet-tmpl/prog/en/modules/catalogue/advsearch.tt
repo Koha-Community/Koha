@@ -207,24 +207,26 @@
                 </div> <!-- /#advanced-search -->
 
                 <!-- MC-TYPE LIMITS -->
-                <div id="advsearches" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
+                [% WRAPPER tabs id= "advsearches" %]
+                    [% WRAPPER tabs_nav %]
                         [% FOREACH advsearchloo IN advancedsearchesloop %]
-                            <li role="presentation" id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
-                                <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]" aria-controls="advsearch-[% advsearchloo.advanced_search_type | uri %]" role="tab" data-toggle="tab">
-                                    [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
-                                    [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
-                                    [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
-                                    [% ELSE %]<span>Something else</span>
-                                    [% END %]
-                                </a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "advsearch-tab-${advsearchloo.advanced_search_type}" %]
+                                [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]
+                                    <span>Item type</span>
+                                [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]
+                                    <span>Collection</span>
+                                [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]
+                                    <span>Shelving location</span>
+                                [% ELSE %]
+                                    <span>Something else</span>
+                                [% END %]
+                            [% END # /tab_item#advsearch-tab-... %]
                         [% END # /FOREACH advsearchloo %]
-                    </ul>
+                    [% END # /WRAPPER tabs_nav %]
 
-                    <div class="tab-content">
+                    [% WRAPPER tab_panels %]
                         [% FOREACH advsearchloo IN advancedsearchesloop %]
-                            <div id="advsearch-[% advsearchloo.advanced_search_type | html %]"  role="tabpanel" class="tab-pane advsearch">
+                            [% WRAPPER tab_panel tabname="advsearch-tab-${advsearchloo.advanced_search_type}" %]
                                 <h4>Limit to any of the following:</h4>
                                 <table>
                                     <tr>
@@ -257,10 +259,10 @@
                                             [% END # /IF ( loop.last ) %]
                                         [% END # /FOREACH itemtypeloo %]
                                 </table>
-                            </div> <!-- /#advsearch-[% advsearchloo.advanced_search_type | html %] -->
+                            [% END # tab_panel/#advsearch-... %]
                         [% END # /FOREACH advsearchloo %]
-                    </div> <!-- /.tab-content -->
-                </div> <!-- /#advsearches -->
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
                 <!-- /MC-TYPE LIMIT -->
 
                 [% IF ( expanded_options ) %]

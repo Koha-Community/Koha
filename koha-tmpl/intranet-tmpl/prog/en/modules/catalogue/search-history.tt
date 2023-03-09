@@ -37,181 +37,184 @@
         <div class="col-sm-12 col-md-8 col-md-offset-2">
 
       <h1>Search history</h1>
-        <div id="tabs" class="toptabs">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#biblio_tab" aria-controls="biblio_tab" role="tab" data-toggle="tab">Catalog</a></li>
-                <li role="presentation"><a href="#authority_tab" aria-controls="authority_tab" role="tab" data-toggle="tab">Authority</a></li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="biblio_tab">
-                    [% IF ( current_biblio_searches ) %]
-                        <h2>Current session</h2>
-                        <form id="current_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-                            <p class="selections-toolbar">
-                                <a class="CheckAll" data-form="current_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
-                                <span class="sep">|</span>
-                                <a class="CheckNone" data-form="current_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
-                                <span class="sep">|</span>
-                                <span class="links">
-                                <span class="selections">Select searches to: </span>
-                                <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
-                                </span>
-                            </p>
-                            <input type="hidden" name="action" value="delete" />
-                            <table class="historyt">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Search</th>
-                                        <th>Results</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH s IN current_biblio_searches %]
+
+            [% WRAPPER tabs id= "tabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% WRAPPER tab_item tabname= "biblio_tab" bt_active= 1 %] <span>Catalog</span> [% END %]
+                    [% WRAPPER tab_item tabname= "authority_tab" %] <span>Authority</span> [% END %]
+                [% END # /WRAPPER tabs_nav %]
+
+                [% WRAPPER tab_panels %]
+                    [% WRAPPER tab_panel tabname="biblio_tab" bt_active= 1 %]
+                        [% IF ( current_biblio_searches ) %]
+                            <h2>Current session</h2>
+                            <form id="current_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                <p class="selections-toolbar">
+                                    <a class="CheckAll" data-form="current_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                                    <span class="sep">|</span>
+                                    <a class="CheckNone" data-form="current_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                                    <span class="sep">|</span>
+                                    <span class="links">
+                                    <span class="selections">Select searches to: </span>
+                                    <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                    </span>
+                                </p>
+                                <input type="hidden" name="action" value="delete" />
+                                <table class="historyt">
+                                    <thead>
                                         <tr>
-                                            <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                                            <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
-                                            <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                            <td>[% s.total | html %]</td>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Search</th>
+                                            <th>Results</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </form>
-                    [% END %]
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH s IN current_biblio_searches %]
+                                            <tr>
+                                                <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
+                                                <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                <td>[% s.total | html %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </form>
+                        [% END %]
 
-                    [% IF ( current_biblio_searches && previous_biblio_searches) %]
-                        <hr />
-                    [% END %]
+                        [% IF ( current_biblio_searches && previous_biblio_searches) %]
+                            <hr />
+                        [% END %]
 
-                    [% IF ( previous_biblio_searches ) %]
-                        <h2>Previous sessions</h2>
-                        <form id="previous_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-                            <p class="selections-toolbar">
-                                <a class="CheckAll" data-form="previous_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
-                                <span class="sep">|</span>
-                                <a class="CheckNone" data-form="previous_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
-                                <span class="sep">|</span>
-                                <span class="links">
-                                <span class="selections">Select searches to: </span>
-                                <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
-                                </span>
-                            </p>
-                            <input type="hidden" name="action" value="delete" />
-                            <table class="historyt">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Search</th>
-                                        <th>Results</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH s IN previous_biblio_searches %]
+                        [% IF ( previous_biblio_searches ) %]
+                            <h2>Previous sessions</h2>
+                            <form id="previous_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                <p class="selections-toolbar">
+                                    <a class="CheckAll" data-form="previous_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                                    <span class="sep">|</span>
+                                    <a class="CheckNone" data-form="previous_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                                    <span class="sep">|</span>
+                                    <span class="links">
+                                    <span class="selections">Select searches to: </span>
+                                    <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                    </span>
+                                </p>
+                                <input type="hidden" name="action" value="delete" />
+                                <table class="historyt">
+                                    <thead>
                                         <tr>
-                                            <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                                            <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
-                                            <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                            <td>[% s.total | html %]</td>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Search</th>
+                                            <th>Results</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </form>
-                    [% END %]
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH s IN previous_biblio_searches %]
+                                            <tr>
+                                                <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
+                                                <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                <td>[% s.total | html %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </form>
+                        [% END %]
 
-                    [% IF !current_biblio_searches && !previous_biblio_searches %]
-                        <p>Your catalog search history is empty.</p>
-                    [% END %]
-                </div> <!-- /#biblio_tab -->
+                        [% IF !current_biblio_searches && !previous_biblio_searches %]
+                            <p>Your catalog search history is empty.</p>
+                        [% END %]
+                    [% END # /tab_panel#biblio_tab %]
 
-                <div id="authority_tab" role="tabpanel" class="tab-pane">
-                    [% IF ( current_authority_searches ) %]
-                        <h2>Current session</h2>
-                        <form id="current_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-                            <p class="selections-toolbar">
-                                <a class="CheckAll" data-form="current_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
-                                <span class="sep">|</span>
-                                <a class="CheckNone" data-form="current_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
-                                <span class="sep">|</span>
-                                <span class="links">
-                                <span class="selections">Select searches to: </span>
-                                <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
-                                </span>
-                            </p>
-                            <input type="hidden" name="action" value="delete" />
-                            <table class="historyt">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Search</th>
-                                        <th>Results</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH s IN current_authority_searches %]
+                    [% WRAPPER tab_panel tabname="authority_tab" %]
+                        [% IF ( current_authority_searches ) %]
+                            <h2>Current session</h2>
+                            <form id="current_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                <p class="selections-toolbar">
+                                    <a class="CheckAll" data-form="current_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                                    <span class="sep">|</span>
+                                    <a class="CheckNone" data-form="current_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                                    <span class="sep">|</span>
+                                    <span class="links">
+                                    <span class="selections">Select searches to: </span>
+                                    <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                    </span>
+                                </p>
+                                <input type="hidden" name="action" value="delete" />
+                                <table class="historyt">
+                                    <thead>
                                         <tr>
-                                            <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                                            <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
-                                            <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                            <td>[% s.total | html %]</td>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Search</th>
+                                            <th>Results</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </form>
-                    [% END %]
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH s IN current_authority_searches %]
+                                            <tr>
+                                                <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
+                                                <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                <td>[% s.total | html %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </form>
+                        [% END %]
 
-                    [% IF ( current_authority_searches && previous_authority_searches) %]
-                        <hr />
-                    [% END %]
+                        [% IF ( current_authority_searches && previous_authority_searches) %]
+                            <hr />
+                        [% END %]
 
-                    [% IF ( previous_authority_searches ) %]
-                        <h2>Previous sessions</h2>
-                        <form id="previous_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-                            <p class="selections-toolbar">
-                                <a class="CheckAll" data-form="previous_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
-                                <span class="sep">|</span>
-                                <a class="CheckNone" data-form="previous_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
-                                <span class="sep">|</span>
-                                <span class="links">
-                                <span class="selections">Select searches to: </span>
-                                <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
-                                </span>
-                            </p>
-                            <input type="hidden" name="action" value="delete" />
-                            <table class="historyt">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Search</th>
-                                        <th>Results</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH s IN previous_authority_searches %]
+                        [% IF ( previous_authority_searches ) %]
+                            <h2>Previous sessions</h2>
+                            <form id="previous_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                <p class="selections-toolbar">
+                                    <a class="CheckAll" data-form="previous_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                                    <span class="sep">|</span>
+                                    <a class="CheckNone" data-form="previous_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                                    <span class="sep">|</span>
+                                    <span class="links">
+                                    <span class="selections">Select searches to: </span>
+                                    <a href="#" class="btn btn-default btn-xs action_delete disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                    </span>
+                                </p>
+                                <input type="hidden" name="action" value="delete" />
+                                <table class="historyt">
+                                    <thead>
                                         <tr>
-                                            <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                                            <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
-                                            <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                            <td>[% s.total | html %]</td>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Search</th>
+                                            <th>Results</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </form>
-                    [% END %]
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH s IN previous_authority_searches %]
+                                            <tr>
+                                                <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                <td data-order="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</td>
+                                                <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                <td>[% s.total | html %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </form>
+                        [% END %]
 
-                    [% IF !current_authority_searches && !previous_authority_searches %]
-                        <p>Your authority search history is empty.</p>
-                    [% END %]
-                </div> [% # /authority_tab %]
-            </div> <!-- /.tab-content -->
-        </div> [% # /tabs %]
+                        [% IF !current_authority_searches && !previous_authority_searches %]
+                            <p>Your authority search history is empty.</p>
+                        [% END %]
+                    [% END # /tab_panel#authority_tab %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
+
     </div> [% # /div.col-md-8 %]
   </div> [% # /div.row %]
 
