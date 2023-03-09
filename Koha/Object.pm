@@ -678,7 +678,6 @@ sub to_api_mapping {
 
 =head3 strings_map
 
-    my $params = { is_public => 1 };
     my $string_map = $object->strings_map($params);
 
 Generic method that returns the string map for coded attributes.
@@ -686,7 +685,7 @@ Generic method that returns the string map for coded attributes.
 Return should be a hashref keyed on database field name with the values
 being hashrefs containing 'str', 'type' and optionally 'category'.
 
-This is then use in to_api to render the _strings embed when requested.
+This is then used in to_api to render the _strings embed when requested.
 
 Note: this only returns an empty I<hashref>. Each class should have its
 own mapping returned.

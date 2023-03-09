@@ -2082,9 +2082,6 @@ sub strings_map {
 
     my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
 
-    my $public_read_list = $params->{public} ? $self->public_read_list : [];
-    my $to_api_mapping   = $self->to_api_mapping;
-
     # Hardcoded known 'authorised_value' values mapped to API codes
     my $code_to_type = {
         branches  => 'library',
