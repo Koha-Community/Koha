@@ -73,7 +73,7 @@
 
 
 [% BLOCK show_tab_html %]
-    <div role="tabpanel" class="tab-pane" id="[% tab_id | html %]">
+    [% WRAPPER tab_panel tabname="${ tab_id }" %]
         [% FOREACH tab0X IN tab_data %]
             [% IF ( tab0X.tag ) %]
                 <div class="tag">
@@ -107,86 +107,87 @@
             [% END %]
             </div> <!-- class='tag' -->
         [% END %]
-    </div>
+    [% END # /tab_panel#tab${tab_id} %]
 [% END %]
 
-    <div id="bibliotabs" class="toptabs">
-        <ul class="nav nav-tabs" role="tablist">
-            [% IF ( tab0XX ) %]
-                <li role="presentation"><a href="#tab0XX" aria-controls="tab0XX" role="tab" data-toggle="tab">&#48;</a></li>
-            [% END %]
-            [% IF ( tab1XX ) %]
-                <li role="presentation"><a href="#tab1XX" aria-controls="tab1XX" role="tab" data-toggle="tab">1</a></li>
-            [% END %]
-            [% IF ( tab2XX ) %]
-                <li role="presentation"><a href="#tab2XX" aria-controls="tab2XX" role="tab" data-toggle="tab">2</a></li>
-            [% END %]
-            [% IF ( tab3XX ) %]
-                <li role="presentation"><a href="#tab3XX" aria-controls="tab3XX" role="tab" data-toggle="tab">3</a></li>
-            [% END %]
-            [% IF ( tab4XX ) %]
-                <li role="presentation"><a href="#tab4XX" aria-controls="tab4XX" role="tab" data-toggle="tab">4</a></li>
-            [% END %]
-            [% IF ( tab5XX ) %]
-                <li role="presentation"><a href="#tab5XX" aria-controls="tab5XX" role="tab" data-toggle="tab">5</a></li>
-            [% END %]
-            [% IF ( tab6XX ) %]
-                <li role="presentation"><a href="#tab6XX" aria-controls="tab6XX" role="tab" data-toggle="tab">6</a></li>
-            [% END %]
-            [% IF ( tab7XX ) %]
-                <li role="presentation"><a href="#tab7XX" aria-controls="tab7XX" role="tab" data-toggle="tab">7</a></li>
-            [% END %]
-            [% IF ( tab8XX ) %]
-                <li role="presentation"><a href="#tab8XX" aria-controls="tab8XX" role="tab" data-toggle="tab">8</a></li>
-            [% END %]
-            [% IF ( tab9XX ) %]
-                <li role="presentation"><a href="#tab9XX" aria-controls="tab9XX" role="tab" data-toggle="tab">9</a></li>
-            [% END %]
-            [% IF ( tab10XX ) %]
-                <li role="presentation"><a href="#tab10XX" aria-controls="tab10XX" role="tab" data-toggle="tab">Item(s)</a></li>
-            [% END %]
-        </ul>
-        <div class="tab-content">
-            [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
+                [% WRAPPER tabs id= "bibliotabs" %]
+                    [% WRAPPER tabs_nav %]
+                        [% IF ( tab0XX ) %]
+                            [% WRAPPER tab_item tabname= "tab0XX" %] &#48; [% END %]
+                        [% END %]
+                        [% IF ( tab1XX ) %]
+                            [% WRAPPER tab_item tabname= "tab1XX" %] 1 [% END %]
+                        [% END %]
+                        [% IF ( tab2XX ) %]
+                            [% WRAPPER tab_item tabname= "tab2XX" %] 2 [% END %]
+                        [% END %]
+                        [% IF ( tab3XX ) %]
+                            [% WRAPPER tab_item tabname= "tab3XX" %] 3 [% END %]
+                        [% END %]
+                        [% IF ( tab4XX ) %]
+                            [% WRAPPER tab_item tabname= "tab4XX" %] 4 [% END %]
+                        [% END %]
+                        [% IF ( tab5XX ) %]
+                            [% WRAPPER tab_item tabname= "tab5XX" %] 5 [% END %]
+                        [% END %]
+                        [% IF ( tab6XX ) %]
+                            [% WRAPPER tab_item tabname= "tab6XX" %] 6 [% END %]
+                        [% END %]
+                        [% IF ( tab7XX ) %]
+                            [% WRAPPER tab_item tabname= "tab7XX" %] 7 [% END %]
+                        [% END %]
+                        [% IF ( tab8XX ) %]
+                            [% WRAPPER tab_item tabname= "tab8XX" %] 8 [% END %]
+                        [% END %]
+                        [% IF ( tab9XX ) %]
+                            [% WRAPPER tab_item tabname= "tab9XX" %] 9 [% END %]
+                        [% END %]
+                        [% IF ( tab10XX ) %]
+                            [% WRAPPER tab_item tabname= "tab10XX" %] Item(s) [% END %]
+                        [% END %]
+                    [% END # /WRAPPER tabs_nav %]
 
-            [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
+                    [% WRAPPER tab_panels %]
+                        [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
 
-            [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
+                        [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
 
-            [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
+                        [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
 
-            [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
+                        [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
 
-            [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
+                        [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
 
-            [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
+                        [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
 
-            [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
+                        [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
 
-            [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
+                        [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
 
-            [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
+                        [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
 
-            [% IF ( tab10XX ) %]
-                <div role="tabpanel" class="tab-pane" id="tab10XX">
-                    <table>
-                            <tr>
-                                [% FOREACH header IN item_header_loop %]
-                                    <th>[% header | html %]</th>
-                                [% END %]
-                            </tr>
-                            [% FOREACH item IN item_loop %]
-                                <tr>
-                                    [% FOREACH sf_code IN item_subfield_codes %]
-                                        <td>[% item.$sf_code | $raw %]</td>
-                                    [% END %]
-                                </tr>
-                            [% END %]
-                    </table>
-                </div>
-            [% END %]
-        </div> <!-- /.tab-content -->
-    </div> <!-- /#bibliotabs -->
+                        [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
+
+                        [% IF ( tab10XX ) %]
+                            [% WRAPPER tab_panel tabname="tab10XX" %]
+                                <table>
+                                        <tr>
+                                            [% FOREACH header IN item_header_loop %]
+                                                <th>[% header | html %]</th>
+                                            [% END %]
+                                        </tr>
+                                        [% FOREACH item IN item_loop %]
+                                            <tr>
+                                                [% FOREACH sf_code IN item_subfield_codes %]
+                                                    <td>[% item.$sf_code | $raw %]</td>
+                                                [% END %]
+                                            </tr>
+                                        [% END %]
+                                </table>
+                            [% END # /tab_panel#tab10XX %]
+                        [% END # /IF tab10XX %]
+                    [% END # /tab_panels %]
+                [% END # /WRAPPER tabs %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

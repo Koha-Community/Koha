@@ -66,17 +66,18 @@
                     [% END %]
                 </div>
 
-                <div id="authoritiestabs" class="toptabs numbered">
-                    <ul class="nav nav-tabs" role="tablist">
+                [% WRAPPER tabs id= "authoritiestabs" %]
+                    [% WRAPPER tabs_nav %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
-                            <li role="presentation">
-                                <a href="#tab[% BIG_LOO.number | uri %]XX" aria-controls="tab[% BIG_LOO.number | uri %]XX" role="tab" data-toggle="tab">[% BIG_LOO.number | html %]</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "tab${ BIG_LOO.number }XX" %]
+                                [% BIG_LOO.number | html %]
+                            [% END %]
                         [% END %]
-                    </ul>
-                    <div class="tab-content">
+                    [% END # /WRAPPER tabs_nav %]
+
+                    [% WRAPPER tab_panels %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
-                            <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane">
+                            [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
                                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
                                     [% IF ( innerloo.tag_number ) %]
                                         <div class="tag">
@@ -114,10 +115,11 @@
                                         [% END #/FOREACH subfiel %]
                                     </div> <!-- /.tag -->
                                 [% END # /FOREACH innerloo %]
-                            </div> <!-- /.tab-pane -->
+                            [% END # /tab_panel#tab${ BIG_LOO.number }XX  %]
                         [% END # /FOREACH BIG_LOO %]
-                    </div> <!-- /.tab-content -->
-                </div> <!-- /#authoritiestabs -->
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
+
             [% END # /IF ( unknownauthid ) %]
         </div> <!-- /.col-md-8 col-md-offset-2 -->
     </div> <!-- /.row -->
