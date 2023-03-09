@@ -562,9 +562,9 @@ sub to_api {
     my $strings = delete $params->{strings};
 
     # coded values handling
-    my $avs = {};
-    if ( $strings and $self->can('api_strings_mapping') ) {
-        $avs = $self->api_strings_mapping($params);
+    my $string_map = {};
+    if ( $strings and $self->can('strings_map') ) {
+        $string_map = $self->strings_map($params);
     }
 
     # Remove forbidden attributes if required (including their coded values)
@@ -575,8 +575,8 @@ sub to_api {
         }
 
         if ($strings) {
-            foreach my $field ( keys %{$avs} ) {
-                delete $avs->{$field}
+            foreach my $field ( keys %{$string_map} ) {
+                delete $string_map->{$field}
                   unless any { $_ eq $field } @{ $self->public_read_list };
             }
         }
@@ -594,8 +594,8 @@ sub to_api {
 
                 # key != undef
                 $json_object->{$mapped_column} = delete $json_object->{$column};
-                $avs->{$mapped_column}         = delete $avs->{$column}
-                  if exists $avs->{$column};
+                $string_map->{$mapped_column}  = delete $string_map->{$column}
+                  if exists $string_map->{$column};
 
             }
             elsif ( exists $json_object->{$column}
@@ -604,12 +604,12 @@ sub to_api {
 
                 # key == undef
                 delete $json_object->{$column};
-                delete $avs->{$column};
+                delete $string_map->{$column};
             }
         }
     }
 
-    $json_object->{_strings} = $avs
+    $json_object->{_strings} = $string_map
       if $strings;
 
     if ($embeds) {
@@ -676,10 +676,10 @@ sub to_api_mapping {
     return {};
 }
 
-=head3 api_strings_mapping
+=head3 strings_map
 
     my $params = { is_public => 1 };
-    my $string_map = $object->api_strings_mapping($params);
+    my $string_map = $object->strings_map($params);
 
 Generic method that returns the string map for coded attributes.
 
@@ -693,7 +693,7 @@ own mapping returned.
 
 =cut
 
-sub api_strings_mapping {
+sub strings_map {
     return {};
 }
 

@@ -2059,13 +2059,20 @@ sub is_denied_renewal {
     return 0;
 }
 
-=head3 api_strings_mapping
+=head3 strings_map
 
-Retrieves for each column name the unblessed authorised value.
+Returns a map of column name to string representations including the string,
+the mapping type and the mapping category where appropriate.
+
+Currently handles authorised value mappings, library, callnumber and itemtype
+expansions.
+
+Accepts a param hashref where the 'public' key denotes whether we want the public
+or staff client strings.
 
 =cut
 
-sub api_strings_mapping {
+sub strings_map {
     my ( $self, $params ) = @_;
 
     my $columns_info  = $self->_result->result_source->columns_info;
