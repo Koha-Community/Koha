@@ -490,18 +490,15 @@
 
             [% IF op == 'list' %]
                 <h1>Lists</h1>
-                <div id="tabs" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li id="privateshelves_tab" role="presentation" class="active">
-                            <a href="#shelves_list" aria-controls="shelves_list" role="tab" data-toggle="tab" data-public="0">Your lists</a>
-                        </li>
-                        <li id="publicshelves_tab" role="presentation">
-                            <a href="#shelves_list" aria-controls="shelves_list" role="tab" data-toggle="tab" data-public="1">Public lists</a>
-                        </li>
-                    </ul>
 
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="shelves_list">
+                [% WRAPPER tabs id= "tabs" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "privateshelves_tab" bt_active= 1 %] <span>Your lists</span> [% END %]
+                        [% WRAPPER tab_item tabname= "publicshelves_tab" %] <span>Public lists</span> [% END %]
+                    [% END # /WRAPPER tabs_nav %]
+
+                    [% WRAPPER tab_panels %]
+                        [% WRAPPER tab_panel tabname="shelves_tab" bt_active= 1 %]
                             <table id="listresultst">
                                 <thead>
                                     <tr>
@@ -538,9 +535,10 @@
                                 </thead>
                                 <tbody></tbody>
                             </table> <!-- /#listresultst -->
-                        </div> <!-- /#shelves_list -->
-                    </div> <!-- #/.tab-content -->
-                </div> <!-- /#tabs -->
+                        [% END %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
+
             [% END # /IF op == 'list' %]
 
             <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
@@ -695,14 +693,18 @@
 
                 /* Select correct tab based on URL parameter */
                 if( public == 0 ){
-                    $('#privateshelves_tab').tab('show');
+                    $('a[href="#privateshelves_tab_panel"]').tab('show');
                 } else {
-                    $("#publicshelves_tab").tab("show");
+                    $('a[href="#publicshelves_tab_panel"]').tab("show");
                 }
 
-                $('a[data-toggle="tab"]')
-                .on("click", function(){
-                    public = $(this).data("public");
+                $('a[data-toggle="tab"]').on("click", function(e){
+                    let target = $(this).attr("href");
+                    if( target == "#publicshelves_tab_panel" ){
+                        public = 1;
+                    } else {
+                        public = 0;
+                    }
                 })
                 .on('shown.bs.tab', function (e) {
                     dtListResults.fnDraw();
