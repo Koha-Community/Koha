@@ -342,7 +342,7 @@ sub _store_matchpoint {
     foreach my $component (@{ $matchpoint->{'components'} }) {
         $seqnum++;
         $sth = $dbh->prepare_cached("INSERT INTO matchpoint_components 
-                                     (matchpoint_id, sequence, tag, subfields, offset, length)
+                                     (matchpoint_id, sequence, tag, subfields, `offset`, length)
                                      VALUES (?, ?, ?, ?, ?, ?)");
         $sth->bind_param(1, $matchpoint_id);
         $sth->bind_param(2, $seqnum);
