@@ -157,41 +157,44 @@ the message.
 
 # C4::Message->enqueue($letter, $borrower, $transport)
 sub enqueue {
-    my ($class, $letter, $borrower, $transport) = @_;
+    my ( $class, $letter, $patron, $transport ) = @_;
     my $metadata   = _metadata($letter);
-    my $to_address = _to_address($borrower, $transport);
+    my $to_address = _to_address( $patron, $transport );
 
     # Same as render_metadata
     my $format ||= sub { $_[0] || "" };
-    my $body = join('', map { $format->($_) } @{$metadata->{body}});
+    my $body = join( '', map { $format->($_) } @{ $metadata->{body} } );
     $letter->{content} = $metadata->{header} . $body . $metadata->{footer};
 
-    $letter->{metadata} = Encode::decode_utf8(Dump($metadata));
-    C4::Letters::EnqueueLetter({
-        letter                 => $letter,
-        borrowernumber         => $borrower->{borrowernumber},
-        message_transport_type => $transport,
-        to_address             => $to_address,
-    });
+    $letter->{metadata} = Encode::decode_utf8( Dump($metadata) );
+    C4::Letters::EnqueueLetter(
+        {
+            letter                 => $letter,
+            borrowernumber         => $patron->id,
+            message_transport_type => $transport,
+            to_address             => $to_address,
+        }
+    );
 }
 
 # based on message $transport, pick an appropriate address to send to
 sub _to_address {
-    my ($borrower, $transport) = @_;
+    my ( $patron, $transport ) = @_;
     my $address;
-    if ($transport eq 'email') {
-        $address = $borrower->{email}
-            || $borrower->{emailpro}
-            || $borrower->{B_email};
-    } elsif ($transport eq 'sms') {
-        $address = $borrower->{smsalertnumber};
-    } else {
+    if ( $transport eq 'email' ) {
+        $address = $patron->notice_email_address;
+    }
+    elsif ( $transport eq 'sms' ) {
+        $address = $patron->smsalertnumber;
+    }
+    else {
         warn "'$transport' is an unknown message transport.";
     }
-    if (not defined $address) {
+    if ( not defined $address ) {
         warn "An appropriate $transport address "
-            . "for borrower $borrower->{userid} "
-            . "could not be found.";
+          . "for borrower "
+          . $patron->userid
+          . "could not be found.";
     }
     return $address;
 }
