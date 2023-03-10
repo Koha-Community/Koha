@@ -768,7 +768,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             $template->param( reserveloop => \@reserveloop );
         }
 
-        if ( $patron ) {
+        if ( $patron && $multi_hold ) {
             # Add the valid pickup locations
             my @pickup_locations = $biblio->pickup_locations({ patron => $patron })->as_list;
             $biblioloopiter{pickup_locations} = \@pickup_locations;
