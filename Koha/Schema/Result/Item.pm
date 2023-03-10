@@ -972,6 +972,16 @@ __PACKAGE__->many_to_many(
   "ordernumber",
 );
 
+__PACKAGE__->has_many(
+  "branchtransfer",
+  "Koha::Schema::Result::Branchtransfer",
+  { 'foreign.itemnumber' => 'self.itemnumber' },
+  {
+      where => { datearrived => undef, datecancelled => undef },
+      order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ]
+  }
+);
+
 use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;

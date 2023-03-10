@@ -565,7 +565,9 @@ we still expect the item to end up at a final location eventually.
 sub get_transfer {
     my ($self) = @_;
 
-    return $self->get_transfers->search( {}, { rows => 1 } )->next;
+    my $transfer = $self->_result->branchtransfer;
+
+    return Koha::Item::Transfers->_new_from_dbic($transfer)->next;
 }
 
 =head3 get_transfers
@@ -588,12 +590,9 @@ we still expect the item to end up at a final location eventually.
 sub get_transfers {
     my ($self) = @_;
 
-    my $transfer_rs = $self->_result->branchtransfers;
+    my $transfer_rs = $self->_result->branchtransfer;
 
-    return Koha::Item::Transfers
-                ->_new_from_dbic($transfer_rs)
-                ->filter_by_current
-                ->search( {}, { order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ], } );
+    return Koha::Item::Transfers->_new_from_dbic($transfer_rs);
 }
 
 =head3 last_returned_by
