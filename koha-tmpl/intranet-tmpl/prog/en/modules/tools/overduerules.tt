@@ -114,9 +114,9 @@
                                                             <option value="">No notice</option>
                                                             [% FOREACH letter IN letters %]
                                                                 [% IF letter.code == value.selected_lettercode %]
-                                                                <option value="[% letter.code | html %]" selected="selected">[% letter.name | html %]</option>
+                                                                <option value="[% letter.code | html %]" selected="selected">[% letter.name | html %] ( [% letter.code | html %] )</option>
                                                                 [% ELSE %]
-                                                                <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                                                <option value="[% letter.code | html %]">[% letter.name | html %] ( [% letter.code | html %] )</option>
                                                                 [% END %]
                                                             [% END %]
                                                         </select>
