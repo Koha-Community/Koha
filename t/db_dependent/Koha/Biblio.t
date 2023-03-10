@@ -811,7 +811,7 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
 };
 
 subtest 'host_items() tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -846,6 +846,18 @@ subtest 'host_items() tests' => sub {
     $host_items = $biblio->host_items;
     is( ref($host_items),   'Koha::Items' );
     is( $host_items->count, 0 );
+
+    subtest 'test host_items param in items()' => sub {
+        plan tests => 4;
+
+        my $items = $biblio->items;
+        is( $items->count, 1, "Without host_items param we only get the items on the biblio");
+        $items = $biblio->items({ host_items => 1 });
+        is( $items->count, 3, "With param host_items we get the biblio items plus analytics");
+        is( ref($items), 'Koha::Items', "We correctly get an Items object");
+        is_deeply( [ $items->get_column('itemnumber') ],
+            [ $item_1->itemnumber, $host_item_1->itemnumber, $host_item_2->itemnumber ] );
+    };
 
     $schema->storage->txn_rollback;
 };
