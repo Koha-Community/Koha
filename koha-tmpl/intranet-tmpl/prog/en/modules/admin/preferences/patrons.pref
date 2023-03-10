@@ -184,6 +184,12 @@ Patrons:
                "OFF": first valid email address
          - 'for sending out email notices.'
      -
+         - Use the following patron email fields in order of highest precedence first
+         - pref: EmailFieldPrecedence
+           class: multi
+         - when selecting which email address to use to send patron notices.
+         - '<br><strong>NOTE:</strong> This preference only takes effect if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoEmailPrimaryAddress">AutoEmailPrimaryAddress</a> is set to <strong>first valid<strong>'
+     -
          - pref: TalkingTechItivaPhoneNotification
            choices:
                1: Enable
