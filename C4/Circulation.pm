@@ -3657,7 +3657,8 @@ sub SendCirculationAlert {
         my $message = C4::Message->find_last_message($borrower, $type, $mtt);
         unless ( $message ) {
             C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
-            C4::Message->enqueue($letter, $borrower, $mtt);
+            my $patron = Koha::Patrons->find($borrower->{borrowernumber});
+            C4::Message->enqueue($letter, $patron, $mtt);
         } else {
             $message->append($letter);
             $message->update;

@@ -358,7 +358,7 @@ sub set_waiting {
         },
     );
 
-    C4::Message->enqueue($letter, $self->patron->unblessed, 'email');
+    C4::Message->enqueue($letter, $self->patron, 'email');
 
     return $self;
 }

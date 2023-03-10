@@ -161,7 +161,7 @@ sub add_recall {
             },
         );
 
-        C4::Message->enqueue( $letter, $checkout->patron->unblessed, 'email' );
+        C4::Message->enqueue( $letter, $checkout->patron, 'email' );
 
         $item = Koha::Items->find( $itemnumber );
         # add to statistics table
