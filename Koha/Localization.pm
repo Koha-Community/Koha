@@ -43,7 +43,7 @@ sub store {
 
     if ($self->entity eq 'itemtypes') {
         my $cache = Koha::Caches->get_instance();
-        my $key = $self->lang."ItemTypeDescriptions";
+        my $key = "itemtype:description:".$self->lang;
         $cache->clear_from_cache($key);
     }
 

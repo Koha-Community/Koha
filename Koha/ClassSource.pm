@@ -53,7 +53,7 @@ sub store {
 
     if ($flush) {
         my $cache = Koha::Caches->get_instance();
-        $cache->clear_from_cache('ClassSources');
+        $cache->clear_from_cache('cn)sources:description');
     }
 
     return $self;

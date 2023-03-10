@@ -60,7 +60,7 @@ sub store {
 
     if ($flush) {
         my $cache = Koha::Caches->get_instance();
-        $cache->clear_from_cache('LibraryNames');
+        $cache->clear_from_cache('libraries:name');
     }
 
     return $self;
