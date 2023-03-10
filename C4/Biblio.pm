@@ -1413,7 +1413,7 @@ sub GetAuthorisedValueDesc {
         }
 
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "cn_source" ) {
-            $cache_key = "ClassSources";
+            $cache_key = "cn_sources:description";
             my $cn_sources = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
             if ( !$cn_sources ) {
                 $cn_sources = {

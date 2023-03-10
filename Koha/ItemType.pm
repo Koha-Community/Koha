@@ -60,7 +60,7 @@ sub store {
 
     if ($flush) {
         my $cache = Koha::Caches->get_instance();
-        my $key = "enItemTypeDescriptions";
+        my $key = "itemtype:description:en";
         $cache->clear_from_cache($key);
     }
 
