@@ -27,6 +27,8 @@ use Koha::Localizations;
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
 
+my $cache = Koha::Caches->get_instance();
+
 =head1 NAME
 
 Koha::ItemType - Koha Item type Object class
@@ -59,12 +61,23 @@ sub store {
     $self = $self->SUPER::store;
 
     if ($flush) {
-        my $cache = Koha::Caches->get_instance();
         my $key = "itemtype:description:en";
         $cache->clear_from_cache($key);
     }
 
     return $self;
+}
+
+=head2 delete
+
+ItemType specific C<delete> to clear relevant caches on delete.
+
+=cut
+
+sub delete {
+    my $self = shift @_;
+    $cache->clear_from_cache('itemtype:description:en');
+    $self->SUPER::delete(@_);
 }
 
 =head3 image_location
