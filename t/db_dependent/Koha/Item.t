@@ -1358,6 +1358,10 @@ subtest 'columns_to_str' => sub {
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("libraries:name");
+    $cache->clear_from_cache("itemtype:description:en");
+    $cache->clear_from_cache("cn_sources:description");
+    $cache->clear_from_cache("AV_descriptions:LOST");
 
     # Creating subfields 'é', 'è' that are not linked with a kohafield
     Koha::MarcSubfieldStructures->search(
@@ -1436,9 +1440,12 @@ subtest 'columns_to_str' => sub {
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("libraries:name");
+    $cache->clear_from_cache("itemtype:description:en");
+    $cache->clear_from_cache("cn_sources:description");
+    $cache->clear_from_cache("AV_descriptions:LOST");
 
     $schema->storage->txn_rollback;
-
 };
 
 subtest 'strings_map() tests' => sub {
@@ -1453,6 +1460,9 @@ subtest 'strings_map() tests' => sub {
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("libraries:name");
+    $cache->clear_from_cache("itemtype:description:en");
+    $cache->clear_from_cache("cn_sources:description");
 
     # Recreating subfields just to be sure tests will be ok
     # 1 => av (LOST)
@@ -1561,7 +1571,7 @@ subtest 'strings_map() tests' => sub {
                 class_split_rule => $class_split_rule->class_split_rule,
             }
         }
-    );
+    )->store();
 
     $item->set(
         {
@@ -1633,6 +1643,9 @@ subtest 'strings_map() tests' => sub {
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("libraries:name");
+    $cache->clear_from_cache("itemtype:description:en");
+    $cache->clear_from_cache("cn_sources:description");
 
     $schema->storage->txn_rollback;
 };
