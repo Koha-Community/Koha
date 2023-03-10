@@ -24,6 +24,8 @@ use Koha::Database;
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
 
+my $cache = Koha::Caches->get_instance();
+
 =head1 NAME
 
 Koha::AuthorisedValue - Koha Authorised value Object class
@@ -61,12 +63,24 @@ sub store {
     $self = $self->SUPER::store;
 
     if ($flush) {
-        my $cache = Koha::Caches->get_instance();
-        my $key = "AVDescriptions-".$self->category;
+        my $key = "AV_descriptions:".$self->category;
         $cache->clear_from_cache($key);
     }
 
     return $self;
+}
+
+=head2 delete
+
+AuthorisedValue specific C<delete> to clear relevant caches on delete.
+
+=cut
+
+sub delete {
+    my $self = shift @_;
+    my $key = "AV_descriptions:".$self->category;
+    $cache->clear_from_cache($key);
+    $self->SUPER::delete(@_);
 }
 
 =head3 opac_description

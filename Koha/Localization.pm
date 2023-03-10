@@ -21,6 +21,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+my $cache = Koha::Caches->get_instance();
+
 =head1 NAME
 
 Koha::Localization - Koha Localization type Object class
@@ -42,12 +44,26 @@ sub store {
     $self = $self->SUPER::store;
 
     if ($self->entity eq 'itemtypes') {
-        my $cache = Koha::Caches->get_instance();
         my $key = "itemtype:description:".$self->lang;
         $cache->clear_from_cache($key);
     }
 
     return $self;
+}
+
+=head2 delete
+
+Localization specific C<delete> to clear relevant caches on delete.
+
+=cut
+
+sub delete {
+    my $self = shift @_;
+    if ($self->entity eq 'itemtypes') {
+        my $key = "itemtype:description:".$self->lang;
+        $cache->clear_from_cache($key);
+    }
+    $self->SUPER::delete(@_);
 }
 
 sub _type {

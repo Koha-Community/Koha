@@ -29,6 +29,8 @@ use Koha::SMTP::Servers;
 
 use base qw(Koha::Object);
 
+my $cache = Koha::Caches->get_instance();
+
 =head1 NAME
 
 Koha::Library - Koha Library Object class
@@ -59,11 +61,22 @@ sub store {
     $self = $self->SUPER::store;
 
     if ($flush) {
-        my $cache = Koha::Caches->get_instance();
         $cache->clear_from_cache('libraries:name');
     }
 
     return $self;
+}
+
+=head2 delete
+
+Library specific C<delete> to clear relevant caches on delete.
+
+=cut
+
+sub delete {
+    my $self = shift @_;
+    $cache->clear_from_cache('libraries:name');
+    $self->SUPER::delete(@_);
 }
 
 =head3 stockrotationstages
