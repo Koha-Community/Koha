@@ -49,9 +49,13 @@ sub store {
         $flush = 1;
     }
     else {
-        my $self_from_storage = $self->get_from_storage;
-        $flush = 1 if ( $self_from_storage->lib ne $self->lib );
-        $flush = 1 if ( $self_from_storage->lib_opac ne $self->lib_opac );
+        my %updated_columns = $self->_result->get_dirty_columns;
+
+        if (   exists $updated_columns{lib}
+            or exists $updated_columns{lib_opac} )
+        {
+            $flush = 1;
+        }
     }
 
     $self = $self->SUPER::store;
