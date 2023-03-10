@@ -193,7 +193,7 @@ my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_loc
 my $params;
 my $patron = Koha::Patrons->find( $borrowernumber );
 $params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
-my $items = $biblio->items({ host_items => 1 })->search_ordered( $params, { prefetch => ['issue','branchtransfers'] } );
+my $items = $biblio->items({ host_items => 1 })->search_ordered( $params, { prefetch => ['issue','branchtransfer'] } );
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords = $biblio->host_items->count;
