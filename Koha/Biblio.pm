@@ -471,11 +471,17 @@ Returns the related Koha::Items object for this biblio
 =cut
 
 sub items {
-    my ($self) = @_;
+    my ($self,$params) = @_;
 
     my $items_rs = $self->_result->items;
 
-    return Koha::Items->_new_from_dbic( $items_rs );
+    return Koha::Items->_new_from_dbic( $items_rs ) unless $params->{host_items};
+
+    my $host_itemnumbers = $self->_host_itemnumbers();
+    my $params = { -or => [biblionumber => $self->id] };
+    push @{$params->{'-or'}}, itemnumber => { -in => $host_itemnumbers } if $host_itemnumbers;
+
+    return Koha::Items->search($params);
 }
 
 =head3 host_items
@@ -492,12 +498,25 @@ sub host_items {
     return Koha::Items->new->empty
       unless C4::Context->preference('EasyAnalyticalRecords');
 
+    my $host_itemnumbers = $self->_host_itemnumbers;
+
+    return Koha::Items->search( { itemnumber => { -in => $host_itemnumbers } } );
+}
+
+=head3 _host_itemnumbers
+
+my $host_itemnumber = $biblio->_host_itemnumbers();
+
+Return the itemnumbers for analytical items on this record
+
+=cut
+
+sub _host_itemnumbers {
+    my ($self) = @_;
+
     my $marcflavour = C4::Context->preference("marcflavour");
     my $analyticfield = '773';
-    if ( $marcflavour eq 'MARC21' ) {
-        $analyticfield = '773';
-    }
-    elsif ( $marcflavour eq 'UNIMARC' ) {
+    if ( $marcflavour eq 'UNIMARC' ) {
         $analyticfield = '461';
     }
     my $marc_record = $self->metadata->record;
@@ -505,9 +524,9 @@ sub host_items {
     foreach my $field ( $marc_record->field($analyticfield) ) {
         push @itemnumbers, $field->subfield('9');
     }
-
-    return Koha::Items->search( { itemnumber => { -in => \@itemnumbers } } );
+    return \@itemnumbers;
 }
+
 
 =head3 itemtype
 
