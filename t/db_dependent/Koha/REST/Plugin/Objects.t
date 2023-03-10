@@ -673,7 +673,7 @@ subtest 'objects.find helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        'api_strings_mapping',
+        'strings_map',
         sub {
             my ($self, $params) = @_;
             use Koha::AuthorisedValues;
@@ -786,7 +786,7 @@ subtest 'objects.search helper with expanded authorised values' => sub {
 
     my $city_class = Test::MockModule->new('Koha::City');
     $city_class->mock(
-        'api_strings_mapping',
+        'strings_map',
         sub {
             my ($self, $params) = @_;
             use Koha::AuthorisedValues;

@@ -311,10 +311,10 @@ subtest "to_api() tests" => sub {
         }
     };
 
-    # mock Koha::Item so it implements 'api_strings_mapping'
+    # mock Koha::Item so it implements 'strings_map'
     my $item_mock = Test::MockModule->new('Koha::Item');
     $item_mock->mock(
-        'api_strings_mapping',
+        'strings_map',
         sub {
             return $_strings;
         }
@@ -475,7 +475,7 @@ subtest "to_api() tests" => sub {
 
         my $city_mock = Test::MockModule->new('Koha::City');
         $city_mock->mock(
-            'api_strings_mapping',
+            'strings_map',
             sub {
                 my ( $self, $params ) = @_;
 
