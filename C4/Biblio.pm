@@ -1375,6 +1375,8 @@ descriptions rather than normal ones when they exist.
 sub GetAuthorisedValueDesc {
     my ( $tag, $subfield, $value, $framework, $tagslib, $category, $opac ) = @_;
 
+    return q{} unless defined($value);
+
     my $cache     = Koha::Caches->get_instance();
     my $cache_key;
     if ( !$category ) {
