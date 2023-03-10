@@ -193,20 +193,14 @@ my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_loc
 my $params;
 my $patron = Koha::Patrons->find( $borrowernumber );
 $params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
-my @items = $biblio->items->search_ordered( $params )->as_list;
+my $items = $biblio->items({ host_items => 1 })->search_ordered( $params, { prefetch => ['issue','branchtransfers'] } );
 
 # flag indicating existence of at least one item linked via a host record
-my $hostrecords;
-# adding items linked via host biblios
-my $hostitems = $biblio->host_items;
-if ( $hostitems->count ) {
-    $hostrecords = 1;
-    push @items, $hostitems->as_list;
-}
+my $hostrecords = $biblio->host_items->count;
 
 my $dat = &GetBiblioData($biblionumber);
-$dat->{'count'} = $biblio->items->count + $hostitems->count;
-$dat->{'showncount'} = scalar @items;
+$dat->{'count'} = $biblio->items({ host_items => 1 })->count;
+$dat->{'showncount'} = $items->count;
 $dat->{'hiddencount'} = $dat->{'count'} - $dat->{'showncount'};
 
 #is biblio a collection and are bundles enabled
@@ -353,7 +347,7 @@ if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
 my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
 my ( $itemloop_has_images, $otheritemloop_has_images );
 
-foreach my $item (@items) {
+while ( my $item = $items->next ) {
     my $itembranchcode = $item->$separatebranch;
 
     my $item_info = $item->unblessed;
@@ -489,7 +483,7 @@ $template->param(
     materials => $materials_flag,
 );
 
-if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+if (C4::Context->preference("AlternateHoldingsField") && scalar $items->count == 0) {
     my $fieldspec = C4::Context->preference("AlternateHoldingsField");
     my $subfields = substr $fieldspec, 3;
     my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
