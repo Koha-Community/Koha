@@ -1436,7 +1436,16 @@ Returns the empty string if the borrower has no email addresses.
 sub first_valid_email_address {
     my ($self) = @_;
 
-    return $self->email() || $self->emailpro() || $self->B_email() || q{};
+    my $email = q{};
+
+    my @fields = split /\s*\|\s*/,
+      C4::Context->preference('EmailFieldPrecedence');
+    for my $field (@fields) {
+        $email = $self->$field;
+        last if ( $email ne q{} );
+    }
+
+    return $email;
 }
 
 =head3 get_club_enrollments
