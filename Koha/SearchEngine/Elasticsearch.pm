@@ -1109,24 +1109,24 @@ sub _get_marc_mapping_rules {
             my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $name, $type, $range);
             if ($field_tag < 10) {
                 $rules->{control_fields}->{$field_tag} //= [];
-                push @{$rules->{control_fields}->{$field_tag}}, @mappings;
+                push @{$rules->{control_fields}->{$field_tag}}, @{clone(\@mappings)};
             }
             else {
                 $rules->{data_fields}->{$field_tag} //= {};
                 foreach my $subfield (@subfields) {
                     $rules->{data_fields}->{$field_tag}->{subfields}->{$subfield} //= [];
-                    push @{$rules->{data_fields}->{$field_tag}->{subfields}->{$subfield}}, @mappings;
+                    push @{$rules->{data_fields}->{$field_tag}->{subfields}->{$subfield}}, @{clone(\@mappings)};
                 }
                 foreach my $subfield_group (@subfield_groups) {
                     $rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group} //= [];
-                    push @{$rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group}}, @mappings;
+                    push @{$rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group}}, @{clone(\@mappings)};
                 }
             }
         }
         elsif ($marc_field =~ $leader_regexp) {
             my $range = defined $1 ? $1 : undef;
             my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $name, $type, $range);
-            push @{$rules->{leader}}, @mappings;
+            push @{$rules->{leader}}, @{clone(\@mappings)};
         }
         else {
             Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
