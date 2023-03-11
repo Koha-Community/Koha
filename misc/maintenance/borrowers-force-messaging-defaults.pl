@@ -34,7 +34,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $since, $not_expired, $no_overwrite, $category ) = @_;
+    my ($doit, $since, $not_expired, $no_overwrite, $category, $branchcode ) = @_;
 
     print "Since: $since\n" if $since;
 
@@ -56,8 +56,9 @@ WHERE 1|;
         $sql .= " AND mp.borrowernumber IS NULL";
     }
     $sql .= " AND bo.categorycode = ?" if $category;
+    $sql .= " AND bo.branchcode = ?" if $branchcode;
     my $sth = $dbh->prepare($sql);
-    $sth->execute($since || (), $category || () );
+    $sth->execute($since || (), $category || (), $branchcode || () );
     my $cnt = 0;
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
@@ -73,19 +74,20 @@ WHERE 1|;
 }
 
 
-my ( $doit, $since, $help, $not_expired, $no_overwrite, $category );
+my ( $doit, $since, $help, $not_expired, $no_overwrite, $category, $branchcode );
 my $result = GetOptions(
     'doit'        => \$doit,
     'since:s'     => \$since,
     'not-expired' => \$not_expired,
     'no-overwrite'  => \$no_overwrite,
     'category:s'  => \$category,
+    'library:s'   => \$branchcode,
     'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite, $category );
+force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite, $category, $branchcode );
 
 =head1 NAME
 
@@ -98,6 +100,7 @@ borrowers-force-messaging-defaults.pl
   borrowers-force-messaging-defaults.pl --doit
   borrowers-force-messaging-defaults.pl --doit --not-expired
   borrowers-force-messaging-defaults.pl --doit --category PT
+  borrowers-force-messaging-defaults.pl --doit --library CPL
 
 =head1 DESCRIPTION
 
@@ -133,6 +136,10 @@ already set their preferences.
 =item B<--category>
 
 Will only update patrons in the category specified.
+
+=item B<--library>
+
+Will only update patrons in the library specified.
 
 =item B<--since>
 
