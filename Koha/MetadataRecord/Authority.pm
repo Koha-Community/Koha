@@ -209,7 +209,7 @@ sub get_all_authorities_iterator {
 
             my $auth = __PACKAGE__->get_from_authid($row->authid);
             if (!$auth) {
-                warn "Something went wrong reading record for authority $row->authid: $@\n";
+                warn "Something went wrong reading record for authority " . $row->authid . ": $@\n";
                 next;
             }
             return $auth;
