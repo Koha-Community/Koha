@@ -690,6 +690,8 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
 
     t::lib::Mocks::mock_preference( 'NotesToHide', '520' );
 
+    my $av = $builder->build_object( { class => 'Koha::AuthorisedValues' } );
+
     my $biblio = $builder->build_sample_biblio;
     my $record = $biblio->metadata->record;
     $record->append_fields(
@@ -698,21 +700,12 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
         MARC::Field->new( '520', '', '', a => 'Note3 skipped' ),
         MARC::Field->new( '541', '0', '', a => 'Note4 skipped on opac' ),
         MARC::Field->new( '544', '', '', a => 'Note5' ),
-        MARC::Field->new( '590', '', '', a => 'CODE' ),
+        MARC::Field->new( '590', '', '', a => $av->authorised_value ),
         MARC::Field->new( '545', '', '', a => 'Invisible on OPAC' ),
     );
 
-    Koha::AuthorisedValueCategory->new({ category_name => 'TEST' })->store;
-    Koha::AuthorisedValue->new(
-        {
-            category         => 'TEST',
-            authorised_value => 'CODE',
-            lib              => 'Description should show',
-            lib_opac         => 'Description should show OPAC'
-        }
-    )->store;
     my $mss = Koha::MarcSubfieldStructures->find({tagfield => "590", tagsubfield => "a", frameworkcode => $biblio->frameworkcode });
-    $mss->update({ authorised_value => "TEST" });
+    $mss->update({ authorised_value => $av->category });
 
     $mss = Koha::MarcSubfieldStructures->find({tagfield => "545", tagsubfield => "a", frameworkcode => $biblio->frameworkcode });
     $mss->update({ hidden => 1 });
@@ -721,6 +714,7 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("MarcCodedFields-");
 
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
@@ -731,7 +725,7 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
     is( $notes->[3]->{marcnote}, 'Note4 skipped on opac',"Note shows if not opac (Hidden by Indicator)" );
     is( $notes->[4]->{marcnote}, 'Note5', 'Fifth note' );
-    is( $notes->[5]->{marcnote}, 'Description should show', 'Authorised value is correctly parsed to show description rather than code' );
+    is( $notes->[5]->{marcnote}, $av->lib, 'Authorised value is correctly parsed to show description rather than code' );
     is( $notes->[6]->{marcnote}, 'Invisible on OPAC', 'Note shows if not opac (Hidden by framework)' );
     is( @$notes, 7, 'No more notes' );
     $notes = $biblio->get_marc_notes({ opac => 1 });
@@ -739,12 +733,13 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
     is( $notes->[3]->{marcnote}, 'Note5', 'Fifth note shows after fourth skipped' );
-    is( $notes->[4]->{marcnote}, 'Description should show OPAC', 'Authorised value is correctly parsed for OPAC to show description rather than code' );
+    is( $notes->[4]->{marcnote}, $av->lib_opac, 'Authorised value is correctly parsed for OPAC to show description rather than code' );
     is( @$notes, 5, 'No more notes' );
 
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
+    $cache->clear_from_cache("MarcCodedFields-");
 
     $schema->storage->txn_rollback;
 };
