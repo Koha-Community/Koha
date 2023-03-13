@@ -73,6 +73,11 @@ subtest 'ExpandCodedFields tests' => sub {
 
     my $cache = Koha::Caches->get_instance;
     $cache->clear_from_cache("MarcCodedFields-");
+    # Clear GetAuthorisedValueDesc-generated cache
+    $cache->clear_from_cache("libraries:name");
+    $cache->clear_from_cache("itemtype:description:en");
+    $cache->clear_from_cache("cn_sources:description");
+    $cache->clear_from_cache("AV_descriptions:LOST");
 
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
