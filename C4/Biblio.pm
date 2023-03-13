@@ -1385,7 +1385,7 @@ sub GetAuthorisedValueDesc {
 
         #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-            $cache_key = "LibraryNames";
+            $cache_key = "libraries:name";
             my $libraries = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
             if ( !$libraries ) {
                 $libraries = {
@@ -1403,7 +1403,7 @@ sub GetAuthorisedValueDesc {
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
             my $lang = C4::Languages::getlanguage;
             $lang //= 'en';
-            $cache_key = $lang . 'ItemTypeDescriptions';
+            $cache_key = 'itemtype:description:' . $lang;
             my $itypes = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
             if ( !$itypes ) {
                 $itypes =
@@ -1435,7 +1435,7 @@ sub GetAuthorisedValueDesc {
 
     my $dbh = C4::Context->dbh;
     if ( $category ne "" ) {
-        $cache_key = "AVDescriptions-" . $category;
+        $cache_key = "AV_descriptions:" . $category;
         my $av_descriptions = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
         if ( !$av_descriptions ) {
             $av_descriptions = {

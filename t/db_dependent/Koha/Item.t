@@ -1463,6 +1463,7 @@ subtest 'strings_map() tests' => sub {
     $cache->clear_from_cache("libraries:name");
     $cache->clear_from_cache("itemtype:description:en");
     $cache->clear_from_cache("cn_sources:description");
+    $cache->clear_from_cache("AV_descriptions:LOST");
 
     # Recreating subfields just to be sure tests will be ok
     # 1 => av (LOST)
