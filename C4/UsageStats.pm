@@ -326,7 +326,7 @@ sub _shared_preferences {
         PatronSelfRegistration
         OPACShelfBrowser
         AutoEmailNewUser
-        AutoEmailPrimaryAddress
+        EmailFieldPrimary
         autoMemberNum
         BorrowerRenewalPeriodBase
         EnableBorrowerFiles

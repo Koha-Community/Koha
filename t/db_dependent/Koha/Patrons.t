@@ -1066,11 +1066,11 @@ subtest 'notice_email_address' => sub {
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
-    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'OFF' );
-    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when AutoEmailPrimaryAddress is off");
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
+    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off");
 
-    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
-    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when AutoEmailPrimaryAddress is emailpro");
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
+    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
 
     $patron->delete;
 };
@@ -2176,7 +2176,7 @@ subtest 'queue_notice' => sub {
     plan tests => 11;
 
     my $dbh = C4::Context->dbh;
-    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'email' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'email' );
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
     my $letter_e = $builder->build_object( {

@@ -419,7 +419,7 @@ sub mockedPref {
         $return = $staffClientBaseURL;
     }
 
-    if ( $param eq 'AutoEmailPrimaryAddress' ) {
+    if ( $param eq 'EmailFieldPrimary' ) {
         $return = 'OFF';
     }
 

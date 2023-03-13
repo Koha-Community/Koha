@@ -95,7 +95,7 @@ if (
 
         # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailNewUser") ) {
-            # Look up correct email address taking AutoEmailPrimaryAddress into account
+            # Look up correct email address taking EmailFieldPrimary into account
             my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice
             if ($emailaddr) {

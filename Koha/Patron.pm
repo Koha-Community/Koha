@@ -1400,7 +1400,7 @@ Returns the empty string if no email address.
 sub notice_email_address{
     my ( $self ) = @_;
 
-    my $which_address = C4::Context->preference("AutoEmailPrimaryAddress");
+    my $which_address = C4::Context->preference("EmailFieldPrimary");
     # if syspref is set to 'first valid' (value == OFF), look up email address
     if ( $which_address eq 'OFF' ) {
         return $self->first_valid_email_address;
