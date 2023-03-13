@@ -9,6 +9,7 @@ return {
         $dbh->do(q{
             INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (29, 'loggedinlibrary', 'Allow staff to change logged in library', 0)
         });
+        say $out "Added new permission 'loggedinlibrary'";
 
         my $IndependentBranches = C4::Context->preference('IndependentBranches');
         unless ( $IndependentBranches ) {
