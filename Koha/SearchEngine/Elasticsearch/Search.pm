@@ -524,8 +524,13 @@ sub _convert_facets {
             };
         }
         if( C4::Context->preference('FacetOrder') eq 'Alphabetical' ){
-            @{ $facet->{facets} } =
-                sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $facet->{facets} };
+            if ($type ne 'date-of-publication') {
+                @{ $facet->{facets} } =
+                    sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $facet->{facets} };
+            } else {
+                @{ $facet->{facets} } =
+                    sort { $b->{facet_label_value} cmp $a->{facet_label_value} } @{ $facet->{facets} };
+            }
         }
         push @facets, $facet if exists $facet->{facets};
     }

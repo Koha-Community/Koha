@@ -614,6 +614,14 @@ sub marc_records_to_documents {
             }
         }
 
+        my $s008;
+        if ($record->field('008') && ($s008 = $record->field('008')->data) && length($s008) > 10 && substr($s008, 10, 1) eq 'u') {
+            my $date = substr($s008, 7, 4);
+            $date =~ s/u/0/g;
+            substr($s008, 7, 4, $date);
+            $record->field('008')->update($s008);
+        }
+
         my $mappings = $rules->{leader};
         if ($mappings) {
             $self->_process_mappings($mappings, $record->leader(), $record_document, {
