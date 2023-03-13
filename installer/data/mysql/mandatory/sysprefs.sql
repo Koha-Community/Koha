@@ -77,6 +77,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AuthorityXSLTOpacDetailsDisplay','','','Enable XSL stylesheet control over authority details page in the OPAC','Free'),
 ('AuthorityXSLTOpacResultsDisplay','','','Enable XSL stylesheet control over authority results page in the OPAC','Free'),
 ('AuthorityXSLTResultsDisplay','','','Enable XSL stylesheet control over authority results page display on intranet','Free'),
+('AuthorLinkSortBy','default','call_number|pubdate|acqdate|title','Specify the default field used for sorting when click author links','Choice'),
+('AuthorLinkSortOrder','asc','asc|dsc|az|za','Specify the default sort order for author links','Choice'),
 ('AuthSuccessLog','0',NULL,'If enabled, log successful authentications','YesNo'),
 ('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
 ('autoControlNumber','OFF','biblionumber|OFF','Used to autogenerate a Control Number: biblionumber will be as biblionumber, OFF will leave the field as it is;','Choice'),

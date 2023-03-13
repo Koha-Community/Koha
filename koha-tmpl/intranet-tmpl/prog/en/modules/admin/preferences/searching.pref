@@ -175,6 +175,23 @@ Searching:
                   az: from A to Z.
                   za: from Z to A.
         -
+            - By default, sort search results from author links by
+            - pref: AuthorLinkSortBy
+              default: default
+              choices:
+                  default: obey default sort field and order specified in defaultSortField or OPACdefaultSortField
+                  call_number: call number
+                  pubdate: date of publication
+                  acqdate: date added
+                  title: title
+            - ','
+            - pref: AuthorLinkSortOrder
+              choices:
+                  asc: ascending.
+                  dsc: descending.
+                  az: from A to Z.
+                  za: from Z to A.
+        -
             - When limiting search results with a library or library group, limit by the item's
             - pref: SearchLimitLibrary
               choices:

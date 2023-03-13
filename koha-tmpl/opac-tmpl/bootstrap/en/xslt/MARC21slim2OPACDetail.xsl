@@ -26,6 +26,8 @@
 
     <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
+    <xsl:variable name="AuthorLinkSortBy" select="marc:sysprefs/marc:syspref[@name='AuthorLinkSortBy']"/>
+    <xsl:variable name="AuthorLinkSortOrder" select="marc:sysprefs/marc:syspref[@name='AuthorLinkSortOrder']"/>
     <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
     <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
     <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
@@ -174,6 +176,8 @@
         <xsl:call-template name="showAuthor">
             <xsl:with-param name="authorfield" select="marc:datafield[(@tag=100 or @tag=110 or @tag=111)]"/>
             <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+            <xsl:with-param name="AuthorLinkSortOrder" select="$AuthorLinkSortOrder"/>
+            <xsl:with-param name="AuthorLinkSortBy" select="$AuthorLinkSortBy"/>
             <xsl:with-param name="materialTypeLabel" select="$materialTypeLabel"/>
             <xsl:with-param name="theme" select="$theme"/>
         </xsl:call-template>
@@ -182,6 +186,8 @@
             <!-- #13382 suppress 700$i and 7xx/@ind2=2 -->
             <xsl:with-param name="authorfield" select="marc:datafield[(@tag=700 or @tag=710 or @tag=711) and not(@ind2=2) and not(marc:subfield[@code='i'])]"/>
             <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+            <xsl:with-param name="AuthorLinkSortOrder" select="$AuthorLinkSortOrder"/>
+            <xsl:with-param name="AuthorLinkSortBy" select="$AuthorLinkSortBy"/>
             <xsl:with-param name="materialTypeLabel" select="$materialTypeLabel"/>
             <xsl:with-param name="theme" select="$theme"/>
         </xsl:call-template>
@@ -1802,6 +1808,8 @@
     <xsl:template name="showAuthor">
         <xsl:param name="authorfield" />
         <xsl:param name="UseAuthoritiesForTracings" />
+        <xsl:param name="AuthorLinkSortBy"/>
+        <xsl:param name="AuthorLinkSortOrder"/>
         <xsl:param name="materialTypeLabel" />
         <xsl:param name="theme" />
         <xsl:if test="count($authorfield)&gt;0">
@@ -1831,10 +1839,29 @@
             <a>
                 <xsl:choose>
                     <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:"<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>"</xsl:attribute>
+                        <xsl:attribute name="href">
+                            <xsl:text>/cgi-bin/koha/opac-search.pl?q=an:</xsl:text>
+                            <xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>
+                            <xsl:if test="$AuthorLinkSortBy!='default'">
+                                <xsl:text>&amp;sort_by=</xsl:text>
+                                <xsl:value-of select="$AuthorLinkSortBy"/>
+                                <xsl:text>_</xsl:text>
+                                <xsl:value-of select="$AuthorLinkSortOrder" />
+                            </xsl:if>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
+                        <xsl:attribute name="href">
+                            <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:"</xsl:text>
+                            <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
+                            <xsl:text>"</xsl:text>
+                            <xsl:if test="$AuthorLinkSortBy!='default'">
+                                <xsl:text>&amp;sort_by=</xsl:text>
+                                <xsl:value-of select="$AuthorLinkSortBy"/>
+                                <xsl:text>_</xsl:text>
+                                <xsl:value-of select="$AuthorLinkSortOrder" />
+                            </xsl:if>
+                        </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <xsl:attribute name="class">contributors</xsl:attribute>

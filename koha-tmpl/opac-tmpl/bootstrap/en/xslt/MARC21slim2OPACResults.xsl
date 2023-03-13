@@ -28,6 +28,8 @@
     <xsl:variable name="OPACResultsUnavailableGroupingBy" select="marc:sysprefs/marc:syspref[@name='OPACResultsUnavailableGroupingBy']"/>
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
+    <xsl:variable name="AuthorLinkSortBy" select="marc:sysprefs/marc:syspref[@name='AuthorLinkSortBy']"/>
+    <xsl:variable name="AuthorLinkSortOrder" select="marc:sysprefs/marc:syspref[@name='AuthorLinkSortOrder']"/>
     <xsl:variable name="OPACResultsLibrary" select="marc:sysprefs/marc:syspref[@name='OPACResultsLibrary']"/>
     <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
@@ -525,10 +527,29 @@
                 <a>
                     <xsl:choose>
                         <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                            <xsl:attribute name="href">
+                                <xsl:text>/cgi-bin/koha/opac-search.pl?q=an:</xsl:text>
+                                <xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>
+                                <xsl:if test="$AuthorLinkSortBy!='default'">
+                                    <xsl:text>&amp;sort_by=</xsl:text>
+                                    <xsl:value-of select="$AuthorLinkSortBy"/>
+                                    <xsl:text>_</xsl:text>
+                                    <xsl:value-of select="$AuthorLinkSortOrder" />
+                                </xsl:if>
+                            </xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
+                            <xsl:attribute name="href">
+                                <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:"</xsl:text>
+                                <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
+                                <xsl:text>"</xsl:text>
+                                <xsl:if test="$AuthorLinkSortBy!='default'">
+                                    <xsl:text>&amp;sort_by=</xsl:text>
+                                    <xsl:value-of select="$AuthorLinkSortBy"/>
+                                    <xsl:text>_</xsl:text>
+                                    <xsl:value-of select="$AuthorLinkSortOrder" />
+                                </xsl:if>
+                            </xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                     <xsl:call-template name="chopPunctuation">
