@@ -763,6 +763,7 @@ SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?
 
     my $dbh = C4::Context->dbh;
     my ( $fee ) = $dbh->selectrow_array( $borquery, undef, ($borrowernumber) );
+    $fee += 0;
     my $hold_fee_mode = C4::Context->preference('HoldFeeMode') || 'not_always';
     if( $fee and $fee > 0 and $hold_fee_mode eq 'not_always' ) {
         # This is a reconstruction of the old code:
