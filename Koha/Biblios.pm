@@ -24,10 +24,6 @@ use Koha::Database;
 
 use Koha::Biblio;
 use Koha::Libraries;
-use MARC::File::MiJ;
-use MARC::File::USMARC;
-use MARC::File::XML;
-use MARC::Record;
 
 use base qw(Koha::Objects);
 
@@ -38,45 +34,6 @@ Koha::Biblios - Koha Biblio object set class
 =head1 API
 
 =head2 Class methods
-
-=head3 print_collection
-    my $collection_text = $result_set->print_collection($format)
-
-Return a text representation of a collection (group of records) in the specified format.
-Allowed formats are marcxml, mij, marc and txt. Defaults to marcxml.
-
-=cut
-
-sub print_collection {
-    my ( $self, $format ) = @_;
-
-    my ($start, $glue, $end, @parts);
-
-    my %serializers = (
-        'mij' => \&MARC::File::MiJ::encode,
-        'marc' => \&MARC::File::USMARC::encode,
-        'txt' => \&MARC::Record::as_formatted,
-        'marcxml' => \&MARC::File::XML::record
-    );
-    if ($format eq 'mij') {
-        $start = '[';
-        $glue = ',';
-        $end = ']';
-    } elsif ($format eq 'marc') {
-        $glue = "\n";
-    } elsif ($format eq 'txt') {
-        $glue = "\n\n";
-    } else {
-        $glue = '';
-        $format = 'marcxml';
-        $start = MARC::File::XML::header();
-        $end = MARC::File::XML::footer();
-    }
-    while (my $biblio = $self->next) {
-        push @parts, $serializers{$format}->($biblio->metadata->record);
-    }
-    return (defined $start ? $start : '').join($glue, @parts).(defined $end ? $end : '');
-}
 
 =head3 pickup_locations
 
