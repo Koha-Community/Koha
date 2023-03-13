@@ -202,7 +202,7 @@ SKIP: {
                 $id =~ m|^tag_952_subfield_w| # replacementpricedate
             ) {
                 $v = strftime("%Y-%m-%d", localtime);
-                $effective_input = $driver->find_element('//div[@id="subfield952w"]/input[@class="input_marceditor flatpickr-input"]');
+                $effective_input = $driver->find_element('//div[@id="subfield952w"]/input[@type="text" and @class="input_marceditor items.replacementpricedate noEnterSubmit flatpickr-input"]');
             }
             elsif (
                 $id =~ m|^tag_952_subfield_d| # dateaccessioned
