@@ -13,7 +13,7 @@ return {
         my $IndependentBranches = C4::Context->preference('IndependentBranches');
         unless ( $IndependentBranches ) {
             $dbh->do(q{
-                UPDATE borrowers SET flags = flags + (1<<29) WHERE flags & 4;
+                UPDATE borrowers SET flags = flags + (1<<29) WHERE ( flags & 4 AND !(flags & 1<<29) ) ;
            });
         }
     },
