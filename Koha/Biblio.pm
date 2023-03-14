@@ -1333,7 +1333,7 @@ Return host only
 sub get_marc_host_only {
     my ($self) = @_;
 
-    my ( $host, $relatedparts ) = $self->get_marc_host;
+    my ( $host ) = $self->get_marc_host;
 
     return $host;
 }
@@ -1349,7 +1349,7 @@ Return related parts only
 sub get_marc_relatedparts_only {
     my ($self) = @_;
 
-    my ( $host, $relatedparts ) = $self->get_marc_host;
+    my ( undef, $relatedparts ) = $self->get_marc_host;
 
     return $relatedparts;
 }
