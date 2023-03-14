@@ -15,6 +15,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Patron',
         description => "Deleting patron failed"
     },
+    'Koha::Exceptions::Patron::FailedAnonymizing' => {
+        isa         => 'Koha::Exceptions::Patron',
+        description => "Anonymizing patron reading history failed"
+    },
     'Koha::Exceptions::Patron::FailedDeleteAnonymousPatron' => {
         isa         => 'Koha::Exceptions::Patron',
         description => "Deleting patron failed, AnonymousPatron is not deleteable"

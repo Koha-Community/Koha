@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
 
@@ -1348,4 +1348,84 @@ subtest 'notify_library_of_registration()' => sub {
     $dbh->do(q|DELETE FROM message_queue|);
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'get_savings tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' }, { value => { branchcode => $library->branchcode } });
+
+    t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library->branchcode });
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item1 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => rand(20),
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => rand(20),
+        }
+    );
+
+    is( $patron->get_savings, 0, 'No checkouts, no savings' );
+
+    # Add an old checkout with deleted itemnumber
+    $builder->build_object({ class => 'Koha::Old::Checkouts', value => { itemnumber => undef, borrowernumber => $patron->id } });
+
+    is( $patron->get_savings, 0, 'No checkouts with itemnumber, no savings' );
+
+    AddIssue( $patron->unblessed, $item1->barcode );
+    AddIssue( $patron->unblessed, $item2->barcode );
+
+    my $savings = $patron->get_savings;
+    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );
+
+    AddReturn( $item2->barcode, $item2->homebranch );
+
+    $savings = $patron->get_savings;
+    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'update privacy tests' => sub {
+
+    plan tests => 5;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy => 1 } });
+
+    my $old_checkout = $builder->build_object({ class => 'Koha::Old::Checkouts', value => { borrowernumber => $patron->id } });
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', '0' );
+
+    $patron->privacy(2); #set to never
+
+    throws_ok{ $patron->store } 'Koha::Exceptions::Patron::FailedAnonymizing', 'We throw an exception when anonymizing fails';
+
+    $old_checkout->discard_changes; #refresh from db
+    $patron->discard_changes;
+
+    is( $old_checkout->borrowernumber, $patron->id, "When anonymizing fails, we don't clear the checkouts");
+    is( $patron->privacy(), 1, "When anonymizing fails, we don't chaneg the privacy");
+
+    my $anon_patron = $builder->build_object({ class => 'Koha::Patrons'});
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anon_patron->id );
+
+    $patron->privacy(2)->store(); #set to never
+
+    $old_checkout->discard_changes; #refresh from db
+    $patron->discard_changes;
+
+    is( $old_checkout->borrowernumber, $anon_patron->id, "Checkout is successfully anonymized");
+    is( $patron->privacy(), 2, "Patron privacy is successfully updated");
 };
