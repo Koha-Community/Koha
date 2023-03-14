@@ -20,6 +20,8 @@ use strict;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Try::Tiny;
+
 use Koha::Account;
 use Koha::Account::Lines;
 
@@ -76,10 +78,28 @@ sub pay {
             };
         }
     }
-    my $pay_response = $account->pay($pay_options);
+
+    my $ok = 1;
+    my $pay_response;
+    my $error;
+    try {
+        $pay_response = $account->pay($pay_options);
+    }
+    catch {
+        $ok = 0;
+
+        if ( ref($_) =~ /^Koha::Exceptions/ ) {
+            $error = $_->description;
+        }
+        else {
+            $_->rethrow;
+        }
+    };
+
     return {
-        ok           => 1,
-        pay_response => $pay_response
+        ok           => $ok,
+        pay_response => $pay_response,
+        error        => $error,
     };
 }
 
