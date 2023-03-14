@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
 
@@ -1397,4 +1397,36 @@ subtest 'get_savings tests' => sub {
     is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'update privacy tests' => sub {
+
+    plan tests => 5;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy => 1 } });
+
+    my $old_checkout = $builder->build_object({ class => 'Koha::Old::Checkouts', value => { borrowernumber => $patron->id } });
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', '0' );
+
+    $patron->privacy(2); #set to never
+
+    throws_ok{ $patron->store } 'Koha::Exceptions::Patron::FailedAnonymizing', 'We throw an exception when anonymizing fails';
+
+    $old_checkout->discard_changes; #refresh from db
+    $patron->discard_changes;
+
+    is( $old_checkout->borrowernumber, $patron->id, "When anonymizing fails, we don't clear the checkouts");
+    is( $patron->privacy(), 1, "When anonymizing fails, we don't chaneg the privacy");
+
+    my $anon_patron = $builder->build_object({ class => 'Koha::Patrons'});
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anon_patron->id );
+
+    $patron->privacy(2)->store(); #set to never
+
+    $old_checkout->discard_changes; #refresh from db
+    $patron->discard_changes;
+
+    is( $old_checkout->borrowernumber, $anon_patron->id, "Checkout is successfully anonymized");
+    is( $patron->privacy(), 2, "Patron privacy is successfully updated");
 };
