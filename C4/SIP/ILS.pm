@@ -284,7 +284,8 @@ sub pay_fee {
 
     return {
         status       => $trans,
-        pay_response => $trans_result->{pay_response}
+        pay_response => $trans_result->{pay_response},
+        error        => $trans_result->{error},
     };
 }
 
