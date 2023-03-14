@@ -58,7 +58,7 @@ if ($email_add) {
       );
 
     my $patron     = Koha::Patrons->find($borrowernumber);
-    my $user_email = $patron->first_valid_email_address;
+    my $user_email = $patron->notice_email_address;
 
     my $comment = $query->param('comment');
 

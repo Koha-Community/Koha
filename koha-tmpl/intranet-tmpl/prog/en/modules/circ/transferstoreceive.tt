@@ -72,11 +72,11 @@
                             [% reser.patron.surname | html %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
                         </a>
                         [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
-                            [% IF ( reser.patron.first_valid_email_address ) %]
+                            [% IF ( reser.patron.notice_email_address ) %]
                                 <br />
                                 [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.patron.first_valid_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]">
-                                    [% reser.patron.first_valid_email_address | html %]
+                                <a href="mailto:[% reser.patron.notice_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]">
+                                    [% reser.patron.notice_email_address | html %]
                                 </a>
                             [% END %]
                         [% ELSIF ( reser.recall ) %]

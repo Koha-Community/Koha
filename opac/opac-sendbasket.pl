@@ -48,7 +48,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $bib_list  = $query->param('bib_list') || '';
 my $email_add = $query->param('email_add');
 
-if ($email_add) {
+if ( $email_add ) {
     die "Wrong CSRF token"
       unless Koha::Token->new->check_csrf(
         {
@@ -58,7 +58,7 @@ if ($email_add) {
       );
 
     my $patron     = Koha::Patrons->find($borrowernumber);
-    my $user_email = $patron->first_valid_email_address;
+    my $user_email = $patron->notice_email_address;
 
     my $comment = $query->param('comment');
 

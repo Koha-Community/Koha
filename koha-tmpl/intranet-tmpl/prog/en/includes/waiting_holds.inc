@@ -54,9 +54,9 @@
                 </td>
                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrower.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=reserveloo.borrower invert_name=1 no_title=1 %]</a>
                     [% IF ( reserveloo.borrower.phone ) %]<br /><span class="patron_phone">[% reserveloo.borrower.phone | html %]</span>[% END %]
-                    [% IF ( reserveloo.borrower.first_valid_email_address ) %]
-                        <span class="patron_email"><br /><a href="mailto:[% reserveloo.borrower.first_valid_email_address | uri %]?subject=[% "Hold waiting: " | uri %][% reserveloo.biblio.title | uri %]">
-                        [% reserveloo.borrower.first_valid_email_address | html %]</a></span>
+                    [% IF ( reserveloo.borrower.notice_email_address ) %]
+                        <span class="patron_email"><br /><a href="mailto:[% reserveloo.borrower.notice_email_address | uri %]?subject=[% "Hold waiting: " | uri %][% reserveloo.biblio.title | uri %]">
+                        [% reserveloo.borrower.notice_email_address | html %]</a></span>
                     [% END %]
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
