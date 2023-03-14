@@ -16,7 +16,7 @@ return {
         }
 
         $dbh->do(q{
-            INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('ActionLogsTraceDepth', '0', '', 'Sets the maximum depth of the action logs stack trace', 'Integer')
         });
         say $out "Added new system preference 'ActionLogsTraceDepth'";
