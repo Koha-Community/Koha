@@ -156,7 +156,7 @@ $template->param(
         {
             branchcode => $branchcode,
         },
-        { order_by => [ { -desc => 'delivered_datetime' }, 'arrival_datetime', 'scheduled_pickup_datetime' ], }
+        { order_by => [ { -desc => 'delivered_datetime' }, 'scheduled_pickup_datetime' ], }
       )->filter_by_scheduled_today,
 );
 
