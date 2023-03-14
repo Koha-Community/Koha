@@ -50,7 +50,7 @@ if ( $op eq 'cancel' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @recalls = Koha::Recalls->search({ status => [ 'requested','overdue','in_transit' ] })->as_list;
+    my @recalls = Koha::Recalls->search({ status => [ 'requested','overdue' ] })->as_list;
     my @pull_list;
     my %seen_bib;
     foreach my $recall ( @recalls ) {
@@ -64,7 +64,7 @@ if ( $op eq 'list' ) {
             # get recall data about this biblio
             my $biblio = $recall->biblio;
             my @this_bib_recalls = $biblio->recalls->search(
-                { status   => [ 'requested', 'overdue', 'in_transit' ] },
+                { status   => [ 'requested','overdue' ] },
                 { order_by => { -asc => 'created_date' } }
             )->as_list;
             my $recalls_count = scalar @this_bib_recalls;
@@ -82,7 +82,7 @@ if ( $op eq 'list' ) {
 
             my @items = $biblio->items->as_list;
             foreach my $item ( @items ) {
-                if ( $item->can_be_waiting_recall and !$item->checkout ) {
+                if ( $item->can_be_waiting_recall and !$item->checkout and Koha::Recalls->search({ item_id => $item->id, status => [ 'waiting','in_transit' ], completed => 0 })->count == 0 ) {
                     # if item can be pulled to fulfill recall, collect item data
                     $items_count++;
                     push( @callnumbers, $item->itemcallnumber ) if ( $item->itemcallnumber );
