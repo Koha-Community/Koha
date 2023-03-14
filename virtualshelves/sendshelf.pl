@@ -40,7 +40,7 @@ use Koha::Virtualshelves;
 
 my $query = CGI->new;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "virtualshelves/sendshelfform.tt",
         query           => $query,
@@ -55,19 +55,10 @@ my $to_address = $query->param('email');
 my $shelf = Koha::Virtualshelves->find( $shelfid );
 
 output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
-    if $shelf && !$shelf->can_be_viewed( $loggedinuser );
+    if $shelf && !$shelf->can_be_viewed( $borrowernumber );
 
 if ($to_address) {
     my $comment = $query->param('comment');
-
-    my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
-        {
-        template_name   => "virtualshelves/sendshelf.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1 },
-        }
-    );
 
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $user_email = $patron->first_valid_email_address;

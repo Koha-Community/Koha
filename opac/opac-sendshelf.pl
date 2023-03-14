@@ -60,15 +60,6 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
   if ( $email ) {
     my $comment    = $query->param('comment');
 
-    my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
-        {
-            template_name   => "opac-sendshelf.tt",
-            query           => $query,
-            type            => "opac",
-            authnotrequired => 1,
-        }
-    );
-
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $user_email = $patron->first_valid_email_address;
     my $shelf = Koha::Virtualshelves->find( $shelfid );
