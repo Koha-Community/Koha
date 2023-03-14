@@ -93,6 +93,12 @@
                             <div class="btn-group">
                                 <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-link"><i class="fa fa-search"></i> Go to item search</a>
                             </div>
+
+                            [% IF Koha.Preference('EnableSearchHistory') %]
+                                <div class="btn-group">
+                                <a href="/cgi-bin/koha/catalogue/search-history.pl" class="btn btn-link"><i class="fa fa-history"></i> Search history</a>
+                            </div>
+                            [% END %]
                         </div> <!-- /#toolbar -->
                         <!-- /SEARCH BUTTONS -->
                     [% END %]
