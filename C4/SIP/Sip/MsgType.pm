@@ -1182,6 +1182,7 @@ sub handle_fee_paid {
     $resp .= add_field( FID_INST_ID,   $inst_id, $server );
     $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
     $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG,     $pay_result->{error}, $server );
     $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE,     $status->print_line, $server );
 
