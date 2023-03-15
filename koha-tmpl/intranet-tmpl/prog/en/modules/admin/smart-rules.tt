@@ -1133,7 +1133,7 @@
                         // select the corresponding option
                         $(current_column).find("select option").each(function(){
                             opt = $(this).text().toLowerCase();
-                            opt = opt.replace(/ \(\w*?\)$/,""); //If option is a parent, compare without (All) or the equivalent in other languages
+                            opt = opt.replace(/ \(all\)$/,""); //If option is a parent, compare without (All)
                             itm = itm.replace(/.*->(.*)/,"$1"); //If item type is part of a group we need to clear the parent description
                             opt = opt.replace(/^\s*|\s*$/g,'');
                             if ( opt == itm.toLowerCase() ) {
