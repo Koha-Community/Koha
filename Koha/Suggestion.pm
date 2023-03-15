@@ -46,11 +46,75 @@ a suggesteddate of today
 sub store {
     my ($self) = @_;
 
+    $self->STATUS("ASKED") unless $self->STATUS;
+
+    $self->branchcode(undef) if $self->branchcode eq '';
     unless ( $self->suggesteddate() ) {
         $self->suggesteddate( dt_from_string()->ymd );
     }
 
-    return $self->SUPER::store();
+    my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
+
+    my $result = $self->SUPER::store();
+
+    if( $emailpurchasesuggestions ){
+
+        if (
+            my $letter = C4::Letters::GetPreparedLetter(
+                module      => 'suggestions',
+                letter_code => 'NEW_SUGGESTION',
+                tables      => {
+                    'branches'    => $result->branchcode,
+                    'borrowers'   => $result->suggestedby,
+                    'suggestions' => $result->unblessed,
+                },
+            )
+        ){
+
+            my $toaddress;
+            if ( $emailpurchasesuggestions eq "BranchEmailAddress" ) {
+                my $library = $result->library;
+                $toaddress = $library->inbound_email_address;
+            }
+            elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
+                $toaddress = C4::Context->preference('ReplytoDefault')
+                  || C4::Context->preference('KohaAdminEmailAddress');
+            }
+            else {
+                $toaddress =
+                     C4::Context->preference($emailpurchasesuggestions)
+                  || C4::Context->preference('ReplytoDefault')
+                  || C4::Context->preference('KohaAdminEmailAddress');
+            }
+
+            C4::Letters::EnqueueLetter(
+                {
+                    letter         => $letter,
+                    borrowernumber => $result->suggestedby,
+                    suggestionid   => $result->id,
+                    to_address     => $toaddress,
+                    message_transport_type => 'email',
+                }
+            ) or warn "can't enqueue letter $letter";
+        }
+    }
+
+    return $result;
+}
+
+=head3 library
+
+my $library = $suggestion->library;
+
+Returns the library of the suggestion (Koha::Library for branchcode field)
+
+=cut
+
+sub library {
+    my ($self) = @_;
+    my $library_rs = $self->_result->branchcode;
+    return unless $library_rs;
+    return Koha::Library->_new_from_dbic($library_rs);
 }
 
 =head3 suggester

@@ -34,7 +34,7 @@ use Koha::Patrons;
 use Koha::Suggestions;
 
 BEGIN {
-    use_ok('C4::Suggestions', qw( NewSuggestion GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan ));
+    use_ok('C4::Suggestions', qw( GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan ));
 }
 
 my $schema  = Koha::Database->new->schema;
@@ -159,21 +159,23 @@ my $my_suggestion_without_suggestedby = {
     quantity      => '', # Insert an empty string into int to catch strict SQL modes errors
 };
 
-my $my_suggestionid = NewSuggestion($my_suggestion);
-isnt( $my_suggestionid, 0, 'NewSuggestion returns an not null id' );
-my $my_suggestionid_with_budget = NewSuggestion($my_suggestion_with_budget);
+my $my_suggestion_object = Koha::Suggestion->new($my_suggestion)->store;
+my $my_suggestionid = $my_suggestion_object->id;
+isnt( $my_suggestionid, 0, 'Suggestion is correctly saved' );
+my $my_suggestion_with_budget_object = Koha::Suggestion->new($my_suggestion_with_budget)->store;
+my $my_suggestionid_with_budget = $my_suggestion_with_budget_object->id;
 
 is( GetSuggestion(), undef, 'GetSuggestion without the suggestion id returns undef' );
 my $suggestion = GetSuggestion($my_suggestionid);
-is( $suggestion->{title}, $my_suggestion->{title}, 'NewSuggestion stores the title correctly' );
-is( $suggestion->{author}, $my_suggestion->{author}, 'NewSuggestion stores the author correctly' );
-is( $suggestion->{publishercode}, $my_suggestion->{publishercode}, 'NewSuggestion stores the publishercode correctly' );
-is( $suggestion->{suggestedby}, $my_suggestion->{suggestedby}, 'NewSuggestion stores the borrower number correctly' );
-is( $suggestion->{biblionumber}, $my_suggestion->{biblionumber}, 'NewSuggestion stores the biblio number correctly' );
-is( $suggestion->{STATUS}, 'ASKED', 'NewSuggestion stores a suggestion with the status ASKED by default' );
-is( $suggestion->{managedby}, undef, 'NewSuggestion stores empty string as undef for non existent foreign key (integer)' );
-is( $suggestion->{manageddate}, undef, 'NewSuggestion stores empty string as undef for date' );
-is( $suggestion->{budgetid}, undef, 'NewSuggestion should set budgetid to NULL if not given' );
+is( $suggestion->{title}, $my_suggestion->{title}, 'Suggestion stores the title correctly' );
+is( $suggestion->{author}, $my_suggestion->{author}, 'Suggestion stores the author correctly' );
+is( $suggestion->{publishercode}, $my_suggestion->{publishercode}, 'Suggestion stores the publishercode correctly' );
+is( $suggestion->{suggestedby}, $my_suggestion->{suggestedby}, 'Suggestion stores the borrower number correctly' );
+is( $suggestion->{biblionumber}, $my_suggestion->{biblionumber}, 'Suggestion stores the biblio number correctly' );
+is( $suggestion->{STATUS}, 'ASKED', 'Suggestion stores a suggestion with the status ASKED by default' );
+is( $suggestion->{managedby}, undef, 'Suggestion stores empty string as undef for non existent foreign key (integer)' );
+is( $suggestion->{manageddate}, undef, 'Suggestion stores empty string as undef for date' );
+is( $suggestion->{budgetid}, undef, 'Suggestion should set budgetid to NULL if not given' );
 
 is( ModSuggestion(), undef, 'ModSuggestion without the suggestion returns undef' );
 my $mod_suggestion1 = {
@@ -240,7 +242,8 @@ $messages = C4::Letters::GetQueuedMessages({
 is ($messages->[1]->{message_transport_type}, 'sms', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is sms if the borrower has no email');
 
 #Make a new suggestion for a borrower with defined email and no smsalertnumber
-my $my_suggestion_2_id = NewSuggestion($my_suggestion_with_budget2);
+my $my_suggestion_2_object = Koha::Suggestion->new($my_suggestion_with_budget2)->store();
+my $my_suggestion_2_id = $my_suggestion_2_object->id;
 
 #Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is enabled and the borrower has a defined email and no smsalertnumber
 t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
@@ -334,7 +337,8 @@ my $del_suggestion = {
     STATUS => 'CHECKED',
     suggestedby => $borrowernumber,
 };
-my $del_suggestionid = NewSuggestion($del_suggestion);
+my $del_suggestion_object = Koha::Suggestion->new($del_suggestion)->store();
+my $del_suggestionid = $del_suggestion_object->id;
 
 is( DelSuggestion(), '0E0', 'DelSuggestion without arguments returns 0E0' );
 is( DelSuggestion($borrowernumber), '', 'DelSuggestion without the suggestion id returns an empty string' );
@@ -348,14 +352,15 @@ is( $suggestions->[1]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes
 
 # Test budgetid fk
 $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
-my $my_suggestionid_test_budgetid = NewSuggestion($my_suggestion);
+my $my_suggestionid_test_budget_object = Koha::Suggestion->new($my_suggestion)->store;
+my $my_suggestionid_test_budgetid = $my_suggestionid_test_budget_object->id;
 $suggestion = GetSuggestion($my_suggestionid_test_budgetid);
-is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
+is( $suggestion->{budgetid}, undef, 'Suggestion Should set budgetid to NULL if equals an empty string' );
 
 $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
 ModSuggestion( $my_suggestion );
 $suggestion = GetSuggestion($my_suggestionid_test_budgetid);
-is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
+is( $suggestion->{budgetid}, undef, 'Suggestion Should set budgetid to NULL if equals an empty string' );
 
 my $suggestion2 = {
     title => "Cuisine d'automne",
@@ -378,7 +383,7 @@ is($record->field( $author_tag )->subfield( $author_subfield ), "Catherine", "Re
 subtest 'GetUnprocessedSuggestions' => sub {
     plan tests => 11;
     $dbh->do(q|DELETE FROM suggestions|);
-    my $my_suggestionid         = NewSuggestion($my_suggestion);
+    my $my_suggestionid         = Koha::Suggestion->new($my_suggestion)->store->id;
     my $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
     is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should return 0 if a suggestion has been processed but not linked to a fund' );
     my $status     = ModSuggestion($mod_suggestion1);
@@ -452,35 +457,35 @@ subtest 'EmailPurchaseSuggestions' => sub {
 
     # EmailPurchaseSuggestions set to disabled
     t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0" );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
     my $newsuggestions_messages = C4::Letters::GetQueuedMessages(
         {
             borrowernumber => $borrowernumber
         }
     );
     is( @$newsuggestions_messages, 0,
-        'NewSuggestions does not send an email when disabled' );
+        'New suggestion does not send an email when EmailPurchaseSuggestions disabled' );
 
     # EmailPurchaseSuggestions set to BranchEmailAddress
     t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions",
         "BranchEmailAddress" );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     Koha::Libraries->find('CPL')->update( { branchemail => 'branchemail@hosting.com' } );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     Koha::Libraries->find('CPL')->update( { branchreplyto => 'branchemail@b.c' } );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     $newsuggestions_messages = C4::Letters::GetQueuedMessages(
         {
             borrowernumber => $borrowernumber
         }
     );
-    isnt( @$newsuggestions_messages, 0, 'NewSuggestions sends an email' );
+    isnt( @$newsuggestions_messages, 0, 'New suggestions sends an email wne EmailPurchaseSuggestions enabled' );
     my $message1 =
       C4::Letters::GetMessage( $newsuggestions_messages->[0]->{message_id} );
     is( $message1->{to_address}, 'noreply@hosting.com',
@@ -507,10 +512,10 @@ subtest 'EmailPurchaseSuggestions' => sub {
         "KohaAdminEmailAddress" );
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", undef );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     $newsuggestions_messages = C4::Letters::GetQueuedMessages(
         {
@@ -531,14 +536,14 @@ subtest 'EmailPurchaseSuggestions' => sub {
         "EmailAddressForSuggestions" );
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", undef );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     t::lib::Mocks::mock_preference( "EmailAddressForSuggestions",
         'suggestions@b.c' );
-    NewSuggestion($my_suggestion);
+    Koha::Suggestion->new($my_suggestion)->store;
 
     $newsuggestions_messages = C4::Letters::GetQueuedMessages(
         {
@@ -565,7 +570,7 @@ subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
     plan tests => 2;
 
     $dbh->do(q|DELETE FROM suggestions|);
-    my $my_suggestionid = NewSuggestion($my_suggestion_without_suggestedby);
+    my $my_suggestionid = Koha::Suggestion->new($my_suggestion_without_suggestedby)->store()->id;
     $suggestion = GetSuggestion($my_suggestionid);
     is( $suggestion->{suggestedby}, undef, "Suggestedby is undef" );
 
