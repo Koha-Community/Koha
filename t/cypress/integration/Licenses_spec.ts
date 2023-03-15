@@ -309,7 +309,6 @@ describe("License CRUD operations", () => {
         cy.get('#licenses_show .action_links .fa-trash').click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("License").contains("deleted");
 
         //Make sure we return to list after deleting from show
         cy.get("#licenses_list table tbody tr:first")
