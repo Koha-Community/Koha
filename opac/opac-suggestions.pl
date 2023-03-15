@@ -27,7 +27,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Suggestions qw(
     DelSuggestion
     MarcRecordFromNewSuggestion
-    NewSuggestion
 );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Scrubber;
@@ -36,6 +35,7 @@ use C4::Search qw( FindDuplicate );
 use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Suggestions;
 
 use Koha::DateUtils qw( dt_from_string );
 
@@ -211,7 +211,7 @@ if ( $op eq "add_confirm" ) {
             $suggestion->{place} = $biblio->biblioitem->place;
         }
 
-        &NewSuggestion($suggestion);
+        Koha::Suggestion->new($suggestion)->store();
         $patrons_pending_suggestions_count++;
         $patrons_total_suggestions_count++;
 

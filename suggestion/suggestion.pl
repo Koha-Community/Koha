@@ -32,6 +32,7 @@ use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Suggestions;
 
 use URI::Escape qw( uri_escape );
 
@@ -232,7 +233,7 @@ if ( $op =~ /save/i ) {
             }
             else {
                 ## Adding some informations related to suggestion
-                &NewSuggestion($suggestion_only);
+                Koha::Suggestion->new($suggestion_only)->store();
             }
             # empty fields, to avoid filter in "SearchSuggestion"
         }
