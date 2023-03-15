@@ -37,7 +37,9 @@
                                 />
                             </li>
                             <li>
-                                <label for="license_description"
+                                <label
+                                    for="license_description"
+                                    class="required"
                                     >{{ $__("Description") }}:
                                 </label>
                                 <textarea
@@ -53,7 +55,7 @@
                                 }}</span>
                             </li>
                             <li>
-                                <label for="license_type"
+                                <label for="license_type" class="required"
                                     >{{ $__("Type") }}:</label
                                 >
                                 <v-select
@@ -77,7 +79,7 @@
                                 }}</span>
                             </li>
                             <li>
-                                <label for="license_status"
+                                <label for="license_status" class="required"
                                     >{{ $__("Status") }}:</label
                                 >
                                 <v-select

@@ -16,7 +16,9 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`related_agreement_id_${counter}`"
+                    <label
+                        :for="`related_agreement_id_${counter}`"
+                        class="required"
                         >{{ $__("Related agreement") }}:
                     </label>
                     <v-select
@@ -38,7 +40,9 @@
                     <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`related_agreement_relationship_${counter}`"
+                    <label
+                        :for="`related_agreement_relationship_${counter}`"
+                        class="required"
                         >{{ $__("Relationship") }}:
                     </label>
                     <v-select

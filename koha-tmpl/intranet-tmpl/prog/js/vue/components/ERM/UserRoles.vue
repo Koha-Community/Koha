@@ -29,7 +29,7 @@
                     >)
                 </li>
                 <li>
-                    <label :for="`user_role_${counter}`"
+                    <label :for="`user_role_${counter}`" class="required"
                         >{{ $__("Role") }}:</label
                     >
                     <v-select

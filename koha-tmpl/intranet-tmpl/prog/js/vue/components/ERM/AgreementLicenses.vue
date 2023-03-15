@@ -16,7 +16,7 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`license_id_${counter}`"
+                    <label :for="`license_id_${counter}`" class="required"
                         >{{ $__("License") }}:</label
                     >
                     <v-select
@@ -38,7 +38,7 @@
                     <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`license_status_${counter}`"
+                    <label :for="`license_status_${counter}`" class="required"
                         >{{ $__("Status") }}:</label
                     >
                     <v-select

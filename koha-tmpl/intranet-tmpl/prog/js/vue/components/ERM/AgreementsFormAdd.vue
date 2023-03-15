@@ -11,7 +11,7 @@
                     <fieldset class="rows">
                         <ol>
                             <li>
-                                <label class="required" for="agreement_name"
+                                <label for="agreement_name" class="required"
                                     >{{ $__("Agreement name") }}:</label
                                 >
                                 <input
@@ -53,7 +53,7 @@
                                 }}</span>
                             </li>
                             <li>
-                                <label for="agreement_status"
+                                <label for="agreement_status" class="required"
                                     >{{ $__("Status") }}:</label
                                 >
                                 <v-select
