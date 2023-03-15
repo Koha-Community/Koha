@@ -2964,7 +2964,7 @@ sub CanBookBeRenewed {
 
     # There is an item level hold on this item, no other item can fill the hold
     return ( 0, "on_reserve" )
-        if ( $item->current_holds->count );
+      if ( $item->current_holds->search( { non_priority => 0 } )->count );
 
     my $fillable_holds = Koha::Holds->search(
         {
