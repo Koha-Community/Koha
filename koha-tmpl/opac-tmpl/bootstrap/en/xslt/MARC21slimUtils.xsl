@@ -685,6 +685,54 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="GetCnumSearchURL">
+        <xsl:param name="title_subfield" select="'t'"/>
+        <xsl:param name="cnum_subfield" select="'w'"/>
+        <xsl:param name="opac_url" select="1"/>
+        <xsl:param name="UseControlNumber"/>
+
+        <xsl:variable name="orgcode">
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber!='1'"/>
+                <xsl:when test="substring-before(marc:subfield[@code=$cnum_subfield],')')">
+                    <!-- substring before closing parenthesis, remove parentheses and spaces -->
+                    <xsl:value-of select="normalize-space(translate(substring-before(marc:subfield[@code=$cnum_subfield],')'),'()',''))"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="controlnumber">
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber!='1'"/>
+                <xsl:when test="substring-after(marc:subfield[@code=$cnum_subfield],')')">
+                    <!-- substring after closing parenthesis, remove spaces -->
+                    <xsl:value-of select="normalize-space(substring-after(marc:subfield[@code=$cnum_subfield],')'))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- consider whole subfield now as controlnumber -->
+                    <xsl:value-of select="normalize-space(marc:subfield[@code=$cnum_subfield])"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="scriptname">
+            <xsl:choose>
+                <xsl:when test="$opac_url=1"><xsl:text>/cgi-bin/koha/opac-search.pl</xsl:text></xsl:when>
+                <xsl:otherwise><xsl:text>/cgi-bin/koha/catalogue/search.pl</xsl:text></xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <!-- search for (1) controlnumber AND orgcode, or (2) only controlnumber, or (3) title -->
+            <xsl:when test="$controlnumber!='' and $orgcode!=''">
+                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber,' and Control-number-identifier:',$orgcode),false())"/>
+            </xsl:when>
+            <xsl:when test="$controlnumber!=''">
+                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber),false())"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=ti,phr:',translate(marc:subfield[@code=$title_subfield], '()', '')),false())"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
