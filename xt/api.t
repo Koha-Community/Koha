@@ -14,10 +14,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Test::Mojo;
 use Data::Dumper;
+
+use FindBin();
+use IPC::Cmd qw(can_run);
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -75,3 +78,18 @@ foreach my $route ( keys %{$paths} ) {
 
 is( scalar @missing_additionalProperties, 0 )
   or diag Dumper \@missing_additionalProperties;
+
+subtest 'The spec passes the swagger-cli validation' => sub {
+
+    plan tests => 1;
+
+    SKIP: {
+        skip "Skipping tests, swagger-cli missing", 1
+          unless can_run('swagger-cli');
+
+        my $spec_dir = "$FindBin::Bin/../api/v1/swagger";
+        my $var      = qx{swagger-cli validate $spec_dir/swagger.yaml 2>&1};
+        is( $?, 0, 'Validation exit code is 0' )
+          or diag $var;
+    }
+};
