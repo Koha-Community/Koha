@@ -256,7 +256,6 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     my $reserves = Koha::Holds->search({
         waitingdate => {$comparator => $waiting_since },
         'me.branchcode'  => $branchcode,
-        '-or' => [ expirationdate => undef, expirationdate => { '>' => \'CURDATE()' } ]
     },{ prefetch => 'patron' });
 
     $verbose and warn "No reserves found for $branchcode\n" unless $reserves->count;
