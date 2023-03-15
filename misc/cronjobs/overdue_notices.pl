@@ -707,7 +707,6 @@ END_SQL
 
                 my $print_sent = 0; # A print notice is not yet sent for this patron
                 for my $mtt ( @message_transport_types ) {
-                    next if $mtt eq 'itiva';
                     my $effective_mtt = $mtt;
                     if ( ($mtt eq 'email' and not scalar @emails_to_use) or ($mtt eq 'sms' and not $data->{smsalertnumber}) ) {
                         # email or sms is requested but not exist, do a print.
