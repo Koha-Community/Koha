@@ -56,7 +56,7 @@ sub search_limited {
         # from other libraries)
         my $userenv = C4::Context->userenv;
 
-        $resultset = $self->search({ branchcode => $userenv->{branch} })
+        $resultset = $self->search({ 'me.branchcode' => $userenv->{branch} })
             if $userenv && $userenv->{branch};
     }
 
