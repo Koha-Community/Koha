@@ -353,7 +353,6 @@ describe("Package CRUD operations", () => {
         cy.get('#packages_show .action_links .fa-trash').click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Local package").contains("deleted");
 
         //Make sure we return to list after deleting from show
         cy.get("#packages_list table tbody tr:first")

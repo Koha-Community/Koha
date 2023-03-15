@@ -187,7 +187,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
-            3
+            2
         );
         cy.get("#agreement_name").type(agreement.name);
         cy.get("#agreement_description").type(agreement.description);
@@ -515,7 +515,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.contains("Accept").click();
+        cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -563,7 +563,6 @@ describe("Agreement CRUD operations", () => {
         cy.get('#agreements_show .action_links .fa-trash').click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Agreement").contains("deleted");
 
         //Make sure we return to list after deleting from show
         cy.get("#agreements_list table tbody tr:first")

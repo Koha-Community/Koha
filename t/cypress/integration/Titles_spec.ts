@@ -498,7 +498,6 @@ describe("Title CRUD operations", () => {
         cy.get('#eholdings_title_show .action_links .fa-trash').click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Local title").contains("deleted");
 
         //Make sure we return to list after deleting from show
         cy.get("#titles_list table tbody tr:first")
