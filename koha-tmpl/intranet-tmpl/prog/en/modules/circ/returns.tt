@@ -367,7 +367,6 @@
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
                                                 <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                                 <input type="hidden" name="multiple_confirm" value="1" />
-                                                <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                                                 [% FOREACH inputloo IN inputloop %]
                                                     <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
                                                     <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
