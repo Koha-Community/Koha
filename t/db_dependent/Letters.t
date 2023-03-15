@@ -388,7 +388,7 @@ $prepared_letter = GetPreparedLetter((
 is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $yesterday_night }) . q|.|, 'dateonly test 3' );
 
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER','Acquisition Order','Order','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order> Basket name: [% basket.basketname %]');});
+$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orderacquisition','TESTACQORDER','Acquisition Order','Order','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
 
 # Test that _parseletter doesn't modify its parameters bug 15429
 {
@@ -425,7 +425,7 @@ my $booksellerid = $bookseller->id;
 
 Koha::Acquisition::Bookseller::Contact->new( { name => 'John Smith',  phone => '0123456x1', claimacquisition => 1, orderacquisition => 1, booksellerid => $booksellerid } )->store;
 Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues      => 1, booksellerid => $booksellerid } )->store;
-my $basketno = NewBasket($booksellerid, 1, 'The basket name');
+my $basketno = NewBasket($booksellerid, 1);
 
 my $budgetid = C4::Budgets::AddBudget({
     budget_code => "budget_code_test_letters",
@@ -490,7 +490,7 @@ warning_like {
     "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
 is($err, 1, "Successfully sent order.");
 is($email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent order");
-is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered) Basket name: The basket name', 'Order notice text constructed successfully');
+is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Order notice text constructed successfully');
 
 my $mocked_koha_email = Test::MockModule->new('Koha::Email');
 $mocked_koha_email->mock( 'send_or_die', sub {
