@@ -430,7 +430,7 @@ sub SendAlerts {
         }
 
         if ( $type eq 'orderacquisition') {
-            $basketno = $externalid;
+            my $basketno = $externalid;
             $strsth = qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*
             FROM aqorders
