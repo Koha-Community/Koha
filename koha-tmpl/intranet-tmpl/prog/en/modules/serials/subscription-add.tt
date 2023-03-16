@@ -210,7 +210,13 @@
                                 <option value="">None</option>
                                 [% FOREACH locations_loo IN locations_loop %]
                                     [% IF locations_loo.authorised_value == location %]
-                                        <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
+                                        [% IF locations_loo.restricted %]
+                                            <option value="[% locations_loo.authorised_value | html %]" selected="selected" title="This value ([% locations_loo.lib | html %]) is limited to other libraries"
+                                                >[% locations_loo.lib | html %] &#9888;</option
+                                            >
+                                        [% ELSE %]
+                                            <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
+                                        [% END %]
                                     [% ELSE %]
                                         <option value="[% locations_loo.authorised_value | html %]">[% locations_loo.lib | html %]</option>
                                     [% END %]

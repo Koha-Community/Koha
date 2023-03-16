@@ -29,6 +29,7 @@ use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters qw( GetLetters );
 use Koha::AdditionalFields;
+use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils qw( output_pref );
 use Koha::ItemTypes;
@@ -123,6 +124,8 @@ if ( $op eq 'modify' || $op eq 'dup' || $op eq 'cud-modsubscription' ) {
 
 my $locations_loop = GetAuthorisedValues("LOC");
 my $ccodes_loop    = GetAuthorisedValues("CCODE");
+
+$locations_loop = Koha::AuthorisedValues->add_current_value( $locations_loop, 'LOC', $subs->{location} );
 
 $template->param(
     branchcode     => $subs->{branchcode},
