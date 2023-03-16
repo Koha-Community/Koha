@@ -243,6 +243,9 @@ sub SetMessagingPreferencesFromDefaults {
 
     my $messaging_options = GetMessagingOptions();
     OPTION: foreach my $option ( @$messaging_options ) {
+        if ( defined $params->{message_name} && $option->{'message_name'} ne $params->{message_name} ) {
+            next OPTION;
+        }
         my $default_pref = GetMessagingPreferences( { categorycode => $params->{categorycode},
                                                       message_name => $option->{'message_name'} } );
         # FIXME - except for setting the borrowernumber, it really ought to be possible

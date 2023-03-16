@@ -34,7 +34,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $since, $not_expired, $no_overwrite, $category, $branchcode ) = @_;
+    my ($doit, $since, $not_expired, $no_overwrite, $category, $branchcode, $message_name ) = @_;
 
     print "Since: $since\n" if $since;
 
@@ -63,10 +63,12 @@ WHERE 1|;
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( {
+        my $options = {
             borrowernumber => $borrowernumber,
             categorycode   => $categorycode,
-        } );
+        };
+        $options->{message_name} = $message_name if defined $message_name;
+        C4::Members::Messaging::SetMessagingPreferencesFromDefaults($options);
         $cnt++;
     }
     $dbh->commit();
@@ -74,7 +76,7 @@ WHERE 1|;
 }
 
 
-my ( $doit, $since, $help, $not_expired, $no_overwrite, $category, $branchcode );
+my ( $doit, $since, $help, $not_expired, $no_overwrite, $category, $branchcode, $message_name );
 my $result = GetOptions(
     'doit'        => \$doit,
     'since:s'     => \$since,
@@ -82,12 +84,13 @@ my $result = GetOptions(
     'no-overwrite'  => \$no_overwrite,
     'category:s'  => \$category,
     'library:s'   => \$branchcode,
+    'message-name:s' => \$message_name,
     'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite, $category, $branchcode );
+force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite, $category, $branchcode, $message_name );
 
 =head1 NAME
 
@@ -101,6 +104,7 @@ borrowers-force-messaging-defaults.pl
   borrowers-force-messaging-defaults.pl --doit --not-expired
   borrowers-force-messaging-defaults.pl --doit --category PT
   borrowers-force-messaging-defaults.pl --doit --library CPL
+  borrowers-force-messaging-defaults.pl --doit --message-name 'Item_Due'
 
 =head1 DESCRIPTION
 
@@ -140,6 +144,11 @@ Will only update patrons in the category specified.
 =item B<--library>
 
 Will only update patrons whose home library matches the given library id
+
+=item B<--message-name>
+
+Will only update the specified message name.
+List of values can be found in installer/data/mysql/mandatory/sample_notices_message_attributes.sql
 
 =item B<--since>
 
