@@ -1160,6 +1160,8 @@ subtest 'Dates formatting' => sub {
 [% biblio.datecreated %]
 [% biblio.datecreated | \$KohaDates %]
 [% biblio.datecreated | \$KohaDates with_hours => 1 %]
+[% biblio.datecreated | \$KohaDates with_hours => 1, add_years => 2 %]
+[% biblio.datecreated | \$KohaDates with_hours => 1, subtract_months => 3 %]
 
 [% biblio.timestamp | \$KohaDates dateformat => 'iso' %]
 [% KohaDates.output_preference( str => biblio.timestamp, dateformat => 'iso' ) %]
@@ -1173,7 +1175,7 @@ EOF
             biblio => $biblio->biblionumber,
         }
     );
-    my $expected_content = sprintf("%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n%s\n",
+    my $expected_content = sprintf("%s\n%s\n%s\n\n%s\n%s\n%s\n%s\n%s\n\n%s\n%s\n%s\n",
         '2018-12-13 20:21:22',
         '13/12/2018',
         '13/12/2018 20:21',
@@ -1181,6 +1183,8 @@ EOF
         '2018-12-13',
         '13/12/2018',
         '13/12/2018 00:00',
+        '13/12/2020 00:00',
+        '13/09/2018 00:00',
 
         '2018-12-13',
         '2018-12-13 20:21',
