@@ -7,14 +7,6 @@
       - biblios
     summary: Add biblio
     parameters:
-      - name: Body
-        in: body
-        description: A JSON object or the Marc string describing a biblio
-        required: true
-        schema:
-          type:
-            - string
-            - object
       - $ref: "../swagger.yaml#/parameters/framework_id_header"
       - $ref: "../swagger.yaml#/parameters/marc_schema_header"
       - $ref: "../swagger.yaml#/parameters/confirm_not_duplicate_header"
@@ -214,14 +206,6 @@
     summary: Update biblio
     parameters:
       - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
-      - name: Body
-        in: body
-        description: A JSON object or the Marc string describing a biblio
-        required: true
-        schema:
-          type:
-            - string
-            - object
       - $ref: "../swagger.yaml#/parameters/framework_id_header"
       - $ref: "../swagger.yaml#/parameters/marc_schema_header"
       - $ref: "../swagger.yaml#/parameters/confirm_not_duplicate_header"
