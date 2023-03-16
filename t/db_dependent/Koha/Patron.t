@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::Exception;
 use Test::Warn;
 
@@ -318,6 +318,90 @@ subtest 'Accessor tests' => sub {
         is( $patron->smsalertnumber,      '0683027347',                       'smsalertnumber field set ok' );
         is( $patron->privacy,             '667789',                           'privacy field set ok' );
     };
+};
+
+subtest 'is_active' => sub {
+    plan tests => 19;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    throws_ok { $patron->is_active } 'Koha::Exceptions::MissingParameter', 'Called without params';
+
+    # Check expiry
+    $patron->dateexpiry( dt_from_string->subtract( days => 1 ) )->store;
+    is( $patron->is_active( { days => 1 } ), 0, 'Expired patron is not active' );
+    $patron->dateexpiry(undef)->store;
+    is( $patron->is_active( { days => 1 } ), 1, 'Expiry date removed' );
+
+    # Change enrolled date now
+    $patron->dateenrolled('2020-01-01')->store;
+
+    # Check lastseen, test days parameter
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 1 );
+    $patron->track_login;
+    is( $patron->is_active( { days => 1 } ), 1, 'Just logged in' );
+    my $ago = dt_from_string->subtract( days => 2 );
+    $patron->lastseen($ago)->store;
+    is( $patron->is_active( { days => 1 } ), 0, 'Not active since yesterday' );
+    is( $patron->is_active( { days => 3 } ), 1, 'Active within last 3 days' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 0 );
+    is( $patron->is_active( { days => 3 } ), 0, 'Pref disabled' );
+
+    # Look at holds, test with weeks
+    $ago = dt_from_string->subtract( weeks => 2 );
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->id, timestamp => $ago },
+        }
+    );
+    is( $patron->is_active( { weeks => 1 } ), 0, 'No holds in 1 weeks' );
+    is( $patron->is_active( { weeks => 3 } ), 1, 'Hold in last 3 weeks' );
+    $hold->delete;
+    my $old_hold = $builder->build_object(
+        {
+            class => 'Koha::Old::Holds',
+            value => { borrowernumber => $patron->id, timestamp => $ago },
+        }
+    );
+    is( $patron->is_active( { weeks => 1 } ), 0, 'No old holds in 1 weeks' );
+    is( $patron->is_active( { weeks => 3 } ), 1, 'Old hold in last 3 weeks' );
+    $old_hold->delete;
+
+    # Look at checkouts, test with months
+    $ago = dt_from_string->subtract( months => 2 );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $patron->id, timestamp => $ago },
+        }
+    );
+    is( $patron->is_active( { months => 1 } ), 0, 'No checkouts in 1 months' );
+    is( $patron->is_active( { months => 3 } ), 1, 'Checkout in last 3 months' );
+    $checkout->delete;
+    my $old_checkout = $builder->build_object(
+        {
+            class => 'Koha::Old::Checkouts',
+            value => { borrowernumber => $patron->id, timestamp => $ago },
+        }
+    );
+    is( $patron->is_active( { months => 1 } ), 0, 'No old checkouts in 1 months' );
+    is( $patron->is_active( { months => 3 } ), 1, 'Old checkout in last 3 months' );
+    $old_checkout->delete;
+
+    # Look at article_requests, test with since
+    $ago = dt_from_string->subtract( days => 10 );
+    my $article_request = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { borrowernumber => $patron->id, updated_on => $ago },
+        }
+    );
+    is( $patron->is_active( { days  => 9 } ),                      0, 'No article requests in 9 days' );
+    is( $patron->is_active( { days  => 10 } ),                     1, 'Article requests in 10 days' );
+    is( $patron->is_active( { since => $ago } ),                   1, 'Article requests since ago' );
+    is( $patron->is_active( { since => $ago->add( days => 1 ) } ), 0, 'No article requests since ago + 1 day' );
+    $article_request->delete;
 
     $schema->storage->txn_rollback;
 };
