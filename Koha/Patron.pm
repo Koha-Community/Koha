@@ -24,6 +24,7 @@ use List::MoreUtils qw( any uniq );
 use JSON qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
+use DateTime ();
 
 use C4::Auth qw( checkpw_hash );
 use C4::Context;
@@ -805,6 +806,73 @@ sub is_expired {
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry =~ '^9999';
     return 1 if dt_from_string( $self->dateexpiry ) < dt_from_string->truncate( to => 'day' );
+    return 0;
+}
+
+=head3 is_active
+
+$patron->is_active({ [ since => $date ], [ days|weeks|months|years => $value ] })
+
+A patron is considered 'active' if their account did not expire, and has not been anonymized,
+and patron logged in recently, or placed a hold, article request or borrowed a book recently.
+A recent enrollment as new patron counts too.
+
+Recently is defined by $date or $value in days, weeks or months. You should
+pass one of those; otherwise an exception is thrown.
+
+=cut
+
+sub is_active {
+    my ( $self, $params ) = @_;
+    return 0 if $self->is_expired or $self->anonymized;
+
+    my $dt;
+    if ( $params->{since} ) {
+        $dt = dt_from_string( $params->{since}, 'iso' );
+    } elsif ( grep { $params->{$_} } qw(days weeks months years) ) {
+        $dt = dt_from_string();
+        foreach my $duration (qw(days weeks months years)) {
+            $dt = $dt->subtract( $duration => $params->{$duration} ) if $params->{$duration};
+        }
+    } else {
+        Koha::Exceptions::MissingParameter->throw('is_active needs date or period');
+    }
+
+    # Enrollment within this period?
+    return 1 if DateTime->compare( dt_from_string( $self->dateenrolled ), $dt ) > -1;
+
+    # Last seen? Updated each login when you track patron activity
+    if ( C4::Context->preference('TrackLastPatronActivity') ) {
+        return 1 if DateTime->compare( dt_from_string( $self->lastseen ), $dt ) > -1;
+    }
+
+    # Check holds, issues and article requests
+    return 1 if $self->holds->filter_by_last_update(
+        {
+            timestamp_column_name => 'timestamp', from => $dt,
+        }
+    )->count;
+    return 1 if $self->old_holds->filter_by_last_update(
+        {
+            timestamp_column_name => 'timestamp', from => $dt,
+        }
+    )->count;
+    return 1 if $self->checkouts->filter_by_last_update(
+        {
+            timestamp_column_name => 'timestamp', from => $dt,
+        }
+    )->count;
+    return 1 if $self->old_checkouts->filter_by_last_update(
+        {
+            timestamp_column_name => 'timestamp', from => $dt,
+        }
+    )->count;
+    return 1 if $self->article_requests->filter_by_last_update(
+        {
+            timestamp_column_name => 'updated_on', from => $dt,
+        }
+    )->count;
+
     return 0;
 }
 
