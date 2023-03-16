@@ -182,9 +182,9 @@ sub _fetch_schema_comments {
     my $info = {};
     my $current_table = q{};
     foreach my $line ( @schema_lines ) {
-        if( $line =~ /^CREATE TABLE `?(\w+)`?/ ) {
+        if( $line =~ /^CREATE TABLE\s*(?:IF NOT EXISTS)?\s*`?(\w+)`?/ ) {
             $current_table = $1;
-        } elsif( $line =~ /^\s+`?(\w+)`?.*COMMENT ['"](.+)['"][,)]?$/ ) {
+        } elsif( $current_table && $line =~ /^\s+`?(\w+)`?.*COMMENT ['"](.+)['"][,)]?$/ ) {
             my ( $col, $comment ) = ( $1, $2 );
             $comment =~ s/''/'/g; # we call quote later on
             $info->{$current_table}->{$col} = $comment;
