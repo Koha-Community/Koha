@@ -51,8 +51,12 @@
     [%- ELSE -%]
         [%- this_priority = loop.count() - found_holds -%]
     [%- END -%]
-        <tr>
-            <th><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"/></th>
+        [% IF hold.suspend %]
+            <tr class="suspend">
+        [% ELSE %]
+            <tr>
+        [% END %]
+            <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"/></td>
             <td>
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
