@@ -491,21 +491,26 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $body = $c->validation->param('Body');
+        my $headers = $c->req->headers;
 
-        my $flavour = $c->validation->param('x-marc-schema');
-        $flavour = C4::Context->preference('marcflavour') unless $flavour;
+        my $flavour = $headers->header('x-marc-schema');
+        $flavour //= C4::Context->preference('marcflavour');
 
         my $record;
 
-        my $frameworkcode = $c->validation->param('x-framework-id');
-        if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
-            $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
-        } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
-            $record = MARC::Record->new_from_mij_structure( $body );
-        } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
-            $record = MARC::Record->new_from_usmarc( $body );
-        } else {
+        my $frameworkcode = $headers->header('x-framework-id');
+        my $content_type  = $headers->content_type;
+
+        if ( $content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
+        }
+        elsif ( $content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $c->req->json );
+        }
+        elsif ( $content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $c->req->body );
+        }
+        else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -519,12 +524,12 @@ sub add {
         my ( $duplicatebiblionumber, $duplicatetitle );
             ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
 
-        my $confirm_not_duplicate = $c->validation->param('x-confirm-not-duplicate');
+        my $confirm_not_duplicate = $headers->header('x-confirm-not-duplicate');
 
         return $c->render(
             status  => 400,
             openapi => {
-                error => "Duplicate biblio $duplicatebiblionumber"
+                error => "Duplicate biblio $duplicatebiblionumber",
             }
         ) unless !$duplicatebiblionumber || $confirm_not_duplicate;
 
@@ -550,10 +555,10 @@ Controller function that handles modifying an biblio object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblionumber = $c->validation->param('biblio_id');
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio_id = $c->param('biblio_id');
+    my $biblio    = Koha::Biblios->find($biblio_id);
 
-    if ( not defined $biblio ) {
+    if ( ! defined $biblio ) {
         return $c->render(
             status  => 404,
             openapi => { error => "Object not found" }
@@ -561,20 +566,27 @@ sub update {
     }
 
     try {
-        my $body = $c->validation->param('Body');
+        my $headers = $c->req->headers;
 
-        my $flavour = $c->validation->param('x-marc-schema');
-        $flavour = C4::Context->preference('marcflavour') unless $flavour;
+        my $flavour = $headers->header('x-marc-schema');
+        $flavour //= C4::Context->preference('marcflavour');
+
+        my $frameworkcode = $headers->header('x-framework-id') || $biblio->frameworkcode;
+
+        my $content_type = $headers->content_type;
 
         my $record;
-        my $frameworkcode = $c->validation->param('x-framework-id') || $biblio->frameworkcode;
-        if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
-            $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
-        } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
-            $record = MARC::Record->new_from_mij_structure( $body );
-        } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
-            $record = MARC::Record->new_from_usmarc( $body );
-        } else {
+
+        if ( $content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
+        }
+        elsif ( $content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $c->req->json );
+        }
+        elsif ( $content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $c->req->body );
+        }
+        else {
             return $c->render(
                 status  => 406,
                 openapi => [
@@ -586,11 +598,11 @@ sub update {
             );
         }
 
-        ModBiblio( $record, $biblionumber, $frameworkcode );
+        ModBiblio( $record, $biblio_id, $frameworkcode );
 
         $c->render(
             status  => 200,
-            openapi => { id => $biblionumber }
+            openapi => { id => $biblio_id }
         );
     }
     catch {
