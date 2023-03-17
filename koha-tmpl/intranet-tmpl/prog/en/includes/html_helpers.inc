@@ -126,9 +126,9 @@
                         [% END %]
                         [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
                         [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
-                                <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%]</option>
+                                <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%] (Not an authorised value)</option>
                             </select>
-                            <span style="float:right;" title="The current value [% mv.default | html %] is not in the authorised value list"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+                            <span style="float:right;" title="The current value [% mv.default | html %] is not configured for the authorised value category controlling this subfield"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
                         [% ELSE %]
                             </select>
                         [% END %]
