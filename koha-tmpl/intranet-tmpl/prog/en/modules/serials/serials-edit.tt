@@ -170,6 +170,27 @@ $(document).ready(function() {
             [% ELSE %]
               <option value="2">Arrived</option>
             [% END %]
+            [% IF ( serialslis.status21 ) %]
+              <option value="21" selected="selected">Circulating</option>
+            [% ELSE %]
+                [% IF ( !serialslis.status1 ) %]
+                    <option value="21">Circulating</option>
+                [% END %]
+            [% END %]
+            [% IF ( serialslis.status22 ) %]
+              <option value="22" selected="selected">Out for binding</option>
+            [% ELSE %]
+                [% IF ( !serialslis.status1 ) %]
+                    <option value="22">Out for binding</option>
+                [% END %]
+            [% END %]
+            [% IF ( serialslis.status23 ) %]
+              <option value="23" selected="selected">Bound</option>
+            [% ELSE %]
+                [% IF ( !serialslis.status1 ) %]
+                    <option value="23">Bound</option>
+                [% END %]
+            [% END %]
             [% IF ( serialslis.status3 ) %]
               <option value="3" selected="selected">Late</option>
             [% ELSE %]
