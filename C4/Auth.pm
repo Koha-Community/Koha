@@ -193,7 +193,7 @@ sub get_template_and_user {
     # Exceptions for consent page itself and SCI/SCO system
     if( $in->{type} eq 'opac' && $user &&
         $in->{'template_name'} !~ /^(opac-page|opac-patron-consent|sc[io]\/)/ &&
-        C4::Context->preference('GDPR_Policy') eq 'Enforced' )
+        C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced' )
     {
         my $consent = Koha::Patron::Consents->search({
             borrowernumber => getborrowernumber($user),

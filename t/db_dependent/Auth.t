@@ -32,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 # FIXME: SessionStorage defaults to mysql, but it seems to break transaction
 # handling
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
-t::lib::Mocks::mock_preference( 'GDPR_Policy', '' ); # Disabled
+t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent', '' ); # Disabled
 
 # To silence useless warnings
 $ENV{REMOTE_ADDR} = '127.0.0.1';
