@@ -235,7 +235,7 @@ describe("Package CRUD operations", () => {
         );
         // There are no resources, the table should not be displayed
         cy.contains("Titles (0)");
-        cy.get("#table#title_list").should("not.exist");
+        cy.get("#title_list_result table").should("not.exist");
 
         // List resources
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", {
@@ -269,7 +269,7 @@ describe("Package CRUD operations", () => {
         cy.contains("Titles (1)");
         cy.wait("@get-resource");
         cy.wait(500);
-        cy.get("table#title_list").contains("A great title");
+        cy.get("#title_list_result table").contains("A great title");
     });
 
     it("Delete package", () => {
