@@ -68,7 +68,7 @@
     [%- ELSIF invert_name -%]
         [%- data.title | $raw -%][%- data.surname | html -%][%- IF ( data.firstname ) -%], [% data.firstname | html -%][%- END -%][%- IF data.middle_name -%] [% data.middle_name | html -%][%- END -%][%- IF data.othernames -%] ([%- data.othernames | html -%])[%- END -%]
     [%- ELSE -%]
-        [%- data.title | $raw -%][%- data.firstname | html -%][%- IF data.middle_name -%] [% data.middle_name | html -%][%- END -%][%- IF data.othernames -%] ([%- data.othernames | html -%]) [%- END -%] [%- data.surname | html -%]
+        [%- data.title | $raw -%][%- data.firstname | html %][%- IF data.middle_name -%] [% data.middle_name | html -%][%- END -%][%- IF data.othernames -%] ([%- data.othernames | html -%]) [%- END -%] [% data.surname | html -%]
     [%- END -%]
     [%- IF display_cardnumber AND data.cardnumber -%] ([%- data.cardnumber | html -%])[%- END -%]
 [%- ELSIF display_cardnumber -%]
