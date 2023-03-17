@@ -6,7 +6,6 @@
 
 <script>
 import { inject, ref } from "vue"
-import { useDataTable } from "../../composables/datatables"
 import KohaTable from "../KohaTable.vue"
 
 export default {

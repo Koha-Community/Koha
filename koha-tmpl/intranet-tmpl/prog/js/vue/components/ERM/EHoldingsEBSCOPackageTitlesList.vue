@@ -62,7 +62,6 @@
 <script>
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
-import { useDataTable } from "../../composables/datatables"
 import KohaTable from "../KohaTable.vue"
 
 export default {
