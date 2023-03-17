@@ -69,24 +69,29 @@ subtest "_search tests" => sub {
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
     my $search = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
 
-    $search->mock('search_auth_compat', sub {
-        my $self = shift;
-        my $search_query = shift;
-        return $search_query;
-    });
+    $search->mock(
+        'search_auth_compat',
+        sub {
+            my $self         = shift;
+            my $search_query = shift;
+            return $search_query;
+        }
+    );
 
-    my $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,' );
-    my $heading = C4::Heading->new_from_field($field);
-    my $search_query = $heading->_search( 'match-heading' );
-    my $terms = $search_query->{query}->{bool}->{must};
+    my ( $field, $heading, $search_query, $terms );
+
+    $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,' );
+    $heading = C4::Heading->new_from_field($field);
+    $search_query = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
     is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with single punctuation mark");
 
 
-    my $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,', e => '[author]' );
-    my $heading = C4::Heading->new_from_field($field);
-    my $search_query = $heading->_search( 'match-heading' );
-    my $terms = $search_query->{query}->{bool}->{must};
-    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with doulbe punctuation, hyphen+comma");
+    $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,', e => '[author]' );
+    $heading = C4::Heading->new_from_field($field);
+    $search_query = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    is_deeply( $terms->[0], { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } }, "Search formed as expected for a non-subject field with double punctuation, hyphen+comma");
 
     $field = MARC::Field->new( '100', ' ', '', a => 'Tolkien, J.R.R.,', e => '[author]' );
     $heading = C4::Heading->new_from_field($field);
