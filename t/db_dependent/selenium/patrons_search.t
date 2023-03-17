@@ -300,6 +300,7 @@ subtest 'Search patrons' => sub {
         is( $patron_selected_text, "Patrons selected: 2", "Two patrons are selected" );
 
         $driver->find_element('//*[@id="memberresultst_next"]')->click;
+        $s->wait_for_ajax;
         @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[0]->click;
