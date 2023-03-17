@@ -115,16 +115,19 @@
                     </li>
                     <li>
                         <label for="lift_after_payment" class="required">Lift after payment: </label>
-                        <select type="text" name="lift_after_payment" id="lift_after_payment" class="required" required="required" />
-                            <option value="1" selected="selected">Yes</option>
+                        <select type="text" name="lift_after_payment" id="lift_after_payment"/>
+                        [% IF restriction.lift_after_payment %]
                             <option value="0">No</option>
+                            <option value="1" selected="selected">Yes</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">No</option>
+                            <option value="1">Yes</option>
+                        [% END %]
                         </select>
-                        <span class="required">Required</span>
                     </li>
                     <li>
-                        <label for="fee_limit" class="required">Fee limit: </label>
-                        <input type="text" value="[% restriction.fee_limit | html %]" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" class="required" required="required" />
-                        <span class="required">Required</span>
+                        <label for="fee_limit">Fee limit: </label>
+                        <input type="text" value="[% restriction.fee_limit | html %]" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" />
                     </li>
                 [% ELSE %]
                     <li>
@@ -138,17 +141,15 @@
                         <span class="required">Required</span>
                     </li>
                     <li>
-                        <label for="lift_after_payment" class="required">Lift after payment: </label>
-                        <select type="text" name="lift_after_payment" id="lift_after_payment" class="required" required="required" />
-                            <option value="1" selected="selected">Yes</option>
-                            <option value="0">No</option>
+                        <label for="lift_after_payment">Lift after payment: </label>
+                        <select type="text" name="lift_after_payment" id="lift_after_payment" />
+                            <option value="0" selected="selected">No</option>
+                            <option value="1">Yes</option>
                         </select>
-                        <span class="required">Required</span>
                     </li>
                     <li>
-                        <label for="fee_limit" class="required">Fee limit: </label>
-                        <input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" class="required" required="required" />
-                        <span class="required">Required</span>
+                        <label for="fee_limit">Fee limit: </label>
+                        <input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" />
                     </li>
                 [% END %]
             </ol>
@@ -257,6 +258,15 @@
             [% ex.code | $raw %]: '[% ex.display_text | $raw %]',
         [% END %]
         };
+
+        //Require fee limit if "Lift after payment" is set true
+        $("#lift_after_payment").on("change", function(){
+            if($(this).val() == 1){
+                $("#fee_limit").prop("required",true).after('<span class="required">Required</span>');
+            } else {
+                $("#fee_limit").prop("required",false).nextAll().remove();
+            }
+        });
     </script>
     [% Asset.js("js/restrictiontypes.js") | $raw %]
 [% END %]
