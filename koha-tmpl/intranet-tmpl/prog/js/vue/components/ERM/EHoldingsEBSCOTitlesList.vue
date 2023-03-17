@@ -57,14 +57,19 @@
                 >
             </div>
             <div id="title_list_result" class="page-section">
-                <table :id="table_id"></table>
+                <KohaTable
+                    v-if="show_table"
+                    ref="table"
+                    v-bind="tableOptions"
+                    @show="doShow"
+                ></KohaTable>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { inject, createVNode, render } from "vue"
+import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 import {
@@ -72,6 +77,7 @@ import {
     build_url_params,
     build_url,
 } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -82,28 +88,63 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
-        const table_id = "title_list"
-        useDataTable(table_id)
+        const table = ref()
+        const filters = reactive({
+            publication_title: "",
+            publication_type: "",
+            selection_type: "",
+        })
 
         return {
             vendors,
             av_title_publication_types,
             get_lib_from_av,
+            escape_str,
             erm_providers,
-            table_id,
+            table,
         }
     },
     data: function () {
+        this.filters = {
+            publication_title: this.$route.query.publication_title || "",
+            publication_type: this.$route.query.publication_type || "",
+            selection_type: this.$route.query.selection_type || "",
+        }
+        let filters = this.filters
+
         return {
             titles: [],
             initialized: true,
-            filters: {
-                publication_title: this.$route.query.publication_title || "",
-                publication_type: this.$route.query.publication_type || "",
-                selection_type: this.$route.query.selection_type || "",
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url: "/api/v1/erm/eholdings/ebsco/titles",
+                options: {
+                    ordering: false,
+                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                    aLengthMenu: [
+                        [10, 20, 50, 100],
+                        [10, 20, 50, 100],
+                    ],
+                },
+                filters_options: {
+                    1: () =>
+                        this.map_av_dt_filter("av_title_publication_types"),
+                },
+                actions: { 0: ["show"] },
+                default_filters: {
+                    publication_title: function () {
+                        return filters.publication_title || ""
+                    },
+                    publication_type: function () {
+                        return filters.publication_type || ""
+                    },
+                    selection_type: function () {
+                        return filters.selection_type || ""
+                    },
+                },
             },
             cannot_search: false,
-            show_table: false,
+            show_table: build_url_params(filters).length ? true : false,
             local_title_count: null,
         }
     },
@@ -115,15 +156,11 @@ export default {
             )
         },
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.build_datatable()
-        })
-    },
     methods: {
-        show_title: function (title_id) {
+        doShow: function (title, dt, event) {
+            event.preventDefault()
             this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/titles/" + title_id
+                "/cgi-bin/koha/erm/eholdings/ebsco/titles/" + title.title_id
             )
         },
         filter_table: async function () {
@@ -136,13 +173,16 @@ export default {
                 this.$router.push(new_route)
                 this.show_table = true
                 this.local_title_count = null
-                $("#" + this.table_id)
-                    .DataTable()
-                    .draw()
+
+                if (this.$refs.table) {
+                    this.$refs.table.redraw(
+                        "/api/v1/erm/eholdings/ebsco/titles"
+                    )
+                }
                 if (this.erm_providers.includes("local")) {
                     const client = APIClient.erm
 
-                    const q = filters
+                    const q = this.filters
                         ? {
                               ...(this.filters.publication_title
                                   ? {
@@ -172,170 +212,87 @@ export default {
                 this.cannot_search = true
             }
         },
-        build_datatable: function () {
-            let show_title = this.show_title
+        getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
-            if (!this.show_table) {
-                this.show_table = build_url_params(this.filters).length
-                    ? true
-                    : false
-            }
-            let filters = this.filters
-            let table_id = this.table_id
-
-            window["vendors"] = this.vendors.map(e => {
-                e["_id"] = e["id"]
-                e["_str"] = e["name"]
-                return e
-            })
-            let vendors_map = this.vendors.reduce((map, e) => {
-                map[e.id] = e
-                return map
-            }, {})
-            window["av_title_publication_types"] =
-                this.av_title_publication_types.map(e => {
-                    e["_id"] = e["value"]
-                    e["_str"] = e["description"]
-                    return e
-                })
-
-            let additional_filters = {
-                publication_title: function () {
-                    return filters.publication_title || ""
-                },
-                publication_type: function () {
-                    return filters.publication_type || ""
-                },
-                selection_type: function () {
-                    return filters.selection_type || ""
-                },
-            }
-            $("#" + table_id).kohaTable(
+            let escape_str = this.escape_str
+            return [
                 {
-                    ajax: {
-                        url: "/api/v1/erm/eholdings/ebsco/titles",
+                    title: __("Title"),
+                    data: "me.publication_title",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        let node =
+                            '<a href="/cgi-bin/koha/erm/eholdings/ebsco/titles/' +
+                            row.title_id +
+                            '" class="show">' +
+                            escape_str(
+                                `${row.publication_title} (#${row.title_id})`
+                            ) +
+                            "</a>"
+                        if (row.is_selected) {
+                            node +=
+                                " " +
+                                '<i class="fa fa-check-square-o" style="color: green; float: right;" title="' +
+                                __("Is selected") +
+                                '" />'
+                        }
+                        return node
                     },
-                    ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    aLengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                    deferLoading: true,
-                    autoWidth: false,
-                    columns: [
-                        {
-                            title: __("Title"),
-                            data: "me.publication_title",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                // Rendering done in drawCallback
-                                return ""
-                            },
-                        },
-                        {
-                            title: __("Publisher name"),
-                            data: "me.publisher_name",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return escape_str(row.publisher_name)
-                            },
-                        },
-                        {
-                            title: __("Publication type"),
-                            data: "publication_type",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_title_publication_types",
-                                        row.publication_type
-                                    )
-                                )
-                            },
-                        },
-                        {
-                            title: __("Identifier"),
-                            data: "print_identifier:online_identifier",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                let print_identifier = row.print_identifier
-                                let online_identifier = row.online_identifier
-                                return (
-                                    (print_identifier
-                                        ? escape_str(
-                                              _("ISBN (Print): %s").format(
-                                                  print_identifier
-                                              )
-                                          )
-                                        : "") +
-                                    (online_identifier
-                                        ? escape_str(
-                                              _("ISBN (Online): %s").format(
-                                                  online_identifier
-                                              )
-                                          )
-                                        : "")
-                                )
-                            },
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
-
-                        if (!api.rows({ search: "applied" }).count()) return
-
-                        $.each(
-                            $(this).find("tbody tr td:first-child"),
-                            function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
-                                let n = createVNode(
-                                    "a",
-                                    {
-                                        role: "button",
-                                        onClick: e => {
-                                            e.preventDefault()
-                                            show_title(row.title_id)
-                                        },
-                                    },
-                                    `${row.publication_title} (#${row.title_id})`
-                                )
-
-                                if (row.is_selected) {
-                                    n = createVNode("span", {}, [
-                                        n,
-                                        " ",
-                                        createVNode("i", {
-                                            class: "fa fa-check-square-o",
-                                            style: {
-                                                color: "green",
-                                                float: "right",
-                                            },
-                                            title: __("Is selected"),
-                                        }),
-                                    ])
-                                }
-                                render(n, e)
-                            }
+                },
+                {
+                    title: __("Publisher name"),
+                    data: "me.publisher_name",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return escape_str(row.publisher_name)
+                    },
+                },
+                {
+                    title: __("Publication type"),
+                    data: "publication_type",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_title_publication_types",
+                                row.publication_type
+                            )
                         )
                     },
                 },
-                null,
-                0,
-                additional_filters
-            )
-
-            if (filters.publication_title.length) {
-                this.filter_table()
-            }
+                {
+                    title: __("Identifier"),
+                    data: "print_identifier:online_identifier",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        let print_identifier = row.print_identifier
+                        let online_identifier = row.online_identifier
+                        return (
+                            (print_identifier
+                                ? escape_str(
+                                      _("ISBN (Print): %s").format(
+                                          print_identifier
+                                      )
+                                  )
+                                : "") +
+                            (online_identifier
+                                ? escape_str(
+                                      _("ISBN (Online): %s").format(
+                                          online_identifier
+                                      )
+                                  )
+                                : "")
+                        )
+                    },
+                },
+            ]
         },
     },
+    components: { KohaTable },
     name: "EHoldingsEBSCOTitlesList",
 }
 </script>
