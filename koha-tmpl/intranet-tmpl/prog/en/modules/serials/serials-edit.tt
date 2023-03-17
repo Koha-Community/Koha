@@ -465,17 +465,21 @@ $(document).ready(function() {
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
                 [% INCLUDE 'serials-menu.inc' %]
-                <ul>
-                    [% FOREACH subscription IN subscriptions %]
-                        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="serial collection for [% subscription.bibliotitle | uri %]">Serial collection #[% subscription.subscriptionid | html %]</a></li>
-                        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
-                        [% IF ( subscription.abouttoexpire ) %]
-                            [% UNLESS subscription.closed %]
-                                <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
+                <div id="serialmenu">
+                    <h5>Serial links</h5>
+                    <ul>
+                        [% FOREACH subscription IN subscriptions %]
+                            <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Serial collection for [% subscription.subscriptionid | html %]">Serial collection #[% subscription.subscriptionid | html %]</a></li>
+                            <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
+                            [% IF ( subscription.abouttoexpire ) %]
+                                [% UNLESS subscription.closed %]
+                                    <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
+                                [% END %]
                             [% END %]
                         [% END %]
-                    [% END %]
-                    <li><a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
+                        <li><a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="Go to [% bibliotitle | html %]">Show bibliographic record</a></li>
+                    </ul>
+                </div>
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
