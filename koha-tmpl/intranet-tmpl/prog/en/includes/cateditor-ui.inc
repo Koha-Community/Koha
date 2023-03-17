@@ -122,7 +122,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                             $node.append( '<option value="' + authval.value + '"' + selected + '>' + authval.lib + '</option>' );
                         } );
                         if( !matched ){
-                            $node.append( '<option value="' + value + '" selected="selected">' + value + _(' (Not in authorised values list) ') + '</option>' );
+                            $node.append( "<option value='" + value + "' selected='selected'>" + value + " " + _("(Not in authorised values list)") + " " + "</option>" );
                         }
                         $node.val( this.text );
 
