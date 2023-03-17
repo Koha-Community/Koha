@@ -55,14 +55,15 @@
                 />
             </fieldset>
         </div>
-        <table :id="table_id"></table>
+        <KohaTable ref="table" v-bind="tableOptions" @show="doShow"></KohaTable>
     </div>
 </template>
 
 <script>
-import { inject, createVNode, render } from "vue"
+import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useDataTable } from "../../composables/datatables"
+import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
@@ -70,160 +71,130 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
-        const table_id = "title_list"
-        useDataTable(table_id)
+        const table = ref()
+        const filters = reactive({
+            publication_title: "",
+            publication_type: "",
+            selection_type: "",
+        })
 
         return {
             av_title_publication_types,
             get_lib_from_av,
+            escape_str,
             map_av_dt_filter,
-            table_id,
+            table,
         }
     },
     data() {
-        return {
-            filters: {
-                publication_title: "",
-                publication_type: "",
-                selection_type: "",
-            },
-            display_filters: false,
+        this.filters = {
+            publication_title: this.$route.query.publication_title || "",
+            publication_type: this.$route.query.publication_type || "",
+            selection_type: this.$route.query.selection_type || "",
         }
-    },
-    methods: {
-        show_resource: function (resource_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id
-            )
-        },
-        filter_table: function () {
-            $("#" + this.table_id)
-                .DataTable()
-                .draw()
-        },
-        toggle_filters: function (e) {
-            this.display_filters = !this.display_filters
-        },
-        build_datatable: function () {
-            let show_resource = this.show_resource
-            let package_id = this.package_id
-            let get_lib_from_av = this.get_lib_from_av
-            let map_av_dt_filter = this.map_av_dt_filter
-            let filters = this.filters
-            let table_id = this.table_id
-
-            window["av_title_publication_types"] = map_av_dt_filter(
-                "av_title_publication_types"
-            )
-
-            let additional_filters = {
-                publication_title: function () {
-                    return filters.publication_title || ""
-                },
-                publication_type: function () {
-                    return filters.publication_type || ""
-                },
-                selection_type: function () {
-                    return filters.selection_type || ""
-                },
-            }
-
-            $("#" + table_id).kohaTable(
-                {
-                    ajax: {
-                        url:
-                            "/api/v1/erm/eholdings/ebsco/packages/" +
-                            package_id +
-                            "/resources",
-                    },
+        let filters = this.filters
+        return {
+            tableOptions: {
+                columns: this.getTableColumns(),
+                url:
+                    "/api/v1/erm/eholdings/ebsco/packages/" +
+                    this.package_id +
+                    "/resources",
+                options: {
+                    embed: "title",
                     ordering: false,
                     dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
                     aLengthMenu: [
                         [10, 20, 50, 100],
                         [10, 20, 50, 100],
                     ],
-                    embed: ["title"],
-                    autoWidth: false,
-                    columns: [
-                        {
-                            title: __("Name"),
-                            data: "title.publication_title",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                // Rendering done in drawCallback
-                                return ""
-                            },
-                        },
-                        {
-                            title: __("Publication type"),
-                            data: "title.publication_type",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    get_lib_from_av(
-                                        "av_title_publication_types",
-                                        row.title.publication_type
-                                    )
-                                )
-                            },
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings)
+                },
+                filters_options: {
+                    1: () =>
+                        this.map_av_dt_filter("av_title_publication_types"),
+                },
+                actions: { 0: ["show"] },
+                default_filters: {
+                    publication_title: function () {
+                        return filters.publication_title || ""
+                    },
+                    publication_type: function () {
+                        return filters.publication_type || ""
+                    },
+                    selection_type: function () {
+                        return filters.selection_type || ""
+                    },
+                },
+            },
+            display_filters: false,
+        }
+    },
+    methods: {
+        doShow: function (resource, dt, event) {
+            event.preventDefault()
+            this.$router.push(
+                "/cgi-bin/koha/erm/eholdings/ebsco/resources/" +
+                    resource.resource_id
+            )
+        },
+        filter_table: function () {
+            this.$refs.table.redraw(
+                "/api/v1/erm/eholdings/ebsco/packages/" +
+                    this.package_id +
+                    "/resources"
+            )
+        },
+        toggle_filters: function (e) {
+            this.display_filters = !this.display_filters
+        },
+        getTableColumns: function () {
+            let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
 
-                        $.each(
-                            $(this).find("tbody tr td:first-child"),
-                            function (index, e) {
-                                let tr = $(this).parent()
-                                let row = api.row(tr).data()
-                                if (!row) return // Happen if the table is empty
-                                let n = createVNode(
-                                    "a",
-                                    {
-                                        role: "button",
-                                        href:
-                                            "/cgi-bin/koha/erm/eholdings/ebsco/resources/" +
-                                            row.resource_id,
-                                        onClick: e => {
-                                            e.preventDefault()
-                                            show_resource(row.resource_id)
-                                        },
-                                    },
-                                    `${row.title.publication_title}`
-                                )
-                                if (row.is_selected) {
-                                    n = createVNode("span", {}, [
-                                        n,
-                                        " ",
-                                        createVNode("i", {
-                                            class: "fa fa-check-square-o",
-                                            style: {
-                                                color: "green",
-                                                float: "right",
-                                            },
-                                            title: __("Is selected"),
-                                        }),
-                                    ])
-                                }
-                                render(n, e)
-                            }
+            return [
+                {
+                    title: __("Name"),
+                    data: "title.publication_title",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        let node =
+                            '<a href="/cgi-bin/koha/erm/eholdings/ebsco/resources/' +
+                            row.resource_id +
+                            '" class="show">' +
+                            escape_str(`${row.title.publication_title}`) +
+                            "</a>"
+                        if (row.is_selected) {
+                            node +=
+                                " " +
+                                '<i class="fa fa-check-square-o" style="color: green; float: right;" title="' +
+                                __("Is selected") +
+                                '" />'
+                        }
+                        return node
+                    },
+                },
+                {
+                    title: __("Publication type"),
+                    data: "title.publication_type",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_title_publication_types",
+                                row.title.publication_type
+                            )
                         )
                     },
                 },
-                null,
-                0,
-                additional_filters
-            )
+            ]
         },
-    },
-    mounted() {
-        this.build_datatable()
     },
     props: {
         package_id: String,
     },
+    components: { KohaTable },
     name: "EHoldingsEBSCOPackageTitlesList",
 }
 </script>
