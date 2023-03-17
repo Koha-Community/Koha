@@ -799,7 +799,7 @@ sub _batchCommitItems {
             $updsth->finish();
             $num_items_replaced++;
         } elsif (
-            # We aren't replacing, but the incoming file ahs a barcode, we need to check if it exists
+            # We aren't replacing, but the incoming file has a barcode, we need to check if it exists
             $duplicate_barcode &&
             ( $item_match = Koha::Items->find({ barcode => $item->{'barcode'} }) )
         ) {
