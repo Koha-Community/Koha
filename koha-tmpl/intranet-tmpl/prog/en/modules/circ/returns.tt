@@ -1283,7 +1283,7 @@
                                             </td>
                                             <td class="ci-note">
                                                 [% IF ( riloo.patron.borrowernotes ) %]
-                                                    <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | html %]</span></p>
+                                                    <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | $raw %]</span></p>
                                                 [% END %]
                                                 [% IF ( riloo.itemnote ) %]
                                                     <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</span></p>
