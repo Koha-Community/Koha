@@ -38,7 +38,7 @@ plugin 'Koha::REST::Plugin::Pagination';
 get '/cities' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
-    $c->stash_embed;
+    $c->stash_embed( { spec => { parameters => [ { name => 'x-koha-embed', items => { enum => ['+strings'] } } ] } } );
     my $cities = $c->objects->search(Koha::Cities->new);
     $c->render( status => 200, json => $cities );
 };
@@ -55,7 +55,7 @@ get '/cities/rs' => sub {
 get '/cities/:city_id' => sub {
     my $c = shift;
     my $id = $c->stash("city_id");
-    $c->stash_embed;
+    $c->stash_embed( { spec => { parameters => [ { name => 'x-koha-embed', items => { enum => ['+strings'] } } ] } } );
     my $city = $c->objects->find(Koha::Cities->new, $id);
     $c->render( status => 200, json => $city );
 };
