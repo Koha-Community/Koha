@@ -77,7 +77,7 @@ sub new {
         unless ref($self->{dbh}) eq DBI_HANDLE_CLASS;
 
     $self->{database} //= ( $self->{dbh}->selectrow_array('SELECT DATABASE()') )[0];
-    $self->_find_schema unless $self->{schema_file};
+    $self->_find_schema;
     $self->{schema_info} = {};
 
     return $self;
@@ -159,7 +159,9 @@ sub renumber {
 sub _find_schema {
     my $self = shift;
     my $rootdir = C4::Context->config('intranetdir');
-    if( -e "$rootdir/". KOHA_STRUCTURE ) {
+    if( $self->{schema_file} ) {
+        warn "File ". $self->{schema_file}. " not found!\n" if !-e $self->{schema_file};
+    } elsif( -e "$rootdir/". KOHA_STRUCTURE ) {
         $self->{schema_file} = "$rootdir/". KOHA_STRUCTURE;
     } elsif( -e "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE ) {
         $self->{schema_file} = "$rootdir/intranet/cgi-bin/". KOHA_STRUCTURE;

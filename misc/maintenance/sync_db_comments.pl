@@ -36,14 +36,14 @@ GetOptions(
   'help|h'     => \$cmd_args->{help},
   'renumber'   => \$cmd_args->{renumber},
   'reset'      => \$cmd_args->{reset},
-  'schema:s'   => \$cmd_args->{schema},
+  'schema:s'   => \$cmd_args->{schema_file},
   'table:s'    => \$cmd_args->{table},
   'verbose|v'  => \$cmd_args->{verbose},
 );
 $cmd_args->{dry_run} = !$cmd_args->{commit};
 
 my $commenter = Koha::Database::Commenter->new({
-    database => delete $cmd_args->{database}, dbh => C4::Context->dbh, schema_file => delete $cmd_args->{schema},
+    database => delete $cmd_args->{database}, dbh => C4::Context->dbh, schema_file => delete $cmd_args->{schema_file},
 });
 my $messages = $cmd_args->{verbose} || $cmd_args->{dry_run} ? [] : undef;
 if( $cmd_args->{help} ) {
@@ -94,9 +94,10 @@ misc/maintenance/sync_db_comments.pl
     Clear all column comments in database.
     The verbose flag shows all issued ALTER TABLE statements.
 
-    misc/maintance/sync_db_comments.pl -reset -commit -database mydb -table items
+    misc/maintance/sync_db_comments.pl -reset -commit -database mydb -table items -schema newstructure.sql
     Only resets comments in items table.
     Operates on specific database instead of the one from $KOHA_CONF.
+    Reads the schema from the specified file instead of default one.
 
     misc/maintance/sync_db_comments.pl -renumber
     Renumbers all comments like Comment_1,2,..
