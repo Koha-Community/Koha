@@ -151,6 +151,15 @@ sub commit {
 
     my @bib_records;
     my @auth_records;
+
+    my $jobs = Koha::BackgroundJobs->search( { id => [ map { $_->id } @jobs ] });
+    # Start
+    $jobs->update({
+        progress => 0,
+        status => 'started',
+        started_on => \'NOW()',
+    });
+
     for my $job (@jobs) {
         my $args = try {
             $job->json->decode( $job->data );
@@ -182,5 +191,10 @@ sub commit {
         };
     }
 
-    Koha::BackgroundJobs->search( { id => [ map { $_->id } @jobs ] } )->update( { status => 'finished', progress => 1 }, { no_triggers => 1 } );
+    # Finish
+    $jobs->update({
+        progress => 1,
+        status => 'finished',
+        ended_on => \'NOW()',
+    });
 }
