@@ -95,6 +95,18 @@
         required: true
         type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_resource_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - title
+            - package
+            - vendor
+        collectionFormat: csv
     responses:
       200:
         description: An eHolding resource
