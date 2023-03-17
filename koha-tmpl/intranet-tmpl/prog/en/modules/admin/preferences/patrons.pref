@@ -355,16 +355,16 @@ Patrons:
          - Use the following URL
          - pref: PrivacyPolicyURL
            class: url
-         - to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)
-         - '<br><strong>NOTE:</strong> The URL will only be displayed if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy">GDPR_Policy</a> is set.'
+         - to refer to your local privacy policy in messages about privacy and data protection. (If you enforce a data privacy policy, make sure that this page is not blocked.)
+         - '<br><strong>NOTE:</strong> The URL will only be displayed if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent">PrivacyPolicyConsent</a> is set.'
      -
-         - "Set GDPR policy to:"
-         - pref: GDPR_Policy
+         - "Set data privacy policy consent to:"
+         - pref: PrivacyPolicyConsent
            choices:
                '': 'disabled'
                Enforced: 'enforced'
                Permissive: 'permissive'
-         - ". GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
+         - ". When you enforce a data privacy policy, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
          - '<br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL">PrivacyPolicyURL</a> setting.'
      -
          - Lock/expire patrons that submitted an unsubscribe request (refused consent) after

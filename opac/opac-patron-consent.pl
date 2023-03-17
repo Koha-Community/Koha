@@ -40,7 +40,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
 
 my $patron = Koha::Patrons->find($borrowernumber);
 my $gdpr_proc_consent;
-if( C4::Context->preference('GDPR_Policy') ) {
+if( C4::Context->preference('PrivacyPolicyConsent') ) {
     $gdpr_proc_consent = Koha::Patron::Consents->search({
         borrowernumber => $borrowernumber,
         type => GDPR_PROCESSING,
@@ -64,7 +64,7 @@ if( $op eq 'gdpr_proc_save' && $gdpr_proc_consent ) {
 }
 
 # If user refused GDPR consent and we enforce GDPR, logout (when saving)
-if( $op =~ /save/ && C4::Context->preference('GDPR_Policy') eq 'Enforced' && $gdpr_proc_consent->refused_on )
+if( $op =~ /save/ && C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced' && $gdpr_proc_consent->refused_on )
 {
     print $query->redirect('/cgi-bin/koha/opac-main.pl?logout.x=1');
     exit;

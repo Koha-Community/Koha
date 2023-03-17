@@ -984,11 +984,11 @@
                         </div> <!-- /.row -->
                     [% END %]
 
-                    [% IF Koha.Preference('GDPR_Policy') && action != 'edit' %]
+                    [% IF Koha.Preference('PrivacyPolicyConsent') && action != 'edit' %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_gdpr_consent">
-                                    <legend>GDPR consent</legend>
+                                    <legend>Data privacy policy consent</legend>
                                     <ol>
                                     <li>
                                         <div class="label"></div>
