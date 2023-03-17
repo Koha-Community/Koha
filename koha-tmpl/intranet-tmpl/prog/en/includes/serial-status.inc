@@ -1,5 +1,8 @@
 [% IF ( serial.status1 ) %]<span>Expected</span>[% END %]
 [% IF ( serial.status2 ) %]<span>Arrived</span>[% END %]
+    [% IF ( serial.status21 ) %]<span>Circulating</span>[% END %]
+    [% IF ( serial.status22 ) %]<span>Out for binding</span>[% END %]
+    [% IF ( serial.status23 ) %]<span>Bound</span>[% END %]
 [% IF ( serial.status3 ) %]<span>Late</span>[% END %]
 [% IF ( serial.status4 ) %]<span>Missing</span>[% END %]
     [% IF ( serial.status41 ) %]<span>Missing (never received)</span>[% END %]
