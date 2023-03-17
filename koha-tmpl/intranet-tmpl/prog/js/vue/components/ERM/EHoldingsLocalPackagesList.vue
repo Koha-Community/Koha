@@ -28,7 +28,6 @@ import Toolbar from "./EHoldingsLocalPackagesToolbar.vue"
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
-import { useDataTable } from "../../composables/datatables"
 import KohaTable from "../KohaTable.vue"
 
 export default {

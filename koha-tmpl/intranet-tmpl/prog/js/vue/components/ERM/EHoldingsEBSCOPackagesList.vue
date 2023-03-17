@@ -68,11 +68,7 @@
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
-import {
-    useDataTable,
-    build_url_params,
-    build_url,
-} from "../../composables/datatables"
+import { build_url_params, build_url } from "../../composables/datatables"
 import KohaTable from "../KohaTable.vue"
 
 export default {
