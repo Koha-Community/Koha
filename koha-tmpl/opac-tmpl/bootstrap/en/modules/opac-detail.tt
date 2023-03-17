@@ -767,18 +767,7 @@
                                                             <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
                                                             <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
                                                             <td class="serial_status">
-                                                                [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
-                                                                [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
-                                                                [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
-                                                                [% IF (latestserial.status4 ) %]<span>Missing</span>[% END %]
-                                                                    [% IF (latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
-                                                                    [% IF (latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
-                                                                    [% IF (latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
-                                                                    [% IF (latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
-                                                                [% IF (latestserial.status5 ) %]<span>Not issued</span>[% END %]
-                                                                [% IF (latestserial.status6 ) %]<span>Delete</span>[% END %]
-                                                                [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
-                                                                [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
+                                                                [% INCLUDE 'serial-status.inc' serial = latestserial %]
                                                             </td>
                                                             <td class="serial_notes">[% latestserial.notes | html %]</td>
                                                         </tr>
