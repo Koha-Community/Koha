@@ -277,23 +277,7 @@
                                             [% serialslis.publisheddatetext | html %]
                                         </td>
                                         <td>
-                                            [% IF ( serialslis.status1 ) %]<span>Expected</span>[% END %]
-                                            [% IF ( serialslis.status2 ) %]<span>Arrived</span>[% END %]
-                                            [% IF ( serialslis.status3 ) %]<span>Late</span>[% END %]
-                                            [% IF ( serialslis.status4 ) %]<span>Missing</span>[% END %]
-                                            [% IF ( serialslis.status41 ) %]<span>Missing (never received)</span>[% END %]
-                                            [% IF ( serialslis.status42 ) %]<span>Missing (sold out)</span>[% END %]
-                                            [% IF ( serialslis.status43 ) %]<span>Missing (damaged)</span>[% END %]
-                                            [% IF ( serialslis.status44 ) %]<span>Missing (lost)</span>[% END %]
-                                            [% IF ( serialslis.status5 ) %]<span>Not issued</span>[% END %]
-                                            [% IF ( serialslis.status6 ) %]<span>Delete</span>[% END %]
-                                            [% IF ( serialslis.status7 ) %]
-                                                <span>Claimed</span>
-                                                [% IF ( serialslis.claimdate ) %]
-                                                    [% serialslis.claimdate | html %]
-                                                [% END %]
-                                            [% END %]
-                                            [% IF ( serialslis.status8 ) %]<span>Stopped</span>[% END %]
+                                            [% INCLUDE 'serial-status.inc' serial = serialslis %]
                                         </td>
                                     </tr>
                                 [% END # /FOREACH serialslist %]

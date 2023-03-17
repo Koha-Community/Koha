@@ -153,14 +153,7 @@
                                             <td>[% missingissue.issn | html %]</td>
                                             <td>[% missingissue.serialseq | html %]</td>
                                             <td>
-                                                [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]
-                                                [% IF ( missingissue.status3 ) %]<span class="status-late">Late</span>[% END %]
-                                                [% IF ( missingissue.status4 ) %]<span class="status-missing">Missing</span>[% END %]
-                                                [% IF ( missingissue.status41 ) %]<span class="status-missing_never_received">Missing (never received)</span>[% END %]
-                                                [% IF ( missingissue.status42 ) %]<span class="status-missing_sold_out">Missing (sold out)</span>[% END %]
-                                                [% IF ( missingissue.status43 ) %]<span class="status-missing_damaged">Missing (damaged)</span>[% END %]
-                                                [% IF ( missingissue.status44 ) %]<span class="status-missing_lost">Missing (lost)</span>[% END %]
-                                                [% IF ( missingissue.status7 ) %]<span class="status-claimed">Claimed</span>[% END %]
+                                                [% INCLUDE 'serial-status.inc' serial = missingissue %]
                                             </td>
                                             <td class="planneddate" data-order="[% missingissue.planneddate | html %]">
                                                 [% missingissue.planneddate | $KohaDates %]
