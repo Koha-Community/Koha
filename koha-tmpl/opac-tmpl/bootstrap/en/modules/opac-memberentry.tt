@@ -1006,10 +1006,18 @@
                                                                     [% END %]
                                                                 </select>
                                                             [% ELSE %]
-                                                                <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
+                                                                [% IF ( pa.type.is_date && pa.type.mandatory ) %]
+                                                                    <input type="text" id="[% form_id | html %]" name="patron_attribute_value" value="[% pa_value | html %]" size="10" required="required" class="flatpickr" />
+                                                                [% ELSIF ( pa.type.is_date && !pa.type.mandatory ) %]
+                                                                    <input type="text" id="[% form_id | html %]" name="patron_attribute_value" value="[% pa_value | html %]" size="10" class="flatpickr" />
+                                                                [% ELSE %]
+                                                                    <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
+                                                                [% END %]
                                                             [% END %]
                                                             <div class="attr-control">
-                                                                <a href="#" class="btn btn-sm btn-link clear-attribute"><i class="fa fa-remove" aria-hidden="true"></i> Clear</a>
+                                                                [% IF ( !pa.type.is_date ) %]
+                                                                    <a href="#" class="btn btn-sm btn-link clear-attribute"><i class="fa fa-remove" aria-hidden="true"></i> Clear</a>
+                                                                [% END %]
                                                                 [% IF ( pa.type.repeatable ) %]
                                                                     <a href="#" class="btn btn-sm btn-link clone-attribute"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
                                                                 [% END %]
@@ -1020,6 +1028,8 @@
                                                         [% ELSE %]
                                                             [% IF ( pa.type.authorised_value_category ) %]
                                                                 [% AuthorisedValues.GetByCode( pa.type.authorised_value_category, pa_value, 1 ) | html_line_break %]
+                                                            [% ELSIF ( pa.type.is_date ) %]
+                                                                [% pa_value | $KohaDates %]
                                                             [% ELSE %]
                                                                 [% pa_value | html_line_break %]
                                                             [% END %]
