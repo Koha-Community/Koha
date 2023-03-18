@@ -115,7 +115,12 @@
             [% IF ( extendedattribute.type.display_checkout ) %] [%# FIXME We should filter in the line above %]
                 [% IF ( extendedattribute.attribute.defined  ) %]
                     <li class="patronattribute">
-                        <span class="patronattributelabel">[% extendedattribute.type.description | html %]</span>: [% extendedattribute.description | html %]
+                        <span class="patronattributelabel">[% extendedattribute.type.description | html %]</span>:
+                        [% IF extendedattribute.type.is_date %]
+                            [% extendedattribute.description | $KohaDates %]
+                        [% ELSE %]
+                            [% extendedattribute.description | html %]
+                        [% END %]
                     </li>
                 [% END %]
             [% END %]

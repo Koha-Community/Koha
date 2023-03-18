@@ -880,6 +880,7 @@ sub patron_attributes_form {
             category          => $attr_type->authorised_value_category(),
             category_code     => $attr_type->category_code(),
             mandatory         => $attr_type->mandatory(),
+            is_date           => $attr_type->is_date(),
         };
         if (exists $attr_hash{$attr_type->code()}) {
             foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {

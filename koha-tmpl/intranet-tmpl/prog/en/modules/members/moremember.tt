@@ -335,7 +335,11 @@
                                                         [% FOREACH item IN attribute.items %]
                                                             <li data-pa_code="[% item.type.code | replace('[^a-zA-Z0-9_-]', '') %]">
                                                                 <span class="label">[% item.type.description | html %]: </span>
-                                                                [% item.description | html_line_break %]
+                                                                [% IF item.type.is_date %]
+                                                                    [% item.description | $KohaDates %]
+                                                                [% ELSE %]
+                                                                    [% item.description | html_line_break %]
+                                                                [% END %]
                                                             </li>
                                                         [% END %]
                                                     </ol>
