@@ -24,7 +24,6 @@ isnt(C4::Languages::_get_themes(), undef, 'testing _get_themes doesnt return und
 
 ok(C4::Languages::_get_language_dirs(), 'test getting _get_language_dirs');
 
-
 my $result;
 warning_is { $result = C4::Languages::accept_language(); }
     q{accept_language(x,y) called with no clientPreferences (x).},
