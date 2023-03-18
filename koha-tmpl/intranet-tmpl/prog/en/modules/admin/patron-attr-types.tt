@@ -149,6 +149,16 @@
                   cannot be given to a different record.</span>
         </li>
 
+        <li>
+            <label for="is_date">Is a date: </label>
+            [% IF attribute_type.is_date %]
+                <input type="checkbox" id="is_date" name="is_date" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" id="is_date" name="is_date" />
+            [% END %]
+            <span class="hint">If checked, attribute will be a date. Date attributes cannot be repeatable or linked to an authorised value category.</span>
+        </li>
+
        <li><label for="opac_display">Display in OPAC: </label>
           [% IF attribute_type AND attribute_type.opac_display %]
             <input type="checkbox" id="opac_display" name="opac_display" checked="checked" />
@@ -428,6 +438,30 @@
                     $("#opac_editable").removeAttr('disabled').parent().removeAttr('aria-disabled');
                 } else {
                     $("#opac_editable").attr('disabled', true).parent().attr('aria-disabled', 'true');
+                }
+            } ).change();
+
+            $("#is_date").change( function() {
+                if ( this.checked ) {
+                    $("#repeatable, #authorised_value_category").attr('disabled', true).parent().attr('aria-disabled', 'true');
+                } else {
+                    $("#repeatable, #authorised_value_category").removeAttr('disabled').parent().removeAttr('aria-disabled');
+                }
+            } ).change();
+
+            $("#repeatable").change( function() {
+                if ( this.checked ) {
+                    $("#is_date").attr('disabled', true).parent().attr('aria-disabled', 'true');
+                } else {
+                    $("#is_date").removeAttr('disabled').parent().removeAttr('aria-disabled');
+                }
+            } ).change();
+
+            $("#authorised_value_category").change( function() {
+                if ( $(this).val() != "" ) {
+                    $("#is_date").attr('disabled', true).parent().attr('aria-disabled', 'true');
+                } else {
+                    $("#is_date").removeAttr('disabled').parent().removeAttr('aria-disabled');
                 }
             } ).change();
 
