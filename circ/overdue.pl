@@ -117,7 +117,7 @@ for my $attrcode (grep { /^patron_attr_filter_/ } $input->multi_param) {
 }
 my $have_pattr_filter_data = keys(%cgi_attrcode_to_attrvalues) > 0;
 
-my @patron_attr_filter_loop;   # array of [ domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category ]
+my @patron_attr_filter_loop;   # array of [ domid cgivalue ismany isclone ordinal code description repeatable is_date authorised_value_category ]
 
 my $patron_attrs = Koha::Patron::Attribute::Types->search_with_library_limits(
     {
@@ -133,6 +133,7 @@ while (my $attr = $patron_attrs->next ) {
         code => $attr->code,
         description => $attr->description,
         repeatable => $attr->repeatable,
+        is_date => $attr->is_date,
         authorised_value_category => $attr->authorised_value_category,
     };
     $row->{ordinal} = $ordinal;

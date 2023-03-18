@@ -208,10 +208,10 @@
             [% ELSE %]<option value="lost">Lost card</option>[% END %]
         </select>
     </li>
-	[% FOREACH patron_attr_filter_loo IN patron_attr_filter_loop %]
-		<!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
-		<li>
-			<label>[% patron_attr_filter_loo.description | html %]:</label>
+    [% FOREACH patron_attr_filter_loo IN patron_attr_filter_loop %]
+        <!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
+        <li>
+            <label>[% patron_attr_filter_loo.description | html %]:</label>
             [% IF ( patron_attr_filter_loo.authorised_value_category ) %]
                 [% SET authvals = AuthorisedValues.GetAuthValueDropbox( patron_attr_filter_loo.authorised_value_category ) %]
                 <select id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" class="pattrodue-input">
@@ -224,10 +224,12 @@
                         [% END %]
                     [% END %]
                 </select>
-			[% ELSE %]
+            [% ELSIF ( patron_attr_filter_loo.is_date ) %]
+                <input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]" class="flatpickr"/>
+            [% ELSE %]
                 <input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]"/>
-			[% END %]
-			[% IF ( patron_attr_filter_loo.repeatable ) %]
+            [% END %]
+            [% IF ( patron_attr_filter_loo.repeatable ) %]
                 <a href="#" class="btn btn-link clone-attribute" data-original-id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]"><i class="fa fa-plus"></i> Add</a>
                 [% IF ( patron_attr_filter_loo.isclone ) %]
                     <a href="#" class="btn btn-link delete_clone"><i class="fa fa-times"></i> Delete</a>
@@ -236,9 +238,9 @@
                 [% ELSE %]
                     <a href="#" class="btn btn-link delete_clone" style="display:none"><i class="fa fa-times"></i> Delete</a>
                 [% END %]
-			[% END %]
-		</li>
-	[% END %]
+            [% END %]
+        </li>
+    [% END %]
 
     <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       [% FOREACH itemtypeloo IN itemtypeloop %][% IF ( itemtypeloo.selected ) %]
