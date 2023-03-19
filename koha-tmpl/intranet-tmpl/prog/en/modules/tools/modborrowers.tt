@@ -413,8 +413,9 @@
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_patron_modification', 'borrowerst', 'json' ) | $raw %];
+
         [% FOREACH attrh IN attributes_header %]
-            table_settings.push({
+            table_settings["columns"].push({
                 columname: "[% attrh.attribute | html %]",
                 cannot_be_modified: 0,
                 cannot_be_toggled: 0,
