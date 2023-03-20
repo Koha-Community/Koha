@@ -114,7 +114,6 @@ subtest "_search tests" => sub {
     $terms = $search_query->{query}->{bool}->{must};
     $expected_terms = [
         { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } },
-        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
     ];
     is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with single punctuation mark");
 
@@ -124,7 +123,6 @@ subtest "_search tests" => sub {
     $terms = $search_query->{query}->{bool}->{must};
     $expected_terms = [
         { term => { 'match-heading.ci_raw' => 'Yankovic, Al 1959' } },
-        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
     ];
     is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with double punctuation, hyphen+comma");
 
@@ -134,7 +132,6 @@ subtest "_search tests" => sub {
     $terms = $search_query->{query}->{bool}->{must};
     $expected_terms = [
         { term => { 'match-heading.ci_raw' => 'Tolkien, J.R.R' } },
-        { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
     ];
     is_deeply( $terms, $expected_terms, "Search formed as expected for a non-subject field with double punctuation, period+comma ");
 

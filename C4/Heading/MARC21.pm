@@ -339,7 +339,7 @@ sub parse_heading {
     my $thesaurus =
       $tag =~ m/6../
       ? _get_subject_thesaurus($field)
-      : "lcsh";    # use 'lcsh' for names, UT, etc.
+      : undef;    # We can't know the thesaurus for non-subject fields
     my $search_heading =
       _get_search_heading( $field, $field_info->{'subfields'} );
     my $display_heading =

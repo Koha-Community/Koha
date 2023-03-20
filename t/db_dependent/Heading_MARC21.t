@@ -25,12 +25,12 @@ SKIP: {
     $heading = C4::Heading->new_from_field($field);
     is($heading->display_form(), 'The dark is rising ;', 'Display form generation');
     is($heading->search_form(), 'The dark is rising', 'Search form generation');
-    is($heading->{thesaurus}, 'lcsh', 'Thesaurus generation');
+    ok( !defined $heading->{thesaurus}, 'Thesaurus is not generated outside of 6XX fields');
 
     $field = MARC::Field->new( '100', '1', '', a => 'Yankovic, Al', d => '1959-' );
     $heading = C4::Heading->new_from_field($field);
     is($heading->display_form(), 'Yankovic, Al 1959-', 'Display form generation');
     is($heading->search_form(), 'Yankovic, Al 1959', 'Search form generation');
-    is($heading->{thesaurus}, 'lcsh', 'Thesaurus generation');
+    ok( !defined $heading->{thesaurus}, 'Thesaurus is not generated outside of 6XX fields');
 
 }
