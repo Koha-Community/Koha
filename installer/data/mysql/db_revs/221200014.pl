@@ -18,5 +18,13 @@ return {
             ('circulation','PREDUEDGST','','Advance notice of item due (digest)',0,'Advance notice of item due','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have <<count>> item(s) that will be due soon.\r\n\r\nThank you.','sms','default'),
             ('reserves','HOLD','','Hold available for pickup',0,'Hold available for pickup at <<branches.branchname>>','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYour hold for <<biblio.title>> is available for pickup.','sms','default')
         });
+
+        say $out "Added new letter 'CHECKIN' (sms)";
+        say $out "Added new letter 'CHECKOUT' (sms)";
+        say $out "Added new letter 'DUE' (sms)";
+        say $out "Added new letter 'DUEDGST' (sms)";
+        say $out "Added new letter 'PREDUE' (sms)";
+        say $out "Added new letter 'PREDUEDGST' (sms)";
+        say $out "Added new letter 'HOLD' (sms)";
     },
 };
