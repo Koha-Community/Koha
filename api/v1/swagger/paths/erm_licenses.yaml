@@ -51,6 +51,15 @@
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - vendor.name
     responses:
       200:
         description: A list of agreements' licenses
