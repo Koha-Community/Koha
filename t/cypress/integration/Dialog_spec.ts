@@ -88,7 +88,15 @@ describe("Dialog operations", () => {
         cy.get("main div[class='dialog message']").contains("Package created");
         cy.get("main div[class='dialog message']").should("have.length", 1);
 
-        cy.get("#navmenulist").contains("Agreements").click();
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
+            statusCode: 200,
+            body: [cy.get_title()],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.get("#navmenulist").contains("Titles").click();
         // Info messages should be cleared when view is changed
         cy.get("main div[class='dialog message']").should("not.exist");
     });
