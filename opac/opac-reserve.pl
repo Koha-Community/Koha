@@ -495,16 +495,16 @@ foreach my $biblioNum (@biblionumbers) {
                 $biblioLoopIter{force_hold} = 1 if $opac_hold_policy eq 'F';
             }
             $numCopiesAvailable++;
+        }
 
-            unless ($can_place_hold_if_available_at_pickup) {
-                my $items_in_this_library = Koha::Items->search(
-                    { biblionumber => $item->biblionumber, holdingbranch => $item->holdingbranch, notforloan => 0 } );
-                my $nb_of_items_issued =
-                    $items_in_this_library->search( { 'issue.itemnumber' => { not => undef } }, { join => 'issue' } )
-                    ->count;
-                if ( $items_in_this_library->count > $nb_of_items_issued ) {
-                    push @not_available_at, $item->holdingbranch;
-                }
+        unless ($can_place_hold_if_available_at_pickup) {
+            my $items_in_this_library = Koha::Items->search(
+                { biblionumber => $item->biblionumber, holdingbranch => $item->holdingbranch, notforloan => 0 } );
+            my $nb_of_items_issued =
+                $items_in_this_library->search( { 'issue.itemnumber' => { not => undef } }, { join => 'issue' } )
+                ->count;
+            if ( $items_in_this_library->count > $nb_of_items_issued ) {
+                push @not_available_at, $item->holdingbranch;
             }
         }
 
