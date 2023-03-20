@@ -6,6 +6,18 @@
     tags:
       - biblios
     summary: Add biblio
+    description: |
+      Add a bibliographic record to Koha. An optional `x-framework-id`
+      may be passed to specify the cataloguing framework to be used (instead
+      of the default).
+
+      The request body is expected to contain a MARC record in the format specified in
+      the `Content-type` header you pass. Possible values for this header and the corresponding
+      record formats expected are listed below:
+
+      * application/marcxml+xml: MARCXML
+      * application/marc-in-json: MARC-in-JSON
+      * application/marc: Raw USMARC binary data
     parameters:
       - $ref: "../swagger.yaml#/parameters/framework_id_header"
       - $ref: "../swagger.yaml#/parameters/marc_schema_header"
@@ -204,6 +216,18 @@
     tags:
       - biblios
     summary: Update biblio
+    description: |
+      Updates a bibliographic record to Koha. An optional `x-framework-id`
+      may be passed, to specify the cataloguing framework to be used (instead
+      of the default).
+
+      The request body is expected to contain a MARC record in the format specified by
+      the `Content-type` header passed. Possible values for this headers and the corresponding
+      record formats expected are listed below:
+
+      * application/marcxml+xml: MARCXML
+      * application/marc-in-json: MARC-in-JSON
+      * application/marc: Raw USMARC binary data
     parameters:
       - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
       - $ref: "../swagger.yaml#/parameters/framework_id_header"
