@@ -686,14 +686,9 @@
             </a>
 
             <xsl:if test="marc:subfield[@code=9]">
-                <xsl:text> </xsl:text>
-                <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                    <xsl:element name="i">
-                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
-                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
-                    </xsl:element>
-                </a>
+                <xsl:call-template name="showAuthlink">
+                    <xsl:with-param name="authid"><xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
 
             <xsl:choose>
@@ -735,15 +730,11 @@
                     </xsl:call-template>
                     </a>
 
+
                     <xsl:if test="marc:subfield[@code=9]">
-                        <xsl:text> </xsl:text>
-                        <a class='authlink'>
-                            <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                            <xsl:element name="i">
-                                <xsl:attribute name="class">fa fa-search</xsl:attribute>
-                                <xsl:attribute name="aria-label">View authority record</xsl:attribute>
-                            </xsl:element>
-                        </a>
+                        <xsl:call-template name="showAuthlink">
+                            <xsl:with-param name="authid"><xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:with-param>
+                        </xsl:call-template>
                     </xsl:if>
                     <xsl:if test="position()!=last()"><span class="separator"> | </span></xsl:if>
                 </xsl:for-each>
@@ -1745,14 +1736,9 @@
             </xsl:if>
         </a>
         <xsl:if test="marc:subfield[@code=9]">
-                <xsl:text> </xsl:text>
-                <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                    <xsl:element name="i">
-                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
-                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
-                    </xsl:element>
-                </a>
+            <xsl:call-template name="showAuthlink">
+                <xsl:with-param name="authid"><xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:with-param>
+            </xsl:call-template>
         </xsl:if>
         <xsl:choose>
           <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
@@ -1760,6 +1746,20 @@
         </xsl:for-each>
         </h5>
 	</xsl:if>
+    </xsl:template>
+
+    <xsl:template name="showAuthlink">
+        <xsl:param name="authid"/>
+        <xsl:text> </xsl:text>
+        <a class='authlink'>
+            <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
+            <xsl:attribute name="title">View authority record</xsl:attribute>
+            <xsl:attribute name="target">_blank</xsl:attribute>
+            <xsl:element name="i">
+                <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                <xsl:attribute name="aria-label">View authority record</xsl:attribute>
+            </xsl:element>
+        </a>
     </xsl:template>
 
     <!-- #1807 Strip unwanted parenthesis from subjects for searching -->

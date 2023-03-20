@@ -51,7 +51,21 @@
     </xsl:template>
 
     <xsl:template match="marc:subfield">
-        <strong>_<xsl:value-of select="@code"/></strong> <xsl:value-of select="."/>
+        <strong>_<xsl:value-of select="@code"/></strong>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+            <xsl:when test="@code = '9'">
+                <a>
+                    <xsl:attribute name='href'>/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="."/></xsl:attribute>
+                    <xsl:attribute name="title">View authority record</xsl:attribute>
+                    <xsl:attribute name='target'>_blank</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </a>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:choose>
         <xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><br /></xsl:otherwise></xsl:choose>
     </xsl:template>
