@@ -157,11 +157,6 @@ describe("Title CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept(
-            "GET",
-            "/api/v1/erm/eholdings/local/titles/*",
-            erm_title
-        );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.get("#titles_list").contains("Showing 1 to 1 of 1 entries");
     });
