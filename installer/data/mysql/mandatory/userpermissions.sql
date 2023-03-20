@@ -110,6 +110,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'edit_calendar', 'Define days when the library is closed'),
    (13, 'moderate_comments', 'Moderate patron comments'),
    (13, 'edit_notices', 'Define notices'),
+   (13, 'view_generated_notices', 'View and print generated notices'),
    (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Browse the system logs'),
    (13, 'inventory', 'Perform inventory (stocktaking) of your catalog'),
