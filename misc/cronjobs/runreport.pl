@@ -183,6 +183,7 @@ my $separator = ',';
 my $quote = '"';
 my $store_results = 0;
 my $csv_header = 0;
+my $csv_separator = "";
 
 my $username = undef;
 my $password = undef;
@@ -195,6 +196,7 @@ GetOptions(
     'man'               => \$man,
     'verbose'           => \$verbose,
     'format=s'          => \$format,
+    'separator=s'       => \$csv_separator,
     'to=s'              => \$to,
     'from=s'            => \$from,
     'subject=s'         => \$subject,
@@ -217,6 +219,14 @@ cronlogaction({ info => $command_line_options });
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";
     $format = 'text';
+}
+
+if( $csv_separator ){
+    if( $format eq 'csv' ) {
+        $separator = "$csv_separator";
+    } else {
+        print STDERR "Cannot specify separator if not using CSV format\n";
+    }
 }
 
 if ($format eq 'tsv' || $format eq 'text') {
