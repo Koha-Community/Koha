@@ -149,7 +149,7 @@ div#result { margin-top: 1em; }
             ev.preventDefault();
             newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
         });
-        if( $(".tab-pane.active").length < 1 ){
+        if( $("#tabs .tab-pane.active").length < 1 ){
             $("#tabs a:first").tab("show");
         }
     });

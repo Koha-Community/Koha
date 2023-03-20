@@ -48,7 +48,6 @@
     <div id="tabs" class="toptabs">
         <h2>Source records</h2>
         <ul class="nav nav-tabs" role="tablist">
-    <div class="tab-content">
             [% FOREACH record IN sourcerecords %]
                 <li role="presentation">
                     <a href="#tabrecord[% record.recordid | uri %]" aria-controls="tabrecord[% record.recordid | uri %]" role="tab" data-toggle="tab">
