@@ -1613,27 +1613,27 @@ subtest 'list() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/weird+format', 'x-koha-query' => $search } )
-      ->status_is(400);
+      ->status_is(400, 'Status is 400 for bad format');
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/json', 'x-koha-query' => $search } )
-      ->status_is(200);
+      ->status_is(200, 'Status is 200 for application/json');
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
-      ->status_is(200);
+      ->status_is(200, 'Status is 200 for application/marcxml+xml');
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
-      ->status_is(200);
+      ->status_is(200, 'Status is 200 for application/marc-in-json');
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/marc', 'x-koha-query' => $search } )
-      ->status_is(200);
+      ->status_is(200, 'Status is 200 for application/marc');
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'text/plain', 'x-koha-query' => $search } )
-      ->status_is(200);
+      ->status_is(200, 'Status is 200 for text/plain');
 
     $schema->storage->txn_rollback;
 };
