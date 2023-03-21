@@ -136,6 +136,9 @@ sub anonymize {
     Koha::Exceptions::SysPref::NotSet->throw( syspref => 'AnonymousPatron' )
         unless $anonymous_id;
 
+    my $self_renewals = $self->renewals->search( { renewer_id => $self->borrowernumber } );
+    $self_renewals->update( { renewer_id => $anonymous_id } );
+
     return $self->update( { borrowernumber => $anonymous_id } );
 }
 
