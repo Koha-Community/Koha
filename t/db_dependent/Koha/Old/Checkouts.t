@@ -32,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'anonymize() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -89,8 +89,28 @@ subtest 'anonymize() tests' => sub {
             }
         }
     );
+    my $renewal_1 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::Renewals',
+            value => {
+                checkout_id => $checkout_4->id,
+                interface   => 'opac',
+                renewer_id  => $patron->id
+            }
+        }
+    );
+    my $renewal_2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::Renewals',
+            value => {
+                checkout_id => $checkout_4->id,
+                interface   => 'intranet'
+            }
+        }
+    );
 
     is( $patron->old_checkouts->count, 4, 'Patron has 4 completed checkouts' );
+    is( $checkout_4->renewals->count,  2, 'Checkout 4 has 2 renewals' );
 
     # filter them so only the older two are part of the resultset
     my $checkouts = $patron->old_checkouts->filter_by_last_update( { min_days => 1 } );
@@ -110,6 +130,12 @@ subtest 'anonymize() tests' => sub {
     is( $anonymized_count, 2, 'update() tells 2 rows were updated' );
 
     is( $patron->old_checkouts->count, 2, 'Patron has 2 completed checkouts' );
+    is( $checkout_4->renewals->count,  2, 'Checkout 4 still has 2 renewals' );
+    is(
+        $checkout_4->renewals->search( { renewer_id => $anonymous_patron->id } )->count,
+        1,
+        'OPAC renewal was anonymized'
+    );
 
     $schema->storage->txn_rollback;
 };
