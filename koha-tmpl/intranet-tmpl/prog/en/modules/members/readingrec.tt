@@ -47,107 +47,111 @@
 [% ELSIF ( !loop_reading ) %]
     <div class="dialog message">This patron has no circulation history.</div>
 [% ELSE %]
-<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
+    <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
+        [% BLOCK table_readingrec %]
+            <table id="table_readingrec">
+                <thead>
+                    <tr>
+                        <th style="display:none;">Type</th>
+                        <th>Date</th>
+                        <th class="anti-the">Title</th>
+                        <th>Author</th>
+                        <th>Call number</th>
+                        <th>Vol info</th>
+                        <th>Barcode</th>
+                        <th>Number of renewals</th>
+                        <th>Checked out on</th>
+                        <th>Checked out from</th>
+                        [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                            <th>Checked out by</th>
+                        [% END %]
+                        <th>Date due</th>
+                        <th>Return date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH issue IN loop_reading %]
+                        [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
+                            <td style="display:none;">
+                                [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
+                                [% ELSE %][% issuetype = 'standard_checkout' | html %]
+                                [% END %]
+                                [% issuetype | html %]
+                            </td>
+                            <td data-order="[% issue.issuestimestamp | html %]">
+                                [% issue.issuestimestamp | $KohaDates  with_hours => 1 %]
+                            </td>
+                            <td>
+                                [% INCLUDE 'biblio-title.inc' biblio=issue link = 1 %]
+                            </td>
 
-<div id="tabs" class="toptabs">
-  [% IF Koha.Preference('OnSiteCheckouts') %]
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" data-tabname="all" id="tab_all">All</a></li>
-    <li role="presentation"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" data-tabname="checkouts" id="tab_checkout">Checkouts</a></li>
-    <li role="presentation"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" id="tab_onsite_checkout" data-tabname="onsite">On-site checkouts</a></li>
-  </ul>
-  <div class="tab-content">
-      <div id="readingrec" role="tabpanel" class="tab-pane active">
-  [% ELSE %]
-    <div id="readingrec" class="page-section">
-  [% END %]
-    <table id="table_readingrec">
-      <thead>
-        <tr>
-        <th style="display:none;">Type</th>
-        <th>Date</th>
-        <th class="anti-the">Title</th>
-        <th>Author</th>
-        <th>Call number</th>
-        <th>Vol info</th>
-        <th>Barcode</th>
-        <th>Number of renewals</th>
-        <th>Checked out on</th>
-        <th>Checked out from</th>
-        [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-        <th>Checked out by</th>
+                            <td>[% issue.author | html %]</td>
+
+                            <td>
+                                [% IF issue.classification %]
+                                    [% issue.classification | html %]
+                                [% ELSE %]
+                                    [% issue.itemcallnumber | html %]
+                                [% END %]
+                            </td>
+
+                            <td>
+                                [% IF issue.enumchron %]
+                                    [% issue.enumchron | html %]
+                                [% END %]
+                            </td>
+
+                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% issue.itemnumber | uri %]&amp;biblionumber=[% issue.biblionumber | uri %]&amp;bi=[% issue.biblioitemnumber | uri %]#item[% issue.itemnumber | uri %]">[% issue.barcode | html %]</a></td>
+                            <td>
+                                [% issue.renewals_count | html %]
+                                [% IF issue.renewals_count > 0 %]
+                                    [ <a class="checkout_renewals_view" data-renewals="[% issue.renewals_count | html %]" data-issueid="[% issue.issue_id | html %]" href="#">View</a> ]
+                                [% END %]
+                            </td>
+                            <td data-order="[% issue.issuedate | html %]">
+                                [% issue.issuedate |$KohaDates  with_hours => 1 %]
+                            </td>
+                            <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
+                            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                                <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer_id | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
+                            [% END %]
+                            <td data-order="[% issue.date_due | html %]">
+                                [% issue.date_due |$KohaDates  with_hours => 1 %]
+                            </td>
+                            [% IF  issue.returndate %]
+                                <td data-order="[% issue.returndate | html %]">
+                                [% issue.returndate |$KohaDates  with_hours => 1 %]
+                            [% ELSE %]
+                                <td data-order="checked out">
+                                <small>Checked out</small>
+                            [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
         [% END %]
-        <th>Date due</th>
-        <th>Return date</th>
-        </tr>
-      </thead>
-      <tbody>
-      [% FOREACH issue IN loop_reading %]
-        [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
-          <td style="display:none;">
-            [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
-            [% ELSE %][% issuetype = 'standard_checkout' | html %]
-            [% END %]
-            [% issuetype | html %]
-          </td>
-          <td data-order="[% issue.issuestimestamp | html %]">
-              [% issue.issuestimestamp | $KohaDates  with_hours => 1 %]
-          </td>
-          <td>
-            [% INCLUDE 'biblio-title.inc' biblio=issue link = 1 %]
-            </td>
 
-          <td>[% issue.author | html %]</td>
+        [% IF Koha.Preference('OnSiteCheckouts') %]
+            [% WRAPPER tabs id= "tabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% WRAPPER tab_item tabname= "tab_all" bt_active= 1 %] <span>All</span> [% END %]
+                    [% WRAPPER tab_item tabname= "tab_checkout" %] <span>Checkouts</span> [% END %]
+                    [% WRAPPER tab_item tabname= "tab_onsite_checkout" %] <span>On-site checkouts</span> [% END %]
+                [% END # /WRAPPER tabs_nav %]
+                [% WRAPPER tab_panels %]
+                    [% WRAPPER tab_panel tabname="readingrec" bt_active= 1 %]
+                        [% INCLUDE table_readingrec %]
+                    [% END # /tab_panel# %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
+        [% ELSE %]
+            <div class="page-section">
+                [% INCLUDE table_readingrec %]
+            </div> <!-- /.page-section -->
+        [% END # /IF Koha.Preference('OnSiteCheckouts') %]
 
-          <td>
-            [% IF issue.classification %]
-                [% issue.classification | html %]
-            [% ELSE %]
-                [% issue.itemcallnumber | html %]
-            [% END %]
-          </td>
-
-          <td>
-            [% IF issue.enumchron %]
-                [% issue.enumchron | html %]
-            [% END %]
-          </td>
-
-          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% issue.itemnumber | uri %]&amp;biblionumber=[% issue.biblionumber | uri %]&amp;bi=[% issue.biblioitemnumber | uri %]#item[% issue.itemnumber | uri %]">[% issue.barcode | html %]</a></td>
-          <td>
-              [% issue.renewals_count | html %]
-              [% IF issue.renewals_count > 0 %]
-                  [ <a class="checkout_renewals_view" data-renewals="[% issue.renewals_count | html %]" data-issueid="[% issue.issue_id | html %]" href="#">View</a> ]
-              [% END %]
-          </td>
-          <td data-order="[% issue.issuedate | html %]">
-              [% issue.issuedate |$KohaDates  with_hours => 1 %]
-          </td>
-          <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
-          [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-          <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer_id | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
-          [% END %]
-          <td data-order="[% issue.date_due | html %]">
-              [% issue.date_due |$KohaDates  with_hours => 1 %]
-          </td>
-            [% IF  issue.returndate %]
-                <td data-order="[% issue.returndate | html %]">
-                [% issue.returndate |$KohaDates  with_hours => 1 %]
-            [% ELSE %]
-                <td data-order="checked out">
-                <small>Checked out</small>
-            [% END %]
-          </td>
-        </tr>
-      [% END %]
-      </tbody>
-    </table>
-  </div>
-  [% IF Koha.Preference('OnSiteCheckouts') %]
-    </div> <!-- /.tab-content -->
-  [% END %]
-</div>
 [% END %]
 
             </main>
@@ -178,10 +182,10 @@
             }, table_settings);
 
             $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
-                active_tab = $(this).data("tabname");
-                if( active_tab == "checkouts" ){
+                active_tab = $(this).attr("href");
+                if( active_tab == "#tab_checkout_panel" ){
                     table.fnFilter("standard_checkout", 0);
-                } else if( active_tab == "onsite" ){
+                } else if( active_tab == "#tab_onsite_checkout_panel" ){
                     table.fnFilter("onsite_checkout", 0);
                 } else {
                     table.fnFilter('', 0);
