@@ -65,7 +65,7 @@ subtest "UNIMARC tests" => sub {
 
 subtest "_search tests" => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
@@ -110,6 +110,16 @@ subtest "_search tests" => sub {
         { term => { 'subject-heading-thesaurus.ci_raw' => 'special_sauce' } },
     ];
     is_deeply( $terms, $expected_terms, "Search formed as expected with second indicator 7 and subfield 2");
+
+    $field = MARC::Field->new( '650', ' ', '4', a => 'Uncles', x => 'Fiction' );
+    $heading = C4::Heading->new_from_field($field);
+    ($search_query) = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+        { term => { 'subject-heading-thesaurus.ci_raw' => '|' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search looks for thesaurus '|' when second indicator 4");
 
     $field = MARC::Field->new( '100', ' ', '', a => 'Yankovic, Al', d => '1959-,' );
     $heading = C4::Heading->new_from_field($field);
