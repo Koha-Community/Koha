@@ -60,17 +60,21 @@
     }
 }
 
+@mixin cartRemove {
+    color: #900;
+    font-size: 90%;
+    padding-left: 0;
+
+    &:hover {
+        color: #C60000;
+    }
+}
+
 a {
     &:link,
     &:visited {
         &.cartRemove {
-            color: #900;
-            font-size: 90%;
-            padding-left: 0;
-
-            &:hover {
-                color: #C60000;
-            }
+            @include cartRemove();
         }
     }
 
@@ -657,6 +661,10 @@ th {
 
             &.btn-link {
                 color: $links;
+
+                &.cartRemove {
+                    @include cartRemove();
+                }
             }
         }
     }
