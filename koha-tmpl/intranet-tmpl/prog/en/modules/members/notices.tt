@@ -53,6 +53,9 @@
                         <th>Updated on</th>
                         <th>Time created</th>
                         <th>Delivery note</th>
+                        [% IF CAN_user_tools_view_generated_notices %]
+                            <th>Actions</th>
+                        [% END %]
                     </tr>
                 </thead>
                 <tbody>
@@ -143,6 +146,11 @@
                                     [% END %]
                                 [% END %]
                             </td>
+                            [% IF CAN_user_tools_view_generated_notices %]
+                                <td class="actions"
+                                    ><a target="_blank" class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/print_notice.pl?message_ids=[% QUEUED_MESSAGE.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
+                                >
+                            [% END %]
                         </tr>
                     [% END %]
                 </tbody>
