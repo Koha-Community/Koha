@@ -202,6 +202,8 @@ sub _search {
     my @operator;
     my @value;
 
+    # FIXME: We specify values for @and_or and @excluding
+    # but these fields are not used anywhere and should be removed
     if ($index) {
         push @marclist, $index;
         push @and_or,   'AND';

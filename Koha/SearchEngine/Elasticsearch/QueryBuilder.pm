@@ -564,14 +564,20 @@ our $koha_to_index_name = {
     all             => ''
 };
 
+# Note that sears and aat map to 008/11 values here
+# but don't appear in C4/Headin/MARC21 thesaurus
+# because they don't have values in controlled field indicators
+# https://www.loc.gov/marc/authority/ad008.html
 our $thesaurus_to_value = {
-   lcsh => 'a',
-   lcac => 'b',
-   mesh => 'c',
-   nal  => 'd',
+   lcsh  => 'a',
+   lcac  => 'b',
+   mesh  => 'c',
+   nal   => 'd',
    notspecified => 'n',
-   cash => 'k',
-   rvm => 'v',
+   cash  => 'k',
+   rvm   => 'v',
+   aat   => 'r',
+   sears => 's'
 };
 
 sub build_authorities_query_compat {
