@@ -573,11 +573,13 @@ our $thesaurus_to_value = {
    lcac  => 'b',
    mesh  => 'c',
    nal   => 'd',
-   notspecified => 'n',
+   notapplicable => 'n',
    cash  => 'k',
    rvm   => 'v',
    aat   => 'r',
-   sears => 's'
+   sears => 's',
+   notdefined => 'z',
+   notspecified => '|'
 };
 
 sub build_authorities_query_compat {

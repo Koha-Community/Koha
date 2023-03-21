@@ -2452,7 +2452,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
           </xslo:choose>
         </xslo:when>
         <xslo:otherwise>
-          <xslo:text>notdefined</xslo:text>
+          <xslo:text>notspecified</xslo:text>
         </xslo:otherwise>
       </xslo:choose>
     </xslo:variable>
