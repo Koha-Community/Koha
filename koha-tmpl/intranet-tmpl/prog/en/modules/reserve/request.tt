@@ -227,21 +227,23 @@
                             <h2>Search patrons</h2>
                         [% END %]
                     [% END %]
-                    <div id="circ_holds_select" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#holds_patronsearch_pane" aria-controls="holds_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
+
+                    [% WRAPPER tabs id= "circ_holds_select" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "holds_patronsearch_pane" bt_active= 1 %] <span>Patrons</span> [% END %]
                             [% IF clubcount %]
-                                <li role="presentation"><a href="#holds_clubsearch_pane" aria-controls="holds_clubsearch_pane" role="tab" data-toggle="tab">Clubs</a></li>
+                                [% WRAPPER tab_item tabname= "holds_clubsearch_pane" %] <span>Clubs</span> [% END %]
                             [% END %]
-                        </ul>
-                        <div class="tab-content">
-                            <div id="holds_patronsearch_pane" role="tabpanel" class="tab-pane active">
+                        [% END # /WRAPPER tabs_nav %]
+
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="holds_patronsearch_pane" bt_active= 1 %]
                                 [% PROCESS patron_search_filters_simple %]
 
                                 [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
-                            </div>
+                            [% END # /tab_panel# %]
                             [% IF clubcount %]
-                                <div id="holds_clubsearch_pane" role="tabpanel" class="tab-pane">
+                                [% WRAPPER tab_panel tabname="holds_clubsearch_pane" %]
                                     <form id="holds_clubsearch" action="request.pl" method="post">
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
@@ -254,10 +256,10 @@
                                     [% IF clubs %]
                                         [% INCLUDE 'clubs-table.inc' destination = "holds" %]
                                     [% END %]
-                                </div>
-                            [% END %]
-                        </div> <!-- /.tab-content -->
-                    </div>
+                                [% END # /tab_panel# %]
+                            [% END # /IF clubcount %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs %]
                 </fieldset>
             [% ELSIF club %]
                 <div class="dialog alert hide clubalert">
