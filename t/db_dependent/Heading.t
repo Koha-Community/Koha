@@ -69,6 +69,9 @@ subtest "_search tests" => sub {
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
+    # NOTE: We are testing solely against ES here to make the assumptions simpler while testing
+    # C4/Headings code specifically. The actual query building and searching code should
+    # be covered in other test files
     my $search = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
 
     $search->mock('search_auth_compat', sub {

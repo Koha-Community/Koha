@@ -359,6 +359,11 @@ sub _get_subject_thesaurus {
     my $field = shift;
     my $ind2  = $field->indicator(2);
 
+    # NOTE: sears and aat do not appear
+    # here as they do not have indicator values
+    # though the 008 in the authority records
+    # do have values for them
+
     my $thesaurus = "notdefined";
     if ( $ind2 eq '0' ) {
         $thesaurus = "lcsh";
