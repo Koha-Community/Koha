@@ -37,7 +37,10 @@
                         <label>{{ $__("Publication title") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/ebsco/titles/${resource.title_id}`"
+                                :to="{
+                                    name: 'EHoldingsEBSCOTitlesShow',
+                                    params: { title_id: resource.title_id },
+                                }"
                                 >{{
                                     resource.title.publication_title
                                 }}</router-link
@@ -77,7 +80,10 @@
                         <label>{{ $__("Package") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/ebsco/packages/${resource.package_id}`"
+                                :to="{
+                                    name: 'EHoldingsEBSCOPackagesShow',
+                                    params: { package_id: resource.package_id },
+                                }"
                                 >{{ resource.package.name }}</router-link
                             ></span
                         >

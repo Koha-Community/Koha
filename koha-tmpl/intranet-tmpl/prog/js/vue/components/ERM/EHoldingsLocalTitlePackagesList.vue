@@ -22,12 +22,14 @@ export default {
     },
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/resources/" + resource_id
-            )
+            this.$router.push({
+                name: "EHoldingsLocalResourcesShow",
+                params: { resource_id },
+            })
         },
         build_datatable: function () {
             let show_resource = this.show_resource
+            let router = this.$router
             let resources = this.resources
             let table_id = this.table_id
 
@@ -59,13 +61,15 @@ export default {
                                 let tr = $(this).parent()
                                 let row = api.row(tr).data()
                                 if (!row) return // Happen if the table is empty
+                                let { href } = router.resolve({
+                                    name: "EHoldingsLocalResourcesShow",
+                                    params: { resource_id },
+                                })
                                 let n = createVNode(
                                     "a",
                                     {
                                         role: "button",
-                                        href:
-                                            "/cgi-bin/koha/erm/eholdings/local/resources/" +
-                                            row.resource_id,
+                                        href,
                                         onClick: e => {
                                             e.preventDefault()
                                             show_resource(row.resource_id)

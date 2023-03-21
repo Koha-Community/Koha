@@ -149,26 +149,27 @@ export default {
     },
     computed: {
         local_titles_url() {
-            return build_url(
-                "/cgi-bin/koha/erm/eholdings/local/titles",
-                this.filters
-            )
+            let { href } = this.$router.resolve({
+                name: "EHoldingsLocalTitlesList",
+            })
+            return build_url(href, this.filters)
         },
     },
     methods: {
-        doShow: function (title, dt, event) {
+        doShow: function ({ title_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/titles/" + title.title_id
-            )
+            this.$router.push({
+                name: "EHoldingsEBSCOTitlesShow",
+                params: { title_id },
+            })
         },
         filter_table: async function () {
             if (this.filters.publication_title.length) {
                 this.cannot_search = false
-                let new_route = build_url(
-                    "/cgi-bin/koha/erm/eholdings/ebsco/titles",
-                    this.filters
-                )
+                let { href } = this.$router.resolve({
+                    name: "EHoldingsEBSCOTitlesList",
+                })
+                let new_route = build_url(href, this.filters)
                 this.$router.push(new_route)
                 this.show_table = true
                 this.local_title_count = null
