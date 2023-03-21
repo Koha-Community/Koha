@@ -107,17 +107,18 @@ export default {
                 error => {}
             )
         },
-        doShow: function (title, dt, event) {
+        doShow: function ({ title_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/titles/" + title.title_id
-            )
+            this.$router.push({
+                name: "EHoldingsLocalTitlesShow",
+                params: { title_id },
+            })
         },
-        doEdit: function (title, dt, event) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/titles/edit/" +
-                    title.title_id
-            )
+        doEdit: function ({ title_id }, dt, event) {
+            this.$router.push({
+                name: "EHoldingsLocalTitlesFormAddEdit",
+                params: { title_id },
+            })
         },
         doDelete: function (title, dt, event) {
             this.setConfirmationDialog(

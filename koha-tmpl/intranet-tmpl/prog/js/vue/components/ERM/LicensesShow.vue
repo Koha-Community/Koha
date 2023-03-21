@@ -5,7 +5,10 @@
             {{ $__("License #%s").format(license.license_id) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/licenses/edit/${license.license_id}`"
+                    :to="{
+                        name: 'LicensesFormAddEdit',
+                        params: { license_id: license.license_id },
+                    }"
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
@@ -131,7 +134,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/licenses"
+                    :to="{ name: 'LicensesList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -216,7 +219,7 @@ export default {
                                 ),
                                 true
                             )
-                            this.$router.push("/cgi-bin/koha/erm/licenses")
+                            this.$router.push({ name: "LicensesList" })
                         },
                         error => {}
                     )

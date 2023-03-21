@@ -18,7 +18,10 @@
                         <label>{{ $__("Publication title") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/local/titles/${resource.title_id}`"
+                                :to="{
+                                    name: 'EHoldingsLocalTitlesShow',
+                                    params: { title_id: resource.title_id },
+                                }"
                                 >{{
                                     resource.title.publication_title
                                 }}</router-link
@@ -58,7 +61,10 @@
                         <label>{{ $__("Package") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/local/packages/${resource.package_id}`"
+                                :to="{
+                                    name: 'EHoldingsLocalPackagesShow',
+                                    params: { package_id: resource.package_id },
+                                }"
                                 >{{ resource.package.name }}</router-link
                             ></span
                         >

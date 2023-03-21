@@ -1,8 +1,6 @@
 <template>
     <div id="toolbar" class="btn-toolbar">
-        <router-link
-            to="/cgi-bin/koha/erm/agreements/add"
-            class="btn btn-default"
+        <router-link :to="{ name: 'AgreementsFormAdd' }" class="btn btn-default"
             ><font-awesome-icon icon="plus" />
             {{ $__("New agreement") }}</router-link
         >

@@ -121,7 +121,7 @@
                 <fieldset class="action">
                     <input type="submit" :value="$__('Submit')" />
                     <router-link
-                        to="/cgi-bin/koha/erm/licenses"
+                        :to="{ name: 'LicensesList' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -259,7 +259,7 @@ export default {
                 client.licenses.update(license, license_id).then(
                     success => {
                         setMessage(this.$__("License updated"))
-                        this.$router.push("/cgi-bin/koha/erm/licenses")
+                        this.$router.push({ name: "LicensesList" })
                     },
                     error => {}
                 )
@@ -267,7 +267,7 @@ export default {
                 client.licenses.create(license).then(
                     success => {
                         setMessage(this.$__("License created"))
-                        this.$router.push("/cgi-bin/koha/erm/licenses")
+                        this.$router.push({ name: "LicensesList" })
                     },
                     error => {}
                 )

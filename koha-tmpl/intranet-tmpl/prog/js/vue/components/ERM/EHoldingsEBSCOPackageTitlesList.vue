@@ -129,12 +129,12 @@ export default {
         }
     },
     methods: {
-        doShow: function (resource, dt, event) {
+        doShow: function ({ resource_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/resources/" +
-                    resource.resource_id
-            )
+            this.$router.push({
+                name: "EHoldingsEBSCOResourcesShow",
+                params: { resource_id },
+            })
         },
         filter_table: function () {
             this.$refs.table.redraw(

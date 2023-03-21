@@ -145,25 +145,25 @@ export default {
     },
     computed: {
         local_packages_url() {
-            return build_url(
-                "/cgi-bin/koha/erm/eholdings/local/packages",
-                this.filters
-            )
+            let { href } = this.$router.resolve({
+                name: "EHoldingsLocalPackagesList",
+            })
+            return build_url(href, this.filters)
         },
     },
     methods: {
-        doShow: function (erm_package, dt, event) {
+        doShow: function ({ package_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/packages/" +
-                    erm_package.package_id
-            )
+            this.$router.push({
+                name: "EHoldingsEBSCOPackagesShow",
+                params: { package_id },
+            })
         },
         filter_table: async function () {
-            let new_route = build_url(
-                "/cgi-bin/koha/erm/eholdings/ebsco/packages",
-                this.filters
-            )
+            let { href } = this.$router.resolve({
+                name: "EHoldingsEBSCOPackagesShow",
+            })
+            let new_route = build_url(href, this.filters)
             this.$router.push(new_route)
             this.show_table = true
             this.local_count_packages = null

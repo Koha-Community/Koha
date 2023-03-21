@@ -232,7 +232,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings/ebsco/titles"
+                    :to="{ name: 'EHoldingsEBSCOTitlesList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link

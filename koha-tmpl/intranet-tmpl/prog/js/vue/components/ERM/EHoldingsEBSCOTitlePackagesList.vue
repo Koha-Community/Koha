@@ -66,9 +66,10 @@ export default {
     },
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id
-            )
+            this.$router.push({
+                name: "EHoldingsEBSCOResourcesShow",
+                params: { resource_id },
+            })
         },
         toggle_filters: function (e) {
             this.display_filters = !this.display_filters
@@ -83,6 +84,7 @@ export default {
             let resources = this.resources
             let filters = this.filters
             let table_id = this.table_id
+            let router = this.$router
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
@@ -122,13 +124,15 @@ export default {
                                 let tr = $(this).parent()
                                 let row = api.row(tr).data()
                                 if (!row) return // Happen if the table is empty
+                                let { href } = router.resolve({
+                                    name: "EHoldingsEBSCOResourcesShow",
+                                    params: { resource_id: row.resource_id },
+                                })
                                 let n = createVNode(
                                     "a",
                                     {
                                         role: "button",
-                                        href:
-                                            "/cgi-bin/koha/erm/eholdings/ebsco/resources/" +
-                                            row.resource_id,
+                                        href,
                                         onClick: e => {
                                             e.preventDefault()
                                             show_resource(row.resource_id)

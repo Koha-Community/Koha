@@ -17,7 +17,12 @@
             v-bind:key="counter"
         >
             <router-link
-                :to="`/cgi-bin/koha/erm/agreements/${package_agreement.agreement.agreement_id}`"
+                :to="{
+                    name: 'AgreementsShow',
+                    params: {
+                        agreement_id: package_agreement.agreement.agreement_id,
+                    },
+                }"
                 >{{ package_agreement.agreement.name }}</router-link
             >
             &nbsp;

@@ -115,18 +115,18 @@ export default {
                 error => {}
             )
         },
-        doShow: function (erm_package, dt, event) {
+        doShow: function ({ package_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/packages/" +
-                    erm_package.package_id
-            )
+            this.$router.push({
+                name: "EHoldingsLocalPackagesShow",
+                params: { package_id },
+            })
         },
-        doEdit: function (erm_package, dt, event) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/packages/edit/" +
-                    erm_package.package_id
-            )
+        doEdit: function ({ package_id }, dt, event) {
+            this.$router.push({
+                name: "EHoldingsLocalPackagesFormAddEdit",
+                params: { package_id },
+            })
         },
         doDelete: function (erm_package, dt, event) {
             this.setConfirmationDialog(
