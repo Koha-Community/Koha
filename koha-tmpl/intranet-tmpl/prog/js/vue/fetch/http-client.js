@@ -52,7 +52,7 @@ class HttpClient {
 
     post(params = {}) {
         const body = params.body
-            ? typeof str === "string"
+            ? typeof params.body === "string"
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
@@ -65,7 +65,7 @@ class HttpClient {
 
     put(params = {}) {
         const body = params.body
-            ? typeof str === "string"
+            ? typeof params.body === "string"
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
@@ -105,7 +105,7 @@ class HttpClient {
 
     patch(params = {}) {
         const body = params.body
-            ? typeof str === "string"
+            ? typeof params.body === "string"
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
