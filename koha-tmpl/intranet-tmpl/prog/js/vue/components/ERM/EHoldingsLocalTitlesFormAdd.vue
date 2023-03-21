@@ -370,7 +370,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/local/titles"
+                        :to="{ name: 'EHoldingsLocalTitlesList' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -499,9 +499,9 @@ export default {
                 client.localTitles.update(title, title_id).then(
                     success => {
                         setMessage(this.$__("Title updated"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/titles"
-                        )
+                        this.$router.push({
+                            name: "EHoldingsLocalTitlesList",
+                        })
                     },
                     error => {}
                 )
@@ -509,9 +509,9 @@ export default {
                 client.localTitles.create(title).then(
                     success => {
                         setMessage(this.$__("Title created"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/titles"
-                        )
+                        this.$router.push({
+                            name: "EHoldingsLocalTitlesList",
+                        })
                     },
                     error => {}
                 )

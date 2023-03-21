@@ -5,7 +5,10 @@
             {{ $__("Title #%s").format(title.title_id) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/local/titles/edit/${title.title_id}`"
+                    :to="{
+                        name: 'EHoldingsLocalTitlesFormAddEdit',
+                        params: { title_id: title.title_id },
+                    }"
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
@@ -246,7 +249,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings/local/titles"
+                    :to="{ name: 'EHoldingsLocalTitlesList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -346,9 +349,9 @@ export default {
                                 ),
                                 true
                             )
-                            this.$router.push(
-                                "/cgi-bin/koha/erm/eholdings/local/titles"
-                            )
+                            this.$router.push({
+                                name: "EHoldingsLocalTitlesList",
+                            })
                         },
                         error => {}
                     )

@@ -5,7 +5,10 @@
             {{ $__("Agreement #%s").format(agreement.agreement_id) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/agreements/edit/${agreement.agreement_id}`"
+                    :to="{
+                        name: 'AgreementsFormAddEdit',
+                        params: { agreement_id: agreement.agreement_id },
+                    }"
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
@@ -161,7 +164,13 @@
                                 >
                                     <td>
                                         <router-link
-                                            :to="`/cgi-bin/koha/erm/licenses/${agreement_license.license_id}`"
+                                            :to="{
+                                                name: 'LicensesShow',
+                                                params: {
+                                                    license_id:
+                                                        agreement_license.license_id,
+                                                },
+                                            }"
                                         >
                                             {{ agreement_license.license.name }}
                                         </router-link>
@@ -198,7 +207,15 @@
                             >
                                 <span
                                     ><router-link
-                                        :to="`/cgi-bin/koha/erm/agreements/${relationship.related_agreement.agreement_id}`"
+                                        :to="{
+                                            name: 'AgreementsShow',
+                                            params: {
+                                                agreement_id:
+                                                    relationship
+                                                        .related_agreement
+                                                        .agreement_id,
+                                            },
+                                        }"
                                         >{{
                                             relationship.related_agreement.name
                                         }}</router-link
@@ -230,7 +247,14 @@
                                     "
                                 >
                                     <router-link
-                                        :to="`/cgi-bin/koha/erm/eholdings/ebsco/packages/${agreement_package.package.external_id}`"
+                                        :to="{
+                                            name: 'EHoldingsEBSCOPackagesShow',
+                                            params: {
+                                                package_id:
+                                                    agreement_package.package
+                                                        .external_id,
+                                            },
+                                        }"
                                         >{{
                                             agreement_package.package.name
                                         }}</router-link
@@ -239,7 +263,14 @@
                                 >
                                 <span v-else
                                     ><router-link
-                                        :to="`/cgi-bin/koha/erm/eholdings/local/packages/${agreement_package.package.package_id}`"
+                                        :to="{
+                                            name: 'EHoldingsLocalPackagesShow',
+                                            params: {
+                                                package_id:
+                                                    agreement_package.package
+                                                        .package_id,
+                                            },
+                                        }"
                                         >{{
                                             agreement_package.package.name
                                         }}</router-link
@@ -290,7 +321,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/agreements"
+                    :to="{ name: 'AgreementsList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -381,7 +412,7 @@ export default {
                                 ),
                                 true
                             )
-                            this.$router.push("/cgi-bin/koha/erm/agreements")
+                            this.$router.push({ name: "AgreementsList" })
                         },
                         error => {}
                     )

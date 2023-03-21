@@ -21,7 +21,7 @@
                                 <ul>
                                     <li>
                                         <router-link
-                                            to="/cgi-bin/koha/erm/agreements"
+                                            :to="{ name: 'AgreementsList' }"
                                         >
                                             <i class="fa fa-check-circle-o"></i>
                                             {{ $__("Agreements") }}</router-link
@@ -29,7 +29,7 @@
                                     </li>
                                     <li>
                                         <router-link
-                                            to="/cgi-bin/koha/erm/licenses"
+                                            :to="{ name: 'LicensesList' }"
                                         >
                                             <i class="fa fa-gavel"></i>
                                             {{ $__("Licenses") }}</router-link

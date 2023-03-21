@@ -1,14 +1,14 @@
 <template>
     <div id="toolbar" class="btn-toolbar">
         <router-link
-            to="/cgi-bin/koha/erm/eholdings/local/titles/add"
+            :to="{ name: 'EHoldingsLocalTitlesFormAdd' }"
             class="btn btn-default"
             ><font-awesome-icon icon="plus" />
             {{ $__("New title") }}</router-link
         >
         &nbsp;
         <router-link
-            to="/cgi-bin/koha/erm/eholdings/local/titles/import"
+            :to="{ name: 'EHoldingsLocalTitlesFormImport' }"
             class="btn btn-default"
             ><font-awesome-icon icon="plus" />
             {{ $__("Import from list") }}</router-link

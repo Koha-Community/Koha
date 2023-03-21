@@ -121,6 +121,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/erm.pl",
+        name: "Home",
         component: Home,
         meta: {
             breadcrumb: () => [breadcrumbs.home, breadcrumbs.erm_home],
@@ -131,6 +132,7 @@ export const routes = [
         children: [
             {
                 path: "",
+                name: "AgreementsList",
                 component: AgreementsList,
                 meta: {
                     breadcrumb: () => breadcrumb_paths.agreements,
@@ -138,6 +140,7 @@ export const routes = [
             },
             {
                 path: ":agreement_id",
+                name: "AgreementsShow",
                 component: AgreementsShow,
                 meta: {
                     breadcrumb: () =>
@@ -149,6 +152,7 @@ export const routes = [
             },
             {
                 path: "add",
+                name: "AgreementsFormAdd",
                 component: AgreementsFormAdd,
                 meta: {
                     breadcrumb: () =>
@@ -160,6 +164,7 @@ export const routes = [
             },
             {
                 path: "edit/:agreement_id",
+                name: "AgreementsFormAddEdit",
                 component: AgreementsFormAdd,
                 meta: {
                     breadcrumb: () =>
@@ -197,6 +202,7 @@ export const routes = [
                         children: [
                             {
                                 path: "",
+                                name: "EHoldingsLocalPackagesList",
                                 component: EHoldingsLocalPackagesList,
                                 meta: {
                                     breadcrumb: () =>
@@ -209,6 +215,7 @@ export const routes = [
                             },
                             {
                                 path: ":package_id",
+                                name: "EHoldingsLocalPackagesShow",
                                 component: EHoldingsLocalPackagesShow,
                                 meta: {
                                     breadcrumb: () =>
@@ -224,6 +231,7 @@ export const routes = [
                             },
                             {
                                 path: "add",
+                                name: "EHoldingsLocalPackagesFormAdd",
                                 component: EHoldingsLocalPackagesFormAdd,
                                 meta: {
                                     breadcrumb: () =>
@@ -239,6 +247,7 @@ export const routes = [
                             },
                             {
                                 path: "edit/:package_id",
+                                name: "EHoldingsLocalPackagesFormAddEdit",
                                 component: EHoldingsLocalPackagesFormAdd,
                                 meta: {
                                     breadcrumb: () =>
@@ -259,6 +268,7 @@ export const routes = [
                         children: [
                             {
                                 path: "",
+                                name: "EHoldingsLocalTitlesList",
                                 component: EHoldingsLocalTitlesList,
                                 meta: {
                                     breadcrumb: () =>
@@ -270,6 +280,7 @@ export const routes = [
                             },
                             {
                                 path: ":title_id",
+                                name: "EHoldingsLocalTitlesShow",
                                 component: EHoldingsLocalTitlesShow,
                                 meta: {
                                     breadcrumb: () =>
@@ -285,6 +296,7 @@ export const routes = [
                             },
                             {
                                 path: "add",
+                                name: "EHoldingsLocalTitlesFormAdd",
                                 component: EHoldingsLocalTitlesFormAdd,
                                 meta: {
                                     breadcrumb: () =>
@@ -300,6 +312,7 @@ export const routes = [
                             },
                             {
                                 path: "edit/:title_id",
+                                name: "EHoldingsLocalTitlesFormAddEdit",
                                 component: EHoldingsLocalTitlesFormAdd,
                                 meta: {
                                     breadcrumb: () =>
@@ -315,6 +328,7 @@ export const routes = [
                             },
                             {
                                 path: "import",
+                                name: "EHoldingsLocalTitlesFormImport",
                                 component: EHoldingsLocalTitlesFormImport,
                                 meta: {
                                     breadcrumb: () =>
@@ -332,6 +346,7 @@ export const routes = [
                     },
                     {
                         path: "resources/:resource_id",
+                        name: "EHoldingsLocalResourcesShow",
                         component: EHoldingsLocalResourcesShow,
                         meta: {
                             breadcrumb: () =>
@@ -360,6 +375,7 @@ export const routes = [
                         children: [
                             {
                                 path: "",
+                                name: "EHoldingsEBSCOPackagesList",
                                 component: EHoldingsEBSCOPackagesList,
                                 meta: {
                                     breadcrumb: () =>
@@ -372,6 +388,7 @@ export const routes = [
                             },
                             {
                                 path: ":package_id",
+                                name: "EHoldingsEBSCOPackagesShow",
                                 component: EHoldingsEBSCOPackagesShow,
                                 meta: {
                                     breadcrumb: () =>
@@ -392,6 +409,7 @@ export const routes = [
                         children: [
                             {
                                 path: "",
+                                name: "EHoldingsEBSCOTitlesList",
                                 component: EHoldingsEBSCOTitlesList,
                                 meta: {
                                     breadcrumb: () =>
@@ -403,6 +421,7 @@ export const routes = [
                             },
                             {
                                 path: ":title_id",
+                                name: "EHoldingsEBSCOTitlesShow",
                                 component: EHoldingsEBSCOTitlesShow,
                                 meta: {
                                     breadcrumb: () =>
@@ -420,6 +439,7 @@ export const routes = [
                     },
                     {
                         path: "resources/:resource_id",
+                        name: "EHoldingsEBSCOResourcesShow",
                         component: EHoldingsEBSCOResourcesShow,
                         meta: {
                             breadcrumb: () =>
@@ -441,6 +461,7 @@ export const routes = [
         children: [
             {
                 path: "",
+                name: "LicensesList",
                 component: LicensesList,
                 meta: {
                     breadcrumb: () => breadcrumb_paths.licenses,
@@ -448,6 +469,7 @@ export const routes = [
             },
             {
                 path: ":license_id",
+                name: "LicensesShow",
                 component: LicensesShow,
                 meta: {
                     breadcrumb: () =>
@@ -459,6 +481,7 @@ export const routes = [
             },
             {
                 path: "add",
+                name: "LicensesFormAdd",
                 component: LicensesFormAdd,
                 meta: {
                     breadcrumb: () =>
@@ -470,6 +493,7 @@ export const routes = [
             },
             {
                 path: "edit/:license_id",
+                name: "LicensesFormAddEdit",
                 component: LicensesFormAdd,
                 meta: {
                     breadcrumb: () =>

@@ -42,12 +42,12 @@ export default {
         }
     },
     methods: {
-        doShow: function (resource, dt, event) {
+        doShow: function ({ resource_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/eholdings/local/resources/" +
-                    resource.resource_id
-            )
+            this.$router.push({
+                name: "EHoldingsLocalResourcesShow",
+                params: { resource_id },
+            })
         },
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av

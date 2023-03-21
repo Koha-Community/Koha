@@ -5,7 +5,10 @@
             {{ $__("Package #%s").format(erm_package.package_id) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/local/packages/edit/${erm_package.package_id}`"
+                    :to="{
+                        name: 'EHoldingsLocalPackagesFormAddEdit',
+                        params: { package_id: erm_package.package_id },
+                    }"
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
@@ -69,7 +72,14 @@
                             :key="package_agreement.agreement_id"
                         >
                             <router-link
-                                :to="`/cgi-bin/koha/erm/agreements/${package_agreement.agreement.agreement_id}`"
+                                :to="{
+                                    name: 'AgreementsShow',
+                                    params: {
+                                        agreement_id:
+                                            package_agreement.agreement
+                                                .agreement_id,
+                                    },
+                                }"
                                 >{{
                                     package_agreement.agreement.name
                                 }}</router-link
@@ -92,7 +102,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings/local/packages"
+                    :to="{ name: 'EHoldingsLocalPackagesList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -178,9 +188,9 @@ export default {
                                 ),
                                 true
                             )
-                            this.$router.push(
-                                "/cgi-bin/koha/erm/eholdings/local/packages"
-                            )
+                            this.$router.push({
+                                name: "EHoldingsLocalPackagesList",
+                            })
                         },
                         error => {}
                     )

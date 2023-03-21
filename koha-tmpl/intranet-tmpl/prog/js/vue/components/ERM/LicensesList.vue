@@ -88,16 +88,15 @@ export default {
                 error => {}
             )
         },
-        doShow: function (license, dt, event) {
+        doShow: function ({ license_id }, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/erm/licenses/" + license.license_id
-            )
+            this.$router.push({ name: "LicensesShow", params: { license_id } })
         },
-        doEdit: function (license, dt, event) {
-            this.$router.push(
-                "/cgi-bin/koha/erm/licenses/edit/" + license.license_id
-            )
+        doEdit: function ({ license_id }, dt, event) {
+            this.$router.push({
+                name: "LicensesFormAddEdit",
+                params: { license_id },
+            })
         },
         doDelete: function (license, dt, event) {
             this.setConfirmationDialog(

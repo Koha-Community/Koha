@@ -72,7 +72,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/local/packages"
+                        :to="{ name: 'EHoldingsLocalPackagesList' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -183,9 +183,9 @@ export default {
                 client.localPackages.update(erm_package, package_id).then(
                     success => {
                         setMessage(this.$__("Package updated"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/packages"
-                        )
+                        this.$router.push({
+                            name: "EHoldingsLocalPackagesList",
+                        })
                     },
                     error => {}
                 )
@@ -193,9 +193,9 @@ export default {
                 client.localPackages.create(erm_package).then(
                     success => {
                         setMessage(this.$__("Package created"))
-                        this.$router.push(
-                            "/cgi-bin/koha/erm/eholdings/local/packages"
-                        )
+                        this.$router.push({
+                            name: "EHoldingsLocalPackagesList",
+                        })
                     },
                     error => {}
                 )
