@@ -241,7 +241,7 @@ sub _search {
     # This is legal, so we do a fallback search
     if( !$total && $thesaurus && !( grep /$thesaurus/,('lcsh','lcac','mesh','nal','notspecified','cash','rvm','sears','aat') ) ){
         pop @value;
-        push @value, 'z';
+        push @value, 'notdefined';
         $search_query = $builder->build_authorities_query_compat(
             \@marclist, \@and_or, \@excluding, \@operator,
             \@value,    $self->{'auth_type'},
