@@ -10,7 +10,7 @@ return {
         $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('RetainCatalogSearchTerms', '1', NULL, 'If enabled, searches entered into the catalog search bar will be retained', 'YesNo') });
         say $out "Added new system preference 'RetainCatalogSearchTerms'";
 
-        $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('RetainPatronSearchTerms', '1', NULL, 'If enabled, searches entered into the checkout and patrons search bars will be retained', 'YesNo') });
-        say $out "Added new system preference 'RetainPatronSearchTerms'";
+        $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('RetainPatronsSearchTerms', '1', NULL, 'If enabled, searches entered into the checkout and patrons search bars will be retained', 'YesNo') });
+        say $out "Added new system preference 'RetainPatronsSearchTerms'";
     },
 };
