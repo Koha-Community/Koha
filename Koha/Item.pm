@@ -70,10 +70,6 @@ Koha::Item - Koha Item object class
 
 $params can take an optional 'skip_record_index' parameter.
 If set, the reindexation process will not happen (index_records not called)
-
-NOTE: This is a temporary fix to answer a performance issue when lot of items
-are added (or modified) at the same time.
-The correct way to fix this is to make the ES reindexation process async.
 You should not turn it on if you do not understand what it is doing exactly.
 
 =cut
