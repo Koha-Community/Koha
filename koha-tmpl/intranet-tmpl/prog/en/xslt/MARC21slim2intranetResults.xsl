@@ -963,28 +963,11 @@
                 <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
                 <a>
                     <xsl:attribute name="href">
-                        <xsl:if test="not(contains(marc:subfield[@code='u'],'://') or contains(marc:subfield[@code='u'],'mailto:'))">
-                            <xsl:choose>
-                                <xsl:when test="@ind1=7">
-                                    <xsl:value-of select="marc:subfield[@code='2']"/><xsl:text>://</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="@ind1=0">
-                                    <xsl:text>mailto:</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="@ind1=1">
-                                    <xsl:text>ftp://</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="@ind1=2">
-                                    <xsl:text>telnet://</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="@ind1=3">
-                                    <xsl:text>tel:</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>http://</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:if>
+                        <xsl:call-template name="AddMissingProtocol">
+                            <xsl:with-param name="resourceLocation" select="marc:subfield[@code='u']"/>
+                            <xsl:with-param name="indicator1" select="@ind1"/>
+                            <xsl:with-param name="accessMethod" select="marc:subfield[@code='2']"/>
+                        </xsl:call-template>
                         <xsl:value-of select="marc:subfield[@code='u']"/>
                     </xsl:attribute>
                     <xsl:choose>
