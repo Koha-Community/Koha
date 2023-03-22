@@ -653,6 +653,38 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="AddMissingProtocol">
+        <xsl:param name="resourceLocation"/>
+        <xsl:param name="indicator1"/>
+        <xsl:param name="accessMethod"/>
+        <xsl:param name="delimiter" select="':'"/>
+        <xsl:if test="not(contains($resourceLocation, $delimiter))">
+            <xsl:choose>
+                <xsl:when test="$indicator1=7 and ( $accessMethod='mailto' or $accessMethod='tel' )">
+                    <xsl:value-of select="$accessMethod"/><xsl:text>:</xsl:text>
+                </xsl:when>
+                <xsl:when test="$indicator1=7">
+                    <xsl:value-of select="$accessMethod"/><xsl:text>://</xsl:text>
+                </xsl:when>
+                <xsl:when test="$indicator1=0">
+                    <xsl:text>mailto:</xsl:text>
+                </xsl:when>
+                <xsl:when test="$indicator1=1">
+                    <xsl:text>ftp://</xsl:text>
+                </xsl:when>
+                <xsl:when test="$indicator1=2">
+                    <xsl:text>telnet://</xsl:text>
+                </xsl:when>
+                <xsl:when test="$indicator1=3">
+                    <xsl:text>tel:</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>http://</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
