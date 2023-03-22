@@ -1,18 +1,19 @@
 [% USE Koha %]
 
+[% SET report = job.decoded_data %]
 [% BLOCK report %]
-    [% SET report = job.report %]
-    [% IF report %]
-        [% IF report.total_records == 1 %]
-            [% IF report.total_success == 1 %]
-                <div class="dialog message">The records have successfully been reindexed!</div>
-            [% END %]
+    [% IF job.status == 'finished' %]
+        [% IF report %]
+            <div class="dialog message">
+                [% report.record_ids.size | html %] records have successfully been reindexed.
+            </div>
         [% ELSE %]
             <div class="dialog message">
-                [% report.total_success | html %] / [% report.total_records | html %] records have successfully been reindexed. Some errors occurred.
-                [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
+               Job data could not be read, see the logs for details
             </div>
         [% END %]
+    [% ELSIF job.status == 'cancelled' %]
+        <span>The job has been cancelled before it finished.</span>
     [% END %]
 [% END %]
 
@@ -32,7 +33,16 @@
             [% END %]
         </div>
     [% END %]
+    [% IF report %]
+        <h2> Record ids:</h2>
+        <ul>
+        [% FOREACH record_id IN report.record_ids %]
+            <li>[% record_id | html %]</li>
+        [% END %]
+        </ul>
+    [% END %]
 [% END %]
+
 
 [% BLOCK js %]
 [% END %]
