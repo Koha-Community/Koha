@@ -302,10 +302,7 @@ sub store {
                 # their checkouts
                 if( $self->privacy() == 2 && $self_from_storage->privacy() != 2 ){
                     try{
-                        my $schema = Koha::Database->new()->schema();
-                        $schema->txn_do(
-                            sub { $self->old_checkouts->anonymize; }
-                        );
+                        $self->old_checkouts->anonymize;
                     }
                     catch {
                         Koha::Exceptions::Patron::FailedAnonymizing->throw(
