@@ -1968,6 +1968,8 @@ legend:hover {
             });
         [% END %]
         $("#guarantor_template").hide();
+        var guarantor_attributes;
+        var to_api_mapping;
         [% IF guarantor_attributes %]
             guarantor_attributes = [% To.json(guarantor_attributes) %];
         [% END %]

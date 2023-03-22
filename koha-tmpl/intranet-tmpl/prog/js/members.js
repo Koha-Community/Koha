@@ -122,7 +122,8 @@ function select_user(borrowernumber, borrower, relationship) {
             fieldset.find('.new_guarantor_relationship').val(relationship);
         }
 
-        if(typeof guarantor_attributes !== 'undefined' && to_api_mapping) {
+        if(guarantor_attributes && to_api_mapping) {
+            $('#saverecord').prop('disabled', true);
             $.ajax({
                 url: '/api/v1/patrons/'+borrowernumber,
                 method: "GET",
@@ -135,6 +136,10 @@ function select_user(borrowernumber, borrower, relationship) {
                             document.forms.entryform[attribute].value = data[key_data];
                         }
                     }
+                    $('#saverecord').prop('disabled', false);
+                },
+                error:function(){
+                    $('#saverecord').prop('disabled', false);
                 }
             });
         }
