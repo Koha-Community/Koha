@@ -36,6 +36,7 @@ use Koha::Account::Lines;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblios;
 use Koha::Calendar;
+use Koha::Cache::Memory::Lite;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -419,8 +420,23 @@ sub CanBookBeReserved{
 
 =cut
 
+our $CanItemBeReserved_cache_key;
+sub _cache {
+    my ( $return )  = @_;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    $memory_cache->set_in_cache( $CanItemBeReserved_cache_key, $return );
+    return $return;
+}
+
 sub CanItemBeReserved {
     my ( $patron, $item, $pickup_branchcode, $params ) = @_;
+
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    $CanItemBeReserved_cache_key = sprintf "Hold_CanItemBeReserved:%s:%s:%s", $patron->borrowernumber, $item->itemnumber, $pickup_branchcode || "";
+    if ( $params->{get_from_cache} ) {
+        my $cached = $memory_cache->get_from_cache($CanItemBeReserved_cache_key);
+        return $cached if $cached;
+    }
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
@@ -432,7 +448,7 @@ sub CanItemBeReserved {
         and !C4::Context->preference('canreservefromotherbranches') )
     {
         if ( $item->homebranch ne $patron->branchcode ) {
-            return { status => 'cannotReserveFromOtherBranches' };
+            return _cache { status => 'cannotReserveFromOtherBranches' };
         }
     }
 
@@ -441,7 +457,7 @@ sub CanItemBeReserved {
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
-    return { status =>'damaged' }
+    return _cache { status =>'damaged' }
       if ( $item->damaged
         && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
@@ -450,21 +466,21 @@ sub CanItemBeReserved {
         # Check for the age restriction
         my ( $ageRestriction, $daysToAgeRestriction ) =
           C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
-        return { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+        return _cache { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
     }
 
     # Check that the patron doesn't have an item level hold on this item already
-    return { status =>'itemAlreadyOnHold' }
+    return _cache { status =>'itemAlreadyOnHold' }
       if ( !$params->{ignore_hold_counts} && Koha::Holds->search( { borrowernumber => $patron->borrowernumber, itemnumber => $item->itemnumber } )->count() );
 
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
         && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $item->biblionumber ) ) {
-        return { status =>'alreadypossession' };
+        return _cache { status =>'alreadypossession' };
     }
 
     # check if a recall exists on this item from this borrower
-    return { status => 'recall' }
+    return _cache { status => 'recall' }
       if $patron->recalls->filter_by_current->search({ item_id => $item->itemnumber })->count;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
@@ -508,7 +524,7 @@ sub CanItemBeReserved {
 
     if (   defined $holds_per_record && $holds_per_record ne '' ){
         if ( $holds_per_record == 0 ) {
-            return { status => "noReservesAllowed" };
+            return _cache { status => "noReservesAllowed" };
         }
         if ( !$params->{ignore_hold_counts} ) {
             my $search_params = {
@@ -516,7 +532,7 @@ sub CanItemBeReserved {
                 biblionumber   => $item->biblionumber,
             };
             my $holds = Koha::Holds->search($search_params);
-            return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record } if $holds->count() >= $holds_per_record;
+            return _cache { status => "tooManyHoldsForThisRecord", limit => $holds_per_record } if $holds->count() >= $holds_per_record;
         }
     }
 
@@ -526,13 +542,13 @@ sub CanItemBeReserved {
             borrowernumber => $patron->borrowernumber,
             reservedate    => dt_from_string->date
         });
-        return { status => 'tooManyReservesToday', limit => $holds_per_day } if $today_holds->count() >= $holds_per_day;
+        return _cache { status => 'tooManyReservesToday', limit => $holds_per_day } if $today_holds->count() >= $holds_per_day;
     }
 
     # we check if it's ok or not
     if ( defined $allowedreserves && $allowedreserves ne '' ){
         if( $allowedreserves == 0 ){
-            return { status => 'noReservesAllowed' };
+            return _cache { status => 'noReservesAllowed' };
         }
         if ( !$params->{ignore_hold_counts} ) {
             # we retrieve count
@@ -577,7 +593,7 @@ sub CanItemBeReserved {
                 $reservecount = $rowcount->{count};
             }
 
-            return { status => 'tooManyReserves', limit => $allowedreserves } if $reservecount >= $allowedreserves;
+            return _cache { status => 'tooManyReserves', limit => $allowedreserves } if $reservecount >= $allowedreserves;
         }
     }
 
@@ -596,26 +612,26 @@ sub CanItemBeReserved {
             }
         )->count();
 
-        return { status => 'tooManyReserves', limit => $rule->rule_value} if $total_holds_count >= $rule->rule_value;
+        return _cache { status => 'tooManyReserves', limit => $rule->rule_value} if $total_holds_count >= $rule->rule_value;
     }
 
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->effective_itemtype );
 
     if ( $branchitemrule->{holdallowed} eq 'not_allowed' ) {
-        return { status => 'notReservable' };
+        return _cache { status => 'notReservable' };
     }
 
     if (   $branchitemrule->{holdallowed} eq 'from_home_library'
         && $borrower->{branchcode} ne $item->homebranch )
     {
-        return { status => 'cannotReserveFromOtherBranches' };
+        return _cache { status => 'cannotReserveFromOtherBranches' };
     }
 
     my $item_library = Koha::Libraries->find( {branchcode => $item->homebranch} );
     if ( $branchitemrule->{holdallowed} eq 'from_local_hold_group') {
         if($patron->branchcode ne $item->homebranch && !$item_library->validate_hold_sibling( {branchcode => $patron->branchcode} )) {
-            return { status => 'branchNotInHoldGroup' };
+            return _cache { status => 'branchNotInHoldGroup' };
         }
     }
 
@@ -625,23 +641,23 @@ sub CanItemBeReserved {
         });
 
         unless ($destination) {
-            return { status => 'libraryNotFound' };
+            return _cache { status => 'libraryNotFound' };
         }
         unless ($destination->pickup_location) {
-            return { status => 'libraryNotPickupLocation' };
+            return _cache { status => 'libraryNotPickupLocation' };
         }
         unless ($item->can_be_transferred({ to => $destination })) {
-            return { status => 'cannotBeTransferred' };
+            return _cache { status => 'cannotBeTransferred' };
         }
         if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup' && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
-            return { status => 'pickupNotInHoldGroup' };
+            return _cache { status => 'pickupNotInHoldGroup' };
         }
         if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
-            return { status => 'pickupNotInHoldGroup' };
+            return _cache { status => 'pickupNotInHoldGroup' };
         }
     }
 
-    return { status => 'OK' };
+    return _cache { status => 'OK' };
 }
 
 =head2 CanReserveBeCanceledFromOpac

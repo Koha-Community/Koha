@@ -264,7 +264,7 @@ if ( $query->param('place_reserve') ) {
         my $biblio = Koha::Biblios->find($biblioNum);
         my $rank = $biblio->holds->search( { found => [ { "!=" => "W" }, undef ] } )->count + 1;
         if ( $item ) {
-            my $status = CanItemBeReserved( $patron, $item, $branch )->{status};
+            my $status = CanItemBeReserved( $patron, $item, $branch, { get_from_cache => 1 } )->{status};
             if( $status eq 'OK' ){
                 $canreserve = 1;
             } else {
@@ -484,7 +484,7 @@ foreach my $biblioNum (@biblionumbers) {
         # items_any_available defined outside of the current loop,
         # so we avoiding loop inside IsAvailableForItemLevelRequest:
         my $policy_holdallowed =
-            CanItemBeReserved( $patron, $item )->{status} eq 'OK' &&
+            CanItemBeReserved( $patron, $item, undef, { get_from_cache => 1 } )->{status} eq 'OK' &&
             IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
 
         if ($policy_holdallowed) {
