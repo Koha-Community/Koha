@@ -166,6 +166,6 @@ subtest "_search tests" => sub {
         { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
         { term => { 'subject-heading-thesaurus.ci_raw' => 'z' } },
     ];
-    is_deeply( $terms, $expected_terms, "When thesaurus in subfield 2, and nothing is found, we should search again for 008_11 = z");
+    is_deeply( $terms, $expected_terms, "When thesaurus in subfield 2, and nothing is found, we should search again for notdefined (008_11 = z) ");
 
 };
