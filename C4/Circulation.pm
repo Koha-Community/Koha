@@ -3161,7 +3161,8 @@ sub AddRenewal {
         $renews = ( $item_object->renewals || 0 ) + 1;
         $item_object->renewals($renews);
         $item_object->onloan($datedue);
-        $item_object->store({ log_action => 0 });
+        # Don't index as we are in a transaction
+        $item_object->store({ log_action => 0, skip_record_index => 1 });
 
         # Charge a new rental fee, if applicable
         my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -3246,6 +3247,9 @@ sub AddRenewal {
             }
         });
     });
+    # We index now, after the transaction is committed
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $item_object->biblionumber, "specialUpdate", "biblioserver" );
 
     return $datedue;
 }
