@@ -48,6 +48,137 @@ sub job_type {
     return 'create_eholdings_from_biblios';
 }
 
+
+my $fix_coverage = sub {
+    my $coverage = shift || q{};
+    my @coverages = split '-', $coverage;
+    return ($coverages[0], (@coverages > 1 ? $coverages[1] : q{}));
+};
+
+sub _get_unimarc_mapping {
+    my ($biblio)          = @_;
+    my $record            = $biblio->metadata->record;
+    my $biblio_id         = $biblio->biblionumber;
+    my $publication_title = $biblio->title;
+    my $print_identifier =
+         $record->subfield( '010', 'a' )
+      || $record->subfield( '010', 'z' )
+      || $record->subfield( '011', 'a' )
+      || $record->subfield( '011', 'y' );
+    my $online_identifier               = $print_identifier;
+    my $date_first_issue_online         = $record->subfield( '955', 'a' );
+    my $date_last_issue_online          = $record->subfield( '955', 'k' );
+    my $num_first_vol_online            = $record->subfield( '955', 'd' );
+    my $num_last_vol_online             = $record->subfield( '955', 'n' );
+    my $num_first_issue_online          = $record->subfield( '955', 'e' );
+    my $num_last_issue_online           = $record->subfield( '955', 'o' );
+    my $title_url                       = $record->subfield( '856', 'u' );
+    my $first_author                    = $biblio->author;
+    my $embargo_info                    = $record->subfield( '371', 'a' );
+    my $coverage_depth                  = $title_url ? 'fulltext' : 'print';
+    my $notes                           = $record->subfield( '336', 'a' );
+    my $publisher_name                  = $record->subfield( '214', 'c' );
+    my $label_pos67                     = substr( $record->leader, 6, 2 );
+    my $publication_type                = $label_pos67 eq 'am' ? 'monograph' : $label_pos67 eq 'as' ? 'serial' : '';
+    my $date_monograph_published_print  = $record->subfield( '214', 'd' ) || substr( $record->subfield(100, 'a'), 9, 4 ) || '';
+    my $date_monograph_published_online = $date_monograph_published_print;
+    my $monograph_volume                = $record->subfield( '200', 'v' );
+    my $monograph_edition               = $record->subfield( '205', 'a' );
+    my $first_editor                    = $publisher_name;
+    my $parent_publication_title_id     = '';                                  # FIXME ?
+    my $preceeding_publication_title_id = '';                                  # FIXME ?
+    my $access_type                     = $record->subfield( '856', 'y' );
+
+    return {
+        biblio_id                       => $biblio_id,
+        publication_title               => $publication_title,
+        print_identifier                => $print_identifier,
+        online_identifier               => $online_identifier,
+        date_first_issue_online         => $date_first_issue_online,
+        num_first_vol_online            => $num_first_vol_online,
+        num_first_issue_online          => $num_first_issue_online,
+        date_last_issue_online          => $date_last_issue_online,
+        num_last_vol_online             => $num_last_vol_online,
+        num_last_issue_online           => $num_last_issue_online,
+        title_url                       => $title_url,
+        first_author                    => $first_author,
+        embargo_info                    => $embargo_info,
+        coverage_depth                  => $coverage_depth,
+        notes                           => $notes,
+        publisher_name                  => $publisher_name,
+        publication_type                => $publication_type,
+        date_monograph_published_print  => $date_monograph_published_print,
+        date_monograph_published_online => $date_monograph_published_online,
+        monograph_volume                => $monograph_volume,
+        monograph_edition               => $monograph_edition,
+        first_editor                    => $first_editor,
+        parent_publication_title_id     => $parent_publication_title_id,
+        preceeding_publication_title_id => $preceeding_publication_title_id,
+        access_type                     => $access_type,
+    };
+}
+
+sub _get_marc21_mapping {
+    my ($biblio)          = @_;
+    my $record            = $biblio->metadata->record;
+    my $biblio_id         = $biblio->biblionumber;
+    my $publication_title = $biblio->title;
+    my $print_identifier =
+         $record->subfield( '020', 'a' )
+      || $record->subfield( '020', 'z' )
+      || $record->subfield( '022', 'a' )
+      || $record->subfield( '022', 'y' );
+    my $online_identifier = $print_identifier;
+    my ( $date_first_issue_online, $date_last_issue_online ) =
+      $fix_coverage->( $record->subfield( '866', 'a' ) );
+    my ( $num_first_vol_online, $num_last_vol_online ) =
+      $fix_coverage->( $record->subfield( '863', 'a' ) );
+    my ( $num_first_issue_online, $num_last_issue_online ) = ( '', '' );    # FIXME ?
+    my $title_url                       = $record->subfield( '856', 'u' );
+    my $first_author                    = $biblio->author;
+    my $embargo_info                    = '';                                  # FIXME ?
+    my $coverage_depth                  = $title_url ? 'fulltext' : 'print';
+    my $notes                           = $record->subfield( '852', 'z' );
+    my $publisher_name                  = $record->subfield( '260', 'b' );
+    my $publication_type                = '';                                  # FIXME ?
+    my $date_monograph_published_print  = '';                                  # FIXME ?
+    my $date_monograph_published_online = '';                                  # FIXME ?
+    my $monograph_volume                = '';                                  # FIXME ?
+    my $monograph_edition               = '';                                  # FIXME ?
+    my $first_editor                    = '';                                  # FIXME ?
+    my $parent_publication_title_id     = '';                                  # FIXME ?
+    my $preceeding_publication_title_id = '';                                  # FIXME ?
+    my $access_type                     = '';                                  # FIXME ?
+
+    return {
+        biblio_id                       => $biblio_id,
+        publication_title               => $publication_title,
+        print_identifier                => $print_identifier,
+        online_identifier               => $online_identifier,
+        date_first_issue_online         => $date_first_issue_online,
+        num_first_vol_online            => $num_first_vol_online,
+        num_first_issue_online          => $num_first_issue_online,
+        date_last_issue_online          => $date_last_issue_online,
+        num_last_vol_online             => $num_last_vol_online,
+        num_last_issue_online           => $num_last_issue_online,
+        title_url                       => $title_url,
+        first_author                    => $first_author,
+        embargo_info                    => $embargo_info,
+        coverage_depth                  => $coverage_depth,
+        notes                           => $notes,
+        publisher_name                  => $publisher_name,
+        publication_type                => $publication_type,
+        date_monograph_published_print  => $date_monograph_published_print,
+        date_monograph_published_online => $date_monograph_published_online,
+        monograph_volume                => $monograph_volume,
+        monograph_edition               => $monograph_edition,
+        first_editor                    => $first_editor,
+        parent_publication_title_id     => $parent_publication_title_id,
+        preceeding_publication_title_id => $preceeding_publication_title_id,
+        access_type                     => $access_type,
+    };
+}
+
 =head3 process
 
 Process the import.
@@ -91,12 +222,6 @@ sub process {
         return $self->finish( $data );
     }
 
-    my $fix_coverage = sub {
-        my $coverage = shift || q{};
-        my @coverages = split '-', $coverage;
-        return ($coverages[0], (@coverages > 1 ? $coverages[1] : q{}));
-    };
-
     my %existing_biblio_ids = map {
         my $resource = $_;
         map { $_->biblio_id => $resource->resource_id } $resource->title
@@ -120,66 +245,12 @@ sub process {
                 return;
             }
             my $biblio = Koha::Biblios->find($biblio_id);
-            my $record = $biblio->metadata->record;
-            my $publication_title = $biblio->title;
-            my $print_identifier =
-                 $record->subfield( '020', 'a' )
-              || $record->subfield( '020', 'z' )
-              || $record->subfield( '022', 'a' )
-              || $record->subfield( '022', 'y' );
-            my $online_identifier = $print_identifier;
-            my ( $date_first_issue_online, $date_last_issue_online ) =
-              $fix_coverage->( $record->subfield( '866', 'a' ) );
-            my ( $num_first_vol_online, $num_last_vol_online ) =
-              $fix_coverage->( $record->subfield( '863', 'a' ) );
-            my ( $num_first_issue_online, $num_last_issue_online ) =
-              ( '', '' );    # FIXME ?
-            my $title_url = $record->subfield( '856', 'u' );
-            my $first_author = $biblio->author;
-            my $embargo_info     = '';                                 # FIXME ?
-            my $coverage_depth   = $title_url ? 'fulltext' : 'print';
-            my $notes            = $record->subfield( '852', 'z' );
-            my $publisher_name   = $record->subfield( '260', 'b' );
-            my $publication_type = '';                                 # FIXME ?
-            my $date_monograph_published_print  = '';                  # FIXME ?
-            my $date_monograph_published_online = '';                  # FIXME ?
-            my $monograph_volume                = '';                  # FIXME ?
-            my $monograph_edition               = '';                  # FIXME ?
-            my $first_editor                    = '';                  # FIXME ?
-            my $parent_publication_title_id     = '';                  # FIXME ?
-            my $preceeding_publication_title_id = '';                  # FIXME ?
-            my $access_type                     = '';                  # FIXME ?
+            my $eholding_title = C4::Context->preference('marcflavour') eq 'UNIMARC'
+                ? _get_unimarc_mapping($biblio)
+                : _get_marc21_mapping($biblio);
 
-            my $eholding_title = {
-                biblio_id                       => $biblio_id,
-                publication_title               => $publication_title,
-                print_identifier                => $print_identifier,
-                online_identifier               => $online_identifier,
-                date_first_issue_online         => $date_first_issue_online,
-                num_first_vol_online            => $num_first_vol_online,
-                num_first_issue_online          => $num_first_issue_online,
-                date_last_issue_online          => $date_last_issue_online,
-                num_last_vol_online             => $num_last_vol_online,
-                num_last_issue_online           => $num_last_issue_online,
-                title_url                       => $title_url,
-                first_author                    => $first_author,
-                embargo_info                    => $embargo_info,
-                coverage_depth                  => $coverage_depth,
-                notes                           => $notes,
-                publisher_name                  => $publisher_name,
-                publication_type                => $publication_type,
-                date_monograph_published_print  => $date_monograph_published_print,
-                date_monograph_published_online => $date_monograph_published_online,
-                monograph_volume                => $monograph_volume,
-                monograph_edition               => $monograph_edition,
-                first_editor                    => $first_editor,
-                parent_publication_title_id     => $parent_publication_title_id,
-                preceeding_publication_title_id => $preceeding_publication_title_id,
-                access_type                     => $access_type,
-              };
-              $eholding_title = Koha::ERM::EHoldings::Title->new($eholding_title)->store;
-              Koha::ERM::EHoldings::Resource->new({ title_id => $eholding_title->title_id, package_id => $package_id })->store;
-
+            $eholding_title = Koha::ERM::EHoldings::Title->new($eholding_title)->store;
+            Koha::ERM::EHoldings::Resource->new({ title_id => $eholding_title->title_id, package_id => $package_id })->store;
             $report->{total_success}++;
         } catch {
             push @messages, {
