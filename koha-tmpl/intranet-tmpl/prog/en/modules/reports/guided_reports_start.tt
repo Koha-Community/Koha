@@ -244,20 +244,17 @@
                             </p>
                         [% END %]
 
-                        <div id="tabs" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#reports" aria-controls="reports" role="tab" data-toggle="tab">All</a>
-                                </li>
+                        [% WRAPPER tabs id= "tabs" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "reports" bt_active= 1 %] <span>All</span> [% END %]
                                 [% FOREACH group IN groups_with_subgroups %]
-                                    <li role="presentation">
-                                        <a id="[% group.id | html %]" href="#reports" aria-controls="reports" role="tab" data-toggle="tab">[% group.name | html %]</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= group.id %] <span>[% group.name | html %]</span> [% END %]
                                 [% END %]
-                            </ul>
+                            [% END # /WRAPPER tabs_nav %]
 
-                            <div class="tab-content">
-                                <div id="reports" role="tabpanel" class="tab-pane active">
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname="reports" bt_active= 1 %]
+
                                     <div id="subgroup_filter_block">
                                         <label for="subgroup_filter">Subgroup:</label>
                                         <select id="subgroup_filter">
@@ -419,9 +416,13 @@
                                             </fieldset>
                                         [% END %]
                                     </form>
-                                </div> <!-- /#reports -->
-                            </div> <!-- /.tab-content -->
-                        </div>
+                                                                [% END # /tab_panel# %]
+                            [% END # /WRAPPER tab_panels %]
+                        [% END # /WRAPPER tabs %]
+
+
+
+
                     [% ELSE # IF ( savedreports ) %]
                         <div class="dialog message">
                             [% IF (filter_set || filters.date || filters.author || filters.keyword) %]
@@ -2241,8 +2242,7 @@
         }
 
         function tabsInit( tab, rtable ){
-            var thisTab = tab; // ui.newTab ? ui.newTab : ui.tab;
-            var activeTab = thisTab.index();
+            var activeTab = tab.index();
             localStorage.setItem("sql_reports_activetab", activeTab );
 
             $("#subgroup_filter option").each(function() {
@@ -2255,8 +2255,9 @@
             rtable.fnSetColumnVis(4, true);
             rtable.fnSetColumnVis(5, true);
 
-            var g_id = $( tab ).children().attr('id');
-            var g_name = $( tab ).children().text();
+            var g_id = tab.find("a").data("tabname");
+            var g_name = tab.find("a").text().trim();
+
             if ( g_name == _("All") ) {
                 g_id = "";
                 g_name = "";
