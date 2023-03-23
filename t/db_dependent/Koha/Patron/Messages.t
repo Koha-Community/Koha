@@ -113,7 +113,6 @@ my $current_messages_count = $patron_obj->messages->count;
 is( $patron_obj->messages->filter_by_unread->count, $current_messages_count, "No messages have been marked as read" );
 $new_message_4->update({ patron_read_date => dt_from_string });
 is( $patron_obj->messages->filter_by_unread->count, $current_messages_count - 1, "One message has been marked as read" );
-$new_message_4->update({ patron_read_date => undef });
 
 $schema->storage->txn_rollback;
 

@@ -41,14 +41,11 @@ Koha::Patron::Messages - Koha Message Object set class
 =cut
 
 sub filter_by_unread {
-    my ( $self, $params ) = @_;
-
-    $params ||= {};
+    my ( $self ) = @_;
 
     return $self->search(
         {
             patron_read_date => { is => undef },
-            %$params,
         }
     );
 }
