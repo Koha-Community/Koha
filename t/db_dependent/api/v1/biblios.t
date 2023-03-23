@@ -1616,7 +1616,8 @@ subtest 'put() tests' => sub {
 };
 
 subtest 'list() tests' => sub {
-    plan tests => 14;
+
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -1631,7 +1632,23 @@ subtest 'list() tests' => sub {
     $patron->discard_changes;
     my $userid = $patron->userid;
 
-    my $biblionumber1 = $builder->build_sample_biblio->biblionumber;
+    t::lib::Mocks::mock_preference('marcflavour', 'UNIMARC');
+
+    my $title_with_diacritics = "L'insoutenable légèreté de l'être";
+    my $biblio = $builder->build_sample_biblio(
+        {
+            title  => $title_with_diacritics,
+            author => "Milan Kundera"
+        }
+    );
+
+    my $record = $biblio->metadata->record;
+    $record->leader('     nam         3  4500');
+    $biblio->metadata->metadata($record->as_xml_record('UNIMARC'))->store;
+
+    my $biblionumber1 = $biblio->biblionumber;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $biblionumber2 = $builder->build_sample_biblio->biblionumber;
 
     my $search =
@@ -1650,9 +1667,12 @@ subtest 'list() tests' => sub {
           { Accept => 'application/json', 'x-koha-query' => $search } )
       ->status_is(200, 'Status is 200 for application/json');
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
+    my $result = $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
-      ->status_is(200, 'Status is 200 for application/marcxml+xml');
+      ->status_is(200, 'Status is 200 for application/marcxml+xml')->tx->res->body;
+
+    my $encoded_title  = Encode::encode( "UTF-8", $title_with_diacritics );
+    like( $result, qr/\Q$encoded_title/, "The title is not double encoded" );
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
           { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
