@@ -1156,8 +1156,8 @@ subtest 'post() tests' => sub {
         }
     );
 
-    $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode, "x-marc-schema" => 'INVALID'})
-      ->status_is(400, 'Invalid header x-marc-schema');
+    $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode, "x-record-schema" => 'INVALID'})
+      ->status_is(400, 'Invalid header x-record-schema');
 
     $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode} => $marcxml)
       ->status_is(200)
