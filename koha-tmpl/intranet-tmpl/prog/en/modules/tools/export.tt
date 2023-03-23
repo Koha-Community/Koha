@@ -51,263 +51,280 @@
     </div>
 [% END %]
 
-<div id="exporttype" class="toptabs">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a href="#bibs" aria-controls="bibs" role="tab" data-toggle="tab">Export bibliographic records</a>
-        </li>
-        <li role="presentation">
-            <a href="#auths" aria-controls="auths" role="tab" data-toggle="tab">Export authority records</a>
-        </li>
+[% WRAPPER tabs id= "exporttype" %]
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "bibs" bt_active= 1 %] <span>Export bibliographic records</span> [% END %]
+        [% WRAPPER tab_item tabname= "auths" %] <span>Export authority records</span> [% END %]
         [% IF ( allow_db_export ) %]
-            <li role="presentation">
-                <a href="#db" aria-controls="db" role="tab" data-toggle="tab">Export database</a>
-            </li>
+            [% WRAPPER tab_item tabname= "db" %] <span>Export database</span> [% END %]
         [% END %]
         [% IF ( allow_conf_export ) %]
-            <li role="presentation">
-                <a href="#conf" aria-controls="conf" role="tab" data-toggle="tab">Export configuration</a>
-            </li>
+            [% WRAPPER tab_item tabname= "conf" %] <span>Export configuration</span> [% END %]
         [% END %]
-    </ul>
-    <div class="tab-content">
-        <div id="bibs" role="tabpanel" class="tab-pane active">
-        <p>
-            <strong>Note : The items are exported by this tool unless specified.</strong>
-        </p>
+    [% END # /WRAPPER tabs_nav %]
 
-        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
-            <fieldset class="rows">
-            <legend> Select records to export </legend>
-                <ol>
-                <li>
-                    <label for="start">From biblionumber: </label>
-                    <input id="start" type="text" name="StartingBiblionumber" size="5" />
-                </li>
-                <li>
-                    <label for="end">To biblionumber: </label>
-                    <input id="end" type="text" name="EndingBiblionumber" size="5" />
-                </li>
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="bibs" bt_active= 1 %]
+            <p>
+                <strong>Note : The items are exported by this tool unless specified.</strong>
+            </p>
 
-                <li>
-                    <label for="itemtype">Item type: </label>
-                    <select name="itemtype" id="itemtype" multiple>
-                        <option value="">-- All --</option>
-                        [% FOREACH itemtype IN itemtypes %]
-                            <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
-                        [% END %]
-                    </select>
-                </li>
+            <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
+                <fieldset class="rows">
+                    <legend> Select records to export </legend>
+                    <ol>
+                        <li>
+                            <label for="start">From biblionumber: </label>
+                            <input id="start" type="text" name="StartingBiblionumber" size="5" />
+                        </li>
+                        <li>
+                            <label for="end">To biblionumber: </label>
+                            <input id="end" type="text" name="EndingBiblionumber" size="5" />
+                        </li>
 
-                <li>
-                    <label>With items owned by the following libraries: </label>
-                    [% INCLUDE 'branch-selector.inc' branches = libraries %]
-                </li>
-            </ol>
+                        <li>
+                            <label for="itemtype">Item type: </label>
+                            <select name="itemtype" id="itemtype" multiple>
+                                <option value="">-- All --</option>
+                                [% FOREACH itemtype IN itemtypes %]
+                                    <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
+                                [% END %]
+                            </select>
+                        </li>
 
-            <fieldset class="rows">
-                <legend>Call number range</legend>
-                <ol>
-                    <li>
-                        <label for="startcn">From item call number: </label>
-                        <input id="startcn" type="text" name="start_callnumber" size="15" />
-                    </li>
-                    <li>
-                        <label for="endcn">To item call number: </label>
-                        <input id="endcn" type="text" name="end_callnumber" size="15" />
-                    </li>
-                </ol>
-            </fieldset>
+                        <li>
+                            <label>With items owned by the following libraries: </label>
+                            [% INCLUDE 'branch-selector.inc' branches = libraries %]
+                        </li>
+                    </ol>
 
-            <fieldset class="rows">
-                <legend>Accession date (inclusive)</legend>
-                <ol>
-                    <li>
-                            <label for="from">Start date:</label>
-                            <input type="text" size="10" id="from" name="start_accession" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-                    </li>
-                    <li>
-                        <label for="to">End date:</label>
-                        <input size="10" id="to" name="end_accession" value="[% end_accession | html %]" type="text" class="flatpickr" />
-                    </li>
-                </ol>
-            </fieldset>
+                    <fieldset class="rows">
+                        <legend>Call number range</legend>
+                        <ol>
+                            <li>
+                                <label for="startcn">From item call number: </label>
+                                <input id="startcn" type="text" name="start_callnumber" size="15" />
+                            </li>
+                            <li>
+                                <label for="endcn">To item call number: </label>
+                                <input id="endcn" type="text" name="end_callnumber" size="15" />
+                            </li>
+                        </ol>
+                    </fieldset>
 
-            </fieldset>
-            <fieldset class="rows">
-            <legend>
-                Use a file
-            </legend>
-                <ol>
-                <li>File containing a list of biblionumbers with one biblionumber per line. This list works as a filter: it is compatible with other parameters. (File types accepted: .csv and .txt)</li>
-                <li><label for="id_list_file">File: </label> <input type="file" id="id_list_file" name="id_list_file" /></li>
-                </ol>
-            </fieldset>
-            <fieldset class="rows">
-            <legend> Options</legend>
-        <ol>        <li>
-                <label for="dont_export_item">Don't export items:</label>
-                <input id="dont_export_item" type="checkbox" name="dont_export_item" />
-                </li>
-                <li>
-                <label for="strip_items_not_from_libraries">Remove items not owned by selected libraries:</label>
-                <input id="strip_items_not_from_libraries" type="checkbox" name="strip_items_not_from_libraries" />
-                </li>
-                <li>
-                <label for="export_remove_fields">Don't export fields:</label>
-                <input id="export_remove_fields" type="text" name="export_remove_fields" value="[% export_remove_fields | html %]" />
-                separate by a blank. (e.g., 100a 200 606)
-                </li></ol>
-            </fieldset>
-            <fieldset class="rows">
-            <legend>
-                Output format
-            </legend>
-                <ol><li>
-                    <label for="output_format">File format: </label>
-                    <select id="output_format" name="output_format">
-                        <option value="iso2709">MARC</option>
-                        <option value="xml">XML</option>
-                        [% IF csv_profiles %]
-                            <option value="csv">CSV</option>
+                    <fieldset class="rows">
+                        <legend>Accession date (inclusive)</legend>
+                        <ol>
+                            <li>
+                                <label for="from">Start date:</label>
+                                <input type="text" size="10" id="from" name="start_accession" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                            </li>
+                            <li>
+                                <label for="to">End date:</label>
+                                <input size="10" id="to" name="end_accession" value="[% end_accession | html %]" type="text" class="flatpickr" />
+                            </li>
+                        </ol>
+                    </fieldset>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend>
+                        Use a file
+                    </legend>
+                    <ol>
+                        <li>
+                            File containing a list of biblionumbers with one biblionumber per line. This list works as a filter: it is compatible with other parameters. (File types accepted: .csv and .txt)
+                        </li>
+                        <li>
+                            <label for="id_list_file">File: </label> <input type="file" id="id_list_file" name="id_list_file" />
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend> Options</legend>
+                    <ol>
+                        <li>
+                            <label for="dont_export_item">Don't export items:</label>
+                            <input id="dont_export_item" type="checkbox" name="dont_export_item" />
+                        </li>
+                        <li>
+                            <label for="strip_items_not_from_libraries">Remove items not owned by selected libraries:</label>
+                            <input id="strip_items_not_from_libraries" type="checkbox" name="strip_items_not_from_libraries" />
+                        </li>
+                        <li>
+                            <label for="export_remove_fields">Don't export fields:</label>
+                            <input id="export_remove_fields" type="text" name="export_remove_fields" value="[% export_remove_fields | html %]" />
+                            separate by a blank. (e.g., 100a 200 606)
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend>
+                        Output format
+                    </legend>
+                    <ol>
+                        <li>
+                            <label for="output_format">File format: </label>
+                            <select id="output_format" name="output_format">
+                                <option value="iso2709">MARC</option>
+                                <option value="xml">XML</option>
+                                [% IF csv_profiles %]
+                                    <option value="csv">CSV</option>
+                                [% ELSE %]
+                                    <option value="csv" disabled data-toggle="tooltip" data-placement="left" title="You must create a CSV profile for MARC exports to use this option.">CSV</option>
+                                [% END %]
+                            </select>
+                        </li>
+                        <li class="csv_profiles">
+                            <label for="bibs_csv_profile">CSV profile: </label>
+                            <select id="bibs_csv_profile" name="csv_profile_id">
+                                [% FOR csv_profile IN csv_profiles %]
+                                    <option value="[% csv_profile.export_format_id | html %]">[% csv_profile.profile | html %]</option>
+                                [% END %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="filename">File name:</label><input id="filename" type="text" name="filename" value="koha.mrc" />
+                        </li>
+                    </ol>
+                </fieldset>
+                <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="record_type" value="bibs" />
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Export bibliographic records" />
+                </fieldset>
+            </form>
+        [% END # /tab_panel#bibs %]
+
+        [% WRAPPER tab_panel tabname="auths" %]
+            <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
+                <fieldset class="rows">
+                    <legend> Select records to export </legend>
+                    <ol>
+                        <li>
+                            <label for="start">From authid: </label>
+                            <input id="start" type="text" name="starting_authid" size="6" />
+                        </li>
+                        <li>
+                            <label for="end">To authid: </label>
+                            <input id="end" type="text" name="ending_authid" size="6" />
+                        </li>
+                        <li>
+                            <label for="authtype">Authority type: </label>
+                            <select name="authtype" id="authtype">
+                                <option value="">-- All --</option>
+                                [% FOREACH authority_type IN authority_types %]
+                                    <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
+                                [% END %]
+                            </select>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend>
+                        Use a file
+                    </legend>
+                    <ol>
+                        <li>
+                            File containing a list of authids with one authid per line. This list works as a filter: it is compatible with other parameters. (File types accepted: .csv and .txt)
+                        </li>
+                        <li>
+                            <label for="id_list_file">File:</label> <input type="file" id="id_list_file" name="id_list_file" />
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend>Options</legend>
+                    <ol>
+                        <li>
+                            <label for="export_remove_fields">Don't export fields:</label>
+                            <input id="export_remove_fields" type="text" name="export_remove_fields" />
+                            <div class="hint">separate by a blank. (e.g., 100a 200 606)</div>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                    <legend>Output format</legend>
+                    <ol>
+                        <li>
+                            <label for="output_format">File format: </label>
+                            <select id="output_format_auth" name="output_format">
+                                <option value="marc">MARC</option>
+                                <option value="xml">XML</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="filename_auth">File name:</label>
+                            <input id="filename_auth" type="text" name="filename_auth" value="koha.mrc" />
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="record_type" value="auths" />
+
+                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Export authority records" /></fieldset>
+            </form>
+        [% END # /tab_panel#auths %]
+
+        [% IF ( allow_db_export ) %]
+            [% WRAPPER tab_panel tabname="db" %]
+                <form method="post" class="clearfix" action="/cgi-bin/koha/tools/export.pl">
+                    <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
+                    <fieldset class="rows">
+                        <legend> Choose a file </legend>
+                        [% IF ( dbfiles && (dbfiles.size > 0) ) %]
+                            <ul>
+                                [% FOREACH dbfile IN dbfiles %]
+                                    <li><input type="radio" name="filename" value="[% dbfile | html %]" />[% dbfile | html %]</li>
+                                [% END %]
+                            </ul>
                         [% ELSE %]
-                            <option value="csv" disabled data-toggle="tooltip" data-placement="left" title="You must create a CSV profile for MARC exports to use this option.">CSV</option>
+                            <p style="clear:both">Unfortunately, no backups are available.</p>
                         [% END %]
-                    </select>
-                </li>
-                <li class="csv_profiles">
-                    <label for="bibs_csv_profile">CSV profile: </label>
-                    <select id="bibs_csv_profile" name="csv_profile_id">
-                        [% FOR csv_profile IN csv_profiles %]
-                            <option value="[% csv_profile.export_format_id | html %]">[% csv_profile.profile | html %]</option>
-                        [% END %]
-                    </select>
-                </li>
-                <li>
-                <label for="filename">File name:</label><input id="filename" type="text" name="filename" value="koha.mrc" />
-                </li></ol>
-            </fieldset>
-            <input type="hidden" name="op" value="export" />
-            <input type="hidden" name="record_type" value="bibs" />
+                    </fieldset>
 
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Export bibliographic records" /></fieldset>
-        </form>
-        </div>
-
-        <div id="auths" role="tabpanel" class="tab-pane">
-        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
-            <fieldset class="rows">
-            <legend> Select records to export </legend>
-                <ol><li>
-                    <label for="start">From authid: </label>
-                    <input id="start" type="text" name="starting_authid" size="6" />
-                </li>
-                <li>
-                    <label for="end">To authid: </label>
-                    <input id="end" type="text" name="ending_authid" size="6" />
-                </li>
-                <li>
-                    <label for="authtype">Authority type: </label>
-                    <select name="authtype" id="authtype">
-                        <option value="">-- All --</option>
-                        [% FOREACH authority_type IN authority_types %]
-                            <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
-                        [% END %]
-                    </select>
-                </li>
-                </ol>
-            </fieldset>
-            <fieldset class="rows">
-            <legend>
-                Use a file
-            </legend>
-                <ol>
-                <li>File containing a list of authids with one authid per line. This list works as a filter: it is compatible with other parameters. (File types accepted: .csv and .txt)</li>
-                <li><label for="id_list_file">File:</label> <input type="file" id="id_list_file" name="id_list_file" /></li>
-                </ol>
-            </fieldset>
-            <fieldset class="rows">
-            <legend>Options</legend>
-                <ol>
-                <li>
-                    <label for="export_remove_fields">Don't export fields:</label>
-                    <input id="export_remove_fields" type="text" name="export_remove_fields" />
-                    separate by a blank. (e.g., 100a 200 606)
-                </li></ol>
-            </fieldset>
-            <fieldset class="rows">
-            <legend>Output format</legend>
-                <ol><li>
-                    <label for="output_format">File format: </label>
-                    <select id="output_format_auth" name="output_format">
-                        <option value="marc">MARC</option>
-                        <option value="xml">XML</option>
-                    </select>
-                </li>
-                <li>
-                <label for="filename_auth">File name:</label><input id="filename_auth" type="text" name="filename_auth" value="koha.mrc" />
-                </li></ol>
-            </fieldset>
-            <input type="hidden" name="op" value="export" />
-            <input type="hidden" name="record_type" value="auths" />
-
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Export authority records" /></fieldset>
-        </form>
-        </div>
-
-        [% IF ( allow_db_export ) %]
-        <div id="db" role="tabpanel" class="tab-pane">
-        <form method="post" action="/cgi-bin/koha/tools/export.pl">
-            <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
-            <fieldset class="rows">
-            <legend> Choose a file </legend>
-            [% IF ( dbfiles && (dbfiles.size > 0) ) %]
-                <ul>
-                [% FOREACH dbfile IN dbfiles %]
-                    <li><input type="radio" name="filename" value="[% dbfile | html %]">[% dbfile | html %]</input></li>
-                [% END %]
-                </ul>
-            [% ELSE %]
-                <p>Unfortunately, no backups are available.</p>
-            [% END %]
-            </fieldset>
-
-            [% IF ( dbfiles && (dbfiles.size > 0) ) %]
-                <input type="hidden" name="op" value="export" />
-                <input type="hidden" name="record_type" value="db" />
-                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download database" /></fieldset>
-            [% END %]
-        </form>
-        </div>
-        [% END %]
+                    [% IF ( dbfiles && (dbfiles.size > 0) ) %]
+                        <input type="hidden" name="op" value="export" />
+                        <input type="hidden" name="record_type" value="db" />
+                        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download database" /></fieldset>
+                    [% END %]
+                </form>
+            [% END # /tab_panel#db %]
+        [% END # /IF allow_db_export %]
 
         [% IF ( allow_conf_export ) %]
-        <div id="conf" role="tabpanel" class="tab-pane">
-        <form method="post" action="/cgi-bin/koha/tools/export.pl">
-            <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
-            <fieldset class="rows">
-            <legend> Choose a file </legend>
-            [% IF ( conffiles && (conffiles.size > 0) ) %]
-                <ul>
-                [% FOREACH conffile IN conffiles %]
-                    <li><input type="radio" name="filename" value="[% conffile | html %]">[% conffile | html %]</input></li>
-                [% END %]
-                </ul>
-            [% ELSE %]
-                <p>Unfortunately, no backups are available.</p>
-            [% END %]
-            </fieldset>
+            [% WRAPPER tab_panel tabname="conf" %]
+                <form method="post" class="clearfix" action="/cgi-bin/koha/tools/export.pl">
+                    <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
+                    <fieldset class="rows">
+                        <legend> Choose a file </legend>
+                        [% IF ( conffiles && (conffiles.size > 0) ) %]
+                            <ul>
+                                [% FOREACH conffile IN conffiles %]
+                                    <li><input type="radio" name="filename" value="[% conffile | html %]">[% conffile | html %]</input></li>
+                                [% END %]
+                                </ul>
+                        [% ELSE %]
+                            <p style="clear:both">Unfortunately, no backups are available.</p>
+                        [% END %]
+                    </fieldset>
 
-            [% IF ( conffiles && (conffiles.size > 0) ) %]
-                <input type="hidden" name="op" value="export" />
-                <input type="hidden" name="record_type" value="conf" />
-                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download configuration" /></fieldset>
-            [% END %]
-        </form>
-        </div>
-        [% END %]
-    </div> <!-- /.tab-content -->
-</div>
+                    [% IF ( conffiles && (conffiles.size > 0) ) %]
+                        <input type="hidden" name="op" value="export" />
+                        <input type="hidden" name="record_type" value="conf" />
+                        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download configuration" /></fieldset>
+                    [% END %]
+                </form>
+            [% END # /tab_panel#conf %]
+        [% END # /IF allow_conf_export %]
+    [% END # /WRAPPER tab_panels %]
+[% END # /WRAPPER tabs %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->

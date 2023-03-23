@@ -38,91 +38,39 @@
             <main>
 
                 [% IF ( op == 'show_form' ) %]
-                <h1>Batch patron modification</h1>
-                <form id="patron_batchmod_form" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
-                    <input type="hidden" name="op" value="show" />
-                    <div id="batch_patron_options" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#usecardnumber" aria-controls="usecardnumber" role="tab" data-toggle="tab">By card number</a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#useborrowernumber" aria-controls="useborrowernumber" role="tab" data-toggle="tab">By borrowernumber</a>
-                            </li>
-                            [% IF patron_lists %]
-                                <li role="presentation">
-                                    <a href="#uselist" aria-controls="uselist" role="tab" data-toggle="tab">By patron list</a>
-                                </li>
-                            [% END %]
-                        </ul>
-                        <div class="tab-content">
-                            <div id="usecardnumber" role="tabpanel" class="tab-pane active">
-                                <fieldset class="rows">
-                                    <legend>Use a file of card numbers</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="cardnumberuploadfile">File: </label> <input type="file"
-                                                id="cardnumberuploadfile" name="cardnumberuploadfile" />
-                                            <div class="hint">File must contain one card number per line.</div>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                                <fieldset class="rows">
-                                    <legend>Or list card numbers one by one</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="cardnumberlist">Card number list (one card number per line):
-                                            </label>
-                                            <textarea rows="10" cols="30" id="cardnumberlist"
-                                                name="cardnumberlist">[% cardnumberlist | html %]</textarea>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                                <fieldset class="action">
-                                    <input type="submit" class="btn btn-primary" value="Continue" />
-                                    <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
-                                </fieldset>
-                            </div>
-                            <div id="useborrowernumber" role="tabpanel" class="tab-pane">
-                                <fieldset class="rows">
-                                    <legend>Use a file of borrowernumbers</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="borrowernumberuploadfile">File: </label> <input type="file"
-                                                id="borrowernumberuploadfile" name="borrowernumberuploadfile" />
-                                            <div class="hint">File must contain one borrowernumber per line.</div>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                                <fieldset class="rows">
-                                    <legend>List borrowernumbers one by one</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="borrowernumberlist">Borrowernumber list (one number per line):
-                                            </label>
-                                            <textarea rows="10" cols="30" id="borrowernumberlist"
-                                                name="borrowernumberlist">[% borrowernumberlist | html %]</textarea>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                                <fieldset class="action">
-                                    <input type="submit" class="btn btn-primary" value="Continue" />
-                                    <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
-                                </fieldset>
-                            </div>
-                            [% IF patron_lists %]
-                                <div id="uselist" role="tabpanel" class="tab-pane">
+                    <h1>Batch patron modification</h1>
+                    <form id="patron_batchmod_form" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
+                        <input type="hidden" name="op" value="show" />
+
+                        [% WRAPPER tabs id= "batch_patron_options" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "usecardnumber" bt_active= 1 %] <span>By card number</span> [% END %]
+                                [% WRAPPER tab_item tabname= "useborrowernumber" %] <span>By borrowernumber</span> [% END %]
+                                [% IF patron_lists %]
+                                    [% WRAPPER tab_item tabname= "uselist" %] <span>By patron list</span> [% END %]
+                                [% END %]
+                            [% END # /WRAPPER tabs_nav %]
+
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname="usecardnumber" bt_active= 1 %]
                                     <fieldset class="rows">
-                                        <legend>Use a patron list</legend>
+                                        <legend>Use a file of card numbers</legend>
                                         <ol>
                                             <li>
-                                                <label for="patron_list_id">Patron list: </label>
-                                                <select id="patron_list_id" name="patron_list_id">
-                                                    <option value=""> -- Choose a patron list -- </option>
-                                                    [% FOREACH pl IN patron_lists %]
-                                                    <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
-                                                    [% END %]
-                                                </select>
+                                                <label for="cardnumberuploadfile">File: </label> <input type="file"
+                                                    id="cardnumberuploadfile" name="cardnumberuploadfile" />
+                                                <div class="hint">File must contain one card number per line.</div>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                    <fieldset class="rows">
+                                        <legend>Or list card numbers one by one</legend>
+                                        <ol>
+                                            <li>
+                                                <label for="cardnumberlist">Card number list (one card number per line):
+                                                </label>
+                                                <textarea rows="10" cols="30" id="cardnumberlist"
+                                                    name="cardnumberlist">[% cardnumberlist | html %]</textarea>
                                             </li>
                                         </ol>
                                     </fieldset>
@@ -130,11 +78,61 @@
                                         <input type="submit" class="btn btn-primary" value="Continue" />
                                         <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
                                     </fieldset>
-                                </div>
-                            [% END %]
-                        </div> <!-- /.tab-content -->
-                    </div><!-- /#batch_patron_options -->
-                </form>
+                                [% END # /tab_panel# %]
+
+                                [% WRAPPER tab_panel tabname="useborrowernumber" %]
+                                    <fieldset class="rows">
+                                        <legend>Use a file of borrowernumbers</legend>
+                                        <ol>
+                                            <li>
+                                                <label for="borrowernumberuploadfile">File: </label> <input type="file"
+                                                    id="borrowernumberuploadfile" name="borrowernumberuploadfile" />
+                                                <div class="hint">File must contain one borrowernumber per line.</div>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                    <fieldset class="rows">
+                                        <legend>List borrowernumbers one by one</legend>
+                                        <ol>
+                                            <li>
+                                                <label for="borrowernumberlist">Borrowernumber list (one number per line):
+                                                </label>
+                                                <textarea rows="10" cols="30" id="borrowernumberlist"
+                                                    name="borrowernumberlist">[% borrowernumberlist | html %]</textarea>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                    <fieldset class="action">
+                                        <input type="submit" class="btn btn-primary" value="Continue" />
+                                        <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
+                                    </fieldset>
+                                [% END # /tab_panel# %]
+
+                                [% IF patron_lists %]
+                                    [% WRAPPER tab_panel tabname="uselist" %]
+                                        <fieldset class="rows">
+                                            <legend>Use a patron list</legend>
+                                            <ol>
+                                                <li>
+                                                    <label for="patron_list_id">Patron list: </label>
+                                                    <select id="patron_list_id" name="patron_list_id">
+                                                        <option value=""> -- Choose a patron list -- </option>
+                                                        [% FOREACH pl IN patron_lists %]
+                                                        <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
+                                                        [% END %]
+                                                    </select>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <input type="submit" class="btn btn-primary" value="Continue" />
+                                            <a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
+                                        </fieldset>
+                                    [% END # /tab_panel# %]
+                                [% END %]
+                            [% END # /WRAPPER tab_panels %]
+                        [% END # /WRAPPER tabs %]
+                    </form>
                 [% END %]
 
                 [% IF ( op == 'show') && (!borrowers) && (!notfoundcardnumbers) # Alert if no patrons given%]
