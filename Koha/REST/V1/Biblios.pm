@@ -67,14 +67,15 @@ sub get {
             );
         }
         else {
-            my $record = $biblio->metadata->record;
-            my $marcflavour = C4::Context->preference("marcflavour");
+            my $metadata = $biblio->metadata;
+            my $record   = $metadata->record;
+            my $schema   = $metadata->schema // C4::Context->preference("marcflavour");
 
             $c->respond_to(
                 marcxml => {
                     status => 200,
                     format => 'marcxml',
-                    text   => $record->as_xml_record($marcflavour),
+                    text   => $record->as_xml_record($schema),
                 },
                 mij => {
                     status => 200,
@@ -169,7 +170,8 @@ sub get_public {
 
     return try {
 
-        my $record = $biblio->metadata->record;
+        my $metadata = $biblio->metadata;
+        my $record   = $metadata->record;
 
         my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
         my $patron = $c->stash('koha.user');
@@ -189,7 +191,7 @@ sub get_public {
             }
         }
 
-        my $marcflavour = C4::Context->preference("marcflavour");
+        my $schema = $metadata->schema // C4::Context->preference("marcflavour");
 
         my $record_processor = Koha::RecordProcessor->new({
             filters => 'ViewPolicy',
@@ -205,7 +207,7 @@ sub get_public {
             marcxml => {
                 status => 200,
                 format => 'marcxml',
-                text   => $record->as_xml_record($marcflavour),
+                text   => $record->as_xml_record($schema),
             },
             mij => {
                 status => 200,
