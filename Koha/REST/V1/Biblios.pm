@@ -496,7 +496,7 @@ sub add {
     try {
         my $headers = $c->req->headers;
 
-        my $flavour = $headers->header('x-marc-schema');
+        my $flavour = $headers->header('x-record-schema');
         $flavour //= C4::Context->preference('marcflavour');
 
         my $record;
@@ -571,7 +571,7 @@ sub update {
     try {
         my $headers = $c->req->headers;
 
-        my $flavour = $headers->header('x-marc-schema');
+        my $flavour = $headers->header('x-record-schema');
         $flavour //= C4::Context->preference('marcflavour');
 
         my $frameworkcode = $headers->header('x-framework-id') || $biblio->frameworkcode;
