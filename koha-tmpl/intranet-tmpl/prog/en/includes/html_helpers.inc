@@ -351,20 +351,19 @@
 </div>
 [% END %]
 
-[%# BOOTSTRAP TAB WRAPPER USAGE
-    [ WRAPPER tabs id= "tabs_container_id" ]
-        [ WRAPPER tabs_nav ]
-            [ WRAPPER tab_item tabname= "tab_name_1" bt_active= 1 ] Tab text 1 [ END ]
-            [ WRAPPER tab_item tabname= "tab_name_2" ] Tab text 2 [ END ]
-            ...
-        [ END ]
-        [ WRAPPER tab_panels ]
-            [ WRAPPER tab_panel tabname="tab_name_1" bt_active= 1 ] Panel contents 1 [ END ]
-            [ WRAPPER tab_panel tabname="tab_name_2" ] Panel contents 2 [ END ]
-            ...
-        [ END ]
-    [ END ]
- %]
+[% # BOOTSTRAP TAB WRAPPER USAGE                                                                   %]
+[% #     [ WRAPPER tabs id= "tabs_container_id" ]                                                  %]
+[% #         [ WRAPPER tabs_nav ]                                                                  %]
+[% #             [ WRAPPER tab_item tabname= "tab_name_1" bt_active= 1 ] Tab text 1 [ END ]        %]
+[% #             [ WRAPPER tab_item tabname= "tab_name_2" ] Tab text 2 [ END ]                     %]
+[% #             ...                                                                               %]
+[% #         [ END ]                                                                               %]
+[% #         [ WRAPPER tab_panels ]                                                                %]
+[% #             [ WRAPPER tab_panel tabname="tab_name_1" bt_active= 1 ] Panel contents 1 [ END ]  %]
+[% #             [ WRAPPER tab_panel tabname="tab_name_2" ] Panel contents 2 [ END ]               %]
+[% #             ...                                                                               %]
+[% #         [ END ]                                                                               %]
+[% #     [ END ]                                                                                   %]
 
 [% BLOCK tabs %]
     [% IF ( id ) %]
@@ -410,39 +409,38 @@
     </div>
 [% END %]
 
-[%# BOOTSTRAP BREADCRUMBS WRAPPER USAGE
-    [ WRAPPER breadcrumbs ]
-        [ Home breadcrumb automatically included ]
-        [ WRAPPER breadcrumb_item ]
-            <a href="/cgi-bin/koha/module/module-home.pl"> Module </a>
-        [ END ]
+[% # BOOTSTRAP BREADCRUMBS WRAPPER USAGE                                       %]
+[% #    [ WRAPPER breadcrumbs ]                                                %]
+[% #        [ Home breadcrumb automatically included ]                         %]
+[% #        [ WRAPPER breadcrumb_item ]                                        %]
+[% #            <a href="/cgi-bin/koha/module/module-home.pl"> Module </a>     %]
+[% #        [ END ]                                                            %]
 
-        [ IF op == 'add_form' ]
-            [ WRAPPER breadcrumb_item ]
-                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
-            [ END ]
-            [ WRAPPER breadcrumb_item bc_active = 1 ]
-                Add form
-            [ END ]
+[% #        [ IF op == 'add_form' ]                                            %]
+[% #            [ WRAPPER breadcrumb_item ]                                    %]
+[% #                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>   %]
+[% #            [ END ]                                                        %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                Add form                                                   %]
+[% #            [ END ]                                                        %]
 
-        [ ELSIF op == 'delete_confirm' ]
-            [ WRAPPER breadcrumb_item ]
-                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>
-            [ END ]
-            [ WRAPPER breadcrumb_item bc_active = 1 ]
-                Confirm deletion
-            [ END ]
+[% #        [ ELSIF op == 'delete_confirm' ]                                   %]
+[% #            [ WRAPPER breadcrumb_item ]                                    %]
+[% #                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>   %]
+[% #            [ END ]                                                        %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                Confirm deletion                                           %]
+[% #            [ END ]                                                        %]
 
-        [ ELSE ]
-            [ WRAPPER breadcrumb_item bc_active = 1 ]
-                Module page
-            [ END ]
-        [ END #/IF op = add_form ]
+[% #        [ ELSE ]                                                           %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                Module page                                                %]
+[% #            [ END ]                                                        %]
+[% #        [ END #/IF op = add_form ]                                         %]
 
-    [ END #/ WRAPPER breadcrumbs ]
- %]
+[% #    [ END #/ WRAPPER breadcrumbs ]                                         %]
 
-[%# Used to build breadcrumb navigation nav %]
+[% # Used to build breadcrumb navigation nav %]
 [% BLOCK breadcrumbs %]
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
