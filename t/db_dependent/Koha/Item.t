@@ -213,7 +213,7 @@ subtest 'bundle_host tests' => sub {
 };
 
 subtest 'add_to_bundle tests' => sub {
-    plan tests => 7;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
