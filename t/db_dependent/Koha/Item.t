@@ -213,7 +213,7 @@ subtest 'bundle_host tests' => sub {
 };
 
 subtest 'add_to_bundle tests' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -227,10 +227,25 @@ subtest 'add_to_bundle tests' => sub {
     my $host_item = $builder->build_sample_item();
     my $bundle_item1 = $builder->build_sample_item();
     my $bundle_item2 = $builder->build_sample_item();
+    my $bundle_item3 = $builder->build_sample_item();
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     throws_ok { $host_item->add_to_bundle($host_item) }
     'Koha::Exceptions::Item::Bundle::IsBundle',
       'Exception thrown if you try to add the item to itself';
+
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $bundle_item3->biblionumber,
+            itemnumber     => $bundle_item3->itemnumber,
+        }
+    );
+    throws_ok { $host_item->add_to_bundle($bundle_item3) }
+    'Koha::Exceptions::Item::Bundle::ItemHasHolds',
+      'Exception thrown if you try to add an item with holds to a bundle';
 
     ok($host_item->add_to_bundle($bundle_item1), 'bundle_item1 added to bundle');
     is($bundle_item1->notforloan, 1, 'add_to_bundle sets notforloan to BundleNotLoanValue');
@@ -247,7 +262,6 @@ subtest 'add_to_bundle tests' => sub {
     'Koha::Exceptions::Item::Bundle::IsBundle',
       'Exception thrown if you try to add a bundle host to a bundle item';
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     C4::Circulation::AddIssue( $patron->unblessed, $bundle_item2->barcode );
     throws_ok { $host_item->add_to_bundle($bundle_item2) }
     'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut',
