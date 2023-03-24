@@ -52,6 +52,13 @@ $builder->build({
         reservefee            => 2,
     },
 });
+$builder->build({
+    source => 'Category',
+    value  => {
+        categorycode          => 'XYZ2',
+        reservefee            => 0,
+    },
+});
 my $patron1 = $builder->build({
     source => 'Borrower',
     value  => {
@@ -66,6 +73,12 @@ my $patron2 = $builder->build({
 });
 my $patron3 = $builder->build({
     source => 'Borrower',
+});
+my $patron4 = $builder->build({
+    source => 'Borrower',
+    value  => {
+        categorycode => 'XYZ2',
+    },
 });
 
 # One biblio and two items
@@ -84,7 +97,7 @@ my $item2 = $builder->build_sample_item(
 );
 
 subtest 'GetReserveFee' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     C4::Circulation::AddIssue( $patron1, $item1->barcode, '2015-12-31', 0, undef, 0, {} ); # the date does not really matter
     C4::Circulation::AddIssue( $patron3, $item2->barcode, '2015-12-31', 0, undef, 0, {} ); # the date does not really matter
@@ -109,6 +122,10 @@ subtest 'GetReserveFee' => sub {
     t::lib::Mocks::mock_preference('HoldFeeMode', 'any_time_is_collected');
     $fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->biblionumber );
     is( int($fee), 2, 'HoldFeeMode=any_time_is_collected, Patron 2 should be charged' );
+
+    t::lib::Mocks::mock_preference('HoldFeeMode', 'any_time_is_placed');
+    $fee = C4::Reserves::GetReserveFee( $patron4->{borrowernumber}, $biblio->biblionumber );
+    is( $fee, 0, 'HoldFeeMode=any_time_is_placed ; fee == 0, Patron 4 should not be charged' );
 };
 
 subtest 'Integration with AddReserve' => sub {
