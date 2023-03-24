@@ -631,19 +631,24 @@ if ($op eq "add") {
         }
                 exit;
 } else {
-if ($op eq "duplicate")
-        {
-                $authid = "";
-        }
-        if($changed_authtype eq "changed"){
-            $record = TransformHtmlToMarc( $input, 0 );
-        }
+    if ( $op eq "duplicate" ) {
+        $authid = "";
+    }
 
-        build_tabs ($template, $record, $dbh, $input);
-        build_hidden_data;
-        $template->param(oldauthtypetagfield=>$oldauthtypetagfield, oldauthtypetagsubfield=>$oldauthtypetagsubfield,
-                        oldauthnumtagfield=>$oldauthnumtagfield, oldauthnumtagsubfield=>$oldauthnumtagsubfield,
-                        authid                      => $authid , authtypecode=>$authtypecode,	);
+    if ( $changed_authtype eq "changed" ) {
+        $record = TransformHtmlToMarc( $input, 0 );
+    }
+
+    build_tabs( $template, $record, $dbh, $input );
+    build_hidden_data;
+    $template->param(
+        oldauthtypetagfield    => $oldauthtypetagfield,
+        oldauthtypetagsubfield => $oldauthtypetagsubfield,
+        oldauthnumtagfield     => $oldauthnumtagfield,
+        oldauthnumtagsubfield  => $oldauthnumtagsubfield,
+        authid                 => $authid,
+        authtypecode           => $authtypecode,
+    );
 }
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
