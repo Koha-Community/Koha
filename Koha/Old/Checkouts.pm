@@ -101,6 +101,11 @@ sub anonymize {
     Koha::Exceptions::SysPref::NotSet->throw( syspref => 'AnonymousPatron' )
         unless $anonymous_id;
 
+    while ( my $checkout = $self->next ) {
+        my $self_renewals = $checkout->renewals->search( { renewer_id => $checkout->borrowernumber } );
+        $self_renewals->update( { renewer_id => $anonymous_id } );
+    }
+
     return $self->update( { borrowernumber => $anonymous_id }, { no_triggers => 1 } );
 }
 
