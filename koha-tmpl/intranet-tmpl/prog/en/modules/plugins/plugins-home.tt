@@ -122,6 +122,7 @@
                                         <th>Minimum Koha version</th>
                                         <th>Maximum Koha version</th>
                                         <th>Last updated</th>
+                                        <th>Status</th>
                                         [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
                                             <th class="noExport">Actions</th>
                                         [% END %]
@@ -145,11 +146,6 @@
                                     <tr>
                                         <td>
                                             <strong>[% plugin.metadata.name | html %]</strong>
-                                            [% IF ( plugin.is_enabled ) %]
-                                                <span class="label label-primary">ENABLED</span>
-                                            [% ELSE %]
-                                                <span class="label label-default">DISABLED</span>
-                                            [% END %]
                                         </td>
                                         <td>
                                             [% plugin.metadata.description | html %]
@@ -171,6 +167,13 @@
                                         <td>[% plugin.metadata.minimum_version | html %]</td>
                                         <td>[% plugin.metadata.maximum_version | html %]</td>
                                         <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
+                                        <td>
+                                            [% IF ( plugin.is_enabled ) %]
+                                                <span class="bg-success">Enabled</span>
+                                            [% ELSE %]
+                                                <span class="bg-warning">Disabled</span>
+                                            [% END %]
+                                        </td>
                                         [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
                                             <td class="actions">
                                                 <div class="btn-group dropup">
