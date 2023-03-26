@@ -93,9 +93,3 @@ export default {
     name: "EHoldingsLocalPackageTitlesList",
 }
 </script>
-
-<style scoped>
-#title_list {
-    display: table;
-}
-</style>

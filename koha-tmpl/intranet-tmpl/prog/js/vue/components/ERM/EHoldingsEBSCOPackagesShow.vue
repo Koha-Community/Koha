@@ -90,15 +90,13 @@
                         <label
                             >Titles ({{ erm_package.resources_count }})</label
                         >
-                        <div v-if="erm_package.resources_count">
-                            <EHoldingsPackageTitlesList
-                                :package_id="erm_package.package_id.toString()"
-                            />
-                        </div>
                     </li>
-
-                    <li></li>
                 </ol>
+                <div v-if="erm_package.resources_count">
+                    <EHoldingsPackageTitlesList
+                        :package_id="erm_package.package_id.toString()"
+                    />
+                </div>
             </fieldset>
             <fieldset class="action">
                 <router-link
