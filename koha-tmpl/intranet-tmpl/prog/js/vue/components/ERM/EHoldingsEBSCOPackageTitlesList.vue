@@ -199,9 +199,6 @@ export default {
 </script>
 
 <style scoped>
-#title_list {
-    display: table;
-}
 #filters {
     margin: 0;
 }
