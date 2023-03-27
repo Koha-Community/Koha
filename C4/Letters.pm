@@ -1671,7 +1671,18 @@ sub _process_tt {
     my $loops      = $params->{loops};
     my $objects    = $params->{objects} || {};
     my $substitute = $params->{substitute} || {};
-    my $lang = defined($params->{lang}) && $params->{lang} ne 'default' ? $params->{lang} : 'en';
+    my $lang       = 'en';
+    my $interface  = C4::Context->interface;
+    if(defined($params->{lang}) && $params->{lang} ne 'default'){
+        $lang = $params->{lang};
+    } elsif($interface eq 'intranet' || $interface eq 'opac') {
+        #use interface language
+        $lang = C4::Languages::getlanguage();
+    } else {
+        # Pick the first selected syspref language
+        my @languages = split /,/, C4::Context->preference('language');
+        $lang = shift @languages;
+    }
     my ($theme, $availablethemes);
 
     my $htdocs = C4::Context->config('intrahtdocs');
