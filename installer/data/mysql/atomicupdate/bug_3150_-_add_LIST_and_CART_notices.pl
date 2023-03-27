@@ -67,6 +67,7 @@ Please note that the attached file is a MARC bibliographic records file which ca
 [% item.barcode | html %]</li>[% END %]</ul>[% END %]
 <hr></li>[% END %]</ol>",'email','default') });
 
-        say $out "Add LIST and CART notices";
+        say $out "Added new letter 'LIST' (email)";
+        say $out "Added new letter 'CART' (email)";
     },
 };
