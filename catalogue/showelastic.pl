@@ -31,8 +31,8 @@ use Try::Tiny;
 
 # Koha modules used
 use C4::Context;
-use C4::Output;
-use C4::Auth;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw(get_template_and_user);
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::XSLT ;
@@ -65,8 +65,8 @@ try {
     });
 }
 catch{
-    @es_fields = ("Error fetching record: see logs for details");
     warn $_;
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
 };
 
 for my $field (sort keys %{$es_record} ){
