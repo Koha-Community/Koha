@@ -126,12 +126,13 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
         }
         push @directories, "$dirname";
         foreach my $recursive_dir (@directories) {
-            opendir RECDIR, $recursive_dir;
-            while ( my $entry = readdir RECDIR ) {
+            my $recdir_h;
+            opendir $recdir_h, $recursive_dir;
+            while ( my $entry = readdir $recdir_h ) {
                 push @directories, "$recursive_dir/$entry"
                   if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
             }
-            closedir RECDIR;
+            closedir $recdir_h;
         }
         foreach my $dir (@directories) {
             $results = handle_dir( $dir, $filesuffix, $template );
@@ -206,8 +207,9 @@ sub handle_dir {
         my ( $file, $filename );
         undef $cardnumber;
         $logger->debug("Passed a zip file.");
-        opendir DIR, $dir;
-        while ( my $filename = readdir DIR ) {
+        my $dir_h;
+        opendir $dir_h, $dir;
+        while ( my $filename = readdir $dir_h ) {
             $file = "$dir/$filename"
               if ( $filename =~ m/datalink\.txt/i
                 || $filename =~ m/idlink\.txt/i );
@@ -242,7 +244,7 @@ sub handle_dir {
             %counts = handle_file( $cardnumber, $source, $template, %counts );
         }
         close $fh;
-        closedir DIR;
+        closedir $dir_h;
     }
     else {
         %counts = handle_file( $cardnumber, $source, $template, %counts );
