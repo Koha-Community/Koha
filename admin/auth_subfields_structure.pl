@@ -87,19 +87,20 @@ if ($op eq 'add_form') {
 	# 2 cases here : on CVS install, $cgidir does not need a /cgi-bin
 	# on a standard install, /cgi-bin need to be added. 
 	# test one, then the other
-    my $cgidir = C4::Context->config('intranetdir') ."/cgi-bin";
-	unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
+    my $cgidir = C4::Context->config('intranetdir') . "/cgi-bin";
+    my $dir_h;
+    unless ( opendir( $dir_h, "$cgidir/cataloguing/value_builder" ) ) {
         $cgidir = C4::Context->config('intranetdir');
-		opendir(DIR, "$cgidir/cataloguing/value_builder") || die "can't opendir $cgidir/value_builder: $!";
-	} 
-	while (my $line = readdir(DIR)) {
-        if ( $line =~ /\.pl$/ &&
-             $line !~ /EXAMPLE\.pl$/ ) { # documentation purposes
-            push (@value_builder,$line);
-		}
-	}
-        @value_builder= sort {$a cmp $b} @value_builder;
-	closedir DIR;
+        opendir( $dir_h, "$cgidir/cataloguing/value_builder" ) || die "can't opendir $cgidir/value_builder: $!";
+    }
+    while ( my $line = readdir($dir_h) ) {
+        if (   $line =~ /\.pl$/
+            && $line !~ /EXAMPLE\.pl$/ ) {    # documentation purposes
+            push( @value_builder, $line );
+        }
+    }
+    @value_builder = sort { $a cmp $b } @value_builder;
+    closedir $dir_h;
 
     my @loop_data;
     my $asses = Koha::Authority::Subfields->search({ tagfield => $tagfield, authtypecode => $authtypecode}, {order_by => 'display_order'})->unblessed;

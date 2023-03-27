@@ -301,12 +301,14 @@ sub getallthemes {
     else {
         $htdocs = C4::Context->config('opachtdocs');
     }
-    opendir D, "$htdocs";
-    my @dirlist = readdir D;
+    my $dir_h;
+    opendir $dir_h, "$htdocs";
+    my @dirlist = readdir $dir_h;
     foreach my $directory (@dirlist) {
         next if $directory eq 'lib';
         -d "$htdocs/$directory/en" and push @themes, $directory;
     }
+    close $dir_h;
     return @themes;
 }
 
