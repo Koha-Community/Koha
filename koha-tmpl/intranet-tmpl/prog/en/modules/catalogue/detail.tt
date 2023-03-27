@@ -1962,7 +1962,7 @@ Note that permanent location is a code, and location may be an authval.
                           } else if (response.error_code === 'checked_out') {
                               const button = $('<button type="button">')
                                 .addClass('btn btn-xs')
-                                .text(__('Check in and add to bundle'))
+                                .text(__("Check in and add to bundle"))
                                 .on('click', function () {
                                     addToBundle(url, { external_id: barcode, force_checkin: true });
                                 });
@@ -1979,7 +1979,7 @@ Note that permanent location is a code, and location may be an authval.
                           } else if (response.error_code === 'reserved') {
                               const button = $('<button type="button">')
                                 .addClass('btn btn-xs')
-                                .text(__('Ignore holds and add to bundle'))
+                                .text(__("Ignore holds and add to bundle"))
                                 .on('click', function () {
                                     addToBundle(url, { external_id: barcode, ignore_holds: true });
                                 });
