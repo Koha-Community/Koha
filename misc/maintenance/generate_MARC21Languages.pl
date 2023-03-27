@@ -56,7 +56,7 @@ my $out_handle;
 if (defined $outfile) {
     open( $out_handle, ">", $outfile ) || croak("Cannot open output file");
 } else {
-    open( $out_handle, ">&STDOUT" ) || croak("Couldn't duplicate STDOUT: $!");
+    open( $out_handle, q{>}, "&STDOUT" ) || croak("Couldn't duplicate STDOUT: $!");
 }
 generate_header($out_handle);
 generate_body($out_handle, $languages);

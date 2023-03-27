@@ -76,9 +76,10 @@ sub getFrameworkLanguages {
     
     # find the available directory names
     my $dir=C4::Context->config('intranetdir')."/installer/data/";
-    opendir (MYDIR,$dir);
-    my @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir(MYDIR);    
-    closedir MYDIR;
+    my $dir_h;
+    opendir ($dir_h,$dir);
+    my @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir($dir_h);
+    closedir $dir_h;
 
     # pull out all data for the dir names that exist
     for my $dirname (@listdir) {
@@ -293,12 +294,14 @@ sub _get_themes {
     else {
         $htdocs = C4::Context->config('opachtdocs');
     }
-    opendir D, "$htdocs";
-    my @dirlist = readdir D;
+    my $dir_h;
+    opendir $dir_h, "$htdocs";
+    my @dirlist = readdir $dir_h;
     foreach my $directory (@dirlist) {
         # if there's an en dir, it's a valid theme
         -d "$htdocs/$directory/en" and push @themes, $directory;
     }
+    close $dir_h;
     return @themes;
 }
 
@@ -313,8 +316,9 @@ sub _get_language_dirs {
     $htdocs //= '';
     $theme //= '';
     my @lang_strings;
-    opendir D, "$htdocs/$theme";
-    for my $lang_string ( readdir D ) {
+    my $dir_h;
+    opendir $dir_h, "$htdocs/$theme";
+    for my $lang_string ( readdir $dir_h ) {
         next if $lang_string =~/^\./;
         next if $lang_string eq 'all';
         next if $lang_string =~/png$/;
@@ -325,7 +329,8 @@ sub _get_language_dirs {
         next if $lang_string =~/img|images|famfam|js|less|lib|sound|pdf/;
         push @lang_strings, $lang_string;
     }
-        return (@lang_strings);
+    close $dir_h;
+    return (@lang_strings);
 }
 
 =head2 _build_languages_arrayref 

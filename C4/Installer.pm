@@ -123,19 +123,20 @@ sub marc_framework_sql_list {
 
     undef $/;
     my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang/marcflavour/".lc($marcflavour);
-    unless (opendir( MYDIR, $dir )) {
+    my $dir_h;
+    unless (opendir( $dir_h, $dir )) {
         if ($lang eq 'en') {
             warn "cannot open MARC frameworks directory $dir";
         } else {
             # if no translated MARC framework is available,
             # default to English
             $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/en/marcflavour/".lc($marcflavour);
-            opendir(MYDIR, $dir) or warn "cannot open English MARC frameworks directory $dir";
+            opendir($dir_h, $dir) or warn "cannot open English MARC frameworks directory $dir";
             $defaulted_to_en = 1;
         }
     }
-    my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
-    closedir MYDIR;
+    my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir($dir_h);
+    closedir $dir_h;
 
     my @fwklist;
     my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
@@ -148,9 +149,10 @@ sub marc_framework_sql_list {
     }
 
     foreach my $requirelevel (@listdir) {
-        opendir( MYDIR, "$dir/$requirelevel" );
-        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir(MYDIR);
-        closedir MYDIR;
+        my $dir_h;
+        opendir( $dir_h, "$dir/$requirelevel" );
+        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir($dir_h);
+        closedir $dir_h;
         my %cell;
         my @frameworklist;
         map {
@@ -206,19 +208,20 @@ sub sample_data_sql_list {
 
     undef $/;
     my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang";
-    unless (opendir( MYDIR, $dir )) {
+    my $dir_h;
+    unless (opendir( $dir_h, $dir )) {
         if ($lang eq 'en') {
             warn "cannot open sample data directory $dir";
         } else {
             # if no sample data is available,
             # default to English
             $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/en";
-            opendir(MYDIR, $dir) or warn "cannot open English sample data directory $dir";
+            opendir($dir_h, $dir) or warn "cannot open English sample data directory $dir";
             $defaulted_to_en = 1;
         }
     }
-    my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
-    closedir MYDIR;
+    my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir($dir_h);
+    closedir $dir_h;
 
     my @levellist;
     my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
@@ -231,9 +234,10 @@ sub sample_data_sql_list {
     }
 
     foreach my $requirelevel (@listdir) {
-        opendir( MYDIR, "$dir/$requirelevel" );
-        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir(MYDIR);
-        closedir MYDIR;
+        my $dir_h;
+        opendir( $dir_h, "$dir/$requirelevel" );
+        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir($dir_h);
+        closedir $dir_h;
         my %cell;
         my @frameworklist;
         map {
@@ -847,7 +851,7 @@ sub run_atomic_updates {
             my $code = read_file( $filepath );
             my ( $out, $err ) = ('', '');
             {
-                open my $oldout, ">&STDOUT";
+                open my $oldout, qw{>}, "&STDOUT";
                 close STDOUT;
                 open STDOUT,'>:encoding(utf8)', \$out;
                 my $DBversion = Koha::version; # We need $DBversion and $dbh for the eval
