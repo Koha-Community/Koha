@@ -1083,7 +1083,8 @@
         // On-site checkout
         function toggle_onsite_checkout(){
             if ( $("#onsite_checkout").prop('checked') ) {
-                $("#duedatespec").val("[% todaysdate | $KohaDates  with_hours => 1 %]")
+                const duedatespec_fp = document.querySelector("#duedatespec")._flatpickr;
+                duedatespec_fp.setDate("[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]");
             }
         }
 

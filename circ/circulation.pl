@@ -627,7 +627,7 @@ $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
     PatronAutoComplete        => C4::Context->preference("PatronAutoComplete"),
-    todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
+    today_due_date_and_time   => dt_from_string()->set(hour => 23)->set(minute => 59),
     restriction_types         => scalar Koha::Patron::Restriction::Types->search(),
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
