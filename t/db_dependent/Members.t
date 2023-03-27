@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 54;
+use Test::More tests => 53;
 use Test::MockModule;
 use Test::Exception;
 
@@ -153,28 +153,6 @@ is( $borrower->{dateofbirth}, '1970-01-01', 'Koha::Patron->store should correctl
 is( $borrower->{debarred}, '2042-01-01', 'Koha::Patron->store should correctly set debarred if a valid date is given');
 is( $borrower->{dateexpiry}, '9999-12-31', 'Koha::Patron->store should correctly set dateexpiry if a valid date is given');
 is( $borrower->{dateenrolled}, '2015-09-06', 'Koha::Patron->store should correctly set dateenrolled if a valid date is given');
-
-subtest 'Koha::Patron->store should not update userid if not true' => sub {
-    plan tests => 3;
-
-    # TODO Move this to t/db_dependent/Koha/Patrons.t subtest ->store
-
-    $data{ cardnumber } = "234567890";
-    $data{userid} = 'a_user_id';
-    $borrowernumber = Koha::Patron->new( \%data )->store->borrowernumber;
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $borrower = $patron->unblessed;
-
-    $patron->set( { firstname => 'Tomas', userid => '' } )->store;
-    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    is ( $borrower->{userid}, $data{userid}, 'Koha::Patron->store should not update the userid with an empty string' );
-    $patron->set( { firstname => 'Tomas', userid => 0 } )->store;
-    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    is ( $borrower->{userid}, $data{userid}, 'Koha::Patron->store should not update the userid with an 0');
-    $patron->set( { firstname => 'Tomas', userid => undef } )->store;
-    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    is ( $borrower->{userid}, $data{userid}, 'Koha::Patron->store should not update the userid with an undefined value');
-};
 
 #Regression tests for bug 10612
 my $library3 = $builder->build({

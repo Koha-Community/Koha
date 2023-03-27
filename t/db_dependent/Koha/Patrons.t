@@ -1810,7 +1810,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 9;
+    plan tests => 11;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1823,6 +1823,10 @@ subtest '->store' => sub {
 
     # Clear userid and check regeneration
     $patron_2->userid(undef)->store;
+    like( $patron_2->userid, qr/\w+\.\w+/, 'Userid regenerated' ); # old school userid
+    $patron_2->userid('')->store;
+    like( $patron_2->userid, qr/\w+\.\w+/, 'Userid regenerated' ); # old school userid
+    $patron_2->userid(0)->store;
     like( $patron_2->userid, qr/\w+\.\w+/, 'Userid regenerated' ); # old school userid
 
     # Test password
