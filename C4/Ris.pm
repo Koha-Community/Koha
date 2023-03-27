@@ -97,7 +97,7 @@ sub marc2ris {
     my $intype = lc($marcflavour);
 
     # Let's redirect stdout
-    open my $oldout, ">&STDOUT";
+    open my $oldout, qw{>}, "&STDOUT";
     my $outvar;
     close STDOUT;
     open STDOUT,'>:encoding(utf8)', \$outvar;

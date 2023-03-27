@@ -122,7 +122,8 @@ sub generate_salt {
         $source = '/dev/urandom'; # non-blocking
     }
 
-    sysopen SOURCE, $source, O_RDONLY
+    my $source_fh;
+    sysopen $source_fh, $source, O_RDONLY
         or die "failed to open source '$source' in Koha::AuthUtils::generate_salt\n";
 
     # $bytes is the bytes just read
@@ -132,7 +133,7 @@ sub generate_salt {
     # keep reading until we have $length bytes in $strength
     while( length($string) < $length ){
         # return the number of bytes read, 0 (EOF), or -1 (ERROR)
-        my $return = sysread SOURCE, $bytes, $length - length($string);
+        my $return = sysread $source_fh, $bytes, $length - length($string);
 
         # if no bytes were read, keep reading (if using /dev/random it is possible there was insufficient entropy so this may block)
         next unless $return;
@@ -143,7 +144,7 @@ sub generate_salt {
         $string .= $bytes;
     }
 
-    close SOURCE;
+    close $source_fh;
     return $string;
 }
 
