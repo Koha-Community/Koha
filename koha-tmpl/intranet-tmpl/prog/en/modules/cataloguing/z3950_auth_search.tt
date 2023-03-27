@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -85,6 +86,9 @@
         <th>Server</th>
         <th>Heading</th>
         <th>Authority type</th>
+        [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') %]
+            <th>Additional fields</th>
+        [% END %]
         <th class="noExport">Actions</th>
     </tr></thead>
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
@@ -93,6 +97,18 @@
             <td>[% breeding_loo.server | html %]</td>
             <td>[% breeding_loo.heading | html %]</td>
             <td>[% breeding_loo.heading_code | html %]</td>
+            [% IF Koha.Preference('AdditionalFieldsInZ3950ResultAuthSearch') != '' %]
+                <td>
+                   <dl>
+                      [% FOREACH addnumberfield IN breeding_loo.row.addnumberfields %]
+                        [% FOREACH string IN breeding_loo.row.$addnumberfield %]
+                            <dt>[% addnumberfield | html %]:</dt>
+                            <dd>[% string | html %]</dd>
+                        [% END %]
+                      [% END %]
+                   </dl>
+                </td>
+            [% END %]
             <td class="actions">
                 <div class="btn-group dropup">
                     <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a><button class="btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>

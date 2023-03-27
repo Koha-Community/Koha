@@ -11,6 +11,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AcqWarnOnDuplicateInvoice','0','','Warn librarians when they try to create a duplicate invoice','YesNo'),
 ('ActionLogsTraceDepth', '0', '', 'Sets the maximum depth of the action logs stack trace', 'Integer'),
 ('AdditionalContentsEditor','tinymce','tinymce|codemirror','Choose tool for editing News.', 'Choice'),
+('AdditionalFieldsInZ3950ResultAuthSearch', '', NULL, 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of an authority Z39.50 search', 'Free'),
 ('AdditionalFieldsInZ3950ResultSearch', '', NULL, 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of a search Z3950', 'Free'),
 ('AddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress', 'free'),
 ('AddressFormat','us','us|de|fr','Choose format to display postal addresses', 'Choice'),
