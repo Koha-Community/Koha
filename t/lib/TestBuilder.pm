@@ -590,6 +590,18 @@ sub _gen_default_values {
             materials          => undef,
             more_subfields_xml => undef,
         },
+        Branchtransfer => {
+            daterequested      => dt_from_string(),
+            datesent           => dt_from_string(),
+            datearrived        => undef,
+            datecancelled      => undef,
+            reason             => undef,
+            withdrawn          => 0,
+            restricted         => 0,
+            damaged            => 0,
+            materials          => undef,
+            more_subfields_xml => undef,
+        },
         Category => {
             enrolmentfee => 0,
             reservefee   => 0,
