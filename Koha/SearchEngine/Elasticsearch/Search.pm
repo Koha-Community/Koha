@@ -94,7 +94,7 @@ sub search {
     my $results = eval {
         $elasticsearch->search(
             index => $self->index_name,
-            track_total_hits => JSON::true,
+            track_total_hits => \1,
             body => $query
         );
     };
@@ -124,7 +124,7 @@ sub count {
     # and just return number of hits
     my $result = $elasticsearch->search(
         index => $self->index_name,
-        track_total_hits => JSON::true,
+        track_total_hits => \1,
         body => $query
     );
 
