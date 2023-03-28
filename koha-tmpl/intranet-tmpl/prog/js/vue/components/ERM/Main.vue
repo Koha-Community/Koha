@@ -1,6 +1,9 @@
 <template>
     <div v-if="ERMModule">
-        <Breadcrumb />
+        <div id="sub-header">
+            <Breadcrumb />
+            <Help />
+        </div>
         <div class="main container-fluid">
             <div class="row">
                 <div class="col-sm-10 col-sm-push-2">
@@ -117,6 +120,7 @@
 <script>
 import { inject } from "vue"
 import Breadcrumb from "../../components/Breadcrumb.vue"
+import Help from "../../components/Help.vue"
 import Dialog from "../../components/Dialog.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import "vue-select/dist/vue-select.css"
@@ -205,6 +209,7 @@ export default {
     components: {
         Breadcrumb,
         Dialog,
+        Help,
     },
 }
 </script>
