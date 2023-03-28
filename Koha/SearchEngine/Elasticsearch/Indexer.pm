@@ -134,7 +134,6 @@ sub update_index {
             my $elasticsearch = $self->get_elasticsearch();
             $response = $elasticsearch->bulk(
                 index => $self->index_name,
-                type => 'data', # is just hard coded in Indexer.pm?
                 body => \@body
             );
             if ($response->{errors}) {
@@ -270,11 +269,7 @@ sub update_mappings {
     try {
         my $response = $elasticsearch->indices->put_mapping(
             index => $self->index_name,
-            type => 'data',
-            include_type_name => JSON::true(),
-            body => {
-                data => $mappings
-            }
+            body => $mappings,
         );
     } catch {
         $self->set_index_status_recreate_required();
@@ -363,7 +358,6 @@ sub delete_index {
     my @body = map { { delete => { _id => "$_" } } } @{$biblionums};
     my $result = $elasticsearch->bulk(
         index => $self->index_name,
-        type => 'data',
         body => \@body,
     );
     if ($result->{errors}) {
