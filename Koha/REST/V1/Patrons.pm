@@ -147,6 +147,12 @@ sub add {
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
             }
+            elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "Problem with ". $_->userid }
+                );
+            }
             elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
@@ -280,6 +286,12 @@ sub update {
             return $c->render(
                 status  => 409,
                 openapi => { error => $_->error, conflict => $_->duplicate_id }
+            );
+        }
+        elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Problem with ". $_->userid }
             );
         }
         elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {

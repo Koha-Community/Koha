@@ -302,7 +302,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 25;
+        plan tests => 24;
 
         $schema->storage->txn_begin;
 
@@ -364,11 +364,9 @@ subtest 'add() tests' => sub {
 
         $newpatron->{library_id} = $deleted_library_id;
 
-        warning_like {
-            $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
-              ->status_is(409)
-              ->json_is('/error' => "Duplicate ID"); }
-            qr/DBD::mysql::st execute failed: Duplicate entry/;
+        $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
+          ->status_is(400)
+          ->json_is('/error' => "Problem with ". $newpatron->{userid} );
 
         $newpatron->{library_id} = $patron->branchcode;
 
@@ -418,6 +416,7 @@ subtest 'add() tests' => sub {
           ->json_is( '/date_of_birth' => $newpatron->{ date_of_birth }, 'Date field set (Bug 28585)' )
           ->json_is( '/last_seen'     => $newpatron->{ last_seen }, 'Date-time field set (Bug 28585)' );
 
+        $newpatron->{userid} = undef; # force regeneration
         warning_like {
             $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
               ->status_is(409)
@@ -592,7 +591,7 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 45;
+        plan tests => 43;
 
         $schema->storage->txn_begin;
 
@@ -677,12 +676,9 @@ subtest 'update() tests' => sub {
         $newpatron->{cardnumber} = $patron_1->cardnumber;
         $newpatron->{userid}     = $patron_1->userid;
 
-        warning_like {
-            $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
-              ->status_is(409)
-              ->json_has( '/error', "Fails when trying to update to an existing cardnumber or userid")
-              ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
-            qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
+          ->status_is(400)
+          ->json_has( '/error', "Problem with userid ". $patron_1->userid );
 
         $newpatron->{ cardnumber } = $patron_1->id . $patron_2->id;
         $newpatron->{ userid }     = "user" . $patron_1->id.$patron_2->id;
