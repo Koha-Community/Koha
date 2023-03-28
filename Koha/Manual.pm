@@ -150,6 +150,34 @@ our $mapping = {
     'course_reserves/course-details'           => '/course_reserves.html',
     'course_reserves/course-reserves'          => '/course_reserves.html',
     'course_reserves/course'                   => '/course_reserves.html#adding-courses',
+    'erm/erm'                                  => '/erm.html',
+    'erm/agreements'                           => '/erm.html#agreements',
+    'erm/agreements/'                          => '/erm.html#search-and-view-an-agreement-record',
+    'erm/agreements/add'                       => '/erm.html#create-an-agreement-record',
+    'erm/agreements/edit/'                     => '/erm.html#create-an-agreement-record',
+    'erm/licenses'                             => '/erm.html#licenses',
+    'erm/licenses/'                            => '/erm.html#search-and-view-a-license-record',
+    'erm/licenses/add'                         => '/erm.html#create-a-license-record',
+    'erm/licenses/edit'                        => '/erm.html#create-a-license-record',
+    'erm/eholdings/local/packages'             => '/erm.html#local',
+    'erm/eholdings/local/packages/'            => '/erm.html#local',
+    'erm/eholdings/local/packages/add'         => '/erm.html#local',
+    'erm/eholdings/local/packages/edit/'       => '/erm.html#local',
+    'erm/eholdings/local/titles'               => '/erm.html#titles-1',
+    'erm/eholdings/local/titles/'              => '/erm.html#titles-1',
+    'erm/eholdings/local/titles/add'           => '/erm.html#titles-1',
+    'erm/eholdings/local/titles/edit/'         => '/erm.html#titles-1',
+    'erm/eholdings/local/titles/import'        => '/erm.html#import-a-new-local-title-record-from-a-list',
+    'erm/eholdings/local/resources/'           => '/erm.html#eholdings',
+    'erm/eholdings/ebsco/packages'             => '/erm.html#packages',
+    'erm/eholdings/ebsco/packages/'            => '/erm.html#packages',
+    'erm/eholdings/ebsco/packages/add'         => '/erm.html#packages',
+    'erm/eholdings/ebsco/packages/edit/'       => '/erm.html#packages',
+    'erm/eholdings/ebsco/titles'               => '/erm.html#titles',
+    'erm/eholdings/ebsco/titles/'              => '/erm.html#titles',
+    'erm/eholdings/ebsco/titles/add'           => '/erm.html#titles',
+    'erm/eholdings/ebsco/titles/edit/'         => '/erm.html#titles',
+    'erm/eholdings/ebsco/resources/'           => '/erm.html#ebsco',
     'ill/ill-requests'                         => '/ILL_requests.html',
     'labels/label-edit-batch'                  => '/tools.html#label-batches-label',
     'labels/label-edit-layout'                 => '/tools.html#label-layouts-label',
@@ -254,12 +282,16 @@ our $mapping = {
 sub get_url {
     my ( $url, $preferred_language ) = @_;
     my $file;
-    if ($url =~ /koha\/(.*)\.pl/) {
+    if ($url =~ /koha\/(.*)\.pl/ || $url =~ '/koha/(erm.*)') {
         $file = $1;
     } else {
         $file = 'mainpage';
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
+
+    if ( $file =~ m|^erm| ) {
+        $file =~ s|\d*$||;
+    }
 
     my $view;
     if ($url =~ /(?:\?|\&)tab=(?<value>[\w+,.-]*)/) {
