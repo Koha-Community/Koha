@@ -67,7 +67,51 @@
                     [% IF failed_holds %]
                         <div class="alert alert-info">
                             <h2>Notice:</h2>
-                            <p>One or more holds were not placed due to existing holds.</p>
+                            <p>One or more holds were not placed due to following errors:</p>
+                            <ul>
+                            [% FOREACH fail IN failed_holds.split('\|') %]
+                                <li>
+                                [% SWITCH fail %]
+                                [% CASE 'damaged' %]
+                                    <span>Item damaged</span>
+                                [% CASE 'ageRestricted' %]
+                                    <span>Age restricted</span>
+                                [% CASE 'tooManyHoldsForThisRecord' %]
+                                    <span>Exceeded max holds per record</span>
+                                [% CASE 'tooManyReservesToday' %]
+                                    <span>Daily hold limit reached for patron</span>
+                                [% CASE 'tooManyReserves' %]
+                                    <span>Too many holds</span>
+                                [% CASE 'notReservable' %]
+                                    <span>Not holdable</span>
+                                [% CASE 'cannotReserveFromOtherBranches' %]
+                                    <span>Patron is from different library</span>
+                                [% CASE 'branchNotInHoldGroup' %]
+                                    <span>Cannot place hold from patron's library</span>
+                                [% CASE 'itemAlreadyOnHold' %]
+                                    <span>Patron already has hold for this item</span>
+                                [% CASE 'cannotBeTransferred' %]
+                                    <span>Cannot be transferred to pickup library</span>
+                                [% CASE 'pickupNotInHoldGroup' %]
+                                    <span>Only pickup locations within the same hold group are allowed</span>
+                                [% CASE 'noReservesAllowed' %]
+                                    <span>No holds are allowed on this item</span>
+                                [% CASE 'libraryNotPickupLocation' %]
+                                    <span>Library is not a pickup location</span>
+                                [% CASE 'no_valid_pickup_location' %]
+                                    <span>No valid pickup location</span>
+                                [% CASE 'notforloan' %]
+                                    <span>Not for loan</span>
+                                [% CASE 'items_available' %]
+                                    <span>There are items available in the library, please visit to check them out</span>
+                                [% CASE 'not_placed' %]
+                                    <span>Error when placing hold, please report this to the library</span>
+                                [% CASE %]
+                                    <span>Error: [% fail | html %]</span>
+                                [% END %]
+                                </li>
+                            [% END %]
+                            </ul>
                         </div>
                     [% END %]
 
