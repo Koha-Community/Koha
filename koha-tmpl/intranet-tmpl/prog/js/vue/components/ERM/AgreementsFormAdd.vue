@@ -92,12 +92,13 @@
                                 />
                             </li>
                             <li>
-                                <label
-                                    for="agreement_is_perpetual"
-                                    class="radio"
+                                <label for="agreement_is_perpetual"
                                     >{{ $__("Is perpetual") }}:</label
                                 >
-                                <label for="agreement_is_perpetual_yes">
+                                <label
+                                    class="radio"
+                                    for="agreement_is_perpetual_yes"
+                                    >{{ $__("Yes") }}:
                                     <input
                                         type="radio"
                                         name="is_perpetual"
@@ -105,9 +106,11 @@
                                         :value="true"
                                         v-model="agreement.is_perpetual"
                                     />
-                                    {{ $__("Yes") }}:
                                 </label>
-                                <label for="agreement_is_perpetual_no">
+                                <label
+                                    class="radio"
+                                    for="agreement_is_perpetual_no"
+                                    >{{ $__("No") }}:
                                     <input
                                         type="radio"
                                         name="is_perpetual"
@@ -115,7 +118,6 @@
                                         :value="false"
                                         v-model="agreement.is_perpetual"
                                     />
-                                    {{ $__("No") }}:
                                 </label>
                             </li>
                             <li>
