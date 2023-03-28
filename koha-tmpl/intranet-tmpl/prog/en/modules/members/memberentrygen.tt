@@ -1548,7 +1548,7 @@ legend:hover {
                                                         <legend id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</legend>
                                                     [% END %]
                                                     [% FOREACH patron_attribute IN pa_loo.items %]
-                                                        <li data-category_code="[% patron_attribute.category_code | html %]">
+                                                        <li data-category_code="[% patron_attribute.category_code | html %]" data-pa_code="[% patron_attribute.code | replace('[^a-zA-Z0-9_-]', '') %]">
                                                             [% IF patron_attribute.mandatory %]
                                                                 <label for="[% patron_attribute.form_id | html %]" class="required" required="required">[% patron_attribute.description | html %]: </label>
                                                             [% ELSE %]

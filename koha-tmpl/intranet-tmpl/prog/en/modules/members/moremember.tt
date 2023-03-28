@@ -318,7 +318,7 @@
                                                     <h4>[% attribute.lib | html %]</h4>
                                                     <ol>
                                                         [% FOREACH item IN attribute.items %]
-                                                            <li>
+                                                            <li data-pa_code="[% item.type.code | replace('[^a-zA-Z0-9_-]', '') %]">
                                                                 <span class="label">[% item.type.description | html %]: </span>
                                                                 [% item.description | html_line_break %]
                                                             </li>
