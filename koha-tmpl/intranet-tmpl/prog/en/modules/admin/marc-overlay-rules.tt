@@ -453,8 +453,14 @@
           }
         });
 
+        var $category = {};
+
+        [% FOR categorycode IN categorycodes %]
+            $category["[% categorycode.categorycode %]"] = "[% categorycode.description | html %]";
+        [% END %]
+
         var module_filter_options = {
-          source: {
+        source: {
             '*': '*',
             batchmod: _("Batch record modification"),
             intranet: _("Staff client MARC editor"),
@@ -462,13 +468,9 @@
             z3950: _("Z39.50"),
             /* bulkmarcimport: _("bulkmarcimport.pl"), */
             import_lexile: _("import_lexile.pl")
-          },
-          categorycode: {
-            '*': '*',
-            [% FOREACH categorycode IN categorycodes %]
-              [% categorycode.categorycode | html %]: "[% categorycode.description | html %]",
-            [% END %]
-          }
+        },
+
+        categorycode: $category
         };
 
         //Kind of hack: Replace filter value with label when one exist
