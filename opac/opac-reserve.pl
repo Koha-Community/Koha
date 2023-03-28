@@ -223,7 +223,7 @@ if ( $query->param('place_reserve') ) {
         exit;
     }
 
-    my $failed_holds = 0;
+    my @failed_holds;
     while (@selectedItems) {
         my $biblioNum = shift(@selectedItems);
         my $itemNum   = shift(@selectedItems);
@@ -280,11 +280,21 @@ if ( $query->param('place_reserve') ) {
         my $rank = $biblioData->{rank};
         my $patron = Koha::Patrons->find( $borrowernumber );
         if ( $item ) {
-            $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
+            my $status = CanItemBeReserved( $patron, $item, $branch )->{status};
+            if( $status eq 'OK' ){
+                $canreserve = 1;
+            } else {
+                push @failed_holds, $status;
+            }
+
         }
         else {
-            $canreserve = 1
-              if CanBookBeReserved( $borrowernumber, $biblioNum, $branch, { itemtype => $itemtype } )->{status} eq 'OK';
+            my $status = CanBookBeReserved( $borrowernumber, $biblioNum, $branch, { itemtype => $itemtype } )->{status};
+            if( $status eq 'OK'){
+                $canreserve = 1;
+            } else {
+                push @failed_holds, $status;
+            }
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
@@ -294,6 +304,7 @@ if ( $query->param('place_reserve') ) {
         if (   $maxreserves
             && $reserve_cnt >= $maxreserves )
         {
+            push @failed_holds, 'tooManyReserves';
             $canreserve = 0;
         }
 
@@ -302,7 +313,8 @@ if ( $query->param('place_reserve') ) {
             my $nb_of_items_issued = $items_in_this_library->search({ 'issue.itemnumber' => { not => undef }}, { join => 'issue' })->count;
             my $nb_of_items_unavailable = $items_in_this_library->search({ -or => { lost => { '!=' => 0 }, damaged => { '!=' => 0 }, } });
             if ( $items_in_this_library->count > $nb_of_items_issued + $nb_of_items_unavailable ) {
-                $canreserve = 0
+                $canreserve = 0;
+                push @failed_holds, 'items_available';
             }
         }
 
@@ -323,12 +335,15 @@ if ( $query->param('place_reserve') ) {
                     itemtype         => $itemtype,
                 }
             );
-            $failed_holds++ unless $reserve_id;
-            ++$reserve_cnt;
+            if( $reserve_id ){
+                ++$reserve_cnt;
+            } else {
+                push @failed_holds, 'not_placed';
+            }
         }
     }
 
-    print $query->redirect("/cgi-bin/koha/opac-user.pl?" . ( $failed_holds ? "failed_holds=$failed_holds" : q|| ) . "#opac-user-holds");
+    print $query->redirect("/cgi-bin/koha/opac-user.pl?" . ( @failed_holds ? "failed_holds=" . join('|',@failed_holds) : q|| ) . "#opac-user-holds");
     exit;
 }
 
