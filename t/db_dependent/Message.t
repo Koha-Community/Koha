@@ -16,11 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use utf8;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Letters qw( GetPreparedLetter );
 use Koha::Database;
@@ -37,7 +38,7 @@ $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test
 ")});
 my $biblio_1 = $builder->build_sample_biblio({ title => "heÄllo" });
 my $biblio_2 = $builder->build_sample_biblio({ title => "hell❤️" });
-my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { email => 'test@example.org'} });
+my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 my $letter = C4::Letters::GetPreparedLetter(
     (
         module      => 'test',
@@ -48,9 +49,12 @@ my $letter = C4::Letters::GetPreparedLetter(
     )
 );
 
-C4::Message->enqueue($letter, $patron->unblessed, 'email');
+
+t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'OFF' );
+C4::Message->enqueue($letter, $patron, 'email');
 my $message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
 like( $message->{metadata}, qr{heÄllo} );
+is ($message->{to_address}, $patron->email, "To address set correctly for AutoEmailPrimaryAddress 'off'");
 
 $letter = C4::Letters::GetPreparedLetter(
     (
@@ -64,3 +68,8 @@ $letter = C4::Letters::GetPreparedLetter(
 $message->append($letter);
 like( $message->{metadata}, qr{heÄllo} );
 like( $message->{metadata}, qr{hell❤️} );
+
+t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
+C4::Message->enqueue($letter, $patron, 'email');
+$message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
+is ($patron->notice_email_address, $patron->emailpro, "To address set correctly for AutoEmailPrimaryAddress 'emailpro'");
