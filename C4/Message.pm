@@ -37,8 +37,8 @@ How to add a new message to the queue:
 
   use C4::Message;
   use C4::Items;
-  my $borrower = { borrowernumber => 1 };
-  my $item     = Koha::Items->find($itemnumber)->unblessed;
+  my $patron = Koha::Patron->find({ borrowernumber => 1 });
+  my $item   = Koha::Items->find($itemnumber)->unblessed;
   my $letter =  C4::Letters::GetPreparedLetter (
       module => 'circulation',
       letter_code => 'CHECKOUT',
@@ -48,7 +48,7 @@ How to add a new message to the queue:
           'biblioitems', $item->{biblionumber},
       },
   );
-  C4::Message->enqueue($letter, $borrower->{borrowernumber}, 'email');
+  C4::Message->enqueue($letter, $patron, 'email');
 
 How to update a borrower's last checkout message:
 
@@ -148,7 +148,7 @@ sub find_last_message {
 }
 
 
-=head3 C4::Message->enqueue($letter, $borrower, $transport)
+=head3 C4::Message->enqueue($letter, $patron, $transport)
 
 This is a front-end for C<C4::Letters::EnqueueLetter()> that adds metadata to
 the message.
