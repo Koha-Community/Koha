@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
-        <div v-else-if="package_count" id="packages_list">
+        <div v-else id="packages_list">
             <Toolbar />
             <div
                 v-if="package_count > 0"
@@ -10,7 +10,7 @@
             >
                 <table :id="table_id"></table>
             </div>
-            <div v-else-if="initialized" class="dialog message">
+            <div v-else class="dialog message">
                 {{ $__("There are no packages defined") }}
             </div>
         </div>
@@ -48,7 +48,7 @@ export default {
     },
     data: function () {
         return {
-            package_count: null,
+            package_count: 0,
             initialized: false,
             filters: {
                 package_name: this.$route.query.package_name || "",
