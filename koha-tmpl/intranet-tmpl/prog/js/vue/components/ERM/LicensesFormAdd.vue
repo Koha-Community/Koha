@@ -113,7 +113,7 @@
                     </ol>
                 </fieldset>
                 <UserRoles
-                    :user_type="$__('License user')"
+                    :user_type="$__('License user %s')"
                     :user_roles="license.user_roles"
                     :av_user_roles="av_user_roles"
                 />
