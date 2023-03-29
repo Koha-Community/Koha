@@ -63,7 +63,7 @@ my $suggestion = {
     note            => scalar $input->param('note'),
 };
 
-# If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
+# If a spambot accidentally populates the 'negcap' field in the suggestions form, then silently skip and return.
 if ($negcaptcha ) {
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl");
     exit;
