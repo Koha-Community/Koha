@@ -86,7 +86,7 @@
                                         <li>
                                             [% IF biblionumber %]
                                                 <label>Title:</label>
-                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">[% title | html %]</a>
+                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">[% title | html %]</a>
                                             [% ELSIF ( title_required ) %]
                                                 <label for="title" class="required">Title:</label>
                                                 <input type="text" id="title" name="title" class="span6" maxlength="255" value="[% title | html %]" required="required" />
