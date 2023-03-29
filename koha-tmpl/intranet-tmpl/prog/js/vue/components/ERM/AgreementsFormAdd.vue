@@ -137,7 +137,7 @@
                 </fieldset>
                 <AgreementPeriods :periods="agreement.periods" />
                 <UserRoles
-                    :user_type="$__('Agreement user')"
+                    :user_type="$__('Agreement user %s')"
                     :user_roles="agreement.user_roles"
                     :av_user_roles="av_user_roles"
                 />
