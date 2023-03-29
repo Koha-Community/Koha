@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use C4::Context;
 use C4::Acquisition qw( NewBasket GetOrders GetOrder TransferOrder SearchOrders ModReceiveOrder CancelReceipt );
 use C4::Biblio;
@@ -14,6 +14,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use t::lib::TestBuilder;
 use MARC::Record;
+use String::Random qw(random_string);
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -109,5 +110,40 @@ CancelReceipt( $newordernumber );
 $order = GetOrder( $newordernumber );
 is ( $order->{ordernumber}, $newordernumber, 'Regression test Bug 11549: After a transfer, receive and cancel the receive should be possible.' );
 is ( $order->{basketno}, $basketno2, 'Regression test Bug 11549: The order still exist in the basket where the transfer has been done.');
+
+subtest 'TransferOrder should copy additional fields' => sub {
+    plan tests => 2;
+
+    my $field = Koha::AdditionalField->new(
+        {
+            tablename => 'aqorders',
+            name => random_string('c' x 100),
+        }
+    );
+    $field->store()->discard_changes();
+    my $order = Koha::Acquisition::Order->new(
+        {
+            basketno => $basketno1,
+            quantity => 2,
+            biblionumber => $biblionumber,
+            budget_id => $budget->{budget_id},
+        }
+    )->store;
+    $order->set_additional_fields(
+        [
+            {
+                id => $field->id,
+                value => 'additional field value',
+            },
+        ]
+    );
+
+    my $newordernumber = TransferOrder($order->ordernumber, $basketno2);
+    my $neworder = Koha::Acquisition::Orders->find($newordernumber);
+    my $field_values = $neworder->additional_field_values()->as_list;
+
+    is(scalar @$field_values, 1, 'transfered order has one additional field value');
+    is($field_values->[0]->value, 'additional field value', 'transfered order additional field has the correct value');
+};
 
 $schema->storage->txn_rollback();

@@ -1,6 +1,7 @@
 package Koha::Object::Mixin::AdditionalFields;
 
 use Modern::Perl;
+use Koha::AdditionalFields;
 use Koha::AdditionalFieldValues;
 
 =head1 NAME
