@@ -318,6 +318,15 @@ export default {
                     )
                 )
             }
+            agreement.user_roles.forEach((user, i) => {
+                if (user.patron_str === "") {
+                    errors.push(
+                        this.$__("Agreement user %s is missing a user").format(
+                            i + 1
+                        )
+                    )
+                }
+            })
             errors.forEach(function (e) {
                 setWarning(e)
             })
