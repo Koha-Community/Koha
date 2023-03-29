@@ -15,7 +15,7 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`user_id_${counter}`"
+                    <label :for="`user_id_${counter}`" class="required"
                         >{{ $__("User") }}:</label
                     >
                     <span class="user">
@@ -27,6 +27,7 @@
                         class="btn btn-default"
                         >{{ $__("Select user") }}</a
                     >)
+                    <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`user_role_${counter}`" class="required"
