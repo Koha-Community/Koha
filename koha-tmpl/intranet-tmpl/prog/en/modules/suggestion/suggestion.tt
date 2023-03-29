@@ -1412,6 +1412,7 @@
                     $("#" + target).toggle();
                 });
 
+                // Note: the selector below passes a second 'context' param - it is not a multiple selector
                 $("button[type='submit']", "#suggestions_batch_ops").on("click", function(e) {
                     var submit_button = this;
                     var form = $(submit_button).parents("form");
