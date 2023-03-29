@@ -1,5 +1,5 @@
 <template>
-    <div class="page-section" id="agreement_licenses">
+    <fieldset class="rows" id="agreement_licenses">
         <legend>{{ $__("Licenses") }}</legend>
         <fieldset
             :id="`agreement_license_${counter}`"
@@ -97,7 +97,7 @@
             ><font-awesome-icon icon="plus" /> {{ $__("Add new license") }}</a
         >
         <span v-else>{{ $__("There are no licenses created yet") }}</span>
-    </div>
+    </fieldset>
 </template>
 
 <script>

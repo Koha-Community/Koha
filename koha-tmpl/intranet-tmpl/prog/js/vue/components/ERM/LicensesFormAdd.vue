@@ -7,125 +7,111 @@
         <h2 v-else>{{ $__("New license") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
-                <div class="page-section">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label class="required" for="license_name"
-                                    >{{ $__("License name") }}:</label
-                                >
-                                <input
-                                    id="license_name"
-                                    v-model="license.name"
-                                    :placeholder="$__('License name')"
-                                    required
-                                />
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
-                            </li>
-                            <li>
-                                <label for="license_vendor_id"
-                                    >{{ $__("Vendor") }}:</label
-                                >
-                                <v-select
-                                    id="license_vendor_id"
-                                    v-model="license.vendor_id"
-                                    label="name"
-                                    :reduce="vendor => vendor.id"
-                                    :options="vendors"
-                                />
-                            </li>
-                            <li>
-                                <label
-                                    for="license_description"
-                                    class="required"
-                                    >{{ $__("Description") }}:
-                                </label>
-                                <textarea
-                                    id="license_description"
-                                    v-model="license.description"
-                                    :placeholder="$__('Description')"
-                                    rows="10"
-                                    cols="50"
-                                    required
-                                />
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
-                            </li>
-                            <li>
-                                <label for="license_type" class="required"
-                                    >{{ $__("Type") }}:</label
-                                >
-                                <v-select
-                                    id="license_type"
-                                    v-model="license.type"
-                                    label="description"
-                                    :reduce="av => av.value"
-                                    :options="av_license_types"
-                                >
-                                    <template #search="{ attributes, events }">
-                                        <input
-                                            :required="!license.type"
-                                            class="vs__search"
-                                            v-bind="attributes"
-                                            v-on="events"
-                                        />
-                                    </template>
-                                </v-select>
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
-                            </li>
-                            <li>
-                                <label for="license_status" class="required"
-                                    >{{ $__("Status") }}:</label
-                                >
-                                <v-select
-                                    id="license_status"
-                                    v-model="license.status"
-                                    :reduce="av => av.value"
-                                    :options="av_license_statuses"
-                                    label="description"
-                                >
-                                    <template #search="{ attributes, events }">
-                                        <input
-                                            :required="!license.status"
-                                            class="vs__search"
-                                            v-bind="attributes"
-                                            v-on="events"
-                                        />
-                                    </template>
-                                </v-select>
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
-                            </li>
-                            <li>
-                                <label for="started_on"
-                                    >{{ $__("Start date") }}:</label
-                                >
-                                <flat-pickr
-                                    id="started_on"
-                                    v-model="license.started_on"
-                                    :config="fp_config"
-                                    data-date_to="ended_on"
-                                />
-                            </li>
-                            <li>
-                                <label for="ended_on"
-                                    >{{ $__("End date") }}:</label
-                                >
-                                <flat-pickr
-                                    id="ended_on"
-                                    v-model="license.ended_on"
-                                    :config="fp_config"
-                                />
-                            </li>
-                        </ol>
-                    </fieldset>
-                </div>
+                <fieldset class="rows">
+                    <ol>
+                        <li>
+                            <label class="required" for="license_name"
+                                >{{ $__("License name") }}:</label
+                            >
+                            <input
+                                id="license_name"
+                                v-model="license.name"
+                                :placeholder="$__('License name')"
+                                required
+                            />
+                            <span class="required">{{ $__("Required") }}</span>
+                        </li>
+                        <li>
+                            <label for="license_vendor_id"
+                                >{{ $__("Vendor") }}:</label
+                            >
+                            <v-select
+                                id="license_vendor_id"
+                                v-model="license.vendor_id"
+                                label="display_name"
+                                :reduce="vendor => vendor.id"
+                                :options="vendors"
+                            />
+                        </li>
+                        <li>
+                            <label for="license_description" class="required"
+                                >{{ $__("Description") }}:
+                            </label>
+                            <textarea
+                                id="license_description"
+                                v-model="license.description"
+                                :placeholder="$__('Description')"
+                                rows="10"
+                                cols="50"
+                                required
+                            />
+                            <span class="required">{{ $__("Required") }}</span>
+                        </li>
+                        <li>
+                            <label for="license_type" class="required"
+                                >{{ $__("Type") }}:</label
+                            >
+                            <v-select
+                                id="license_type"
+                                v-model="license.type"
+                                label="description"
+                                :reduce="av => av.value"
+                                :options="av_license_types"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!license.type"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">{{ $__("Required") }}</span>
+                        </li>
+                        <li>
+                            <label for="license_status" class="required"
+                                >{{ $__("Status") }}:</label
+                            >
+                            <v-select
+                                id="license_status"
+                                v-model="license.status"
+                                :reduce="av => av.value"
+                                :options="av_license_statuses"
+                                label="description"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!license.status"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">{{ $__("Required") }}</span>
+                        </li>
+                        <li>
+                            <label for="started_on"
+                                >{{ $__("Start date") }}:</label
+                            >
+                            <flat-pickr
+                                id="started_on"
+                                v-model="license.started_on"
+                                :config="fp_config"
+                                data-date_to="ended_on"
+                            />
+                        </li>
+                        <li>
+                            <label for="ended_on">{{ $__("End date") }}:</label>
+                            <flat-pickr
+                                id="ended_on"
+                                v-model="license.ended_on"
+                                :config="fp_config"
+                            />
+                        </li>
+                    </ol>
+                </fieldset>
                 <UserRoles
                     :user_type="$__('License user')"
                     :user_roles="license.user_roles"
