@@ -233,9 +233,7 @@ export default {
                     )
                 }
             })
-            errors.forEach(function (e) {
-                setWarning(e)
-            })
+            setWarning(errors.join("<br>"))
             return !errors.length
         },
         onSubmit(e) {
