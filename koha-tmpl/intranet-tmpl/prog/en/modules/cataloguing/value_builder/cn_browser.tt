@@ -1,5 +1,6 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Call number browser &rsaquo; Cataloging &rsaquo; Koha</title>
@@ -50,6 +51,7 @@
             <th>Title</th>
             <th>Library</th>
             <th>Collection</th>
+            <th>Item type</th>
         </tr></thead>
         <tbody>
     [% FOREACH cn_loo IN cn_loop %]
@@ -66,6 +68,7 @@
         </td>
         <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
         <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
+        <td style="background:[% cn_loo.background | html %];">[% ItemTypes.GetDescription( cn_loo.itype ) | html %]</td>
         </tr>
     [% END %]
         </tbody>
