@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
-        <div v-else-if="title_count" id="titles_list">
+        <div v-else id="titles_list">
             <Toolbar />
             <div
                 v-if="title_count > 0"
@@ -10,7 +10,7 @@
             >
                 <table :id="table_id"></table>
             </div>
-            <div v-else-if="initialized" class="dialog message">
+            <div v-else class="dialog message">
                 {{ $__("There are no titles defined") }}
             </div>
         </div>
@@ -46,7 +46,7 @@ export default {
     },
     data: function () {
         return {
-            title_count: null,
+            title_count: 0,
             initialized: false,
             filters: {
                 publication_title: this.$route.query.publication_title || "",

@@ -1,11 +1,11 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="license_count" id="licenses_list">
+    <div v-else id="licenses_list">
         <Toolbar />
         <div v-if="license_count > 0" class="page-section">
             <table :id="table_id"></table>
         </div>
-        <div v-else-if="initialized" class="dialog message">
+        <div v-else class="dialog message">
             {{ $__("There are no licenses defined") }}
         </div>
     </div>
@@ -42,7 +42,7 @@ export default {
     },
     data: function () {
         return {
-            license_count: null,
+            license_count: 0,
             initialized: false,
         }
     },

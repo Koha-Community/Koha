@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="agreement_count" id="agreements_list">
+    <div v-else id="agreements_list">
         <Toolbar v-if="before_route_entered" />
         <fieldset v-if="agreement_count > 0" class="filters">
             <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
@@ -27,7 +27,7 @@
         <div v-if="agreement_count > 0" class="page-section">
             <table :id="table_id"></table>
         </div>
-        <div v-else-if="initialized" class="dialog message">
+        <div v-else class="dialog message">
             {{ $__("There are no agreements defined") }}
         </div>
     </div>
@@ -67,7 +67,7 @@ export default {
     data: function () {
         return {
             fp_config: flatpickr_defaults,
-            agreement_count: null,
+            agreement_count: 0,
             initialized: false,
             filters: {
                 by_expired: this.$route.query.by_expired || false,
