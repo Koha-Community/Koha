@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -34,13 +34,26 @@ my $builder = t::lib::TestBuilder->new;
 my $nb_categories = Koha::Patron::Categories->count;
 
 # Create sample categories
-my $category_1 = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+my $category_1 = $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'ZZZZZZ' } } );
 my @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 1 + $nb_categories, '->all returns all defined categories' );
 
-my $category_2 = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+my $category_2 = $builder->build_object( { class => 'Koha::Patron::Categories', value => { description => 'AAAAAA' } } );
 @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 2 + $nb_categories, '->all returns all defined categories' );
+
+my $category_1_pos = 0;
+my $category_2_pos = 0;
+for ( my $i = 0 ; $i < scalar(@categories) ; $i++ ) {
+    my $idescription = $categories[$i]->description // '';
+    if ( $idescription eq $category_1->description ) {
+        $category_1_pos = $i;
+    }
+    if ( $idescription eq $category_2->description ) {
+        $category_2_pos = $i;
+    }
+}
+ok( $category_1_pos > $category_2_pos, 'Categories are sorted by description' );
 
 is( Koha::Template::Plugin::Categories->GetName(
         $category_1->categorycode
