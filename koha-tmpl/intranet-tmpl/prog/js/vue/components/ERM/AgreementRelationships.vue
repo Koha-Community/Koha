@@ -1,5 +1,5 @@
 <template>
-    <div class="page-section" id="agreement_relationships">
+    <fieldset class="rows" id="agreement_relationships">
         <legend>{{ $__("Related agreements") }}</legend>
         <fieldset
             :id="`related_agreement_${counter}`"
@@ -85,7 +85,7 @@
         <span v-else>{{
             $__("There are no other agreements created yet")
         }}</span>
-    </div>
+    </fieldset>
 </template>
 
 <script>

@@ -364,12 +364,9 @@
                                 :placeholder="$__('Access type')"
                             />
                         </li>
-
-                        <EHoldingsTitlesFormAddResources
-                            :resources="title.resources"
-                        />
                     </ol>
                 </fieldset>
+                <EHoldingsTitlesFormAddResources :resources="title.resources" />
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link

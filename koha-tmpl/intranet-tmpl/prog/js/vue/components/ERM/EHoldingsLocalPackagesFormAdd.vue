@@ -64,12 +64,11 @@
                                 v-model="erm_package.notes"
                             />
                         </li>
-
-                        <EHoldingsPackageAgreements
-                            :package_agreements="erm_package.package_agreements"
-                        />
                     </ol>
                 </fieldset>
+                <EHoldingsPackageAgreements
+                    :package_agreements="erm_package.package_agreements"
+                />
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
