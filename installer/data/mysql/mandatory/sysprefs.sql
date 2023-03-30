@@ -1,4 +1,5 @@
 INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+('1PageOrderPDFText', 'Order number must appear on all related correspondence, shipping papers and invoices. Notify us immediately if \n you are unable to supply item(s).', NULL, 'Text to be used above the order table in the 1-page order PDF file', 'textarea'),
 ('AccessControlAllowOrigin', '', NULL, 'Set the Access-Control-Allow-Origin header to the specified value', 'Free'),
 ('AccountAutoReconcile','0',NULL,'If enabled, patron balances will get reconciled automatically on each transaction.','YesNo'),
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
