@@ -34,6 +34,7 @@ use Koha::SMS::Providers;
 use Koha::Email;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
+use Koha::Notice::Util;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Auth::TwoFactorAuth;
 use Koha::Patrons;
@@ -64,6 +65,8 @@ BEGIN {
       ResendMessage
     );
 }
+
+our $domain_limits = {};
 
 =head1 NAME
 
@@ -984,6 +987,7 @@ sub SendQueuedMessages {
         'where'                  => $params->{'where'} // q{},
     };
     my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
+    $domain_limits = Koha::Notice::Util->load_domain_limits; # (re)initialize per run
     MESSAGE: foreach my $message ( @$unsent_messages ) {
         my $message_object = Koha::Notice::Messages->find( $message->{message_id} );
         # If this fails the database is unwritable and we won't manage to send a message that continues to be marked 'pending'
@@ -1331,6 +1335,9 @@ sub _send_message_by_email {
             return;
         }
     }
+
+    # Skip this message if we exceed domain limits in this run
+    return if Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits });
 
     my $subject = $message->{'subject'};
 
