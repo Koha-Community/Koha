@@ -192,6 +192,21 @@ sub illcomments {
     );
 }
 
+=head3 comments
+
+    my $ill_comments = $req->comments;
+
+Returns a I<Koha::Illcomments> resultset for the linked comments.
+
+=cut
+
+sub comments {
+    my ( $self ) = @_;
+    return Koha::Illcomments->_new_from_dbic(
+        scalar $self->_result->comments
+    );
+}
+
 =head3 logs
 
 =cut
@@ -204,12 +219,45 @@ sub logs {
 
 =head3 patron
 
+    my $patron = $request->patron;
+
+Returns the linked I<Koha::Patron> object.
+
 =cut
 
 sub patron {
     my ( $self ) = @_;
-    return Koha::Patron->_new_from_dbic(
-        scalar $self->_result->borrowernumber
+
+    return Koha::Patron->_new_from_dbic( scalar $self->_result->patron );
+}
+
+=head3 library
+
+    my $library = $request->library;
+
+Returns the linked I<Koha::Library> object.
+
+=cut
+
+sub library {
+    my ($self) = @_;
+
+    return Koha::Library->_new_from_dbic( scalar $self->_result->library );
+}
+
+=head3 ill_extended_attributes
+
+    my $ill_extended_attributes = $request->ill_extended_attributes;
+
+Returns the linked I<Koha::Illrequestattributes> resultset object.
+
+=cut
+
+sub ill_extended_attributes {
+    my ( $self ) = @_;
+
+    return Koha::Illrequestattributes->_new_from_dbic(
+        scalar $self->_result->ill_extended_attributes
     );
 }
 
@@ -1142,12 +1190,9 @@ or undef if none exists
 
 sub biblio {
     my ( $self ) = @_;
-
-    return if !$self->biblio_id;
-
-    return Koha::Biblios->find({
-        biblionumber => $self->biblio_id
-    });
+    my $biblio_rs = $self->_result->biblio;
+    return unless $biblio_rs;
+    return Koha::Biblio->_new_from_dbic($biblio_rs);
 }
 
 =head3 check_out
