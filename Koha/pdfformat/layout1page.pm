@@ -140,6 +140,7 @@ sub printhead {
     my $billing_library  = Koha::Libraries->find( $basketgroup->{billingplace} );
     my $delivery_library = Koha::Libraries->find( $basketgroup->{deliveryplace} );
     my $freedeliveryplace = $basketgroup->{freedeliveryplace};
+    my $ordersentences = C4::Context->preference("1PageOrderPDFText");
 
     # open 1st page (with the header)
     my $page = $pdf->openpage(1);
@@ -161,6 +162,16 @@ sub printhead {
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
     $text->translate(107/mm, ($height-67)/mm);
     $text->text($libraryname);
+
+    # print text defined in 1PageOrderPDFText syspref
+    $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
+    my @allLines = split/\n+/, $ordersentences;
+    my $count = 0;
+    foreach my $ordersentence ( @allLines ) {
+        $count+=4;
+        $text->translate(15/mm, ($height-(105 + $count ))/mm);
+        $text->text( $ordersentence );
+    }
 
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
     $text->translate(107/mm, ($height-71)/mm);
