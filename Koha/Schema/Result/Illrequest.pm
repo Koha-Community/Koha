@@ -334,6 +334,37 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 18:44:13
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:on9OCRON/U0uR+m9aPIKPg
 
+__PACKAGE__->has_many(
+  "comments",
+  "Koha::Schema::Result::Illcomment",
+  { "foreign.illrequest_id" => "self.illrequest_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->has_many(
+  "ill_extended_attributes",
+  "Koha::Schema::Result::Illrequestattribute",
+  { "foreign.illrequest_id" => "self.illrequest_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->belongs_to(
+  "library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+  "patron",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 1;

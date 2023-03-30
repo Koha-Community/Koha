@@ -31,14 +31,26 @@ Koha::Illrequestattribute - Koha Illrequestattribute Object class
 
 =head2 Internal methods
 
-=cut
-
 =head3 _type
 
 =cut
 
 sub _type {
     return 'Illrequestattribute';
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Illrequestattribute object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        illrequest_id => 'ill_request_id',
+        readonly      => 'read_only',
+    };
 }
 
 =head1 AUTHOR
