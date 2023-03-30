@@ -52,6 +52,8 @@ definitions:
     $ref: ./definitions/ill_backend.yaml
   ill_backends:
     $ref: ./definitions/ill_backends.yaml
+  ill_request:
+    $ref: ./definitions/ill_request.yaml
   import_batch_profile:
     $ref: ./definitions/import_batch_profile.yaml
   import_batch_profiles:
@@ -239,6 +241,8 @@ paths:
     $ref: "./paths/ill_backends.yaml#/~1ill_backends~1{ill_backend_id}"
   /illrequests:
     $ref: ./paths/illrequests.yaml#/~1illrequests
+  /ill_requests:
+    $ref: ./paths/illrequests.yaml#/~1ill_requests
   "/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen":
     $ref: "./paths/import_batches.yaml#/~1import_batches~1{import_batch_id}~1records~1{import_record_id}~1matches~1chosen"
   /import_batch_profiles:

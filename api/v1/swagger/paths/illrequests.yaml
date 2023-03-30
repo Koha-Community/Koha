@@ -1,118 +1,52 @@
 ---
-/illrequests:
+/ill_requests:
   get:
     x-mojo-to: Illrequests#list
     operationId: listIllrequests
     tags:
-      - illrequests
+      - ill_requests
     summary: List ILL requests
     parameters:
-      - name: embed
-        in: query
-        description: Additional objects that should be embedded in the response
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: x-koha-embed
+        in: header
         required: false
+        description: Embed list sent as a request header
         type: array
-        collectionFormat: csv
         items:
           type: string
           enum:
-            - patron
-            - library
-            - capabilities
-            - metadata
-            - requested_partners
+            - +strings
+            - biblio
             - comments
-            - status_alias
-      - name: backend
-        in: query
-        description: The name of a ILL backend
-        required: false
-        type: string
-      - name: orderid
-        in: query
-        description: The order ID of a request
-        required: false
-        type: string
-      - name: biblionumber
-        in: query
-        description: Internal biblio identifier
-        required: false
-        type: integer
-      - name: borrowernumber
-        in: query
-        description: Internal patron identifier
-        required: false
-        type: integer
-      - name: completed
-        in: query
-        description: The date the request was considered completed
-        required: false
-        type: string
-      - name: completed_formatted
-        in: query
-        description: The date the request was considered complete formatted
-        required: false
-        type: string
-      - name: status
-        in: query
-        description: A full status string e.g. REQREV
-        required: false
-        type: string
-      - name: cost
-        in: query
-        description: The quoted cost of the request
-        required: false
-        type: number
-      - name: price_paid
-        in: query
-        description: The final cost of the request
-        required: false
-        type: number
-      - name: medium
-        in: query
-        description: The medium of the requested item
-        required: false
-        type: string
-      - name: updated
-        in: query
-        description: The last updated date of the request
-        required: false
-        type: string
-      - name: updated_formatted
-        in: query
-        description: The last updated date of the request formatted
-        required: false
-        type: string
-      - name: placed
-        in: query
-        description: The date the request was placed
-        required: false
-        type: string
-      - name: placed_formatted
-        in: query
-        description: The date the request was placed formatted
-        required: false
-        type: string
-      - name: branchcode
-        in: query
-        description: Library ID
-        required: false
-        type: string
+            - comments+count
+            - ill_extended_attributes
+            - library
+            - id_prefix
+            - patron
+        collectionFormat: csv
     produces:
       - application/json
     responses:
       "200":
         description: A list of ILL requests
-      "401":
-        description: Authentication required
         schema:
-          $ref: "../swagger.yaml#/definitions/error"
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/ill_request"
       "403":
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
-        description: ILL requests not found
+        description: Patron not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
