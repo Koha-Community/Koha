@@ -24,6 +24,7 @@ use Try::Tiny qw( catch try );
 use DateTime;
 
 use C4::Letters;
+use Mojo::Util qw(deprecated);
 
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
@@ -177,6 +178,7 @@ sub statusalias {
 =cut
 
 sub illrequestattributes {
+    deprecated 'illrequestattributes is DEPRECATED in favor of extended_attributes';
     my ( $self ) = @_;
     return Koha::Illrequestattributes->_new_from_dbic(
         scalar $self->_result->illrequestattributes
@@ -247,20 +249,20 @@ sub library {
     return Koha::Library->_new_from_dbic( scalar $self->_result->library );
 }
 
-=head3 ill_extended_attributes
+=head3 extended_attributes
 
-    my $ill_extended_attributes = $request->ill_extended_attributes;
+    my $extended_attributes = $request->extended_attributes;
 
 Returns the linked I<Koha::Illrequestattributes> resultset object.
 
 =cut
 
-sub ill_extended_attributes {
+sub extended_attributes {
     my ( $self ) = @_;
 
-    return Koha::Illrequestattributes->_new_from_dbic(
-        scalar $self->_result->ill_extended_attributes
-    );
+    my $rs = $self->_result->extended_attributes;
+    # We call search to use the filters in Koha::Illrequestattributes->search
+    return Koha::Illrequestattributes->_new_from_dbic($rs)->search;
 }
 
 =head3 status_alias

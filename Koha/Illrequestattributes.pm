@@ -32,6 +32,22 @@ Koha::Illrequestattributes - Koha Illrequestattributes Object class
 
 =head2 Class Methods
 
+=cut
+
+=head3 search
+
+my $attributes = Koha::Illrequestattributes->search( $params );
+
+=cut
+
+sub search {
+    my ( $self, $params, $attributes ) = @_;
+
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['me.type', 'value'] }
+
+    return $self->SUPER::search( $params, $attributes );
+}
+
 =head3 type
 
 =cut
