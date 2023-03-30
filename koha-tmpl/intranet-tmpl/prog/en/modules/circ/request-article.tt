@@ -63,31 +63,25 @@
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-
-            [% IF blocking_error %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Catalog
-                    </a>
-                </li>
-
-            [% ELSE %]
-                [% INCLUDE 'biblio-title.inc' link = 1 %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Request article
-                    </a>
-                </li>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% IF blocking_error %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Catalog</span>
             [% END %]
-        </ol>
-    </nav>
-    [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
+                [% INCLUDE 'biblio-title.inc' link = 1 %]
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Request article</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% INCLUDE 'blocking_errors.inc' %]
 <div class="main container-fluid">
