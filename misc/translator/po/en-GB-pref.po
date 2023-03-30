@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-10-20 09:00+0000\n"
-"Last-Translator: Jon McGowan <jon.mcgowan@ptfs-europe.com>\n"
+"PO-Revision-Date: 2023-03-17 12:10+0000\n"
+"Last-Translator: ashimema <martin.renvoize@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /en_GB/21.05/en-GB-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1634720425.973591\n"
+"X-POOTLE-MTIME: 1679055038.062310\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3900,6 +3900,24 @@ msgstr ""
 " the automatic redirection to another user when a user barcode is scanned "
 "instead of a book."
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Do"
+msgstr " reservations at once."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
+msgstr " reservations at once."
+
+# Circulation > Checkout policy
+#, fuzzy
+msgid ""
+"circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
+"when the modal is dismissed without clicking 'Yes'."
+msgstr ""
+" automatically transfer items to their home library when they are returned."
+
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
 msgstr ""
@@ -5528,7 +5546,10 @@ msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
 "interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
 "cronjob."
-msgstr " If a user is restricted,"
+msgstr ""
+"circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
+"interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
+"cronjob."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -10048,7 +10069,9 @@ msgstr " users to confirm their email address by entering it twice."
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
-msgstr " as the default user category for users registered via the OPAC."
+msgstr ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
+"use a regular patron category for self registration.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 #, fuzzy
@@ -10061,13 +10084,13 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-" <br><strong>WARNING: Do not use a regular user category for self "
-"registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> "
-"cronjob is setup to delete unverified and unfinished OPAC self "
-"registrations, it will permanently and unrecoverably delete all users that "
-"have registered more than <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
+"unverified and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href"
+"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistra"
+"tionExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccoun"
+"tsDelay</a> days ago (unless that delay is empty or zero)."
 
 # OPAC > Self registration and modification
 #, fuzzy
