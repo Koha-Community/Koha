@@ -117,9 +117,8 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
-" . (Vyžaduje <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a>)"
+" . (Vyžaduje <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 #, fuzzy
@@ -157,11 +156,11 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"Tato předvolba nemá žádný vliv, pokud je povoleno <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a> nebo pokud nejsou v kategorii ověřených hodnot <a href"
-"=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
-">PAYMENT_TYPE</a> definovány žádné typy plateb."
+"Tato předvolba nemá žádný vliv, pokud je povoleno <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=UseCashRegisters"
+"\">UseCashRegisters</a> nebo pokud nejsou v kategorii ověřených hodnot <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE"
+"\">PAYMENT_TYPE</a> definovány žádné typy plateb."
 
 # Accounting > Policy
 #, fuzzy
@@ -415,10 +414,9 @@ msgid ""
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-" <br>Pokud zvolítee <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"EmailAddressForSuggestions\">EmailAddressForSuggestions</a> musíte zadat "
-"platnou e-mailovou adresu:"
+" <br>Pokud zvolítee <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> musíte zadat platnou e-mailovou adresu:"
 
 # Acquisitions > Policy
 msgid ""
@@ -918,11 +916,11 @@ msgid ""
 msgstr ""
 "Zvolte OAuth2 až budete vytvářet aplikaci v Google cloud console a nastavte "
 "správnou URL do vašeho katalogu. Dále také přesměrování na vas_opac_url/cgi-"
-"bin/koha/svc/auth/googleopenidconnect. Vyžaduje, aby bylo <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID\""
-">GoogleOAuth2ClientID</a> and <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a> nastavené."
+"bin/koha/svc/auth/googleopenidconnect. Vyžaduje, aby bylo <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a> and <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> nastavené."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -941,9 +939,8 @@ msgid ""
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
 "automatické zaregistrování uživatele při jeho přihlášení pomocí Google Open "
-"ID. Vyžaduje <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
-">GoogleOpenIDConnect</a>"
+"ID. Vyžaduje <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>"
 
 # Administration > Google OpenID Connect > GoogleOpenIDConnectDefaultBranch
 msgid ""
@@ -2044,8 +2041,8 @@ msgid ""
 "the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated "
 "configuration page</a> to set and edit this system preference."
 msgstr ""
-"<br><strong>POZNÁMKA:</strong>Pro toto nastavení je třeba použít <a href"
-"=\"/cgi-bin/koha/admin/usage_statistics.pl\">samostatnou stránku</a>."
+"<br><strong>POZNÁMKA:</strong>Pro toto nastavení je třeba použít <a href=\"/"
+"cgi-bin/koha/admin/usage_statistics.pl\">samostatnou stránku</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -2411,10 +2408,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"chybějící záznamy autorit (<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"RequireChoosingExistingAuthority\">RequireChoosingExistingAuthority</a> musí "
-"být nastaveno na \"nevyžadovat\", aby to mělo nějaký efekt)."
+"chybějící záznamy autorit (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> musí být nastaveno na \"nevyžadovat"
+"\", aby to mělo nějaký efekt)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -9362,9 +9359,10 @@ msgstr ""
 #, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr "Použít ověřenou hodnotu LOST"
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
@@ -13288,6 +13286,11 @@ msgstr ""
 #, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Alternativní adresa: PSČ"
+
+# Patrons > General
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "(oddělit sloupce svislítkem |)"
 
 # Patrons > Patron relationships
 msgid ""

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2022-12-19 09:04+0000\n"
+"PO-Revision-Date: 2023-03-10 04:35+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hi/22.11/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1671440676.329963\n"
+"X-POOTLE-MTIME: 1678422904.574466\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -4898,14 +4898,13 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "circulation.pref # CircControl # पुस्तकालय आप पर लॉग इन कर रहे।"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# To determine whether an item is "
 "transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
-"यह निर्धारित करने के लिए कि चेकइन के बाद कोई आइटम स्थानांतरित किया गया है या पुस्तकालय "
-"में रहता है, के संचलन नियमों का उपयोग करें"
+"यह निर्धारित करने के लिए कि क्या कोई आइटम ट्रांसफर किया गया है या चेकइन के बाद "
+"लाइब्रेरी में रहता है, के संचलन नियमों का उपयोग करें"
 
 # Circulation > Checkout policy
 msgid ""
@@ -9471,139 +9470,116 @@ msgstr ""
 "i18n_l10n.pref # opaclanguagesdisplay # संरक्षक भाषा वे ओपेक पर देख बदलने के लिए।"
 
 # Serials
-#, fuzzy
 msgid "interlibrary_loans.pref"
-msgstr "serials.pref"
+msgstr "interlibrary_loans.pref"
 
 # Searching > Features
-#, fuzzy
 msgid "interlibrary_loans.pref Features"
-msgstr "serials.pref सुविधाएँ"
+msgstr "interlibrary_loans.pref विशेषताएँ"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "interlibrary_loans.pref Notifications"
-msgstr "patrons.pref नोटिस और सूचनाएं"
+msgstr "interlibrary_loans.pref अधिसूचना"
 
 # Interlibrary loans
 msgid "interlibrary_loans.pref OPAC"
-msgstr ""
+msgstr "interlibrary_loans.pref ओपेक"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Disable"
-msgstr "circulation.pref#CirculateILL# अक्षम"
+msgstr "अक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Enable"
-msgstr "circulation.pref#CirculateILL# सक्षम"
+msgstr "सक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "circulation.pref#CirculateILL# ILL अनुरोधित वस्तुओं का प्रचलन."
+msgstr "ILL अनुरोधित वस्तुओं का प्रचलन।"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
-msgstr "circulation.pref#ILLCheckAvailability# चैक"
+msgstr "चैक"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
-msgstr "circulation.pref#ILLCheckAvailability# चैक नही करें"
+msgstr "चैक नही करें"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLCheckAvailability# external sources for "
 "availability during the request process."
-msgstr ""
-"circulation.pref#ILLCheckAvailability# अनुरोध प्रक्रिया के दौरान उपलब्धता के लिए "
-"बाहरी स्रोत"
+msgstr "अनुरोध प्रक्रिया के दौरान उपलब्धता के लिए बाहरी स्रोत"
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
 "staff ILL notices to be sent to in the absence of a library address:"
-msgstr ""
-"circulation.pref#ILLDefaultStaffEmail# स्टाफ ILL नोटिस के लिए फालबैक ईमेल पता, "
-"पुस्तकालय के पते के अभाव में भेजा जाएगा:"
+msgstr "स्टाफ ILL नोटिस के लिए फालबैक ईमेल पता, पुस्तकालय के पते के अभाव में भेजा जाएगा:"
 
 # Circulation > Interlibrary loans
 #, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
-"(| से अलग)। यदि खाली छोड़ दिया जाता है, तो सभी ILL अनुरोध प्रदर्शित किए जाएँगे। "
-"अनुरोध कोड <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> अधिकृत मान श्रेणी में मिल सकते हैं।"
+"यदि खाली छोड़ दिया जाता है, तो सभी ILL अनुरोध प्रदर्शित किए जाएंगे। अनुरोध कोड <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
+"\">ILLSTATUS</a> अधिकृत मान श्रेणी में पाया जा सकता है।"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
 "considered finished and should not be displayed in the ILL module: "
 msgstr ""
-"circulation.pref#ILLHiddenRequestStatuses# ILL स्थितियां जिन्हें समाप्त माना जाता "
-"है और उन्हें ILL मॉड्यूल में प्रदर्शित नहीं किया जाना चाहिए: "
+"ILL स्थितियां जिन्हें समाप्त माना जाता है और उन्हें ILL मॉड्यूल में प्रदर्शित नहीं किया जाना "
+"चाहिए: "
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Disable"
-msgstr "circulation.pref#ILLModule# अक्षम"
+msgstr "अक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Enable"
-msgstr "circulation.pref#ILLModule# सक्षम"
+msgstr "सक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
 "switch)."
-msgstr "circulation.pref#ILLModule# अंत: पुस्तकालय ऋण मॉड्यूल (मास्टर स्विच)."
+msgstr "अंत: पुस्तकालय ऋण मॉड्यूल (मास्टर स्विच)."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
 "the copyright clearance stage in request creation. The text you enter will "
 "be the text displayed."
 msgstr ""
-"circulation.pref#ILLModuleCopyrightClearance# पाठ जोड़ने से अनुरोध निर्माण में "
-"कॉपीराइट स्वीकृति चरण सक्षम होगा। आपके द्वारा दर्ज किया हुआ टेक्स्ट टेक्स्ट प्रदर्शित होगा."
+"पाठ जोड़ने से अनुरोध निर्माण में कॉपीराइट स्वीकृति चरण सक्षम होगा। आपके द्वारा दर्ज किया "
+"हुआ टेक्स्ट टेक्स्ट प्रदर्शित होगा."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
-msgstr "circulation.pref#ILLModuleUnmediated# अक्षम"
+msgstr "अक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
-msgstr "circulation.pref#ILLModuleUnmediated# सक्षम"
+msgstr "सक्षम"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
 "requests. If enabled and the ILL backend supports it, the newly created "
 "requests are immediately requested by backend."
 msgstr ""
-"circulation.pref#ILLModuleUnmediated# अनियंत्रित इंटरलाउंस ऋण अनुरोध। यदि सक्षम और "
-"ILL बैकएंड इसका समर्थन करता है, तो नए बनाए गए अनुरोध तुरंत बैकएंड द्वारा अनुरोध किए जाते "
-"हैं."
+"अनियंत्रित इंटरलाउंस ऋण अनुरोध। यदि सक्षम और ILL बैकएंड इसका समर्थन करता है, तो नए "
+"बनाए गए अनुरोध तुरंत बैकएंड द्वारा अनुरोध किए जाते हैं."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
 "all installed backends will be enabled."
@@ -9612,31 +9588,25 @@ msgstr ""
 "जाएंगे।"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
 "initiated requests:"
 msgstr "ओपेक द्वारा आरंभ किए गए अनुरोधों के लिए सक्षम ILL बैकएंड:"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"circulation.pref#ILLSendStaffNotices# (के साथ अलग हो गया |). जैसे. "
-"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED यदि खाली छोड़ दिया जाता है, तो कोई "
-"कर्मचारी ILL नोटिस नहीं भेजा जाएगा."
+"(के साथ अलग हो गया |). जैसे. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED यदि खाली "
+"छोड़ दिया जाता है, तो कोई कर्मचारी ILL नोटिस नहीं भेजा जाएगा."
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
 "when appropriate:"
-msgstr ""
-"circulation.pref#ILLSendStaffNotices# उपयुक्त होने पर कर्मचारियों को ये ILL नोटिस "
-"भेजें:"
+msgstr "उपयुक्त होने पर कर्मचारियों को ये ILL नोटिस भेजें:"
 
 # Local Use
 msgid "local_use.pref"
@@ -12886,14 +12856,13 @@ msgstr ""
 "विस्तारित किया जा सकता है)"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
 "option in the patrons or circulation module:"
 msgstr ""
-"patrons.pref#DefaultPatronSearchFields# \"मानक\" विकल्प का उपयोग करके संरक्षक "
-"खोज के दौरान उपयोग किए जाने वाले डिफ़ॉल्ट फ़ील्ड को परिभाषित करने वाली कोमा अलग सूची:"
+"\"मानक\" विकल्प का उपयोग करके संरक्षक खोज के दौरान उपयोग किए जाने वाले डिफ़ॉल्ट फ़ील्ड "
+"को परिभाषित करने वाली कोमा अलग सूची:"
 
 # Patrons > General
 msgid ""
@@ -13456,6 +13425,11 @@ msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - सड�
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - जिप/पोस्टल कोड"
+
+# Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता: फैक्स"
 
 # Patrons > Patron relationships
 msgid ""

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2023-02-21 11:13+0000\n"
+"PO-Revision-Date: 2023-03-03 11:28+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /tr/22.11/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1676978019.233515\n"
+"X-POOTLE-MTIME: 1677842887.706056\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -147,7 +147,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Zorunlu kıl"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -158,8 +157,9 @@ msgid ""
 msgstr ""
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> "
-"etkinleştirildiğinde veya PAYMENT_TYPE yetkili değer kategorisinde hiçbir "
-"ödeme türü tanımlanmadığında bu tercihin hiçbir etkisi yoktur."
+"etkinleştirildiğinde veya <a href'te hiçbir ödeme türü tanımlanmadığında bu "
+"tercihin hiçbir etkisi yoktur. =\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> yetkili değer kategorisi. "
 
 # Accounting > Policy
 msgid ""
@@ -408,17 +408,16 @@ msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "konum"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"<br><a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions </a>tercihini seçerseniz geçerli bir e-posta "
-"adresi girmeniz gerekir:"
+"\">EmailAddressForSuggestions</a>'ı seçerseniz geçerli bir e-posta adresi "
+"girmelisiniz:"
 
 # Acquisitions > Policy
 msgid ""
@@ -435,9 +434,8 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr "KohaAdminEmailAddress"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of library"
-msgstr "şubenin e-posta adresi"
+msgstr "kütüphanenin e-posta adresi"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
@@ -493,9 +491,8 @@ msgstr ""
 "replacementprice ve itemcallnumber. Özel Alanlar: quantity ve budget_code"
 
 # Acquisitions > Printing
-#, fuzzy
 msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
-msgstr "İngilizce 2-sayfa"
+msgstr "İngilizce 1-sayfa"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -585,20 +582,21 @@ msgstr ""
 "işareti ile ayırın."
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
 "only accept values up to 4 decimals precision, further values will be "
 "rounded."
 msgstr ""
-"Lütfen unutmayın: Veritabanı yalnızca 4 ondalık kesinliğe kadar olan "
-"değerleri kabul eder, diğer değerler yuvarlanır."
+"<br/><strong>NOT:</strong>Veritabanı yalnızca 4 ondalık hassasiyete kadar "
+"olan değerleri kabul edecek, diğer değerler yuvarlanacaktır."
 
 # Acquisitions > Policy > TaxRates
 msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> Vendor tax rate "
 "information may need updating if tax rate values are removed."
 msgstr ""
+"<br/><strong>NOT:</strong>Vergi oranı değerleri kaldırılırsa satıcı vergi "
+"oranı bilgilerinin güncellenmesi gerekebilir."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#TaxRates# Tax rates are"
@@ -2392,7 +2390,6 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Kayıtları düzenlerken eksik otorite kayıtlarını"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -2400,10 +2397,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"kayıp olan otorite kayıtları (bunun herhangi bir etkisi olması için <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> "
-"sistem tercihinin \"izin ver\" olarak ayarlanması gerekmektedir)"
+"eksik olan otorite kayıtları (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority\">Bunun herhangi bir "
+"etkisinin olması için RequireChoosingExistingAuthority</a> \"gerekli değil\" "
+"olarak ayarlanmalıdır)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2414,17 +2411,14 @@ msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "oluştur"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#AutoLinkBiblios# Do"
 msgstr "Gerçekleştir"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#AutoLinkBiblios# Don't"
 msgstr "Gerçekleştirme"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
 "when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
@@ -2433,11 +2427,11 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"Materyali iade edecek olan en son kullanıcı. Bu ayar, <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> ve <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> sistem "
-"tercihlerinden bağımsızdır."
+"kayıtları kataloglama modülünde kaydederken başlıkları otomatik olarak "
+"bağlamaya çalışır, <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=LinkerRelink'>LinkerRelink</a> ve <a href=' "
+"kurallarına uyar Kayıt düzenlemeleri için /cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a>."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2448,18 +2442,18 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Gerçekleştirme"
 
 # Authorities > Linker
-#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module "
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"Katalog modülünde kayıtları kaydederken önceden eşleştirilmiş başlıkları "
-"(headings) otomatik olarak yeniden eşleştir"
+"kayıtları kataloglama modülüne kaydederken daha önce bağlanmış olan "
+"başlıkları otomatik olarak yeniden bağlar (<a href='/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a> "
+"gerektirir)."
 
 # OPAC > Privacy > OPACPrivacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (must not "
@@ -2468,11 +2462,12 @@ msgid ""
 "a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"MARC21 yetki kayıtlarının 667$a alanı için varsayılan değer olarak aşağıdaki "
-"metni kullanın (<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> ve <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"MARC21 otorite kayıtlarının 667$a alanı için varsayılan değer olarak "
+"aşağıdaki metni kullanın (<a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a gerektirmemelidir) > ve <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>'e "
+"izin vermelidir):"
 
 # OPAC > Privacy > OPACPrivacy
 #, fuzzy
@@ -4827,11 +4822,12 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr "kayıp materyal ücreti tahsil etme"
 
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
 "admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
-msgstr "KAYIP yetkili değerini kullanın"
+msgstr ""
+"<a href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST\">LOST</"
+"a> yetkili değerini kullanın"
 
 # Circulation > Return claims
 msgid ""
@@ -5212,7 +5208,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
 "These system preferences require the <code>misc/cronjobs/holds/"
@@ -5221,7 +5216,7 @@ msgid ""
 msgstr ""
 "<br><strong>NOT:</strong> Bu sistem tercihi <code>misc/cronjobs/holds/"
 "auto_unsuspend_holds.pl</code> cronjob'u nu gerektirir. Sistem "
-"yöneticinizden ayarlamasını isteyin."
+"yöneticinizden ayarlamasını isteyin.<br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -9182,12 +9177,15 @@ msgstr ""
 #, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "(| ile ayrılmış). Boş bırakılırsa, tüm ILL istekleri görüntülenecektir. "
-"İstek kodları, ILLSTATUS otorite değeri kategorisinde bulunabilir. "
+"İstek kodları, <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILLSTATUS\">ILLSTATUS</a> yetkili değer kategorisinde "
+"bulunabilir."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -12057,9 +12055,8 @@ msgstr ""
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
-msgstr "OPAC’da satın alma teklifi yapacak olan kullanıcılar."
+msgstr "OPAC'ta satın alma önerileri.<br>"
 
 # Patrons
 msgid "patrons.pref"
@@ -13015,6 +13012,11 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Ana adres - ZIP/Posta kodu"
 
 # Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "İletişim - Faks"
+
+# Patrons > Patron relationships
 msgid ""
 "patrons.pref#PrefillGuaranteeField# When adding a guarantee to a guarantor "
 "patron fill the following fields in the guarantee's member entry form from "
@@ -13884,13 +13886,11 @@ msgid ""
 msgstr "OPAC arama sonuçlarında sayfa başına açılır liste"
 
 # Searching > Results display > PassItemMarcToXSLT
-#, fuzzy
 msgid ""
 "searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
 "displayed using other methods."
 msgstr ""
-"materyal MARC etiketlerini XSLT stil sayfalarında kullanılabilir hale "
-"getirin. Varsayılan \"Gerçekleştirme\"dir, materyaller diğer yöntemler "
+"<br/>Varsayılan \"Yapma\" şeklindedir, materyaller diğer yöntemler "
 "kullanılarak görüntülenir."
 
 # Searching > Search form
@@ -14818,7 +14818,6 @@ msgid ""
 msgstr "Belirli HTML sistem tercihlerini düzenlerken WYSIWYG editörü."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14828,15 +14827,12 @@ msgid ""
 "languages the placeholder {langcode} will be replaced with current interface "
 "language."
 msgstr ""
-"<br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the "
-"default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a "
-"URL for an external specific stylesheet.</li><li>NOTE: The system preference "
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
-"{langcode} will be replaced with current interface language."
+"<br />Seçenekler:<ul><li>Varsayılan olarak \"<a href=\"#\" class="
+"\"set_syspref\" data-syspref=\"XSLLTDetailsDisplay\" data-value=\"default"
+"\">varsayılan</a>\" stil sayfası girin</li><li>Bir xslt dosyası tanımlamak "
+"için bir yol koyun</li><li>Harici belirli bir stil sayfası için bir URL "
+"girin.</li></ul>Farklı diller için birden fazla stil sayfanız varsa, yer "
+"tutucu {langcode}, geçerli arayüz diliyle değiştirilecek."
 
 # Staff interface > Appearance
 msgid ""

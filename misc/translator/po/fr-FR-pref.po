@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2023-02-09 15:38+0000\n"
-"Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
+"PO-Revision-Date: 2023-03-19 09:01+0000\n"
+"Last-Translator: grenier <aurelie.grenier@orleans-metropole.fr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fr/22.11/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1675957131.466781\n"
+"X-POOTLE-MTIME: 1679216511.168870\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -4773,15 +4773,14 @@ msgstr "la bibliothèque de l'adhérent."
 msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "la bibliothèque à laquelle le bibliothécaire est connecté."
 
-# Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# To determine whether an item is "
 "transferred or remains in the library after checkin, use the circulation "
 "rules of"
 msgstr ""
-"Pour déterminer si un document est transféré ou reste dans le site après son "
-"retour, utiliser les règles de circulation de"
+"circulation.pref#CircControlReturnsBranch# Pour déterminer si un document "
+"est transféré ou reste dans le site après son retour, utiliser les règles de "
+"circulation de"
 
 # Circulation > Checkout policy
 msgid ""
@@ -9150,171 +9149,163 @@ msgid ""
 msgstr "aux adhérents de changer la langue d'utilisation de Koha à l'OPAC."
 
 # Serials
-#, fuzzy
 msgid "interlibrary_loans.pref"
-msgstr "Périodiques"
+msgstr "interlibrary_loans.pref"
 
 # Searching > Features
-#, fuzzy
 msgid "interlibrary_loans.pref Features"
-msgstr "Fonctionnalités"
+msgstr "interlibrary_loans.pref Caractéristiques"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "interlibrary_loans.pref Notifications"
-msgstr "Messages et notifications"
+msgstr "interlibrary_loans.pref Notifications"
 
 # Interlibrary loans
 msgid "interlibrary_loans.pref OPAC"
-msgstr ""
+msgstr "interlibrary_loans.pref OPAC"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Disable"
-msgstr "Désactiver"
+msgstr "interlibrary_loans.pref#CirculateILL# Désactiver"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Enable"
-msgstr "Activer"
+msgstr "interlibrary_loans.pref#CirculateILL# Activer"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "la circulation des exemplaires du prêt entre bibliothèques."
+msgstr ""
+"interlibrary_loans.pref#CirculateILL# la circulation des exemplaires du prêt "
+"entre bibliothèques."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
-msgstr "Vérifier"
+msgstr "interlibrary_loans.pref#ILLCheckAvailability# Vérifier"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
-msgstr "Ne pas vérifier"
+msgstr "interlibrary_loans.pref#ILLCheckAvailability# Ne pas vérifier"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLCheckAvailability# external sources for "
 "availability during the request process."
 msgstr ""
-"dans les sources externes la disponibilité pendant le processus de demande."
+"interlibrary_loans.pref#ILLCheckAvailability# dans les sources externes la "
+"disponibilité pendant le processus de demande."
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
 "staff ILL notices to be sent to in the absence of a library address:"
 msgstr ""
-"Mail par défaut pour les demandes de prêt entre bibliothèque, utilisé en "
-"l'absence de mail de la bibliothèque :"
+"interlibrary_loans.pref#ILLDefaultStaffEmail# Courriel par défaut pour les "
+"demandes de prêt entre bibliothèque, utilisé en l'absence de courriel de la "
+"bibliothèque :"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
-"circulation.pref#ILLHiddenRequestStatuses# (séparé par |). Si laissé vide, "
-"toutes les demandes de PEB s'afficheront. Les codes de demandes sont "
-"disponibles dans la catégorie de valeurs autorisées <a href=\"/cgi-bin/koha/"
-"admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</a>."
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). Si "
+"laissé vide, toutes les demandes de PEB s'afficheront. Les codes de demandes "
+"sont définis dans les serveurs et des alias additionnels peuvent être "
+"configurés via la <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
+">ILL_STATUS_ALIAS</a> catégorie de valeur autorisée."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
 "considered finished and should not be displayed in the ILL module: "
 msgstr ""
-"Les statuts pour les demandes PEB considérées comme closes ne doivent pas "
-"s'afficher dans le module PEB : "
+"interlibrary_loans.pref#ILLHiddenRequestStatuses# Les statuts pour les "
+"demandes PEB considérées comme closes ne doivent pas s'afficher dans le "
+"module PEB : "
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Disable"
-msgstr "Désactiver"
+msgstr "interlibrary_loans.pref#ILLModule# Désactiver"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Enable"
-msgstr "Activer"
+msgstr "interlibrary_loans.pref#ILLModule# Activer"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
 "switch)."
-msgstr "le module de prêts entre bibliothèques (interrupteur principal)."
+msgstr ""
+"interlibrary_loans.pref#ILLModule# le module de prêts entre bibliothèques "
+"(interrupteur principal)."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
 "the copyright clearance stage in request creation. The text you enter will "
 "be the text displayed."
 msgstr ""
-"Ajouter du texte activera l'étape d'obtention des droits d'auteurs lors de "
-"la création d'une requête de PEB. Le texte saisi sera le texte affiché."
+"interlibrary_loans.pref#ILLModuleCopyrightClearance# Ajouter du texte "
+"activera l'étape d'obtention des droits d'auteurs lors de la création d'une "
+"requête de PEB. Le texte saisi sera le texte affiché."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
-msgstr "Désactiver"
+msgstr "interlibrary_loans.pref#ILLModuleUnmediated# Désactiver"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
-msgstr "Activer"
+msgstr "interlibrary_loans.pref#ILLModuleUnmediated# Activer"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
 "requests. If enabled and the ILL backend supports it, the newly created "
 "requests are immediately requested by backend."
 msgstr ""
-"la transmission directe des demandes de prêts entre bibliothèques. Si "
-"l'option est activée et que le back-end du PEB le prend en charge, les "
-"demandes nouvellement créées sont immédiatement demandées par le backend."
+"interlibrary_loans.pref#ILLModuleUnmediated# la transmission directe des "
+"demandes de prêts entre bibliothèques. Si l'option est activée et que le "
+"backend du PEB le prend en charge, les demandes nouvellement créées sont "
+"immédiatement demandées par le backend."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
 "all installed backends will be enabled."
 msgstr ""
-" (séparés par des |). Si laissé vide, tous les backends installés seront "
-"proposés."
+"interlibrary_loans.pref#ILLOpacbackends# (séparés par des |). Si laissé "
+"vide, tous les backends installés seront proposés."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
 "initiated requests:"
 msgstr ""
-" Backends de prêt entre bibliothèques activés pour les demandes faites via "
-"l'OPAC :"
+"interlibrary_loans.pref#ILLOpacbackends# Backends de prêt entre "
+"bibliothèques activés pour les demandes faites via l'OPAC :"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"(à séparer par des |). ex : ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Si "
-"vide, aucune notification PEB pour les professionnels ne sera envoyée."
+"interlibrary_loans.pref#ILLSendStaffNotices# (séparé par des |). ex : "
+"ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Si vide, aucune notification PEB "
+"pour les professionnels ne sera envoyée."
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
 "when appropriate:"
-msgstr "Envoi des notifications aux professionnels quand :"
+msgstr ""
+"interlibrary_loans.pref#ILLSendStaffNotices# Envoi des notifications aux "
+"professionnels quand :"
 
 # Local Use
 msgid "local_use.pref"
@@ -12503,14 +12494,14 @@ msgstr ""
 "peuvent toujours être dépliées plus tard) :"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
 "option in the patrons or circulation module:"
 msgstr ""
-"Liste séparée par des virgules définissant les champs par défaut à utiliser "
-"lors d'une recherche d'usager à l'aide de l'option \"standard\" :"
+"patrons.pref#DefaultPatronSearchFields# Liste séparée par des virgules "
+"définissant les champs par défaut à utiliser lors d'une recherche d'usager à "
+"l'aide de l'option \"standard\" dans le module adhérents ou circulation :"
 
 # Patrons > General
 msgid ""
@@ -13066,6 +13057,10 @@ msgstr "Adresse principale - Type de voie"
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Adresse principale - Code postal"
+
+# Patrons > Patron relationships
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "patrons.pref#PrefillGuaranteeField# Nom de famille"
 
 # Patrons > Patron relationships
 msgid ""

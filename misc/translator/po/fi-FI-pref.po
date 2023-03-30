@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2023-02-03 08:33+0000\n"
+"PO-Revision-Date: 2023-03-17 06:42+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1675413223.464631\n"
+"X-POOTLE-MTIME: 1679035367.178789\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -4698,7 +4698,7 @@ msgid ""
 "held by."
 msgstr ""
 "sen kirjaston laina- ja maksusääntöjä, joka pitää nidettä tällä hetkellä "
-"pitää hallussaan."
+"hallussaan."
 
 # Circulation > Checkout policy
 msgid ""
@@ -9034,17 +9034,18 @@ msgstr ""
 "sähköpostia ei ole: "
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaukolainapyynnöt "
-"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta  <a href=\"/"
-"cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</"
-"a>."
+"näytetään. Pyyntökoodit määritetään taustajärjestelmässä ja lisäaliaksia voi "
+"määrittää auktorisoidun arvon luokkaan <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
+">ILL_STATUS_ALIAS</a>."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -9705,7 +9706,7 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
-msgstr "EmailAddressForSuggestions"
+msgstr "EmailAddressForPatronRegistrations"
 
 # Acquisitions > Policy
 msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
@@ -11044,9 +11045,8 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
 msgstr ""
-"opac.pref#OpacMaintenanceNotice# Näytä seuraava HTML-koodi, kun <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
-"\">OpacMaintenance</a>-asetus on päällä:"
+"Näytä seuraava HTML-koodi, kun <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacMaintenance\">OpacMaintenance</a>-asetus on päällä:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -12836,6 +12836,11 @@ msgstr "Pääosoite - Katutyyppi"
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Pääosoite - Postinumero"
+
+# Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "Yhteystieto - Fax"
 
 # Patrons > Patron relationships
 msgid ""

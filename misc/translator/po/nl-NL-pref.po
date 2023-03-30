@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-11-04 09:45+0000\n"
+"PO-Revision-Date: 2023-03-22 10:04+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/22.11/nl-NL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1667555100.901622\n"
+"X-POOTLE-MTIME: 1679479477.515544\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -148,7 +148,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Wel"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -160,7 +159,8 @@ msgstr ""
 "Deze voorkeur heeft geen effect als de <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> "
 "systeemvoorkeur is ingesteld of als er geen betalingstypes ingesteld zijn in "
-"de PAYMENT_TYPE geautoriseerde waardecategorie."
+"de  <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> geautoriseerde waardecategorie."
 
 # Accounting > Policy
 msgid ""
@@ -410,14 +410,13 @@ msgid "acquisitions.pref#EdifactLSQ# location"
 msgstr "Wel"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Bij het kiezen voor <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"<br>Bij het kiezen voor <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> moet een geldig e-mailadres ingevoerd "
 "worden:"
@@ -586,14 +585,13 @@ msgstr ""
 "(pijpteken)."
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
 "only accept values up to 4 decimals precision, further values will be "
 "rounded."
 msgstr ""
-"Let op: de database accepteert alleen waarden tot maximaal 4 decimalen, "
-"daarna wordt er afgerond."
+"<br/><strong>Let op:</strong> de database accepteert alleen waarden tot "
+"maximaal 4 decimalen, daarna wordt er afgerond."
 
 # Acquisitions > Policy > TaxRates
 msgid ""
@@ -2389,7 +2387,6 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Bij het bewerken van records,"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -2397,9 +2394,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"van ontbrekende thesaurusrecords (<a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> "
-"moet op \"toestaan\" staan om effect te hebben)."
+"in ontbrekende thesaurusrecords moet (<a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority"
+"\">RequireChoosingExistingAuthority</a> op \"niet vereisen\" staan om effect "
+"te hebben)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2420,7 +2418,6 @@ msgid "authorities.pref#AutoLinkBiblios# Don't"
 msgstr "Niet"
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
 "when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
@@ -2429,11 +2426,12 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"de laatste lener die een exemplaar heeft ingeleverd. Deze instelling is "
-"onafhankelijk van de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> en <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
-"\">AnonymousPatron</a> systeemvoorkeuren."
+"probeer automatisch ingangen te linken bij het opslaan in de "
+"catalogusmodule, gehoorzaamt <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=LinkerRelink'>LinkerRelink</a> en <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> bij "
+"bewerken van records."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2444,18 +2442,17 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Niet"
 
 # Authorities > Linker
-#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module "
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"authorities.pref#CatalogModuleRelink# automatisch herlinken van headings die "
-"voorheen gelinkt zijn bij het opslaan van records in de catalogusmodule."
+"automatisch herlinken van ingangen die eerder gelinkt zijn bij het opslaan "
+"van records in de catalogusmodule (vereist <a href='/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (must not "
@@ -2465,13 +2462,13 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Gebruik de volgende tekst als standaardwaarde voor het 667$a veld van MARC21 "
-"thesaurusrecords (vereist<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> en <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"thesaurusrecords (mag niet <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> vereisen en moet <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> "
+"toestaan):"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
 "default value for the 670$a field of MARC21 authority records (must not "
@@ -2481,10 +2478,11 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Gebruik de volgende tekst als standaardwaarde voor het 670$a veld van MARC21 "
-"thesaurusrecords (vereist<a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> en <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"thesaurusrecords (mag niet <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> vereisen en moet <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> "
+"toestaan):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -4893,11 +4891,12 @@ msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr "geen zoekkosten rekenen"
 
 # Circulation > Return Claims
-#, fuzzy
 msgid ""
 "circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
 "admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
-msgstr "Gebruik de ZOEK geautoriseerde waarde"
+msgstr ""
+"Gebruik de <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=LOST\">ZOEK</a> geautoriseerde waarde"
 
 # Circulation > Return Claims
 msgid ""
@@ -5279,7 +5278,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# <br><strong>NOTE:</strong> "
 "These system preferences require the <code>misc/cronjobs/holds/"
@@ -5287,8 +5285,8 @@ msgid ""
 "schedule it.<br>"
 msgstr ""
 "<br><strong>OPMERKING:</strong> Deze systeeminstelling vereist de <code>misc/"
-"cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Vraag je "
-"systeembeheerder om deze in te plannen."
+"cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Vraag je "
+"systeembeheerder om deze in te plannen.<br>"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -5323,7 +5321,6 @@ msgid ""
 msgstr "Sta niet toe"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
@@ -5331,12 +5328,10 @@ msgid ""
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
 "system preference.</br>"
 msgstr ""
-"dat aanvragen vanzelf verlopen indien ze niet binnen de in <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
-"\">ReservesMaxPickUpDelay</a> systeemvoorkeur opgegeven tijd worden "
-"opgehaald. <br><strong>LET OP:</strong> Deze systeemvoorkeur vereist de "
-"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Vraag de "
-"systeembeheerder deze in te plannen."
+"dat aanvragen vanzelf verlopen indien ze niet worden opgehaald binnen de in "
+"de systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
+"ingestelde periode.</br>"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -9301,15 +9296,18 @@ msgstr ""
 "de bibliotheek is:"
 
 # Circulation > Interlibrary Loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
-"left empty, all ILL requests will be displayed. The request codes can be "
-"found in the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a> authorized value category."
+"left empty, all ILL requests will be displayed. The request codes are "
+"defined in the backends and additional aliases can be configured via the <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "(gescheiden door |). Indien leeg, worden alle IBL aanvragen getoond. De "
-"aanvraagcodes zijn te vinden in de ILLSTATUS geautoriseerde waardecategorie."
+"aanvraagcodes zijn gedefinieerd aan de achterzijde en aanvullende aliassen "
+"kunnen worden ingesteld via de <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
+">ILL_STATUS_ALIAS</a> geautoriserde waardecategorie."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -9839,7 +9837,6 @@ msgstr ""
 "als de anonieme lener (voor anonieme suggesties en uitleengeschiedenis)."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Options:<ul><li>Empty. No "
 "XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
@@ -9849,10 +9846,13 @@ msgid ""
 "interface language</li><li>authority types: use the placeholder "
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
-"<br />Opties:<ul><li>Voer een pad in om een xslt bestand te definiëren</"
-"li><li>Voer een url in voor een specifieke externe stylesheet.</li></"
-"ul>{langcode} wordt vervangen door de huidige interfacetaal en "
-"{authtypecode} wordt vervangen door de thesaurustype code"
+"<br />Opties:<ul><li>Leeg. Er wordt geen XSLT toegepast (<strong>standaard</"
+"strong>)</li><li>Voer een pad in om een xslt bestand te definiëren</"
+"li><li>Voer een url in voor een specifieke externe stylesheet.</li></ul>Bij "
+"meerdere stylesheets voor: <ul><li>verschillende talen: gebruik een "
+"plaatshouder {langcode} - deze wordt vervangen door de huidige interfacetaal "
+"</li><li>thesaurustypes: gebruik de plaatshouder {authtypecode} - deze wordt "
+"vervangen door de thesaurustype code"
 
 # OPAC > Appearance
 #, fuzzy
@@ -9960,7 +9960,6 @@ msgstr ""
 "en beschrijvingen in XSLT MARC21-resultaten en detailpagina's in de OPAC."
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "opac.pref#EmailPatronRegistrations# <br>If you chooose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?"
@@ -9968,10 +9967,10 @@ msgid ""
 "\">EmailAddressForPatronRegistrations</a> you have to enter a valid email "
 "address: "
 msgstr ""
-"Bij het kiezen voor <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> moet een geldig e-mailadres ingevoerd "
-"worden:"
+"<br>Bij het kiezen voor <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForPatronRegistrations"
+"\">EmailAddressForPatronRegistrations</a> moet een geldig e-mailadres "
+"ingevoerd worden: "
 
 # Acquisitions > Policy
 #, fuzzy
@@ -12015,9 +12014,7 @@ msgstr "Gebruik"
 msgid ""
 "opac.pref#ShelfBrowserUsesCcode# the item collection code when finding items "
 "for the shelf browser."
-msgstr ""
-"opac.pref#ShelfBrowserUsesCcode# item collectiecode bij zoeken naar "
-"exemplaren voor snuffelen langs plank."
+msgstr "item collectiecode bij zoeken naar exemplaren van vergelijkbare titels."
 
 # OPAC > Shelf Browser
 msgid "opac.pref#ShelfBrowserUsesHomeBranch# Don't use"
@@ -12241,7 +12238,6 @@ msgid "opac.pref#suggestion# Enable"
 msgstr "Toestaan"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#suggestion# When <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=suggestion\">suggestion</a> is enabled and <a href=\"/"
@@ -12249,15 +12245,15 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"Samen met <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
-"activeert <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
+"Als <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">Suggestion</a> ingeschakeld is en <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> uitgeschakeld, dan mogen de volgende lenercategorieën "
+"geen aanschafsuggesties doen:"
 
 # OPAC > Policy
-#, fuzzy
 msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
-msgstr "dat leners aanschafsuggesties doen in de OPAC."
+msgstr "aanschafsuggesties in de OPAC.<br>"
 
 # Acquisitions
 msgid "patrons.pref"
@@ -13195,6 +13191,11 @@ msgstr "Hoofdadres - Straattype"
 
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Hoofdadres - Postcode"
+
+# Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Surname"
+msgstr "Contact - Fax"
 
 # Patrons > Patron relationships
 msgid ""
