@@ -1,0 +1,22 @@
+# koha-common.service
+# /etc/systemd/system/koha-common.service
+
+[Unit]
+Description=Start required services for each Koha instance
+SourcePath=/etc/init.d/koha-common
+Before=multi-user.target
+Before=graphical.target
+After=remote-fs.target
+After=memcached.service
+
+[Service]
+Type=forking
+Restart=no
+TimeoutSec=5min
+IgnoreSIGPIPE=no
+KillMode=process
+GuessMainPID=no
+RemainAfterExit=yes
+SuccessExitStatus=5 6
+ExecStart=/etc/init.d/koha-common start
+ExecStop=/etc/init.d/koha-common stop
