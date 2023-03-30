@@ -342,7 +342,7 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->has_many(
-  "ill_extended_attributes",
+  "extended_attributes",
   "Koha::Schema::Result::Illrequestattribute",
   { "foreign.illrequest_id" => "self.illrequest_id" },
   { cascade_copy => 0, cascade_delete => 0 },

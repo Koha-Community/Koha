@@ -560,9 +560,43 @@ function _dt_default_ajax (params){
                         // escape SQL LIKE special characters %
                         value = value.replace(/(\%|\\)/g, "\\$1");
                     }
-                    part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
-                        ? value
-                        : {like: (['contains', 'ends_with'].indexOf(criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1?'%':'')};
+
+                    let built_value;
+                    if ( col.datatype !== undefined ) {
+                        if ( col.datatype == 'date' ) {
+                            let rfc3339 = $date_to_rfc3339(value);
+                            if ( rfc3339 != 'Invalid Date' ) {
+                                built_value = rfc3339;
+                            }
+                        }
+                        else if (col.datatype == 'related-object') {
+                            let query_term = value;
+
+                            if (criteria != 'exact') {
+                                query_term = { like: (['contains', 'ends_with'].indexOf(criteria) !== -1 ? '%' : '') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1 ? '%' : '') };
+                            }
+
+                            part = {
+                                [col.related + '.' + col.relatedKey]: col.relatedValue,
+                                [col.related + '.' + col.relatedSearchOn]: query_term
+                            };
+                        } else {
+                            console.log("datatype %s not supported yet".format(col.datatype));
+                        }
+                    }
+
+                    if (col.datatype != 'related-object') {
+                        let value_part;
+                        if ( criteria === 'exact' ) {
+                            value_part = built_value ? [value, built_value] : value
+                        } else {
+                            let like = {like: (['contains', 'ends_with'].indexOf(criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1?'%':'')};
+                            value_part = built_value ? [like, built_value] : like;
+                        }
+
+                        part[!attr.includes('.')?'me.'+attr:attr] = value_part;
+                    }
+
                     parts.push(part);
                 }
                 return parts;

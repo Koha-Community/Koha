@@ -69,9 +69,14 @@
                                     <input type="text" name="illfilter_keyword" id="illfilter_keyword" />
                                 </li>
                                 <li>
+                                    <label for="illfilter_backend">Backend:</label>
+                                    <select name="illfilter_backend" id="illfilter_backend">
+                                        <option value="">All backends</option>
+                                    </select>
+                                </li>
+                                <li>
                                     <label for="illfilter_status">Status:</label>
                                     <select name="illfilter_status" id="illfilter_status">
-                                        <option value=""></option>
                                     </select>
                                 </li>
                                 <li>
@@ -93,7 +98,8 @@
                                 <li>
                                     <label for="illfilter_branchname">Library:</label>
                                     <select name="illfilter_branchname" id="illfilter_branchname">
-                                        <option value=""></option>
+                                        <option value="">All libraries</option>
+                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => userbranch, only_from_group => 1 ) %]
                                     </select>
                                 </li>
                                 <li>
@@ -150,7 +156,7 @@
                     [% IF !whole.stage || whole.stage == 'form' %]
                         <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
-                        <div class="alert">This item cannot be checked out out as there is no bibliographic record associated with it</div>
+                        <div class="alert">This item cannot be issued as it has no biblio record associated with it</div>
                         [% END %]
                         [% IF whole.value.errors.itemcount %]
                         <div class="alert">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
@@ -599,15 +605,16 @@
                             <span class="fa fa-eye"></span>
                             Display supplier metadata
                         </a>
-                        [% IF Koha.Preference('IllLog') %]
-                            <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
-                                <span class="fa fa-calendar"></span>
-                                ILL request log
-                            </a>
-                        [% END %]
+                        <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
+                            <span class="fa fa-calendar"></span>
+                            ILL request log
+                        </a>
                     </div>
-                    <div class="page-section">
-                        <h3>Request details</h3>
+                    <div class="ill-view-panel panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Request details</h3>
+                        </div>
+                        <div class="panel-body">
                             <h4>Details from library</h4>
                             <div class="rows">
                                 <ol>
@@ -618,7 +625,7 @@
                                     <li class="borrowernumber">
                                         <span class="label borrowernumber">Patron:</span>
                                         [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                        <a href="[% borrowerlink | url %]" title="View patron details">
+                                        <a href="[% borrowerlink | url %]" title="View borrower details">
                                         [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                         </a>
                                     </li>
@@ -664,7 +671,7 @@
                                         [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                     </li>
                                     <li class="req_id">
-                                        <span class="label req_id">Request ID:</span>
+                                        <span class="label req_id">Request number:</span>
                                         [% request.id_prefix _ request.illrequest_id | html %]
                                     </li>
                                     <li class="notesstaff">
@@ -672,7 +679,7 @@
                                         <p>[% request.notesstaff | html %]</p>
                                     </li>
                                     <li class="notesopac">
-                                        <span class="label notes_opac">OPAC notes:</span>
+                                        <span class="label notes_opac">Notes:</span>
                                         <p>[% request.notesopac | html %]</p>
                                     </li>
                                 </ol>
@@ -688,6 +695,7 @@
                                     [% END %]
                                 </ol>
                             </div>
+                        </div>
                     </div>
 
                     <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
@@ -738,40 +746,44 @@
                         </div>
                     </div>
 
-                    <div class="page-section">
-                        <h3>[% request.illcomments.count | html %] comments</h3>
-                        [% IF request.illcomments.count && request.illcomments.count > 0 %]
-                            [% FOREACH comment IN request.illcomments %]
-                                <div class="rows comment_[% comment.patron.categorycode | html %]">
-                                <h5>Comment by:
-                                <a href="[% borrowerlink | url %]" title="View patron details">
-                                [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
-                                [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
-                                <p>[% comment.comment | html %]</p>
-                                </div>
+                    <div class="ill-view-panel panel panel-default">
+                        <div class="panel-heading">
+                            <h3>[% request.illcomments.count | html %] comments</h3>
+                        </div>
+                        <div class="panel-body">
+                            [% IF request.illcomments.count && request.illcomments.count > 0 %]
+                                [% FOREACH comment IN request.illcomments %]
+                                    <div class="rows comment_[% comment.patron.categorycode | html %]">
+                                    <h5>Comment by:
+                                    <a href="[% borrowerlink | url %]" title="View borrower details">
+                                    [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
+                                    [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
+                                    <p>[% comment.comment | html %]</p>
+                                    </div>
+                                [% END %]
                             [% END %]
-                        [% END %]
-                        <div class="rows">
-                            <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
-                            <div id="addcomment" class="content_hidden">
-                                <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
-                                    <input type="hidden" value="save_comment" name="method">
-                                    <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
-                                    <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
-                                    <fieldset class="rows">
-                                        <ol>
-                                            <li>
-                                                <label class="required" for="comment">Comment: </label>
-                                                <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
-                                                <span class="required">Required</span>
-                                            </li>
-                                        </ol>
-                                    </fieldset>
-                                    <fieldset class="action">
-                                        <input type="submit" class="btn btn-primary" value="Submit" />
-                                    </fieldset>
-                                </form>
-                            </div>
+                                <div class="rows">
+                                    <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
+                                    <div id="addcomment" class="content_hidden">
+                                        <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                            <input type="hidden" value="save_comment" name="method">
+                                            <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
+                                            <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
+                                            <fieldset class="rows">
+                                                <ol>
+                                                    <li>
+                                                        <label class="required" for="comment">Comment: </label>
+                                                        <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
+                                                        <span class="required">Required</span>
+                                                    </li>
+                                                </ol>
+                                            </fieldset>
+                                            <fieldset class="action">
+                                                <input type="submit" class="btn btn-primary" value="Submit" />
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
                         </div>
                     </div>
 
@@ -780,12 +792,12 @@
                     <h1>View ILL requests</h1>
                     <div id="results" class="page-section">
                         <h2>Details for all requests</h2>
-                        [% INCLUDE 'ill-list-table.inc' %]
+                         [% INCLUDE 'ill-list-table.inc' %]
                     </div> <!-- /#results -->
                 [% ELSIF query_type == 'availability' %]
                     <!-- availability -->
                     <h1>Availability</h1>
-                    <div id="results" class="page-section">
+                    <div id="results">
                         <h3>Displaying availability results</h3>
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                             [% FOREACH key IN whole.keys %]
@@ -830,6 +842,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-biblio-format.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
@@ -871,6 +885,7 @@
     [% IF query_type == 'generic_confirm' && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability-partner.js") | $raw %]
     [% END %]
+
 [% END %]
 
 [% TRY %]
