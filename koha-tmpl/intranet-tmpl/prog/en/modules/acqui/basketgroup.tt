@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Branches %]
 [% USE Price %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Basket grouping for [% booksellername | html %] &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -323,7 +324,7 @@
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="newbasketgroup"><i class="fa fa-plus"></i> New basket group</a></div>
                     </div>
                     <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
-                    [% IF (NoEDIMessage) %]<div><strong>No EDIFACT configuration for [% booksellername | html %]</strong></div>[% END %]
+                    [% IF (NoEDIMessage && Koha.Preference('EDIFACT')) %]<div><strong>No EDIFACT configuration for [% booksellername | html %]</strong></div>[% END %]
 
                     [% WRAPPER tabs id= "basket_groups" %]
                         [% WRAPPER tabs_nav %]
@@ -403,11 +404,13 @@
                                                         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="Reopen" /></form>
                                                         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="Export as PDF" /></form>
                                                         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="Export as CSV" /></form>
-                                                [% IF (ediaccount) %]
-                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="Generate EDIFACT order" /></form>
-                                                [% ELSE %]
-                                                        <div>No EDIFACT configuration for [% booksellername | html %]</div>
-                                                [% END %]
+                                                        [% IF Koha.Preference('EDIFACT') %]
+                                                            [% IF (ediaccount) %]
+                                                                 <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="Generate EDIFACT order" /></form>
+                                                            [% ELSE %]
+                                                                <div>No EDIFACT configuration for [% booksellername | html %]</div>
+                                                            [% END %]
+                                                        [% END %]
                                                     </td>
                                                 </tr>
                                             [% END %]
