@@ -24,6 +24,8 @@ use Try::Tiny qw( catch try );
 use DateTime;
 
 use C4::Letters;
+
+use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
@@ -1878,6 +1880,100 @@ sub TO_JSON {
 }
 
 =head2 Internal methods
+
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        illrequest_id  => 'ill_request_id',
+        borrowernumber => 'patron_id',
+        branchcode     => 'library_id',
+        status_alias   => 'status_av',
+        placed         => 'requested_date',
+        replied        => 'replied_date',
+        updated        => 'timestamp',
+        completed      => 'completed_date',
+        accessurl      => 'access_url',
+        price_paid     => 'paid_price',
+        notesopac      => 'opac_notes',
+        notesstaff     => 'staff_notes',
+        orderid        => 'ill_backend_request_id',
+        backend        => 'ill_backend_id',
+    };
+}
+
+=head3 strings_map
+
+    my $strings = $self->string_map({ [ public => 0|1 ] });
+
+Returns a map of column name to string representations. Extra information
+is returned depending on the column characteristics as shown below.
+
+Accepts a param hashref where the I<public> key denotes whether we want the public
+or staff client strings.
+
+Example:
+
+    {
+        status => {
+            backend => 'backendName',
+            str     => 'Status description',
+            type    => 'ill_status',
+        },
+        status_alias => {
+            category => 'ILL_STATUS_ALIAS,
+            str      => $value, # the AV description, depending on $params->{public}
+            type     => 'av',
+        }
+    }
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    my $cache     = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key = 'ill:status_graph:' . $self->backend;
+
+    my $status_graph_union = $cache->get($cache_key);
+    unless ($status_graph_union) {
+        $status_graph_union = $self->capabilities;
+        $cache->set( $cache_key, $status_graph_union );
+    }
+
+    my $status_string =
+      ( exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{name} )
+      ? $status_graph_union->{ $self->status }->{name}
+      : $self->status;
+
+    my $status_code =
+      ( exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{id} )
+      ? $status_graph_union->{ $self->status }->{id}
+      : $self->status;
+
+    my $strings = {
+        status => {
+            backend => $self->backend, # the backend identifier
+            str     => $status_string, # the status description, taken from the status graph
+            code    => $status_code,   # the status id, taken from the status graph
+            type    => 'ill_status',   # fixed type
+        }
+    };
+
+    my $status_alias = $self->statusalias;
+    if ($status_alias) {
+        $strings->{"status_alias"} = {
+            category => 'ILL_STATUS_ALIAS',
+            str      => $params->{public} ? $status_alias->lib_opac : $status_alias->lib,
+            code     => $status_alias->authorised_value,
+            type     => 'av',
+        };
+    }
+
+    return $strings;
+}
 
 =head3 _type
 

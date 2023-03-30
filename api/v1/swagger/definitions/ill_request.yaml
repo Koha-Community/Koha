@@ -1,0 +1,137 @@
+---
+type: object
+properties:
+  ill_request_id:
+    type: integer
+    description: Internal ILL request identifier
+  biblio_id:
+    type:
+      - integer
+      - "null"
+    description: Internal bibliographic record identifier
+  patron_id:
+    type:
+      - integer
+      - "null"
+    description: Internal patron id
+  due_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Date and time the request item should be due when checked out
+  library_id:
+    type: string
+    description: Internal library identifier
+  requested_date:
+    type: string
+    format: date
+    description: Date the request was placed by the patron
+  replied_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: FIXME
+  timestamp:
+    type: string
+    format: date-time
+    description: Date and time of last object update
+  completed_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: Date the request was marked as completed
+  access_url:
+    type:
+      - string
+      - "null"
+    description: A URL for accessing the item
+  status:
+    type: string
+    description: |
+      The status the request is at.
+
+      Note: This is defined by each backend. Please refer to the specific backend's
+      documentation or code to understand the possible values.
+  medium:
+    type:
+      - string
+      - "null"
+    description: Description of the ILL item medium
+  cost:
+    type:
+      - string
+      - "null"
+    description: Default request cost
+  paid_price:
+    type:
+      - string
+      - "null"
+    description: Effective request cost
+  opac_notes:
+    type:
+      - string
+      - "null"
+    description: Note that is visible to the patron
+  staff_notes:
+    type:
+      - string
+      - "null"
+    description: Interal staff note about the request
+  ill_backend_id:
+    type: string
+    description: The ILL backend identifier string
+  ill_backend_request_id:
+    type:
+      - string
+      - "null"
+    description: Backend-specific request id
+  status_av:
+    type:
+      - string
+      - "null"
+    description: The authorised value category the field is linked to
+  biblio:
+    type:
+      - object
+      - "null"
+    description: The linked biblio object (x-koha-embed)
+  comments:
+    type:
+      - array
+      - "null"
+    description: The linked comment objects (x-koha-embed)
+  comments_count:
+    type:
+      - integer
+      - "null"
+    description: The linked comment objects count (x-koha-embed)
+  ill_extended_attributes:
+    type:
+      - array
+      - "null"
+    description: The linked extended ill request attributes (x-koha-embed)
+  library:
+    type:
+      - object
+      - "null"
+    description: The linked library object (x-koha-embed)
+  id_prefix:
+    type:
+      - string
+      - "null"
+    description: The id_prefix of the request (x-koha-embed)
+  patron:
+    type:
+      - object
+      - "null"
+    description: The linked patron object (x-koha-embed)
+  _strings:
+    type:
+      - object
+      - "null"
+    description: Expanded coded fiels (x-koha-embed)
+
+additionalProperties: false

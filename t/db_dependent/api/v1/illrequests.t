@@ -17,11 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Test::MockModule;
 use Test::MockObject;
 use Test::Mojo;
+
+use JSON qw(encode_json);
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -36,7 +38,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 my $t = Test::Mojo->new('Koha::REST::V1');
 
-subtest 'list() tests' => sub {
+subtest 'list_legacy() tests' => sub {
 
     plan tests => 30;
 
@@ -94,6 +96,7 @@ subtest 'list() tests' => sub {
             class => 'Koha::Illrequests',
             value => {
                 backend        => 'Mock',
+                biblio_id      => undef,
                 branchcode     => $library->branchcode,
                 borrowernumber => $patron_1->borrowernumber,
                 status         => 'STATUS1',
@@ -129,6 +132,7 @@ subtest 'list() tests' => sub {
             class => 'Koha::Illrequests',
             value => {
                 backend        => 'Mock',
+                biblio_id      => undef,
                 branchcode     => $library->branchcode,
                 borrowernumber => $patron_2->borrowernumber,
                 status         => 'STATUS2',
@@ -169,6 +173,56 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
       ->status_is(200)
       ->json_is( [ $req_formatted ] );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list() tests' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    Koha::Illrequests->search->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 ** 22 } # 22 => ill
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    $t->get_ok("//$userid:$password@/api/v1/ill_requests")
+      ->status_is(200)
+      ->json_is( [] );
+
+    my $req_1 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => undef, status => 'REQ' } });
+    my $req_2 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => undef, status => 'REQ' } } );
+    my $ret   = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => undef, status => 'RET' } } );
+
+    $t->get_ok("//$userid:$password@/api/v1/ill_requests")
+      ->status_is(200)
+      ->json_is( [ $req_1->to_api, $req_2->to_api, $ret->to_api ]);
+
+    my $query = encode_json({ status => 'REQ' });
+
+    # Filtering works
+    $t->get_ok("//$userid:$password@/api/v1/ill_requests?q=$query" )
+      ->status_is(200)
+      ->json_is( [ $req_1->to_api, $req_2->to_api ]);
 
     $schema->storage->txn_rollback;
 };
