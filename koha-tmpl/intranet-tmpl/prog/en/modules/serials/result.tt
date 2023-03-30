@@ -10,6 +10,7 @@
 
 [% IF ( total ) %]
 <h1>Search results from [% from | html %] to [% to | html %] of [% total | html %]</h1>
+<div class="page-section">
 <table>
     <tr>
        <th>Title</th>
@@ -40,6 +41,7 @@
         </tr>
     [% END %]
     </table>
+</div>
 [% ELSE %]
 
     <div class="dialog message">
