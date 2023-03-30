@@ -42,21 +42,16 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 
-
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">Curbside pickups</a>
-        </li>
-    </ol>
-</nav>
-
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active = 1 %]
+            <span>Curbside pickups</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% BLOCK waiting_holds %]
     [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
