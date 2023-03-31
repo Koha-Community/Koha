@@ -1,3 +1,5 @@
+[% USE raw %]
+[% USE HtmlTags %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -20,29 +22,32 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                [% IF course_name %] Edit <em>[% course_name | html %]</em> [% ELSE %] New course [% END %]
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF course_name %]
+                <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
+            [% ELSE %]
+                <span>New course</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% IF ( departments ) %]
 
     <div class="main container-fluid">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <h1>[% IF course_name %] Edit <em>[% course_name | html %]</em> [% ELSE %] New course [% END %]</h1>
+                <h1>
+                    [% IF course_name %]
+                        <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
+                    [% ELSE %]
+                        <span>New course</span>
+                    [% END %]
+                </h1>
 
             <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
                 [% IF course_id %]<input type="hidden" name="course_id" value="[% course_id | html %]" />[% END %]

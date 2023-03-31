@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE HtmlTags %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
@@ -32,22 +33,15 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Course details for <em>[% course.course_name | html %]</em>
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Course details for [% course.course_name | html | $HtmlTags tag="em" %]</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
@@ -73,7 +67,7 @@
             </div><!-- /toolbar -->
             [% END %]
 
-            <div class="page-section">
+            <div class="page-section clearfix">
 
                 <fieldset class="rows">
                 <ol>
