@@ -818,6 +818,7 @@ elsif ($phase eq 'Run this report'){
             }
             $template->param('sql'         => $sql,
                             'name'         => $name,
+                            'notes'         => $notes,
                             'sql_params'   => \@tmpl_parameters,
                             'auth_val_errors'  => \@authval_errors,
                             'enter_params' => 1,
