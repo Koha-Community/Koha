@@ -10,33 +10,26 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Templates</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ( template_id ) %]
-                        Edit label template [% template_id | html %]
-                    [% ELSE %]
-                        New label template
-                    [% END %]
-                </a>
-            </li>
-        </ol>
-    </nav>
-    [% END %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Templates</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF ( template_id ) %]
+                <span>Edit label template [% template_id | html %]</span>
+            [% ELSE %]
+                <span>New label template</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
