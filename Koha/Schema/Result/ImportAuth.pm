@@ -100,6 +100,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-31 10:47:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SRH+gauacnrd+nD9OtAfCQ
 
+sub koha_objects_class {
+    'Koha::Import::Record::Auths';
+}
+sub koha_object_class {
+    'Koha::Import::Record::Auth';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
