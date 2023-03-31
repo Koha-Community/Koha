@@ -1,3 +1,5 @@
+[% USE raw %]
+[% USE HtmlTags %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
@@ -20,29 +22,22 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="clubs.pl">Patron clubs</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                [% IF club %]
-                    Modify club <em>[% club.name | html %]</em>
-                [% ELSE %]
-                    Create a new <em>[% club_template.name | html %]</em> club
-                [% END %]
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF club %]
+                <span>Modify club [% club.name | html | $HtmlTags tag="em" %]</span>
+            [% ELSE %]
+                <span>Create a new [% club_template.name | html | $HtmlTags tag="em" %] club</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -57,9 +52,9 @@
                     <legend>
                         <h1>
                             [% IF club %]
-                                Modify club <em>[% club.name | html %]</em>
+                                <span>Modify club [% club.name | html | $HtmlTags tag="em" %]</span>
                             [% ELSE %]
-                                Create a new <em>[% club_template.name | html %]</em> club
+                                <span>Create a new [% club_template.name | html | $HtmlTags tag="em" %] club</span>
                             [% END %]
                         </h1>
                     </legend>
