@@ -1700,11 +1700,9 @@ sub get_notice {
     }
     my $metastring = join("\n", @metaarray);
 
-    my $illrequestattributes = {};
-    my $attributes = $self->illrequestattributes;
-    while ( my $attribute = $attributes->next ) {
-        $illrequestattributes->{$attribute->type} = $attribute->value;
-    }
+    my $illrequestattributes = {
+        map { $_->type => $_->value } $self->illrequestattributes->as_list
+    };
 
     my $letter = C4::Letters::GetPreparedLetter(
         module                 => 'ill',
