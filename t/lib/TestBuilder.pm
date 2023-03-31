@@ -592,7 +592,7 @@ sub _gen_default_values {
         },
         Branchtransfer => {
             daterequested      => dt_from_string(),
-            datesent           => dt_from_string(),
+            datesent           => undef,
             datearrived        => undef,
             datecancelled      => undef,
             reason             => undef,

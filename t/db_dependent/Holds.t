@@ -1738,10 +1738,15 @@ subtest 'Koha::Holds->get_items_that_can_fill returns items with datecancelled o
     my $biblio2 = $builder->build_sample_biblio();
     my $item2 = $builder->build_sample_item({ biblionumber => $biblio2->biblionumber });
 
-    my $transfer2 = $builder->build_object({ class => "Koha::Item::Transfers", value => {
-        datecancelled => undef,
-        itemnumber => $item2->itemnumber
-    }});
+    my $transfer2 = $builder->build_object(
+        {   class => "Koha::Item::Transfers",
+            value => {
+                datearrived   => dt_from_string,
+                datecancelled => undef,
+                itemnumber    => $item2->itemnumber
+            }
+        }
+    );
 
     my $hold2 = $builder->build_object({ class => 'Koha::Holds', value => {
         biblionumber => $biblio2->biblionumber,
