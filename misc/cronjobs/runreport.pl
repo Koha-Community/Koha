@@ -87,7 +87,11 @@ Verbose. Without this flag set, only fatal errors are reported.
 
 =item B<--format>
 
-Current options are text, html, csv, and tsv. At the moment, text and tsv both produce tab-separated tab-separated output.
+Current options are text, html, csv, and tsv. At the moment, text and tsv both produce tab-separated output.
+
+=item B<--separator>
+
+Separator character, only for csv format. Default to comma.
 
 =item B<--email>
 
@@ -221,8 +225,8 @@ unless ($format) {
     $format = 'text';
 }
 
-if( $csv_separator ){
-    if( $format eq 'csv' ) {
+if ($csv_separator) {
+    if ( $format eq 'csv' ) {
         $separator = "$csv_separator";
     } else {
         print STDERR "Cannot specify separator if not using CSV format\n";
