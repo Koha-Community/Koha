@@ -45,20 +45,21 @@ $cache->clear_from_cache("MarcSubfieldStructure-");
 # 952$t is linked with items.copynumber and is not repeatable
 setup_mss();
 
-# FIXME Later in this script we are comparing itemtypes, ordered by their description.
-# MySQL and Perl don't sort _ identically.
-# If you have one itemtype BK and another one B_K, MySQL will sort B_K first when Perl will sort it last
-my @itemtypes = Koha::ItemTypes->search->as_list;
-for my $itemtype ( @itemtypes ) {
-    my $d = $itemtype->description;
-    $d =~ s|_||g;
-    $itemtype->description($d)->store;
-}
-
 subtest 'authorised values' => sub {
     #plan tests => 1;
 
     my $biblio = $builder->build_sample_biblio({ value => {frameworkcode => ''}});
+
+    # FIXME Later in this script we are comparing itemtypes, ordered by their description.
+    # MySQL and Perl don't sort _ identically.
+    # If you have one itemtype BK and another one B_K, MySQL will sort B_K first when Perl will sort it last
+    my @itemtypes = Koha::ItemTypes->search->as_list;
+    for my $itemtype ( @itemtypes ) {
+        my $d = $itemtype->description;
+        $d =~ s|_||g;
+        $itemtype->description($d)->store;
+    }
+
     my $subfields =
       Koha::UI::Form::Builder::Item->new(
         { biblionumber => $biblio->biblionumber } )->edit_form;
