@@ -1092,6 +1092,24 @@ subtest 'Helpers' => sub {
         });
     is($queue->count, 1, "Notice is not queued");
 
+    my $attribute = $builder->build({
+        source => 'Illrequestattribute',
+        value  => { illrequest_id => $illrq_obj->illrequest_id, type => 'pages', value => '42' }
+    });
+
+    my $ILL_REQUEST_CANCEL_content =
+        q{The patron for interlibrary loans request [% illrequest.illrequest_id %], with the following details, has requested cancellation of this ILL request:
+
+[% ill_full_metadata %]
+
+Attribute: Pages=[% illrequestattributes.pages %]
+};
+    my $dbh = C4::Context->dbh;
+    $dbh->do(q{UPDATE letter
+        SET content=?
+        WHERE code="ILL_REQUEST_CANCEL"
+    }, undef, $ILL_REQUEST_CANCEL_content);
+
     #get_notice
     my $not = $illrq_obj->get_notice({
         notice_code => 'ILL_REQUEST_CANCEL',
@@ -1120,7 +1138,7 @@ subtest 'Helpers' => sub {
     $not->{content} =~ s/\s//g;
 
     is(
-        $not->{content},"Thepatronforinterlibraryloansrequest" . $illrq_obj->id . ",withthefollowingdetails,hasrequestedcancellationofthisILLrequest:-author:myauthor-title:mytitle",
+        $not->{content},"Thepatronforinterlibraryloansrequest" . $illrq_obj->id . ",withthefollowingdetails,hasrequestedcancellationofthisILLrequest:-author:myauthor-title:mytitleAttribute:Pages=42",
         'Correct content returned from get_notice with metadata correctly ordered'
     );
 
