@@ -67,6 +67,18 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 25 },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</import_record_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("import_record_id");
+
 =head1 RELATIONS
 
 =head2 import_record
@@ -85,8 +97,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bm1ctlmYDh4qWUU95SLqBw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-31 10:47:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SRH+gauacnrd+nD9OtAfCQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

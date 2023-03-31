@@ -186,16 +186,16 @@ __PACKAGE__->set_primary_key("import_record_id");
 
 =head1 RELATIONS
 
-=head2 import_auths
+=head2 import_auth
 
-Type: has_many
+Type: might_have
 
 Related object: L<Koha::Schema::Result::ImportAuth>
 
 =cut
 
-__PACKAGE__->has_many(
-  "import_auths",
+__PACKAGE__->might_have(
+  "import_auth",
   "Koha::Schema::Result::ImportAuth",
   { "foreign.import_record_id" => "self.import_record_id" },
   { cascade_copy => 0, cascade_delete => 0 },
@@ -262,8 +262,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-17 11:17:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bGhtHdQ7/pXWWezcgz/4EA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-31 10:47:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XNZhr5GRMgyndwQMsGfGRQ
 
 sub koha_object_class {
     'Koha::Import::Record';
