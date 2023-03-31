@@ -104,6 +104,7 @@
                                                 <th style="display:none;" class="noExport">Type</th>
                                                 <th class="NoSort noExport"></th>
                                                 <th class="anti-the">Title</th>
+                                                <th>Author</th>
                                                 <th>Item type</th>
                                                 <th>Call number</th>
                                                 <th>Vol info</th>
@@ -154,13 +155,11 @@
                                                 </td>
                                                 <td>
                                                 [% INCLUDE 'biblio-title.inc' biblio=issue, link => 1 %]
-                                                <p class="results-summary item-details">[% issue.author | html %]</p>
-
                                                     [% IF ( Koha.Preference( 'OpacStarRatings' ) == 'all' ) %]
                                                         [% INCLUDE 'user-star-ratings.inc' item=issue %]
                                                     [% END %]
-
                                                 </td>
+                                                <td>[% issue.author | html %]</td>
                                                 <td>
                                                 [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                     [% IF ( issue.imageurl ) %]
