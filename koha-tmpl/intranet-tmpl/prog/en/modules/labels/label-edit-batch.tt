@@ -12,46 +12,28 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-    [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Batches</a>
-            </li>
-
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Batches</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF description %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Edit [% description | html %]
-                    </a>
-                </li>
-
+                <span>Edit [% description | html %]</span>
             [% ELSIF batch_id %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Edit label batch [% batch_id | html %]
-                    </a>
-                </li>
-
+                <span>Edit label batch [% batch_id | html %]</span>
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New label batch
-                    </a>
-                </li>
+                <span>New label batch</span>
             [% END %]
-        </ol>
-    </nav>
-    [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
