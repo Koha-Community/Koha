@@ -48,5 +48,5 @@ override_dh_compress:
 	dh_compress --exclude=history.txt --exclude=contributors.yaml --exclude=teams.yaml
 
 override_dh_installchangelogs:
-    # Debian Buster onwards renames history.txt to changelog which breaks Koha's timeline feature
-    dh_installchangelogs --exclude=history.txt
+	# Debian Buster onwards renames history.txt to changelog which breaks Koha's timeline feature
+	dh_installchangelogs --exclude=history.txt
