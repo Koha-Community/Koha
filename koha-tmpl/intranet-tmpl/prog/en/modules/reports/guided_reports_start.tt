@@ -1324,7 +1324,6 @@
 
                 [% IF ( editsql ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
-                        <input type="hidden" name="phase" value="Update SQL" />
                         <input type="hidden" name="id" value="[% id | html %]"/>
                         <fieldset class="rows">
                             <legend><h1>Edit SQL report</h1></legend>
@@ -1382,7 +1381,8 @@
                         </fieldset>
 
                         <fieldset class="action">
-                            <input type="submit" name="submit" class="btn btn-primary" value="Update SQL" />
+                            <input type="submit" name="phase" class="btn btn-primary" value="Update SQL" />
+                            <input type="submit" name="phase" class="btn btn-primary" value="Update and run SQL" />
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
