@@ -215,9 +215,6 @@ export default {
 </script>
 
 <style>
-#navmenulist a.router-link-active {
-    font-weight: 700;
-}
 #menu ul ul,
 #navmenulist ul ul {
     padding-left: 2em;
@@ -241,13 +238,14 @@ textarea {
 .flatpickr-input {
     width: 30%;
 }
-
+#navmenulist ul li a.current.disabled {
+    background-color: inherit;
+    border-left: 5px solid #e6e6e6;
+    color: #000;
+}
 #navmenulist ul li a.disabled {
     color: #666;
     pointer-events: none;
     font-weight: 700;
-}
-#navmenulist ul li a.disabled.router-link-active {
-    color: #000;
 }
 </style>

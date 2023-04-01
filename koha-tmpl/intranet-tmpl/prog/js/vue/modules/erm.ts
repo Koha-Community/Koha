@@ -21,7 +21,7 @@ import { routes } from "../routes/erm";
 
 const router = createRouter({
     history: createWebHistory(),
-    linkExactActiveClass: "current",
+    linkActiveClass: "current",
     routes,
 });
 
