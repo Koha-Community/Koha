@@ -1,0 +1,138 @@
+---
+#
+#  Copyright 2023 Koha Development Team
+#
+#  This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+description:
+  - "Debit types used in Koha"
+
+tables:
+  - account_debit_types:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - code: "ACCOUNT"
+          description: "Account creation fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "ACCOUNT_RENEW"
+          description: "Account renewal fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "ARTICLE_REQUEST"
+          description: "Article request fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "LOST"
+          description: "Lost item"
+          can_be_invoiced: "1"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "MANUAL"
+          description: "Manual fee"
+          can_be_invoiced: "1"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "0"
+
+        - code: "NEW_CARD"
+          description: "New card fee"
+          can_be_invoiced: "1"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "OVERDUE"
+          description: "Overdue fine"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "PROCESSING"
+          description: "Lost item processing fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "PAYOUT"
+          description: "Payment from library to patron"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RENT"
+          description: "Rental fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RENT_DAILY"
+          description: "Daily rental fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RENT_DAILY_RENEW"
+          description: "Renewal of daily rental item"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RENT_RENEW"
+          description: "Renewal of rental item"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RESERVE"
+          description: "Hold fee"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "RESERVE_EXPIRED"
+          description: "Hold waiting too long"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"
+
+        - code: "VOID"
+          description: "Credit has been voided"
+          can_be_invoiced: "0"
+          can_be_sold: "0"
+          default_amount: ~
+          is_system: "1"

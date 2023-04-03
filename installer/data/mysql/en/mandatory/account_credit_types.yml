@@ -1,0 +1,81 @@
+---
+#
+#  Copyright 2023 Koha Development Team
+#
+#  This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+description:
+  - "Credit types used in Koha"
+
+tables:
+  - account_credit_types:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - code: "OVERPAYMENT"
+          description: "Overpayment refund"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "PAYMENT"
+          description: "Payment"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "WRITEOFF"
+          description: "Writeoff"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "FORGIVEN"
+          description: "Forgiven"
+          can_be_added_manually: "1"
+          is_system: "1"
+
+        - code: "CREDIT"
+          description: "Credit"
+          can_be_added_manually: "1"
+          is_system: "1"
+
+        - code: "DISCOUNT"
+          description: "A discount applied to a patrons fine"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "REFUND"
+          description: "Refund"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "LOST_FOUND"
+          description: "Lost item fee refund"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "PURCHASE"
+          description: "Purchase"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "CANCELLATION"
+          description: "Cancellation"
+          can_be_added_manually: "0"
+          is_system: "1"
+
+        - code: "PROCESSING_FOUND"
+          description: "Lost item processing fee refund"
+          can_be_added_manually: "0"
+          is_system: "1"
