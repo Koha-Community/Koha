@@ -954,22 +954,22 @@ ENDSQL
 =head2 SendQueuedMessages ([$hashref]) 
 
     my $sent = SendQueuedMessages({
-        letter_code => $letter_code,
+        message_id => $id,
         borrowernumber => $who_letter_is_for,
+        letter_code => $letter_code, # can be scalar or arrayref
+        type => $type, # can be scalar or arrayref
         limit => 50,
         verbose => 1,
-        type => 'sms',
+        where => $where,
     });
 
-Sends all of the 'pending' items in the message queue, unless
-parameters are passed.
+Sends 'pending' messages from the queue, based on parameters.
 
-The letter_code, borrowernumber and limit parameters are used
-to build a parameter set for _get_unsent_messages, thus limiting
-which pending messages will be processed. They are all optional.
+The (optional) message_id, borrowernumber, letter_code, type and where
+parameter are used to select which pending messages will be processed. The
+limit parameter determines the volume of results, i.e. sent messages.
 
-The verbose parameter can be used to generate debugging output.
-It is also optional.
+The optional verbose parameter can be used to generate debugging output.
 
 Returns number of messages sent.
 
@@ -977,19 +977,26 @@ Returns number of messages sent.
 
 sub SendQueuedMessages {
     my $params = shift;
+    my $limit = $params->{limit};
+    my $where = $params->{where};
 
-    my $which_unsent_messages = {
-        'message_id'             => $params->{'message_id'},
-        'limit'                  => $params->{'limit'} // 0,
-        'borrowernumber'         => $params->{'borrowernumber'} // q{},
-        'letter_code'            => $params->{'letter_code'} // q{},
-        'message_transport_type' => $params->{'type'} // q{},
-        'where'                  => $params->{'where'} // q{},
-    };
-    my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
+    my $count_messages = 0;
+    my $unsent_messages = Koha::Notice::Messages->search({
+        status  => 'pending',
+        $params->{message_id} ? ( message_id => $params->{message_id} ) : (),
+        $params->{borrowernumber} ? ( borrowernumber => $params->{borrowernumber} ) : (),
+        # Check for scalar or array in letter_code and type
+        ref($params->{letter_code}) && @{$params->{letter_code}} ? ( letter_code => $params->{letter_code} ) : (),
+        !ref($params->{letter_code}) && $params->{letter_code} ? ( letter_code => $params->{letter_code} ) : (),
+        ref($params->{type}) && @{$params->{type}} ? ( message_transport_type => $params->{type} ) : (), #TODO Existing inconsistency
+        !ref($params->{type}) && $params->{type} ? ( message_transport_type => $params->{type} ) : (), #TODO Existing inconsistency
+    });
+    $unsent_messages = $unsent_messages->search( \$where ) if $where;
+
     $domain_limits = Koha::Notice::Util->load_domain_limits; # (re)initialize per run
-    MESSAGE: foreach my $message ( @$unsent_messages ) {
-        my $message_object = Koha::Notice::Messages->find( $message->{message_id} );
+    while( ( my $message_object = $unsent_messages->next ) && ( !$limit || $count_messages < $limit ) ) {
+        my $message = $message_object->unblessed;
+
         # If this fails the database is unwritable and we won't manage to send a message that continues to be marked 'pending'
         $message_object->make_column_dirty('status');
         return unless $message_object->store;
@@ -1000,9 +1007,10 @@ sub SendQueuedMessages {
                       $message->{'borrowernumber'} || 'Admin' )
           if $params->{'verbose'};
         # This is just begging for subclassing
-        next MESSAGE if ( lc($message->{'message_transport_type'}) eq 'rss' );
+        next if ( lc($message->{'message_transport_type'}) eq 'rss' );
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
-            _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+            my $rv = _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+            $count_messages++ if $rv;
         }
         elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
             if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
@@ -1011,12 +1019,12 @@ sub SendQueuedMessages {
                 unless ( $sms_provider ) {
                     warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'};
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
-                    next MESSAGE;
+                    next;
                 }
                 unless ( $patron->smsalertnumber ) {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'};
-                    next MESSAGE;
+                    next;
                 }
                 $message->{to_address}  = $patron->smsalertnumber; #Sometime this is set to email - sms should always use smsalertnumber
                 $message->{to_address} .= '@' . $sms_provider->domain();
@@ -1029,13 +1037,15 @@ sub SendQueuedMessages {
                 }
 
                 _update_message_to_address($message->{'message_id'}, $message->{to_address});
-                _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+                my $rv = _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+                $count_messages++ if $rv;
             } else {
-                _send_message_by_sms( $message );
+                my $rv = _send_message_by_sms( $message );
+                $count_messages++ if $rv;
             }
         }
     }
-    return scalar( @$unsent_messages );
+    return $count_messages;
 }
 
 =head2 GetRSSMessages
@@ -1307,9 +1317,10 @@ sub _send_message_by_email {
     my $message = shift or return;
     my ($username, $password, $method) = @_;
 
-    my $patron = Koha::Patrons->find( $message->{borrowernumber} );
+    my $patron;
     my $to_address = $message->{'to_address'};
     unless ($to_address) {
+        $patron = Koha::Patrons->find( $message->{borrowernumber} );
         unless ($patron) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status(
@@ -1337,7 +1348,12 @@ sub _send_message_by_email {
     }
 
     # Skip this message if we exceed domain limits in this run
-    return if Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits });
+    if( Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits }) ) {
+        # Save the to_address if you delay the message so that we dont need to look it up again
+        _update_message_to_address( $message->{'message_id'}, $to_address )
+            if !$message->{to_address};
+        return;
+    }
 
     my $subject = $message->{'subject'};
 
@@ -1350,6 +1366,7 @@ sub _send_message_by_email {
     my $branch_returnpath = undef;
     my $library;
 
+    $patron //= Koha::Patrons->find( $message->{borrowernumber} ); # we might already found him
     if ($patron) {
         $library           = $patron->library;
         $branch_email      = $library->from_email_address;
