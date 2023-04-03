@@ -11,7 +11,7 @@
                 <div class="modal-body">
                         <fieldset class="brief">
                             <label for="ODpassword">Password:</label>
-                            <input type="password" name="ODpassword" id="ODpassword" value="" />
+                            <input type="password" name="ODpassword" id="ODpassword" value="" autocomplete="off" />
                         </fieldset>
                 </div>
                 <div class="modal-footer">

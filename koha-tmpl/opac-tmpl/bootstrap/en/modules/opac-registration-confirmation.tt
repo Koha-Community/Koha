@@ -88,15 +88,15 @@
                                         <legend>Log in to your account:</legend>
                                         <label for="userid">Login:</label>
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="[% borrower.userid | html %]" />
+                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="[% borrower.userid | html %]" autocomplete="off" />
                                         [% ELSE %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="" />
+                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="" autocomplete="off" />
                                         [% END %]
                                         <label for="password">Password:</label>
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="password" id="password" size="10" name="password" value="[% password_cleartext | html %]" />
+                                            <input class="form-control" type="password" id="password" size="10" name="password" value="[% password_cleartext | html %]" autocomplete="off" />
                                         [% ELSE %]
-                                            <input class="form-control" type="password" id="password" size="10" name="password" value="" />
+                                            <input class="form-control" type="password" id="password" size="10" name="password" value="" autocomplete="off" />
                                         [% END %]
                                     <fieldset class="action">
                                         <input type="submit" value="Log in" class="btn btn-primary" />
