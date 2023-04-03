@@ -5,6 +5,8 @@ use Test::More tests => 3;
 use t::lib::TestBuilder;
 use C4::Items qw( GetMarcItem );
 
+use Koha::AuthorisedValues;
+
 BEGIN {
     use_ok('Koha::Z3950Responder');
     use_ok('Koha::Z3950Responder::Session');
@@ -39,7 +41,8 @@ subtest 'add_item_status' => sub {
             value  => {
                 itemnumber    => $item_1->itemnumber,
                 datearrived   => undef,
-                datecancelled => undef
+                datecancelled => undef,
+                datesent      => \'NOW()',
             }
         }
     );
