@@ -419,7 +419,7 @@ Circulation:
                   0: "don't ask"
             - "for confirmation."
         -
-            - By default, set the LOST value of an item to
+            - By default, set the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> value of an item to
             - pref: DefaultLongOverdueLostValue
               choices: authval
               source: LOST
@@ -428,11 +428,11 @@ Circulation:
               class: integer
             - days.
             - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
-            - "<br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+            - "<br>Example: [1] [30] Sets an item to the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value 1 when it has been overdue for more than 30 days."
             - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
-            - "Charge a lost item to the patron's account when the LOST value of the item changes to:"
+            - "Charge a lost item to the patron's account when the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value of the item changes to:"
             - pref: DefaultLongOverdueChargeValue
               choices: authval
               source: LOST
@@ -440,10 +440,10 @@ Circulation:
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
-            - When using the automatic item loss process, skip items with lost values matching any of
+            - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
             - pref: DefaultLongOverdueSkipLostStatuses
             - "."
-            - <br>Leave this field empty if you don't want to skip any lost statuses.
+            - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
             - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
         -
             - "When issuing an item that has been marked as lost, "
@@ -542,9 +542,9 @@ Circulation:
             - "<br />Can name any field in the items table followed by a colon then a space then"
             - "a bracketed list of values separated by commas."
             - "For example:"
-            - "<br />ccode: [NEWFIC,null,DVD]"
-            - "<br />itype: [NEWBK,\"\"]"
-            - "<br /> <strong>NOTE:</strong> The word 'null' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
+            - "<br />ccode: [NEWFIC,NULL,DVD] <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=CCODE'>Collection codes</a>"
+            - "<br />itype: [NEWBK,\"\"] <a href='/cgi-bin/koha/admin/itemtypes.pl'>Item types</a>"
+            - "<br /> <strong>NOTE:</strong> The word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
         -
             - pref: UpdateNotForLoanStatusOnCheckout
               type: textarea
@@ -561,11 +561,11 @@ Circulation:
                   0: "Don't trap"
             - items that are not for loan but holdable ( notforloan < 0 ) to fill holds.
         -
-            - Never trap items with 'not for loan' values of
+            - Never trap items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">'not for loan'</a> values of
             - pref: SkipHoldTrapOnNotForLoanValue
               class: integer
             - to fill holds.
-            - "(list of not for loan values separated with a pipe '|')"
+            - "(list of <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN'>not for loan</a> values separated with a pipe '|')"
         -
             - pref: HoldsAutoFill
               choices:
@@ -616,6 +616,7 @@ Circulation:
               syntax: text/x-yaml
               class: code
             - "This is a list of value pairs. The first value is followed immediately by colon space then the second value.<br/><br/>"
+            - <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOC">Location codes</a><br/><br/>
             - "Examples:<br/>"
             - "PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check in.<br/>"
             - "FIC: GEN - causes an item in the Fiction location to be updated into the General stacks location on check in.<br/>"
@@ -649,14 +650,11 @@ Circulation:
               type: textarea
               syntax: text/x-yaml
               class: code
-            - "This is a list of item types and value pairs.<br/><br/>"
-            - "<strong>Examples:</strong><br/>"
-            - "_ALL_:<br/>"
-            - "&nbsp-1: 0<br/><br/>"
-            - "CR:<br/>"
-            - "&nbsp1: 0<br/><br/>"
-            - "When an item is checked in, if it's item type matches CR then when the value on the left (1) matches the items' not for loan value it will be updated to the value on the right.<br/><br/>The special term _ALL_ is used on the left side of the colon (:) to affect all item types, <strong>this does not override all other rules</strong><br/><br/>"
-            - "Each item type needs to be defined on a separate line on the left side of the colon (:).<br/>Each pair of not for loan values, for that item type, should be listed on separate lines below the item type, each indented by a leading space<br/><br/>"
+            - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value
+            - "it will be updated to the right-hand value. For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
+            - "Can be used for showing only the not for loan description. E.g. '-1: ONLYMESSAGE'."
+            - "Each pair of values should be on a separate line.<br/>"
+            - <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">Not for loan values</a>
         -
             - pref: HidePersonalPatronDetailOnCirculation
               choices:
@@ -962,8 +960,8 @@ Circulation:
                   allow_and_notify: "Allow to mark items as lost and notify the patron"
             - from the 'Holds to pull' page. Values to be applied must be defined in <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UpdateItemWhenLostFromHoldList">UpdateItemWhenLostFromHoldList</a>.
         -
-            - A list of values to update an item's values with when it is marked as lost from the 'Holds to pull' page.
-            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost. (Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CanMarkHoldsToPullAsLost">CanMarkHoldsToPullAsLost</a>)'
+            - A list of values to update an item's values with when it is marked as <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> from the 'Holds to pull' page.
+            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a>. (Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CanMarkHoldsToPullAsLost">CanMarkHoldsToPullAsLost</a>)'
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
               syntax: text/x-yaml
