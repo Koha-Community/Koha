@@ -62,7 +62,8 @@ subtest 'add_item_status' => sub {
             value  => {
                 itemnumber    => $item_1->itemnumber,
                 datearrived   => undef,
-                datecancelled => undef
+                datecancelled => undef,
+                datesent      => \'NOW()',
             }
         }
     );
