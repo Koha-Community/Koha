@@ -48,29 +48,54 @@ sub load_domain_limits {
                 ? [ $entry->{domain} ]
                 : $entry->{domain};
             # Convert to hash structure by domain name
-            $domain_limits = { map { lc $_->{name}, { limit => $_->{limit}, unit => $_->{unit}, count => 0 }} @$domain_limits };
+            $domain_limits = { map { _init_domain_entry($_); } @$domain_limits };
         }
     }
-    return _fill_domain_counts($domain_limits);
+    return $domain_limits;
+}
+
+sub _init_domain_entry {
+    my ( $config_entry ) = @_;
+    # Return either a hash like ( name => { limit => , unit =>, count => } ) for regular entries
+    # or return a hash like ( name => { belongs_to => } ) for a domain that is part of a group
+
+    return if ref($config_entry) ne 'HASH' || !exists $config_entry->{name};
+    my $elements;
+    if( $config_entry->{belongs_to} ) {
+        $elements = { belongs_to => lc $config_entry->{belongs_to} };
+    } else {
+        $elements = { limit => $config_entry->{limit}, unit => $config_entry->{unit}, count => undef };
+    }
+    return ( lc $config_entry->{name}, $elements );
 }
 
 =head2 exceeds_limit
 
-    my $boolean = Koha::Notice::Util->exceeds_limit( $to_address, $domain_limits );
+    my $boolean = Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits, incr => 1|0 });
 
 =cut
 
 sub exceeds_limit {
-    my ( $class, $to_address, $domain_limits ) = @_;
-    return 0 if !$domain_limits;
+    my ( $class, $params ) = @_;
+    my $domain_limits = $params->{limits} or return 0; # no limits at all
+    my $to_address = $params->{to} or return 0; # no address, no limit exceeded
+    my $incr = $params->{incr} // 1; # by default we increment
+
     my $domain = q{};
-    $domain = lc $1 if $to_address && $to_address =~ /@(.*)/;
-    return 0 if !exists $domain_limits->{$domain};
-    return 1 if $domain_limits->{$domain}->{count} >= $domain_limits->{$domain}->{limit};
-    $domain_limits->{$domain}->{count}++;
-    warn "Sending messages: domain $domain reached limit of ".
-        $domain_limits->{$domain}->{limit}. '/'. $domain_limits->{$domain}->{unit}
-        if $domain_limits->{$domain}->{count} == $domain_limits->{$domain}->{limit};
+    $domain = lc $1 if $to_address && $to_address =~ /@(\H+)/;
+    return 0 if !$domain || !exists $domain_limits->{$domain};
+
+    # Keep in mind that domain may be part of group count
+    my $group = $domain_limits->{$domain}->{belongs_to} // $domain;
+    _get_domain_count( $domain, $group, $domain_limits ) if !defined $domain_limits->{$group}->{count};
+    return 1 if $domain_limits->{$group}->{count} >= $domain_limits->{$group}->{limit};
+
+    if( $incr ) {
+        $domain_limits->{$group}->{count}++;
+        warn "Sending messages: domain $group reached limit of ".
+          $domain_limits->{$group}->{limit}. '/'. $domain_limits->{$group}->{unit}
+            if $domain_limits->{$group}->{count} == $domain_limits->{$group}->{limit};
+    }
     return 0;
 }
 
@@ -78,20 +103,30 @@ sub exceeds_limit {
 
 =cut
 
-sub _fill_domain_counts {
-    my ( $limits ) = @_;
-    return $limits if !$limits;
+sub _get_domain_count {
+    my ( $domain, $group, $limits ) = @_;
+
+    # Check if there are group members too
+    my @domains;
+    push @domains, $domain if $domain eq $group;
+    push @domains, map
+    {
+        my $belongs = $limits->{$_}->{belongs_to} // q{};
+        $belongs eq $group ? $_ : ();
+    } keys %$limits;
+
+    my $sum = 0;
     my $dt_parser = Koha::Database->new->schema->storage->datetime_parser;
-    foreach my $domain ( keys %$limits ) {
-        my $start_dt = _convert_unit( undef, $limits->{$domain}->{unit} );
-        $limits->{$domain}->{count} = Koha::Notice::Messages->search({
+    my $start_dt = _convert_unit( undef, $limits->{$group}->{unit} );
+    foreach my $domain ( @domains ) {
+        $sum += Koha::Notice::Messages->search({
             message_transport_type => 'email',
             status => 'sent',
             to_address => { 'LIKE', '%'.$domain },
             updated_on => { '>=', $dt_parser->format_datetime($start_dt) }, # FIXME Would be nice if possible via filter_by_last_update
         })->count;
     }
-    return $limits;
+    $limits->{$group}->{count} = $sum;
 }
 
 sub _convert_unit { # unit should be like \d+(m|h|d)
