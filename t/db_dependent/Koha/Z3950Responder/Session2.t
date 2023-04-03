@@ -5,6 +5,7 @@ use Test::More tests => 3;
 use t::lib::TestBuilder;
 use C4::Items qw( GetMarcItem );
 
+use Koha::AuthorisedValues;
 use Koha::Caches;
 
 BEGIN {
@@ -25,23 +26,32 @@ subtest 'add_item_status' => sub {
     plan tests => 2;
 
     # This time we are sustituting some values
-    $builder->schema->resultset( 'AuthorisedValue' )->delete_all();
-    $builder->build({
-        source => 'AuthorisedValue',
-        value => {
-            category => 'Z3950_STATUS',
-            authorised_value => 'AVAILABLE',
-            lib => "Free as a bird"
-        }
-    });
-    $builder->build({
-        source => 'AuthorisedValue',
-        value => {
-            category => 'Z3950_STATUS',
-            authorised_value => 'DAMAGED',
-            lib => "Borked completely"
-        }
-    });
+
+    my $available = Koha::AuthorisedValues->find({ category => 'Z3950_STATUS', authorised_value => 'AVAILABLE' });
+    unless( $available ){
+        $available = $builder->build_object({
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category => 'Z3950_STATUS',
+                authorised_value => 'AVAILABLE',
+                lib => "Free as a bird"
+            }
+        });
+    }
+    my $available_status = $available->lib;
+
+    my $damaged = Koha::AuthorisedValues->find({ category => 'Z3950_STATUS', authorised_value => 'DAMAGED' });
+    unless( $damaged ){
+        $damaged = $builder->build_object({
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category => 'Z3950_STATUS',
+                authorised_value => 'DAMAGED',
+                lib => "Borked completely"
+            }
+        });
+    }
+    my $damaged_status = $damaged->lib;
 
     ## FIRST ITEM HAS ALL THE STATUSES ##
     my $item_1 = $builder->build_sample_item(
@@ -81,10 +91,10 @@ subtest 'add_item_status' => sub {
     $zR->init_handler($args);
 
     $args->{HANDLE}->add_item_status($item_field_1);
-    is($item_field_1->subfield('k'),"Checked Out, Lost, Not for Loan, Borked completely, Withdrawn, In Transit, On Hold","All statuses added in one field as expected");
+    is($item_field_1->subfield('k'),"Checked Out, Lost, Not for Loan, $damaged_status, Withdrawn, In Transit, On Hold","All statuses added in one field as expected");
 
     $args->{HANDLE}->add_item_status($item_field_2);
-    is($item_field_2->subfield('k'),'Free as a bird',"Available status is 'Free as a bird' added as expected");
+    is($item_field_2->subfield('k'),"$available_status","Available status is '$available_status' added as expected");
 
 };
 
