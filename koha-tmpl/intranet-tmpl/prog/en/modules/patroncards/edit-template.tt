@@ -12,32 +12,25 @@
 [% END %]
 
     [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-            </li>
-            <li>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a>
-            </li>
-            <li>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Templates</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF (template_id) %]
-                        Edit ([% template_id | html %])
-                    [% ELSE %]
-                        New
-                    [% END %]
-                </a>
-            </li>
-        </ol>
-    </nav>
-    [% END %]
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF (template_id) %]
+                    <span>Edit ([% template_id | html %])</span>
+                [% ELSE %]
+                    <span>New</span>
+                [% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
@@ -45,7 +38,14 @@
                 <main>
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
-                    <h1>[% IF (template_id) %]Edit[% ELSE %]Create[% END %] patron card template[% IF (template_id) %] ([% template_id | html %])[% END %]</h1>
+                    <h1>
+                        [% IF (template_id) %]
+                            <span>Edit patron card template</span>
+                        [% ELSE %]
+                            <span>Create patron card template</span>
+                        [% END %]
+                        [% IF (template_id) %] ([% template_id | html %])[% END %]
+                    </h1>
                     <form name="input" action="/cgi-bin/koha/patroncards/edit-template.pl" method="get">
                         <div class="row">
                         <div class="col-sm-6">
