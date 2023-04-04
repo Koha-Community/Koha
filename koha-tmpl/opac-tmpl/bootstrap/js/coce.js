@@ -40,7 +40,7 @@ KOHA.coce = {
                             }
                         };
                         $(this).attr('href', url);
-                        $(this).append(img);
+                        $(this).empty().append(img);
                     });
                 }
             },
