@@ -118,17 +118,13 @@ function get_licenses_to_relate() {
 
 describe("Agreement CRUD operations", () => {
     before(() => {
-        cy.fetch_initial_ERM_sys_pref_value();
-        cy.set_ERM_sys_pref_value(true);
+        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
+        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
     });
 
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-    });
-
-    after(() => {
-        cy.reset_initial_ERM_sys_pref_value();
     });
 
     it("List agreements", () => {
