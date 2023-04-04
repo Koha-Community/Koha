@@ -815,6 +815,9 @@
 
                                                         [% UNLESS ( transfertodo) %]
                                                             [% INCLUDE display_bormessagepref %]
+                                                            [% IF patron.primary_contact_method %]
+                                                                <li id="main_contact_method">Main contact method: <span>[% patron.primary_contact_method | html %]</span></li>
+                                                            [% END %]
                                                         [% END %]
 
                                                         [% IF ( patron.is_debarred ) %]
