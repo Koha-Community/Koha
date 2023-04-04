@@ -70,6 +70,35 @@ sub set_preference {
     C4::Service->return_success( $response );
 }
 
+=head2 get_preference
+
+=over 4
+
+=item url path
+
+GET /svc/config/systempreferences/$preference
+
+=item url query
+
+preference=$pref_name
+
+=back
+
+Used to get a single system preference.
+
+=cut
+
+sub get_preference {
+    my $preference = scalar $query->param('pref');
+
+    my $value = C4::Context->preference( $preference );
+    $response->param( value => $value );
+
+    C4::Service->return_success( $response );
+}
+
+
+
 =head2 set_preferences
 
 =over 4
@@ -109,4 +138,5 @@ sub set_preferences {
 C4::Service->dispatch(
     [ 'POST /([A-Za-z0-9_-]+)', [ 'value' ], \&set_preference ],
     [ 'POST /', [], \&set_preferences ],
+    [ 'GET /', [ 'pref' ], \&get_preference],
 );

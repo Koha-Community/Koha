@@ -1,5 +1,5 @@
 <template>
-    <div v-if="ERMModule">
+    <div v-if="initialized">
         <div id="sub-header">
             <Breadcrumb />
             <Help />
@@ -140,8 +140,6 @@ export default {
             vendorStore,
             AVStore,
             setError,
-            erm_providers,
-            ERMModule,
             loading,
             loaded,
         }
@@ -149,62 +147,96 @@ export default {
     data() {
         return {
             component: "agreement",
+            initialized: false,
+            ERMModule: null,
+            erm_providers: [],
         }
     },
     beforeCreate() {
-        if (!this.ERMModule) {
-            return this.setError(
-                this.$__(
-                    'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
-                ),
-                false
-            )
-        }
         this.loading()
 
-        const acq_client = APIClient.acquisition
-        acq_client.vendors.getAll().then(
-            vendors => {
-                this.vendorStore.vendors = vendors
-                this.initialized = true
-            },
-            error => {}
-        )
+        const fetch_config = () => {
+            let promises = []
 
-        const av_client = APIClient.authorised_values
-        const authorised_values = {
-            av_agreement_statuses: "ERM_AGREEMENT_STATUS",
-            av_agreement_closure_reasons: "ERM_AGREEMENT_CLOSURE_REASON",
-            av_agreement_renewal_priorities: "ERM_AGREEMENT_RENEWAL_PRIORITY",
-            av_user_roles: "ERM_USER_ROLES",
-            av_license_types: "ERM_LICENSE_TYPE",
-            av_license_statuses: "ERM_LICENSE_STATUS",
-            av_agreement_license_statuses: "ERM_AGREEMENT_LICENSE_STATUS",
-            av_agreement_license_location: "ERM_AGREEMENT_LICENSE_LOCATION",
-            av_package_types: "ERM_PACKAGE_TYPE",
-            av_package_content_types: "ERM_PACKAGE_CONTENT_TYPE",
-            av_title_publication_types: "ERM_TITLE_PUBLICATION_TYPE",
+            const acq_client = APIClient.acquisition
+            promises.push(
+                acq_client.vendors.getAll().then(
+                    vendors => {
+                        this.vendorStore.vendors = vendors
+                    },
+                    error => {}
+                )
+            )
+
+            const av_client = APIClient.authorised_values
+            const authorised_values = {
+                av_agreement_statuses: "ERM_AGREEMENT_STATUS",
+                av_agreement_closure_reasons: "ERM_AGREEMENT_CLOSURE_REASON",
+                av_agreement_renewal_priorities:
+                    "ERM_AGREEMENT_RENEWAL_PRIORITY",
+                av_user_roles: "ERM_USER_ROLES",
+                av_license_types: "ERM_LICENSE_TYPE",
+                av_license_statuses: "ERM_LICENSE_STATUS",
+                av_agreement_license_statuses: "ERM_AGREEMENT_LICENSE_STATUS",
+                av_agreement_license_location: "ERM_AGREEMENT_LICENSE_LOCATION",
+                av_package_types: "ERM_PACKAGE_TYPE",
+                av_package_content_types: "ERM_PACKAGE_CONTENT_TYPE",
+                av_title_publication_types: "ERM_TITLE_PUBLICATION_TYPE",
+            }
+
+            let av_cat_array = Object.keys(authorised_values).map(function (
+                av_cat
+            ) {
+                return '"' + authorised_values[av_cat] + '"'
+            })
+
+            promises.push(
+                av_client.values
+                    .getCategoriesWithValues(av_cat_array)
+                    .then(av_categories => {
+                        Object.entries(authorised_values).forEach(
+                            ([av_var, av_cat]) => {
+                                const av_match = av_categories.find(
+                                    element => element.category_name == av_cat
+                                )
+                                this.AVStore[av_var] =
+                                    av_match.authorised_values
+                            }
+                        )
+                    })
+            )
+
+            promises.push(
+                sysprefs_client.sysprefs.get("ERMProviders").then(
+                    providers => {
+                        this.erm_providers = providers.value.split(",")
+                    },
+                    error => {}
+                )
+            )
+            return Promise.all(promises)
         }
 
-        let av_cat_array = Object.keys(authorised_values).map(function (
-            av_cat
-        ) {
-            return '"' + authorised_values[av_cat] + '"'
-        })
-
-        av_client.values
-            .getCategoriesWithValues(av_cat_array)
-            .then(av_categories => {
-                Object.entries(authorised_values).forEach(
-                    ([av_var, av_cat]) => {
-                        const av_match = av_categories.find(
-                            element => element.category_name == av_cat
-                        )
-                        this.AVStore[av_var] = av_match.authorised_values
-                    }
-                )
+        const sysprefs_client = APIClient.sysprefs
+        sysprefs_client.sysprefs
+            .get("ERMModule")
+            .then(value => {
+                this.ERMModule = value
+                if (!this.ERMModule) {
+                    this.loaded()
+                    return this.setError(
+                        this.$__(
+                            'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
+                        ),
+                        false
+                    )
+                }
+                return fetch_config()
             })
-            .then(() => this.loaded())
+            .then(() => {
+                this.loaded()
+                this.initialized = true
+            })
     },
     components: {
         Breadcrumb,
