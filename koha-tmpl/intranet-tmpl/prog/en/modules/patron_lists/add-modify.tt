@@ -17,40 +17,32 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-[% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        </li>
-        <li>
-            <a href="lists.pl">Patron lists</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
+    [% WRAPPER 'sub-header.inc' %]
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="lists.pl">Patron lists</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF list.patron_list_id %]
-                    Modify patron list
+                    <span>Modify patron list</span>
                 [% ELSE %]
-                    New patron list
+                    <span>New patron list</span>
                 [% END %]
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
-
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
         <h1>
             [% IF list.patron_list_id %]
-                Modify patron list
+                <span>Modify patron list</span>
             [% ELSE %]
-                New patron list
+                <span>New patron list</span>
             [% END %]
         </h1>
 
@@ -59,9 +51,9 @@
 
                 <legend>
                     [% IF list.patron_list_id %]
-                    Modify patron list
+                    <span>Modify patron list</span>
                     [% ELSE %]
-                    Create a new patron list
+                    <span>Create a new patron list</span>
                     [% END %]
                 </legend>
 
