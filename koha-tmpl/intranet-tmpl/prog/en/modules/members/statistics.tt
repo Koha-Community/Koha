@@ -19,33 +19,18 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-
-        [% IF blocking_error %]
-            <li>
-                <a href="#" aria-current="page">
-                    Patrons
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Statistics for [% INCLUDE 'patron-title.inc' invert_name = 1 %]
-
-                </a>
-            </li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Statistics</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
