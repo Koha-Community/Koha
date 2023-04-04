@@ -30,6 +30,7 @@ use MARC::Record;
 use utf8;
 
 my ( $email_object, $sendmail_params );
+our $send_or_die_count = 0;
 
 my $email_sender_module = Test::MockModule->new('Email::Stuffer');
 $email_sender_module->mock(
@@ -38,6 +39,7 @@ $email_sender_module->mock(
         ( $email_object, $sendmail_params ) = @_;
         my $str = $email_object->email->as_string;
         unlike $str, qr/I =C3=A2=C2=99=C2=A5 Koha=/, "Content is not double encoded";
+        $send_or_die_count++;
         warn "Fake send_or_die";
     }
 );
@@ -55,9 +57,12 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Orders;
 use Koha::Libraries;
+use Koha::Notice::Messages;
 use Koha::Notice::Templates;
+use Koha::Notice::Util;
 use Koha::Patrons;
 use Koha::Subscriptions;
+
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
@@ -156,7 +161,7 @@ Koha::Notice::Messages->find($messages->[0]->{message_id})->time_queued($yesterd
 my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
 is($messages_processed, 0, 'No queued messages processed if type limit passed with unused type');
 $messages_processed = C4::Letters::SendQueuedMessages( { type => 'sms' });
-is($messages_processed, 1, 'All queued messages processed, found correct number of messages with type limit');
+is($messages_processed, 0, 'All queued messages processed, nothing sent');
 $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is(
     $messages->[0]->{status},
@@ -958,7 +963,7 @@ EOF
 };
 
 subtest 'Test where parameter for SendQueuedMessages' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     my $dbh = C4::Context->dbh;
 
@@ -968,7 +973,6 @@ subtest 'Test where parameter for SendQueuedMessages' => sub {
         categorycode => $patron_category,
         branchcode   => $library->{branchcode},
         dateofbirth  => $date,
-        smsalertnumber => undef,
     })->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
@@ -1011,15 +1015,23 @@ subtest 'Test where parameter for SendQueuedMessages' => sub {
         'message_transport_type' => 'sms',
         'from_address'           => 'from@example.com'
     };
-    C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::EnqueueLetter($my_message2);
-    C4::Letters::EnqueueLetter($my_message3);
-    my $messages_processed = C4::Letters::SendQueuedMessages( { where => q{content NOT LIKE '%skipped%'} } );
-    is( $messages_processed, 2, "Correctly skipped processing one message containing the work 'skipped' in contents" );
+    my @id = ( C4::Letters::EnqueueLetter($my_message),
+        C4::Letters::EnqueueLetter($my_message2),
+        C4::Letters::EnqueueLetter($my_message3),
+    );
+    C4::Letters::SendQueuedMessages({
+        # Test scalar/arrayref in parameter too
+        letter_code => [ 'TEST_MESSAGE', 'SOMETHING_NOT_THERE' ],
+        type => 'sms',
+        where => q{content NOT LIKE '%skipped%'},
+    });
+    is( Koha::Notice::Messages->find( $id[0] )->status, 'failed', 'Processed but failed' );
+    is( Koha::Notice::Messages->find( $id[1] )->status, 'failed', 'Processed but failed' );
+    is( Koha::Notice::Messages->find( $id[2] )->status, 'pending', 'Skipped, still pending' );
 };
 
 subtest 'Test limit parameter for SendQueuedMessages' => sub {
-    plan tests => 3;
+    plan tests => 18;
 
     my $dbh = C4::Context->dbh;
 
@@ -1029,7 +1041,7 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
         categorycode => $patron_category,
         branchcode   => $library->{branchcode},
         dateofbirth  => $date,
-        smsalertnumber => undef,
+        email          => 'shouldnotwork@wrong.net',
     })->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
@@ -1043,28 +1055,71 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
         },
         'borrowernumber'         => $borrowernumber,
         'to_address'             => undef,
-        'message_transport_type' => 'sms',
+        'message_transport_type' => 'email',
         'from_address'           => 'from@example.com'
     };
-    C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::EnqueueLetter($my_message);
-    C4::Letters::EnqueueLetter($my_message);
-    my $messages_processed = C4::Letters::SendQueuedMessages( { limit => 1 } );
-    is( $messages_processed, 1,
-        'Processed 1 message with limit of 1 and 5 unprocessed messages' );
-    $messages_processed = C4::Letters::SendQueuedMessages( { limit => 2 } );
-    is( $messages_processed, 2,
-        'Processed 2 message with limit of 2 and 4 unprocessed messages' );
-    $messages_processed = C4::Letters::SendQueuedMessages( { limit => 3 } );
-    is( $messages_processed, 2,
-        'Processed 2 message with limit of 3 and 2 unprocessed messages' );
+    C4::Letters::EnqueueLetter($my_message) for 1..5;
+
+    $send_or_die_count = 0; # reset
+    my $messages_sent;
+    my $regex = qr|Fake send_or_die|;
+    warning_like {
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 1 } ) }
+        $regex,
+        "SendQueuedMessages with limit 1";
+    is( $messages_sent, 1,
+        'Sent 1 message with limit of 1 and 5 unprocessed messages' );
+
+    warnings_like {
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 2 } ) }
+        [ map { $regex } 1..2 ],
+        "SendQueuedMessages with limit 2";
+    is( $messages_sent, 2,
+        'Sent 2 messages with limit of 2 and 4 unprocessed messages' );
+
+    warnings_like {
+        $messages_sent = C4::Letters::SendQueuedMessages( { limit => 3 } ) }
+        [ map { $regex } 1..2 ],
+        "SendQueuedMessages with limit 3";
+    is( $messages_sent, 2,
+        'Sent 2 messages with limit of 3 and 2 unprocessed messages' );
+
+    is( $send_or_die_count, 5, '5 messages sent' );
+    # Mimic correct status in queue for next tests
+    Koha::Notice::Messages->search({ to_address => { 'LIKE', '%wrong.net' }})->update({ status => 'sent' });
+
+    # Now add a few domain limits too, sending 2 more mails to wrongnet, 2 to fake1, 2 to fake2
+    # Since we already sent 5 to wrong.net, we expect one deferral when limiting to 6
+    # Similarly we arrange for 1 deferral for fake1, and 2 for fake2
+    # We set therefore limit to 3 sent messages: we expect 2 sent, 4 deferred (so 6 processed)
+    t::lib::Mocks::mock_config( 'message_domain_limits', { domain => [
+        { name => 'wrong.net',    limit => 6, unit => '1m' },
+        { name => 'fake1.domain', limit => 1, unit => '1m' },
+        { name => 'fake2.domain', limit => 0, unit => '1m' },
+    ]});
+    C4::Letters::EnqueueLetter($my_message) for 1..2;
+    $my_message->{to_address} = 'someone@fake1.domain';
+    C4::Letters::EnqueueLetter($my_message) for 1..2;
+    $my_message->{to_address} = 'another@fake2.domain';
+    C4::Letters::EnqueueLetter($my_message) for 1..2;
+    my $mocked_util = Test::MockModule->new('Koha::Notice::Util');
+    my $count_exceeds_calls = 0;
+    $mocked_util->mock( 'exceeds_limit', sub {
+        $count_exceeds_calls++;
+        $mocked_util->original('exceeds_limit')->(@_);
+    });
+    warnings_like {
+        $messages_sent = C4::Letters::SendQueuedMessages({ limit => 3 }) }
+        [ qr/wrong.net reached limit/, $regex, qr/fake1.domain reached limit/, $regex ],
+        "SendQueuedMessages with limit 2 and domain limits";
+    is( $messages_sent, 2, 'Only expecting 2 sent messages' );
+    is(  Koha::Notice::Messages->search({ status => 'pending' })->count, 4, 'Still 4 pending' );
+    is( $count_exceeds_calls, 6, 'We saw 6 messages while checking domain limits: so we deferred 4' );
 };
 
 subtest 'Test message_id parameter for SendQueuedMessages' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     my $dbh = C4::Context->dbh;
 
@@ -1092,8 +1147,9 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
         'from_address'           => '@example.com' # invalid from_address
     };
     my $message_id = C4::Letters::EnqueueLetter($my_message);
+    $send_or_die_count = 0; # reset
     my $processed = C4::Letters::SendQueuedMessages( { message_id => $message_id } );
-    is( $processed, 1, 'Processed 1 message when one message_id passed' );
+    is( $send_or_die_count, 0, 'Nothing sent when one message_id passed' );
     my $message_1 = C4::Letters::GetMessage($message_id);
     is( $message_1->{status}, 'failed', 'Invalid from_address => status failed' );
     is( $message_1->{failure_code}, 'INVALID_EMAIL:from', 'Failure code set correctly for invalid email parameter');
@@ -1103,6 +1159,7 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
     warning_like { C4::Letters::SendQueuedMessages( { message_id => $message_id } ); }
         qr|Fake send_or_die|,
         "SendQueuedMessages is using the mocked send_or_die routine";
+    is( $send_or_die_count, 1, 'One message passed through' );
     $message_1 = C4::Letters::GetMessage($message_1->{message_id});
     my $message_2 = C4::Letters::GetMessage($message_id);
     is( $message_1->{status}, 'failed', 'Message 1 status is unchanged' );
