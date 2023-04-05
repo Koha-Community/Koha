@@ -18,14 +18,11 @@ function get_packages_to_relate() {
 }
 
 describe("Title CRUD operations", () => {
-    before(() => {
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
-    });
-
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
+        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
     });
 
     it("Import titles", () => {
