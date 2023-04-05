@@ -6,7 +6,7 @@
             :to="{ name: option.to }"
             class="btn btn-default"
             ><font-awesome-icon icon="plus" />
-            {{ $__(`${option.button_title}`) }}</router-link
+            {{ option.button_title }}</router-link
         >
     </div>
 </template>
