@@ -1,5 +1,5 @@
 <template>
-    <div v-if="initialized">
+    <div v-if="initialized && ERMModule == 1">
         <div id="sub-header">
             <Breadcrumb />
             <Help />
@@ -214,10 +214,7 @@ export default {
                     error => {}
                 )
             )
-            return Promise.all(promises).then(values => {
-                this.loaded()
-                this.initialized = true
-            })
+            return Promise.all(promises)
         }
 
         const sysprefs_client = APIClient.sysprefs
@@ -225,8 +222,7 @@ export default {
             .get("ERMModule")
             .then(value => {
                 this.ERMModule = value.value
-                if (this.ERMModule == 0) {
-                    this.loaded()
+                if (this.ERMModule != 1) {
                     return this.setError(
                         this.$__(
                             'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
@@ -235,6 +231,10 @@ export default {
                     )
                 }
                 return fetch_config()
+            })
+            .then(() => {
+                this.loaded()
+                this.initialized = true
             })
     },
     components: {
