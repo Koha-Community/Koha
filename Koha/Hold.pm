@@ -220,7 +220,7 @@ sub set_waiting {
     my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 
-    my $new_expiration_date = $today->clone->add(days => $max_pickup_delay);
+    my $new_expiration_date = dt_from_string($self->waitingdate)->clone->add( days => $max_pickup_delay );
 
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
         my $itemtype = $self->item ? $self->item->effective_itemtype : $self->biblio->itemtype;
@@ -233,7 +233,7 @@ sub set_waiting {
         );
         my $calendar = Koha::Calendar->new( branchcode => $self->branchcode, days_mode => $daysmode );
 
-        $new_expiration_date = $calendar->days_forward( dt_from_string(), $max_pickup_delay );
+        $new_expiration_date = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
     }
 
     # If patron's requested expiration date is prior to the
