@@ -33,12 +33,7 @@
         const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
         const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
 
-        const ERMProviders  = "[% Koha.Preference('ERMProviders') | html %]";
-        const erm_providers = ERMProviders.split(',');
-
         const max_allowed_packet = [% To.json(max_allowed_packet) | $raw %];
-
-        const ERMModule = [% IF Koha.Preference('ERMModule') %]true[% ELSE %]false[% END %];
 
         const logged_in_user_lists = [% To.json(logged_in_user.virtualshelves.unblessed) | $raw %];
 

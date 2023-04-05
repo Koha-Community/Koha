@@ -39,34 +39,3 @@ Cypress.Commands.add('login', (username, password) => {
     cy.get("#password").type(pass)
     cy.get("#submit-button").click()
 })
-
-Cypress.Commands.add('set_ERM_sys_pref_value', (enable) => {
-    cy.visit('/cgi-bin/koha/admin/admin-home.pl')
-    cy.get("h4").contains("Global system preferences").click();
-    cy.get("a[title^=E-resource]").contains("E-resource management").click();
-    cy.get('#pref_ERMModule').then(($select) => {
-        // Only enable if currently disabled, or only disable if currently enabled
-        let sys_pref_value = $select.find(":selected").text().trim();
-        if (enable && sys_pref_value == 'Disable' || !enable && sys_pref_value == 'Enable') {
-            cy.get("#pref_ERMModule").select(enable ? 'Enable' : 'Disable');
-            cy.get(".save-all").first().click();
-            Cypress.env("current_ERM_Module_sys_pref_value", enable);
-            cy.wait(500); // Cypress is too fast!
-        }
-    })
-})
-
-Cypress.Commands.add('fetch_initial_ERM_sys_pref_value', () => {
-    cy.login();
-    cy.visit('/cgi-bin/koha/admin/admin-home.pl')
-    cy.get("h4").contains("Global system preferences").click();
-    cy.get("a[title^=E-resource]").contains("E-resource management").click();
-    cy.get('#pref_ERMModule').then(($select) => {
-        Cypress.env('initial_ERM_Module_sys_pref_value', $select.find(":selected").text().trim() == 'Enable');
-    })
-})
-
-Cypress.Commands.add('reset_initial_ERM_sys_pref_value', () => {
-    cy.login();
-    cy.set_ERM_sys_pref_value(Cypress.env("initial_ERM_Module_sys_pref_value"));
-})
