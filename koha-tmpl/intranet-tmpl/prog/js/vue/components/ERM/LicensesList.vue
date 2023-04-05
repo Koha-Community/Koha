@@ -53,7 +53,7 @@ export default {
             toolbar_options: [
                 {
                     to: "LicensesFormAdd",
-                    button_title: "New license",
+                    button_title: this.$__("New license"),
                 },
             ],
             tableOptions: {
