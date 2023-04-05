@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE KohaDates %]
 [% USE Price %]
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
@@ -91,8 +92,8 @@
             <td>[% ordersloo.quantity | html %]</td>
             <td>[% ordersloo.total_rrp | $Price %]</td>
             <td>[% ordersloo.total_ecost | $Price %]</td>
-            <td>[% ordersloo.entrydate | html %]</td>
-            <td>[% ordersloo.datereceived | html %]</td>
+            <td>[% ordersloo.entrydate | $KohaDates %]</td>
+            <td>[% ordersloo.datereceived | $KohaDates %]</td>
             <td>[% ordersloo.order_internalnote | html %]</td>
             <td>[% ordersloo.order_vendornote | html %]</td>
             </tr>
