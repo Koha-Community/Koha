@@ -41,13 +41,13 @@
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search agreements" href="#agreement_search" aria-controls="agreement_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-check-circle-o"></i> <span class="tab-title">Search agreements</span></a>
+            <a id="agreement_search_tab" title="Search agreements" href="#agreement_search" aria-controls="agreement_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-check-circle-o"></i> <span class="tab-title">Search agreements</span></a>
         </li>
         <li role="presentation">
-            <a title="Search packages" href="#package_search" aria-controls="package_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-archive"></i> <span class="tab-title">Search packages</span></a>
+            <a id="package_search_tab" title="Search packages" href="#package_search" aria-controls="package_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-archive"></i> <span class="tab-title">Search packages</span></a>
         </li>
         <li role="presentation">
-            <a title="Search titles" href="#title_search" aria-controls="title_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-sort-alpha-asc"></i> <span class="tab-title">Search titles</span></a>
+            <a id="title_search_tab" title="Search titles" href="#title_search" aria-controls="title_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-sort-alpha-asc"></i> <span class="tab-title">Search titles</span></a>
         </li>
     </ul>
 </div><!-- /#header_search -->
