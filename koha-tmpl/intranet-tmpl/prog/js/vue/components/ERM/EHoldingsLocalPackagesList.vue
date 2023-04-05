@@ -2,7 +2,7 @@
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else id="packages_list">
-            <Toolbar />
+            <Toolbar :options="this.toolbar_options" />
             <div
                 v-if="package_count > 0"
                 id="package_list_result"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Toolbar from "./EHoldingsLocalPackagesToolbar.vue"
+import Toolbar from "../Toolbar.vue"
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -98,6 +98,12 @@ export default {
                     "-1": ["edit", "delete"],
                 },
             },
+            toolbar_options: [
+                {
+                    to: "EHoldingsLocalPackagesFormAdd",
+                    button_title: "New package",
+                },
+            ],
         }
     },
     beforeRouteEnter(to, from, next) {
