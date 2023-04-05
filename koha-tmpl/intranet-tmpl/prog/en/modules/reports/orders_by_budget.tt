@@ -92,8 +92,8 @@
             <td>[% ordersloo.quantity | html %]</td>
             <td>[% ordersloo.total_rrp | $Price %]</td>
             <td>[% ordersloo.total_ecost | $Price %]</td>
-            <td>[% ordersloo.entrydate | $KohaDates %]</td>
-            <td>[% ordersloo.datereceived | $KohaDates %]</td>
+            <td data-order="[% ordersloo.entrydate | html %]">[% ordersloo.entrydate | $KohaDates %]</td>
+            <td data-order="[% ordersloo.datereceived | html %]">[% ordersloo.datereceived | $KohaDates %]</td>
             <td>[% ordersloo.order_internalnote | html %]</td>
             <td>[% ordersloo.order_vendornote | html %]</td>
             </tr>
