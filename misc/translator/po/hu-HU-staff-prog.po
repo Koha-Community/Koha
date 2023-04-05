@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2023-02-17 23:50-0300\n"
+"POT-Creation-Date: 2023-03-16 20:48-0300\n"
 "PO-Revision-Date: 2022-10-26 15:40+0000\n"
 "Last-Translator: Hamar Zoltán <zhamarusa@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -993,7 +993,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  library.branchcode | html 
 #. %8$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:8
 #, fuzzy, c-format
 msgid ""
 "%s %s Modify library %s New library %s %s &rsaquo; %s Confirm deletion of "
@@ -1751,7 +1751,7 @@ msgstr "%s (valószínűleg rendben, ha üres)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:402
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1041
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1040
 #, fuzzy
 msgid "%s - Click to Expand this Tag"
 msgstr "Kattintson a kosárba helyezéshez"
@@ -1951,7 +1951,7 @@ msgstr "MARC bibliográfiai keretrendszer"
 #. %1$s:  IF mode=='new' || mode =='deleted'
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:37
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
 msgstr ""
@@ -2257,7 +2257,7 @@ msgid "%s Date of birth: "
 msgstr "%s Születési dátum: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:930
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:929
 #, c-format
 msgid "%s Default "
 msgstr "%s Alapértelmezett "
@@ -2271,14 +2271,38 @@ msgstr "%s Alapértelmezett "
 msgid "%s Default %s %s %s "
 msgstr "%sAlapértelmezett%s%s%s"
 
-#. For the first occurrence,
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
+#. %1$s:  END 
+#. %2$s:  pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, fuzzy, c-format
-msgid "%s Default: "
-msgstr "%s Alapértelmezett "
+msgid ""
+"%s Default: %s system preference %s Default: ILLDefaultStaffEmail system "
+"preference %s "
+msgstr "Globális rendszerbeállítások"
+
+#. %1$s:  END 
+#. %2$s:  pref_ReplyToDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#, fuzzy, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReplyToDefault system "
+"preference %s "
+msgstr "Globális rendszerbeállítások"
+
+#. %1$s:  END 
+#. %2$s:  pref_ReturnpathDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#, fuzzy, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReturnpathDefault system "
+"preference %s "
+msgstr "Vissza a Rendszer Beállításhoz"
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -2360,8 +2384,8 @@ msgstr "Hozzáad egy létező csoporthoz"
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:810
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:826
 #, c-format
 msgid "%s Editing "
 msgstr "%s Szerkesztés "
@@ -2501,11 +2525,16 @@ msgstr "%s Kezes vezetékneve: "
 msgid "%s Hold expected at "
 msgstr ""
 
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
-#, fuzzy, c-format
-msgid "%s If not filled in defaults to system preference "
-msgstr "Hozzáad egy rendszer beállítást "
+#. %1$s:  END 
+#. %2$s:  pref_MARCOrgCode_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#, c-format
+msgid ""
+"%s If not filled in defaults to system preference %s. %s If not filled in "
+"defaults to system preference MARCOrgCode. %s You can obtain your code from "
+msgstr ""
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-nomatch-action.inc:11
@@ -2856,7 +2885,7 @@ msgstr "%s Egyik sem "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #, fuzzy, c-format
 msgid "%s No %s "
 msgstr "%s Új %s "
@@ -3910,7 +3939,7 @@ msgid "%s checked out:"
 msgstr "Kölcsönzött kiadványok"
 
 #. %1$s:  request.illcomments.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #, c-format
 msgid "%s comments"
 msgstr "%s hozzászólások"
@@ -4523,7 +4552,7 @@ msgstr "Olvasójegyének lejárati ideje: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:476
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:592
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:597
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "%s years"
 msgstr "%s év"
@@ -5477,7 +5506,7 @@ msgstr "Besorolási MARC keretrendszer: %s%s%salapértelmezett keretrendszer%s"
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:114
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%sKönyvtár módosítása%sÚj könyvtár%s"
@@ -5541,7 +5570,7 @@ msgstr "Koha &rsaquo; Szerzeményezés &rsaquo; Számla"
 #. %1$s:  IF record.permanent 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:233
 #, c-format
 msgid "%sNo%sYes%s"
 msgstr "%sNem%sIgen%s"
@@ -6337,20 +6366,20 @@ msgid "( Effective checkin date is %s )"
 msgstr ""
 
 #. %1$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:99
 #, fuzzy, c-format
 msgid "(%s items)."
 msgstr "%s példány maradt"
 
 #. %1$s:  m.data.patrons_count | html 
 #. %2$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:95
 #, fuzzy, c-format
 msgid "(%s patrons and %s items)."
 msgstr "Az olvasó %s kiadváyt kölcsönzött ki."
 
 #. %1$s:  m.data.patrons_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:97
 #, fuzzy, c-format
 msgid "(%s patrons)."
 msgstr "Olvasó(k) hozzáadása"
@@ -6612,7 +6641,7 @@ msgstr "Elveszett dokumentum"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(Bejegyzés száma %s) %s MARC bejegyzés hozzáadása %s"
@@ -6620,7 +6649,7 @@ msgstr "(Bejegyzés száma %s) %s MARC bejegyzés hozzáadása %s"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:811
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(Bejegyzés száma %s) %s MARC bejegyzés hozzáadása %s "
@@ -6800,7 +6829,7 @@ msgstr "(számokkal adja meg az összeget)"
 msgid "(exclusive) "
 msgstr "(beleértve) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:152
 #, c-format
 msgid "(fast cataloging)"
@@ -7215,15 +7244,6 @@ msgstr "-- egyik sem -- "
 #, c-format
 msgid "-- please choose --"
 msgstr "-- kérlek válassz --"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
-#, c-format
-msgid ""
-". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
-"obtain your code from "
-msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:221
 #, fuzzy, c-format
@@ -8113,7 +8133,7 @@ msgstr "Információk a beszerzésről"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -8139,14 +8159,14 @@ msgstr "Információk a beszerzésről"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:87
@@ -8173,7 +8193,7 @@ msgstr "Információk a beszerzésről"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
@@ -8432,7 +8452,7 @@ msgstr "Új mező hozzáadása"
 msgid "Add a new message"
 msgstr "Új üzenet hozzáadása"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, fuzzy, c-format
 msgid "Add a new record"
 msgstr "Új mező hozzáadása"
@@ -8444,7 +8464,7 @@ msgid "Add a new regular expression"
 msgstr "Új művelet hozzáadása"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Add a new upload"
 msgstr "Új feltöltés hozzáadása"
 
@@ -8585,7 +8605,7 @@ msgstr "Új üzenet hozzáadása"
 msgid "Add classification source"
 msgstr "Osztályozási forrás hozzáadása"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:757
 #, fuzzy, c-format
 msgid "Add comment"
 msgstr "%s hozzászólások"
@@ -9175,10 +9195,13 @@ msgstr "Hozzáad megerendelést"
 msgid "Add users"
 msgstr "Könyv hozzáadása"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, fuzzy, c-format
-msgid "Add values to the "
-msgstr "Hozzáad forgalmazót"
+#. %1$s:  av_UPLOAD_link | $raw | $KohaSpan 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#, c-format
+msgid ""
+"Add values to the %s authorized value category otherwise all uploads will be "
+"marked as temporary."
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:144
 #, c-format
@@ -9377,13 +9400,13 @@ msgstr "További eszközök"
 msgid "Additional tools"
 msgstr "További eszközök"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:155
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:140
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:141
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Address"
@@ -9391,7 +9414,7 @@ msgstr "Cím"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
 #, c-format
 msgid "Address 2"
 msgstr "Cím 2"
@@ -9417,7 +9440,7 @@ msgstr "Cím a keresésben"
 msgid "Address line 1:"
 msgstr "Cím 2:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, fuzzy, c-format
 msgid "Address line 1: "
 msgstr "Cím 2: "
@@ -9427,12 +9450,12 @@ msgstr "Cím 2: "
 msgid "Address line 2:"
 msgstr "Cím 2:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, fuzzy, c-format
 msgid "Address line 2: "
 msgstr "Cím 2: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #, fuzzy, c-format
 msgid "Address line 3: "
 msgstr "Cím 2: "
@@ -9480,7 +9503,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
@@ -9656,8 +9679,8 @@ msgstr "Koha &rsaquo; Adminisztráció &rsaquo; Hallható riasztások"
 msgid "Advanced prediction pattern: "
 msgstr "Összetett szűkítés:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:143
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:18
@@ -9882,7 +9905,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -9948,6 +9971,11 @@ msgstr "Összes dátum"
 #, c-format
 msgid "All dependencies installed."
 msgstr "Minden tartozék települt."
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#, fuzzy, c-format
+msgid "All emails"
+msgstr "E-mail"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:107
@@ -10032,6 +10060,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "All payments to the library"
 msgstr "Üzenet a könyvtártól:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#, fuzzy, c-format
+msgid "All phones"
+msgstr "Más kapcsolattartó"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_authority_record_deletion.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_biblio_record_deletion.inc:5
@@ -10134,7 +10167,7 @@ msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:95
 #, c-format
 msgid "Allow public downloads:"
 msgstr "Nyilvános letöltés engedélyezése:"
@@ -10198,12 +10231,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:538
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:5
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
 #, c-format
 msgid "Alternate address"
 msgstr "Második cím"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
 #, fuzzy, c-format
 msgid "Alternate address line 2"
 msgstr "Második cím"
@@ -10258,7 +10291,7 @@ msgstr "Második cím"
 msgid "Alternate address: ZIP/Postal code"
 msgstr "Második cím"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
 #, fuzzy, c-format
 msgid "Alternate city"
 msgstr "Más kapcsolattartó"
@@ -10269,47 +10302,47 @@ msgstr "Más kapcsolattartó"
 msgid "Alternate contact"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
 #, fuzzy, c-format
 msgid "Alternate contact ZIP/postal code"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
 #, fuzzy, c-format
 msgid "Alternate contact address"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
 #, fuzzy, c-format
 msgid "Alternate contact address 2"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
 #, fuzzy, c-format
 msgid "Alternate contact city"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
 #, fuzzy, c-format
 msgid "Alternate contact country"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
 #, fuzzy, c-format
 msgid "Alternate contact first name"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
 #, fuzzy, c-format
 msgid "Alternate contact phone"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
 #, fuzzy, c-format
 msgid "Alternate contact state"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
 #, fuzzy, c-format
 msgid "Alternate contact surname"
 msgstr "Más kapcsolattartó"
@@ -10359,37 +10392,37 @@ msgstr "Más kapcsolattartó"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
 #, fuzzy, c-format
 msgid "Alternate country"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
 #, fuzzy, c-format
 msgid "Alternate email"
 msgstr "Második cím"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
 #, fuzzy, c-format
 msgid "Alternate phone"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
 #, fuzzy, c-format
 msgid "Alternate state"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
 #, fuzzy, c-format
 msgid "Alternate street number"
 msgstr "Házszám"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
 #, fuzzy, c-format
 msgid "Alternate street type"
 msgstr "Második cím"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
 #, fuzzy, c-format
 msgid "Alternate zip code"
 msgstr "Második cím"
@@ -10519,7 +10552,7 @@ msgstr "Összeg:"
 msgid "Amount: "
 msgstr "Összeg: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:85
 #, c-format
 msgid ""
 "An administrator must add values to the UPLOAD authorized value category "
@@ -10695,7 +10728,7 @@ msgid ""
 "exist."
 msgstr "A lista készítése közben hiba történt. A név %s már szerepel."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:83
 #, fuzzy, c-format
 msgid ""
 "An error occurred when adding this library. The branchcode might already "
@@ -10802,7 +10835,7 @@ msgstr "A lista törlése közben hiba történt."
 msgid "An error occurred when deleting this item type. Check the logs"
 msgstr "A lista törlése közben hiba történt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:85
 #, fuzzy, c-format
 msgid "An error occurred when deleting this library. Check the logs."
 msgstr "A lista törlése közben hiba történt."
@@ -10949,7 +10982,7 @@ msgid ""
 "exists"
 msgstr "A lista készítése közben hiba történt. A név %s már szerepel."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:81
 #, fuzzy, c-format
 msgid ""
 "An error occurred when updating this library. Perhaps it already exists."
@@ -11027,7 +11060,7 @@ msgid "An error occurred, please try again: %s "
 msgstr "Hiba történt, kérem próbálja újra."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "An error occurred. Check the logs"
 msgstr "Hiba történt! %s"
@@ -11547,7 +11580,7 @@ msgstr "Biztosan el akarja távolítani a kijelölt listát?"
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
 #, fuzzy, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "Biztosan el akarja távolítani a kijelölt listát?"
@@ -12358,11 +12391,11 @@ msgid "Authname"
 msgstr "Auth"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:370
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:371
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:273
@@ -12951,7 +12984,7 @@ msgstr "Automatikus meghosszabbítás"
 msgid "Automatic return to home"
 msgstr "Automatikus meghosszabbítás"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:9
 #, c-format
 msgid "Availability"
@@ -13089,7 +13122,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Back"
@@ -13124,7 +13157,7 @@ msgstr "Vissza a rendszerbeállításokhoz"
 msgid "Back to the list"
 msgstr "Vissza a listákhoz"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:36
 #, fuzzy, c-format
 msgid "Backend"
 msgstr "Vissza"
@@ -14125,7 +14158,6 @@ msgstr "Bibliográfiai adatok"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
 #, fuzzy, c-format
 msgid "Bibliographic record"
 msgstr "Könyvtári tétel címe"
@@ -14179,14 +14211,16 @@ msgstr ""
 msgid "Bibliographic record %s was not deleted. An error occurred."
 msgstr "%s félretett tétel"
 
+#. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-#, fuzzy
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
+#, fuzzy, c-format
 msgid "Bibliographic record ID"
 msgstr "Könyvtári tétel címe"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:625
 #, fuzzy, c-format
 msgid "Bibliographic record ID:"
 msgstr "Könyvtári tétel címe"
@@ -14466,7 +14500,7 @@ msgstr "Olvasó neve"
 msgid "Borrower number"
 msgstr "Olvasó sorszáma"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
 #, fuzzy, c-format
 msgid "Borrowernumber"
 msgstr "Olvasó sorszáma"
@@ -14515,11 +14549,6 @@ msgstr ""
 #, c-format
 msgid "Braille"
 msgstr "Braille-írás"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#, fuzzy, c-format
-msgid "Branch"
-msgstr "Mandzsu"
 
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
@@ -14573,7 +14602,7 @@ msgstr "Mandzsu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:13
@@ -14612,6 +14641,13 @@ msgstr "Mandzsu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:32
@@ -14624,13 +14660,10 @@ msgstr "Mandzsu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
@@ -14651,10 +14684,6 @@ msgstr "Mandzsu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -14793,7 +14822,7 @@ msgstr "Mandzsu"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
@@ -14846,7 +14875,7 @@ msgstr ""
 #. %3$s:  alphabet = ['A' .. 'Z'] 
 #. %4$s:  END 
 #. %5$s:  FOREACH letter IN alphabet 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:120
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:106
 #, fuzzy, c-format
 msgid "Browse by last name: %s %s %s %s %s "
 msgstr "Böngészés vezetéknév alapján: %s "
@@ -15421,7 +15450,7 @@ msgstr "Sydney, Ausztrália"
 msgid "Camden County, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr ""
@@ -15571,8 +15600,6 @@ msgstr "Nem lehet törölni megrendelést"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -15591,7 +15618,7 @@ msgstr "Nem lehet törölni megrendelést"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
@@ -15633,12 +15660,17 @@ msgstr "Nem lehet törölni megrendelést"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:952
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:75
@@ -15647,9 +15679,6 @@ msgstr "Nem lehet törölni megrendelést"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:150
@@ -15737,7 +15766,7 @@ msgstr "Nem lehet törölni megrendelést"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
@@ -16314,7 +16343,7 @@ msgstr "Idézet"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:150
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:136
 #, c-format
 msgid "Card"
 msgstr "Kat. céd."
@@ -16345,7 +16374,7 @@ msgstr "Oldal magassága:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
 #, c-format
 msgid "Card number"
 msgstr "Olvasójegy száma"
@@ -16632,6 +16661,7 @@ msgid "Cassette recording"
 msgstr "Kazetta"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:58
@@ -16644,7 +16674,6 @@ msgstr "Kazetta"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/request.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:14
@@ -16721,7 +16750,7 @@ msgid "Catalog statistics "
 msgstr "Olvasói statisztikák"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:806
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:85
@@ -16805,8 +16834,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:143
 #, c-format
 msgid "Category"
 msgstr "Kategória"
@@ -16819,7 +16848,7 @@ msgstr ""
 "%s Kategória %s használatban van. A törlés nem lehetséges! %s Erősítse meg a "
 "kategória törlését %s %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
 #, fuzzy, c-format
 msgid "Category (code)"
 msgstr "Kategória kódja"
@@ -16871,8 +16900,8 @@ msgstr "Kategória:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:65
 #, c-format
 msgid "Category: "
@@ -16996,7 +17025,7 @@ msgstr "Új kategória"
 msgid "Change currency"
 msgstr "Új pénznem"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:923
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, fuzzy, c-format
 msgid "Change framework"
@@ -17348,7 +17377,7 @@ msgstr "Visszahozatal"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:104
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:25
@@ -17386,7 +17415,7 @@ msgstr "Visszavételkor megjelenő üzenet"
 msgid "Check out to this patron"
 msgstr "Korábbi kölcsönzések"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:75
 #, fuzzy, c-format
 msgid "Check previous checkout"
 msgstr "Kölcsönzések száma"
@@ -17868,7 +17897,7 @@ msgstr "Kölcsönzés állapota"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:147
 #, c-format
 msgid "Checkouts"
 msgstr "Kölcsönözések"
@@ -17948,8 +17977,8 @@ msgstr "Számla "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
 #, c-format
 msgid "Choose"
 msgstr "Választás"
@@ -18277,7 +18306,7 @@ msgid "Circulation home"
 msgstr "Kölcsönzéskor tulajdonoskönyvtár"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
 #, c-format
 msgid "Circulation note"
 msgstr "Kölcsönzési megjegyzés"
@@ -18392,7 +18421,7 @@ msgstr "Városok"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
 #, c-format
 msgid "City"
 msgstr "Város"
@@ -18438,7 +18467,7 @@ msgstr "sikeresen frissítve"
 msgid "City:"
 msgstr "Város:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:578
 #, c-format
@@ -18671,7 +18700,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:354
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:81
 #, c-format
 msgid "Clear"
 msgstr "Törlés"
@@ -18680,14 +18709,14 @@ msgstr "Törlés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:315
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:409
@@ -18870,7 +18899,7 @@ msgstr ""
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1081
 #, fuzzy
 msgid "Click to Expand this Tag"
 msgstr "Kattintson a kosárba helyezéshez"
@@ -18921,7 +18950,7 @@ msgstr "Másolás a vágólapra"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -18950,7 +18979,7 @@ msgstr "egyéb szabály"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -18994,14 +19023,14 @@ msgstr "Kölcsönzésre és bírságra vonatkozó szabályok"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:277
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1040
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1040
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:734
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:183
@@ -19032,8 +19061,8 @@ msgstr "Kölcsönzésre és bírságra vonatkozó szabályok"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:444
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
@@ -19042,8 +19071,8 @@ msgstr "Kölcsönzésre és bírságra vonatkozó szabályok"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:189
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:177
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:186
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:163
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:172
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:150
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
@@ -19249,7 +19278,7 @@ msgstr "%s %s nincsen tartozása. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -19576,7 +19605,7 @@ msgstr "Megjegyzés"
 msgid "Comment "
 msgstr "Megjegyzés "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:748
 #, fuzzy, c-format
 msgid "Comment by: "
 msgstr "Megjegyzések %s"
@@ -19588,7 +19617,7 @@ msgstr "Megjegyzések %s"
 msgid "Comment:"
 msgstr "Megjegyzés:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
@@ -19605,7 +19634,7 @@ msgstr "Megjegyzés "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
@@ -19934,7 +19963,7 @@ msgid "Confirm deletion of desk "
 msgstr "Megerősíti %s törlését?"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:57
 #, fuzzy, c-format
 msgid "Confirm deletion of library '%s' "
 msgstr "Megerősíti %s törlését?"
@@ -20140,7 +20169,7 @@ msgstr "Elérhetőségek"
 msgid "Contact name: "
 msgstr "Megjegyzés "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
 #, fuzzy, c-format
 msgid "Contact note"
 msgstr "Kontakt megjegyzés:"
@@ -20194,8 +20223,8 @@ msgstr "Elérhetőség"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:48
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:83
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:86
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:72
 #, c-format
 msgid "Contains"
 msgstr "Tartalmazza"
@@ -20510,7 +20539,7 @@ msgid "Copy holidays to:"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Copy link to this file"
 msgstr "Megjegyzések e fájllal kapcsolatban: "
@@ -20625,7 +20654,7 @@ msgid "Cost must be expressed as a decimal number >= 0"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, fuzzy, c-format
 msgid "Cost:"
 msgstr "Elveszett: "
@@ -20769,7 +20798,7 @@ msgstr "dokumentumok"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:226
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
 #, c-format
 msgid "Country"
 msgstr "Ország"
@@ -20780,7 +20809,7 @@ msgstr "Ország"
 msgid "Country:"
 msgstr "Ország:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:597
 #, c-format
@@ -22039,7 +22068,7 @@ msgstr "Beszerzés dátuma"
 msgid "Date acquired (item)"
 msgstr "Beszerzés dátuma"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:425
@@ -22111,8 +22140,8 @@ msgstr "Legutóbbi módosítás dátuma"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:180
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:151
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
 #, c-format
 msgid "Date of birth"
 msgstr "Születési dátum"
@@ -22379,9 +22408,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:408
@@ -22396,9 +22425,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:437
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:63
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:90
@@ -22815,7 +22844,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:693
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -22853,13 +22882,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:240
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:757
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
@@ -22904,7 +22933,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:95
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:367
@@ -23351,8 +23380,8 @@ msgstr "A szünnap törlése"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:471
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 #, fuzzy
 msgid "Delete this Tag"
 msgstr "E lista törlése"
@@ -23393,7 +23422,7 @@ msgstr "E lista törlése"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
 #, fuzzy
 msgid "Delete this subfield"
 msgstr "E lista törlése"
@@ -23552,7 +23581,7 @@ msgstr "Szerver neve: "
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Denied"
 msgstr ""
 
@@ -23869,8 +23898,8 @@ msgstr "Visszahozatalkor megjelenő üzenet: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:244
@@ -23897,7 +23926,7 @@ msgstr "Részletek: %s"
 msgid "Details for %s &rsaquo; Housebound &rsaquo; Koha"
 msgstr "Koha &rsaquo; Házhozkötött &rsaquo; Részletek %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:785
 #, c-format
 msgid "Details for all requests"
 msgstr "Minden kérés részletei"
@@ -23914,13 +23943,13 @@ msgstr "%s&rsaquo; Az előfizetés részletei #%s%s "
 msgid "Details for subscription #%s &rsaquo; Serials &rsaquo; Koha"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:609
 #, fuzzy, c-format
 msgid "Details from library"
 msgstr "Áthelyezés ebbe a könyvtárba:"
 
 #. %1$s:  request.backend | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
 #, fuzzy, c-format
 msgid "Details from supplier (%s)"
 msgstr "Részletek: %s"
@@ -24321,7 +24350,7 @@ msgstr ""
 msgid "Displaying"
 msgstr "Megjelenítés eddig: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:793
 #, c-format
 msgid "Displaying availability results"
 msgstr "Elérhető eredmények megjelenítése"
@@ -24392,7 +24421,7 @@ msgid "Do not use template"
 msgstr "Új klub sablon"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Do you really want to delete this upload?"
 msgstr "Biztosan el akarja távolítani a kijelölt listát?"
@@ -24535,7 +24564,7 @@ msgid "DoverNet, USA"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
 #, c-format
 msgid "Download"
 msgstr "Letöltés"
@@ -24862,7 +24891,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Kosár szám: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 #, fuzzy, c-format
 msgid "Duplicate record suspected"
 msgstr ") kölcsönzés lejártának dátuma: %s"
@@ -25101,7 +25130,7 @@ msgstr "Előjegyzések"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:692
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -25126,9 +25155,9 @@ msgstr "Előjegyzések"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:238
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:608
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:614
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:297
@@ -25175,8 +25204,8 @@ msgstr "Szerkesztés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:428
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:219
@@ -25540,8 +25569,8 @@ msgid "Edit quotes for quote-of-the-day feature "
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:99
@@ -25820,10 +25849,10 @@ msgstr "Email:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:523
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "Email: "
 msgstr "Email: "
@@ -25954,8 +25983,8 @@ msgid "End date is not consistent with subscription length."
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:139
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:388
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
@@ -26842,7 +26871,7 @@ msgstr "Lejár ekkor:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:158
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/recalls.inc:11
 #, c-format
 msgid "Expires on"
@@ -26854,7 +26883,7 @@ msgid "Expiring before:"
 msgstr "Lejárat dátuma:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
 #, c-format
 msgid "Expiry date"
 msgstr "Lejárat dátuma"
@@ -27218,7 +27247,7 @@ msgstr "acetát"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Failed"
 msgstr ""
 
@@ -27399,7 +27428,7 @@ msgstr "Gyors katalogizálás"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:821
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
 #, c-format
 msgid "Fax"
 msgstr "Fax"
@@ -27408,8 +27437,8 @@ msgstr "Fax"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:147
 #, c-format
@@ -27527,7 +27556,7 @@ msgid "Field 3"
 msgstr "dokumentum mezők"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "Minden könyvtár megjelenítése"
@@ -27612,12 +27641,12 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be created. Check permissions."
 msgstr "A fájlt nem sikerült létrehozni. Ellenőrizze a jogosultságokat."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File could not be read."
 msgstr "A fájlt nem sikerült létrehozni. Ellenőrizze a jogosultságokat."
@@ -27629,7 +27658,7 @@ msgid "File format: "
 msgstr "Fájlformátumok"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File has been deleted."
 msgstr "Az e-mail elment."
@@ -27670,7 +27699,7 @@ msgid "File not found!"
 msgstr "Klub nem található"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File or upload record could not be deleted."
 msgstr ": Nem találja ezt a vonalkódot "
@@ -27713,7 +27742,7 @@ msgid "FileSaver library"
 msgstr "Aktuális könyvtár kiválasztása"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
 #, c-format
 msgid "Filename"
 msgstr "Fájlnév"
@@ -28011,7 +28040,7 @@ msgid "Fine grace period"
 msgstr "Türelmi idő a bírság előtt"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:148
 #, c-format
 msgid "Fines"
 msgstr "Késedelmi díjak"
@@ -28055,7 +28084,7 @@ msgstr "Befejezés"
 msgid "Finished "
 msgstr "Befejezés"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:662
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:5
 #, c-format
@@ -28085,7 +28114,7 @@ msgstr "Publikálás dátuma: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
 #, c-format
 msgid "First name"
 msgstr "Keresztnév"
@@ -28773,6 +28802,11 @@ msgstr "Összeg: "
 msgid "Fulfilled"
 msgstr "HoldTitle"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#, fuzzy, c-format
+msgid "Full address"
+msgstr "Email cím:"
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, fuzzy
@@ -28969,7 +29003,7 @@ msgstr "Geauga County Public Library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:191
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
 #, c-format
 msgid "Gender"
 msgstr "Neme"
@@ -29202,7 +29236,7 @@ msgid "Goethe-Institut, Germany"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
 #, fuzzy, c-format
 msgid "Gone no address"
 msgstr "Lakcím"
@@ -29275,7 +29309,7 @@ msgstr "Csoportok"
 msgid "Group name"
 msgstr "Kurzus neve"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:145
 #, c-format
 msgid "Group(s):"
 msgstr "Csoport(ok):"
@@ -29301,17 +29335,17 @@ msgstr "Könyvtárcsoportok: "
 msgid "Guarantees:"
 msgstr "Kezesek:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
 #, fuzzy, c-format
 msgid "Guarantor ID"
 msgstr "Kezesek:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
 #, fuzzy, c-format
 msgid "Guarantor can view checkouts"
 msgstr "Oolvasók, akik nem kölcsönöztek"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
 #, fuzzy, c-format
 msgid "Guarantor firstname"
 msgstr "%s Kezes keresztneve: "
@@ -29321,17 +29355,17 @@ msgstr "%s Kezes keresztneve: "
 msgid "Guarantor information"
 msgstr "Gondviselő adatai"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
 #, fuzzy, c-format
 msgid "Guarantor relationship"
 msgstr "Gondviselő adatai"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
 #, fuzzy, c-format
 msgid "Guarantor surname"
 msgstr "%s Kezes vezetékneve: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
 #, fuzzy, c-format
 msgid "Guarantor title"
 msgstr "Kezesek:"
@@ -29450,7 +29484,7 @@ msgstr "Kezdő dátum"
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
 #, fuzzy, c-format
 msgid "Hashvalue"
 msgstr "érték"
@@ -30413,7 +30447,7 @@ msgstr "Évente ismétlődő szünnap"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:16
@@ -30452,6 +30486,13 @@ msgstr "Évente ismétlődő szünnap"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:18
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:35
@@ -30464,13 +30505,10 @@ msgstr "Évente ismétlődő szünnap"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:14
@@ -30492,10 +30530,6 @@ msgstr "Évente ismétlődő szünnap"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:19
@@ -30641,7 +30675,7 @@ msgstr "Évente ismétlődő szünnap"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
@@ -30934,12 +30968,12 @@ msgid "ILL notice sent to patron"
 msgstr "Felnőtt olvasó"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
 #, fuzzy
 msgid "ILL request log"
 msgstr "ILL kérés megerősítése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:599
 #, fuzzy, c-format
 msgid "ILL request log "
 msgstr "ILL kérés megerősítése"
@@ -30985,12 +31019,12 @@ msgstr "<a1>Főoldal</a> &rsaquo; <a2>Olvasók</a> &rsaquo; %s %s számlája"
 msgid "ILL requests:"
 msgstr "ILL kérés megerősítése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:175
 #, c-format
 msgid "ILL staff email: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr ""
@@ -31010,7 +31044,7 @@ msgstr ""
 msgid "INTERMARC"
 msgstr "NORMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "IP"
 msgstr ""
@@ -31025,7 +31059,7 @@ msgstr "Az IP cím megváltozott. Kérjük, jelentkezzen be ismét."
 msgid "IP address has changed. Please log in again "
 msgstr "Az IP cím megváltozott. Kérjük, jelentkezzen be ismét."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #, c-format
 msgid "IP: "
 msgstr ""
@@ -31042,13 +31076,13 @@ msgstr "Részletek"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:213
@@ -31076,9 +31110,9 @@ msgstr "ISBN vagy ISSN vagy más sztenderd szám:"
 msgid "ISBN/EAN/ISSN: %s"
 msgstr "ISBN: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1046
 #, c-format
 msgid "ISBN:"
@@ -31502,7 +31536,7 @@ msgid ""
 "entries or a blank page"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr "Ha nem találja amit keres, Ön tud "
@@ -32052,7 +32086,7 @@ msgstr "Felnőtt olvasó"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:407
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:185
 #, fuzzy, c-format
 msgid "Important"
@@ -32389,7 +32423,7 @@ msgid "Initial float: "
 msgstr "Monogram: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
 #, c-format
 msgid "Initials"
 msgstr "Monogram"
@@ -33158,7 +33192,7 @@ msgid "Is new"
 msgstr "Hozzáadás "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
 #, c-format
 msgid "Is this a duplicate of "
 msgstr ""
@@ -33875,11 +33909,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
@@ -34945,7 +34979,7 @@ msgstr "Nagybetűs nyomtatvány"
 msgid "Large text"
 msgstr "szent szövegek"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:18
 #, c-format
 msgid "Last "
@@ -35058,7 +35092,7 @@ msgstr "Utolsó"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:74
 #, fuzzy, c-format
 msgid "Last seen"
 msgstr "Utolsó "
@@ -35084,13 +35118,13 @@ msgstr "Utolsó frissítés: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:739
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:73
 #, c-format
 msgid "Last updated"
 msgstr "Utolsó frissítés"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:501
 #, c-format
 msgid "Last updated:"
@@ -35357,9 +35391,9 @@ msgid "Librarian:"
 msgstr "Könyvtáros:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_to_pull.tt:46
@@ -35369,7 +35403,7 @@ msgstr "Könyvtáros:"
 msgid "Libraries"
 msgstr "Könyvtárak"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #, c-format
 msgid "Libraries "
 msgstr "Könyvtárak"
@@ -35407,9 +35441,9 @@ msgstr "Könyvtárak:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/overdrive.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:875
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:124
@@ -35439,7 +35473,8 @@ msgstr "Könyvtárak:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:15
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:156
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:142
 #, c-format
 msgid "Library"
 msgstr "Könyvtár"
@@ -35458,7 +35493,7 @@ msgstr ""
 " <a1>Főoldal</a> &rsaquo; <a2>Adminisztráció</a> &rsaquo; <a3>Pénznem &amp; "
 "Valutaárfolyam</a> &rsaquo;"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
 #, fuzzy, c-format
 msgid "Library (code)"
 msgstr "Könyvtár kódja: "
@@ -35483,7 +35518,7 @@ msgstr "Könyvtár EAN-számai (Európai Gyártmánykód)"
 msgid "Library URL: "
 msgstr "Könyvtár URL-je: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:89
 #, fuzzy, c-format
 msgid "Library added successfully."
 msgstr "sikeresen frissítve"
@@ -35505,8 +35540,8 @@ msgid ""
 "Library checkin and transfer policy &rsaquo; Administration &rsaquo; Koha"
 msgstr "Koha &rsaquo; Adminisztráció &rsaquo; Hallható riasztások"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -35528,7 +35563,7 @@ msgstr "Alapértelmezett könyvtár: %s"
 msgid "Library default updated successfully."
 msgstr "sikeresen frissítve"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:91
 #, fuzzy, c-format
 msgid "Library deleted successfully."
 msgstr "A gyűjtemény sikeresen törlődött."
@@ -35605,7 +35640,7 @@ msgstr "Könyvtári adatok"
 msgid "Library name: "
 msgstr "Könyvtár neve: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:244
 #, c-format
 msgid "Library of Congress"
 msgstr "Kongresszusi könyvtár"
@@ -35637,7 +35672,7 @@ msgstr "Könyvtári adatok"
 msgid "Library type: "
 msgstr "Könyvtár típusa: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:87
 #, fuzzy, c-format
 msgid "Library updated successfully."
 msgstr "sikeresen frissítve"
@@ -35655,7 +35690,7 @@ msgstr "Könyvtárhasználat"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:633
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:906
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:48
@@ -35877,13 +35912,13 @@ msgstr "Link a forráshoz "
 msgid "Link a host record to %s"
 msgstr "%s rekord %s: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:907
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:906
 #, c-format
 msgid "Link authorities automatically"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Link copied to the clipboard"
 msgstr "Másolás a vágólapra"
@@ -36083,9 +36118,9 @@ msgstr "Nem animációs"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1064
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1064
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1495
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:286
@@ -36099,17 +36134,17 @@ msgstr "Betöltés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:308
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:14
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1037
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1037
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:182
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:167
 #, c-format
 msgid "Loading "
@@ -36144,7 +36179,7 @@ msgid "Loading records, please wait..."
 msgstr "Betöltés, türelmét kérjük..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -36273,8 +36308,8 @@ msgstr "Publikáció dátuma"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:434
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:434
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
@@ -36460,7 +36495,7 @@ msgstr "%s Előjegyzések (%s) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
 #, c-format
 msgid "Lost card"
 msgstr "Elveszett olvasójegy"
@@ -36627,11 +36662,11 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:240
@@ -36797,8 +36832,8 @@ msgstr "Módosítás dátuma"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Eszközök &rsaquo; Fájlok feltöltése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #, c-format
 msgid "MARC organization code"
 msgstr "MARC szervezet kódja"
@@ -36817,12 +36852,12 @@ msgstr "Koha &rsaquo; Adminisztráció"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:109
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1034
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1034
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:435
 #, c-format
@@ -36902,7 +36937,7 @@ msgstr "1-5 A nyilvántartásban levő dátum"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "MARCOrgCode"
 msgstr ""
@@ -38613,7 +38648,7 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
 #, fuzzy, c-format
 msgid "Mobile phone"
 msgstr "Mobil telefonszám"
@@ -38941,7 +38976,7 @@ msgstr "Kiadványtípus módosítása"
 msgid "Modify items in a batch"
 msgstr "Több példány együttes szerkesztése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:40
 #, fuzzy, c-format
 msgid "Modify library "
 msgstr "Saját könyvtáram"
@@ -39402,11 +39437,11 @@ msgstr "Koha verzió: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:662
 #, c-format
 msgid "N/A"
 msgstr ""
@@ -39460,7 +39495,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
@@ -39490,8 +39525,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:8
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:152
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:153
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:139
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Name"
@@ -39584,7 +39619,7 @@ msgid "Name:"
 msgstr "Név:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
@@ -40165,13 +40200,13 @@ msgstr "Számla"
 msgid "New label template"
 msgstr "Új klub sablon"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:109
 #, c-format
 msgid "New library"
 msgstr "Új könyvtár"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:46
 #, fuzzy, c-format
 msgid "New library %s "
 msgstr "Új könyvtár"
@@ -40300,7 +40335,7 @@ msgstr "Új hívójel"
 msgid "New routing list"
 msgstr "Új olvasólista"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:193
 #, c-format
 msgid "New search"
 msgstr "Új keresés"
@@ -40454,7 +40489,7 @@ msgstr "Következő találat"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:266
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:674
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:676
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:17
 #, c-format
 msgid "Next "
@@ -40510,11 +40545,11 @@ msgstr "Következő oldal"
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (Documentation Compiler)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:326
@@ -40549,9 +40584,9 @@ msgstr "Nicholas Rosasco (Documentation Compiler)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
@@ -41497,10 +41532,10 @@ msgid "No results for your query"
 msgstr "Nincs sikeres találat "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:109
 #, c-format
 msgid "No results found"
@@ -41568,7 +41603,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "No temporary directory found."
 msgstr "Nem található megegyező bejegyzés"
@@ -41626,7 +41661,7 @@ msgstr "Nem, ne törölje"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:290
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -41696,8 +41731,8 @@ msgstr "Nem, ne törölje"
 msgid "No, let me think about it"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:856
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:855
 #, fuzzy, c-format
 msgid "No, save as new record"
 msgstr "A bejegyzés mentése és megjelenítése"
@@ -42227,15 +42262,16 @@ msgid ""
 "or slow your system down."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:77
 #, c-format
 msgid "Note: For temporary uploads do not select a category."
 msgstr ""
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:78
+#. %2$s:  av_UPLOAD_link = BLOCK 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:79
 #, fuzzy, c-format
-msgid "Note: No upload categories are defined. %s "
+msgid "Note: No upload categories are defined. %s %s"
 msgstr "Még egyetlen egy hozzászólást sem engedélyeztek."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:221
@@ -42264,8 +42300,8 @@ msgstr "Megjegyzés: A következő 2 mező egyikének 1-nek kell lennie!"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:90
@@ -42281,7 +42317,7 @@ msgstr "Megjegyzés: A következő 2 mező egyikének 1-nek kell lennie!"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:14
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-article-requests.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-return-claims.inc:17
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:159
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:145
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:251
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:38
 #, c-format
@@ -42335,7 +42371,7 @@ msgstr "Megjegyzések:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, fuzzy, c-format
 msgid "Notes: "
@@ -42881,7 +42917,7 @@ msgstr "Web katalógus"
 msgid "OPAC - %s %s"
 msgstr "Web katalógus - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, fuzzy, c-format
 msgid "OPAC info: "
 msgstr "OPAC nézet: "
@@ -42894,7 +42930,7 @@ msgstr "Előjegyezze"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:236
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
 #, fuzzy, c-format
 msgid "OPAC note"
 msgstr "%s Megjegyzés a web katalógushoz: "
@@ -42905,13 +42941,13 @@ msgstr "%s Megjegyzés a web katalógushoz: "
 msgid "OPAC note:"
 msgstr "%s Megjegyzés a web katalógushoz: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
 #, fuzzy, c-format
 msgid "OPAC notes"
 msgstr "%s Megjegyzés a web katalógushoz: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #, fuzzy, c-format
 msgid "OPAC notes:"
 msgstr "%s Megjegyzés a web katalógushoz: "
@@ -42948,8 +42984,8 @@ msgstr "Problémajelentés küldése: "
 msgid "OPAC tables"
 msgstr "Olvasók táblái"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:559
 #, fuzzy, c-format
 msgid "OPAC view"
 msgstr "OPAC nézet: "
@@ -43417,7 +43453,7 @@ msgstr ""
 msgid "Only search fields mapped with biblios can be weighted"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:103
 #, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or budget_modify "
@@ -43425,7 +43461,7 @@ msgid ""
 "results"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:115
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:101
 #, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or order_manage "
@@ -43433,7 +43469,7 @@ msgid ""
 "results"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:99
 #, c-format
 msgid ""
 "Only staff with superlibrarian or suggestions_manage permissions are "
@@ -43664,7 +43700,7 @@ msgstr "Megrendelve"
 msgid "Order ID"
 msgstr "Rendezés szempontja: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:613
 #, fuzzy, c-format
 msgid "Order ID:"
 msgstr "Rendezés szempontja: "
@@ -44052,7 +44088,7 @@ msgstr "Egyéb állomány %s"
 msgid "Other limits"
 msgstr "Típuson belüli korlátozások"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
 #, fuzzy, c-format
 msgid "Other name"
 msgstr "Egyéb nevek:"
@@ -44763,12 +44799,12 @@ msgid "Patron"
 msgstr "Olvasó"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' added."
 msgstr "'%s' olvasót hozzáadtuk."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' is already in the list."
 msgstr "'%s' olvasó már szerepel a listában."
 
@@ -45736,7 +45772,7 @@ msgid "Patron's record has guaranteed accounts attached."
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:470
 #, c-format
 msgid "Patron:"
@@ -45825,7 +45861,7 @@ msgstr "Olvasók &rsaquo; Olvasók hozzáadása"
 msgid "Patrons and circulation"
 msgstr "Olvasók és kölcsönzés"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:132
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:118
 #, fuzzy, c-format
 msgid "Patrons found for: "
 msgstr "Nincs sikeres találat "
@@ -46282,13 +46318,13 @@ msgstr "Ezen olvasók tartós törlése"
 msgid "Permanently delete these patrons"
 msgstr "Ezen olvasók tartós törlése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
 #, fuzzy, c-format
 msgid "Permissions (code)"
 msgstr "Jogosultságok beállítása"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "Ph: "
 msgstr ""
 
@@ -46297,7 +46333,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:10
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:160
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:146
 #, c-format
 msgid "Phone"
 msgstr "Telefonszám"
@@ -46318,7 +46354,7 @@ msgstr "Telefonszám:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:603
 #, c-format
@@ -46403,7 +46439,7 @@ msgstr "Minden könyvtár"
 msgid "Pickup library:"
 msgstr "Felvétel helye:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:99
@@ -46413,7 +46449,7 @@ msgstr "Felvétel helye:"
 msgid "Pickup location"
 msgstr "pickup_location"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:248
 #, fuzzy, c-format
 msgid "Pickup location: "
 msgstr "pickup_location"
@@ -46881,7 +46917,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Please enter a search term."
 msgstr "Adjon meg legalább {0} karaktert."
@@ -47700,7 +47736,7 @@ msgstr "Hozzáadja az új listához:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:7
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:538
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:661
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:663
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -47752,8 +47788,13 @@ msgstr "Előző munkamenet"
 msgid "Price"
 msgstr "Ár:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#, fuzzy, c-format
+msgid "Price paid"
+msgstr "Ár:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:661
 #, fuzzy, c-format
 msgid "Price paid:"
 msgstr "Ár:"
@@ -47789,7 +47830,7 @@ msgstr "Beszerzés"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:807
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
 #, c-format
 msgid "Primary email"
 msgstr "Elsődleges email"
@@ -47806,7 +47847,7 @@ msgstr "Elsődleges email:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:786
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
 #, c-format
 msgid "Primary phone"
 msgstr "Elsődleges telefonszám"
@@ -47891,8 +47932,8 @@ msgstr "Kikölcsönözve %s db."
 msgid "Print hold/transfer slip"
 msgstr "Fiatal felnőtt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
 #, fuzzy, c-format
 msgid "Print label"
 msgstr "Oldal nyomtatása"
@@ -48060,7 +48101,7 @@ msgstr "CSV profilok"
 msgid "Priority"
 msgstr "Prioritás"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
 #, fuzzy, c-format
 msgid "Privacy (code)"
 msgstr "Aktív beállítások"
@@ -48333,11 +48374,11 @@ msgid ""
 "file."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:365
@@ -48406,7 +48447,7 @@ msgstr "Nyilvános megjegyzés:"
 msgid "Public notes"
 msgstr "Nyilvános megjegyzések"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:355
 #, fuzzy, c-format
 msgid "Public: "
@@ -49675,7 +49716,7 @@ msgid "Register: %s &rArr; %s"
 msgstr "Könyvtár: %s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:230
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
 #, c-format
 msgid "Registration date"
 msgstr "Beiratkozás dátuma"
@@ -49958,7 +49999,6 @@ msgstr "Távérzékelő kép"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:495
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
@@ -49969,6 +50009,7 @@ msgstr "Távérzékelő kép"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:505
@@ -50412,8 +50453,8 @@ msgstr ""
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:467
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1087
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1088
 #, fuzzy
 msgid "Repeat this Tag"
 msgstr "Igen, törölje ezt a címkét"
@@ -50482,7 +50523,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "Bejegyzés felülírása Z39.50/SRU adataival"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #, fuzzy, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "Bejegyzés felülírása Z39.50/SRU adataival"
@@ -50528,12 +50569,12 @@ msgstr "Fizetés típusa: "
 msgid "Replied"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Reply-To: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, fuzzy, c-format
 msgid "ReplyToDefault"
 msgstr "Alapértelmezett"
@@ -50714,6 +50755,12 @@ msgstr "Requiem"
 msgid "Request ID"
 msgstr "Requiem"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#, fuzzy, c-format
+msgid "Request ID:"
+msgstr "Requiem"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:541
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, fuzzy, c-format
@@ -50737,29 +50784,28 @@ msgid "Request article from %s"
 msgstr "0 Kölcsönzések "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:393
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:606
 #, fuzzy, c-format
 msgid "Request details"
 msgstr "Beszerzés adatai"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
 #, fuzzy, c-format
 msgid "Request log"
 msgstr "Kérés visszavonása"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
-#, fuzzy, c-format
-msgid "Request number:"
-msgstr "Házszám:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:510
 #, fuzzy, c-format
 msgid "Request specific item type:"
 msgstr "Egy bizonyos példány előjegyízése:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
+#, fuzzy, c-format
+msgid "Request type"
+msgstr "Kiadvány típusa:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
 #, fuzzy, c-format
 msgid "Request type:"
 msgstr "Kiadvány típusa:"
@@ -50845,8 +50891,8 @@ msgstr "hiányzó szó"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -50895,13 +50941,13 @@ msgstr "hiányzó szó"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:768
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:200
@@ -51238,7 +51284,7 @@ msgstr "Keresések kiválasztása a következő művelethez: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
 #, c-format
 msgid "Restricted"
 msgstr "Korlátozott"
@@ -51290,7 +51336,7 @@ msgstr ""
 msgid "Restriction overridden temporarily."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
 #, fuzzy, c-format
 msgid "Restriction reason"
 msgstr "%s Korlátozások"
@@ -51309,13 +51355,13 @@ msgstr "Leírás: %s"
 msgid "Result"
 msgstr "Találat"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:189
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:165
@@ -51586,7 +51632,7 @@ msgstr "Vissza az elejére"
 msgid "Return to where you were"
 msgstr "Vissza az elejére"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #, fuzzy, c-format
 msgid "Return-Path: "
 msgstr "8- Előpublikálási szint"
@@ -51598,7 +51644,7 @@ msgstr "8- Előpublikálási szint"
 msgid "Returned to patron: "
 msgstr "Olvasójegy meghosszabbítása"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, fuzzy, c-format
 msgid "ReturnpathDefault"
 msgstr "8- Előpublikálási szint"
@@ -52048,7 +52094,7 @@ msgid "SMS"
 msgstr "SMS"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
 #, fuzzy, c-format
 msgid "SMS alert number"
 msgstr "SMS száma:"
@@ -52076,7 +52122,7 @@ msgstr "Koha &rsaquo; Adminisztráció &rsaquo; Hallható riasztások"
 msgid "SMS number:"
 msgstr "SMS száma:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
 #, fuzzy, c-format
 msgid "SMS provider"
 msgstr "SMS szolgáltató:"
@@ -52087,12 +52133,12 @@ msgstr "SMS szolgáltató:"
 msgid "SMS provider:"
 msgstr "SMS szolgáltató:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #, fuzzy, c-format
 msgid "SMTP server"
 msgstr "Szerver"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
 #, fuzzy, c-format
 msgid "SMTP server: "
 msgstr "Szerver"
@@ -52197,7 +52243,7 @@ msgstr ""
 msgid "Sale %s "
 msgstr "Sorozat: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
 #, c-format
 msgid "Salutation"
 msgstr "Megszólítás"
@@ -52242,7 +52288,6 @@ msgstr "szombatonként"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -52277,13 +52322,14 @@ msgstr "szombatonként"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:884
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:205
@@ -52352,14 +52398,14 @@ msgstr ""
 msgid "Save all %s preferences"
 msgstr "Minden %s beállítás mentése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:290
 #, c-format
 msgid "Save and continue editing"
 msgstr "Mentés és a szerkesztés folytatása"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
 #, c-format
 msgid "Save and edit items"
 msgstr "A bejegyzés mentése és a példány szerkesztése"
@@ -52375,7 +52421,7 @@ msgstr "Mentés mindenképpen"
 msgid "Save and preview routing slip"
 msgstr "A bejegyzés mentése és megjelenítése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:888
 #, c-format
 msgid "Save and view record"
 msgstr "A bejegyzés mentése és megjelenítése"
@@ -52676,16 +52722,16 @@ msgstr "Képernyő"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:1
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
@@ -52697,8 +52743,8 @@ msgstr "Képernyő"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
@@ -52707,7 +52753,7 @@ msgstr "Képernyő"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:13
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:166
@@ -52886,7 +52932,8 @@ msgstr "Hiba történt, kérem próbálja újra."
 msgid "Search field"
 msgstr "Keresési mezők:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:84
 #, fuzzy, c-format
 msgid "Search field:"
 msgstr "Keresési mezők:"
@@ -53151,8 +53198,8 @@ msgstr "Keresés kulcsszó alapján:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:25
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:73
 #, c-format
@@ -53244,7 +53291,7 @@ msgstr "Keresés a rendszerbeállításokban"
 msgid "Search targets"
 msgstr "Keresés az alábbi szervereken"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:154
 #, fuzzy, c-format
 msgid "Search term: "
 msgstr "Keresés típusa:"
@@ -53292,7 +53339,7 @@ msgid "Search to hold "
 msgstr "Előjegyzés keresése"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:41
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:79
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Search type:"
 msgstr "Keresés típusa:"
@@ -53303,12 +53350,12 @@ msgstr "Keresés típusa:"
 msgid "Search unavailable"
 msgstr "%s elérhetetlen:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:122
 #, fuzzy, c-format
 msgid "Search uploads by category"
 msgstr "Keresési kategória"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:151
 #, c-format
 msgid "Search uploads by name or hashvalue"
 msgstr ""
@@ -53389,7 +53436,7 @@ msgstr "Alapértelmezett értékek használata"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:248
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
 #, c-format
 msgid "Secondary email"
 msgstr "Másodlagos email"
@@ -53409,7 +53456,7 @@ msgstr "Másodlagos email: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
 #, c-format
 msgid "Secondary phone"
 msgstr "Másodlagos telefonszám"
@@ -53446,7 +53493,7 @@ msgstr "Részegység"
 #. For the first occurrence,
 #. %1$s:  BIG_LOO.number | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1018
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1017
 #, fuzzy, c-format
 msgid "Section %s"
 msgstr "Részegység"
@@ -53715,15 +53762,15 @@ msgstr "Válasszon ki egy listát"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:314
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:409
@@ -53811,7 +53858,7 @@ msgstr "Válasszon könyvtárat:"
 msgid "Select download format: "
 msgstr "Kérjük, válasszon letöltési formátumot"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:57
 #, fuzzy, c-format
 msgid "Select files: "
 msgstr "Kiválasztott címek hozzáadása: "
@@ -53884,7 +53931,7 @@ msgid "Select partner libraries:"
 msgstr "Válasszon könyvtárat:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "Select patron"
 msgstr "Olvasók keresése"
@@ -54725,7 +54772,7 @@ msgstr "Állapot"
 msgid "Set the date received to today?"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr ""
@@ -54786,7 +54833,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Beállítások "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:912
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55066,7 +55113,7 @@ msgstr "Vissza az elejére"
 msgid "Show MARC"
 msgstr "MARC megjelenítése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:918
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "MARC adatelemszámok dokumentációs linkjeinek megjelenítése"
@@ -55389,7 +55436,7 @@ msgstr "Előfizetések keresése"
 msgid "Show suggestion #%s "
 msgstr "%s. javaslat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
 #, c-format
 msgid "Show tags"
 msgstr "Címkék megjelenítése"
@@ -55446,7 +55493,7 @@ msgstr "%s óta"
 msgid "Single holiday: %s"
 msgstr "Hetente visszatérő szünnap: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Size"
@@ -55630,7 +55677,7 @@ msgstr "Google bejelentkezése sikertelen volt."
 msgid "Sorry, there is no result for your search."
 msgstr "Engedélyezett érték"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:306
 #, fuzzy, c-format
 msgid "Sorry, your request had no results."
 msgstr "Authority keresés találatai"
@@ -55645,7 +55692,7 @@ msgstr "Rendezés"
 msgid "Sort "
 msgstr "Sorbarendezés "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
 #, c-format
 msgid "Sort 1"
 msgstr "Besorolás 1"
@@ -55655,7 +55702,7 @@ msgstr "Besorolás 1"
 msgid "Sort 1:"
 msgstr "Besorolás 1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
 #, c-format
 msgid "Sort 2"
 msgstr "Besorolás 2"
@@ -56106,13 +56153,13 @@ msgstr "Könyvtáros megjegyzése"
 msgid "Staff note:"
 msgstr "Könyvtáros megjegyzése:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
 #, fuzzy, c-format
 msgid "Staff notes"
 msgstr "Könyvtáros megjegyzése:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #, c-format
 msgid "Staff notes:"
 msgstr "Könyvtáros megjegyzése:"
@@ -56289,8 +56336,8 @@ msgid "Start date"
 msgstr "Kezdő dátum"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:134
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:387
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:123
 #, c-format
@@ -56305,8 +56352,8 @@ msgstr "Kezdő dátum:"
 msgid "Start date: "
 msgstr "Kezdő dátum"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, fuzzy, c-format
 msgid "Start defining libraries"
 msgstr "Lelőhely (könyvtárak)"
@@ -56379,8 +56426,8 @@ msgstr "ezzel kezdődik "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:71
 #, c-format
 msgid "Starts with"
 msgstr "Kezdődik vele"
@@ -56389,7 +56436,7 @@ msgstr "Kezdődik vele"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
 #, c-format
 msgid "State"
 msgstr "Megye"
@@ -56400,7 +56447,7 @@ msgstr "Megye"
 msgid "State:"
 msgstr "Megye:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:585
 #, c-format
@@ -56536,7 +56583,7 @@ msgstr "Ismeretlen dátum"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1076
@@ -56747,7 +56794,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
 #, c-format
 msgid "Street number"
 msgstr "Házszám"
@@ -56758,7 +56805,7 @@ msgid "Street number:"
 msgstr "Házszám:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
 #, fuzzy, c-format
 msgid "Street type"
 msgstr "%s Utca típusa: "
@@ -56951,7 +56998,7 @@ msgstr "Tárgyszó(k):"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:155
@@ -56965,9 +57012,9 @@ msgstr "Tárgyszó(k):"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:388
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:388
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:289
@@ -56979,7 +57026,7 @@ msgstr "Tárgyszó(k):"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:773
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
@@ -57549,7 +57596,7 @@ msgstr "Előfizetések"
 msgid "Supplemental issue "
 msgstr "Kiegészítők: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, fuzzy, c-format
 msgid "Supplier metadata"
 msgstr "Kiegészítők: "
@@ -57567,7 +57614,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
 #, c-format
 msgid "Surname"
 msgstr "Vezetéknév"
@@ -57640,7 +57687,7 @@ msgid "Switch languages"
 msgstr "Nyelvváltás"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:915
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "Váltás részletes szerkesztőre"
@@ -58038,8 +58085,8 @@ msgstr "A lista törlődött."
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:554
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:559
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:140
 #, fuzzy, c-format
@@ -58251,7 +58298,7 @@ msgstr "Klub sablon "
 msgid "Templates"
 msgstr "Klub sablonok"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:211
 #, c-format
 msgid "Temporary"
 msgstr ""
@@ -59231,7 +59278,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -59517,7 +59564,7 @@ msgstr ""
 msgid "The record id "
 msgstr "Új bejegyzés "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:990
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr ""
@@ -59877,12 +59924,12 @@ msgid "There are no late orders."
 msgstr "NIncsenek késedelmes kölcsönzések."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, fuzzy
 msgid "There are no libraries defined."
 msgstr "Nincsenek meghatározva pénztárak. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, fuzzy, c-format
 msgid "There are no libraries defined. "
@@ -59986,7 +60033,7 @@ msgstr "Önnek nincsenek olvasólistái."
 msgid "There are no recalls to show."
 msgstr "Önnek nincsenek olvasólistái."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:730
 #, fuzzy, c-format
 msgid "There are no recorded logs for this request"
 msgstr "%s %s %s %s %s %s Nincsenek rögzített bejegyzések ehhez a kéréshez %s "
@@ -60435,7 +60482,7 @@ msgid "This field is required."
 msgstr "%s elemzett tétel"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "This file already exists (in this category)."
 msgstr "%s tétel tárolva"
@@ -60685,7 +60732,7 @@ msgstr "Nem lehet előjegyezni"
 msgid "This item type already exists"
 msgstr "Ez a kiadványtípus már létezik!"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:93
 #, c-format
 msgid "This library cannot be deleted. Patrons or items are still using it"
 msgstr ""
@@ -61128,14 +61175,14 @@ msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:366
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:211
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:310
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:416
@@ -61773,7 +61820,7 @@ msgstr "beépülő modul feltöltése"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
@@ -62532,7 +62579,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:17
 #, c-format
@@ -62577,10 +62623,10 @@ msgstr ""
 msgid "UPCE"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, fuzzy, c-format
-msgid "UPLOAD authorized value category"
-msgstr "Engedélyezett érték: "
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:82
+#, c-format
+msgid "UPLOAD"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -62597,7 +62643,7 @@ msgstr "URL"
 msgid "URL(s)"
 msgstr "URL(s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:227
 #, fuzzy, c-format
 msgid "URL: "
 msgstr "URL: %s "
@@ -63384,24 +63430,24 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:971
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:239
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Upload"
 msgstr "Fájlok feltöltése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:13
 #, fuzzy, c-format
 msgid "Upload &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Eszközök &rsaquo; Fájlok feltöltése"
@@ -63491,7 +63537,7 @@ msgstr "Feltöltés ebbe a könyvtárba: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:298
 #, c-format
 msgid "Upload file"
 msgstr "Fájl feltöltése"
@@ -63549,7 +63595,7 @@ msgstr "További képek feltöltése"
 msgid "Upload new file"
 msgstr "Új fájlok feltöltése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #, c-format
 msgid "Upload new files"
 msgstr "Új fájlok feltöltése"
@@ -63609,7 +63655,7 @@ msgid "Upload photo"
 msgstr "Idézetek feltöltése"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:11
 #, c-format
 msgid "Upload plugin"
 msgstr "beépülő modul feltöltése"
@@ -63636,7 +63682,7 @@ msgstr "beépülő modul feltöltése"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:106
 #, c-format
 msgid "Upload progress: "
 msgstr "A feltöltés folyamatban: "
@@ -63655,14 +63701,14 @@ msgstr "A feltöltés folyamatban: "
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: "
 msgstr "Feltöltés állapota: "
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: Cancelled "
 msgstr "Feltöltés állapota: törölt"
 
@@ -64097,7 +64143,7 @@ msgstr "Felhasználói azonosító: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:233
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
 #, c-format
 msgid "Username"
 msgstr "Felhasználónév"
@@ -64524,7 +64570,7 @@ msgstr "Nézet"
 msgid "View ILL availability plugins"
 msgstr "Minden könyvtár megjelenítése"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
 #, fuzzy, c-format
 msgid "View ILL requests"
 msgstr "ILL kérés megerősítése"
@@ -64585,19 +64631,13 @@ msgstr "Új kosár"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
-msgid "View biblio details"
-msgstr "Beszerzés adatai"
+msgid "View bibliographic record"
+msgstr "Könyvtári tétel címe"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:50
 #, c-format
 msgid "View bibliographic record enhancement plugins for the staff interface"
 msgstr ""
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-#, fuzzy
-msgid "View borrower details"
-msgstr "További részletek"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:174
 #, fuzzy, c-format
@@ -64671,8 +64711,9 @@ msgid "View patron"
 msgstr "Új olvasó "
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
 msgid "View patron details"
 msgstr "Olvasók táblái"
@@ -65630,11 +65671,11 @@ msgstr "Évente ismétlődő ünnep: %s"
 msgid "Yellow"
 msgstr "Engedélyezett"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:325
@@ -65672,9 +65713,9 @@ msgstr "Engedélyezett"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:569
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:584
@@ -65702,7 +65743,7 @@ msgstr "Engedélyezett"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:250
@@ -65796,7 +65837,7 @@ msgstr "Igen, bezárom (Y)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:294
@@ -65865,7 +65906,7 @@ msgstr "Igen, törölje a címkét"
 msgid "Yes, delete this tag"
 msgstr "Igen, törölje ezt a címkét"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
 #, fuzzy, c-format
 msgid "Yes, edit existing items"
 msgstr "A bejegyzés mentése és a példány szerkesztése"
@@ -65897,7 +65938,7 @@ msgid "Yes: Edit existing authority"
 msgstr "Besorolási adatok szerkesztése"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:848
 #, fuzzy
 msgid "Yes: View existing items"
 msgstr "Hozzáad egy létező csoporthoz"
@@ -66759,7 +66800,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr ""
 
@@ -66840,7 +66881,7 @@ msgstr ""
 msgid "Your report will be generated with the following SQL statement."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:301
 #, fuzzy, c-format
 msgid "Your request gave the following results:"
 msgstr "A következő előfizetéseket készül szerkeszteni:"
@@ -66936,10 +66977,10 @@ msgid "Z39.50 can send records in various formats. Choose one."
 msgstr "a rekordokat különféle formában is elküldeni. Válasszon egyet!)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:903
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
 msgstr "Z39.50/SRU keresés"
@@ -67000,7 +67041,7 @@ msgstr "ZIP-fájl:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:225
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
 #, c-format
 msgid "ZIP/Postal code"
 msgstr "Irányítószám"
@@ -67011,7 +67052,7 @@ msgstr "Irányítószám"
 msgid "ZIP/Postal code:"
 msgstr "Irányítószám: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:591
 #, c-format
@@ -67428,7 +67469,7 @@ msgid "beep.ogg"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "begins with "
 msgstr "ezzel kezdődik "
@@ -67628,7 +67669,7 @@ msgstr ""
 msgid "can place %s of the requested %s holds for a maximum of %s total holds."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:815
 #, fuzzy, c-format
 msgid "cancel your request"
 msgstr "Élőjegyzés"
@@ -67742,7 +67783,7 @@ msgid "considered late"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "containing "
 msgstr "folytatódó"
@@ -67767,7 +67808,7 @@ msgstr "folytatódó"
 msgid "contains"
 msgstr "tartalmazza"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #, c-format
 msgid "continue creating your request"
 msgstr ""
@@ -67946,7 +67987,7 @@ msgstr "Globális rendszerbeállítások"
 msgid "display detail for this librarian."
 msgstr "Az adott cím részletezve"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, fuzzy, c-format
 msgid "do a catalog search"
 msgstr "Katalógus keresés"
@@ -68391,7 +68432,7 @@ msgid "in fines. If you would like you can record payments. "
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "in library "
 msgstr "Kölcsönző könyvtár"
@@ -69140,8 +69181,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "vagy"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:384
@@ -69183,11 +69224,6 @@ msgstr ", bemutató"
 #, fuzzy
 msgid "order(s) left"
 msgstr "%s példány maradt"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, c-format
-msgid "otherwise all uploads will be marked as temporary."
-msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -69622,7 +69658,7 @@ msgid "stages"
 msgstr "Oldalak"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "starting with "
 msgstr "ezzel kezdődik "
 
@@ -69748,28 +69784,6 @@ msgstr "főkönyvtáros"
 msgid "surname: %s"
 msgstr "Vezetéknév: "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
-#, fuzzy, c-format
-msgid ""
-"system preference %s Default: ILLDefaultStaffEmail system preference %s "
-msgstr "Globális rendszerbeállítások"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, fuzzy, c-format
-msgid "system preference %s Default: ReplyToDefault system preference %s "
-msgstr "Globális rendszerbeállítások"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
-#, fuzzy, c-format
-msgid "system preference %s Default: ReturnpathDefault system preference %s "
-msgstr "Vissza a Rendszer Beállításhoz"
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:44
 #, fuzzy, c-format
@@ -69789,7 +69803,7 @@ msgstr "Keresés a rendszerbeállításokban:"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:352
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:981
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:980
 msgid "tag_anchor_%s_%s%s"
 msgstr ""
 
@@ -70124,7 +70138,7 @@ msgid "with all the columns."
 msgstr "Minden oszlop elrejtése"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "with category "
 msgstr "Új kategória"
@@ -70315,7 +70329,6 @@ msgstr "| Státusz: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:269
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1033
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:223
@@ -70323,12 +70336,13 @@ msgstr "| Státusz: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1033
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
@@ -70568,6 +70582,10 @@ msgstr ""
 #~ msgstr "%s Napok %s Órák %s Meghatározatlan %s "
 
 #, fuzzy
+#~ msgid "%s Default: "
+#~ msgstr "%s Alapértelmezett "
+
+#, fuzzy
 #~ msgid ""
 #~ "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
 #~ "Copy %s %s Copy and replace %s %s %s 1st %s %s field %s%s$%s%s %s with "
@@ -70588,6 +70606,10 @@ msgstr ""
 
 #~ msgid "%s Hold(s)"
 #~ msgstr "%s előjegyzés"
+
+#, fuzzy
+#~ msgid "%s If not filled in defaults to system preference "
+#~ msgstr "Hozzáad egy rendszer beállítást "
 
 #, fuzzy
 #~ msgid ""
@@ -70775,6 +70797,10 @@ msgstr ""
 #~ msgstr "de."
 
 #, fuzzy
+#~ msgid "Add values to the "
+#~ msgstr "Hozzáad forgalmazót"
+
+#, fuzzy
 #~ msgid ""
 #~ "An error occurred when adding this library category. The categorycode "
 #~ "might already exist."
@@ -70824,6 +70850,10 @@ msgstr ""
 
 #~ msgid "Borrower name"
 #~ msgstr "Olvasó neve"
+
+#, fuzzy
+#~ msgid "Branch"
+#~ msgstr "Mandzsu"
 
 #, fuzzy
 #~ msgid "Cancelled reserve"
@@ -70963,6 +70993,10 @@ msgstr ""
 #~ msgstr ". <a1>Visszavonom előjegyzésem</a>"
 
 #, fuzzy
+#~ msgid "Request number:"
+#~ msgstr "Házszám:"
+
+#, fuzzy
 #~ msgid "Searching for subscription in Mana Knowledge Base"
 #~ msgstr "<b>%s</b> előfizetés(ek)"
 
@@ -70997,8 +71031,20 @@ msgstr ""
 #~ msgstr "Időzóna"
 
 #, fuzzy
+#~ msgid "UPLOAD authorized value category"
+#~ msgstr "Engedélyezett érték: "
+
+#, fuzzy
 #~ msgid "Use records from the following list: "
 #~ msgstr "V: A dokumentum úgy jelenik meg, mintha a másik fiókhoz tartozna."
+
+#, fuzzy
+#~ msgid "View biblio details"
+#~ msgstr "Beszerzés adatai"
+
+#, fuzzy
+#~ msgid "View borrower details"
+#~ msgstr "További részletek"
 
 #, fuzzy
 #~ msgid "You must choose a subscription length or an end date."

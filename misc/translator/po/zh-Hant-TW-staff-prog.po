@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2023-02-18 00:15-0300\n"
-"PO-Revision-Date: 2023-02-17 06:32+0000\n"
-"Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
+"POT-Creation-Date: 2023-03-16 21:35-0300\n"
+"PO-Revision-Date: 2023-03-20 08:54+0000\n"
+"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /zh_TW/22.05/zh-Hant-TW-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1676615569.401581\n"
+"X-POOTLE-MTIME: 1679302495.862522\n"
 
 #. %1$s:  END 
 #. %2$s:  data.created_on | $KohaDates 
@@ -736,9 +736,9 @@ msgstr "%s %s (%s) %s 預設 MARC 框架 %s"
 #. %1$s:  END 
 #. %2$s:  Koha.Preference('numSearchResults') | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:303
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s (default) "
-msgstr "%s (預設值)"
+msgstr "%s %s (預設值)"
 
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  IF ( opadd ) 
@@ -1034,7 +1034,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  library.branchcode | html 
 #. %8$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:8
 #, c-format
 msgid ""
 "%s %s Modify library %s New library %s %s &rsaquo; %s Confirm deletion of "
@@ -1789,7 +1789,7 @@ msgstr "%s (空白可能沒問題)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:402
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1041
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1040
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - 勾選以擴充此標籤"
 
@@ -1990,7 +1990,7 @@ msgstr "%s 新增書目記錄至此框架："
 #. %1$s:  IF mode=='new' || mode =='deleted'
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:37
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s 新增上傳或搜尋 %s 結果 %s "
@@ -2297,7 +2297,7 @@ msgid "%s Date of birth: "
 msgstr "%s 生日："
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:930
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:929
 #, c-format
 msgid "%s Default "
 msgstr "%s 預設 "
@@ -2311,14 +2311,38 @@ msgstr "%s 預設 "
 msgid "%s Default %s %s %s "
 msgstr "%s 預設 %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
+#. %1$s:  END 
+#. %2$s:  pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
-msgid "%s Default: "
-msgstr "%s 預設: "
+msgid ""
+"%s Default: %s system preference %s Default: ILLDefaultStaffEmail system "
+"preference %s "
+msgstr "%s 預設: %s 系統偏好 %s 預設: ILLDefaultStaffEmail 系統偏好 %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReplyToDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReplyToDefault system "
+"preference %s "
+msgstr "%s 預設: %s 系統偏好 %s 預設: ReplyToDefault 系統偏好 %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReturnpathDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReturnpathDefault system "
+"preference %s "
+msgstr "%s 預設: %s 系統偏好 %s 預設: ReturnpathDefault 系統偏好 %s "
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -2396,8 +2420,8 @@ msgstr "%s 編輯印表機設定檔 %s %s 新增印表機設定檔 %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:810
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:826
 #, c-format
 msgid "%s Editing "
 msgstr "%s 編輯 "
@@ -2510,9 +2534,9 @@ msgstr "%s 基金供 '%s' %s 全部基金 %s "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1301
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gone no address: "
-msgstr "無地址"
+msgstr "%s 無地址: "
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:235
@@ -2538,11 +2562,16 @@ msgstr "%s 保證人的姓："
 msgid "%s Hold expected at "
 msgstr "%s 預約預期在 "
 
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
+#. %1$s:  END 
+#. %2$s:  pref_MARCOrgCode_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
-msgid "%s If not filled in defaults to system preference "
-msgstr "%s 若未填入預設的系統偏好值。"
+msgid ""
+"%s If not filled in defaults to system preference %s. %s If not filled in "
+"defaults to system preference MARCOrgCode. %s You can obtain your code from "
+msgstr "%s 若未填入預設的系統偏好 %s. %s 若未填入預設的系統偏好 MARCOrgCode 值.%s 可以從此取得您的代碼 "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-nomatch-action.inc:11
@@ -2632,9 +2661,9 @@ msgstr "%s 位置："
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1336
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost card: "
-msgstr "遺失讀者證"
+msgstr "%s 遺失讀者證: "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
@@ -2903,7 +2932,7 @@ msgstr "%s 無 "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #, c-format
 msgid "%s No %s "
 msgstr "%s 無 %s "
@@ -2970,9 +2999,9 @@ msgstr "%s 無停用預算 %s "
 
 #. %1$s:  IF item_action_ignore AND num_items == 0 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-item-action.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s No items were found during staging "
-msgstr "%s 匯入過程中未找到館藏。 %s "
+msgstr "%s 匯入過程中未找到館藏 "
 
 #. %1$s:  ELSE 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:276
@@ -3957,7 +3986,7 @@ msgid "%s checked out:"
 msgstr "%s 已借出:"
 
 #. %1$s:  request.illcomments.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #, c-format
 msgid "%s comments"
 msgstr "%s 評論"
@@ -4551,7 +4580,7 @@ msgstr "%s 將到期 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:476
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:592
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:597
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "%s years"
 msgstr "%s 年"
@@ -5525,7 +5554,7 @@ msgstr "%s修改框架文字%s新增框架%s"
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:114
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%s修改圖書館%s新增圖書館%s"
@@ -5591,7 +5620,7 @@ msgstr "%s新增 %s購物車 %s (%s) 針對 %s &rsaquo; 採訪 &rsaquo; Koha"
 #. %1$s:  IF record.permanent 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:233
 #, c-format
 msgid "%sNo%sYes%s"
 msgstr "%s否%s是%s"
@@ -6400,20 +6429,20 @@ msgid "( Effective checkin date is %s )"
 msgstr "( 還入生效日期為 %s )"
 
 #. %1$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:99
 #, c-format
 msgid "(%s items)."
 msgstr "(%s 館藏)."
 
 #. %1$s:  m.data.patrons_count | html 
 #. %2$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:95
 #, c-format
 msgid "(%s patrons and %s items)."
 msgstr "(%s 讀者以及 %s 館藏)."
 
 #. %1$s:  m.data.patrons_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:97
 #, c-format
 msgid "(%s patrons)."
 msgstr "(%s 讀者)."
@@ -6671,7 +6700,7 @@ msgstr "(未遺失)"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(紀錄編號 %s) %s新增 MARC 紀錄 %s"
@@ -6679,7 +6708,7 @@ msgstr "(紀錄編號 %s) %s新增 MARC 紀錄 %s"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:811
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(紀錄編號 %s) %s新增 MARC 紀錄 %s "
@@ -6857,7 +6886,7 @@ msgstr "(以數字鍵入數量) "
 msgid "(exclusive) "
 msgstr "(不包括) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:152
 #, c-format
 msgid "(fast cataloging)"
@@ -7262,15 +7291,6 @@ msgstr "-- 無 -- "
 #, c-format
 msgid "-- please choose --"
 msgstr "-- 請選擇 --"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
-#, c-format
-msgid ""
-". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
-"obtain your code from "
-msgstr ". %s 若未填入預設的系統偏好 MARCOrgCode 值。%s 可以從此取得您的代碼 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:221
 #, c-format
@@ -8163,7 +8183,7 @@ msgstr "若找不到對映書目時，則："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -8194,10 +8214,10 @@ msgstr "若找不到對映書目時，則："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:78
@@ -8223,7 +8243,7 @@ msgstr "若找不到對映書目時，則："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
@@ -8479,7 +8499,7 @@ msgstr "新增館藏"
 msgid "Add a new message"
 msgstr "新增訊息"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, c-format
 msgid "Add a new record"
 msgstr "新增紀錄"
@@ -8490,7 +8510,7 @@ msgid "Add a new regular expression"
 msgstr "新增常用表達"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Add a new upload"
 msgstr "新增上傳"
 
@@ -8630,7 +8650,7 @@ msgstr "新增流通訊息"
 msgid "Add classification source"
 msgstr "新增分類法來源"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:757
 #, c-format
 msgid "Add comment"
 msgstr "新增評論"
@@ -9214,10 +9234,13 @@ msgstr "新增使用者"
 msgid "Add users"
 msgstr "新增使用者"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
+#. %1$s:  av_UPLOAD_link | $raw | $KohaSpan 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
 #, c-format
-msgid "Add values to the "
-msgstr "將值新增至 "
+msgid ""
+"Add values to the %s authorized value category otherwise all uploads will be "
+"marked as temporary."
+msgstr "將值新增到 %s 容許值類別，否則所有上傳都將被標記為臨時。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:144
 #, c-format
@@ -9414,13 +9437,13 @@ msgstr "特別感謝..."
 msgid "Additional tools"
 msgstr "其他工具"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:155
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:140
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:141
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Address"
@@ -9428,7 +9451,7 @@ msgstr "地址"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
 #, c-format
 msgid "Address 2"
 msgstr "地址 2"
@@ -9454,7 +9477,7 @@ msgstr "地址有問題"
 msgid "Address line 1:"
 msgstr "地址 1："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, c-format
 msgid "Address line 1: "
 msgstr "地址 1："
@@ -9464,12 +9487,12 @@ msgstr "地址 1："
 msgid "Address line 2:"
 msgstr "地址 2："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, c-format
 msgid "Address line 2: "
 msgstr "地址 2："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #, c-format
 msgid "Address line 3: "
 msgstr "地址 3："
@@ -9517,7 +9540,7 @@ msgstr "加入運費的調整：%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
@@ -9879,10 +9902,10 @@ msgstr "Alingsås 公共圖書館，瑞典"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:248
@@ -9914,7 +9937,7 @@ msgstr "Alingsås 公共圖書館，瑞典"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -9978,6 +10001,11 @@ msgstr "所有日子"
 #, c-format
 msgid "All dependencies installed."
 msgstr "已安裝所有的相依套件。"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#, fuzzy, c-format
+msgid "All emails"
+msgstr "電子郵件"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:107
@@ -10062,6 +10090,11 @@ msgstr "將取消此採購單的訂單並還入使用的基金。"
 #, c-format
 msgid "All payments to the library"
 msgstr "所有的付款"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#, fuzzy, c-format
+msgid "All phones"
+msgstr "備用電話"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_authority_record_deletion.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_biblio_record_deletion.inc:5
@@ -10163,7 +10196,7 @@ msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
 msgstr "允許此讀者的保證人從 OPAC 檢視該讀者的罰款"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:95
 #, c-format
 msgid "Allow public downloads:"
 msgstr "允許大眾下載："
@@ -10229,12 +10262,12 @@ msgstr "Alt 鍵指的是鍵盤上標記為 \"Alt\" 的按鍵"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:538
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:5
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
 #, c-format
 msgid "Alternate address"
 msgstr "其他地址"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
 #, c-format
 msgid "Alternate address line 2"
 msgstr "備用地址2"
@@ -10289,7 +10322,7 @@ msgstr "其他地址：街路類型"
 msgid "Alternate address: ZIP/Postal code"
 msgstr "其他地址：郵遞區號"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
 #, c-format
 msgid "Alternate city"
 msgstr "備用城市"
@@ -10300,47 +10333,47 @@ msgstr "備用城市"
 msgid "Alternate contact"
 msgstr "其他連絡"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
 #, c-format
 msgid "Alternate contact ZIP/postal code"
 msgstr "備用聯繫ZIP/郵政編碼"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
 #, c-format
 msgid "Alternate contact address"
 msgstr "備用連絡地址"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
 #, c-format
 msgid "Alternate contact address 2"
 msgstr "備用連絡地址2"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
 #, c-format
 msgid "Alternate contact city"
 msgstr "備用連絡城市"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
 #, c-format
 msgid "Alternate contact country"
 msgstr "備用連絡國家"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
 #, c-format
 msgid "Alternate contact first name"
 msgstr "備用連絡人名"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
 #, c-format
 msgid "Alternate contact phone"
 msgstr "備用連絡電話"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
 #, c-format
 msgid "Alternate contact state"
 msgstr "備用連絡州/省"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
 #, c-format
 msgid "Alternate contact surname"
 msgstr "備用連絡人姓"
@@ -10390,37 +10423,37 @@ msgstr "其他連絡：姓"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "其他連絡：郵遞區號"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
 #, c-format
 msgid "Alternate country"
 msgstr "其他國家"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
 #, c-format
 msgid "Alternate email"
 msgstr "備用電子郵件"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
 #, c-format
 msgid "Alternate phone"
 msgstr "備用電話"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
 #, c-format
 msgid "Alternate state"
 msgstr "備用州/省"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
 #, c-format
 msgid "Alternate street number"
 msgstr "備用街路號碼"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
 #, c-format
 msgid "Alternate street type"
 msgstr "備用街路類型"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
 #, c-format
 msgid "Alternate zip code"
 msgstr "備用郵遞區號"
@@ -10547,7 +10580,7 @@ msgstr "總計："
 msgid "Amount: "
 msgstr "總計："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:85
 #, c-format
 msgid ""
 "An administrator must add values to the UPLOAD authorized value category "
@@ -10721,7 +10754,7 @@ msgid ""
 "exist."
 msgstr "新增此書目框架時發生錯誤。 該書目框架可能已經存在。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:83
 #, c-format
 msgid ""
 "An error occurred when adding this library. The branchcode might already "
@@ -10827,7 +10860,7 @@ msgstr "刪除此書目框架時發生錯誤。 檢查紀錄。"
 msgid "An error occurred when deleting this item type. Check the logs"
 msgstr "刪除此館藏類型時出錯。 檢查紀錄"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:85
 #, c-format
 msgid "An error occurred when deleting this library. Check the logs."
 msgstr "刪除此圖書館時出錯。檢查紀錄。"
@@ -10973,7 +11006,7 @@ msgid ""
 "exists"
 msgstr "更新此館藏類型時出錯。 也許該值已經存在"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:81
 #, c-format
 msgid ""
 "An error occurred when updating this library. Perhaps it already exists."
@@ -11050,7 +11083,7 @@ msgid "An error occurred, please try again: %s "
 msgstr "產生錯誤, 請再試一次: %s"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "An error occurred. Check the logs"
 msgstr "發生錯誤。檢查紀錄"
 
@@ -11550,7 +11583,7 @@ msgstr "確定刪除 %s %s 嗎？"
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "確定刪除 %s (%s) 嗎？"
@@ -12889,7 +12922,7 @@ msgstr "自動還入館藏"
 msgid "Automatic return to home"
 msgstr "自動續借"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:9
 #, c-format
 msgid "Availability"
@@ -13026,7 +13059,7 @@ msgstr "BULAC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Back"
@@ -13060,7 +13093,7 @@ msgstr "返回系統偏好設置"
 msgid "Back to the list"
 msgstr "回到虛擬書架"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:36
 #, c-format
 msgid "Backend"
 msgstr "背端"
@@ -13117,11 +13150,11 @@ msgstr "Bar"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:109
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
@@ -14051,7 +14084,6 @@ msgstr "書目資訊"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
 #, c-format
 msgid "Bibliographic record"
 msgstr "書目紀錄"
@@ -14105,13 +14137,16 @@ msgstr "書目記錄 %s 未被刪除。 無法取消保留 (reserve_id %s)。"
 msgid "Bibliographic record %s was not deleted. An error occurred."
 msgstr "書目記錄 %s 未被刪除。發生錯誤。"
 
+#. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
+#, c-format
 msgid "Bibliographic record ID"
 msgstr "書目紀錄 ID"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:625
 #, c-format
 msgid "Bibliographic record ID:"
 msgstr "書目紀錄 ID："
@@ -14381,7 +14416,7 @@ msgstr "借閱者"
 msgid "Borrower number"
 msgstr "借閱者號碼"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
 #, c-format
 msgid "Borrowernumber"
 msgstr "借閱者號碼"
@@ -14430,11 +14465,6 @@ msgstr "底部"
 #, c-format
 msgid "Braille"
 msgstr "點字資料"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#, c-format
-msgid "Branch"
-msgstr "分館"
 
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
@@ -14488,7 +14518,7 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:13
@@ -14539,7 +14569,7 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -14566,10 +14596,6 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -14579,10 +14605,11 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/errors/errorpage.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/barcode-print.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:28
@@ -14592,6 +14619,9 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -14708,7 +14738,7 @@ msgstr "分館"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
@@ -14761,7 +14791,7 @@ msgstr "Brooklyn 法學院圖書館，美國"
 #. %3$s:  alphabet = ['A' .. 'Z'] 
 #. %4$s:  END 
 #. %5$s:  FOREACH letter IN alphabet 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:120
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:106
 #, c-format
 msgid "Browse by last name: %s %s %s %s %s "
 msgstr "按姓氏瀏覽：%s %s %s %s %s"
@@ -15345,7 +15375,7 @@ msgstr "Calyx，澳洲"
 msgid "Camden County, USA"
 msgstr "Camden County，美國"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr "可以鍵入一個 IP 或次網段，如192.168.1.*"
@@ -15496,8 +15526,6 @@ msgstr "無法掃碼？"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -15516,7 +15544,7 @@ msgstr "無法掃碼？"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
@@ -15558,8 +15586,10 @@ msgstr "無法掃碼？"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:952
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -15572,15 +15602,15 @@ msgstr "無法掃碼？"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:172
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:354
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:385
@@ -15662,7 +15692,7 @@ msgstr "無法掃碼？"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
@@ -16230,7 +16260,7 @@ msgstr "引用"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:150
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:136
 #, c-format
 msgid "Card"
 msgstr "讀者證號"
@@ -16261,7 +16291,7 @@ msgstr "讀者證高度："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
 #, c-format
 msgid "Card number"
 msgstr "讀者證號碼"
@@ -16328,9 +16358,9 @@ msgstr "讀者證號碼長度不能超過 %s 字元。"
 msgid "Card number:"
 msgstr "讀者證號碼："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:56
 #, c-format
 msgid "Card number: "
 msgstr "讀者證號碼："
@@ -16635,7 +16665,7 @@ msgid "Catalog statistics "
 msgstr "目錄統計資料"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:806
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:85
@@ -16721,8 +16751,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:143
 #, c-format
 msgid "Category"
 msgstr "類型"
@@ -16733,7 +16763,7 @@ msgstr "類型"
 msgid "Category %s is in use. Deletion not possible!"
 msgstr "類型 %s 正在使用中。 無法刪除！"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
 #, c-format
 msgid "Category (code)"
 msgstr "類型(代碼)"
@@ -16785,8 +16815,8 @@ msgstr "類型："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:65
 #, c-format
 msgid "Category: "
@@ -16906,7 +16936,7 @@ msgstr "變更類型"
 msgid "Change currency"
 msgstr "更改貨幣"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:923
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -17254,7 +17284,7 @@ msgstr "不檢查"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:104
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:25
@@ -17291,7 +17321,7 @@ msgstr "借出訊息"
 msgid "Check out to this patron"
 msgstr "借出給此讀者"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:75
 #, c-format
 msgid "Check previous checkout"
 msgstr "檢查先前借出嗎？"
@@ -17760,7 +17790,7 @@ msgstr "借出狀態："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:147
 #, c-format
 msgid "Checkouts"
 msgstr "借出"
@@ -17842,8 +17872,8 @@ msgstr "選擇"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
 #, c-format
 msgid "Choose"
 msgstr "選擇"
@@ -18170,7 +18200,7 @@ msgid "Circulation home"
 msgstr "流通首頁"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
 #, c-format
 msgid "Circulation note"
 msgstr "流通說明"
@@ -18284,7 +18314,7 @@ msgstr "縣市與鄉鎮"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
 #, c-format
 msgid "City"
 msgstr "縣市"
@@ -18330,7 +18360,7 @@ msgstr "縣市成功更新"
 msgid "City:"
 msgstr "縣市："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:578
 #, c-format
@@ -18561,7 +18591,7 @@ msgstr "清除批次匯入#%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:354
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:81
 #, c-format
 msgid "Clear"
 msgstr "清除"
@@ -18570,10 +18600,10 @@ msgstr "清除"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -18754,7 +18784,7 @@ msgstr "勾選日期以便新增或編輯假日。"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1081
 msgid "Click to Expand this Tag"
 msgstr "勾選以擴充此標籤"
 
@@ -18804,7 +18834,7 @@ msgstr "剪貼簿"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -18830,7 +18860,7 @@ msgstr "複製此規則給："
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -18877,8 +18907,8 @@ msgstr "複製流通與罰款規則失敗！"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:734
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:183
@@ -18909,8 +18939,8 @@ msgstr "複製流通與罰款規則失敗！"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:444
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
@@ -18919,8 +18949,8 @@ msgstr "複製流通與罰款規則失敗！"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:189
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:177
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:186
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:163
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:172
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:150
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
@@ -19121,7 +19151,7 @@ msgstr "來自開放圖書館的Coce圖片"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -19441,7 +19471,7 @@ msgstr "評論"
 msgid "Comment "
 msgstr "評論 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:748
 #, c-format
 msgid "Comment by: "
 msgstr "評論者："
@@ -19453,7 +19483,7 @@ msgstr "評論者："
 msgid "Comment:"
 msgstr "評論："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
@@ -19470,7 +19500,7 @@ msgstr "評論者 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
@@ -19801,7 +19831,7 @@ msgid "Confirm deletion of desk "
 msgstr "確認刪除流通櫃台"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:57
 #, c-format
 msgid "Confirm deletion of library '%s' "
 msgstr "確認刪除圖書館 '%s'"
@@ -20004,7 +20034,7 @@ msgstr "聯絡資訊"
 msgid "Contact name: "
 msgstr "聯絡名稱："
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
 #, c-format
 msgid "Contact note"
 msgstr "聯絡說明"
@@ -20058,8 +20088,8 @@ msgstr "連絡人"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:48
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:83
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:86
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:72
 #, c-format
 msgid "Contains"
 msgstr "包括"
@@ -20373,7 +20403,7 @@ msgid "Copy holidays to:"
 msgstr "複製假日至："
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Copy link to this file"
 msgstr "複製連結到這份檔案"
 
@@ -20486,7 +20516,7 @@ msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "成本必須以數字表示 >= 0"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, c-format
 msgid "Cost:"
 msgstr "成本："
@@ -20633,7 +20663,7 @@ msgstr "計算不重複的館藏："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:226
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
 #, c-format
 msgid "Country"
 msgstr "國家"
@@ -20644,7 +20674,7 @@ msgstr "國家"
 msgid "Country:"
 msgstr "國家："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:597
 #, c-format
@@ -21889,7 +21919,7 @@ msgstr "到館日期"
 msgid "Date acquired (item)"
 msgstr "取得日期 (館藏)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:425
@@ -21961,8 +21991,8 @@ msgstr "最後出現的日期"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:180
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:151
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
 #, c-format
 msgid "Date of birth"
 msgstr "生日"
@@ -22226,9 +22256,9 @@ msgstr "減少寬限期針對高預約(日)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:408
@@ -22246,11 +22276,11 @@ msgstr "減少寬限期針對高預約(日)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:248
@@ -22660,7 +22690,7 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:693
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -22703,14 +22733,14 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:401
@@ -22749,7 +22779,7 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:95
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:367
@@ -23189,8 +23219,8 @@ msgstr "刪除此範圍的單一假日"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:471
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 msgid "Delete this Tag"
 msgstr "刪除此標籤"
 
@@ -23227,7 +23257,7 @@ msgstr "刪除此儲存的報表"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
 msgid "Delete this subfield"
 msgstr "刪除此分欄"
 
@@ -23384,7 +23414,7 @@ msgstr "送達時間："
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Denied"
 msgstr "拒絕"
 
@@ -23562,12 +23592,12 @@ msgstr "說明："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:106
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:55
@@ -23699,8 +23729,8 @@ msgstr "詳細訊息： "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:244
@@ -23727,7 +23757,7 @@ msgstr "詳情 %s "
 msgid "Details for %s &rsaquo; Housebound &rsaquo; Koha"
 msgstr "館藏詳情 %s &rsaquo; 編目 &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:785
 #, c-format
 msgid "Details for all requests"
 msgstr "需求細節"
@@ -23744,13 +23774,13 @@ msgstr "訂閱詳情 #%s "
 msgid "Details for subscription #%s &rsaquo; Serials &rsaquo; Koha"
 msgstr "訂閱詳情 #%s &rsaquo; 期刊 &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:609
 #, c-format
 msgid "Details from library"
 msgstr "圖書館詳情"
 
 #. %1$s:  request.backend | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
 #, c-format
 msgid "Details from supplier (%s)"
 msgstr "供應商詳情 (%s)"
@@ -24145,7 +24175,7 @@ msgstr "在圖書群組搜尋下拉列表顯示"
 msgid "Displaying"
 msgstr "顯示"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:793
 #, c-format
 msgid "Displaying availability results"
 msgstr "顯示可取得的結果"
@@ -24215,7 +24245,7 @@ msgid "Do not use template"
 msgstr "不要使用模板"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Do you really want to delete this upload?"
 msgstr "確定刪除此上傳嗎？"
 
@@ -24353,7 +24383,7 @@ msgid "DoverNet, USA"
 msgstr "DoverNet，美國"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
 #, c-format
 msgid "Download"
 msgstr "下載"
@@ -24676,7 +24706,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "刪除重複批次號碼的讀者 %s：%s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "可能為複製紀錄"
@@ -24914,7 +24944,7 @@ msgstr "最早催還日期"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:692
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -24990,9 +25020,9 @@ msgstr "編輯"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:219
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:122
@@ -25627,10 +25657,10 @@ msgstr "電子郵件："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:523
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "Email: "
 msgstr "電子郵件："
@@ -26640,7 +26670,7 @@ msgstr "到期日："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:158
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/recalls.inc:11
 #, c-format
 msgid "Expires on"
@@ -26652,7 +26682,7 @@ msgid "Expiring before:"
 msgstr "到期日"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
 #, c-format
 msgid "Expiry date"
 msgstr "到期日"
@@ -27006,7 +27036,7 @@ msgstr "Facetable"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Failed"
 msgstr "失敗"
 
@@ -27178,7 +27208,7 @@ msgstr "快速編目 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:821
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
 #, c-format
 msgid "Fax"
 msgstr "傳真"
@@ -27187,8 +27217,8 @@ msgstr "傳真"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:147
 #, c-format
@@ -27308,7 +27338,7 @@ msgid "Field 3"
 msgstr "欄位 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
 msgid "Field autofilled by plugin"
 msgstr "以外掛程式自動填入資料的欄位"
 
@@ -27397,12 +27427,12 @@ msgstr ""
 "為：.csv 與 .txt)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be created. Check permissions."
 msgstr "不能新增檔案。檢查您的權限。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be read."
 msgstr "不能閱讀檔案。"
 
@@ -27413,7 +27443,7 @@ msgid "File format: "
 msgstr "檔案格式："
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File has been deleted."
 msgstr "已刪除檔案。"
 
@@ -27452,7 +27482,7 @@ msgid "File not found!"
 msgstr "無法找到檔案！"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File or upload record could not be deleted."
 msgstr "無法刪除檔案或上傳記錄。"
 
@@ -27493,7 +27523,7 @@ msgid "FileSaver library"
 msgstr "FileSaver 函式庫"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
 #, c-format
 msgid "Filename"
 msgstr "檔案名稱"
@@ -27788,7 +27818,7 @@ msgid "Fine grace period"
 msgstr "罰款寬限期"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:148
 #, c-format
 msgid "Fines"
 msgstr "罰款"
@@ -27830,7 +27860,7 @@ msgstr "已完成"
 msgid "Finished "
 msgstr "已完成 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:662
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:5
 #, c-format
@@ -27860,7 +27890,7 @@ msgstr "首期出版日期："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
 #, c-format
 msgid "First name"
 msgstr "名"
@@ -27870,8 +27900,8 @@ msgstr "名"
 msgid "First name:"
 msgstr "名："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:560
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:48
 #, c-format
 msgid "First name: "
 msgstr "名："
@@ -28126,10 +28156,10 @@ msgstr "若有限制則強迫借出 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:681
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #, c-format
 msgid "Forever"
 msgstr "永遠"
@@ -28542,6 +28572,11 @@ msgstr "正面 "
 msgid "Fulfilled"
 msgstr "已履行"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#, fuzzy, c-format
+msgid "Full address"
+msgstr "電子郵件地址："
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "Fullscreen"
@@ -28736,7 +28771,7 @@ msgstr "Geauga County Public Library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:191
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
 #, c-format
 msgid "Gender"
 msgstr "性別"
@@ -28965,7 +29000,7 @@ msgid "Goethe-Institut, Germany"
 msgstr "歌德學院，德國"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
 #, c-format
 msgid "Gone no address"
 msgstr "無地址"
@@ -29035,7 +29070,7 @@ msgstr "群組代碼"
 msgid "Group name"
 msgstr "群組名稱"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:145
 #, c-format
 msgid "Group(s):"
 msgstr "群組："
@@ -29061,17 +29096,17 @@ msgstr "圖書館群組："
 msgid "Guarantees:"
 msgstr "被保證人"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
 #, c-format
 msgid "Guarantor ID"
 msgstr "保證人 ID"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
 #, c-format
 msgid "Guarantor can view checkouts"
 msgstr "保證人可查看借出"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
 #, c-format
 msgid "Guarantor firstname"
 msgstr "擔保人名字"
@@ -29081,17 +29116,17 @@ msgstr "擔保人名字"
 msgid "Guarantor information"
 msgstr "保證人資訊"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
 #, c-format
 msgid "Guarantor relationship"
 msgstr "保證人關係"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
 #, c-format
 msgid "Guarantor surname"
 msgstr "擔保人的姓氏"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
 #, c-format
 msgid "Guarantor title"
 msgstr "保證人題名"
@@ -29208,7 +29243,7 @@ msgstr "固定到期日:"
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Harrison Carmel 公共圖書館，美國"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
 #, c-format
 msgid "Hashvalue"
 msgstr "Hashvalue"
@@ -30158,7 +30193,7 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:16
@@ -30209,7 +30244,7 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -30237,10 +30272,6 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:19
@@ -30250,10 +30281,11 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/errors/errorpage.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/barcode-print.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:31
@@ -30263,6 +30295,9 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:28
@@ -30386,7 +30421,7 @@ msgstr "每年的此段時間都是假日"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
@@ -30677,11 +30712,11 @@ msgid "ILL notice sent to patron"
 msgstr "發送給讀者的館際互借通知"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
 msgid "ILL request log"
 msgstr "館際互借請求紀錄"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:599
 #, c-format
 msgid "ILL request log "
 msgstr "館際互借請紀錄 "
@@ -30727,12 +30762,12 @@ msgstr "館際互借請求紀錄 %s &rsaquo; 讀者 &rsaquo; Koha"
 msgid "ILL requests:"
 msgstr "館際互借請求:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:175
 #, c-format
 msgid "ILL staff email: "
 msgstr "館際互借的館員電子郵件： "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr "ILLDefaultStaffEmail"
@@ -30752,7 +30787,7 @@ msgstr "INSTID:12345,LANG:fr"
 msgid "INTERMARC"
 msgstr "INTERMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "IP"
 msgstr "IP"
@@ -30767,7 +30802,7 @@ msgstr "IP位址已改變，請重新登入 "
 msgid "IP address has changed. Please log in again "
 msgstr "IP位址已改變。請重新登入 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #, c-format
 msgid "IP: "
 msgstr "IP："
@@ -30784,8 +30819,8 @@ msgstr "ISBD 詳情 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
@@ -31253,7 +31288,7 @@ msgid ""
 "entries or a blank page"
 msgstr "如您使用沒有條碼的樣版, 這可能導致遺失條目或出現空白頁面。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr "如果您找不到您要的，您可以"
@@ -31373,9 +31408,9 @@ msgid "Ignore incoming record (its items may still be processed)"
 msgstr "忽略匯入的紀錄(它的館藏可能仍持續被處理中)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore items"
-msgstr "%s 忽略館藏"
+msgstr "忽略館藏"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:462
@@ -31779,7 +31814,7 @@ msgstr "匯入此批次進入目錄"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:407
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:185
 #, c-format
 msgid "Important"
@@ -32112,7 +32147,7 @@ msgid "Initial float: "
 msgstr "初始浮動值："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
 #, c-format
 msgid "Initials"
 msgstr "縮寫"
@@ -32853,7 +32888,7 @@ msgid "Is new"
 msgstr "是新的"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "是複本嗎 "
@@ -33564,11 +33599,11 @@ msgstr "目前無法儲存館藏號"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
@@ -34116,9 +34151,9 @@ msgstr "Kazik Pietruszewski"
 
 #. %1$s:  order.fund.budget_name | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:295
-#, fuzzy, c-format
+#, c-format
 msgid "Keep current (%s)"
-msgstr "維持目前的 (%s - %s)"
+msgstr "維持目前的 (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:564
 #, c-format
@@ -34633,7 +34668,7 @@ msgstr "大字體資料"
 msgid "Large text"
 msgstr "大型文字"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:18
 #, c-format
 msgid "Last "
@@ -34746,7 +34781,7 @@ msgstr "最新的執行"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:74
 #, c-format
 msgid "Last seen"
 msgstr "最後看到"
@@ -34771,13 +34806,13 @@ msgstr "最近更新的："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:739
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:73
 #, c-format
 msgid "Last updated"
 msgstr "最後更新"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:501
 #, c-format
 msgid "Last updated:"
@@ -35043,9 +35078,9 @@ msgid "Librarian:"
 msgstr "館員："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_to_pull.tt:46
@@ -35055,7 +35090,7 @@ msgstr "館員："
 msgid "Libraries"
 msgstr "圖書館"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #, c-format
 msgid "Libraries "
 msgstr "圖書館 "
@@ -35125,7 +35160,8 @@ msgstr "圖書館:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:15
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:156
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:142
 #, c-format
 msgid "Library"
 msgstr "圖書館"
@@ -35142,7 +35178,7 @@ msgstr "圖書館 "
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "圖書館 %s - %s 還入與轉移政策"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
 #, c-format
 msgid "Library (code)"
 msgstr "圖書館(代碼)"
@@ -35167,7 +35203,7 @@ msgstr "圖書館 EANs "
 msgid "Library URL: "
 msgstr "圖書館 URL："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:89
 #, c-format
 msgid "Library added successfully."
 msgstr "圖書館新增成功。"
@@ -35189,8 +35225,8 @@ msgid ""
 "Library checkin and transfer policy &rsaquo; Administration &rsaquo; Koha"
 msgstr "圖書館還入與轉移政策 &rsaquo; 管理 &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -35212,7 +35248,7 @@ msgstr "預設圖書館"
 msgid "Library default updated successfully."
 msgstr "預設圖書館更新成功。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:91
 #, c-format
 msgid "Library deleted successfully."
 msgstr "圖書館已成功刪除。"
@@ -35289,7 +35325,7 @@ msgstr "圖書館管理"
 msgid "Library name: "
 msgstr "圖書館名稱："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:244
 #, c-format
 msgid "Library of Congress"
 msgstr "美國國會圖書館"
@@ -35321,7 +35357,7 @@ msgstr "圖書館轉移限制"
 msgid "Library type: "
 msgstr "圖書館類型："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:87
 #, c-format
 msgid "Library updated successfully."
 msgstr "圖書館更新成功。"
@@ -35339,7 +35375,7 @@ msgstr "圖書館使用"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:633
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:906
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:48
@@ -35369,9 +35405,9 @@ msgstr "圖書館："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:106
@@ -35562,13 +35598,13 @@ msgstr "連結主要編目記錄至 "
 msgid "Link a host record to %s"
 msgstr "連結主要編目記錄至 %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:907
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:906
 #, c-format
 msgid "Link authorities automatically"
 msgstr "自動連結權威"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Link copied to the clipboard"
 msgstr "連結已複製到剪貼板"
 
@@ -35790,7 +35826,7 @@ msgstr "載入中"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:182
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:167
 #, c-format
 msgid "Loading "
@@ -35822,7 +35858,7 @@ msgid "Loading records, please wait..."
 msgstr "上傳記錄中，請稍候..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -36135,7 +36171,7 @@ msgstr "遺失 (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
 #, c-format
 msgid "Lost card"
 msgstr "遺失讀者證"
@@ -36466,8 +36502,8 @@ msgstr "修改 MARC 模板 %s"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "MARC 修改模板 &rsaquo; 工具 &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #, c-format
 msgid "MARC organization code"
 msgstr "MARC 機構代碼"
@@ -36574,7 +36610,7 @@ msgstr "無館藏資訊的 MARC"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "MARCOrgCode"
 msgstr "MARCOrgCode"
@@ -37283,9 +37319,9 @@ msgstr "管理請求"
 
 #. %1$s:  request.id_prefix _ request.illrequest_id | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "Manage request %s "
-msgstr "管理請求"
+msgstr "管理請求 %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:97
 #, c-format
@@ -38281,7 +38317,7 @@ msgstr "拼寫錯誤的單字"
 msgid "Mobile"
 msgstr "行動"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
 #, c-format
 msgid "Mobile phone"
 msgstr "行動電話"
@@ -38609,7 +38645,7 @@ msgstr "修改館藏類型 '%s' "
 msgid "Modify items in a batch"
 msgstr "批次修改館藏"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:40
 #, c-format
 msgid "Modify library "
 msgstr "修改圖書館 "
@@ -39051,11 +39087,11 @@ msgstr "MySQL版本："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:662
 #, c-format
 msgid "N/A"
 msgstr "N/A"
@@ -39109,16 +39145,16 @@ msgstr "NW7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:48
@@ -39139,8 +39175,8 @@ msgstr "NW7"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:8
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:152
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:153
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:139
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Name"
@@ -39233,13 +39269,13 @@ msgid "Name:"
 msgstr "名稱："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:305
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
@@ -39325,11 +39361,11 @@ msgstr "需要協助嗎？請求授權時，請上網搜尋 \"%s 手冊授權\" 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:419
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:459
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:419
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:459
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:277
 #, c-format
 msgid "Never"
@@ -39814,13 +39850,13 @@ msgstr "新增書標布局 "
 msgid "New label template"
 msgstr "新增書標模板"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:109
 #, c-format
 msgid "New library"
 msgstr "新增圖書館"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:46
 #, c-format
 msgid "New library %s "
 msgstr "新增圖書館 %s "
@@ -39948,7 +39984,7 @@ msgstr "新增巡迴"
 msgid "New routing list"
 msgstr "新增傳閱清單"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:193
 #, c-format
 msgid "New search"
 msgstr "新增搜尋"
@@ -40101,7 +40137,7 @@ msgstr "下一頁"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:266
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:674
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:676
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:17
 #, c-format
 msgid "Next "
@@ -40157,11 +40193,11 @@ msgstr "下一頁"
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco (文件匯整者)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:326
@@ -40199,8 +40235,6 @@ msgstr "Nicholas Rosasco (文件匯整者)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
@@ -40209,6 +40243,8 @@ msgstr "Nicholas Rosasco (文件匯整者)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:484
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:382
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:138
@@ -41195,7 +41231,7 @@ msgstr ""
 "未找到電子郵件地址。至少鍵入一個電子郵件地址或檢查館際互借夥半圖書館的紀錄。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "No temporary directory found."
 msgstr "未找到暫存目錄。"
 
@@ -41251,7 +41287,7 @@ msgstr "不，不要刪除"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:290
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -41321,8 +41357,8 @@ msgstr "不，不要續借(N)"
 msgid "No, let me think about it"
 msgstr "不，讓我想想"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:856
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:855
 #, c-format
 msgid "No, save as new record"
 msgstr "不，儲存為新紀錄"
@@ -41852,16 +41888,17 @@ msgid ""
 "or slow your system down."
 msgstr "說明：小心選擇欄。若選擇太廣，可能產生極大的報表，拖累整個系統的運作。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:77
 #, c-format
 msgid "Note: For temporary uploads do not select a category."
 msgstr "說明：暫時上傳不必選擇類型。"
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:78
+#. %2$s:  av_UPLOAD_link = BLOCK 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:79
 #, c-format
-msgid "Note: No upload categories are defined. %s "
-msgstr "說明：沒有定義上傳類別。 %s "
+msgid "Note: No upload categories are defined. %s %s"
+msgstr "說明：沒有定義上傳類別. %s %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:221
 #, c-format
@@ -41887,8 +41924,8 @@ msgstr "說明：接下來的兩個欄位之一必須等於 1"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:90
@@ -41904,7 +41941,7 @@ msgstr "說明：接下來的兩個欄位之一必須等於 1"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:14
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-article-requests.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-return-claims.inc:17
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:159
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:145
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:251
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:38
 #, c-format
@@ -41958,7 +41995,7 @@ msgstr "說明："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, c-format
 msgid "Notes: "
@@ -42503,7 +42540,7 @@ msgstr "OPAC "
 msgid "OPAC - %s %s"
 msgstr "OPAC - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, c-format
 msgid "OPAC info: "
 msgstr "OPAC 說明："
@@ -42516,7 +42553,7 @@ msgstr "OPAC 讀者選擇預約館藏"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:236
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
 #, c-format
 msgid "OPAC note"
 msgstr "OPAC 說明"
@@ -42527,13 +42564,13 @@ msgstr "OPAC 說明"
 msgid "OPAC note:"
 msgstr "OPAC 說明："
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
 #, c-format
 msgid "OPAC notes"
 msgstr "OPAC 說明"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #, c-format
 msgid "OPAC notes:"
 msgstr "OPAC 說明:"
@@ -43035,7 +43072,7 @@ msgstr "僅允許同一預約群組內的提取地點"
 msgid "Only search fields mapped with biblios can be weighted"
 msgstr "只有對映至書目的搜尋欄位才可加權"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:103
 #, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or budget_modify "
@@ -43043,7 +43080,7 @@ msgid ""
 "results"
 msgstr "搜尋結果僅返回具有超級館員或採訪權限 (或取得預算修改權限)的館員"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:115
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:101
 #, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or order_manage "
@@ -43053,7 +43090,7 @@ msgstr ""
 "擁有超級館員或採訪權限 (或取得 order_manage 權限) 的館員，才能在搜尋結果由退"
 "回原址"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:99
 #, c-format
 msgid ""
 "Only staff with superlibrarian or suggestions_manage permissions are "
@@ -43278,7 +43315,7 @@ msgstr "訂單"
 msgid "Order ID"
 msgstr "訂單 ID"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:613
 #, c-format
 msgid "Order ID:"
 msgstr "訂單 ID："
@@ -43662,7 +43699,7 @@ msgstr "其他預約："
 msgid "Other limits"
 msgstr "其他限制"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
 #, c-format
 msgid "Other name"
 msgstr "其他名稱"
@@ -44265,8 +44302,8 @@ msgstr "密碼："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:112
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:446
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:104
 #, c-format
 msgid "Password: "
 msgstr "密碼："
@@ -44358,12 +44395,12 @@ msgid "Patron"
 msgstr "讀者"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' added."
 msgstr "讀者 '%s' 已新增。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' is already in the list."
 msgstr "讀者 '%s' 已經在清單內。"
 
@@ -45320,7 +45357,7 @@ msgid "Patron's record has guaranteed accounts attached."
 msgstr "讀者紀錄裡有保證人。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:470
 #, c-format
 msgid "Patron:"
@@ -45409,7 +45446,7 @@ msgstr "讀者 &rsaquo; 新增讀者"
 msgid "Patrons and circulation"
 msgstr "讀者與流通"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:132
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:118
 #, c-format
 msgid "Patrons found for: "
 msgstr "找到讀者："
@@ -45863,13 +45900,13 @@ msgstr "永久刪除借出記錄，早於"
 msgid "Permanently delete these patrons"
 msgstr "永久刪除這些讀者"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
 #, c-format
 msgid "Permissions (code)"
 msgstr "權限（代碼）"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "Ph: "
 msgstr "Ph: "
 
@@ -45878,7 +45915,7 @@ msgstr "Ph: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:10
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:160
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:146
 #, c-format
 msgid "Phone"
 msgstr "電話："
@@ -45899,7 +45936,7 @@ msgstr "電話："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:603
 #, c-format
@@ -45983,7 +46020,7 @@ msgstr "提取圖書館不同。"
 msgid "Pickup library:"
 msgstr "提取圖書館："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:99
@@ -45993,7 +46030,7 @@ msgstr "提取圖書館："
 msgid "Pickup location"
 msgstr "提取地點"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:248
 #, c-format
 msgid "Pickup location: "
 msgstr "提取地點："
@@ -46451,7 +46488,7 @@ msgid ""
 msgstr "共享前，請鍵入報表名稱及說明 (最多20個字元) "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Please enter a search term."
 msgstr "請鍵入搜尋字詞。"
 
@@ -47231,7 +47268,7 @@ msgstr "預覽此通知模版"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:7
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:538
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:661
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:663
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -47282,8 +47319,13 @@ msgstr "前一個作業"
 msgid "Price"
 msgstr "價格"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#, fuzzy, c-format
+msgid "Price paid"
+msgstr "支付價格："
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:661
 #, c-format
 msgid "Price paid:"
 msgstr "支付價格："
@@ -47319,7 +47361,7 @@ msgstr "採訪主要連絡人："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:807
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
 #, c-format
 msgid "Primary email"
 msgstr "主要電子郵件"
@@ -47336,7 +47378,7 @@ msgstr "主要電子郵件："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:786
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
 #, c-format
 msgid "Primary phone"
 msgstr "主要電話"
@@ -47588,7 +47630,7 @@ msgstr "印表機設定檔"
 msgid "Priority"
 msgstr "優先"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
 #, c-format
 msgid "Privacy (code)"
 msgstr "隱私權(代碼)"
@@ -47859,11 +47901,11 @@ msgstr ""
 "假名化必須只在'bcrypt_settings' 組態條目存在和被正確歸檔於 Koha 配置檔案才會"
 "被啟動。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:365
@@ -47932,7 +47974,7 @@ msgstr "公開說明："
 msgid "Public notes"
 msgstr "公開說明"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:355
 #, c-format
 msgid "Public: "
@@ -48382,9 +48424,9 @@ msgid "Quote uploader "
 msgstr "引句上傳"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Quote uploader &rsaquo; Tools &rsaquo; Koha"
-msgstr "%s 行事曆 &rsaquo; 工具 &rsaquo; Koha"
+msgstr "引文上傳器 &rsaquo; 工具 &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:104
@@ -48690,9 +48732,9 @@ msgid "Recalls to pull"
 msgstr "在館預約待取得"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_to_pull.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "Recalls to pull &rsaquo; Circulation &rsaquo; Koha"
-msgstr "續借 %s &rsaquo; 流通 &rsaquo; Koha"
+msgstr "舊的催還 &rsaquo; 流通 &rsaquo; Koha"
 
 #. %1$s:  waiting_elsewhere | html 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:168
@@ -49193,7 +49235,7 @@ msgid "Register: %s &rArr; %s"
 msgstr "註冊：%s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:230
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
 #, c-format
 msgid "Registration date"
 msgstr "登記日期"
@@ -49476,7 +49518,6 @@ msgstr "網路圖示："
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:495
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
@@ -49487,6 +49528,7 @@ msgstr "網路圖示："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:505
@@ -49926,8 +49968,8 @@ msgstr "修復"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:467
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1087
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1088
 msgid "Repeat this Tag"
 msgstr "重複此欄號"
 
@@ -49977,14 +50019,14 @@ msgstr "以收到紀錄取代既有紀錄"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:340
 #, c-format
 msgid "Replace only included patron attributes"
-msgstr "祗取代讀者屬性"
+msgstr "祗取代有放在檔案中讀者屬性欄位的讀者屬性"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:323
 #, c-format
 msgid ""
 "Replace patron passwords with those in the file (blank passwords will be "
 "ignored)"
-msgstr "使用資料夾中的來替換讀者的密碼(空白密碼將被忽略)"
+msgstr "使用檔案中的來替換讀者的密碼(空白密碼將被忽略)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-toolbar.inc:36
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:69
@@ -49993,7 +50035,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "經由 Z39.50/SRU 重置紀錄"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "經由Z39.50/SRU搜索來變更紀錄"
@@ -50038,12 +50080,12 @@ msgstr "重置價格："
 msgid "Replied"
 msgstr "已回覆"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Reply-To: "
 msgstr "回覆至："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid "ReplyToDefault"
 msgstr "ReplyToDefault"
@@ -50224,6 +50266,12 @@ msgstr "請求 %s"
 msgid "Request ID"
 msgstr "請求 ID"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#, fuzzy, c-format
+msgid "Request ID:"
+msgstr "請求 ID"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:541
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
@@ -50247,29 +50295,28 @@ msgid "Request article from %s"
 msgstr "要求論文自 %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:393
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:606
 #, c-format
 msgid "Request details"
 msgstr "請求詳情"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
 #, c-format
 msgid "Request log"
 msgstr "要求紀錄"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
-#, c-format
-msgid "Request number:"
-msgstr "請求編號："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:510
 #, c-format
 msgid "Request specific item type:"
 msgstr "要求特定館藏類型："
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
+#, fuzzy, c-format
+msgid "Request type"
+msgstr "請求類型："
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
 #, c-format
 msgid "Request type:"
 msgstr "請求類型："
@@ -50354,8 +50401,8 @@ msgstr "Require.js JS 模組系統"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -50404,38 +50451,16 @@ msgstr "Require.js JS 模組系統"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1164
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:768
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:106
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:309
@@ -50483,6 +50508,28 @@ msgstr "Require.js JS 模組系統"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1530
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:73
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:91
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:325
@@ -50745,7 +50792,7 @@ msgstr "限制近用至："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
 #, c-format
 msgid "Restricted"
 msgstr "限制"
@@ -50797,7 +50844,7 @@ msgstr "暫時限制重置"
 msgid "Restriction overridden temporarily."
 msgstr "暫時限制重置。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
 #, c-format
 msgid "Restriction reason"
 msgstr "限制原因"
@@ -51092,7 +51139,7 @@ msgstr "回到工具"
 msgid "Return to where you were"
 msgstr "回到原來的位置"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #, c-format
 msgid "Return-Path: "
 msgstr "退回路徑："
@@ -51105,7 +51152,7 @@ msgid "Returned to patron: "
 msgstr "歸還給讀者："
 
 # Administration > Interface options
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "ReturnpathDefault"
 msgstr "ReturnpathDefault"
@@ -51548,7 +51595,7 @@ msgid "SMS"
 msgstr "簡訊"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
 #, c-format
 msgid "SMS alert number"
 msgstr "簡訊提示號碼"
@@ -51576,7 +51623,7 @@ msgstr "SMS 手機提供商 &rsaquo; 管理 &rsaquo; Koha"
 msgid "SMS number:"
 msgstr "簡訊號碼："
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
 #, c-format
 msgid "SMS provider"
 msgstr "SMS 提供者："
@@ -51587,12 +51634,12 @@ msgstr "SMS 提供者："
 msgid "SMS provider:"
 msgstr "SMS 提供商："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #, c-format
 msgid "SMTP server"
 msgstr "SMTP 伺服器"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
 #, c-format
 msgid "SMTP server: "
 msgstr "SMTP 伺服器: "
@@ -51697,7 +51744,7 @@ msgstr "SWITCH Library Consortium，美國"
 msgid "Sale %s "
 msgstr "銷售 %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
 #, c-format
 msgid "Salutation"
 msgstr "敬稱"
@@ -51742,7 +51789,6 @@ msgstr "星期六"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -51777,15 +51823,16 @@ msgstr "星期六"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:884
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:146
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:140
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:172
@@ -51852,14 +51899,14 @@ msgstr "儲存 (若已啟動儲存外掛)"
 msgid "Save all %s preferences"
 msgstr "儲存所有的 %s 設定"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:290
 #, c-format
 msgid "Save and continue editing"
 msgstr "儲存並繼續編輯"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
 #, c-format
 msgid "Save and edit items"
 msgstr "儲存並編輯館藏"
@@ -51874,7 +51921,7 @@ msgstr "儲蓄和繳付"
 msgid "Save and preview routing slip"
 msgstr "儲存並預視傳閱清單"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:888
 #, c-format
 msgid "Save and view record"
 msgstr "儲存並預視紀錄"
@@ -52184,8 +52231,8 @@ msgstr "過濾的"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
@@ -52194,7 +52241,7 @@ msgstr "過濾的"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:13
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:166
@@ -52369,7 +52416,8 @@ msgstr "搜尋時間到，請再登入"
 msgid "Search field"
 msgstr "搜尋欄位"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:84
 #, fuzzy, c-format
 msgid "Search field:"
 msgstr "搜尋欄位："
@@ -52717,7 +52765,7 @@ msgstr "搜尋系統偏好"
 msgid "Search targets"
 msgstr "搜尋標的"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:154
 #, c-format
 msgid "Search term: "
 msgstr "搜尋詞語："
@@ -52765,7 +52813,7 @@ msgid "Search to hold "
 msgstr "搜尋以預約 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:41
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:79
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Search type:"
 msgstr "搜尋類型："
@@ -52775,12 +52823,12 @@ msgstr "搜尋類型："
 msgid "Search unavailable"
 msgstr "搜尋無法使用"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:122
 #, c-format
 msgid "Search uploads by category"
 msgstr "按類型搜尋上傳"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:151
 #, c-format
 msgid "Search uploads by name or hashvalue"
 msgstr "以名稱或散列值搜尋上傳"
@@ -52859,7 +52907,7 @@ msgstr "指標 2 的預設值："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:248
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
 #, c-format
 msgid "Secondary email"
 msgstr "其他電子郵件"
@@ -52879,7 +52927,7 @@ msgstr "次要電子郵件："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
 #, c-format
 msgid "Secondary phone"
 msgstr "其他電話"
@@ -52916,7 +52964,7 @@ msgstr "地點"
 #. For the first occurrence,
 #. %1$s:  BIG_LOO.number | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1018
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1017
 #, c-format
 msgid "Section %s"
 msgstr "區塊 %s"
@@ -53193,11 +53241,11 @@ msgstr "選定時間"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -53289,7 +53337,7 @@ msgstr "選定日期："
 msgid "Select download format: "
 msgstr "選定下載格式："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:57
 #, c-format
 msgid "Select files: "
 msgstr "選定檔案："
@@ -53362,7 +53410,7 @@ msgid "Select partner libraries:"
 msgstr "選定夥伴圖書館："
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "Select patron"
 msgstr "刪除讀者"
@@ -54185,7 +54233,7 @@ msgstr "設定狀態"
 msgid "Set the date received to today?"
 msgstr "設定資料簽收至今天？"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr "設置為“是”，在 OPAC 的圖書館頁面上顯示此圖書館。"
@@ -54246,7 +54294,7 @@ msgstr ""
 msgid "Settings"
 msgstr "設定"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:912
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -54526,7 +54574,7 @@ msgstr "顯示 %s 未解決的索賠"
 msgid "Show MARC"
 msgstr "檢視 MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:918
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "顯示 MARC 標籤文件連結"
@@ -54841,7 +54889,7 @@ msgstr "顯示訂閱"
 msgid "Show suggestion #%s "
 msgstr "顯示建議 #%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
 #, c-format
 msgid "Show tags"
 msgstr "顯示標籤"
@@ -54896,7 +54944,7 @@ msgstr "自從"
 msgid "Single holiday: %s"
 msgstr "唯一假日：%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Size"
@@ -55083,7 +55131,7 @@ msgstr "抱歉，CAS 登入失敗。"
 msgid "Sorry, there is no result for your search."
 msgstr "抱歉，您的搜尋沒有結果。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:306
 #, c-format
 msgid "Sorry, your request had no results."
 msgstr "抱歉，您的搜尋沒有結果。"
@@ -55098,7 +55146,7 @@ msgstr "排序"
 msgid "Sort "
 msgstr "排序 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
 #, c-format
 msgid "Sort 1"
 msgstr "排序1"
@@ -55108,7 +55156,7 @@ msgstr "排序1"
 msgid "Sort 1:"
 msgstr "排序1："
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
 #, c-format
 msgid "Sort 2"
 msgstr "排序 2"
@@ -55548,13 +55596,13 @@ msgstr "館員說明"
 msgid "Staff note:"
 msgstr "館員說明："
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
 #, c-format
 msgid "Staff notes"
 msgstr "館員說明"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #, c-format
 msgid "Staff notes:"
 msgstr "館員說明："
@@ -55745,8 +55793,8 @@ msgstr "開始日期："
 msgid "Start date: "
 msgstr "開始日期："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, c-format
 msgid "Start defining libraries"
 msgstr "開始設定圖書館"
@@ -55816,8 +55864,8 @@ msgstr "開始："
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:71
 #, c-format
 msgid "Starts with"
 msgstr "開始"
@@ -55826,7 +55874,7 @@ msgstr "開始"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
 #, c-format
 msgid "State"
 msgstr "州"
@@ -55837,7 +55885,7 @@ msgstr "州"
 msgid "State:"
 msgstr "州："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:585
 #, c-format
@@ -55973,7 +56021,7 @@ msgstr "狀態未知"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1076
@@ -56184,7 +56232,7 @@ msgstr "停止"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
 #, c-format
 msgid "Street number"
 msgstr "門牌號碼"
@@ -56195,7 +56243,7 @@ msgid "Street number:"
 msgstr "門牌號碼："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
 #, c-format
 msgid "Street type"
 msgstr "街道類型"
@@ -56385,7 +56433,7 @@ msgstr "主題："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:155
@@ -56413,15 +56461,15 @@ msgstr "主題："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:773
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:213
@@ -56975,7 +57023,7 @@ msgstr "上標"
 msgid "Supplemental issue "
 msgstr "補篇期刊 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, c-format
 msgid "Supplier metadata"
 msgstr "供應商元資料"
@@ -56993,7 +57041,7 @@ msgstr "支援鍵盤快捷鍵"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
 #, c-format
 msgid "Surname"
 msgstr "姓氏"
@@ -57003,8 +57051,8 @@ msgstr "姓氏"
 msgid "Surname:"
 msgstr "姓："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:554
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:43
 #, c-format
 msgid "Surname: "
 msgstr "姓："
@@ -57066,7 +57114,7 @@ msgid "Switch languages"
 msgstr "切換語言"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:915
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "進入進階編輯器"
@@ -57477,8 +57525,8 @@ msgstr "欄號被刪除"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:554
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:559
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:140
 #, c-format
@@ -57689,7 +57737,7 @@ msgstr "模板："
 msgid "Templates"
 msgstr "模板"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:211
 #, c-format
 msgid "Temporary"
 msgstr "暫時"
@@ -58221,9 +58269,9 @@ msgid "The change will be applied immediately."
 msgstr "改變立即生效。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "The club you requested does not exist."
-msgstr "您要求的紀錄不存在(%s)。"
+msgstr "您查詢的讀書會不存在。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:311
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:377
@@ -58672,7 +58720,7 @@ msgid ""
 msgstr "報告運作時顯示的欄位標籤，例如 “ 選擇一個圖書館 ”。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -58716,9 +58764,9 @@ msgid "The number of days (%s) must be a number between 0 and 999."
 msgstr "天數 (%s) 必須是 0 至 999 之間的數字。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "The order could not be found."
-msgstr "條碼 %s 找不到。"
+msgstr "訂單找不到。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:78
 #, c-format
@@ -58962,7 +59010,7 @@ msgstr "此紀錄 (%s) 未被加入虛擬書架。請確認不在虛擬書架內
 msgid "The record id "
 msgstr "紀錄 id "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:990
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "您編輯的紀錄不存在。"
@@ -59321,12 +59369,12 @@ msgid "There are no late orders."
 msgstr "沒有遲到的訂單。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, fuzzy
 msgid "There are no libraries defined."
 msgstr "沒有定義圖書館。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "There are no libraries defined. "
@@ -59428,7 +59476,7 @@ msgstr "沒有催還備品."
 msgid "There are no recalls to show."
 msgstr "沒有催還顯示。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:730
 #, c-format
 msgid "There are no recorded logs for this request"
 msgstr "此請求無紀錄日誌"
@@ -59871,7 +59919,7 @@ msgid "This field is required."
 msgstr "此欄位為必備。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "This file already exists (in this category)."
 msgstr "此檔案已存在 (於此類型)。"
 
@@ -60113,7 +60161,7 @@ msgstr "此館藏不能預約。"
 msgid "This item type already exists"
 msgstr "此館藏類型已存在"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:93
 #, c-format
 msgid "This library cannot be deleted. Patrons or items are still using it"
 msgstr "無法刪除此圖書館。讀者或館藏仍在使用它"
@@ -61196,7 +61244,7 @@ msgstr "工具外掛"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
@@ -61947,7 +61995,6 @@ msgstr "雙因素認證代碼："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:17
 #, c-format
@@ -61992,10 +62039,10 @@ msgstr "UPCA"
 msgid "UPCE"
 msgstr "UPCE"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:82
 #, c-format
-msgid "UPLOAD authorized value category"
-msgstr "上傳容許值類別"
+msgid "UPLOAD"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -62012,7 +62059,7 @@ msgstr "網址"
 msgid "URL(s)"
 msgstr "網址"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:227
 #, c-format
 msgid "URL: "
 msgstr "網址："
@@ -62786,21 +62833,21 @@ msgstr "升級"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:971
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:239
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Upload"
 msgstr "上傳 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:13
 #, c-format
 msgid "Upload &rsaquo; Tools &rsaquo; Koha"
 msgstr "上傳 &rsaquo; 工具 &rsaquo; Koha"
@@ -62889,7 +62936,7 @@ msgstr "上傳次目錄："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:298
 #, c-format
 msgid "Upload file"
 msgstr "上傳檔案"
@@ -62947,7 +62994,7 @@ msgstr "上傳更多照片"
 msgid "Upload new file"
 msgstr "上傳新檔案"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #, c-format
 msgid "Upload new files"
 msgstr "上傳新檔案"
@@ -63007,7 +63054,7 @@ msgid "Upload photo"
 msgstr "上傳照片"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:11
 #, c-format
 msgid "Upload plugin"
 msgstr "上傳外掛程式"
@@ -63030,7 +63077,7 @@ msgstr "上傳外掛程式 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:106
 #, c-format
 msgid "Upload progress: "
 msgstr "上傳過程："
@@ -63049,14 +63096,14 @@ msgstr "上傳結果 "
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: "
 msgstr "上傳狀態："
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: Cancelled "
 msgstr "上傳狀態：已取消 "
 
@@ -63489,7 +63536,7 @@ msgstr "使用者帳號："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:233
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
 #, c-format
 msgid "Username"
 msgstr "使用者名稱"
@@ -63507,8 +63554,8 @@ msgid "Username:"
 msgstr "使用者名稱："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:161
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:442
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:99
 #, c-format
 msgid "Username: "
 msgstr "使用者名稱："
@@ -63908,7 +63955,7 @@ msgstr "檢視 "
 msgid "View ILL availability plugins"
 msgstr "檢視館際互借可用外掛"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
 #, c-format
 msgid "View ILL requests"
 msgstr "檢視館際互借請求"
@@ -63967,18 +64014,14 @@ msgstr "查看採購單"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View biblio details"
-msgstr "檢視書目詳情"
+#, fuzzy
+msgid "View bibliographic record"
+msgstr "書目紀錄"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:50
 #, c-format
 msgid "View bibliographic record enhancement plugins for the staff interface"
 msgstr ""
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View borrower details"
-msgstr "檢視借書者詳情"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:174
 #, c-format
@@ -64051,8 +64094,9 @@ msgid "View patron"
 msgstr "檢視讀者"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
 msgid "View patron details"
 msgstr "讀者詳情"
@@ -65000,11 +65044,11 @@ msgstr "每年重複的假日：%s"
 msgid "Yellow"
 msgstr "黃色"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:325
@@ -65045,9 +65089,6 @@ msgstr "黃色"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:94
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:569
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:584
@@ -65056,6 +65097,9 @@ msgstr "黃色"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:482
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:381
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:480
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:488
@@ -65072,7 +65116,7 @@ msgstr "黃色"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:250
@@ -65166,7 +65210,7 @@ msgstr "是的，關閉(Y)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:294
@@ -65235,7 +65279,7 @@ msgstr "是的，刪除此分欄"
 msgid "Yes, delete this tag"
 msgstr "是的，刪除此標籤"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "是的，編輯既有館藏"
@@ -65267,7 +65311,7 @@ msgid "Yes: Edit existing authority"
 msgstr "是的：編輯既有的權威"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:848
 msgid "Yes: View existing items"
 msgstr "是的：檢視既有館藏"
 
@@ -66113,7 +66157,7 @@ msgid ""
 msgstr "您的檔案已上傳。所有檔案上傳後，請在離線流通模式處理它們。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr "您的 koha-conf.xml 未包括有效的 upload_path。"
 
@@ -66194,7 +66238,7 @@ msgstr "您的報表已經與 Mana 報表連結。若已設定就可以共享之
 msgid "Your report will be generated with the following SQL statement."
 msgstr "以下列 SQL 敘述產生您的報表。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:301
 #, c-format
 msgid "Your request gave the following results:"
 msgstr "您的請求得到以下結果："
@@ -66290,7 +66334,7 @@ msgstr "Z39.50 可以發送各種格式的記錄。 選擇一個。"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:903
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -66352,7 +66396,7 @@ msgstr "ZIP檔案"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:225
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
 #, c-format
 msgid "ZIP/Postal code"
 msgstr "郵遞區號"
@@ -66363,7 +66407,7 @@ msgstr "郵遞區號"
 msgid "ZIP/Postal code:"
 msgstr "郵遞區號："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:591
 #, c-format
@@ -66815,7 +66859,7 @@ msgid "beep.ogg"
 msgstr "beep.ogg"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "begins with "
 msgstr "開頭為 "
 
@@ -67015,7 +67059,7 @@ msgstr "最多祗能放置 %s 預約。"
 msgid "can place %s of the requested %s holds for a maximum of %s total holds."
 msgstr "可以放置 %s 於要求的 %s 預約中總數為 %s。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:815
 #, c-format
 msgid "cancel your request"
 msgstr "取消您的請求"
@@ -67125,7 +67169,7 @@ msgid "considered late"
 msgstr "認定遲到"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "containing "
 msgstr "包括 "
 
@@ -67149,7 +67193,7 @@ msgstr "包括 "
 msgid "contains"
 msgstr "包括"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #, c-format
 msgid "continue creating your request"
 msgstr "請繼續提出請求"
@@ -67320,7 +67364,7 @@ msgstr "停用 'Mana' 系統偏好"
 msgid "display detail for this librarian."
 msgstr "顯示這個館員的詳情。"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, c-format
 msgid "do a catalog search"
 msgstr "目錄搜尋"
@@ -67758,7 +67802,7 @@ msgid "in fines. If you would like you can record payments. "
 msgstr "罰款。若您喜歡可以記錄付款。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "in library "
 msgstr "在圖書館 "
 
@@ -68500,8 +68544,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "或"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:384
@@ -68542,11 +68586,6 @@ msgstr "或按enter"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 msgid "order(s) left"
 msgstr "還有訂單"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, c-format
-msgid "otherwise all uploads will be marked as temporary."
-msgstr "否則所有上傳都將被標記為暫時的。"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -68973,7 +69012,7 @@ msgid "stages"
 msgstr "待處理"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "starting with "
 msgstr "開頭為 "
 
@@ -69093,28 +69132,6 @@ msgstr "超級館員"
 msgid "surname: %s"
 msgstr "姓氏：%s"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
-#, c-format
-msgid ""
-"system preference %s Default: ILLDefaultStaffEmail system preference %s "
-msgstr "系統偏好 %s 預設: ILLDefaultStaffEmail 系統偏好 %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "system preference %s Default: ReplyToDefault system preference %s "
-msgstr "系統偏好 %s 預設: ReplyToDefault 系統偏好 %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
-#, c-format
-msgid "system preference %s Default: ReturnpathDefault system preference %s "
-msgstr "系統偏好 %s 預設: ReturnpathDefault 系統偏好 %s "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:44
 #, c-format
@@ -69134,7 +69151,7 @@ msgstr "系統偏好使用催還。"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:352
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:981
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:980
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -69467,7 +69484,7 @@ msgid "with all the columns."
 msgstr "與所有列。"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "with category "
 msgstr "類型 "
 
@@ -69670,8 +69687,8 @@ msgstr "| 狀態：%s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
@@ -69934,6 +69951,9 @@ msgstr ""
 #~ msgid "%s Days %s Hours %s Undefined %s "
 #~ msgstr "%s 日 %s 時 %s 未定義 %s "
 
+#~ msgid "%s Default: "
+#~ msgstr "%s 預設: "
+
 #~ msgid ""
 #~ "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
 #~ "Copy %s %s Copy and replace %s %s %s 1st %s %s field %s%s$%s%s %s with "
@@ -69963,6 +69983,9 @@ msgstr ""
 
 #~ msgid "%s Hold(s)"
 #~ msgstr "%s 預約"
+
+#~ msgid "%s If not filled in defaults to system preference "
+#~ msgstr "%s 若未填入預設的系統偏好值。"
 
 #~ msgid ""
 #~ "%s In transit from %s, to %s, since %s %s %s %s %s Can't be cancelled "
@@ -70222,6 +70245,9 @@ msgstr ""
 #~ msgid "AM"
 #~ msgstr "AM"
 
+#~ msgid "Add values to the "
+#~ msgstr "將值新增至 "
+
 #~ msgid ""
 #~ "An error occurred when adding this library category. The categorycode "
 #~ "might already exist."
@@ -70253,6 +70279,9 @@ msgstr ""
 
 #~ msgid "Borrower name"
 #~ msgstr "借閱者姓名"
+
+#~ msgid "Branch"
+#~ msgstr "分館"
 
 #~ msgid "Cancelled reserve"
 #~ msgstr "取消指定參考書"
@@ -70357,6 +70386,9 @@ msgstr ""
 #~ msgid "Register two-factor authenticator"
 #~ msgstr "SSL 客戶端認證欄位"
 
+#~ msgid "Request number:"
+#~ msgstr "請求編號："
+
 #, fuzzy
 #~ msgid "Set permissions for %s, %s "
 #~ msgstr "設定 %s, %s的權限"
@@ -70392,6 +70424,15 @@ msgstr ""
 #, fuzzy
 #~ msgid "Two-factor authentication"
 #~ msgstr "opac.pref 認證"
+
+#~ msgid "UPLOAD authorized value category"
+#~ msgstr "上傳容許值類別"
+
+#~ msgid "View biblio details"
+#~ msgstr "檢視書目詳情"
+
+#~ msgid "View borrower details"
+#~ msgstr "檢視借書者詳情"
 
 #, fuzzy
 #~ msgid "View staff catalog biblio enhancement plugins"
@@ -70440,6 +70481,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "on %s %s %s %s Available %s %s "
 #~ msgstr "%s %s %s 可得 %s %s "
+
+#~ msgid "otherwise all uploads will be marked as temporary."
+#~ msgstr "否則所有上傳都將被標記為暫時的。"
 
 #~ msgid "profile"
 #~ msgstr "設定檔"

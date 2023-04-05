@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 12:32-0300\n"
-"PO-Revision-Date: 2022-11-24 05:48+0000\n"
+"POT-Creation-Date: 2023-03-16 21:35-0300\n"
+"PO-Revision-Date: 2023-03-23 09:01+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /zh_TW/22.05/zh-Hant-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1669268918.752128\n"
+"X-POOTLE-MTIME: 1679562079.056975\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -4805,7 +4805,7 @@ msgstr "鍵入搜尋術語"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
@@ -7931,14 +7931,14 @@ msgstr "預約中"
 
 #. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:453
-#, fuzzy, c-format
+#, c-format
 msgid "On hold for patron expected at %s"
-msgstr "待讀者 %s 從 %s."
+msgstr "待讀者預約期待於 %s"
 
 #. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
 #. %2$s:  itemLoo.reservedate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:451
-#, fuzzy, c-format
+#, c-format
 msgid "On hold for patron expected at %s since %s"
 msgstr "待讀者 %s 從 %s."
 
@@ -10854,7 +10854,7 @@ msgstr "狀態："
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Step one: Enter your user ID%s and password%s"
 msgstr "步驟一：輸入讀者帳號 %s 與密碼 %s"
 
@@ -11820,29 +11820,29 @@ msgid "This title cannot be requested because it's already in your possession."
 msgstr "不能請求此題名，因為已在您的處理中。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:215
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This title cannot be requested because you already have hold for this item."
-msgstr "不能請求此題名，因為已在您的處理中。"
+msgstr "不能請求此題名，因為您已預約此館藏。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This title cannot be requested because you exceeded max holds per record."
-msgstr "不能請求此題名，因為已在您的處理中。"
+msgstr "不能請求此題名，因為您已超過預約數量。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This title cannot be requested because you reached the daily hold limit."
-msgstr "不能請求此題名，因為已在您的處理中。"
+msgstr "不能請求此題名，因為您已達到每日預約量上限。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This title cannot be requested because you reached the maximum number of "
 "holds."
-msgstr "不能請求此題名，因為已在您的處理中。"
+msgstr "不能請求此題名，因為您已達到預約量上限。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:220
 #, c-format
@@ -11941,7 +11941,7 @@ msgstr "請與 Koha 管理者連繫，報告此錯誤。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "報告此錯誤，應電子郵件給 Koha 管理者。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
@@ -12307,7 +12307,7 @@ msgstr "等待日數"
 #. %1$s:  Branches.GetName( itemLoo.ExpectedAtLibrary ) | html 
 #. %2$s:  itemLoo.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:449
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting for patron at %s since %s"
 msgstr "待讀者 %s 從 %s."
 
@@ -12785,9 +12785,9 @@ msgid "You have nothing checked out"
 msgstr "您沒有借出館藏"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "You have reached the maximum limit of items checked out."
-msgstr "針對此書目，您已使用了最多次數限制的催還服務。"
+msgstr "您已達到借出數量上限。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
 #, c-format
@@ -13794,21 +13794,21 @@ msgstr "名"
 
 #. %1$s:  subscription_LOO.numberlength | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:124
-#, fuzzy, c-format
+#, c-format
 msgid "for %s issues"
-msgstr "期數"
+msgstr "%s 期數"
 
 #. %1$s:  subscription_LOO.monthlength | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:126
-#, fuzzy, c-format
+#, c-format
 msgid "for %s months"
-msgstr "3 個月"
+msgstr "%s 個月"
 
 #. %1$s:  subscription_LOO.weeklength | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:125
-#, fuzzy, c-format
+#, c-format
 msgid "for %s weeks"
-msgstr "每 2 個星期"
+msgstr "%s 星期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:63
 #, c-format

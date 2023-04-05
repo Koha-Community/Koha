@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2023-02-17 23:42-0300\n"
-"PO-Revision-Date: 2023-01-12 08:28+0000\n"
-"Last-Translator: s.pierros <s.pierros@thessaloniki.gr>\n"
+"POT-Creation-Date: 2023-03-16 20:34-0300\n"
+"PO-Revision-Date: 2023-03-02 16:12+0000\n"
+"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /el/22.05/el-GR-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1673512137.920660\n"
+"X-POOTLE-MTIME: 1677773570.355644\n"
 
 #. %1$s:  END 
 #. %2$s:  data.created_on | $KohaDates 
@@ -1049,7 +1049,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  library.branchcode | html 
 #. %8$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:8
 #, c-format
 msgid ""
 "%s %s Modify library %s New library %s %s &rsaquo; %s Confirm deletion of "
@@ -1824,7 +1824,7 @@ msgstr "%s (πιθανώς εντάξει αν είναι κενό)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:402
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1041
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1040
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - Κάντε κλικ για να διευρύνετε την ετικέτα"
 
@@ -2031,7 +2031,7 @@ msgstr "%s Προσθήκη νέας βιβλιογραφικής εγγραφή
 #. %1$s:  IF mode=='new' || mode =='deleted'
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:37
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s Προσθήκη νέας μεταφόρτωσης ή αναζήτησης %s Αποτελέσματα %s "
@@ -2349,7 +2349,7 @@ msgid "%s Date of birth: "
 msgstr "%s Ημερομηνία γέννησης: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:930
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:929
 #, c-format
 msgid "%s Default "
 msgstr "%s Προκαθορισμένο "
@@ -2363,14 +2363,44 @@ msgstr "%s Προκαθορισμένο "
 msgid "%s Default %s %s %s "
 msgstr "%s Προεπιλεγμένα %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
-#, c-format
-msgid "%s Default: "
-msgstr "%s Προκαθορισμένο: "
+#. %1$s:  END 
+#. %2$s:  pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
+#, fuzzy, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ILLDefaultStaffEmail system "
+"preference %s "
+msgstr ""
+"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
+"ILLDefaultStaffEmail %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReplyToDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#, fuzzy, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReplyToDefault system "
+"preference %s "
+msgstr ""
+"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
+"ReplyToDefault %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReturnpathDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#, fuzzy, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReturnpathDefault system "
+"preference %s "
+msgstr ""
+"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
+"ReturnpathDefault %s "
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -2455,8 +2485,8 @@ msgstr "%s Επεξεργασία προφίλ εκτυπωτή %s %s Νέο π�
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:810
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:826
 #, c-format
 msgid "%s Editing "
 msgstr "%s Επεξεργασία "
@@ -2597,11 +2627,18 @@ msgstr "%s Επώνυμο κηδεμόνα: "
 msgid "%s Hold expected at "
 msgstr "%s Κράτηση αναμενόμενη την "
 
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
-#, c-format
-msgid "%s If not filled in defaults to system preference "
-msgstr "%s Εάν δεν συμπληρωθεί αυτόματα στις προτιμήσεις συστήματος "
+#. %1$s:  END 
+#. %2$s:  pref_MARCOrgCode_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#, fuzzy, c-format
+msgid ""
+"%s If not filled in defaults to system preference %s. %s If not filled in "
+"defaults to system preference MARCOrgCode. %s You can obtain your code from "
+msgstr ""
+". %s Αν δεν συμπληρωθεί ως προκαθορισμένο στην προτίμηση συστήματος "
+"MARCOrgCode. %s Μπορείτε να προμηθευτείτε τον κωδικό σας από την "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-nomatch-action.inc:11
@@ -2978,7 +3015,7 @@ msgstr "%s Όχι"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #, fuzzy, c-format
 msgid "%s No %s "
 msgstr "%s σε %s "
@@ -4071,7 +4108,7 @@ msgid "%s checked out:"
 msgstr "%s Δανεισμοί:"
 
 #. %1$s:  request.illcomments.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #, c-format
 msgid "%s comments"
 msgstr "%s σχόλια"
@@ -4684,7 +4721,7 @@ msgstr "%s θα λήξει πριν "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:476
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:592
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:597
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "%s years"
 msgstr "%s έτη"
@@ -5675,7 +5712,7 @@ msgstr "%sΤροποποίηση πλαισίου κειμένου%sΠροσθή
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:114
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%sΤροποποίηση βιβλιοθήκης%sΝέα βιβλιοθήκη%s"
@@ -5741,7 +5778,7 @@ msgstr "%sΝεό %sΚαλάθι %s (%s) για %s &rsaquo; Προσκτήσει�
 #. %1$s:  IF record.permanent 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:233
 #, c-format
 msgid "%sNo%sYes%s"
 msgstr "%sΌχι%sΝαι%s"
@@ -6569,20 +6606,20 @@ msgstr ""
 "%s )."
 
 #. %1$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:99
 #, c-format
 msgid "(%s items)."
 msgstr "(%s τεκμήρια)."
 
 #. %1$s:  m.data.patrons_count | html 
 #. %2$s:  m.data.items_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:95
 #, c-format
 msgid "(%s patrons and %s items)."
 msgstr "(%s μελών και %s τεκμηρίων)."
 
 #. %1$s:  m.data.patrons_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:97
 #, c-format
 msgid "(%s patrons)."
 msgstr "(%s μελών)."
@@ -6844,7 +6881,7 @@ msgstr "Απώλειες τεκμηρίου"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(Αριθμός εγγραφής %s) %s Προσθήκη εγγραφής MARC %s"
@@ -6852,7 +6889,7 @@ msgstr "(Αριθμός εγγραφής %s) %s Προσθήκη εγγραφή�
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:811
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(Αριθμός εγγραφής %s) %s Προσθήκη εγγραφής MARC %s"
@@ -7038,7 +7075,7 @@ msgstr "(εισάγετε το ποσό σε αριθμούς) "
 msgid "(exclusive) "
 msgstr "(αποκλειστικό) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:152
 #, c-format
 msgid "(fast cataloging)"
@@ -7451,17 +7488,6 @@ msgstr "-- κανένα -- "
 #, c-format
 msgid "-- please choose --"
 msgstr "-- παρακαλούμε επιλέξτε --"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
-#, c-format
-msgid ""
-". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
-"obtain your code from "
-msgstr ""
-". %s Αν δεν συμπληρωθεί ως προκαθορισμένο στην προτίμηση συστήματος "
-"MARCOrgCode. %s Μπορείτε να προμηθευτείτε τον κωδικό σας από την "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:221
 #, c-format
@@ -8386,7 +8412,7 @@ msgstr "Ενέργεια αν δεν έχει βρεθεί ταύτιση: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:559
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -8446,7 +8472,7 @@ msgstr "Ενέργεια αν δεν έχει βρεθεί ταύτιση: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
@@ -8702,7 +8728,7 @@ msgstr "Προσθήκη νέου αντιτύπου"
 msgid "Add a new message"
 msgstr "Προσθήκη νέου μηνύματος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, c-format
 msgid "Add a new record"
 msgstr "Προσθήκη νέας εγγραφής"
@@ -8714,7 +8740,7 @@ msgid "Add a new regular expression"
 msgstr "Προσθήκη νέας ενέργειας"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Add a new upload"
 msgstr "Προσθήκη νέας μεταφόρτωσης"
 
@@ -8854,7 +8880,7 @@ msgstr "Προσθήκη μηνύματος κατά την κυκλοφορία
 msgid "Add classification source"
 msgstr "Προσθήκη πηγής ταξινόμησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:757
 #, c-format
 msgid "Add comment"
 msgstr "Προσθήκη σχολίου"
@@ -9450,10 +9476,15 @@ msgstr "Προσθήκη χρήστη"
 msgid "Add users"
 msgstr "Προσθήκη χρηστών"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
+#. %1$s:  av_UPLOAD_link | $raw | $KohaSpan 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
 #, fuzzy, c-format
-msgid "Add values to the "
-msgstr "Προσθήκη σημείωσης προμηθευτή"
+msgid ""
+"Add values to the %s authorized value category otherwise all uploads will be "
+"marked as temporary."
+msgstr ""
+"Ο διαχειριστής πρέπει να εισάγει τιμές στην κατηγορία καθιερωμένων τιμών "
+"UPLOAD αλλιώς όλες οι μεταφορτώσεις σας θα σηματοδοτηθούν ως προσωρινές. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:144
 #, c-format
@@ -9651,13 +9682,13 @@ msgstr "Πρόσθετες ευχαριστίες στους..."
 msgid "Additional tools"
 msgstr "Επιπρόσθετα εργαλεία"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:221
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:155
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:140
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:141
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Address"
@@ -9665,7 +9696,7 @@ msgstr "Διεύθυνση"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:222
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
 #, c-format
 msgid "Address 2"
 msgstr "Διεύθυνση 2"
@@ -9691,7 +9722,7 @@ msgstr "Αμφισβητούμενη διεύθυνση"
 msgid "Address line 1:"
 msgstr "Γραμμή διεύθυνσης 1: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, c-format
 msgid "Address line 1: "
 msgstr "Γραμμή διεύθυνσης 1: "
@@ -9701,12 +9732,12 @@ msgstr "Γραμμή διεύθυνσης 1: "
 msgid "Address line 2:"
 msgstr "Γραμμή διεύθυνσης 2: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, c-format
 msgid "Address line 2: "
 msgstr "Γραμμή διεύθυνσης 2: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #, c-format
 msgid "Address line 3: "
 msgstr "Γραμμή Διεύθυνσης 3: "
@@ -9754,7 +9785,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
@@ -10156,7 +10187,7 @@ msgstr "Δημόσια βιβλιοθήκη Alingsås, Σουηδία"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: koha-tmpl/intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -10220,6 +10251,11 @@ msgstr "Όλες οι ημερομηνίες"
 #, c-format
 msgid "All dependencies installed."
 msgstr "Εγκατεστημένα όλα τα εξαρτημένα."
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#, fuzzy, c-format
+msgid "All emails"
+msgstr "email"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:107
@@ -10309,6 +10345,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "All payments to the library"
 msgstr "Διαθέσιμο στη βιβλιοθήκη"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#, fuzzy, c-format
+msgid "All phones"
+msgstr "Εναλλακτικό τηλέφωνο: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_authority_record_deletion.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/batch_biblio_record_deletion.inc:5
@@ -10414,7 +10455,7 @@ msgstr ""
 "Να επιτρέπεται ο κηδεμόνας αυτού του μέλους να δει τα πρόστιμα του από τον "
 "OPAC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:95
 #, c-format
 msgid "Allow public downloads:"
 msgstr "Να επιτρέπονται δημόσιες λήψεις"
@@ -10480,12 +10521,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:538
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:5
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
 #, c-format
 msgid "Alternate address"
 msgstr "Εναλλακτική διεύθυνση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
 #, c-format
 msgid "Alternate address line 2"
 msgstr "Εναλλακτική διεύθυνση γραμμή 2"
@@ -10540,7 +10581,7 @@ msgstr "Εναλλακτική διεύθυνση: Τύπος οδού"
 msgid "Alternate address: ZIP/Postal code"
 msgstr "Εναλλακτική διεύθυνση: Ταχυδρομικός κώδικας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
 #, c-format
 msgid "Alternate city"
 msgstr "Εναλλακτική πόλη"
@@ -10551,47 +10592,47 @@ msgstr "Εναλλακτική πόλη"
 msgid "Alternate contact"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
 #, c-format
 msgid "Alternate contact ZIP/postal code"
 msgstr "Εναλλακτική επαφή Ταχυδρομικός κώδικας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
 #, c-format
 msgid "Alternate contact address"
 msgstr "Εναλλακτική διεύθυνση επικοινωνίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:63
 #, c-format
 msgid "Alternate contact address 2"
 msgstr "Εναλλακτική διεύθυνση επικοινωνίας 2"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
 #, fuzzy, c-format
 msgid "Alternate contact city"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Πόλη"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:64
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
 #, fuzzy, c-format
 msgid "Alternate contact country"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Χώρα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:60
 #, fuzzy, c-format
 msgid "Alternate contact first name"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Όνομα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
 #, fuzzy, c-format
 msgid "Alternate contact phone"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Τηλέφωνο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:62
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:65
 #, fuzzy, c-format
 msgid "Alternate contact state"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Νομός"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:61
 #, fuzzy, c-format
 msgid "Alternate contact surname"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Επώνυμο"
@@ -10641,37 +10682,37 @@ msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Επώ
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας: Σημείωση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
 #, fuzzy, c-format
 msgid "Alternate country"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
 #, fuzzy, c-format
 msgid "Alternate email"
 msgstr "Εναλλακτική διεύθυνση: Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
 #, fuzzy, c-format
 msgid "Alternate phone"
 msgstr "Εναλλακτικό τηλέφωνο: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:30
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:33
 #, fuzzy, c-format
 msgid "Alternate state"
 msgstr "Εναλλακτικά στοιχεία επικοινωνίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:28
 #, fuzzy, c-format
 msgid "Alternate street number"
 msgstr "Εναλλακτική διεύθυνση: Οδός, αριθμός"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:29
 #, fuzzy, c-format
 msgid "Alternate street type"
 msgstr "Εναλλακτική διεύθυνση: Τύπος οδού"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:31
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:34
 #, fuzzy, c-format
 msgid "Alternate zip code"
 msgstr "Εναλλακτικό τηλέφωνο: "
@@ -10802,7 +10843,7 @@ msgstr "Ποσό: "
 msgid "Amount: "
 msgstr "Ποσό: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:85
 #, c-format
 msgid ""
 "An administrator must add values to the UPLOAD authorized value category "
@@ -11000,7 +11041,7 @@ msgstr ""
 "Προέκυψε σφάλμα κατά την προσθήκη αυτού του πλαισίου. Αυτό το πλαίσιο μπορεί "
 "να υπάρχει ήδη."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:83
 #, c-format
 msgid ""
 "An error occurred when adding this library. The branchcode might already "
@@ -11128,7 +11169,7 @@ msgstr ""
 "Παρουσιάστηκε σφάλμα κατά την διαγραφή αυτού του τύπου τεκμηρίου. Ελέγξτε τα "
 "αρχεία καταγραφής"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:85
 #, c-format
 msgid "An error occurred when deleting this library. Check the logs."
 msgstr ""
@@ -11306,7 +11347,7 @@ msgid ""
 msgstr ""
 "Προέκυψε σφάλμα κατά τη δημιουργία της λίστας. Το όνομα %s υπάρχει ήδη."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:81
 #, fuzzy, c-format
 msgid ""
 "An error occurred when updating this library. Perhaps it already exists."
@@ -11389,7 +11430,7 @@ msgid "An error occurred, please try again: %s "
 msgstr "Προέκυψε ένα σφάλμα, παρακαλώ δοκιμάστε πάλι: %s "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "An error occurred. Check the logs"
 msgstr "Προέκυψε σφάλμα. Ελέγξτε το ιστορικό καταγραφής."
 
@@ -11916,7 +11957,7 @@ msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγρ�
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε %s (%s);"
@@ -13335,7 +13376,7 @@ msgstr "Αυτόματη ανανέωση"
 msgid "Automatic return to home"
 msgstr "Αυτόματη ανανέωση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:9
 #, c-format
 msgid "Availability"
@@ -13472,7 +13513,7 @@ msgstr "BULAC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Back"
@@ -13507,7 +13548,7 @@ msgstr "Επιστροφή στις Προτιμήσεις Συστήματος"
 msgid "Back to the list"
 msgstr "Επιστροφή στη λίστα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:36
 #, fuzzy, c-format
 msgid "Backend"
 msgstr "Πίσω"
@@ -14512,7 +14553,6 @@ msgstr "Βιβλιογραφικές Πληροφορίες"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
 #, c-format
 msgid "Bibliographic record"
 msgstr "Βιβλιογραφική εγγραφή"
@@ -14570,13 +14610,16 @@ msgstr ""
 msgid "Bibliographic record %s was not deleted. An error occurred."
 msgstr "Η βιβλιογραφική εγγραφή %s δε διαγράφηκε. Παρουσιάστηκε σφάλμα."
 
+#. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
+#, c-format
 msgid "Bibliographic record ID"
 msgstr "Κωδικός βιβλιογραφικής εγγραφής"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:625
 #, c-format
 msgid "Bibliographic record ID:"
 msgstr "Κωδικός βιβλιογραφικής εγγραφής:"
@@ -14854,7 +14897,7 @@ msgstr "Μέλος"
 msgid "Borrower number"
 msgstr "Αριθμός μέλους"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
 #, fuzzy, c-format
 msgid "Borrowernumber"
 msgstr "Αριθμός μέλους"
@@ -14904,11 +14947,6 @@ msgstr "Πήγαινε στο κάτω μέρος"
 #, c-format
 msgid "Braille"
 msgstr "Μπράιγ"
-
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#, c-format
-msgid "Branch"
-msgstr "Παράρτημα"
 
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
@@ -14962,7 +15000,7 @@ msgstr "Παράρτημα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:13
@@ -15013,7 +15051,7 @@ msgstr "Παράρτημα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -15182,7 +15220,7 @@ msgstr "Παράρτημα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
@@ -15234,7 +15272,7 @@ msgstr "Brooklyn Law School Library, ΗΠΑ"
 #. %3$s:  alphabet = ['A' .. 'Z'] 
 #. %4$s:  END 
 #. %5$s:  FOREACH letter IN alphabet 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:120
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:106
 #, fuzzy, c-format
 msgid "Browse by last name: %s %s %s %s %s "
 msgstr "Περιήγηση κατά επώνυμο: %s "
@@ -15498,7 +15536,7 @@ msgstr "C3.js v0.4.11"
 #. %26$s:  interface | html 
 #. %27$s:  interface | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline-mf.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "CACHE MANIFEST # %s # Explicitly cached 'master entries'. CACHE: /cgi-bin/"
 "koha/circ/offline.pl %s/lib/bootstrap/bootstrap.min.css %s/lib/bootstrap/"
@@ -15514,22 +15552,6 @@ msgid ""
 "NETWORK: * # Resources that can be substituted if the user is offline "
 "FALLBACK: "
 msgstr ""
-"CACHE MANIFEST # %s # Explicitly cached 'master entries'. CACHE: /cgi-bin/"
-"koha/circ/offline.pl %s/lib/bootstrap/bootstrap.min.css %s/lib/bootstrap/"
-"bootstrap-theme.min.css %s/lib/bootstrap/bootstrap.min.js %s/lib/jquery/"
-"images/ui-icons_222222_256x240.png %s/lib/jquery/images/ui-"
-"icons_454545_256x240.png %s/lib/jquery/jquery-ui-1.11.4.min.css %s/lib/"
-"jquery/jquery-ui-1.11.4.min.js %s/lib/jquery/jquery-2.2.3.min.js %s/lib/"
-"jquery/jquery-migrate-1.3.0.min.js %s/lib/jquery/plugins/jquery.cookie.min."
-"js %s/lib/jquery/plugins/jquery.highlight-3.js %s/lib/shortcut/shortcut.js "
-"%s/lib/jquery/plugins/jquery.indexeddb.js %s/lib/jquery/plugins/jquery."
-"validate.min.js %s/%s/css/print.css %s/%s/css/staff-global.css %s/%s/js/"
-"basket.js %s/%s/js/offlinecirc.js %s/%s/js/staff-global.js %s/lib/jquery/"
-"plugins/jquery-ui-timepicker-addon.min.js %s/lib/yui/reset-fonts-grids.css "
-"%s/prog/img/cart-small.gif %s/prog/img/koha-logo-medium.png %s/prog/img/"
-"loading.gif %s/prog/sound/beep.ogg %s/prog/sound/critical.ogg # Resources "
-"that require the user to be online. NETWORK: * # Resources that can be "
-"substituted if the user is offline FALLBACK: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
 #, c-format
@@ -15825,7 +15847,7 @@ msgstr "Calyx, Αυστραλία"
 msgid "Camden County, USA"
 msgstr "Camden County, ΗΠΑ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr "Μπορεί να καταχωρηθεί ως μονό IP, ή ως ένα υποδίκτυο όπως 192.168.1.*"
@@ -15996,8 +16018,6 @@ msgstr "Δεν είναι δυνατή η ακύρωση της παραγγελ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -16016,7 +16036,7 @@ msgstr "Δεν είναι δυνατή η ακύρωση της παραγγελ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
@@ -16058,8 +16078,10 @@ msgstr "Δεν είναι δυνατή η ακύρωση της παραγγελ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:952
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -16162,7 +16184,7 @@ msgstr "Δεν είναι δυνατή η ακύρωση της παραγγελ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:265
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:267
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
@@ -16738,7 +16760,7 @@ msgstr "Παραπομπή"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:173
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:150
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:136
 #, c-format
 msgid "Card"
 msgstr "Κάρτα"
@@ -16769,7 +16791,7 @@ msgstr "Ύψος κάρτας:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:5
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
 #, c-format
 msgid "Card number"
 msgstr "Αριθμός κάρτας"
@@ -17149,7 +17171,7 @@ msgid "Catalog statistics "
 msgstr "Στατιστικά καταλόγου"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:806
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:85
@@ -17235,8 +17257,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:143
 #, c-format
 msgid "Category"
 msgstr "Κατηγορία"
@@ -17249,7 +17271,7 @@ msgstr ""
 "%s Η κατηγορία %s χρησιμοποιείται. Η διαγραφή δεν είναι δυνατή!%s "
 "Επιβεβαίωση διαγραφής κατηγορίας %s %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:37
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
 #, c-format
 msgid "Category (code)"
 msgstr "Κατηγορία (κωδικός)"
@@ -17301,8 +17323,8 @@ msgstr "Κατηγορία:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:65
 #, c-format
 msgid "Category: "
@@ -17425,7 +17447,7 @@ msgstr "Νέα κατηγορία"
 msgid "Change currency"
 msgstr "Νέο νόμισμα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:923
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -17779,7 +17801,7 @@ msgstr "Επιστροφή στις"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/home-search.inc:35
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:104
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:25
@@ -17816,7 +17838,7 @@ msgstr "Μήνυμα δανεισμού"
 msgid "Check out to this patron"
 msgstr "Δανεισμός σε αυτό το μέλος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:75
 #, fuzzy, c-format
 msgid "Check previous checkout"
 msgstr "Προηγούμενοι δανεισμοί"
@@ -18308,7 +18330,7 @@ msgstr "Κατάσταση δανεισμού:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:161
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:147
 #, c-format
 msgid "Checkouts"
 msgstr "Δανεισμοί"
@@ -18392,8 +18414,8 @@ msgstr "Επιλογή"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
 #, c-format
 msgid "Choose"
 msgstr "Επιλέξτε"
@@ -18554,11 +18576,11 @@ msgstr ""
 "πρόκειται να δανειστούν ένα τεκμήριο το οποίο έχουν δανειστεί παλαιότερα. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:241
-#, fuzzy, c-format
+#, c-format
 msgid "Choose which plugins to use to suggest searches to patrons and staff"
 msgstr ""
 "Επιλέξτε ποια πρόσθετα θα χρησιμοποιούνται για να γίνονται προτάσεις "
-"αναζητήσεων σε μέλη και προσωπικό."
+"αναζητήσεων σε μέλη και προσωπικό"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:73
@@ -18731,7 +18753,7 @@ msgid "Circulation home"
 msgstr "Σημείωση κυκλοφορίας υλικού"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:235
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
 #, c-format
 msgid "Circulation note"
 msgstr "Σημείωση κυκλοφορίας υλικού"
@@ -18848,7 +18870,7 @@ msgstr "Πόλεις και περιοχές"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
 #, c-format
 msgid "City"
 msgstr "Πόλη"
@@ -18894,7 +18916,7 @@ msgstr "επιτυχής ενημέρωση"
 msgid "City:"
 msgstr "Πόλη:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:578
 #, c-format
@@ -19126,7 +19148,7 @@ msgstr "Καθαρισμός εισαγωγής παρτίδας #%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:354
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:95
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:81
 #, c-format
 msgid "Clear"
 msgstr "Καθαρισμός"
@@ -19135,10 +19157,10 @@ msgstr "Καθαρισμός"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -19332,7 +19354,7 @@ msgstr ""
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1081
 msgid "Click to Expand this Tag"
 msgstr "Κάντε κλικ για να Διευρύνετε αυτό το Σύμβολο Πεδίου"
 
@@ -19382,7 +19404,7 @@ msgstr "Αντιγραφή στο πρόχειρο"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -19410,7 +19432,7 @@ msgstr "Κλωνοποίηση αυτών των κανόνων σε:"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:197
@@ -19425,12 +19447,13 @@ msgstr "Κλωνοποίηση αυτού του υποπεδίου"
 #. %6$s:  Branches.GetName( tobranch ) | html 
 #. %7$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cloning circulation and fine rules %s from standard rules%s from \"%s\"%s %s "
 "to \"%s\"%s "
 msgstr ""
-"Αντιγραφή κανόνων δανεισμού και προστίμων %s από \"%s\"%s %s σε \"%s\"%s "
+"Αντιγραφή κανόνων δανεισμού και προστίμων %s από γενικούς κανόνες%s από \"%s"
+"\"%s %s σε \"%s\"%s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:44
 #, c-format
@@ -19458,8 +19481,8 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:734
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:183
@@ -19490,8 +19513,8 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:444
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
@@ -19500,8 +19523,8 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:189
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:177
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:186
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:163
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:172
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:91
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:150
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
@@ -19703,7 +19726,7 @@ msgstr "Coce εξώφυλλο από Open Library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -20031,7 +20054,7 @@ msgstr "Σχόλιο"
 msgid "Comment "
 msgstr "Σχόλιο "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:748
 #, c-format
 msgid "Comment by: "
 msgstr "Σχόλιο από: "
@@ -20043,7 +20066,7 @@ msgstr "Σχόλιο από: "
 msgid "Comment:"
 msgstr "Σχόλιο:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
@@ -20060,7 +20083,7 @@ msgstr "Σχολιαστής "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
@@ -20399,7 +20422,7 @@ msgid "Confirm deletion of desk "
 msgstr "Επιβεβαίωση διαγραφής του γραφείου εξυπηρέτησης "
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:57
 #, c-format
 msgid "Confirm deletion of library '%s' "
 msgstr "Επιβεβαίωση διαγραφής βιβλιοθήκης '%s' "
@@ -20605,7 +20628,7 @@ msgstr "Πληροφορίες επικοινωνίας"
 msgid "Contact name: "
 msgstr "Όνομα επαφής: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:57
 #, fuzzy, c-format
 msgid "Contact note"
 msgstr "Σημείωση επικοινωνίας:"
@@ -20659,8 +20682,8 @@ msgstr "Επαφές"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:45
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:48
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:83
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:86
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:72
 #, c-format
 msgid "Contains"
 msgstr "Περιλαμβάνει"
@@ -20984,7 +21007,7 @@ msgid "Copy holidays to:"
 msgstr "Αντιγραφή αργιών σε:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Copy link to this file"
 msgstr "Επιλέξτε για να διευρύνετε αυτόν τον τομέα"
@@ -21098,7 +21121,7 @@ msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "Το κόστος πρέπει να αναγράφεται με τη μορφή δεκαδικού αριθμού >= 0"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, c-format
 msgid "Cost:"
 msgstr "Κόστος:"
@@ -21256,7 +21279,7 @@ msgstr "Υπολογισμός μοναδικών τεκμηρίων:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:226
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:18
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
 #, c-format
 msgid "Country"
 msgstr "Χώρα"
@@ -21267,7 +21290,7 @@ msgstr "Χώρα"
 msgid "Country:"
 msgstr "Χώρα:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:597
 #, c-format
@@ -22536,7 +22559,7 @@ msgstr "Χρονολογία απόκτησης"
 msgid "Date acquired (item)"
 msgstr "Χρονολογία απόκτησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:425
@@ -22608,8 +22631,8 @@ msgstr "Ημερομηνία τελευταίας εμφάνισης"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:180
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:151
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:137
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
 #, c-format
 msgid "Date of birth"
 msgstr "Ημερομηνία γέννησης"
@@ -22874,9 +22897,9 @@ msgstr "Μείωση περιόδου δανεισμού για τα υψηλώ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:408
@@ -23338,7 +23361,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:693
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -23381,7 +23404,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
@@ -23427,7 +23450,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:95
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:367
@@ -23875,8 +23898,8 @@ msgstr "Διαγραφή των μοναδικών αργιών σε ένα εύ
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:471
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 msgid "Delete this Tag"
 msgstr "Διαγραφή αυτού του Συμβόλου Πεδίου"
 
@@ -23913,7 +23936,7 @@ msgstr "Διαγραφή αυτής της αποθηκευμένης έκθεσ
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1192
 msgid "Delete this subfield"
 msgstr "Διαγραφή αυτού του υποπεδίου"
 
@@ -24075,7 +24098,7 @@ msgstr "Ώρα παράδοσης: "
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Denied"
 msgstr ""
 
@@ -24390,8 +24413,8 @@ msgstr "Αναλυτικά μηνύματα: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:244
@@ -24418,7 +24441,7 @@ msgstr "Λεπτομέρειες για %s "
 msgid "Details for %s &rsaquo; Housebound &rsaquo; Koha"
 msgstr "Λεπτομέρειες τεκμηρίου για %s &rsaquo; Κατάλογος &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:785
 #, c-format
 msgid "Details for all requests"
 msgstr "Πληροφορίες για όλα τα αιτήματα"
@@ -24435,13 +24458,13 @@ msgstr "Πληροφορίες συνδρομής #%s "
 msgid "Details for subscription #%s &rsaquo; Serials &rsaquo; Koha"
 msgstr "Πληροφορίες συνδρομής #%s &rsaquo; Περιοδικές Εκδόσεις &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:609
 #, c-format
 msgid "Details from library"
 msgstr "Λεπτομέρειες από τη βιβλιοθήκη"
 
 #. %1$s:  request.backend | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
 #, fuzzy, c-format
 msgid "Details from supplier (%s)"
 msgstr "Λεπτομέρειες για %s"
@@ -24843,7 +24866,7 @@ msgstr ""
 msgid "Displaying"
 msgstr "Παρουσίαση:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:793
 #, c-format
 msgid "Displaying availability results"
 msgstr "Εμφάνιση διαθεσιμότητας αποτελεσμάτων"
@@ -24919,7 +24942,7 @@ msgid "Do not use template"
 msgstr "Προεπισκόπηση προτύπου ειδοποιήσεων"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Do you really want to delete this upload?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε αυτό το πεδίο;"
@@ -25061,7 +25084,7 @@ msgid "DoverNet, USA"
 msgstr "DoverNet, ΗΠΑ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
 #, c-format
 msgid "Download"
 msgstr "Λήψη"
@@ -25386,7 +25409,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Οι διπλές εγγραφές μελών αφαιρέθηκαν από την παρτίδα με αριθμό %s: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:294
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "Πιθανή διπλοεγγραφή"
@@ -25626,7 +25649,7 @@ msgstr "Παλαιότερη ημερομηνία κράτησης"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:692
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -26346,10 +26369,10 @@ msgstr "Email:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:523
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, c-format
 msgid "Email: "
 msgstr "Email: "
@@ -27376,7 +27399,7 @@ msgstr "Λήξη πριν από:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:158
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/recalls.inc:11
 #, c-format
 msgid "Expires on"
@@ -27388,7 +27411,7 @@ msgid "Expiring before:"
 msgstr "Λήξη πριν από:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
 #, c-format
 msgid "Expiry date"
 msgstr "Ημερομηνία λήξης"
@@ -27757,7 +27780,7 @@ msgstr "Πολυπρισματικό"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Failed"
 msgstr ""
 
@@ -27937,7 +27960,7 @@ msgstr "Γρήγορη καταλογογράφηση"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:821
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:25
 #, c-format
 msgid "Fax"
 msgstr "Fax"
@@ -27946,8 +27969,8 @@ msgstr "Fax"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:147
 #, c-format
@@ -28069,7 +28092,7 @@ msgid "Field 3"
 msgstr "Πεδίο 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
 msgid "Field autofilled by plugin"
 msgstr "Πεδίο που συμπληρώνεται από πρόσθετο"
 
@@ -28160,13 +28183,13 @@ msgstr ""
 "(Αποδεκτοί τύποι αρχείου: .csv και .txt)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File could not be created. Check permissions."
 msgstr "Το αίτημα σας δεν θα διεκπεραιωθεί. Ελέγξτε τα αρχεία καταγραφής"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File could not be read."
 msgstr "Η γραμμή επιγραφής δεν μπόρεσε να αναλυθεί"
@@ -28178,7 +28201,7 @@ msgid "File format: "
 msgstr "Μορφή αρχείου: "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File has been deleted."
 msgstr "Το ηλεκτρονικό ταχυδρομείο έχει σταλεί."
@@ -28220,7 +28243,7 @@ msgid "File not found!"
 msgstr "Το τεκμήριο δε βρέθηκε."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "File or upload record could not be deleted."
 msgstr "Οι ακόλουθες εγγραφές δεν ήταν δυνατό να διαγραφούν:"
@@ -28263,7 +28286,7 @@ msgid "FileSaver library"
 msgstr "FileSaver library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
 #, c-format
 msgid "Filename"
 msgstr "Όνομα αρχείου"
@@ -28565,7 +28588,7 @@ msgid "Fine grace period"
 msgstr "Περίοδος χάριτος προστίμου"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:148
 #, c-format
 msgid "Fines"
 msgstr "Πρόστιμα"
@@ -28608,7 +28631,7 @@ msgstr "Ολοκληρώθηκε "
 msgid "Finished "
 msgstr "Ολοκληρώθηκε "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:662
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:5
 #, c-format
@@ -28638,7 +28661,7 @@ msgstr "Ημερομηνία δημοσίευσης πρώτου τεύχους:
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:7
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
 #, c-format
 msgid "First name"
 msgstr "Όνομα"
@@ -29336,6 +29359,11 @@ msgstr "Πρόσοψη "
 msgid "Fulfilled"
 msgstr "Τέλος κράτησης"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
+#, fuzzy, c-format
+msgid "Full address"
+msgstr "Διεύθυνση email:"
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, fuzzy
@@ -29531,7 +29559,7 @@ msgstr "Geauga County Public Library"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:191
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
 #, c-format
 msgid "Gender"
 msgstr "Γένος"
@@ -29757,7 +29785,7 @@ msgid "Goethe-Institut, Germany"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:40
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
 #, c-format
 msgid "Gone no address"
 msgstr "Χωρίς διεύθυνση"
@@ -29828,7 +29856,7 @@ msgstr "Κωδικός ομάδας"
 msgid "Group name"
 msgstr "Όνομα ομάδας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:145
 #, c-format
 msgid "Group(s):"
 msgstr "Ομάδα(ες):"
@@ -29854,17 +29882,17 @@ msgstr "Ομάδες Βιβλιοθηκών: "
 msgid "Guarantees:"
 msgstr "Εγγυητής σε:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:50
 #, c-format
 msgid "Guarantor ID"
 msgstr "Κωδικός κηδεμόνα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:72
 #, c-format
 msgid "Guarantor can view checkouts"
 msgstr "Κηδεμόνας μπορεί να δει τους δανεισμούς"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:48
 #, c-format
 msgid "Guarantor firstname"
 msgstr "Όνομα κηδεμόνα"
@@ -29874,17 +29902,17 @@ msgstr "Όνομα κηδεμόνα"
 msgid "Guarantor information"
 msgstr "Πληροφορίες εγγυητή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
 #, c-format
 msgid "Guarantor relationship"
 msgstr "Σχέση με κηδεμόνα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:47
 #, c-format
 msgid "Guarantor surname"
 msgstr "Επώνυμο κηδεμόνα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:49
 #, c-format
 msgid "Guarantor title"
 msgstr "Τίτλος κηδεμόνα"
@@ -30003,7 +30031,7 @@ msgstr "Ανελαστική ημερομηνία λήξης: "
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Los Gatos Δημόσια Βιβλιοθήκη, ΗΠΑ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
 #, fuzzy, c-format
 msgid "Hashvalue"
 msgstr "τιμή"
@@ -30978,7 +31006,7 @@ msgstr "Αργίες που επαναλαμβάνονται κάθε χρόνο
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:16
@@ -31029,7 +31057,7 @@ msgstr "Αργίες που επαναλαμβάνονται κάθε χρόνο
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -31206,7 +31234,7 @@ msgstr "Αργίες που επαναλαμβάνονται κάθε χρόνο
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:85
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
@@ -31507,12 +31535,12 @@ msgid "ILL notice sent to patron"
 msgstr "Όρισε στο μέλος"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
 #, fuzzy
 msgid "ILL request log"
 msgstr "Νέο αίτημα διαδανεισμού "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:599
 #, fuzzy, c-format
 msgid "ILL request log "
 msgstr "Νέο αίτημα διαδανεισμού "
@@ -31558,12 +31586,12 @@ msgstr "Ιστορικό δανεισμών για %s &rsaquo; Κατάλογο�
 msgid "ILL requests:"
 msgstr "Προβολή αιτημάτων διαδανεισμού"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:175
 #, c-format
 msgid "ILL staff email: "
 msgstr "Εmail προσωπικού διαδανεισμού: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr "ILLDefaultStaffEmail"
@@ -31583,7 +31611,7 @@ msgstr "INSTID:12345,LANG:fr"
 msgid "INTERMARC"
 msgstr "INTERMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "IP"
 msgstr "IP"
@@ -31598,7 +31626,7 @@ msgstr "η διεύθυνση IP έχει αλλάξει, παρακαλούμε
 msgid "IP address has changed. Please log in again "
 msgstr "η διεύθυνση IP έχει αλλάξει. Παρακαλούμε επανασυνδεθείτε "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #, c-format
 msgid "IP: "
 msgstr "IP: "
@@ -31615,8 +31643,8 @@ msgstr "Λεπτομέρειες ISBD "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
@@ -32104,7 +32132,7 @@ msgid ""
 "entries or a blank page"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr "Εάν δεν βρήκατε αυτό που ψάχνατε, μπορείτε "
@@ -32685,7 +32713,7 @@ msgstr "Εισαγωγή της παρτίδας στον κατάλογο"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:407
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:185
 #, c-format
 msgid "Important"
@@ -33027,7 +33055,7 @@ msgid "Initial float: "
 msgstr "Αρχικά: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:10
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:13
 #, c-format
 msgid "Initials"
 msgstr "Αρχικά"
@@ -33800,7 +33828,7 @@ msgid "Is new"
 msgstr "Προσθήκη νέου"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:295
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "Είναι αυτό αντίγραφο του "
@@ -34522,11 +34550,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:543
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
@@ -35339,7 +35367,7 @@ msgid "Koha reports library"
 msgstr "Αναφορές συστήματος βιβλιοθήκης"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Koha staff interface"
 msgstr "Διεπαφή προσωπικού"
 
@@ -35604,7 +35632,7 @@ msgstr "Μεγεθυμένο κείμενο"
 msgid "Large text"
 msgstr "ιερά κείμενα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:18
 #, c-format
 msgid "Last "
@@ -35718,7 +35746,7 @@ msgstr "Τελευταία εκτέλεση"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:74
 #, c-format
 msgid "Last seen"
 msgstr "Τελευταία εμφάνιση"
@@ -35744,13 +35772,13 @@ msgstr "Τελευταία ενημέρωση: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:739
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:73
 #, c-format
 msgid "Last updated"
 msgstr "Τελευταία ενημέρωση"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:501
 #, c-format
 msgid "Last updated:"
@@ -36017,9 +36045,9 @@ msgid "Librarian:"
 msgstr "Βιβλιοθηκονόμος:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_to_pull.tt:46
@@ -36029,7 +36057,7 @@ msgstr "Βιβλιοθηκονόμος:"
 msgid "Libraries"
 msgstr "Βιβλιοθήκες"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #, c-format
 msgid "Libraries "
 msgstr "Βιβλιοθήκες "
@@ -36099,7 +36127,8 @@ msgstr "Βιβλιοθήκες:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:15
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:156
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:142
 #, c-format
 msgid "Library"
 msgstr "Βιβλιοθήκη"
@@ -36116,7 +36145,7 @@ msgstr "Βιβλιοθήκη"
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "Βιβλιοθήκη %s - %s Πολιτική επιστροφών και  μεταφορών"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:36
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:39
 #, fuzzy, c-format
 msgid "Library (code)"
 msgstr "Κωδικός Βιβλιοθήκης:"
@@ -36141,7 +36170,7 @@ msgstr "EAN βιβλιοθήκης"
 msgid "Library URL: "
 msgstr "Βιβλιοθήκη: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:89
 #, fuzzy, c-format
 msgid "Library added successfully."
 msgstr "Προστέθηκε επιτυχώς"
@@ -36164,8 +36193,8 @@ msgid ""
 msgstr ""
 "Κανόνες κυκλοφορίας υλικού και προστίμων &rsaquo; Διαχείριση &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -36187,7 +36216,7 @@ msgstr "Προκαθορισμένη βιβλιοθήκη: %s"
 msgid "Library default updated successfully."
 msgstr "επιτυχής ενημέρωση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:91
 #, fuzzy, c-format
 msgid "Library deleted successfully."
 msgstr "Ο εξυπηρετητής '%s' διαγράφηκε επιτυχώς."
@@ -36266,7 +36295,7 @@ msgstr "Διαχείριση Βιβλιοθήκης"
 msgid "Library name: "
 msgstr "Κωδικός Βιβλιοθήκης:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:244
 #, c-format
 msgid "Library of Congress"
 msgstr "Library of Congress"
@@ -36298,7 +36327,7 @@ msgstr "Όρια μεταφορών βιβλιοθηκών"
 msgid "Library type: "
 msgstr "Κωδικός Βιβλιοθήκης:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:87
 #, fuzzy, c-format
 msgid "Library updated successfully."
 msgstr "επιτυχής ενημέρωση"
@@ -36316,7 +36345,7 @@ msgstr "Χρήση βιβλιοθήκης"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:633
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:906
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:48
@@ -36543,13 +36572,13 @@ msgstr "Σύνδεση κύριας εγγραφή σε "
 msgid "Link a host record to %s"
 msgstr "Σύνδεση κύριας εγγραφή σε "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:907
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:906
 #, c-format
 msgid "Link authorities automatically"
 msgstr "Αυτόματη σύνδεση καθιερωμένων"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 #, fuzzy
 msgid "Link copied to the clipboard"
 msgstr "Αντιγράφηκαν %d γραμμές στο πρόχειρο."
@@ -36775,7 +36804,7 @@ msgstr "Γίνεται φόρτωση"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:182
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:167
 #, c-format
 msgid "Loading "
@@ -36808,7 +36837,7 @@ msgid "Loading records, please wait..."
 msgstr "Φόρτωση των εγγραφών, παρακαλώ περιμένετε..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -37128,7 +37157,7 @@ msgstr "%s %s Απολεσθέν (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:44
 #, c-format
 msgid "Lost card"
 msgstr "Χαμένη κάρτα"
@@ -37179,14 +37208,14 @@ msgid "Lost items &rsaquo; Reports &rsaquo; Koha"
 msgstr "%s &rsaquo; Μέλη &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:479
-#, fuzzy, c-format
+#, c-format
 msgid "Lost items in staff interface"
 msgstr "Απολεσθέντα τεκμήρια στη διεπαφή προσωπικού"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:210
-#, fuzzy, c-format
+#, c-format
 msgid "Lost items in staff interface: "
-msgstr "Απολεσθέντα τεκμήρια στη διεπαφή προσωπικού"
+msgstr "Απολεσθέντα τεκμήρια στη διεπαφή προσωπικού: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:96
 #, fuzzy, c-format
@@ -37465,8 +37494,8 @@ msgstr "Πρότυπα τροποποίησης MARC %s"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "Πρότυπα τροποποίησης MARC &rsaquo; Εργαλεία &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #, c-format
 msgid "MARC organization code"
 msgstr "Κωδικός MARC οργανισμού"
@@ -37571,7 +37600,7 @@ msgstr "MARC χωρίς αντίτυπα"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "MARCOrgCode"
 msgstr "MARCOrgCode"
@@ -39309,7 +39338,7 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:21
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
 #, fuzzy, c-format
 msgid "Mobile phone"
 msgstr "Αριθμός κινητού τηλεφώνου"
@@ -39639,7 +39668,7 @@ msgstr "Τροποποίηση τύπου τεκμηρίου '%s' "
 msgid "Modify items in a batch"
 msgstr "Τροποποίηση τεκμηρίων σε παρτίδα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:40
 #, c-format
 msgid "Modify library "
 msgstr "Επεξεργασία βιβλιοθήκης "
@@ -40093,11 +40122,11 @@ msgstr "Έκδοση MySQL: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:662
 #, c-format
 msgid "N/A"
 msgstr "Μ/Ε"
@@ -40151,7 +40180,7 @@ msgstr "ΝΕΑ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
@@ -40181,8 +40210,8 @@ msgstr "ΝΕΑ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:8
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:152
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:153
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:138
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:139
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Name"
@@ -40275,7 +40304,7 @@ msgid "Name:"
 msgstr "Όνομα:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
@@ -40861,13 +40890,13 @@ msgstr "Νέα διάταξη ετικέτας"
 msgid "New label template"
 msgstr "Νέο πρότυπο συλλόγου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:109
 #, c-format
 msgid "New library"
 msgstr "Νέα βιβλιοθήκη"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:46
 #, c-format
 msgid "New library %s "
 msgstr "Νέα βιβλιοθήκη %s "
@@ -40996,7 +41025,7 @@ msgstr "Νέα περιστροφή"
 msgid "New routing list"
 msgstr "Νέα λίστα δρομολόγησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:193
 #, c-format
 msgid "New search"
 msgstr "Νέα αναζήτηση"
@@ -41152,7 +41181,7 @@ msgstr "Επόμενο"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:266
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:674
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:676
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:17
 #, c-format
 msgid "Next "
@@ -41208,11 +41237,11 @@ msgstr "Επόμενη σελίδα"
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco, (Συντάκτης της Τεκμηρίωσης)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:326
@@ -42113,13 +42142,11 @@ msgstr ""
 "Δεν έχουν εγκατασταθεί πρόσθετα που μπορούν να δημιουργήσουν μια αναφορά"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No plugins that can enhance the bibliographic records in the staff interface "
 "are installed"
 msgstr ""
-"Δεν έχουν εγκατασταθεί πρόσθετα τα οποία μπορούν να μετατρέψουν αρχεία σε "
-"MARC εγγραφές"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:108
 #, c-format
@@ -42297,7 +42324,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "No temporary directory found."
 msgstr "Δε βρέθηκε προσωρινός φάκελος"
 
@@ -42353,7 +42380,7 @@ msgstr "Όχι, να μη γίνει διαγραφή"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:290
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -42423,8 +42450,8 @@ msgstr "Όχι, να μη γίνει ανανέωση (Ο)"
 msgid "No, let me think about it"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:854
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:856
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:855
 #, c-format
 msgid "No, save as new record"
 msgstr "Όχι, αποθήκευση ως νέα εγγραφή"
@@ -42973,15 +43000,16 @@ msgstr ""
 "πολύ ευρεία θα μπορούσε να έχει ως αποτέλεσμα μία πολύ μεγάλη έκθεση η οποία "
 "είτε δεν θα ολοκληρωθεί, είτε θα επιβραδύνει το σύστημά σας."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:77
 #, c-format
 msgid "Note: For temporary uploads do not select a category."
 msgstr ""
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:78
+#. %2$s:  av_UPLOAD_link = BLOCK 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:79
 #, fuzzy, c-format
-msgid "Note: No upload categories are defined. %s "
+msgid "Note: No upload categories are defined. %s %s"
 msgstr "Δεν έχουν καθοριστεί κατηγορίες. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:221
@@ -43011,8 +43039,8 @@ msgstr "Σημείωση: ένα από τα δύο ακόλουθα πεδία 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:90
@@ -43028,7 +43056,7 @@ msgstr "Σημείωση: ένα από τα δύο ακόλουθα πεδία 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:14
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-article-requests.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-return-claims.inc:17
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:159
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:145
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:251
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:38
 #, c-format
@@ -43082,7 +43110,7 @@ msgstr "Σημειώσεις:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, c-format
 msgid "Notes: "
@@ -43198,6 +43226,9 @@ msgid ""
 "Now we will create a patron with superlibrarian permissions. Log in with "
 "this to access Koha as a staff member with all permissions. "
 msgstr ""
+"Τώρα θα δημιουργήσουμε ένα μέλος με δικαιώματα superlibrarian. Συνδέσου με "
+"αυτό το λογαριασμό για να έχεις πρόσβαση στο Koha ως μέλος τους προσωπικού "
+"με πλήρη δικαιώματα. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step3.tt:306
 #, c-format
@@ -43636,7 +43667,7 @@ msgstr "OPAC"
 msgid "OPAC - %s %s"
 msgstr "OPAC - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, c-format
 msgid "OPAC info: "
 msgstr "Πληροφορίες OPAC: "
@@ -43649,7 +43680,7 @@ msgstr "Κρατήσεις σε επίπεδο τεκμηρίου OPAC "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:236
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:53
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
 #, c-format
 msgid "OPAC note"
 msgstr "Σημείωση OPAC"
@@ -43660,13 +43691,13 @@ msgstr "Σημείωση OPAC"
 msgid "OPAC note:"
 msgstr "Σημείωση OPAC:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
 #, fuzzy, c-format
 msgid "OPAC notes"
 msgstr "Σημείωση OPAC"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #, fuzzy, c-format
 msgid "OPAC notes:"
 msgstr "Σημείωση OPAC:"
@@ -43716,9 +43747,9 @@ msgstr "Προβολή OPAC: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1137
-#, fuzzy, c-format
+#, c-format
 msgid "OPAC/Staff interface login"
-msgstr "OPAC/Σύνδεση προσωπικού"
+msgstr "OPAC/Διεπαφή σύνδεσης προσωπικού"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:319
 #, c-format
@@ -44181,7 +44212,7 @@ msgstr ""
 "Μόνο σε αναζητήσιμα πεδία που αντιστοιχίστηκαν με εγγραφές μπορεί να οριστεί "
 "βαρύτητα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:117
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:103
 #, fuzzy, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or budget_modify "
@@ -44192,7 +44223,7 @@ msgstr ""
 "δικαιώματα order_manage εάν έχουν ενεργοποιηθεί λεπτομερείς άδειες) θα "
 "εμφανιστεί στα αποτελέσματα αναζήτησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:115
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:101
 #, c-format
 msgid ""
 "Only staff with superlibrarian or acquisitions permissions (or order_manage "
@@ -44203,7 +44234,7 @@ msgstr ""
 "δικαιώματα order_manage εάν έχουν ενεργοποιηθεί λεπτομερείς άδειες) θα "
 "εμφανιστεί στα αποτελέσματα αναζήτησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:113
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:99
 #, fuzzy, c-format
 msgid ""
 "Only staff with superlibrarian or suggestions_manage permissions are "
@@ -44435,7 +44466,7 @@ msgstr "Παραγγελία"
 msgid "Order ID"
 msgstr "Παραγγελία "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:613
 #, fuzzy, c-format
 msgid "Order ID:"
 msgstr "Παραγγελία "
@@ -44822,7 +44853,7 @@ msgstr "Άλλα αντίτυπα:"
 msgid "Other limits"
 msgstr "Άλλα ονόματα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
 #, c-format
 msgid "Other name"
 msgstr "Άλλο όνομα"
@@ -45535,12 +45566,12 @@ msgid "Patron"
 msgstr "Μέλος"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' added."
 msgstr "Προστέθηκε το μέλος '%s'. "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "Patron '%s' is already in the list."
 msgstr "Το μέλος '%s' υπάρχει ήδη στη λίστα."
 
@@ -46511,7 +46542,7 @@ msgid "Patron's record has guaranteed accounts attached."
 msgstr "Η εγγραφή μέλους έχει συνημμένους εγγυημένους λογαριασμούς."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:470
 #, c-format
 msgid "Patron:"
@@ -46600,7 +46631,7 @@ msgstr "&rsaquo; Προσθήκη μέλους"
 msgid "Patrons and circulation"
 msgstr "Μέλη και κυκλοφορία υλικού"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:132
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:118
 #, fuzzy, c-format
 msgid "Patrons found for: "
 msgstr "Δε βρέθηκε το μέλος:"
@@ -47058,13 +47089,13 @@ msgstr "Μόνιμη διαγραφή ιστορικού δανειμσμών π
 msgid "Permanently delete these patrons"
 msgstr "Μόνιμη διαγραφή αυτών των μελών"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:51
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:54
 #, fuzzy, c-format
 msgid "Permissions (code)"
 msgstr "Ρύθμιση εξουσιοδοτήσεων"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "Ph: "
 msgstr "Τηλ: "
 
@@ -47073,7 +47104,7 @@ msgstr "Τηλ: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:10
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:160
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:146
 #, c-format
 msgid "Phone"
 msgstr "Τηλέφωνο"
@@ -47094,7 +47125,7 @@ msgstr "Τηλέφωνο:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:603
 #, c-format
@@ -47178,7 +47209,7 @@ msgstr "Η βιβλιοθήκη παραλαβής είναι διαφορετι
 msgid "Pickup library:"
 msgstr "Βιβλιοθήκη παραλαβής:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:99
@@ -47188,7 +47219,7 @@ msgstr "Βιβλιοθήκη παραλαβής:"
 msgid "Pickup location"
 msgstr "Τοποθεσία παραλαβής"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:248
 #, c-format
 msgid "Pickup location: "
 msgstr "Τοποθεσία παραλαβής: "
@@ -47660,7 +47691,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Please enter a search term."
 msgstr "Παρακαλώ εισάγετε ένα όρο αναζήτησης."
 
@@ -48480,7 +48511,7 @@ msgstr "Προεπισκόπηση αυτού του προτύπου ειδοπ
 # Επειδή δεν χωράει στο div (160px) κόβω λίγο από τη λέξη.
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:7
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:538
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:661
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:663
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/page-numbers.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -48532,8 +48563,13 @@ msgstr "Προηγούμενες περίοδοι χρήσης"
 msgid "Price"
 msgstr "Τιμή"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#, fuzzy, c-format
+msgid "Price paid"
+msgstr "Τιμή:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:661
 #, fuzzy, c-format
 msgid "Price paid:"
 msgstr "Τιμή:"
@@ -48569,7 +48605,7 @@ msgstr "Κύρια επικοινωνία για προσκτήσεις"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:807
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:22
 #, c-format
 msgid "Primary email"
 msgstr "Κύριο ηλεκτρονικό ταχυδρομείο"
@@ -48586,7 +48622,7 @@ msgstr "Κύριο email:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:786
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
 #, c-format
 msgid "Primary phone"
 msgstr "Κύριο τηλέφωνο"
@@ -48842,7 +48878,7 @@ msgstr "Προφίλ εκτυπωτή"
 msgid "Priority"
 msgstr "Προτεραιότητα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:71
 #, fuzzy, c-format
 msgid "Privacy (code)"
 msgstr "Κανόνας ιδιωτικότητας"
@@ -49114,11 +49150,11 @@ msgid ""
 "file."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:365
@@ -49187,7 +49223,7 @@ msgstr "Δημόσια σημείωση:"
 msgid "Public notes"
 msgstr "Δημόσιες σημειώσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:355
 #, c-format
 msgid "Public: "
@@ -50468,7 +50504,7 @@ msgid "Register: %s &rArr; %s"
 msgstr "Βιβλιοθήκη: %s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:230
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:38
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:41
 #, c-format
 msgid "Registration date"
 msgstr "Ημερομηνία εγγραφής"
@@ -50760,7 +50796,6 @@ msgstr "Απομακρυσμένη εικόνα:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:160
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:495
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
@@ -50771,6 +50806,7 @@ msgstr "Απομακρυσμένη εικόνα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:505
@@ -51214,8 +51250,8 @@ msgstr ""
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:467
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1087
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1088
 msgid "Repeat this Tag"
 msgstr "Επανάληψη αυτού του Πεδίου"
 
@@ -51283,7 +51319,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "Αντικατάσταση εγγραφής μέσω Z39.50/SRU"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "Αντικατάσταση εγγραφής μέσω Z39.50/SRU"
@@ -51329,12 +51365,12 @@ msgstr "Τιμή αντικατάστασης:"
 msgid "Replied"
 msgstr "lieder"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Reply-To: "
 msgstr "Reply-To: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid "ReplyToDefault"
 msgstr "ReplyToDefault"
@@ -51517,6 +51553,12 @@ msgstr "Αίτημα %s"
 msgid "Request ID"
 msgstr "ID αιτήματος"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#, fuzzy, c-format
+msgid "Request ID:"
+msgstr "ID αιτήματος"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:541
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
@@ -51540,29 +51582,28 @@ msgid "Request article from %s"
 msgstr "Αίτημα άρθρου από %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:393
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:606
 #, c-format
 msgid "Request details"
 msgstr "Στοιχεία αιτήματος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
 #, fuzzy, c-format
 msgid "Request log"
 msgstr "Αίτημα %s"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
-#, fuzzy, c-format
-msgid "Request number:"
-msgstr "Αριθμός οδού:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:510
 #, c-format
 msgid "Request specific item type:"
 msgstr "Ζητήστε συγκεκριμένο τύπο αντιτύπου:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
+#, fuzzy, c-format
+msgid "Request type"
+msgstr "Τύπος αιτήματος:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
 #, c-format
 msgid "Request type:"
 msgstr "Τύπος αιτήματος:"
@@ -51648,8 +51689,8 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -51698,13 +51739,13 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:768
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:200
@@ -52041,7 +52082,7 @@ msgstr "Περιορισμός πρόσβασης σε: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:42
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:45
 #, c-format
 msgid "Restricted"
 msgstr "Περιορισμένο"
@@ -52094,7 +52135,7 @@ msgstr "Ο περιορισμός παραβλέφθηκε προσωρινά"
 msgid "Restriction overridden temporarily."
 msgstr "Ο περιορισμός παραβλέφθηκε προσωρινά."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:43
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:46
 #, fuzzy, c-format
 msgid "Restriction reason"
 msgstr "Σχόλιο περιορισμών"
@@ -52391,7 +52432,7 @@ msgstr "Επιστροφή στα εργαλεία"
 msgid "Return to where you were"
 msgstr "Επιστροφή στο προηγούμενο σημείο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #, c-format
 msgid "Return-Path: "
 msgstr "Return-Path: "
@@ -52403,7 +52444,7 @@ msgstr "Return-Path: "
 msgid "Returned to patron: "
 msgstr "Επιστροφή στις λεπτομέρειες μέλους"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "ReturnpathDefault"
 msgstr "ReturnpathDefault"
@@ -52854,7 +52895,7 @@ msgid "SMS"
 msgstr "SMS"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:66
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:69
 #, c-format
 msgid "SMS alert number"
 msgstr "Αριθμός ειδοποίησης SMS"
@@ -52882,7 +52923,7 @@ msgstr "Πεδία αναζήτησης αντιτύπου &rsaquo; Διαχεί
 msgid "SMS number:"
 msgstr "Αριθμός SMS:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:67
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
 #, fuzzy, c-format
 msgid "SMS provider"
 msgstr "Πάροχος SMS:"
@@ -52893,12 +52934,12 @@ msgstr "Πάροχος SMS:"
 msgid "SMS provider:"
 msgstr "Πάροχος SMS:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #, c-format
 msgid "SMTP server"
 msgstr "Διακομιστής SMTP"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
 #, c-format
 msgid "SMTP server: "
 msgstr "Διακομιστής SMTP: "
@@ -53006,7 +53047,7 @@ msgstr "Washoe County Library System, USA"
 msgid "Sale %s "
 msgstr "Περιοδικό: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:8
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
 #, c-format
 msgid "Salutation"
 msgstr "Χαιρετισμός"
@@ -53051,7 +53092,6 @@ msgstr "Σάββατα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:317
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -53086,9 +53126,10 @@ msgstr "Σάββατα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:884
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:140
@@ -53161,14 +53202,14 @@ msgstr ""
 msgid "Save all %s preferences"
 msgstr "Αποθήκευση όλων των προτιμήσεων %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:290
 #, c-format
 msgid "Save and continue editing"
 msgstr "Αποθήκευση και συνέχεια επεξεργασίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
 #, c-format
 msgid "Save and edit items"
 msgstr "Αποθήκευση και επεξεργασία αντιτύπων"
@@ -53183,7 +53224,7 @@ msgstr "Αποθήκευση "
 msgid "Save and preview routing slip"
 msgstr "Αποθήκευση και προβολή του σημειώματος δρομολόγησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:889
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:888
 #, c-format
 msgid "Save and view record"
 msgstr "Αποθήκευση και προβολή εγγραφής"
@@ -53505,8 +53546,8 @@ msgstr "Οθόνη"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
@@ -53515,7 +53556,7 @@ msgstr "Οθόνη"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/letters-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:13
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:94
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:80
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patrons-admin-search.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-admin-search.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:166
@@ -53694,7 +53735,8 @@ msgstr "Προέκυψε ένα σφάλμα, παρακαλώ δοκιμάστ�
 msgid "Search field"
 msgstr "Αναζήτηση πεδίου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:61
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:81
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:84
 #, fuzzy, c-format
 msgid "Search field:"
 msgstr "Πεδία αναζήτησης:"
@@ -54050,7 +54092,7 @@ msgstr "Αναζήτηση προτιμήσεων συστήματος"
 msgid "Search targets"
 msgstr "Αναζήτηση στόχων"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:154
 #, c-format
 msgid "Search term: "
 msgstr "Όρος αναζήτησης:"
@@ -54098,7 +54140,7 @@ msgid "Search to hold "
 msgstr "Αναζήτηση για κράτηση"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:41
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:79
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Search type:"
 msgstr "Τύπος αναζήτησης:"
@@ -54108,12 +54150,12 @@ msgstr "Τύπος αναζήτησης:"
 msgid "Search unavailable"
 msgstr "Η αναζήτηση δεν είναι διαθέσιμη"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:122
 #, fuzzy, c-format
 msgid "Search uploads by category"
 msgstr "Αναζήτηση μεταφορτώσεων με όνομα ή ψηφιακό αποτύπωμα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:151
 #, c-format
 msgid "Search uploads by name or hashvalue"
 msgstr "Αναζήτηση μεταφορτώσεων με όνομα ή ψηφιακό αποτύπωμα"
@@ -54194,7 +54236,7 @@ msgstr "Χρήση προεπιλεγμένων τιμών"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:248
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:23
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:26
 #, c-format
 msgid "Secondary email"
 msgstr "Δευτερεύουσα διεύθυνση ηλεκτρονικού ταχυδρομείου"
@@ -54214,7 +54256,7 @@ msgstr "Δευτερεύον email: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:24
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
 #, c-format
 msgid "Secondary phone"
 msgstr "Δευτερεύον τηλέφωνο"
@@ -54251,7 +54293,7 @@ msgstr "Τομέας"
 #. For the first occurrence,
 #. %1$s:  BIG_LOO.number | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:376
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1018
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1017
 #, c-format
 msgid "Section %s"
 msgstr "Τομέας %s"
@@ -54538,11 +54580,11 @@ msgstr "Επιλογή ημερομηνίας"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -54638,7 +54680,7 @@ msgstr "Επιλογή ημέρας: "
 msgid "Select download format: "
 msgstr "Επιλογή μορφότυπου λήψης: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:57
 #, c-format
 msgid "Select files: "
 msgstr "Επιλογή αρχείων: "
@@ -54711,7 +54753,7 @@ msgid "Select partner libraries:"
 msgstr "Επιλογή βιβλιοθήκης:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "Select patron"
 msgstr "Διαγραφή μελών"
@@ -55552,7 +55594,7 @@ msgstr "Ρύθμιση κατάστασης"
 msgid "Set the date received to today?"
 msgstr "Να οριστεί ημερομηνία παραλαβής η σημερινή;"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr ""
@@ -55615,7 +55657,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Ρυθμίσεις "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:912
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55899,7 +55941,7 @@ msgstr "Εμφάνιση 1 "
 msgid "Show MARC"
 msgstr "Προβολή MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:918
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "Εμφάνιση συνδέσμων τεκμηρίωσης MARC"
@@ -56221,7 +56263,7 @@ msgstr "Εμφάνιση συνδρομών"
 msgid "Show suggestion #%s "
 msgstr "πρόταση #%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:921
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
 #, c-format
 msgid "Show tags"
 msgstr "Εμφάνιση ετικετών"
@@ -56276,7 +56318,7 @@ msgstr "Από"
 msgid "Single holiday: %s"
 msgstr "Μονοήμερη αργία: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Size"
@@ -56467,7 +56509,7 @@ msgstr "Λυπούμαστε, η CAS σύνδεση απέτυχε."
 msgid "Sorry, there is no result for your search."
 msgstr "Λυπούμαστε, δεν υπάρχει αποτέλεσμα για την αναζήτησή σας."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:306
 #, fuzzy, c-format
 msgid "Sorry, your request had no results."
 msgstr "Η αναζήτησή σας δεν επέστρψε αποτελέσματα."
@@ -56482,7 +56524,7 @@ msgstr "Ταξινόμηση"
 msgid "Sort "
 msgstr "Ταξινόμηση "
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:58
 #, c-format
 msgid "Sort 1"
 msgstr "Ταξινόμηση 1"
@@ -56492,7 +56534,7 @@ msgstr "Ταξινόμηση 1"
 msgid "Sort 1:"
 msgstr "Ταξινόμηση 1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:56
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:59
 #, c-format
 msgid "Sort 2"
 msgstr "Ταξινόμηση 2"
@@ -56950,13 +56992,13 @@ msgstr "Σημείωμα προσωπικού"
 msgid "Staff note:"
 msgstr "Διεπαφή προσωπικού:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
 #, fuzzy, c-format
 msgid "Staff notes"
 msgstr "Σημείωμα προσωπικού"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #, fuzzy, c-format
 msgid "Staff notes:"
 msgstr "Διεπαφή προσωπικού:"
@@ -57098,9 +57140,9 @@ msgid "Standard number:"
 msgstr "Πρότυπος αριθμός"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Standard rules for all libraries"
-msgstr "Μην επιλέξετε κανένα για να δείτε όλες τις βιβλιοθήκες"
+msgstr "Καθολικοί κανόνες για όλες τις βιβλιοθήκες"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:199
 #, fuzzy, c-format
@@ -57148,8 +57190,8 @@ msgstr "Ημερομηνία έναρξης:"
 msgid "Start date: "
 msgstr "Ημερομηνία έναρξης: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, c-format
 msgid "Start defining libraries"
 msgstr "Έναρξη καθορισμού βιβλιοθηκών"
@@ -57220,8 +57262,8 @@ msgstr "Ξεκινάει με:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:47
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:82
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:85
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:71
 #, c-format
 msgid "Starts with"
 msgstr "Ξεκινά με"
@@ -57230,7 +57272,7 @@ msgstr "Ξεκινά με"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:16
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:19
 #, c-format
 msgid "State"
 msgstr "Πολιτεία"
@@ -57241,7 +57283,7 @@ msgstr "Πολιτεία"
 msgid "State:"
 msgstr "Πολιτεία:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:585
 #, c-format
@@ -57377,7 +57419,7 @@ msgstr "Άγνωστες χρονολογίες"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1076
@@ -57590,7 +57632,7 @@ msgstr "Σταμάτησε"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:11
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:14
 #, c-format
 msgid "Street number"
 msgstr "Αριθμός οδού"
@@ -57601,7 +57643,7 @@ msgid "Street number:"
 msgstr "Αριθμός οδού:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:12
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:15
 #, c-format
 msgid "Street type"
 msgstr "Τύπος οδού"
@@ -57792,7 +57834,7 @@ msgstr "Θέματα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:155
@@ -57820,7 +57862,7 @@ msgstr "Θέματα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:773
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
@@ -58389,7 +58431,7 @@ msgstr "Συνδρομή"
 msgid "Supplemental issue "
 msgstr "Συμπληρωματικό τεύχος "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, fuzzy, c-format
 msgid "Supplier metadata"
 msgstr "Αναφορά προμηθευτή"
@@ -58408,7 +58450,7 @@ msgstr "OpenJS keyboard shortcuts library"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:6
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:9
 #, c-format
 msgid "Surname"
 msgstr "Επίθετο"
@@ -58481,7 +58523,7 @@ msgid "Switch languages"
 msgstr "Αλλαγή γλώσσας"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:915
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "Μετάβαση σε προηγμένη επεξεργασία"
@@ -58902,8 +58944,8 @@ msgstr "Η ετικέτα διαγράφηκε"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:554
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:559
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:130
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:140
 #, c-format
@@ -59114,7 +59156,7 @@ msgstr "Πρότυπο: "
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:211
 #, c-format
 msgid "Temporary"
 msgstr "Προσωρινό"
@@ -60124,7 +60166,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -60429,7 +60471,7 @@ msgstr ""
 msgid "The record id "
 msgstr "Το id της εγγραφής "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:990
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "Η εγγραφή που προσπαθείτε να επεξεργαστείτε δεν υπάρχει."
@@ -60804,11 +60846,11 @@ msgid "There are no late orders."
 msgstr "Δεν υπάρχουν αργοπορημένες παραγγελίες."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "There are no libraries defined."
 msgstr "Δεν έχουν οριστεί βιβλιοθήκες."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "There are no libraries defined. "
@@ -60915,7 +60957,7 @@ msgstr "Δεν υπάρχουν λίστες μελών."
 msgid "There are no recalls to show."
 msgstr "Δεν υπάρχουν νέα τεκμήρια."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:728
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:730
 #, fuzzy, c-format
 msgid "There are no recorded logs for this request"
 msgstr ""
@@ -61389,7 +61431,7 @@ msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "This file already exists (in this category)."
 msgstr "Το αρχείο υπάρχει ήδη (σε αυτή την κατηγορία)"
 
@@ -61656,7 +61698,7 @@ msgstr "Κανονικά δεν μπορεί να γίνει κράτηση σε
 msgid "This item type already exists"
 msgstr "Το τεκμήριο βρίσκεται ήδη στο καλάθι σας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:93
 #, fuzzy, c-format
 msgid "This library cannot be deleted. Patrons or items are still using it"
 msgstr ""
@@ -62785,7 +62827,7 @@ msgstr "Πρόσθετα εργαλεία"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
@@ -63540,7 +63582,6 @@ msgstr "Αλφαβητικός κωδικός δύο χαρακτήρων"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:17
 #, c-format
@@ -63585,10 +63626,10 @@ msgstr ""
 msgid "UPCE"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, fuzzy, c-format
-msgid "UPLOAD authorized value category"
-msgstr "Κατηγορία καθιερωμένης τιμής: "
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:82
+#, c-format
+msgid "UPLOAD"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -63605,7 +63646,7 @@ msgstr "URL"
 msgid "URL(s)"
 msgstr "URL(s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:227
 #, c-format
 msgid "URL: "
 msgstr "URL: "
@@ -64396,21 +64437,21 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:971
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:239
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Upload"
 msgstr "Φόρτωση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:13
 #, fuzzy, c-format
 msgid "Upload &rsaquo; Tools &rsaquo; Koha"
 msgstr "%s ημερολόγιο &rsaquo; Εργαλεία &rsaquo; Koha"
@@ -64499,7 +64540,7 @@ msgstr "Φάκελος μεταφορτώσεων: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:298
 #, c-format
 msgid "Upload file"
 msgstr "Μεταφόρτωση αρχείου"
@@ -64557,7 +64598,7 @@ msgstr "Μεταφόρτωση περισσότερων εικόνων"
 msgid "Upload new file"
 msgstr "Μεταφόρτωση νέου αρχείου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #, c-format
 msgid "Upload new files"
 msgstr "Μεταφόρτωση νέων αρχείων"
@@ -64618,7 +64659,7 @@ msgid "Upload photo"
 msgstr "Μεταφόρτωση αποφθεγμάτων"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:11
 #, c-format
 msgid "Upload plugin"
 msgstr "Μεταφόρτωση plugin"
@@ -64643,7 +64684,7 @@ msgstr "Μεταφόρτωση plugin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:106
 #, c-format
 msgid "Upload progress: "
 msgstr "Πρόοδος μεταφόρτωσης: "
@@ -64662,14 +64703,14 @@ msgstr "Αποτελέσματα μεταφόρτωσης εικόνας :"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: "
 msgstr "Κατάσταση μεταφόρτωσης: "
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: Cancelled "
 msgstr "Κατάσταση μεταφόρτωσης: Ακυρώθηκε "
 
@@ -65126,7 +65167,7 @@ msgstr "Ταυτότητα Χρήστη: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc-overlay-rules.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:233
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:52
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:55
 #, c-format
 msgid "Username"
 msgstr "Όνομα χρήστη"
@@ -65553,7 +65594,7 @@ msgstr "Προβολή "
 msgid "View ILL availability plugins"
 msgstr "Προβολή όλων των πρόσθετων"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
 #, c-format
 msgid "View ILL requests"
 msgstr "Προβολή αιτημάτων διαδανεισμού"
@@ -65614,18 +65655,14 @@ msgstr "Νέο καλάθι"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View biblio details"
-msgstr "Προβολή στοιχείων εγγραφής"
+#, fuzzy
+msgid "View bibliographic record"
+msgstr "Βιβλιογραφική εγγραφή"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:50
 #, c-format
 msgid "View bibliographic record enhancement plugins for the staff interface"
 msgstr ""
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View borrower details"
-msgstr "Προβολή στοιχείων μέλους"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:174
 #, fuzzy, c-format
@@ -65699,8 +65736,9 @@ msgid "View patron"
 msgstr "Νέο μέλος"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 #, fuzzy
 msgid "View patron details"
 msgstr "Στοιχεία μέλους"
@@ -66689,11 +66727,11 @@ msgstr "Ετήσια αργία: %s"
 msgid "Yellow"
 msgstr "Επιτρέψτε"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:325
@@ -66761,7 +66799,7 @@ msgstr "Επιτρέψτε"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:250
@@ -66855,7 +66893,7 @@ msgstr "Ναι, κλείσιμο (Ν)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:294
@@ -66924,7 +66962,7 @@ msgstr "Ναι, διαγραφή αυτού του υποπεδίου"
 msgid "Yes, delete this tag"
 msgstr "Ναι, διαγραφή αυτού του υποπεδίου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "Ναι, επεξεργασία υπαρχόντων τεκμηρίων"
@@ -66956,7 +66994,7 @@ msgid "Yes: Edit existing authority"
 msgstr "Ναι: Επεξεργασία υπάρχοντος καθιερωμένου όρου"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:848
 msgid "Yes: View existing items"
 msgstr "Ναι: Προβολή υπαρχόντων τεκμηρίων"
 
@@ -67877,7 +67915,7 @@ msgstr ""
 "ξεκινήστε τη διαδικασία για τις εκτός δικτύου κινήσεις κυκλοφορίας υλικού."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr ""
 
@@ -67958,7 +67996,7 @@ msgstr ""
 msgid "Your report will be generated with the following SQL statement."
 msgstr "Η έκθεσή σας θα δημιουργηθεί με την ακόλουθη SQL δήλωση."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:301
 #, c-format
 msgid "Your request gave the following results:"
 msgstr "Το αίτημά σας έφερε τα ακόλουθα αποτελέσματα:"
@@ -68054,7 +68092,7 @@ msgstr "εγγραφές σε ποικίλες μορφές. Επιλέξτε μ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:903
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -68116,7 +68154,7 @@ msgstr "Αρχείο ZIP"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:225
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:17
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:20
 #, c-format
 msgid "ZIP/Postal code"
 msgstr "Ταχυδρομικός κώδικας"
@@ -68127,7 +68165,7 @@ msgstr "Ταχυδρομικός κώδικας"
 msgid "ZIP/Postal code:"
 msgstr "Ταχυδρομικός κώδικας:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:591
 #, c-format
@@ -68585,7 +68623,7 @@ msgid "beep.ogg"
 msgstr "beep.ogg"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 #, fuzzy
 msgid "begins with "
 msgstr "Αρχίζει από"
@@ -68786,7 +68824,7 @@ msgstr "μπορεί να κάνει το ανώτερο έως %s συνολι�
 msgid "can place %s of the requested %s holds for a maximum of %s total holds."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:815
 #, c-format
 msgid "cancel your request"
 msgstr "ακύρωση αιτήματος σας"
@@ -68899,7 +68937,7 @@ msgid "considered late"
 msgstr "θεωρείται αργοπορημένο"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "containing "
 msgstr "που περιέχει"
 
@@ -68923,7 +68961,7 @@ msgstr "που περιέχει"
 msgid "contains"
 msgstr "περιλαμβάνει"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #, c-format
 msgid "continue creating your request"
 msgstr "συνεχίστε με τη δημιουργία αιτήματος"
@@ -69099,7 +69137,7 @@ msgstr "%sΤροποποίηση %sΠροσθήκη %s προτίμησης συ
 msgid "display detail for this librarian."
 msgstr "παρουσίαση στοιχείων για αυτόν το βιβλιοθηκονόμο."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
 #, c-format
 msgid "do a catalog search"
 msgstr "κάνετε αναζήτηση"
@@ -69545,7 +69583,7 @@ msgid "in fines. If you would like you can record payments. "
 msgstr "σε πρόστιμα. Αν θέλετε μπορείτε να καταγράψετε τις εξοφλήσεις. "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "in library "
 msgstr "στη Βιβλιοθήκη "
 
@@ -70295,8 +70333,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "ή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:992
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:384
@@ -70337,11 +70375,6 @@ msgstr "Σχολιαστής "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 msgid "order(s) left"
 msgstr "παραγγελία(ες) απέμειναν"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, c-format
-msgid "otherwise all uploads will be marked as temporary."
-msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -70776,7 +70809,7 @@ msgid "stages"
 msgstr "Σελίδες"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "starting with "
 msgstr "ξεκινάει με "
 
@@ -70901,34 +70934,6 @@ msgstr "Βιβλιοθηκονόμος"
 msgid "surname: %s"
 msgstr "Επίθετο: "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
-#, c-format
-msgid ""
-"system preference %s Default: ILLDefaultStaffEmail system preference %s "
-msgstr ""
-"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
-"ILLDefaultStaffEmail %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "system preference %s Default: ReplyToDefault system preference %s "
-msgstr ""
-"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
-"ReplyToDefault %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
-#, c-format
-msgid "system preference %s Default: ReturnpathDefault system preference %s "
-msgstr ""
-"προτιμήσεις συστήματος %s Προκαθορισμένο: η προτίμηση συστήματος "
-"ReturnpathDefault %s "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:44
 #, fuzzy, c-format
@@ -70948,7 +70953,7 @@ msgstr "Αναζήτηση προτίμησης συστήματος:"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:352
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:981
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:980
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -71288,7 +71293,7 @@ msgid "with all the columns."
 msgstr "Κρύψιμο όλων των στηλών"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
+#: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:233
 msgid "with category "
 msgstr "με κατηγορία "
 
@@ -71495,8 +71500,8 @@ msgstr "| Κατάσταση: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
@@ -71779,6 +71784,9 @@ msgstr ""
 #~ msgid "%s Days %s Hours %s Undefined %s "
 #~ msgstr "%s Ημέρες %s Ώρες %s Μη καθορισμένο %s "
 
+#~ msgid "%s Default: "
+#~ msgstr "%s Προκαθορισμένο: "
+
 #~ msgid ""
 #~ "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
 #~ "Copy %s %s Copy and replace %s %s %s 1st %s %s field %s%s$%s%s %s with "
@@ -71809,6 +71817,9 @@ msgstr ""
 
 #~ msgid "%s Hold(s)"
 #~ msgstr "%s Κράτηση/ Κρατήσεις"
+
+#~ msgid "%s If not filled in defaults to system preference "
+#~ msgstr "%s Εάν δεν συμπληρωθεί αυτόματα στις προτιμήσεις συστήματος "
 
 #~ msgid ""
 #~ "%s In transit from %s, to %s, since %s %s %s %s %s Can't be cancelled "
@@ -72060,6 +72071,10 @@ msgstr ""
 #~ msgid "AM"
 #~ msgstr "AM"
 
+#, fuzzy
+#~ msgid "Add values to the "
+#~ msgstr "Προσθήκη σημείωσης προμηθευτή"
+
 #~ msgid ""
 #~ "An error occurred when adding this library category. The categorycode "
 #~ "might already exist."
@@ -72098,6 +72113,9 @@ msgstr ""
 
 #~ msgid "Borrower name"
 #~ msgstr "Όνομα δανειζόμενου"
+
+#~ msgid "Branch"
+#~ msgstr "Παράρτημα"
 
 #, fuzzy
 #~ msgid "Cancelled reserve"
@@ -72207,6 +72225,10 @@ msgstr ""
 #~ msgstr "Παραλαβή αποστολής"
 
 #, fuzzy
+#~ msgid "Request number:"
+#~ msgstr "Αριθμός οδού:"
+
+#, fuzzy
 #~ msgid "Set permissions for %s, %s "
 #~ msgstr "Ρύθμιση εξοθσιοδοτήσεων για %s, %s"
 
@@ -72241,6 +72263,16 @@ msgstr ""
 #, fuzzy
 #~ msgid "Two-factor authentication"
 #~ msgstr "Πιστοποίηση CAS"
+
+#, fuzzy
+#~ msgid "UPLOAD authorized value category"
+#~ msgstr "Κατηγορία καθιερωμένης τιμής: "
+
+#~ msgid "View biblio details"
+#~ msgstr "Προβολή στοιχείων εγγραφής"
+
+#~ msgid "View borrower details"
+#~ msgstr "Προβολή στοιχείων μέλους"
 
 #, fuzzy
 #~ msgid "View staff catalog biblio enhancement plugins"

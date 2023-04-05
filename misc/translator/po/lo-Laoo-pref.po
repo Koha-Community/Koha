@@ -380,20 +380,25 @@ msgstr ""
 msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr ""
 
-# Acquisitions > Policy > EmailPurchaseSuggestions
+# Authorities > General
+#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
+"autorités.pref#AutoCreateAuthorities# les notices autorités manquantes "
+"(BiblioAddsAuthorities doit avoir été fixé à \"allow\" for this to have any "
+"effect)."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
 msgstr ""
 
-# Acquisitions > Policy
+# OPAC > Features
+#, fuzzy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# email address of branch"
-msgstr ""
+msgstr "opac.pref#OPACpatronimages# Afficher"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# none"
@@ -2221,7 +2226,7 @@ msgstr "authorités.pref#AutoCreateAuthorities# générer"
 msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
 msgstr "authorités.pref#AutoCreateAuthorities# ne pas générer"
 
-# Authorities > General
+# Authorities > General > BiblioAddsAuthorities
 msgid ""
 "authorities.pref#BiblioAddsAuthorities# them to automatically create new "
 "authority records if needed, rather than having to reference existing "
@@ -2238,6 +2243,7 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "autorités.pref#CatalogModuleRelink# Ne pas"
 
 # Authorities > Linker
+#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module."
@@ -4419,9 +4425,10 @@ msgstr ""
 msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
 msgstr ""
 
-# Circulation > Return claims
+# Circulation > Checkout Policy
+#, fuzzy
 msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
-msgstr ""
+msgstr "Calculate the due date using"
 
 # Circulation > Return claims
 msgid ""
@@ -4668,14 +4675,17 @@ msgid ""
 msgstr ""
 
 # Circulation > Interface
+#, fuzzy
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
 msgstr "Don't show"
 
 # Circulation > Interface
+#, fuzzy
 msgid "circulation.pref#DisplayClearScreenButton# Show"
-msgstr "ClearScreenButton# Show"
+msgstr "Don't show"
 
 # Circulation > Interface
+#, fuzzy
 msgid ""
 "circulation.pref#DisplayClearScreenButton# a button to clear the current "
 "patron from the screen on the circulation screen."
@@ -5040,16 +5050,17 @@ msgstr "Enable"
 msgid "circulation.pref#HouseboundModule# the housebound module."
 msgstr "Calculate the due date using"
 
-# Circulation > Interlibrary loans
+# Circulation > Checkout policy
+#, fuzzy
 msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr ""
+msgstr "Don't block"
 
 # Circulation > Checkout policy
 #, fuzzy
 msgid "circulation.pref#ILLCheckAvailability# Don't check"
 msgstr "Don't block"
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLCheckAvailability
 msgid ""
 "circulation.pref#ILLCheckAvailability# external sources for availability "
 "during the request process."
@@ -5068,7 +5079,7 @@ msgid ""
 "the ILLSTATUS authorized value category."
 msgstr ""
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLHiddenRequestStatuses
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
 "finished and should not be displayed in the ILL module: "
@@ -5084,12 +5095,13 @@ msgstr "Enable"
 msgid "circulation.pref#ILLModule# Enable"
 msgstr "Enable"
 
-# Circulation > Interlibrary loans
+# Circulation > Checkout Policy
+#, fuzzy
 msgid ""
 "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr ""
+msgstr "Calculate the due date using"
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLModuleCopyrightClearance
 msgid ""
 "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the "
 "copyright clearance stage in request creation. The text you enter will be "
@@ -5106,20 +5118,20 @@ msgstr "Enable"
 msgid "circulation.pref#ILLModuleUnmediated# Enable"
 msgstr "Enable"
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLModuleUnmediated
 msgid ""
 "circulation.pref#ILLModuleUnmediated# unmediated interlibrary loan requests. "
 "If enabled and the ILL backend supports it, the newly created requests are "
 "immediately requested by backend."
 msgstr ""
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLOpacbackends
 msgid ""
 "circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
 "installed backends will be enabled."
 msgstr ""
 
-# Circulation > Interlibrary loans
+# Circulation > Interlibrary loans > ILLOpacbackends
 msgid ""
 "circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
 "requests:"
@@ -8955,7 +8967,7 @@ msgstr ""
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr ""
 
-# OPAC > Privacy
+# OPAC > Privacy > AllowPatronToSetFinesVisibilityForGuarantor
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's fines to the patron's "
@@ -9229,7 +9241,7 @@ msgid ""
 "the OPAC if they have less than"
 msgstr ""
 
-# OPAC > Policy
+# OPAC > Policy > OPACFineNoRenewals
 msgid ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
 "disable)."
@@ -9517,9 +9529,10 @@ msgstr "opac.pref#OPACpatronimages# Afficher"
 msgid "opac.pref#OPACResultsMaxItems# branch"
 msgstr "opac.pref#OPACpatronimages# Afficher"
 
-# OPAC > Appearance > OPACResultsMaxItems
+# OPAC > Features
+#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# substatus"
-msgstr ""
+msgstr "opac.pref#OPACpatronimages# Afficher"
 
 # OPAC > Appearance
 msgid ""
@@ -9528,6 +9541,7 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
 "{CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with "
@@ -11144,8 +11158,9 @@ msgstr ""
 "informations personnelles à l'OPAC."
 
 # OPAC > Features
+#, fuzzy
 msgid "opac.pref#suggestion# Allow"
-msgstr ""
+msgstr "opac.pref#OPACpatronimages# Afficher"
 
 # OPAC > Features
 #, fuzzy
@@ -11153,8 +11168,11 @@ msgid "opac.pref#suggestion# Don't allow"
 msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
 
 # OPAC > Features
+#, fuzzy
 msgid "opac.pref#suggestion# patrons to make purchase suggestions on the OPAC."
 msgstr ""
+"opac.pref#OPACpatronimages# les photos des adhérents sur la page des "
+"informations personnelles à l'OPAC."
 
 # Patrons
 msgid "patrons.pref"
@@ -11228,7 +11246,7 @@ msgstr ""
 msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr ""
 
-# Patrons > Patron relationships
+# Patrons > Patron relationships > AllowStaffToSetFinesVisibilityForGuarantor
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's fines to be viewed by linked patrons in the OPAC."
@@ -11523,7 +11541,7 @@ msgid ""
 "still be expanded later):"
 msgstr ""
 
-# Patrons > General
+# Patrons > General > DefaultPatronSearchFields
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
@@ -12567,7 +12585,7 @@ msgstr ""
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
 msgstr ""
 
-# Searching > Results display
+# Searching > Results display > FacetLabelTruncationLength
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface."
@@ -13544,11 +13562,12 @@ msgstr ""
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
 msgstr ""
 
-# Staff interface > Authentication > TwoFactorAuthentication
+# OPAC > Features
+#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA)."
-msgstr ""
+msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -14233,6 +14252,275 @@ msgid ""
 "reports web service."
 msgstr ""
 
+# Authorities > Linker
+#, fuzzy
+#~ msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
+#~ msgstr "authorities.pref#LinkerModule# Utiliser l'éditeur de liens"
+
+# Authorities > Linker
+#, fuzzy
+#~ msgid "authorities.pref#AutoLinkBiblios# Do"
+#~ msgstr "autorités.pref#LinkerRelink# Activer"
+
+# Authorities > Linker
+#, fuzzy
+#~ msgid "authorities.pref#AutoLinkBiblios# Don't"
+#~ msgstr "autorités.pref#LinkerRelink# Ne pas activer"
+
+# Authorities > General
+#, fuzzy
+#~ msgid ""
+#~ "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
+#~ "when saving records in the cataloging module, obeys <a href='/cgi-bin/"
+#~ "koha/admin/preferences.pl?"
+#~ "op=search&searchfield=LinkerRelink'>LinkerRelink</a> and <a href='/cgi-"
+#~ "bin/koha/admin/preferences.pl?"
+#~ "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
+#~ "record edits."
+#~ msgstr ""
+#~ "autorités.pref#AutoCreateAuthorities# les notices autorités manquantes "
+#~ "(BiblioAddsAuthorities doit avoir été fixé à \"allow\" for this to have "
+#~ "any effect)."
+
+# Authorities > General
+#, fuzzy
+#~ msgid ""
+#~ "authorities.pref#RequireChoosingExistingAuthority# When editing records,"
+#~ msgstr "autorités.pref#AutoCreateAuthorities# En modification de notice,"
+
+# Authorities > General
+#, fuzzy
+#~ msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
+#~ msgstr "authorités.pref#AutoCreateAuthorities# ne pas générer"
+
+# Authorities > General
+#, fuzzy
+#~ msgid "authorities.pref#RequireChoosingExistingAuthority# require"
+#~ msgstr "authorités.pref#AutoCreateAuthorities# générer"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#CatalogConcerns# Allow"
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#CatalogConcerns# Don't allow"
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#CatalogerEmails# Use "
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
+#~ msgstr "Показывать"
+
+# Cataloging > Interface
+#, fuzzy
+#~ msgid "cataloguing.pref#autoControlNumber# not generated automatically."
+#~ msgstr "Показывать"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref Curbside pickup module"
+#~ msgstr "Don't block"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref Item bundles"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Autoriser"
+
+# Circulation > Checkout Policy
+#, fuzzy
+#~ msgid "circulation.pref Patron restrictions"
+#~ msgstr "circulation rules only."
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#CircControlReturnsBranch# the library the item is "
+#~ "checked in at."
+#~ msgstr "circulation.pref#CircAutoPrintQuickSlip# effacer l'écran"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#CircControlReturnsBranch# the library the item is "
+#~ "currently held by."
+#~ msgstr "circulation.pref#CircAutoPrintQuickSlip# effacer l'écran"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#CircControlReturnsBranch# the library the item is owned "
+#~ "by."
+#~ msgstr "circulation.pref#CircAutoPrintQuickSlip# effacer l'écran"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#CurbsidePickup# Disable"
+#~ msgstr "Enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#CurbsidePickup# Enable"
+#~ msgstr "Enable"
+
+# Circulation > Checkout Policy
+#, fuzzy
+#~ msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
+#~ msgstr "Calculate the due date using"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#DisplayClearScreenButton# Show print quick slip and "
+#~ "clear screen buttons"
+#~ msgstr "ClearScreenButton# Show"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#DisplayClearScreenButton# Show print slip and clear "
+#~ "screen buttons"
+#~ msgstr "ClearScreenButton# Show"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
+#~ msgstr "Don't enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#EnableItemGroupHolds# Enable"
+#~ msgstr "Enable"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
+#~ "groups."
+#~ msgstr "circulation.pref#CircAutoPrintQuickSlip# effacer l'écran"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#EnableItemGroups# Don't enable"
+#~ msgstr "Don't enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#EnableItemGroups# Enable"
+#~ msgstr "Enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Do"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Autoriser"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Ne pas autoriser"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
+#~ "the new hold filled with a canceled item to"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Ne pas autoriser"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the "
+#~ "next hold using the item."
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Ne pas autoriser"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
+#~ msgstr "Don't block"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OPACAllowUserToChangeBranch# Pending"
+#~ msgstr "Block"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OPACAllowUserToChangeBranch# Suspended"
+#~ msgstr "Block"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OverdueNoticeFrom# ."
+#~ msgstr "Block"
+
+# Circulation > Checkout Policy
+#, fuzzy
+#~ msgid ""
+#~ "circulation.pref#OverdueNoticeFrom# Organize and send overdue notices "
+#~ "using the"
+#~ msgstr "when checking out to a member that has overdues outstanding"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OverdueNoticeFrom# checkout library"
+#~ msgstr "Block"
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#OverdueNoticeFrom# command-line option"
+#~ msgstr "Block"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#OverdueNoticeFrom# item home library"
+#~ msgstr "Enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#PatronRestrictionTypes# Allow"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Autoriser"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
+#~ msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# Ne pas autoriser"
+
+# Circulation > Checkout Policy
+#, fuzzy
+#~ msgid "circulation.pref#UseLocationAsAQInSIP# Use"
+#~ msgstr "circulation rules only."
+
+# Circulation > Checkout Policy
+#, fuzzy
+#~ msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
+#~ msgstr "circulation rules only."
+
+# Circulation > Checkout policy
+#, fuzzy
+#~ msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
+#~ msgstr "Ask for confirmation"
+
 # Enhanced content > Local or remote cover images
 #, fuzzy
 #~ msgid "enhanced_content.pref#CustomCoverImages# Display"
@@ -14246,6 +14534,88 @@ msgstr ""
 #~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
 #~ msgstr "enhanced_content.pref#OPACLocalCoverImages# Afficher"
 
+#, fuzzy
+#~ msgid "erm.pref"
+#~ msgstr "ສິ່ງທີ່ມີການພິມແບບຕໍ່ເນື່ອງ"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "erm.pref#ERMModule# Disable"
+#~ msgstr "Enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "erm.pref#ERMModule# Enable"
+#~ msgstr "Enable"
+
+# I18N/L10N
+#, fuzzy
+#~ msgid "i18n_l10n.pref Global"
+#~ msgstr "i18n_l10n.pref#dateformat# aaaa-mm-jj"
+
+#, fuzzy
+#~ msgid "interlibrary_loans.pref"
+#~ msgstr "ສິ່ງທີ່ມີການພິມແບບຕໍ່ເນື່ອງ"
+
+#, fuzzy
+#~ msgid "interlibrary_loans.pref Notifications"
+#~ msgstr "ຍົກເລີກການຈັດແຈງໝວດໝູ່ຂອງ ອີເມວ"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "interlibrary_loans.pref#ILLModule# Disable"
+#~ msgstr "Enable"
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "interlibrary_loans.pref#ILLModule# Enable"
+#~ msgstr "Enable"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref Suggestions"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#EmailPatronRegistrations# EmailAddressForPatronRegistrations"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#EmailPatronRegistrations# KohaAdminEmailAddress"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#EmailPatronRegistrations# none"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#OPACAuthorIdentifiers# Display"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#OPACAuthorIdentifiers# Don't display"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors "
+#~ "to the detail pages in the OPAC."
+#~ msgstr ""
+#~ "opac.pref#OPACpatronimages# les photos des adhérents sur la page des "
+#~ "informations personnelles à l'OPAC."
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
 # OPAC > Features
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
@@ -14258,5 +14628,94 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
+#~ msgid "opac.pref#OpacCatalogConcerns# Allow"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#OpacCatalogConcerns# Don't allow"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
 #~ msgid "opac.pref#ShowReviewerPhoto# Hide"
 #~ msgstr "opac.pref#ShowReviewer# aucun nom"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#suggestion# Disable"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#suggestion# Enable"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "patrons.pref#NotifyPasswordChange# Don't notify"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "patrons.pref#NotifyPasswordChange# Notify"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# Patrons > General
+#, fuzzy
+#~ msgid "patrons.pref#PrefillGuaranteeField# Surname"
+#~ msgstr "patrons.pref#BorrowerUnwantedField# (separer les colonnes par |)"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
+#~ msgstr "Показати до"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#RetainCatalogSearchTerms# Retain"
+#~ msgstr "Показати до"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
+#~ msgstr "Показати до"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#RetainPatronsSearchTerms# Retain"
+#~ msgstr "Показати до"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#SavedSearchFilters# Disable"
+#~ msgstr "Показати до"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#SavedSearchFilters# Enable"
+#~ msgstr "Показати до"
+
+# Circulation > Interface
+#, fuzzy
+#~ msgid "searching.pref#SearchWithISSNVariations# don't search"
+#~ msgstr "Don't show"
+
+# Searching > Results display
+#, fuzzy
+#~ msgid "searching.pref#SearchWithISSNVariations# search"
+#~ msgstr "Показати до"
+
+#, fuzzy
+#~ msgid "serials.pref Features"
+#~ msgstr "ສິ່ງທີ່ມີການພິມແບບຕໍ່ເນື່ອງ"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
+#~ msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
+#~ msgstr "opac.pref#OPACpatronimages# Afficher"
