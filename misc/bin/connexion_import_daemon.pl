@@ -30,7 +30,7 @@ GetOptions(
     'help|?'        => \$help,
 );
 
-if($help || !$config){
+if ( $help || !$config ) {
     print <<EOF
 $0 --config=my.conf
 Parameters :
@@ -55,11 +55,13 @@ Config file format:
   password - koha user password, authentication
   match          - marc_matchers.code: ISBN or ISSN
   overlay_action - import_batches.overlay_action: replace, create_new or ignore
+  overlay_framework - if overlaying records - move to a new framework, if blank will use default
+                      if not included it will use the framework of the existing record
   nomatch_action - import_batches.nomatch_action: create_new or ignore
   item_action    - import_batches.item_action:    always_add,
                       add_only_for_matches, add_only_for_new or ignore
   import_mode    - stage or direct
-  framework      - to be used if import_mode is direct
+  framework      - to be used if import_mode is direct, if blank, will use default
   connexion_user      - User sent from connexion client
   connexion_password  - Password sent from connexion client
 
@@ -69,7 +71,7 @@ Config file format:
   All process related parameters (all but ip and port) have default values as
   per Koha import process.
 EOF
-;
+        ;
     exit;
 }
 
@@ -353,29 +355,38 @@ sub handle_request {
     }
 
     my $base_url = $self->{koha};
-    my $resp = $ua->post( $base_url.IMPORT_SVC_URI,
-                              {'nomatch_action' => $self->{params}->{nomatch_action},
-                               'overlay_action' => $self->{params}->{overlay_action},
-                               'match'          => $self->{params}->{match},
-                               'import_mode'    => $self->{params}->{import_mode},
-                               'framework'      => $self->{params}->{framework},
-                               'item_action'    => $self->{params}->{item_action},
-                               'xml'            => $data});
+    my $resp = $ua->post(
+        $base_url . IMPORT_SVC_URI,
+        {
+            'nomatch_action'    => $self->{params}->{nomatch_action},
+            'overlay_action'    => $self->{params}->{overlay_action},
+            'match'             => $self->{params}->{match},
+            'import_mode'       => $self->{params}->{import_mode},
+            'framework'         => $self->{params}->{framework},
+            'overlay_framework' => $self->{params}->{overlay_framework},
+            'item_action'       => $self->{params}->{item_action},
+            'xml'               => $data
+        }
+    );
 
     my $status = $resp->code;
-    if ($status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN) {
-        my $user = $self->{user};
+    if ( $status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN ) {
+        my $user     = $self->{user};
         my $password = $self->{password};
-        $resp = $ua->post( $base_url.AUTH_URI, { userid => $user, password => $password } );
-        $resp = $ua->post( $base_url.IMPORT_SVC_URI,
-                              {'nomatch_action' => $self->{params}->{nomatch_action},
-                               'overlay_action' => $self->{params}->{overlay_action},
-                               'match'          => $self->{params}->{match},
-                               'import_mode'    => $self->{params}->{import_mode},
-                               'framework'      => $self->{params}->{framework},
-                               'item_action'    => $self->{params}->{item_action},
-                               'xml'            => $data})
-          if $resp->is_success;
+        $resp = $ua->post( $base_url . AUTH_URI, { userid => $user, password => $password } );
+        $resp = $ua->post(
+            $base_url . IMPORT_SVC_URI,
+            {
+                'nomatch_action'    => $self->{params}->{nomatch_action},
+                'overlay_action'    => $self->{params}->{overlay_action},
+                'match'             => $self->{params}->{match},
+                'import_mode'       => $self->{params}->{import_mode},
+                'framework'         => $self->{params}->{framework},
+                'overlay_framework' => $self->{params}->{overlay_framework},
+                'item_action'       => $self->{params}->{item_action},
+                'xml'               => $data
+            }
+        ) if $resp->is_success;
     }
     unless ($resp->is_success) {
         $self->log("Unsuccessful request", $resp->request->as_string, $resp->as_string);
