@@ -2,7 +2,7 @@
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else id="titles_list">
-            <Toolbar />
+            <Toolbar :options="this.toolbar_options" />
             <div
                 v-if="title_count > 0"
                 id="title_list_result"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
+import Toolbar from "../Toolbar.vue"
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -90,6 +90,16 @@ export default {
                 },
             },
             cannot_search: false,
+            toolbar_options: [
+                {
+                    to: "EHoldingsLocalTitlesFormAdd",
+                    button_title: "New title",
+                },
+                {
+                    to: "EHoldingsLocalTitlesFormImport",
+                    button_title: "Import from list",
+                },
+            ],
         }
     },
     beforeRouteEnter(to, from, next) {
