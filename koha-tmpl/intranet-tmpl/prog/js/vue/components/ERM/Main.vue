@@ -214,15 +214,18 @@ export default {
                     error => {}
                 )
             )
-            return Promise.all(promises)
+            return Promise.all(promises).then(values => {
+                this.loaded()
+                this.initialized = true
+            })
         }
 
         const sysprefs_client = APIClient.sysprefs
         sysprefs_client.sysprefs
             .get("ERMModule")
             .then(value => {
-                this.ERMModule = value
-                if (!this.ERMModule) {
+                this.ERMModule = value.value
+                if (this.ERMModule == 0) {
                     this.loaded()
                     return this.setError(
                         this.$__(
@@ -232,10 +235,6 @@ export default {
                     )
                 }
                 return fetch_config()
-            })
-            .then(() => {
-                this.loaded()
-                this.initialized = true
             })
     },
     components: {
