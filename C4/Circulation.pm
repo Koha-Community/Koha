@@ -21,7 +21,6 @@ package C4::Circulation;
 use Modern::Perl;
 use DateTime;
 use POSIX qw( floor );
-use YAML::XS;
 use Encode;
 
 use C4::Context;
@@ -1795,21 +1794,12 @@ sub AddIssue {
                 }
             }
 
-            my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckout');
-            if ($yaml) {
-                $yaml = "$yaml\n\n";
-
-                my $rules;
-                eval { $rules = YAML::XS::Load(Encode::encode_utf8($yaml)); };
-                if ($@) {
-                    warn "Unable to parse UpdateNotForLoanStatusOnCheckout syspref : $@";
-                }
-                else {
-                    foreach my $key ( keys %$rules ) {
-                        if ( $item_object->notforloan eq $key ) {
-                            $item_object->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1 });
-                            last;
-                        }
+            my $rules = C4::Context->yaml_preference('UpdateNotForLoanStatusOnCheckout');
+            if ($rules) {
+                foreach my $key ( keys %$rules ) {
+                    if ( $item_object->notforloan eq $key ) {
+                        $item_object->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1 });
+                        last;
                     }
                 }
             }
@@ -2214,34 +2204,28 @@ sub AddReturn {
         $messages->{ $loc_msg_key } = $loc_messages->{ $loc_msg_key };
     }
 
-    my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckin');
-    if ($yaml) {
-        $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
-        my $rules;
-        eval { $rules = YAML::XS::Load(Encode::encode_utf8($yaml)); };
-        if ($@) {
-            warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
-        }
-        else {
-            if ( defined $rules->{$item->itype} ) {
-                foreach my $notloan_rule_key (keys %{ $rules->{$item->itype}} ) {
-                    if ( $item->notforloan eq $notloan_rule_key ) {
-                        $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$item->itype}->{$notloan_rule_key} };
-                        $item->notforloan( $rules->{ $item->itype }->{$notloan_rule_key} )
-                            ->store( { log_action => 0, skip_record_index => 1, skip_holds_queue => 1 } )
-                            unless $rules->{ $item->itype }->{$notloan_rule_key} eq 'ONLYMESSAGE';
-                        last;
-                    }
+    my $rules = C4::Context->yaml_preference('UpdateNotForLoanStatusOnCheckin');
+    if ($rules) {
+        if ( defined $rules->{ $item->itype } ) {
+            foreach my $notloan_rule_key ( keys %{ $rules->{ $item->itype } } ) {
+                if ( $item->notforloan eq $notloan_rule_key ) {
+                    $messages->{'NotForLoanStatusUpdated'} =
+                        { from => $item->notforloan, to => $rules->{ $item->itype }->{$notloan_rule_key} };
+                    $item->notforloan( $rules->{ $item->itype }->{$notloan_rule_key} )
+                        ->store( { log_action => 0, skip_record_index => 1, skip_holds_queue => 1 } )
+                        unless $rules->{ $item->itype }->{$notloan_rule_key} eq 'ONLYMESSAGE';
+                    last;
                 }
-            } elsif ( defined $rules->{'_ALL_'} ) {
-                foreach my $notloan_rule_key (keys %{ $rules->{'_ALL_'}} ) {
-                    if ( $item->notforloan eq $notloan_rule_key ) {
-                        $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{'_ALL_'}->{$notloan_rule_key} };
-                        $item->notforloan( $rules->{'_ALL_'}->{$notloan_rule_key} )
-                            ->store( { log_action => 0, skip_record_index => 1, skip_holds_queue => 1 } )
-                            unless $rules->{ '_ALL_' }->{$notloan_rule_key} eq 'ONLYMESSAGE';
-                        last;
-                    }
+            }
+        } elsif ( defined $rules->{'_ALL_'} ) {
+            foreach my $notloan_rule_key ( keys %{ $rules->{'_ALL_'} } ) {
+                if ( $item->notforloan eq $notloan_rule_key ) {
+                    $messages->{'NotForLoanStatusUpdated'} =
+                        { from => $item->notforloan, to => $rules->{'_ALL_'}->{$notloan_rule_key} };
+                    $item->notforloan( $rules->{'_ALL_'}->{$notloan_rule_key} )
+                        ->store( { log_action => 0, skip_record_index => 1, skip_holds_queue => 1 } )
+                        unless $rules->{'_ALL_'}->{$notloan_rule_key} eq 'ONLYMESSAGE';
+                    last;
                 }
             }
         }

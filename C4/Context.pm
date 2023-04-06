@@ -342,7 +342,7 @@ the value cannot be properly decoded as YAML.
 sub yaml_preference {
     my ( $self, $preference ) = @_;
 
-    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8( $self->preference( $preference ) ) ); };
+    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8( $self->preference( $preference ) // '' ) ); };
     if ($@) {
         warn "Unable to parse $preference syspref : $@";
         return;
