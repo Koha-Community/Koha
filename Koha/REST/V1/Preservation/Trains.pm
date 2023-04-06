@@ -288,6 +288,48 @@ sub get_item {
     };
 }
 
+=head3 add_items
+
+Controller function that handles adding items in batch to a train
+
+=cut
+
+sub add_items {
+    my $c = shift->openapi->valid_input or return;
+
+    my $train_id = $c->validation->param('train_id');
+    my $train = Koha::Preservation::Trains->find( $train_id );
+
+    unless ($train) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Train not found" }
+        );
+    }
+
+    my $body = $c->validation->every_param('body');
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $train_items = $train->add_items($body);
+                return $c->render( status => 201, openapi => $train_items );
+            }
+        );
+    }
+    catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "MissingSettings", parameter => $_->parameter }
+                );
+            }
+        }
+
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 add_item
 
 Controller function that handles adding items in batch to a train

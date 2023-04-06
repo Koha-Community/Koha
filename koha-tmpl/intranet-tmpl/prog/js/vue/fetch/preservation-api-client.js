@@ -116,6 +116,11 @@ export class PreservationAPIClient extends HttpClient {
                     endpoint: "trains/" + train_id + "/items",
                     body: train_item,
                 }),
+            createAll: (train_items, train_id) =>
+                this.post({
+                    endpoint: "trains/" + train_id + "/items/batch",
+                    body: train_items,
+                }),
             update: (train_item, train_id, id) =>
                 this.put({
                     endpoint: "trains/" + train_id + "/items/" + id,

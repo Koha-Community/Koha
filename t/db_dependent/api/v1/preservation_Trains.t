@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 6;
 use Test::Mojo;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -372,7 +373,7 @@ subtest 'delete() tests' => sub {
 
 subtest '*_item() tests' => sub {
 
-    plan tests => 26;
+    plan tests => 35;
 
     $schema->storage->txn_begin;
 
@@ -484,6 +485,24 @@ subtest '*_item() tests' => sub {
         "//$userid:$password@/api/v1/preservation/trains/$train_id/items" =>
           json => { item_id => $item_2->itemnumber } )->status_is(404)
       ->json_is( { error => 'Item not found' } );
+
+    # batch add items
+    # Nothing added (FIXME maybe not 201?)
+    warning_is {
+        $t->post_ok(
+            "//$userid:$password@/api/v1/preservation/trains/$train_id/items/batch"
+              => json => [ { item_id => $item_3->itemnumber } ] )
+          ->status_is(201)->json_is( [] );
+    }
+    'Item not added to train: [Cannot add item to train, it is not in the waiting list]';
+
+    $item_3->notforloan($not_for_loan_waiting_list_in)->store;
+    $t->post_ok(
+        "//$userid:$password@/api/v1/preservation/trains/$train_id/items/batch"
+          => json => [ { item_id => $item_3->itemnumber } ] )->status_is(201)
+      ->json_is( '/0/item_id'       => $item_3->itemnumber )
+      ->json_is( '/0/processing_id' => $train->default_processing_id )
+      ->json_has('/0/added_on');
 
     # Update item
     my $new_item_attributes = [

@@ -376,6 +376,84 @@
     x-koha-authorization:
       permissions:
         preservation: 1
+"/preservation/trains/{train_id}/items/batch":
+  post:
+    x-mojo-to: Preservation::Trains#add_items
+    operationId: addItemsToTrain
+    tags:
+      - preservation_train
+    summary: Add items to train
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - description: A list of items
+        in: body
+        name: body
+        required: true
+        schema:
+          type: array
+          items:
+            type: object
+    responses:
+      201:
+        description: A successfully added list of items
+        schema:
+          type: array
+          items:
+            type: object
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+
 "/preservation/trains/{train_id}/items/{train_item_id}":
   put:
     x-mojo-to: Preservation::Trains#update_item

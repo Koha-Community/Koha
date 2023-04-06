@@ -146,9 +146,8 @@
                         v-for="(item, counter) in train.items"
                         v-bind:key="counter"
                     >
-                        <!-- FIXME Counter here may change, we should pass an order by clause when retrieving the items -->
                         <label
-                            >{{ counter + 1 }}
+                            >{{ item.user_train_item_id }}
                             <span class="action_links">
                                 <router-link
                                     :to="`/cgi-bin/koha/preservation/trains/${train.train_id}/items/edit/${item.train_item_id}`"
@@ -253,14 +252,21 @@ export default {
                             let item_row = {}
                             this.train.default_processing.attributes.forEach(
                                 attribute => {
-                                    if (item.attributes.length <= 0) return ""
+                                    let v = ""
+                                    if (item.attributes.length >= 0) {
+                                        let a = item.attributes.find(
+                                            a =>
+                                                a.processing_attribute_id ==
+                                                attribute.processing_attribute_id
+                                        )
+                                        if (a) {
+                                            v = a.value
+                                        }
+                                    }
+
                                     item_row[
                                         attribute.processing_attribute_id
-                                    ] = item.attributes.find(
-                                        a =>
-                                            a.processing_attribute_id ==
-                                            attribute.processing_attribute_id
-                                    ).value
+                                    ] = v
                                 }
                             )
                             item_row.item = item
@@ -268,11 +274,9 @@ export default {
                         })
                         this.item_table.columns = []
                         this.item_table.columns.push({
-                            name: "id",
+                            name: "",
                             title: this.$__("ID"),
-                            render: (data, type, row) => {
-                                return 42
-                            },
+                            data: "item.user_train_item_id",
                         })
                         train.default_processing.attributes.forEach(a =>
                             this.item_table.columns.push({

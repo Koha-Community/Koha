@@ -4881,6 +4881,7 @@ CREATE TABLE `preservation_trains_items` (
   `train_id` int(11) NOT NULL COMMENT 'link with preservation_train',
   `item_id` int(11) NOT NULL COMMENT 'link with items',
   `processing_id` int(11) NULL COMMENT 'specific processing for this item',
+  `user_train_item_id` int(11) NOT NULL COMMENT 'train item id for this train, starts from 1',
   `added_on` datetime DEFAULT NULL COMMENT 'added date',
   PRIMARY KEY (`train_item_id`),
   UNIQUE KEY (`train_id`,`item_id`),

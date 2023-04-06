@@ -71,10 +71,15 @@ sub add_item {
     Koha::Exceptions::Preservation::ItemNotFound->throw unless $item;
     Koha::Exceptions::Preservation::ItemNotInWaitingList->throw if $item->notforloan != $not_for_loan;
 
+    # FIXME We need a LOCK here
+    # Not important for now as we have add_items
+    # Note that there are several other places in Koha with this max+1 problem
+    my $max = $self->items->search->_resultset->get_column("user_train_item_id")->max || 0;
     my $train_item_rs = $self->_result->add_to_preservation_trains_items(
         {
             item_id       => $item->itemnumber,
             processing_id => $train_item->{processing_id} || $self->default_processing_id,
+            user_train_item_id => $max + 1,
             added_on      => \'NOW()',
         }
     );

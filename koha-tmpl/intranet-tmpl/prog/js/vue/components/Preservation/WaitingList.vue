@@ -192,30 +192,36 @@ export default {
             this.loading()
             let item_ids = Object.values(this.last_items)
             const client = APIClient.preservation
-            let promises = []
-            this.last_items.forEach(i =>
-                promises.push(
-                    client.train_items.create(
-                        { item_id: i.item_id },
-                        this.train_id_selected_for_add
-                    )
-                )
-            )
-            Promise.all(promises)
-                .then(() => {
-                    this.setMessage(
-                        this.$__(
-                            "The items have been added to train %s."
-                        ).format(this.train_id_selected_for_add),
-                        true
-                    )
+            client.train_items
+                .createAll(item_ids, this.train_id_selected_for_add)
+                .then(
+                    result => {
+                        if (result.length) {
+                            this.setMessage(
+                                this.$__(
+                                    "%s items have been added to train %s."
+                                ).format(
+                                    result.length,
+                                    this.train_id_selected_for_add
+                                ),
+                                true
+                            )
+                        } else {
+                            this.setMessage(
+                                this.$__(
+                                    "No items have been added to the train."
+                                )
+                            )
+                        }
 
-                    this.$refs.table.redraw(
-                        "/api/v1/preservation/waiting-list/items"
-                    )
-                    this.show_modal_add_to_train = false
-                    this.last_items = []
-                })
+                        this.$refs.table.redraw(
+                            "/api/v1/preservation/waiting-list/items"
+                        )
+                        this.show_modal_add_to_train = false
+                        this.last_items = []
+                    },
+                    error => {}
+                )
                 .then(() => this.loaded())
         },
         addItemsToWaitingList: function (e) {
