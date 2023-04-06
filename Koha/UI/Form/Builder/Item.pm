@@ -169,6 +169,7 @@ sub generate_subfield_form {
     if ( $subfield->{authorised_value} ) {
         my @authorised_values;
         my %authorised_lib;
+        my %restricted_values;
 
         # builds list, depending on authorised value...
         if ( $subfield->{authorised_value} eq "LOST" ) {
@@ -202,14 +203,21 @@ sub generate_subfield_form {
             }
         } elsif ( $subfield->{authorised_value} eq "itemtypes" ) {
             push @authorised_values, "";
-            my $itemtypes = Koha::ItemTypes->new;
+            my $all_itemtypes = Koha::ItemTypes->search_with_localization;
+            my $filtered_itemtypes;
             if ($branch_limit) {
-                $itemtypes = $itemtypes->search_with_library_limits( {}, {}, $branch_limit );
+                $filtered_itemtypes = Koha::ItemTypes->search_with_localization( { branchcode => $branch_limit } );
+            } else {
+                $filtered_itemtypes = $all_itemtypes;
             }
-            $itemtypes = $itemtypes->order_by_translated_description;
-            while ( my $itemtype = $itemtypes->next ) {
+            while (my $itemtype = $filtered_itemtypes->next) {
                 push @authorised_values, $itemtype->itemtype;
                 $authorised_lib{ $itemtype->itemtype } = $itemtype->translated_description;
+            }
+            while (my $itemtype = $all_itemtypes->next) {
+                if (!grep { $_ eq $itemtype->itemtype } @authorised_values) {
+                    $restricted_values{ $itemtype->itemtype } = $itemtype->translated_description;
+                }
             }
 
             if ( !$value && $biblionumber ) {
@@ -244,10 +252,11 @@ sub generate_subfield_form {
             #---- "true" authorised value
         } else {
             push @authorised_values, qq{};
-            my $av = GetAuthorisedValues( $subfield->{authorised_value} );
+            my $av = GetAuthorisedValues( $subfield->{authorised_value}, undef, { 'no_limit' => 1 } );
             for my $r (@$av) {
                 push @authorised_values, $r->{authorised_value};
                 $authorised_lib{ $r->{authorised_value} } = $r->{lib};
+                $restricted_values{ $r->{authorised_value} } = $r->{restricted};
             }
         }
 
@@ -265,11 +274,12 @@ sub generate_subfield_form {
             };
         } else {
             $subfield_data{marc_value} = {
-                type    => 'select',
-                id      => "tag_" . $tag . "_subfield_" . $subfieldtag . "_" . $index_subfield,
-                values  => \@authorised_values,
-                labels  => \%authorised_lib,
-                default => $value,
+                type       => 'select',
+                id         => "tag_" . $tag . "_subfield_" . $subfieldtag . "_" . $index_subfield,
+                values     => \@authorised_values,
+                labels     => \%authorised_lib,
+                restricted => \%restricted_values,
+                default    => $value,
                 (
                       ( grep { $_ eq $subfield->{authorised_value} } (qw(branches itemtypes cn_source)) )
                     ? ()
@@ -277,6 +287,7 @@ sub generate_subfield_form {
                 ),
             };
         }
+
     }
 
     # it's a thesaurus / authority field

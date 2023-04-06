@@ -135,20 +135,32 @@
                             [% FOREACH aval IN mv.values %]
                                 [% IF aval == mv.default %]
                                     [% SET matched = 1 %]
-                                    <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                    [% IF mv.restricted.$aval %]
+                                        <option value="[%- aval | html -%]" selected="selected" style="float:right" title="This value ([%- mv.labels.$aval | html -%]) is limited to other librairies">[%- mv.labels.$aval | html -%] &#9888;</option>
+                                    [% ELSE %]
+                                        <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                    [% END %]
                                 [% ELSE %]
                                     [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
                                         <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
                                     [% ELSIF subfield.IS_LOST_AV && Koha.Preference("BundleLostValue") && aval == Koha.Preference("BundleLostValue") %]
                                         <option disabled="disabled" value="[%- aval | html -%]" title="Bundle losses are set at checkin automatically">[%- mv.labels.$aval | html -%]</option>
                                     [% ELSE %]
-                                        <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                        [% UNLESS mv.restricted.$aval %]
+                                            <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                        [% END %]
                                     [% END %]
                                 [% END %]
                             [% END %]
                             [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
                                 [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
-                                <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%] (Not an authorised value)</option>
+                                [% IF mv.restricted %]
+                                    [% FOREACH code IN mv.restricted.keys %]
+                                        [% IF mv.default == code %]
+                                            <option value="[%- code | html -%]" selected="selected" style="float:right" title="This value ([%- mv.restricted.$code | html -%]) is limited to other librairies">[%- mv.restricted.$code | html -%] &#9888;</option>
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
                             [% END %]
                         </select>
                         [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
