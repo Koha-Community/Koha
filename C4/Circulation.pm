@@ -2296,7 +2296,8 @@ sub AddReturn {
                 $transfer->receive;
                 $messages->{'TransferArrived'} = $transfer->frombranch;
                 # validTransfer=1 allows us returning the item back if the reserve is cancelled
-                $validTransfer = 1 if $transfer->reason eq 'Reserve';
+                $validTransfer = 1
+                  if defined $transfer->reason && $transfer->reason eq 'Reserve';
             }
             else {
                 $messages->{'WrongTransfer'}     = $transfer->tobranch;
