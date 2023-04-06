@@ -424,7 +424,7 @@ Authentication method
 
 =head2 flags
 
-  data_type: 'integer'
+  data_type: 'bigint'
   is_nullable: 1
 
 will include a number associated with the staff member's permissions
@@ -759,7 +759,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "flags",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "bigint", is_nullable => 1 },
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
@@ -838,8 +838,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 18:03:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OKIbF7K2KWpEJGbFbetD0w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-06 15:46:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dqGu9iDgO+u09l9X1G0NuA
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

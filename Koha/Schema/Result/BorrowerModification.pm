@@ -327,7 +327,7 @@ patron/borrower's middle name
 
 =head2 flags
 
-  data_type: 'integer'
+  data_type: 'bigint'
   is_nullable: 1
 
 =head2 userid
@@ -578,7 +578,7 @@ __PACKAGE__->add_columns(
   "password",
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "flags",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "bigint", is_nullable => 1 },
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
@@ -638,8 +638,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 18:03:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NsjvIPMgGDCa0LZQc157Ww
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-06 15:46:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TzG6Q5PymhBXCVxJi3C/sA
 
 sub koha_object_class {
     'Koha::Patron::Modification';
