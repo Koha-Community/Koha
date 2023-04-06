@@ -1,3 +1,4 @@
+[% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Upload plugin &rsaquo; Plugins &rsaquo; Tools &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -9,23 +10,16 @@
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
 
-[% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">
-                Plugins disabled
-            </a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+    [% WRAPPER 'sub-header.inc' %]
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Plugins disabled</span>
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div class="container-fluid">
         <div class="row">
