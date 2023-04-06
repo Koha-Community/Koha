@@ -56,35 +56,42 @@ sub default_processing {
 
 Add item to this train
 
-my $train_item = $train->add_item({item_id => $itemnumber, processing_id => $processing_id});
-my $train_item = $train->add_item({barcode => $barcode, processing_id => $processing_id});
+my $train_item = $train->add_item({item_id => $itemnumber, processing_id => $processing_id}, { skip_waiting_list_check => 0|1 });
+my $train_item = $train->add_item({barcode => $barcode, processing_id => $processing_id, { skip_waiting_list_check => 0|1 });
+
+skip_waitin_list_check can be set to true if the item can be added to the train even if the item is not in the waiting list.
 
 =cut
 
 sub add_item {
-    my ( $self, $train_item ) = @_;
+    my ( $self, $train_item, $params ) = @_;
+
+    my $skip_waiting_list_check = $params->{skip_waiting_list_check} || 0;
 
     my $not_for_loan = C4::Context->preference('PreservationNotForLoanWaitingListIn');
 
     my $key  = exists $train_item->{item_id} ? 'itemnumber' : 'barcode';
     my $item = Koha::Items->find( { $key => $train_item->{item_id} || $train_item->{barcode} } );
     Koha::Exceptions::Preservation::ItemNotFound->throw unless $item;
-    Koha::Exceptions::Preservation::ItemNotInWaitingList->throw if $item->notforloan != $not_for_loan;
+
+    Koha::Exceptions::Preservation::ItemNotInWaitingList->throw
+      if !$skip_waiting_list_check && $item->notforloan != $not_for_loan;
 
     # FIXME We need a LOCK here
     # Not important for now as we have add_items
     # Note that there are several other places in Koha with this max+1 problem
     my $max = $self->items->search->_resultset->get_column("user_train_item_id")->max || 0;
-    my $train_item_rs = $self->_result->add_to_preservation_trains_items(
+    my $train_item_object = Koha::Preservation::Train::Item->new(
         {
+            train_id      => $self->train_id,
             item_id       => $item->itemnumber,
             processing_id => $train_item->{processing_id} || $self->default_processing_id,
             user_train_item_id => $max + 1,
             added_on      => \'NOW()',
         }
-    );
+    )->store;
     $item->notforloan( $self->not_for_loan )->store;
-    return Koha::Preservation::Train::Item->_new_from_dbic($train_item_rs);
+    return $train_item_object->get_from_storage;
 }
 
 =head3 add_items

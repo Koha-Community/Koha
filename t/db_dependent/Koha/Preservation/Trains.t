@@ -52,7 +52,7 @@ subtest 'default_processing' => sub {
 };
 
 subtest 'add_items & items' => sub {
-    plan tests => 9;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -97,6 +97,12 @@ subtest 'add_items & items' => sub {
     is( $item_1->get_from_storage->notforloan, $not_for_loan_train_in );
     is( $item_2->get_from_storage->notforloan, 0 );
     is( $item_3->get_from_storage->notforloan, $not_for_loan_train_in );
+
+    warning_is {
+        $train->add_item( { item_id => $item_2->itemnumber }, { skip_waiting_list_check => 1 } );
+    } '';
+    is( $train->items->count, 3, 'the item has been added to the train' );
+    is( $item_2->get_from_storage->notforloan, $not_for_loan_train_in );
 
     $schema->storage->txn_rollback;
 };

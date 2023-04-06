@@ -389,6 +389,98 @@ sub add_item {
     };
 }
 
+=head3 copy_item
+
+=cut
+
+sub copy_item {
+    my $c = shift->openapi->valid_input or return;
+
+    my $train_id = $c->validation->param('train_id');
+    my $train = Koha::Preservation::Trains->find( $train_id );
+
+    unless ($train) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Train not found" }
+        );
+    }
+
+    my $train_item_id = $c->validation->param('train_item_id');
+
+    my $train_item = Koha::Preservation::Train::Items->search({ train_item_id => $train_item_id, train_id => $train_id })->single;
+
+    unless ($train_item) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Item not found" }
+        );
+    }
+
+    my $body = $c->validation->param('body');
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+                my $new_train_id = delete $body->{train_id};
+                my $new_train = Koha::Preservation::Trains->find( $new_train_id );
+                unless ($train) {
+                    return $c->render(
+                        status  => 404,
+                        openapi => { error => "Train not found" }
+                    );
+                }
+                my $new_train_item = $new_train->add_item(
+                    {
+                        item_id       => $train_item->item_id,
+                        processing_id => $train_item->processing_id
+                    },
+                    {
+                        skip_waiting_list_check => 1,
+                    },
+                );
+                my $attributes = [
+                    map {
+                        {
+                            processing_attribute_id => $_->processing_attribute_id,
+                            train_item_id => $new_train_item->train_item_id,
+                            value         => $_->value
+                        }
+                    } $train_item->attributes->as_list
+                  ];
+                $new_train_item->attributes($attributes);
+                return $c->render( status => 201, openapi => $train_item );
+              }
+        );
+    }
+    catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "MissingSettings", parameter => $_->parameter }
+                );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemNotFound') ) {
+                return $c->render(
+                    status  => 404,
+                    openapi => { error => "Item not found" }
+                );
+            } elsif ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => $_->error, conflict => $_->duplicate_id }
+                );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemNotInWaitingList') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => 'Item not in waiting list' }
+                );
+            }
+        }
+
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 update_item
 
 Controller function that handles updating an item from a train

@@ -410,34 +410,18 @@ export default {
         copyItem(event) {
             event.preventDefault()
             const client = APIClient.preservation
-            let new_train_item = {}
             client.train_items
-                .get(this.train.train_id, this.train_item_id_to_copy)
-                .then(train_item => {
-                    new_train_item = {
-                        attributes: train_item.attributes.map(attr => {
-                            return {
-                                processing_attribute_id:
-                                    attr.processing_attribute_id,
-                                value: attr.value,
-                            }
-                        }),
-                        item_id: train_item.item_id,
-                        processing_id: train_item.processing_id,
-                    }
-                })
-                .then(() =>
-                    client.train_items
-                        .create(new_train_item, this.train_id_selected_for_copy)
-                        .then(
-                            success => {
-                                this.setMessage(
-                                    this.$__("Item copied successfully.")
-                                )
-                                this.show_modal = false
-                            },
-                            error => {}
-                        )
+                .copy(
+                    this.train_id_selected_for_copy,
+                    this.train.train_id,
+                    this.train_item_id_to_copy
+                )
+                .then(
+                    success => {
+                        this.setMessage(this.$__("Item copied successfully."))
+                        this.show_modal = false
+                    },
+                    error => {}
                 )
         },
         build_datatable: function () {
