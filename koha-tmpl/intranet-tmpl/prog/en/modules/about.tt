@@ -91,19 +91,21 @@
                                         [% ELSE %]
                                             <td>
                                         [% END %]
-                                                Version:
+                                                <span>Version:</span>
                                                 <span>[% elasticsearch_status.version | html %]</span>
                                                 |
-                                                Nodes:
+                                                <span>Nodes:</span>
                                                 <span>[% elasticsearch_status.nodes.join(' / ') | html %]</span>
                                                 |
-                                                Status:
+                                                <span>Status:</span>
                                             [% IF elasticsearch_status.running %]
                                                 <span>running</span>
                                                 |
-                                                Indices:
+                                                <span>Indices:</span>
                                                 [% FOREACH index IN elasticsearch_status.indexes %]
-                                                    [% index.index_name | html %] (count: <emph>[% index.index_count | html %]</emph>)[% UNLESS loop.last %], [% END %]
+                                                    [% index.index_name | html %]
+                                                    (<span>count:</span> <em>[% index.index_count | html %]</em>)
+                                                    [% UNLESS loop.last %], [% END %]
                                                 [% END %]
                                             [% ELSE %]
                                                 <span class="bg-warning">not running</span>
@@ -119,19 +121,19 @@
                                 [% ELSE %]
                                     <td>
                                 [% END %]
-                                        Servers:
+                                        <span>Servers:</span>
                                         [% IF memcached_servers %]
                                             <span>[% memcached_servers | html %]</span>
                                         [% ELSE %]
                                             <span>undefined</span>
                                         [% END %] |
-                                        Namespace:
+                                        <span>Namespace:</span>
                                         [% IF memcached_namespace %]
                                             <span>[% memcached_namespace | html %]</span>
                                         [% ELSE %]
                                             <span>undefined</span>
                                         [% END %] |
-                                        Status:
+                                        <span>Status:</span>
                                         [% IF memcached_servers %]
                                             [% IF memcached_running and is_memcached_still_active %]
                                                 <span class="bg-success">running</span>.
@@ -144,19 +146,19 @@
                                         [% ELSE %]
                                             <span>unknown</span>
                                         [% END %] |
-                                        Config read from:
+                                        <span>Config read from:</span>
                                         [% SWITCH where_is_memcached_config %]
                                             [% CASE 'config_only' %]
                                                 <span class="bg-success">koha-conf.xml</span>
                                             [% CASE 'ENV_only' %]
-                                                <span class="bg-warning">ENV</span> Note that the right place to define the memcached config is in your $KOHA_CONF file
+                                                <span class="bg-warning">ENV</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file</span>
                                             [% CASE 'both' %]
-                                                <span class="bg-warning">ENV and koha-conf.xml</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you should not export the memcached config from ENV.
+                                                <span class="bg-warning">ENV and koha-conf.xml</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you should not export the memcached config from ENV.</span>
                                             [% CASE # nowhere %]
-                                                <span class="bg-warning">Nowhere</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.
+                                                <span class="bg-warning">Nowhere</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.</span>
                                         [% END %]
                                     [% IF effective_caching_method != 'Cache::Memcached::Fast::Safe' %]
-                                        | Effective caching method: [% effective_caching_method | html %]
+                                        | <span>Effective caching method:</span> [% effective_caching_method | html %]
                                     [% END %]
                                 </td>
                             </tr>
@@ -190,18 +192,19 @@
                                 [% timezone_config_class = (time_zone.config_invalid) ? 'bg-warning' : '' %]
                                 [% timezone_env_class    = (time_zone.env_invalid)    ? 'bg-warning' : '' %]
                                 <th scope="row">Time zone: </th>
-                                <td>Used: <span>[% time_zone.actual | html %]</span>
+                                <td>
+                                    <span>Used:</span> <span>[% time_zone.actual | html %]</span>
                                     [% IF time_zone.actual_bad_tz_fallback %]
                                         <span>(This is a fallback value due to a bad configuration)</span>
                                     [% END %]
                                     |
-                                    Config:
+                                    <span>Config:</span>
                                     [% IF time_zone.config != '' %]
                                         <span class="[% timezone_config_class | html %]">[% time_zone.config | html %]</span>
                                     [% ELSE %]
                                         <span>Undefined</span>
                                     [% END %] |
-                                    Environment (TZ):
+                                    <span>Environment (TZ):</span>
                                     [% IF time_zone.environment != '' %]
                                         <span class="[% timezone_env_class | html %]">[% time_zone.environment | html %]</span>
                                     [% ELSE %]
@@ -262,8 +265,7 @@
                         </table>
                     [% END # /WRAPPER tab_item perl %]
 
-                    [% IF Asset.css("css/staff-global.css") == ""
-                       || Asset.js("js/vue/dist/erm.js") == "" %]
+                    [% IF Asset.css("css/staff-global.css") == "" || Asset.js("js/vue/dist/erm.js") == "" %]
                         [% SET warnMissingCompiledFiles = 1 %]
                     [% END %]
                     [% WRAPPER tab_panel tabname= "sysinfo" %]
@@ -570,7 +572,7 @@
                                             <th scope="row"><strong>Warning</strong> </th>
                                             <td>
                                                 [% FOR w IN warnHiddenBiblionumbers %]
-                                                    Biblio framework "[% w.frameworkcode | html %]" has the biblionumber field hidden at the interface [% w.interface | html %]<br/>
+                                                    <span>Biblio framework "[% w.frameworkcode | html %]" has the biblionumber field hidden at the interface [% w.interface | html %]</span><br/>
                                                 [% END %]
                                             </td>
                                         </tr>
