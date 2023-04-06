@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Authorities;
-use C4::AuthoritiesMarc qw( DelAuthority );
+use C4::AuthoritiesMarc qw( DelAuthority AddAuthority FindDuplicateAuthority);
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -122,6 +122,74 @@ sub delete {
         DelAuthority( { authid => $authority->authid } );
 
         return $c->render( status => 204, openapi => q{} );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 add
+
+Controller function that handles creating an authority object
+
+=cut
+
+sub add {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $body = $c->validation->param('Body');
+
+        my $flavour =
+            C4::Context->preference('marcflavour') eq 'UNIMARC'
+            ? 'UNIMARCAUTH'
+            : 'MARC21';
+
+        my $record;
+        my $authtypecode;
+
+        if ( $c->req->headers->content_type =~ m/application\/json/ ) {
+            $record = MARC::Record->new_from_xml( $body->{marcxml}, 'UTF-8', $flavour );
+            $authtypecode = $body->{authtypecode};
+        } else {
+            $authtypecode = $c->validation->param('x-authority-type');
+            if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
+                $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
+            } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
+                $record = MARC::Record->new_from_mij_structure( $body );
+            } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
+                $record = MARC::Record->new_from_usmarc( $body );
+            } else {
+                return $c->render(
+                    status  => 406,
+                    openapi => [
+                        "application/json",
+                        "application/marcxml+xml",
+                        "application/marc-in-json",
+                        "application/marc"
+                    ]
+                );
+            }
+        }
+
+        my ($duplicateauthid,$duplicateauthvalue);
+            ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode);
+
+        my $confirm_not_duplicate = $c->validation->param('x-confirm-not-duplicate');
+
+        return $c->render(
+            status  => 400,
+            openapi => {
+                error => "Duplicate authority $duplicateauthid"
+            }
+        ) unless !$duplicateauthid || $confirm_not_duplicate;
+
+        my $authid = AddAuthority( $record, undef, $authtypecode );
+
+        $c->render(
+            status  => 200,
+            openapi => { id => $authid }
+        );
     }
     catch {
         $c->unhandled_exception($_);

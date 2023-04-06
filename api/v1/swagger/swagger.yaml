@@ -155,6 +155,8 @@ paths:
     $ref: paths/authorised_value_categories.yaml#/~1authorised_value_categories
   "/authorised_value_categories/{authorised_value_category_name}/authorised_values":
     $ref: "./paths/authorised_values.yaml#/~1authorised_value_categories~1{authorised_value_category_name}~1authorised_values"
+  "/authorities":
+    $ref: paths/authorities.yaml#/~1authorities
   "/authorities/{authority_id}":
     $ref: paths/authorities.yaml#/~1authorities~1{authority_id}
   "/biblios":
@@ -380,6 +382,12 @@ parameters:
     name: authority_id
     required: true
     type: integer
+  authority_type_header:
+    description: Authority type code. Use when content type is not application/json
+    name: x-authority-type
+    in: header
+    required: false
+    type: string
   framework_id_header:
     description: Framework id. Use when content type is not application/json
     name: x-framework-id

@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -149,6 +149,74 @@ subtest 'delete() tests' => sub {
 
     $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
       ->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'post() tests' => sub {
+
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    Koha::Authorities->delete;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 } # no permissions
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $marcxml = q|<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <controlfield tag="001">1001</controlfield>
+    <datafield tag="110" ind1=" " ind2=" ">
+        <subfield code="9">102</subfield>
+        <subfield code="a">My Corporation</subfield>
+    </datafield>
+</record>|;
+
+    my $mij = '{"fields":[{"001":"1001"},{"110":{"subfields":[{"9":"102"},{"a":"My Corporation"}],"ind1":" ","ind2":" "}}],"leader":"                        "}';
+    my $marc = '00079     2200049   45000010005000001100024000051001  9102aMy Corporation';
+    my $json = {
+      authtypecode => "CORPO_NAME",
+      marcxml      => $marcxml
+    };
+
+    $t->post_ok("//$userid:$password@/api/v1/authorities")
+      ->status_is(403, 'Not enough permissions makes it return the right code');
+
+    # Add permissions
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 9,
+                code           => 'edit_catalogue'
+            }
+        }
+    );
+
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => json => $json)
+      ->status_is(200)
+      ->json_has('/id');
+
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME'} => $marcxml)
+      ->status_is(200)
+      ->json_has('/id');
+
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME'} => $mij)
+      ->status_is(200)
+      ->json_has('/id');
+
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME'} => $marc)
+      ->status_is(200)
+      ->json_has('/id');
 
     $schema->storage->txn_rollback;
 };
