@@ -343,11 +343,11 @@ export default {
             train[attribute] = new Date()
             const client = APIClient.preservation
             if (train_id) {
-                client.trains
+                return client.trains
                     .update(train, train_id)
                     .then(() => this.getTrain(this.train.train_id))
             } else {
-                client.trains
+                return client.trains
                     .create(train)
                     .then(() => this.getTrain(this.train.train_id))
             }
@@ -359,7 +359,16 @@ export default {
             this.updateTrainDate("sent_on")
         },
         receiveTrain() {
-            this.updateTrainDate("received_on")
+            this.updateTrainDate("received_on").then(
+                success => {
+                    // Rebuild the table to show the "copy" button
+                    $("#" + this.table_id)
+                        .DataTable()
+                        .destroy()
+                    this.build_datatable()
+                },
+                error => {}
+            )
         },
         editItem(train_item_id) {
             this.$router.push(
