@@ -503,8 +503,11 @@ C<$opac> If set to a true value, displays OPAC descriptions rather than normal o
 =cut
 
 sub GetAuthorisedValues {
-    my $category = shift // '';      # optional parameter
-    my $opac     = shift ? 1 : 0;    # normalise to be safe
+    my $category = shift // '';             # optional parameter
+    my $opac     = shift ? 1 : 0;           # normalise to be safe
+    my $options  = shift // '';
+    my $no_limit;
+    if ($options) { $no_limit = $options->{'no_limit'}; }    #optional parameter to ignore library limitation
 
     # Is this cached already?
     my $branch_limit = C4::Context::mybranch();
@@ -515,26 +518,34 @@ sub GetAuthorisedValues {
 
     my @results;
     my $dbh   = C4::Context->dbh;
+
+    my $select_clause = 'SELECT av.*';
+    my @where_args;
+    if ( $branch_limit && $no_limit ) {
+        $select_clause .= ', IF (branchcode = ? OR branchcode IS NULL, 0, 1) as restricted';
+        push @where_args, $branch_limit;
+    }
+
     my $query = qq{
-        SELECT DISTINCT av.*
+        $select_clause
         FROM authorised_values av
     };
     $query .= qq{
           LEFT JOIN authorised_values_branches ON ( id = av_id )
     } if $branch_limit;
     my @where_strings;
-    my @where_args;
-
-    if ($category) {
+    if($category) {
         push @where_strings, "category = ?";
         push @where_args,    $category;
     }
-    if ($branch_limit) {
+
+    if ( $branch_limit && !defined $no_limit ) {
         push @where_strings, "( branchcode = ? OR branchcode IS NULL )";
         push @where_args,    $branch_limit;
     }
-    if ( @where_strings > 0 ) {
-        $query .= " WHERE " . join( " AND ", @where_strings );
+
+    if(@where_strings > 0) {
+        $query .= " WHERE " . join(" AND ", @where_strings);
     }
     $query .= ' ORDER BY category, '
         . (
