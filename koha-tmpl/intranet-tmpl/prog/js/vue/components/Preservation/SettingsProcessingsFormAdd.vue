@@ -25,6 +25,17 @@
                 </fieldset>
                 <fieldset class="rows">
                     <legend>{{ $__("Attributes") }}</legend>
+                    <div
+                        v-if="processing.processing_id"
+                        id="alert-removal"
+                        class="dialog message"
+                    >
+                        {{
+                            $__(
+                                "Be careful removing attribute to this processing, the items using it will be impacted as well!"
+                            )
+                        }}
+                    </div>
                     <fieldset
                         :id="`attribute_${counter}`"
                         class="rows"
@@ -246,8 +257,7 @@ export default {
             }
 
             processing.attributes = processing.attributes.map(
-                ({ processing_id, processing_attribute_id, ...keepAttrs }) =>
-                    keepAttrs
+                ({ processing_id, ...keepAttrs }) => keepAttrs
             )
 
             const client = APIClient.preservation
@@ -284,3 +294,9 @@ export default {
     name: "SettingsProcessingsFormAdd",
 }
 </script>
+
+<style>
+#alert-removal {
+    margin: 0;
+}
+</style>

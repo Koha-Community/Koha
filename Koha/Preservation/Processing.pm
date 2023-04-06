@@ -46,10 +46,31 @@ sub attributes {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
-                $self->attributes->delete;
+                my @existing_ids = map { $_->{processing_attribute_id} || () } @$attributes;
+                if (@existing_ids || !@$attributes) {
+                    $self->attributes->search(
+                        {
+                            (
+                                # If no attributes passed we delete all the existing ones
+                                @$attributes
+                                ? (
+                                    processing_attribute_id => {
+                                        -not_in => \@existing_ids
+                                    }
+                                  )
+                                : ()
+                            )
+                        }
+                    )->delete;
+                }
 
                 for my $attribute (@$attributes) {
-                    $self->_result->add_to_preservation_processing_attributes($attribute);
+                    my $existing_attribute = $self->attributes->find( $attribute->{processing_attribute_id} );
+                    if ($existing_attribute) {
+                        $existing_attribute->set($attribute)->store;
+                    } else {
+                        $self->_result ->add_to_preservation_processing_attributes( $attribute );
+                    }
                 }
             }
         );
