@@ -468,15 +468,16 @@ if (  C4::Context->preference('WebBasedSelfCheck')
 # Test YAML system preferences
 # FIXME: This is list of current YAML formatted prefs, should by type of preference
 my @yaml_prefs = (
-    "UpdateNotForLoanStatusOnCheckin",
-    "OpacHiddenItems",
     "BibtexExportAdditionalFields",
-    "RisExportAdditionalFields",
-    "UpdateItemWhenLostFromHoldList",
+    "ItemsDeniedRenewal",
     "MarcFieldsToOrder",
     "MarcItemFieldsToOrder",
+    "OpacHiddenItems",
+    "RisExportAdditionalFields",
     "UpdateitemLocationOnCheckin",
-    "ItemsDeniedRenewal"
+    "UpdateItemWhenLostFromHoldList",
+    "UpdateNotForLoanStatusOnCheckin",
+    "UpdateNotForLoanStatusOnCheckout",
 );
 my @bad_yaml_prefs;
 foreach my $syspref (@yaml_prefs) {
