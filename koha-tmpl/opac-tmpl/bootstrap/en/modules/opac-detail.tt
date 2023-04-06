@@ -1607,6 +1607,15 @@
                     $(coverSlide).remove();
                 } else {
                     $(coverSlide).addClass("cover-slides");
+                    $(coverSlide).find("img").one("load", function(index) {
+                        if(this.complete && this.naturalHeight !== 0){
+                            $(coverSlide).css({"background-image":"none"});
+                        }
+                    }).each(function() {
+                        if(this.complete) {
+                            $(this).trigger('load');
+                        }
+                    });
                 }
             });
 
