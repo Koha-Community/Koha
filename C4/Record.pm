@@ -794,16 +794,7 @@ sub marc2bibtex {
         );
     }
 
-    my $BibtexExportAdditionalFields = C4::Context->preference('BibtexExportAdditionalFields');
-    my $additional_fields;
-    if ($BibtexExportAdditionalFields) {
-        $BibtexExportAdditionalFields = "$BibtexExportAdditionalFields\n\n";
-        $additional_fields = eval { YAML::XS::Load(Encode::encode_utf8($BibtexExportAdditionalFields)); };
-        if ($@) {
-            warn "Unable to parse BibtexExportAdditionalFields : $@";
-            $additional_fields = undef;
-        }
-    }
+    my $additional_fields = C4::Context->yaml_preference('BibtexExportAdditionalFields');
 
     if ( $additional_fields && $additional_fields->{'@'} ) {
         my ( $f, $sf ) = split( /\$/, $additional_fields->{'@'} );
