@@ -63,7 +63,6 @@ package C4::Ris;
 use Modern::Perl;
 
 use List::MoreUtils qw( uniq );
-use YAML::XS;
 use Encode;
 use vars qw(@ISA @EXPORT);
 
@@ -117,16 +116,7 @@ sub marc2ris {
     ## else: other MARC formats do not specify the character encoding
     ## we assume it's *not* UTF-8
 
-    my $RisExportAdditionalFields = C4::Context->preference('RisExportAdditionalFields');
-    my $ris_additional_fields;
-    if ($RisExportAdditionalFields) {
-        $RisExportAdditionalFields = "$RisExportAdditionalFields\n\n";
-        $ris_additional_fields = eval { YAML::XS::Load(Encode::encode_utf8($RisExportAdditionalFields)); };
-        if ($@) {
-            warn "Unable to parse RisExportAdditionalFields : $@";
-            $ris_additional_fields = undef;
-        }
-    }
+    my $ris_additional_fields = C4::Context->yaml_preference('RisExportAdditionalFields');
 
     ## start RIS dataset
     if ( $ris_additional_fields && $ris_additional_fields->{TY} ) {

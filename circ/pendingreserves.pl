@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use constant PULL_INTERVAL => 2;
 use List::MoreUtils qw( uniq );
-use YAML::XS;
 use Encode;
 
 use C4::Context;
@@ -106,22 +105,15 @@ if ( $op eq 'cud-cancel_reserve' and $reserve_id ) {
             C4::Items::ModItemTransfer( $item->itemnumber, $item->holdingbranch, $item->homebranch, 'LostReserve' );
         }
 
-        if ( my $yaml = C4::Context->preference('UpdateItemWhenLostFromHoldList') ) {
-            $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
-            my $assignments;
-            eval { $assignments = YAML::XS::Load(Encode::encode_utf8($yaml)); };
-            if ($@) {
-                warn "Unable to parse UpdateItemWhenLostFromHoldList syspref : $@" if $@;
-            }
-            else {
-                eval {
-                    while ( my ( $f, $v ) = each( %$assignments ) ) {
-                        $item->$f($v);
-                    }
-                    $item->store;
-                };
-                warn "Unable to modify item itemnumber=" . $item->itemnumber . ": $@" if $@;
-            }
+        my $assignments = C4::Context->yaml_preference('UpdateItemWhenLostFromHoldList');
+        if ( $assignments  ) {
+            eval {
+                while ( my ( $f, $v ) = each( %$assignments ) ) {
+                    $item->$f($v);
+                }
+                $item->store;
+            };
+            warn "Unable to modify item itemnumber=" . $item->itemnumber . ": $@" if $@;
         }
 
     } elsif ( not $item ) {

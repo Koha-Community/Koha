@@ -23,7 +23,6 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use YAML::XS;
 use List::MoreUtils;
 use Encode;
 use Scalar::Util qw( looks_like_number );
@@ -645,15 +644,8 @@ sub add_matcher_list {
 
 sub get_infos_syspref {
     my ($syspref_name, $record, $field_list) = @_;
-    my $syspref = C4::Context->preference($syspref_name);
-    $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
-    my $yaml = eval {
-        YAML::XS::Load(Encode::encode_utf8($syspref));
-    };
-    if ( $@ ) {
-        warn "Unable to parse $syspref syspref : $@";
-        return ();
-    }
+    my $yaml = C4::Context->yaml_preference($syspref_name);
+
     my $r;
     for my $field_name ( @$field_list ) {
         next unless exists $yaml->{$field_name};
