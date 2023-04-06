@@ -42,6 +42,7 @@
                                 }}:</label
                             >
                             <v-select
+                                :disabled="train.train_id ? true : false"
                                 id="not_for_loan"
                                 v-model="train.not_for_loan"
                                 label="description"
