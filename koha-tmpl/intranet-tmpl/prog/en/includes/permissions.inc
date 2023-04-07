@@ -84,6 +84,9 @@
     [%- CASE 'loggedinlibrary' -%]
         <span class="main_permission loggedinlibrary_permission">Allow staff to change logged in library</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'preservation' -%]
+        <span class="main_permission preservation_permission">Manage the preservation module</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 

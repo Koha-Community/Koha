@@ -139,6 +139,16 @@
         [% END %]
         </li>
 
+        [% IF ( preservation ) %]
+            <li class="active">
+                <a title="Preservation" href="/cgi-bin/koha/admin/preferences.pl?tab=preservation">Preservation</a>
+                [% PROCESS subtabs  %]
+        [% ELSE %]
+            <li>
+                <a title="Preservation" href="/cgi-bin/koha/admin/preferences.pl?tab=preservation">Preservation</a>
+        [% END %]
+        </li>
+
         [% IF ( searching ) %]
             <li class="active">
                 <a title="Searching" href="/cgi-bin/koha/admin/preferences.pl?tab=searching">Searching</a>

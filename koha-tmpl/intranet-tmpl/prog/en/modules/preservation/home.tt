@@ -1,0 +1,42 @@
+[% USE raw %]
+[% USE To %]
+[% USE Asset %]
+[% USE KohaDates %]
+[% USE TablesSettings %]
+[% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+    Preservation &rsaquo; Koha
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="preservation_home" class="preservation">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'preservation-search.inc' %]
+[% END %]
+
+<div id="preservation"> <!-- this is closed in intranet-bottom.inc -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% INCLUDE 'js-biblio-format.inc' %]
+
+    <script>
+
+        const authorised_value_categories = [% To.json(AuthorisedValues.GetCategories()) | $raw %].map(c => c.category);
+        const db_columns = [% To.json(db_columns) | $raw %];
+        const api_mappings = [% To.json(api_mappings) | $raw %];
+
+    </script>
+
+    [% Asset.js("js/vue/dist/preservation.js") | $raw %]
+
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

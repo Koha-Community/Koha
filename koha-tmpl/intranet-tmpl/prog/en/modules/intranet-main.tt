@@ -150,6 +150,12 @@
                             </li>
                             [% END %]
 
+                            [% IF Koha.Preference('PreservationModule') && CAN_user_preservation%]
+                            <li>
+                                <a class="icon_general icon_preservation" href="/cgi-bin/koha/preservation/home.pl"><i class="fa fa-fw fa-book"></i>Preservation</a>
+                            </li>
+                            [% END %]
+
 
                             [% IF ( CAN_user_tools || CAN_user_clubs ) %]
                             <li>
