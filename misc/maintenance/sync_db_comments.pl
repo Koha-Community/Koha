@@ -87,19 +87,19 @@ misc/maintenance/sync_db_comments.pl
 
     Some examples:
 
-    misc/maintance/sync_db_comments.pl -help
+    misc/maintenance/sync_db_comments.pl -help
     Usage statement.
 
-    misc/maintance/sync_db_comments.pl -clear -commit -verbose
+    misc/maintenance/sync_db_comments.pl -clear -commit -verbose
     Clear all column comments in database.
     The verbose flag shows all issued ALTER TABLE statements.
 
-    misc/maintance/sync_db_comments.pl -reset -commit -database mydb -table items -schema newstructure.sql
+    misc/maintenance/sync_db_comments.pl -reset -commit -database mydb -table items -schema newstructure.sql
     Only resets comments in items table.
     Operates on specific database instead of the one from $KOHA_CONF.
     Reads the schema from the specified file instead of default one.
 
-    misc/maintance/sync_db_comments.pl -renumber
+    misc/maintenance/sync_db_comments.pl -renumber
     Renumbers all comments like Comment_1,2,..
     Added for testing purposes. Not meant to run on production.
     Omitting the commit flag allows you to see what would be done (dry run).
