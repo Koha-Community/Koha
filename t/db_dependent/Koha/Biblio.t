@@ -24,6 +24,7 @@ use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
 use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
+use Koha::Cache::Memory::Lite;
 use Koha::Caches;
 use Koha::Acquisition::Orders;
 use Koha::AuthorisedValueCategories;
@@ -435,6 +436,8 @@ subtest 'pickup_locations' => sub {
     }
 
     foreach my $cbranch ('ItemHomeLibrary','PatronLibrary') {
+        my $cache = Koha::Cache::Memory::Lite->get_instance();
+        $cache->flush();
         foreach my $biblio ($biblio1, $biblio2) {
             foreach my $patron ($patron1, $patron8) {
                 _doTest($cbranch, $biblio, $patron, $results);
