@@ -35,6 +35,7 @@ use Koha::ArticleRequests;
 use Koha::Biblio::Metadatas;
 use Koha::Biblio::ItemGroups;
 use Koha::Biblioitems;
+use Koha::Cache::Memory::Lite;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
@@ -252,11 +253,17 @@ sub pickup_locations {
 
     my $patron = $params->{patron};
 
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
     my @pickup_locations;
-    foreach my $item_of_bib ( $self->items->as_list ) {
-        push @pickup_locations,
-          $item_of_bib->pickup_locations( { patron => $patron } )
-          ->_resultset->get_column('branchcode')->all;
+    foreach my $item ( $self->items->as_list ) {
+        my $cache_key = sprintf "Pickup_locations:%s:%s:%s:%s:%s",
+           $item->itype,$item->homebranch,$item->holdingbranch,$item->ccode || "",$patron->branchcode||"" ;
+        my $item_pickup_locations = $memory_cache->get_from_cache( $cache_key );
+        unless( $item_pickup_locations ){
+          @{ $item_pickup_locations } = $item->pickup_locations( { patron => $patron } )->_resultset->get_column('branchcode')->all;
+          $memory_cache->set_in_cache( $cache_key, $item_pickup_locations );
+        }
+        push @pickup_locations, @{ $item_pickup_locations }
     }
 
     return Koha::Libraries->search(
