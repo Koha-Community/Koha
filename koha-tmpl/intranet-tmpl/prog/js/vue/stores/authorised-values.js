@@ -36,6 +36,7 @@ export const useAVStore = defineStore("authorised_values", {
         av_package_types: [],
         av_package_content_types: [],
         av_title_publication_types: [],
+        av_notforloan: [],
     }),
     actions: {
         get_lib_from_av(arr_name, av) {

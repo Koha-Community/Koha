@@ -105,6 +105,12 @@ export default {
                                         this.$__("Delete") +
                                         "</a>"
                                 )
+                            } else if (action == "remove") {
+                                content.push(
+                                    '<a class="remove btn btn-default btn-xs" role="button"><i class="fa fa-remove"></i> ' +
+                                        this.$__("Remove") +
+                                        "</a>"
+                                )
                             }
                         })
                         return content.join(" ")

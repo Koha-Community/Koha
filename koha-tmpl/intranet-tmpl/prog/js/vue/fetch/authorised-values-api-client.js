@@ -9,6 +9,10 @@ export class AVAPIClient extends HttpClient {
 
     get values() {
         return {
+            get: category =>
+                this.get({
+                    endpoint: `/${category}/authorised_values`,
+                }),
             getCategoriesWithValues: cat_array =>
                 this.get({
                     endpoint:
