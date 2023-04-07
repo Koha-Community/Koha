@@ -26,5 +26,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (26, 'problem_reports', 'Manage problem reports', 0),
 (27, 'recalls', 'Recalls', 0),
 (28, 'erm', 'Manage electronic resources', 0),
-(29, 'loggedinlibrary', 'Change logged in library', 0)
+(29, 'loggedinlibrary', 'Change logged in library', 0),
+(30, 'preservation', 'Preservation module', 0)
 ;

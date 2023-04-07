@@ -4799,6 +4799,98 @@ CREATE TABLE `plugin_methods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `preservation_trains`
+--
+
+DROP TABLE IF EXISTS `preservation_trains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_trains` (
+  `train_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `name` varchar(80) NOT NULL COMMENT 'name of the train',
+  `description` varchar(255) NULL COMMENT 'description of the train',
+  `default_processing_id` int(11) NULL COMMENT 'default processing, link to preservation_processings.processing_id',
+  `not_for_loan` varchar(80) NOT NULL DEFAULT 0 COMMENT 'NOT_LOAN authorised value to apply toitem added to this train',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'creation date',
+  `closed_on` datetime DEFAULT NULL COMMENT 'closing date',
+  `sent_on` datetime DEFAULT NULL COMMENT 'sending date',
+  `received_on` datetime DEFAULT NULL COMMENT 'receiving date',
+  PRIMARY KEY (`train_id`),
+  CONSTRAINT `preservation_trains_ibfk_1` FOREIGN KEY (`default_processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `preservation_processings`
+--
+
+DROP TABLE IF EXISTS `preservation_processings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_processings` (
+  `processing_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `name` varchar(80) NOT NULL COMMENT 'name of the processing',
+  PRIMARY KEY (`processing_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `preservation_processing_attributes`
+--
+
+DROP TABLE IF EXISTS `preservation_processing_attributes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_processing_attributes` (
+  `processing_attribute_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `processing_id` int(11) NOT NULL COMMENT 'link to the processing',
+  `name` varchar(80) NOT NULL COMMENT 'name of the processing attribute',
+  `type` enum('authorised_value', 'free_text', 'db_column') NOT NULL COMMENT 'Type of the processing attribute',
+  `option_source` varchar(80) NULL COMMENT 'source of the possible options for this attribute',
+  PRIMARY KEY (`processing_attribute_id`),
+  CONSTRAINT `preservation_processing_attributes_ibfk_1` FOREIGN KEY (`processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `preservation_processing_attributes_items`
+--
+
+DROP TABLE IF EXISTS `preservation_processing_attributes_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_processing_attributes_items` (
+  `processing_attribute_id` int(11) NOT NULL COMMENT 'link with preservation_processing_attributes',
+  `train_item_id` int(11) NOT NULL COMMENT 'link with preservation_trains_items',
+  `value` varchar(255) NULL COMMENT 'value for this attribute',
+  PRIMARY KEY (`processing_attribute_id`,`train_item_id`),
+  CONSTRAINT `preservation_processing_attributes_items_ibfk_1` FOREIGN KEY (`processing_attribute_id`) REFERENCES `preservation_processing_attributes` (`processing_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `preservation_processing_attributes_items_ibfk_2` FOREIGN KEY (`train_item_id`) REFERENCES `preservation_trains_items` (`train_item_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `preservation_trains_items`
+--
+
+DROP TABLE IF EXISTS `preservation_trains_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_trains_items` (
+  `train_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `train_id` int(11) NOT NULL COMMENT 'link with preservation_train',
+  `item_id` int(11) NOT NULL COMMENT 'link with items',
+  `processing_id` int(11) NULL COMMENT 'specific processing for this item',
+  `added_on` datetime DEFAULT NULL COMMENT 'added date',
+  PRIMARY KEY (`train_item_id`),
+  UNIQUE KEY (`train_id`,`item_id`),
+  CONSTRAINT `preservation_item_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `preservation_trains` (`train_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `preservation_item_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `preservation_item_ibfk_3` FOREIGN KEY (`processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `printers_profile`
 --
 
