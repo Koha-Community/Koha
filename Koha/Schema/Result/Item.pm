@@ -221,6 +221,13 @@ number of times this item has been checked out/issued
 
 number of times this item has been renewed
 
+=head2 localuse
+
+  data_type: 'smallint'
+  is_nullable: 1
+
+number of times this item has been recorded for localuse
+
 =head2 reserves
 
   data_type: 'smallint'
@@ -468,6 +475,8 @@ __PACKAGE__->add_columns(
   "issues",
   { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "renewals",
+  { data_type => "smallint", default_value => 0, is_nullable => 1 },
+  "localuse",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
   { data_type => "smallint", is_nullable => 1 },
