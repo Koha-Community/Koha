@@ -281,7 +281,13 @@ if ( $patron && ( $op eq 'renew' ) ) {
     if ( $patron->checkouts->find( { itemnumber => $item->itemnumber } ) ) {
         my ($status,$renewerror) = CanBookBeRenewed( $patron, $item->checkout );
         if ($status) {
-            AddRenewal( $patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 1 );
+            AddRenewal(
+                {
+                    borrowernumber => $patron->borrowernumber,
+                    itemnumber     => $item->itemnumber,
+                    seen           => 1
+                }
+            );
             push @newissueslist, $barcode;
             $template->param( renewed => 1 );
         }

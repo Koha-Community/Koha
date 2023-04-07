@@ -284,10 +284,25 @@ subtest 'Test AddRenewal indexer call' => sub {
 
 
         warnings_are{
-            AddRenewal($patron->borrowernumber, $item->itemnumber, $item->homebranch, undef, undef, undef, 0);
+            AddRenewal(
+                {
+                    borrowernumber => $patron->borrowernumber,
+                    itemnumber     => $item->itemnumber,
+                    branch         => $item->homebranch,
+                    seen           => 0
+                }
+            );
         } [$engine,"C4::Circulation"], "index_records is called for $engine when adding a renewal (AddRenewal())";
         warnings_are{
-            AddRenewal($patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 0, 1, 1);
+            AddRenewal(
+                {
+                    borrowernumber    => $patron->borrowernumber,
+                    itemnumber        => $item->itemnumber,
+                    seen              => 0,
+                    automatic         => 1,
+                    skip_record_index => 1
+                }
+            );
         } undef, "index_records is not called for $engine when adding a renewal (AddRenewal()) with skip_record_index";
 
     }

@@ -181,7 +181,13 @@ while ( my $auto_renew = $auto_renews->next ) {
               $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would';
         }
         if ($confirm){
-            my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode, undef, undef, undef, 0, 1 );
+            my $date_due = AddRenewal({
+                borrowernumber => $auto_renew->borrowernumber,
+                itemnumber => $auto_renew->itemnumber,
+                branch => $auto_renew->branchcode,
+                seen => 0,
+                automatic => 1,
+            });
             push @item_renewal_ids, $auto_renew->itemnumber;
             $auto_renew->auto_renew_error(undef)->store;
         }

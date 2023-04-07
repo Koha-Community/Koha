@@ -350,12 +350,12 @@ sub renew {
         }
 
         AddRenewal(
-            $checkout->borrowernumber,
-            $checkout->itemnumber,
-            $checkout->branchcode,
-            undef,
-            undef,
-            $seen
+            {
+                borrowernumber => $checkout->borrowernumber,
+                itemnumber     => $checkout->itemnumber,
+                branch         => $checkout->branchcode,
+                seen           => $seen
+            }
         );
         $checkout = Koha::Checkouts->find($checkout_id);
 

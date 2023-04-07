@@ -1027,13 +1027,12 @@ sub renew_item {
     if ( $can_renew ) {
         my $borrowernumber = $self->patron->borrowernumber;
         my $due_date = C4::Circulation::AddRenewal(
-            $borrowernumber,
-            $itemnumber,
-            $self->{branchcode},
-            undef,
-            undef,
-            undef,
-            0
+            {
+                borrowernumber => $borrowernumber,
+                itemnumber     => $itemnumber,
+                branch         => $self->{branchcode},
+                seen           => 0
+            }
         );
         return {
             itemnumber => $itemnumber,

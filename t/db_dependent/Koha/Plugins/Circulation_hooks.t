@@ -87,7 +87,15 @@ subtest 'after_circ_action() hook tests' => sub {
     subtest 'AddRenewal' => sub {
         plan tests => 1;
 
-        warning_like { AddRenewal( $patron->borrowernumber, $item_1->id, $patron->branchcode ); }
+        warning_like {
+            AddRenewal(
+                {
+                    borrowernumber => $patron->borrowernumber,
+                    itemnumber     => $item_1->id,
+                    branch         => $patron->branchcode
+                }
+            );
+        }
                 qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
                 'AddRenewal calls the after_circ_action hook';
     };

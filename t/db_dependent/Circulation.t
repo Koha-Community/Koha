@@ -779,7 +779,13 @@ subtest "CanBookBeRenewed tests" => sub {
     my $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     my $dt = dt_from_string();
     Time::Fake->offset( $dt->epoch );
-    my $datedue1 = AddRenewal( $renewing_borrower_obj->borrowernumber, $item_7->itemnumber, $branch );
+    my $datedue1 = AddRenewal(
+        {
+            borrowernumber => $renewing_borrower_obj->borrowernumber,
+            itemnumber     => $item_7->itemnumber,
+            branch         => $branch
+        }
+    );
     my $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog');
     isnt (DateTime->compare($datedue1, $dt), 0, "AddRenewal returned a good duedate");
@@ -788,7 +794,13 @@ subtest "CanBookBeRenewed tests" => sub {
     t::lib::Mocks::mock_preference('RenewalLog', 1);
     $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     $old_log_size = Koha::ActionLogs->count( \%params_renewal );
-    AddRenewal( $renewing_borrower_obj->borrowernumber, $item_7->itemnumber, $branch );
+    AddRenewal(
+        {
+            borrowernumber => $renewing_borrower_obj->borrowernumber,
+            itemnumber     => $item_7->itemnumber,
+            branch         => $branch
+        }
+    );
     $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
@@ -4557,7 +4569,14 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     AddIssue( $patron->unblessed, $item->barcode );
 
     throws_ok {
-        AddRenewal( $patron->borrowernumber, $item->itemnumber, $library->id, undef, {break=>"the_renewal"} );
+        AddRenewal(
+            {
+                borrowernumber  => $patron->borrowernumber,
+                itemnumber      => $item->itemnumber,
+                branch          => $library->id,
+                lastreneweddate => { break => "the_renewal" }
+            }
+        );
     } 'Koha::Exceptions::Checkout::FailedRenewal', 'Exception is thrown when renewal update to issues fails';
 
     t::lib::Mocks::mock_preference( 'RenewalLog', 0 );
@@ -4568,7 +4587,13 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
         action => "RENEWAL",
     );
     my $old_log_size = Koha::ActionLogs->count( \%params_renewal );;
-    AddRenewal( $patron->id, $item->id, $library->id );
+    AddRenewal(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            branch         => $library->id
+        }
+    );
     my $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is( $new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog' );
 
@@ -4604,7 +4629,13 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     my $sth = $dbh->prepare("SELECT COUNT(*) FROM statistics WHERE itemnumber = ? AND branch = ?");
     $sth->execute($item->id, $library->id);
     my ($old_stats_size) = $sth->fetchrow_array;
-    AddRenewal( $patron->id, $item->id, $library->id );
+    AddRenewal(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            branch         => $library->id
+        }
+    );
     $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     $sth->execute($item->id, $library->id);
     my ($new_stats_size) = $sth->fetchrow_array;
@@ -4613,7 +4644,14 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     AddReturn( $item->id, $library->id, undef, $date );
     AddIssue( $patron->unblessed, $item->barcode, $now );
-    AddRenewal( $patron->id, $item->id, $library->id, undef, undef, 1 );
+    AddRenewal(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            branch         => $library->id,
+            skipfinecalc   => 1
+        }
+    );
     my $lines_skipped = Koha::Account::Lines->search({
         borrowernumber => $patron->id,
         itemnumber     => $item->id
@@ -4640,7 +4678,14 @@ subtest 'AddRenewal() adds to renewals' => sub {
     is(ref($issue), 'Koha::Checkout', 'Issue added');
 
     # Renew item
-    my $duedate = AddRenewal( $patron->id, $item->id, $library->id, undef, undef, undef, undef, 1 );
+    my $duedate = AddRenewal(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            branch         => $library->id,
+            automatic      => 1
+        }
+    );
 
     ok( $duedate, "Renewal added" );
 
@@ -4729,7 +4774,15 @@ subtest 'Incremented fee tests' => sub {
         "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 0"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,
@@ -4750,7 +4803,15 @@ subtest 'Incremented fee tests' => sub {
         "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,
@@ -4781,7 +4842,15 @@ subtest 'Incremented fee tests' => sub {
         "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1 and closed $closed_day_name"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,
@@ -4799,7 +4868,15 @@ subtest 'Incremented fee tests' => sub {
       Koha::Account::Lines->search( { itemnumber => $item->id } );
     is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly" );
     $accountlines->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountlines = Koha::Account::Lines->search( { itemnumber => $item->id } );
     is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly, for renewal" );
     $accountlines->delete();
@@ -4834,7 +4911,15 @@ subtest 'Incremented fee tests' => sub {
         "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 0 (168h * 0.25u)"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,
@@ -4854,7 +4939,15 @@ subtest 'Incremented fee tests' => sub {
         "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 and closed $closed_day_name (168h - 24h * 0.25u)"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,
@@ -4874,7 +4967,15 @@ subtest 'Incremented fee tests' => sub {
         "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 (168h - 0h * 0.25u"
     );
     $accountline->delete();
-    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    AddRenewal(
+        {
+            borrowernumber  => $patron->id,
+            itemnumber      => $item->id,
+            branch          => $library->id,
+            datedue         => $dt_to_renew,
+            lastreneweddate => $dt_to
+        }
+    );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is(
         $accountline->amount + 0,

@@ -98,13 +98,12 @@ if ($barcode) {
                       : $cgi->param('renewonholdduedate');
 
                     $date_due = AddRenewal(
-                        undef,
-                        $item->itemnumber(),
-                        $branchcode,
-                        $date_due,
-                        undef,
-                        undef,
-                        !$unseen
+                        {
+                            itemnumber => $item->itemnumber(),
+                            branch     => $branchcode,
+                            datedue    => $date_due,
+                            seen       => !$unseen
+                        }
                     );
                     $template->param( date_due => $date_due );
                 }

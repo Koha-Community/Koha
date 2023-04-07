@@ -223,7 +223,15 @@ $se->mock( 'interface', sub {return 'intranet'});
 # Mocking userenv with a different branchcode
 t::lib::Mocks::mock_userenv({ patron => $patron_2, branchcode => $branchcode_3 });
 
-my $datedue3 = AddRenewal( $borrower_id1, $item_id1, $branchcode_1, $datedue1, $daysago10 );
+my $datedue3 = AddRenewal(
+    {
+        borrowernumber  => $borrower_id1,
+        itemnumber      => $item_id1,
+        branch          => $branchcode_1,
+        datedue         => $datedue1,
+        lastreneweddate => $daysago10
+    }
+);
 
 # Restoring the userenv with the original branchcode
 t::lib::Mocks::mock_userenv({ patron => $patron_1});
@@ -265,8 +273,15 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
             my $opac_renew_issue =
               C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
-            AddRenewal( $patron->borrowernumber, $item->itemnumber,
-                "Stavromula", $datedue1, $daysago10 );
+            AddRenewal(
+                {
+                    borrowernumber  => $patron->borrowernumber,
+                    itemnumber      => $item->itemnumber,
+                    branch          => "Stavromula",
+                    datedue         => $datedue1,
+                    lastreneweddate => $daysago10
+                }
+            );
 
             my $stat = Koha::Statistics->search(
                 { itemnumber => $item->itemnumber, type => 'renew' } )->next;
@@ -283,8 +298,15 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
             my $opac_renew_issue =
               C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
-            AddRenewal( $patron->borrowernumber, $item->itemnumber,
-                "Stavromula", $datedue1, $daysago10 );
+            AddRenewal(
+                {
+                    borrowernumber  => $patron->borrowernumber,
+                    itemnumber      => $item->itemnumber,
+                    branch          => "Stavromula",
+                    datedue         => $datedue1,
+                    lastreneweddate => $daysago10
+                }
+            );
 
             my $stat = Koha::Statistics->search(
                 { itemnumber => $item->itemnumber, type => 'renew' } )->next;
@@ -357,8 +379,15 @@ is_deeply(
     "With issuing rules (renewal allowed) and with a valid parameter, Getrenewcount of item1 returns 3 renews left"
 );
 
-AddRenewal( $borrower_id1, $item_id1, $branchcode_1,
-    $datedue3, $daysago10 );
+AddRenewal(
+    {
+        borrowernumber  => $borrower_id1,
+        itemnumber      => $item_id1,
+        branch          => $branchcode_1,
+        datedue         => $datedue3,
+        lastreneweddate => $daysago10
+    }
+);
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
@@ -534,12 +563,26 @@ my $unseen_issue = C4::Circulation::AddIssue( $unseen_patron->unblessed, $unseen
 
 # Does an unseen renewal increment the issue's count
 my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
-AddRenewal( $unseen_patron->borrowernumber, $unseen_item->itemnumber, $branchcode_1, undef, undef, undef, 0 );
+AddRenewal(
+    {
+        borrowernumber => $unseen_patron->borrowernumber,
+        itemnumber     => $unseen_item->itemnumber,
+        branch         => $branchcode_1,
+        seen           => 0
+    }
+);
 my ( $unseen_after ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
 
 # Does a seen renewal reset the unseen count
-AddRenewal( $unseen_patron->borrowernumber, $unseen_item->itemnumber, $branchcode_1, undef, undef, undef, 1 );
+AddRenewal(
+    {
+        borrowernumber => $unseen_patron->borrowernumber,
+        itemnumber     => $unseen_item->itemnumber,
+        branch         => $branchcode_1,
+        seen           => 1
+    }
+);
 my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
 

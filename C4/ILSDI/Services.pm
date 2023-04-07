@@ -691,8 +691,15 @@ sub RenewLoan {
 
     # Add renewal if possible
     my @renewal = CanBookBeRenewed( $patron, $issue );
-    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber, undef, undef, undef, undef, 0 ); }
-
+    if ( $renewal[0] ) {
+        AddRenewal(
+            {
+                borrowernumber => $borrowernumber,
+                itemnumber     => $itemnumber,
+                seen           => 0
+            }
+        );
+    }
 
     # Hashref building
     my $out;

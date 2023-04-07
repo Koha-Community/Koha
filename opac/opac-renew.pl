@@ -66,7 +66,13 @@ else {
         my ( $status, $error ) =
           CanBookBeRenewed( $patron, $issue );
         if ( $status == 1 && $opacrenew == 1 ) {
-            AddRenewal( $borrowernumber, $issue->itemnumber, undef, undef, undef, undef, 0 );
+            AddRenewal(
+                {
+                    borrowernumber => $borrowernumber,
+                    itemnumber     => $issue->itemnumber,
+                    seen           => 0
+                }
+            );
             push( @renewed, $issue->itemnumber );
         }
         else {

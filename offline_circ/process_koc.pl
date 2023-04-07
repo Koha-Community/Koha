@@ -202,11 +202,11 @@ sub kocIssueItem {
             #warn "Item issued to this member already, renewing.";
 
             C4::Circulation::AddRenewal(
-                $issue->borrowernumber,        # borrowernumber
-                $item->itemnumber,             # itemnumber
-                undef,                         # branch
-                undef,                         # datedue - let AddRenewal calculate it automatically
-                $circ->{'date'},               # issuedate
+                {
+                    borrowernumber  => $issue->borrowernumber,
+                    itemnumber      => $item->itemnumber,
+                    lastreneweddate => $circ->{'date'},
+                }
             ) unless (DEBUG);
 
             push @output, {

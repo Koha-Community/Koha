@@ -1540,11 +1540,14 @@ sub AddIssue {
         if ( $actualissue and $actualissue->borrowernumber eq $borrower->{'borrowernumber'}
                 and not $switch_onsite_checkout ) {
             $datedue = AddRenewal(
-                $borrower->{'borrowernumber'},
-                $item_object->itemnumber,
-                $branchcode,
-                $datedue,
-                $issuedate,    # here interpreted as the renewal date
+                {
+                    borrowernumber => $borrower->{'borrowernumber'},
+                    itemnumber     => $item_object->itemnumber,
+                    branch         => $branchcode,
+                    datedue        => $datedue,
+                    lastreneweddate =>
+                      $issuedate,    # here interpreted as the renewal date
+                }
             );
             $issue = $item_object->checkout;
         }
@@ -3094,9 +3097,18 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate], [$seen], [$automatic]);
+  $new_date_due = AddRenewal({
+      borrowernumber   => $borrowernumber,
+      itemnumber       => $itemnumber,
+      branch           => $branch,
+      [datedue         => $datedue],
+      [lastreneweddate => $lastreneweddate],
+      [seen            => $seen],
+      [automatic       => $automatic],
+      [skip_record_index => $skip_record_index]
+  });
 
-Renews a loan.
+Renews a loan, returns the updated due date upon success.
 
 C<$borrowernumber> is the borrower number of the patron who currently
 has the item.
@@ -3131,15 +3143,19 @@ should be skipped for this renewal.
 =cut
 
 sub AddRenewal {
-    my $borrowernumber  = shift;
-    my $itemnumber      = shift or return;
-    my $branch          = shift;
-    my $datedue         = shift;
-    my $lastreneweddate = shift || dt_from_string();
-    my $skipfinecalc    = shift;
-    my $seen            = shift;
-    my $automatic       = shift;
-    my $skip_record_index = shift;
+    my $params = shift;
+
+    my $borrowernumber  = $params->{borrowernumber};
+    my $itemnumber      = $params->{itemnumber};
+    return unless $itemnumber;
+
+    my $branch            = $params->{branch};
+    my $datedue           = $params->{datedue};
+    my $lastreneweddate   = $params->{lastreneweddate} // dt_from_string();
+    my $skipfinecalc      = $params->{skipfinecalc};
+    my $seen              = $params->{seen};
+    my $automatic         = $params->{automatic};
+    my $skip_record_index = $params->{skip_record_index};
 
     # Fallback on a 'seen' renewal
     $seen = defined $seen && $seen == 0 ? 0 : 1;
