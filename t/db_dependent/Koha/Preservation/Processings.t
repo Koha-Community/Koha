@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 use Test::Warn;
 
@@ -53,6 +53,41 @@ subtest 'attributes' => sub {
     $processing->attributes( [] );
     is( ref($fetched_attributes),   'Koha::Preservation::Processing::Attributes' );
     is( $fetched_attributes->count, 0 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_be_deleted' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $processing = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
+    my $another_processing = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
+
+    is( $processing->can_be_deleted, 1, 'processing is not used, it can be deleted' );
+
+    my $train = $builder->build_object(
+        {
+            class => 'Koha::Preservation::Trains',
+            value => {
+                not_for_loan => 42,
+                default_processing_id => $processing->processing_id,
+                closed_on    => undef,
+                sent_on      => undef,
+                received_on  => undef
+            }
+        }
+    );
+
+    is( $processing->can_be_deleted, 0, 'processing is used, it cannot be deleted' );
+    is( $another_processing->can_be_deleted, 1, 'processing is not used, it can be deleted' );
+
+    my $item = $builder->build_sample_item;
+    $train->add_item( { item_id => $item->itemnumber, processing_id => $another_processing->processing_id }, { skip_waiting_list_check => 1 } );
+    is( $processing->can_be_deleted, 0, 'processing is used, it cannot be deleted' );
+    is( $another_processing->can_be_deleted, 0, 'processing is used, it cannot be deleted' );
 
     $schema->storage->txn_rollback;
 };

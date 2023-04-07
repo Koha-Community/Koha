@@ -227,7 +227,8 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $processing = Koha::Preservation::Processings->find( $c->validation->param('processing_id') );
+    my $processing_id = $c->validation->param('processing_id');
+    my $processing = Koha::Preservation::Processings->find( $processing_id );
     unless ($processing) {
         return $c->render(
             status  => 404,
@@ -235,6 +236,12 @@ sub delete {
         );
     }
 
+    unless ($processing->can_be_deleted) {
+        return $c->render(
+            status => 409,
+            openapi => { error => "Processing is already used" },
+        );
+    }
     return try {
         $processing->delete;
         return $c->render(

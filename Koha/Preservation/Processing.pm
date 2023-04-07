@@ -21,6 +21,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::Preservation::Trains;
+use Koha::Preservation::Train::Items;
 use Koha::Preservation::Processing::Attributes;
 
 =head1 NAME
@@ -78,6 +80,24 @@ sub attributes {
 
     my $attributes_rs = $self->_result->preservation_processing_attributes;
     return Koha::Preservation::Processing::Attributes->_new_from_dbic($attributes_rs);
+}
+
+=head3 can_be_deleted
+
+A processing can be deleted if it is not used from any trains or items.
+Note that we do not enforce that in ->delete, the callers are supposed to deal with that correctly.
+
+=cut
+
+sub can_be_deleted {
+    my ($self) = @_;
+
+    my $trains_using_it = Koha::Preservation::Trains->search(
+        { default_processing_id => $self->processing_id } )->count;
+    my $items_using_it = Koha::Preservation::Train::Items->search(
+        { processing_id => $self->processing_id } )->count;
+
+    return ( $trains_using_it || $items_using_it ) ? 0 : 1;
 }
 
 =head2 Internal methods

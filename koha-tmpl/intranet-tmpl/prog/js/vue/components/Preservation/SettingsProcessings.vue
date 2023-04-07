@@ -44,8 +44,9 @@ import { APIClient } from "../../fetch/api-client.js"
 
 export default {
     setup() {
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
-        return { setConfirmationDialog, setMessage }
+        const { setConfirmationDialog, setMessage, setError } =
+            inject("mainStore")
+        return { setConfirmationDialog, setMessage, setError }
     },
     data() {
         return {
@@ -90,7 +91,16 @@ export default {
                                 error => {}
                             )
                         },
-                        error => {}
+                        error => {
+                            // FIXME We need a better way to do that
+                            if (error.toString().match(/409/)) {
+                                this.setError(
+                                    this.$__(
+                                        "This processing cannot be deleted, it is already in used."
+                                    )
+                                )
+                            }
+                        }
                     )
                 }
             )
