@@ -77,6 +77,17 @@ sub add_item {
     Koha::Exceptions::Preservation::ItemNotInWaitingList->throw
       if !$skip_waiting_list_check && $item->notforloan != $not_for_loan;
 
+    my $already_in_train = Koha::Preservation::Train::Items->search(
+        { item_id => $train_item->{item_id}, 'train.received_on' => undef },
+        {
+            join => 'train'
+        }
+    );
+    if ( $already_in_train->count ) {
+        my $train_id = $already_in_train->next->train_id;
+        Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain->throw( train_id => $train_id );
+    }
+
     # FIXME We need a LOCK here
     # Not important for now as we have add_items
     # Note that there are several other places in Koha with this max+1 problem

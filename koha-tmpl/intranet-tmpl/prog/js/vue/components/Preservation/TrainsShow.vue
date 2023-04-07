@@ -197,7 +197,8 @@ export default {
         const AVStore = inject("AVStore")
         const { get_lib_from_av } = AVStore
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage, setWarning } =
+            inject("mainStore")
 
         const table_id = "item_list"
         useDataTable(table_id)
@@ -208,6 +209,7 @@ export default {
             table_id,
             setConfirmationDialog,
             setMessage,
+            setWarning,
         }
     },
     data() {
@@ -421,7 +423,13 @@ export default {
                         this.setMessage(this.$__("Item copied successfully."))
                         this.show_modal = false
                     },
-                    error => {}
+                    error => {
+                        this.setWarning(
+                            this.$__(
+                                "Item cannot be copied to a train, it is already in a non-received train."
+                            )
+                        )
+                    }
                 )
         },
         build_datatable: function () {

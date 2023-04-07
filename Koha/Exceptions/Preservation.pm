@@ -33,6 +33,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Preservation',
         description => "Cannot add item to waiting list, it is already in a non-received train",
     },
+    'Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain' => {
+        isa         => 'Koha::Exceptions::Preservation',
+        description => "Cannot add item to this train, it is already in an other non-received train",
+        fields      => ['train_id'],
+    },
     'Koha::Exceptions::Preservation::ItemNotInWaitingList' => {
         isa         => 'Koha::Exceptions::Preservation',
         description => "Cannot add item to train, it is not in the waiting list",

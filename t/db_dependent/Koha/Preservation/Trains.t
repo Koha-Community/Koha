@@ -23,6 +23,7 @@ use Test::Warn;
 
 use Koha::Preservation::Trains;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -52,7 +53,7 @@ subtest 'default_processing' => sub {
 };
 
 subtest 'add_items & items' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -103,6 +104,24 @@ subtest 'add_items & items' => sub {
     } '';
     is( $train->items->count, 3, 'the item has been added to the train' );
     is( $item_2->get_from_storage->notforloan, $not_for_loan_train_in );
+
+    my $another_train = $builder->build_object(
+        {
+            class => 'Koha::Preservation::Trains',
+            value => {
+                not_for_loan => $not_for_loan_train_in,
+                closed_on    => undef,
+                sent_on      => undef,
+                received_on  => undef
+            }
+        }
+    );
+
+    $train->closed_on(dt_from_string)->store;
+
+    throws_ok {
+        $another_train->add_item( { item_id => $item_1->itemnumber }, { skip_waiting_list_check => 1 });
+    } 'Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain';
 
     $schema->storage->txn_rollback;
 };

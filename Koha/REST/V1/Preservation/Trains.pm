@@ -382,7 +382,13 @@ sub add_item {
                     status  => 400,
                     openapi => { error => 'Item not in waiting list' }
                 );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain') ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => 'Item already in a non-received train', train_id => $_->train_id }
+                );
             }
+
         }
 
         $c->unhandled_exception($_);
@@ -473,6 +479,11 @@ sub copy_item {
                 return $c->render(
                     status  => 400,
                     openapi => { error => 'Item not in waiting list' }
+                );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain') ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => 'Item already in a non-received train', train_id => $_->train_id }
                 );
             }
         }
