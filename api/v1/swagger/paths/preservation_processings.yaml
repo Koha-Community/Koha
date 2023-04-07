@@ -1,0 +1,272 @@
+---
+/preservation/processings:
+  get:
+    x-mojo-to: Preservation::Processings#list
+    operationId: listPreservationProcessings
+    tags:
+      - preservation_processing
+    summary: List processings
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on processing id
+        in: query
+        name: processing_id
+        required: false
+        type: integer
+      - description: Case insensitive search on processing name
+        in: query
+        name: name
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of processings
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_processing"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  post:
+    x-mojo-to: Preservation::Processings#add
+    operationId: addPreservationProcessings
+    tags:
+      - preservation_processing
+    summary: Add processing
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new processing
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/preservation_processing"
+    responses:
+      201:
+        description: A successfully created processing
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_processing"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+"/preservation/processings/{processing_id}":
+  get:
+    x-mojo-to: Preservation::Processings#get
+    operationId: getPreservationProcessings
+    tags:
+      - preservation_processing
+    summary: Get processing
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_processing_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - attributes
+        collectionFormat: csv
+    responses:
+      200:
+        description: A processing
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_processing"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  put:
+    x-mojo-to: Preservation::Processings#update
+    operationId: updatePreservationProcessings
+    tags:
+      - preservation_processing
+    summary: Update processing
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_processing_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing processing
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/preservation_processing"
+
+    responses:
+      200:
+        description: A successfully updated processing
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_processing"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  delete:
+    x-mojo-to: Preservation::Processings#delete
+    operationId: deletePreservationProcessings
+    tags:
+      - preservation_processing
+    summary: Delete processing
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_processing_id_pp"
+    responses:
+      204:
+        description: processing deleted
+      400:
+        description: processing deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1

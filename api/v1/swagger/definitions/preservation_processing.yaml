@@ -1,0 +1,19 @@
+---
+type: object
+properties:
+  processing_id:
+    type: integer
+    description: internally assigned agreement identifier
+    readOnly: true
+  name:
+    description: name of the processing
+    type: string
+  attributes:
+    description: attributes of the processing
+    items:
+      $ref: preservation_processing_attribute.yaml
+
+additionalProperties: false
+required:
+  - processing_id
+  - name

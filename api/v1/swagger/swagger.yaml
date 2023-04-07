@@ -98,6 +98,10 @@ definitions:
     $ref: ./definitions/patron_balance.yaml
   patron_extended_attribute:
     $ref: ./definitions/patron_extended_attribute.yaml
+  preservation_train:
+    $ref: ./definitions/preservation_train.yaml
+  preservation_processing:
+    $ref: ./definitions/preservation_processing.yaml
   quote:
     $ref: ./definitions/quote.yaml
   renewal:
@@ -333,6 +337,22 @@ paths:
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password"
   "/patrons/{patron_id}/password/expiration_date":
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password~1expiration_date"
+  /preservation/trains:
+    $ref: ./paths/preservation_trains.yaml#/~1preservation~1trains
+  "/preservation/trains/{train_id}":
+    $ref: "./paths/preservation_trains.yaml#/~1preservation~1trains~1{train_id}"
+  "/preservation/trains/{train_id}/items":
+    $ref: "./paths/preservation_trains.yaml#/~1preservation~1trains~1{train_id}~1items"
+  "/preservation/trains/{train_id}/items/{train_item_id}":
+    $ref: "./paths/preservation_trains.yaml#/~1preservation~1trains~1{train_id}~1items~1{train_item_id}"
+  /preservation/processings:
+    $ref: ./paths/preservation_processings.yaml#/~1preservation~1processings
+  "/preservation/processings/{processing_id}":
+    $ref: "./paths/preservation_processings.yaml#/~1preservation~1processings~1{processing_id}"
+  /preservation/waiting-list/items:
+    $ref: ./paths/preservation_waiting_list.yaml#/~1preservation~1waiting-list~1items
+  "/preservation/waiting-list/items/{item_id}":
+    $ref: "./paths/preservation_waiting_list.yaml#/~1preservation~1waiting-list~1items~1{item_id}"
   "/public/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1public~1biblios~1{biblio_id}"
   "/public/checkouts/availability":
@@ -638,6 +658,24 @@ parameters:
     in: query
     name: _per_page
     required: false
+    type: integer
+  preservation_processing_id_pp:
+    description: processing internal identifier
+    in: path
+    name: processing_id
+    required: true
+    type: integer
+  preservation_train_id_pp:
+    description: train internal identifier
+    in: path
+    name: train_id
+    required: true
+    type: integer
+  preservation_train_item_id_pp:
+    description: train item internal identifier
+    in: path
+    name: train_item_id
+    required: true
     type: integer
   q_body:
     description: Query filter sent through request"s body

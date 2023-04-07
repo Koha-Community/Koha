@@ -1,0 +1,543 @@
+---
+/preservation/trains:
+  get:
+    x-mojo-to: Preservation::Trains#list
+    operationId: listPreservationTrains
+    tags:
+      - preservation_train
+    summary: List trains
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on train id
+        in: query
+        name: train_id
+        required: false
+        type: integer
+      - description: Case insensitive search on train name
+        in: query
+        name: name
+        required: false
+        type: string
+      - description: Case insensitive search on train description
+        in: query
+        name: description
+        required: false
+        type: string
+      - description: Case insensitive search on not for loan value
+        in: query
+        name: not_for_loan
+        required: false
+        type: string
+      - description: Case insensitive search on train creation date
+        in: query
+        name: created_on
+        required: false
+        type: string
+      - description: Case insensitive search on train closing date
+        in: query
+        name: closed_on
+        required: false
+        type: string
+      - description: Case insensitive search on train sent date
+        in: query
+        name: sent_on
+        required: false
+        type: string
+      - description: Case insensitive search on train receiving date
+        in: query
+        name: received_on
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of trains
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_train"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  post:
+    x-mojo-to: Preservation::Trains#add
+    operationId: addPreservationTrains
+    tags:
+      - preservation_train
+    summary: Add train
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new train
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/preservation_train"
+    responses:
+      201:
+        description: A successfully created train
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_train"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+"/preservation/trains/{train_id}":
+  get:
+    x-mojo-to: Preservation::Trains#get
+    operationId: getPreservationTrains
+    tags:
+      - preservation_train
+    summary: Get train
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - items
+            - items.attributes
+            - items.attributes.processing_attribute
+            - default_processing
+            - default_processing.attributes
+        collectionFormat: csv
+    responses:
+      200:
+        description: A train
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_train"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  put:
+    x-mojo-to: Preservation::Trains#update
+    operationId: updatePreservationTrains
+    tags:
+      - preservation_train
+    summary: Update train
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing train
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/preservation_train"
+    responses:
+      200:
+        description: A successfully updated train
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/preservation_train"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  delete:
+    x-mojo-to: Preservation::Trains#delete
+    operationId: deletePreservationTrains
+    tags:
+      - preservation_train
+    summary: Delete train
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+    responses:
+      204:
+        description: Train deleted
+      400:
+        description: Train deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+"/preservation/trains/{train_id}/items":
+  post:
+    x-mojo-to: Preservation::Trains#add_item
+    operationId: addItemToTrain
+    tags:
+      - preservation_train
+    summary: Add item to train
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - description: An item
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+    responses:
+      201:
+        description: A successfully added item
+        schema:
+          type: object
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+"/preservation/trains/{train_id}/items/{train_item_id}":
+  put:
+    x-mojo-to: Preservation::Trains#update_item
+    operationId: updateItemFromTrain
+    tags:
+      - preservation_train
+    summary: Update item from train
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - $ref: "../swagger.yaml#/parameters/preservation_train_item_id_pp"
+      - description: An item
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - attributes
+        collectionFormat: csv
+    responses:
+      200:
+        description: A successfully updated item
+        schema:
+          type: object
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  delete:
+    x-mojo-to: Preservation::Trains#remove_item
+    operationId: removeItemFromTrain
+    tags:
+      - preservation_train
+    summary: Remove item from train
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - $ref: "../swagger.yaml#/parameters/preservation_train_item_id_pp"
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Item removed
+      "400":
+        description: Item removal failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Item not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1
+  get:
+    x-mojo-to: Preservation::Trains#get_item
+    operationId: getItemFromPreservationTrains
+    tags:
+      - preservation_train
+    summary: Get item from train
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
+      - $ref: "../swagger.yaml#/parameters/preservation_train_item_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - attributes
+            - catalogue_item
+            - catalogue_item.biblio
+        collectionFormat: csv
+    responses:
+      200:
+        description: An item in train
+        schema:
+          type: object
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        preservation: 1

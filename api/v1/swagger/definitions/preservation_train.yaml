@@ -1,0 +1,55 @@
+---
+type: object
+properties:
+  train_id:
+    type: integer
+    description: internally assigned agreement identifier
+    readOnly: true
+  name:
+    description: name of the train
+    type: string
+  description:
+    description: description of the train
+    type:
+      - string
+      - "null"
+  default_processing_id:
+    description: foreign key to preservation_processings
+    type:
+      - integer
+      - "null"
+  not_for_loan:
+    description: NOT_LOAN authorised value to apply to item added to this train
+    type:
+      - string
+      - "null"
+  created_on:
+    description: creation date
+    type:
+      - string
+      - "null"
+  closed_on:
+    description: closing date
+    type:
+      - string
+      - "null"
+  sent_on:
+    description: sending date
+    type:
+      - string
+      - "null"
+  received_on:
+    description: receiving date
+    type:
+      - string
+      - "null"
+  default_processing:
+    description: the default processing
+    type:
+      - object
+      - "null"
+
+additionalProperties: false
+required:
+  - train_id
+  - name
