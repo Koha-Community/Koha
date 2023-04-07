@@ -284,7 +284,9 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $child  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $sibling  = $builder->build_object({ class => 'Koha::Patrons' });
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
+    $sibling->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
 
     t::lib::Mocks::mock_preference('noissuescharge', 50);
     t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 11.01);
@@ -310,11 +312,21 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
         }
     )->store;
 
+    my $fee3 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value  => {
+                borrowernumber => $sibling->borrowernumber,
+                amountoutstanding => 11.11,
+            }
+        }
+    )->store;
+
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
     is( $sip_patron->fines_amount, 11, "Only patron's fines are reported in total");
     ok( !$sip_patron->charge_ok, "Guarantor blocked");
-    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(11\.11\) on guaranteed accounts/,"Screen message includes related fines total");
+    like( $sip_patron->screen_msg, qr/Patron blocked by fines \(22\.22\) on guaranteed accounts/,"Screen message includes related fines total");
 
     $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
 
