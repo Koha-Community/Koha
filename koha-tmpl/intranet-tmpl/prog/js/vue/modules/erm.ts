@@ -28,6 +28,7 @@ const router = createRouter({
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
 import { useAVStore } from "../stores/authorised-values";
+import { useERMStore } from "../stores/erm";
 
 const pinia = createPinia();
 
@@ -54,6 +55,8 @@ const mainStore = useMainStore(pinia);
 app.provide("mainStore", mainStore);
 const AVStore = useAVStore(pinia);
 app.provide("AVStore", AVStore);
+const ERMStore = useERMStore(pinia);
+app.provide("ERMStore", ERMStore);
 
 app.mount("#erm");
 

@@ -84,6 +84,9 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const ERMStore = inject("ERMStore")
+        const { providers } = ERMStore
+
         const table = ref()
         const filters = reactive({
             publication_title: "",
@@ -96,7 +99,7 @@ export default {
             av_title_publication_types,
             get_lib_from_av,
             escape_str,
-            erm_providers,
+            providers,
             table,
         }
     },
@@ -175,7 +178,7 @@ export default {
                         "/api/v1/erm/eholdings/ebsco/titles"
                     )
                 }
-                if (this.erm_providers.includes("local")) {
+                if (this.providers.includes("local")) {
                     const client = APIClient.erm
 
                     const q = this.filters
