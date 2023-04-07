@@ -1,5 +1,5 @@
 <template>
-    <div v-if="initialized && ERMModule == 1">
+    <div v-if="initialized && sysprefs.ERMModule == 1">
         <div id="sub-header">
             <Breadcrumb />
             <Help />
@@ -48,7 +48,7 @@
                                     <li>
                                         <ul>
                                             <li
-                                                v-for="provider in erm_providers"
+                                                v-for="provider in providers"
                                                 :key="provider"
                                             >
                                                 <router-link
@@ -136,9 +136,16 @@ export default {
 
         const { loading, loaded, setError } = mainStore
 
+        const ERMStore = inject("ERMStore")
+
+        const { sysprefs, providers } = ERMStore
+
         return {
             vendorStore,
             AVStore,
+            ERMStore,
+            sysprefs,
+            providers,
             setError,
             loading,
             loaded,
@@ -148,8 +155,6 @@ export default {
         return {
             component: "agreement",
             initialized: false,
-            ERMModule: null,
-            erm_providers: [],
         }
     },
     beforeCreate() {
@@ -209,7 +214,8 @@ export default {
             promises.push(
                 sysprefs_client.sysprefs.get("ERMProviders").then(
                     providers => {
-                        this.erm_providers = providers.value.split(",")
+                        this.ERMStore.providers = providers.value.split(",")
+                        this.providers = this.ERMStore.providers
                     },
                     error => {}
                 )
@@ -221,8 +227,8 @@ export default {
         sysprefs_client.sysprefs
             .get("ERMModule")
             .then(value => {
-                this.ERMModule = value.value
-                if (this.ERMModule != 1) {
+                this.ERMStore.sysprefs.ERMModule = value.value
+                if (this.sysprefs.ERMModule != 1) {
                     return this.setError(
                         this.$__(
                             'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
