@@ -93,9 +93,11 @@ sub new {
         $fine_blocked ||= $fines_amount > $noissueschargeguarantorswithguarantees;
         $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on related accounts" if $fine_blocked;
     } elsif ( $noissueschargeguarantees ) {
-        $fines_amount += $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 0, include_this_patron => 0 });
-        $fine_blocked ||= $fines_amount > $noissueschargeguarantees;
-        $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on guaranteed accounts" if $fine_blocked;
+        if( $patron->guarantee_relationships->count ){
+            $fines_amount += $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 1, include_this_patron => 0 });
+            $fine_blocked ||= $fines_amount > $noissueschargeguarantees;
+            $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on guaranteed accounts" if $fine_blocked;
+        }
     }
 
     my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
