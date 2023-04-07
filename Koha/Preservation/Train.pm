@@ -66,6 +66,8 @@ skip_waitin_list_check can be set to true if the item can be added to the train 
 sub add_item {
     my ( $self, $train_item, $params ) = @_;
 
+    Koha::Exceptions::Preservation::CannotAddItemToClosedTrain->throw if $self->closed_on;
+
     my $skip_waiting_list_check = $params->{skip_waiting_list_check} || 0;
 
     my $not_for_loan = C4::Context->preference('PreservationNotForLoanWaitingListIn');

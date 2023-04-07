@@ -64,7 +64,8 @@ export default {
     setup() {
         const AVStore = inject("AVStore")
         const { get_lib_from_av, map_av_dt_filter } = AVStore
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage, setWarning } =
+            inject("mainStore")
         const table = ref()
         const filters = reactive({ status: "" })
         return {
@@ -72,6 +73,7 @@ export default {
             map_av_dt_filter,
             setConfirmationDialog,
             setMessage,
+            setWarning,
             table,
             filters,
         }
@@ -156,11 +158,15 @@ export default {
             )
         },
         doAddItems: function (train, dt, event) {
-            this.$router.push(
-                "/cgi-bin/koha/preservation/trains/" +
-                    train.train_id +
-                    "/items/add"
-            )
+            if (train.closed_on != null) {
+                this.setWarning(this.$__("Cannot add items to a closed train"))
+            } else {
+                this.$router.push(
+                    "/cgi-bin/koha/preservation/trains/" +
+                        train.train_id +
+                        "/items/add"
+                )
+            }
         },
         table_url() {
             let url = "/api/v1/preservation/trains"

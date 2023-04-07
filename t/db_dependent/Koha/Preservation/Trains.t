@@ -53,7 +53,7 @@ subtest 'default_processing' => sub {
 };
 
 subtest 'add_items & items' => sub {
-    plan tests => 13;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -120,8 +120,13 @@ subtest 'add_items & items' => sub {
     $train->closed_on(dt_from_string)->store;
 
     throws_ok {
-        $another_train->add_item( { item_id => $item_1->itemnumber }, { skip_waiting_list_check => 1 });
+        $another_train->add_item( { item_id => $item_1->itemnumber }, { skip_waiting_list_check => 1 } );
     } 'Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain';
+
+    my $item_4 = $builder->build_sample_item;
+    throws_ok {
+        $train->add_item( { item_id => $item_4->itemnumber } );
+    } 'Koha::Exceptions::Preservation::CannotAddItemToClosedTrain';
 
     $schema->storage->txn_rollback;
 };

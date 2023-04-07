@@ -332,7 +332,7 @@ sub add_items {
 
 =head3 add_item
 
-Controller function that handles adding items in batch to a train
+Controller function that handles adding a new item to a train
 
 =cut
 
@@ -387,8 +387,12 @@ sub add_item {
                     status  => 409,
                     openapi => { error => 'Item already in a non-received train', train_id => $_->train_id }
                 );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::CannotAddItemToClosedTrain') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => 'Cannot add item to a closed train' }
+                );
             }
-
         }
 
         $c->unhandled_exception($_);
@@ -396,6 +400,8 @@ sub add_item {
 }
 
 =head3 copy_item
+
+Controller function that handles copying an item from a train to an other
 
 =cut
 
@@ -484,6 +490,11 @@ sub copy_item {
                 return $c->render(
                     status  => 409,
                     openapi => { error => 'Item already in a non-received train', train_id => $_->train_id }
+                );
+            } elsif ( $_->isa('Koha::Exceptions::Preservation::CannotAddItemToClosedTrain') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => 'Cannot add item to a closed train' }
                 );
             }
         }

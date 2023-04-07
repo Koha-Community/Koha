@@ -46,6 +46,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Preservation',
         description => "Cannot add item to train, the item does not exist",
     },
+    'Koha::Exceptions::Preservation::CannotAddItemToClosedTrain' => {
+        isa         => 'Koha::Exceptions::Preservation',
+        description => "Cannot add item to a closed train",
+    },
+
 );
 
 sub full_message {

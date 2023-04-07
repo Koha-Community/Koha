@@ -49,11 +49,20 @@
     <div v-else id="trains_show">
         <div id="toolbar" class="btn-toolbar">
             <router-link
+                v-if="train.closed_on == null"
                 :to="`/cgi-bin/koha/preservation/trains/${train.train_id}/items/add`"
                 class="btn btn-default"
                 ><font-awesome-icon icon="plus" />
                 {{ $__("Add items") }}</router-link
             >
+            <span
+                v-else
+                class="btn btn-default"
+                disabled="disabled"
+                :title="$__('Cannot add items to a closed train')"
+            >
+                <font-awesome-icon icon="plus" /> {{ $__("Add items") }}
+            </span>
             <router-link
                 :to="`/cgi-bin/koha/preservation/trains/edit/${train.train_id}`"
                 class="btn btn-default"
