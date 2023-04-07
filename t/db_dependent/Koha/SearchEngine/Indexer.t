@@ -285,9 +285,9 @@ subtest 'Test AddRenewal indexer call' => sub {
 
         warnings_are{
             AddRenewal($patron->borrowernumber, $item->itemnumber, $item->homebranch, undef, undef, undef, 0);
-        } [$engine,"Koha::Item"], "index_records is called for $engine when adding a renewal (AddRenewal())";
+        } [$engine,"C4::Circulation"], "index_records is called for $engine when adding a renewal (AddRenewal())";
         warnings_are{
-            AddRenewal($patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 0, 1);
+            AddRenewal($patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 0, 1, 1);
         } undef, "index_records is not called for $engine when adding a renewal (AddRenewal()) with skip_record_index";
 
     }
