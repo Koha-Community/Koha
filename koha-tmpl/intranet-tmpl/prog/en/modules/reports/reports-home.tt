@@ -97,7 +97,14 @@
             [% END %]
 
             <li><a href="http://wiki.koha-community.org/wiki/SQL_Reports_Library" target="blank">Koha reports library</a></li>
-        </ul></div>
+        </ul>
+        [% IF ( Koha.Preference('Mana') == 2 ) %]
+        <div class="dialog message" style="margin:15px 0 0 0";>
+            <strong>Knowledgebase</strong>
+            <p> You haven't decided if you want to activate Mana Knowledge Base. <a href=/cgi-bin/koha/admin/share_content.pl>Change your Mana KB settings</a>.</p>
+        </div>
+        [% END %]
+    </div>
 </div>
 
 
