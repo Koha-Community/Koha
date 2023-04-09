@@ -143,43 +143,46 @@ sub add {
             );
         }
 
-        # Validate pickup location
-        my $valid_pickup_location;
-        if ($item) {    # item-level hold
-            $valid_pickup_location =
-              any { $_->branchcode eq $pickup_library_id }
-            $item->pickup_locations(
-                { patron => $patron } )->as_list;
-        }
-        else {
-            $valid_pickup_location =
-              any { $_->branchcode eq $pickup_library_id }
-            $biblio->pickup_locations(
-                { patron => $patron } )->as_list;
-        }
-
-        return $c->render(
-            status  => 400,
-            openapi => {
-                error => 'The supplied pickup location is not valid'
+        # If the hold is being forced, no need to validate
+        unless( $can_override ){
+            # Validate pickup location
+            my $valid_pickup_location;
+            if ($item) {    # item-level hold
+                $valid_pickup_location =
+                  any { $_->branchcode eq $pickup_library_id }
+                $item->pickup_locations(
+                    { patron => $patron } )->as_list;
             }
-        ) unless $valid_pickup_location || $can_override;
+            else {
+                $valid_pickup_location =
+                  any { $_->branchcode eq $pickup_library_id }
+                $biblio->pickup_locations(
+                    { patron => $patron } )->as_list;
+            }
 
-        my $can_place_hold
-            = $item
-            ? C4::Reserves::CanItemBeReserved( $patron, $item )
-            : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
-
-        if ( C4::Context->preference('maxreserves') && $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
-            $can_place_hold->{status} = 'tooManyReserves';
-        }
-
-        unless ( $can_override || $can_place_hold->{status} eq 'OK' ) {
             return $c->render(
-                status => 403,
-                openapi =>
-                    { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
-            );
+                status  => 400,
+                openapi => {
+                    error => 'The supplied pickup location is not valid'
+                }
+            ) unless $valid_pickup_location;
+
+            my $can_place_hold
+                = $item
+                ? C4::Reserves::CanItemBeReserved( $patron, $item )
+                : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
+
+            if ( C4::Context->preference('maxreserves') && $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
+                $can_place_hold->{status} = 'tooManyReserves';
+            }
+
+            unless ( $can_place_hold->{status} eq 'OK' ) {
+                return $c->render(
+                    status => 403,
+                    openapi =>
+                        { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
+                );
+            }
         }
 
         my $priority = C4::Reserves::CalculatePriority($biblio_id);
