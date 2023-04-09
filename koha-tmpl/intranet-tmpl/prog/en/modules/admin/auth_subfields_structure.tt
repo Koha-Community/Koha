@@ -85,7 +85,7 @@
     <h1>[% IF ( use_heading_flags_p ) %]
     [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints for field [% tagfield | html %] authority [% authtypecode | html %][% END %]
     [% ELSE %][% action | html %][% END %]</h1>
-    <div class="hint">You can drag and drop subfields tabs to change the order</div>
+    <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
     <form action="[% script_name | html %]" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
