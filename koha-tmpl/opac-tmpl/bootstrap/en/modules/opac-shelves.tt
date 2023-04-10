@@ -415,7 +415,7 @@
                                                                 [% END %]
 
                                                                 [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
+                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
                                                                 [% END %]
 
                                                                 [% IF ( GoogleJackets ) %]
