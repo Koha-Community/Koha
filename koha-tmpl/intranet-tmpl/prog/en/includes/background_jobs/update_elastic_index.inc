@@ -34,10 +34,10 @@
         </div>
     [% END %]
     [% IF report %]
-        <h2> Record ids:</h2>
+        <h3> Record IDs:</h3>
         <ul>
         [% FOREACH record_id IN report.record_ids %]
-            <li>[% record_id | html %]</li>
+            <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_id | uri %]">[% record_id | html %]</a></li>
         [% END %]
         </ul>
     [% END %]
