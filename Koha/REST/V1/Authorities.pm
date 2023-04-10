@@ -138,7 +138,8 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $body = $c->validation->param('Body');
+        my $headers   = $c->req->headers;
+        my $overrides = $c->stash('koha.overrides');
 
         my $flavour =
             C4::Context->preference('marcflavour') eq 'UNIMARC'
@@ -146,49 +147,45 @@ sub add {
             : 'MARC21';
 
         my $record;
-        my $authtypecode;
 
-        if ( $c->req->headers->content_type =~ m/application\/json/ ) {
-            $record = MARC::Record->new_from_xml( $body->{marcxml}, 'UTF-8', $flavour );
-            $authtypecode = $body->{authtypecode};
+        my $authtypecode = $headers->header('x-authority-type');
+        my $content_type = $headers->content_type;
+
+        if ( $content_type =~ m/application\/marcxml\+xml/ ) {
+            $record = MARC::Record->new_from_xml( $c->req->body, 'UTF-8', $flavour );
+        } elsif ( $content_type =~ m/application\/marc-in-json/ ) {
+            $record = MARC::Record->new_from_mij_structure( $c->req->json );
+        } elsif ( $content_type =~ m/application\/marc/ ) {
+            $record = MARC::Record->new_from_usmarc( $c->req->body );
         } else {
-            $authtypecode = $c->validation->param('x-authority-type');
-            if ( $c->req->headers->content_type =~ m/application\/marcxml\+xml/ ) {
-                $record = MARC::Record->new_from_xml( $body, 'UTF-8', $flavour );
-            } elsif ( $c->req->headers->content_type =~ m/application\/marc-in-json/ ) {
-                $record = MARC::Record->new_from_mij_structure( $body );
-            } elsif ( $c->req->headers->content_type =~ m/application\/marc/ ) {
-                $record = MARC::Record->new_from_usmarc( $body );
-            } else {
-                return $c->render(
-                    status  => 406,
-                    openapi => [
-                        "application/json",
-                        "application/marcxml+xml",
-                        "application/marc-in-json",
-                        "application/marc"
-                    ]
-                );
-            }
+            return $c->render(
+                status  => 406,
+                openapi => [
+                    "application/marcxml+xml",
+                    "application/marc-in-json",
+                    "application/marc"
+                ]
+            );
         }
 
-        my ($duplicateauthid,$duplicateauthvalue);
-            ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode);
+        unless ( $overrides->{any} || $overrides->{duplicate} ) {
+            my ( $duplicateauthid, $duplicateauthvalue ) = FindDuplicateAuthority( $record, $authtypecode );
 
-        my $confirm_not_duplicate = $c->validation->param('x-confirm-not-duplicate');
-
-        return $c->render(
-            status  => 400,
-            openapi => {
-                error => "Duplicate authority $duplicateauthid"
-            }
-        ) unless !$duplicateauthid || $confirm_not_duplicate;
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => "Duplicate record ($duplicateauthid)",
+                    error_code => 'duplicate',
+                }
+            ) unless !$duplicateauthid;
+        }
 
         my $authid = AddAuthority( $record, undef, $authtypecode );
 
+        $c->res->headers->location($c->req->url->to_string . '/' . $authid);
         $c->render(
-            status  => 200,
-            openapi => { id => $authid }
+            status  => 201,
+            openapi => q{},
         );
     }
     catch {

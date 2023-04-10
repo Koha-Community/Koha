@@ -155,11 +155,9 @@ subtest 'delete() tests' => sub {
 
 subtest 'post() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
-
-    Koha::Authorities->delete;
 
     my $patron = $builder->build_object(
         {
@@ -202,21 +200,37 @@ subtest 'post() tests' => sub {
         }
     );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => json => $json)
-      ->status_is(200)
-      ->json_has('/id');
+    # x-koha-override passed to make sure it goes through
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'any' } => $marcxml)
+      ->status_is(201)
+      ->json_is(q{})
+      ->header_like(
+          Location => qr|^\/api\/v1\/authorities/\d*|,
+          'SWAGGER3.4.1'
+      );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME'} => $marcxml)
-      ->status_is(200)
-      ->json_has('/id');
+    # x-koha-override not passed to force block because duplicate
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME' } => $mij)
+      ->status_is(409)
+      ->header_exists_not( 'Location', 'Location header is only set when the new resource is created' )
+      ->json_like( '/error' => qr/Duplicate record (\d*)/ )
+      ->json_is( '/error_code' => q{duplicate} );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME'} => $mij)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc-in-json', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate' } => $mij)
+      ->status_is(201)
+      ->json_is(q{})
+      ->header_like(
+          Location => qr|^\/api\/v1\/authorities/\d*|,
+          'SWAGGER3.4.1'
+      );
 
-    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME'} => $marc)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate' } => $marc)
+      ->status_is(201)
+      ->json_is(q{})
+      ->header_like(
+          Location => qr|^\/api\/v1\/authorities/\d*|,
+          'SWAGGER3.4.1'
+      );
 
     $schema->storage->txn_rollback;
 };

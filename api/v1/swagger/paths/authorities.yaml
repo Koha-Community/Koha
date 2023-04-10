@@ -6,24 +6,36 @@
     tags:
       - authorities
     summary: Add authority
+    description: |
+      Add an authority record to Koha. An optional `x-authority-type`
+      may be passed to specify the cataloguing framework to be used (instead
+      of the default).
+
+      The request body is expected to contain a MARC record in the format specified in
+      the `Content-type` header you pass. Possible values for this header and the corresponding
+      record formats expected are listed below:
+
+      * application/marcxml+xml: MARCXML
+      * application/marc-in-json: MARC-in-JSON
+      * application/marc: Raw USMARC binary data
     parameters:
-      - name: Body
-        in: body
-        description: A JSON object or the Marc string describing an authority
-        required: true
-        schema:
-          type:
-            - string
-            - object
       - $ref: "../swagger.yaml#/parameters/authority_type_header"
-      - $ref: "../swagger.yaml#/parameters/confirm_not_duplicate_header"
-    produces:
-      - application/json
+      - name: x-koha-override
+        in: header
+        required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - any
+            - duplicate
+        collectionFormat: csv
     responses:
-      "200":
+      "201":
         description: An authority
       "400":
-        description: Bad request
+        description: Bad request.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -41,6 +53,13 @@
           description: Accepted content-types
           items:
             type: string
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `duplicate`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
