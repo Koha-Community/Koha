@@ -24,7 +24,7 @@
 UPDATE systempreferences SET value = 'cataloguing' WHERE variable = 'AcqCreateItem';
 UPDATE systempreferences SET value = '1' WHERE variable = 'AllowRenewalLimitOverride';
 UPDATE systempreferences SET value = 'annual' WHERE variable = 'autoBarcode';
-UPDATE systempreferences SET value = 'email' WHERE variable = 'AutoEmailPrimaryAddress';
+UPDATE systempreferences SET value = 'email' WHERE variable = 'EmailFieldPrimary';
 UPDATE systempreferences SET value = '1' WHERE variable = 'BiblioAddsAuthorities';
 UPDATE systempreferences SET value = 'surname|cardnumber' WHERE variable = 'BorrowerMandatoryField';
 UPDATE systempreferences SET value = '0' WHERE variable = 'BorrowersLog';

@@ -50,11 +50,11 @@ my $letter = C4::Letters::GetPreparedLetter(
 );
 
 
-t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'OFF' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
 C4::Message->enqueue($letter, $patron, 'email');
 my $message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
 like( $message->{metadata}, qr{heÄllo} );
-is ($message->{to_address}, $patron->email, "To address set correctly for AutoEmailPrimaryAddress 'off'");
+is ($message->{to_address}, $patron->email, "To address set correctly for EmailFieldPrimary 'off'");
 
 $letter = C4::Letters::GetPreparedLetter(
     (
@@ -69,7 +69,7 @@ $message->append($letter);
 like( $message->{metadata}, qr{heÄllo} );
 like( $message->{metadata}, qr{hell❤️} );
 
-t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
 C4::Message->enqueue($letter, $patron, 'email');
 $message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
-is ($patron->notice_email_address, $patron->emailpro, "To address set correctly for AutoEmailPrimaryAddress 'emailpro'");
+is ($patron->notice_email_address, $patron->emailpro, "To address set correctly for EmailFieldPrimary 'emailpro'");
