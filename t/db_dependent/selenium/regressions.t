@@ -355,7 +355,7 @@ subtest 'OPAC - Suggest for purchase' => sub {
     $driver->get( $opac_base_url . "opac-detail.pl?biblionumber=$biblionumber" );
 
     $s->click({ href => '/opac-suggestions.pl?op=add&biblionumber=' . $biblionumber });
-    is( $driver->find_element('//input[@id="title"]')->get_value(),
+    is( $driver->find_element('//a[@id="title"]')->get_text(),
         $biblio->title,
         "Suggestion's title correctly filled in with biblio's title" );
 
