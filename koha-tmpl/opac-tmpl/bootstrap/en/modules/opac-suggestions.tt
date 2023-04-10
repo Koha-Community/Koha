@@ -80,7 +80,7 @@
                                         <li>
                                             [% IF biblionumber %]
                                                 <label>Title:</label>
-                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">[% title | html %]</a>
+                                                <a id="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">[% title | html %]</a>
                                             [% ELSIF ( title_required ) %]
                                                 <label for="title" class="required">Title:</label>
                                                 <input type="text" id="title" name="title" class="span6" maxlength="255" value="[% title | html %]" required="required" />
@@ -94,7 +94,7 @@
                                             <li>
                                                     [% IF biblionumber %]
                                                         <label>Author:</label>
-                                                        <span>[% author | html %]</span>
+                                                        <span id="author">[% author | html %]</span>
                                                     [% ELSIF ( author_required ) %]
                                                         <label for="author" class="required">Author:</label>
                                                         <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" required="required" />
@@ -123,7 +123,7 @@
                                             <li>
                                                 [% IF biblionumber %]
                                                     <label>Standard number (ISBN, ISSN or other):</label>
-                                                    <span>[% isbn | html %]</span>
+                                                    <span id="isbn">[% isbn | html %]</span>
                                                 [% ELSIF ( isbn_required ) %]
                                                     <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
                                                     <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" required="required" />
@@ -138,7 +138,7 @@
                                             <li>
                                                 [% IF biblionumber %]
                                                     <label>Publisher:</label>
-                                                    <span>[% publishercode | html %]</span>
+                                                    <span id="publishercode">[% publishercode | html %]</span>
                                                 [% ELSIF ( publishercode_required ) %]
                                                     <label for="publishercode" class="required">Publisher:</label>
                                                     <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" required="required" />
@@ -153,7 +153,7 @@
                                             <li>
                                                 [% IF biblionumber %]
                                                     <label for="collectiontitle" class="required">Collection title:</label>
-                                                    <span>[% collectiontitle | html %]</span>
+                                                    <span id="collectiontitle">[% collectiontitle | html %]</span>
                                                 [% ELSIF ( collectiontitle_required ) %]
                                                     <label for="collectiontitle" class="required">Collection title:</label>
                                                     <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" required="required" />
@@ -168,7 +168,7 @@
                                             <li>
                                                 [% IF biblionumber %]
                                                     <label for="place" class="required">Publication place:</label>
-                                                    <span>[% place | html %]</span>
+                                                    <span id="place">[% place | html %]</span>
                                                 [% ELSIF ( place_required ) %]
                                                     <label for="place" class="required">Publication place:</label>
                                                     <input type="text" id="place" name="place" required="required" maxlength="80" value="[% place | html %]" />
