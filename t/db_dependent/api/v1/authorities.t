@@ -189,16 +189,7 @@ subtest 'post() tests' => sub {
       ->status_is(403, 'Not enough permissions makes it return the right code');
 
     # Add permissions
-    $builder->build(
-        {
-            source => 'UserPermission',
-            value  => {
-                borrowernumber => $patron->borrowernumber,
-                module_bit     => 9,
-                code           => 'edit_catalogue'
-            }
-        }
-    );
+    $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
 
     # x-koha-override passed to make sure it goes through
     $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marcxml+xml', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'any' } => $marcxml)
