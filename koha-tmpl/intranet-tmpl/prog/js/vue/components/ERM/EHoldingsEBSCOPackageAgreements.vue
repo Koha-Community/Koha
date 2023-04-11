@@ -1,7 +1,7 @@
 <template>
     <transition name="modal">
         <div v-if="showModal" class="modal">
-            <AgreementsList @select-agreement="addAgreement" />
+            <AgreementsList :embedded="true" @select-agreement="addAgreement" />
             <input
                 type="button"
                 @click="showModal = false"

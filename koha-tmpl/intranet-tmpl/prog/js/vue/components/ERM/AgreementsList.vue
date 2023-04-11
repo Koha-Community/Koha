@@ -1,7 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_list">
-        <Toolbar v-if="before_route_entered" />
+        <Toolbar v-if="!embedded" />
         <fieldset v-if="agreement_count > 0" class="filters">
             <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
             <input
@@ -100,8 +100,6 @@ export default {
             fp_config: flatpickr_defaults,
             agreement_count: 0,
             initialized: false,
-            before_route_entered: false,
-            building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: { embed: "user_roles,vendor" },
@@ -143,11 +141,7 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.before_route_entered = true // FIXME This is ugly, but we need to distinguish when it's used as main component or child component (from EHoldingsEBSCOPAckagesShow for instance)
-            if (!vm.building_table) {
-                vm.building_table = true
-                vm.getAgreementCount().then(() => (vm.initialized = true))
-            }
+            vm.getAgreementCount().then(() => (vm.initialized = true))
         })
     },
     methods: {
@@ -210,7 +204,7 @@ export default {
             this.$emit("close")
         },
         filter_table: async function () {
-            if (this.before_route_entered) {
+            if (!embedded) {
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",
                     this.filters
@@ -318,13 +312,17 @@ export default {
         },
     },
     mounted() {
-        // We this component is mounted from EHoldingsEBSCOPackageAgreements
-        if (!this.building_table) {
-            this.building_table = true
+        if (this.embedded) {
             this.getAgreementCount().then(() => (this.initialized = true))
         }
     },
     components: { flatPickr, Toolbar, KohaTable },
+    props: {
+        embedded: {
+            type: Boolean,
+            default: false,
+        },
+    },
     name: "AgreementsList",
     emits: ["select-agreement", "close"],
 }
