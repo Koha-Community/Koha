@@ -169,7 +169,7 @@ sub add {
         }
 
         unless ( $overrides->{any} || $overrides->{duplicate} ) {
-            my ( $duplicateauthid, $duplicateauthvalue ) = FindDuplicateAuthority( $record, $authtypecode );
+            my ( $duplicateauthid, $duplicateauthvalue ) = C4::AuthoritiesMarc::FindDuplicateAuthority( $record, $authtypecode );
 
             return $c->render(
                 status  => 409,

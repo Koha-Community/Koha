@@ -159,6 +159,9 @@ subtest 'post() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $authorities_mock = Test::MockModule->new('C4::AuthoritiesMarc');
+    $authorities_mock->mock( 'FindDuplicateAuthority', sub { return 1234; } );
+
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
