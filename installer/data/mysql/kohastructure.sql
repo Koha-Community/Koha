@@ -467,6 +467,25 @@ CREATE TABLE `aqbooksellers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `aqbookseller_issues`
+--
+
+DROP TABLE IF EXISTS `aqbookseller_issues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aqbookseller_issues` (
+  `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
+  `type` varchar(80) DEFAULT NULL COMMENT "type of the issue, authorised value VENDOR_ISSUE_TYPE",
+  `started_on` date DEFAULT NULL COMMENT 'start of the issue',
+  `ended_on` date DEFAULT NULL COMMENT 'end of the issue',
+  `notes` longtext DEFAULT NULL COMMENT 'notes',
+  PRIMARY KEY (`issue_id`),
+  CONSTRAINT `aqbookseller_issues_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `aqbudgetborrowers`
 --
 
