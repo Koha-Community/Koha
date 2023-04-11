@@ -252,7 +252,7 @@ sub add_form {
     elsif ($module eq 'claimissues') {
         push @{$field_selection}, add_fields('aqbooksellers', 'serial', 'subscription', 'biblio', 'biblioitems');
     }
-    elsif ($module eq 'patron_slip') {
+    elsif ( $module eq 'patron_slip' ) {
         push @{$field_selection}, add_fields('borrowers');
     }
     elsif ($module eq 'serial') {

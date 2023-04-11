@@ -32,10 +32,9 @@
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
                 <li><a class="printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
-		[% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
-                     <li><a class="printslip" data-code="[% notice.code %]" href="#">Print [% notice.name %] slip</a></li>
-		[% END %]
-
+                [% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
+                    <li><a class="printslip" data-code="[% notice.code | html %]" href="#">Print [% notice.name | html %] slip</a></li>
+                [% END %]
             </ul>
     </div>
     [% END %]
