@@ -551,7 +551,7 @@
             interfaces = [];
             $("#interfaces > fieldset.supplier-interface > ol.interface-form").each( (index, interface_form )=> {
                 let interface = {};
-                $(interface_form).find('input,textarea').serializeArray().map(attr => {
+                $(interface_form).find('input,textarea,select').serializeArray().map(attr => {
                     let name = attr.name.replace(/interface_([\w_]+)_\d+/, "$1");
                     interface[name] = attr.value
                 })
