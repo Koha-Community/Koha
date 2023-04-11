@@ -617,6 +617,12 @@
             });
             nodes.append(`<button onclick="add_interface();" class="btn btn-default"><i class="fa fa-plus"></i> ` + _("Add another interface") + '</button>')
             $("#interfaces").replaceWith(nodes);
+
+            interfaces.forEach((interface, i) => {
+                $("#interface_account_email_" + i).rules("add", {
+                    email: true,
+                });
+            });
         }
 
         var Sticky;
