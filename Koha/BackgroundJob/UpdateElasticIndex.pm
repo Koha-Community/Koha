@@ -42,54 +42,17 @@ sub job_type {
     return 'update_elastic_index';
 }
 
-=head3 process
-
-Process the modification.
-
-=cut
-
-sub process {
-    my ( $self, $args ) = @_;
-
-    $self->start;
-
-    my @record_ids = @{ $args->{record_ids} };
-    my $record_server = $args->{record_server};
-
-    my $report = {
-        total_records => scalar @record_ids,
-        total_success => 0,
-    };
-
-    my @messages;
-    eval {
-        my $es_index =
-            $record_server eq "authorityserver"
-          ? $Koha::SearchEngine::AUTHORITIES_INDEX
-          : $Koha::SearchEngine::BIBLIOS_INDEX;
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $es_index });
-        $indexer->update_index(\@record_ids);
-    };
-    if ( $@ ) {
-        warn $@;
-        push @messages, {
-            type => 'error',
-            code => 'index_error',
-            error => $@,
-
-        }
-    } else {
-        $self->step;
-        # FIXME This is not correct if some record_ids have been skipped
-        $report->{total_success} = scalar @record_ids;
-    }
-
-    my $data = $self->decoded_data;
-    $data->{messages} = \@messages;
-    $data->{report} = $report;
-
-    $self->finish( $data );
-}
+# While most background jobs provide this method, the ES indexing has its own dedicated worker:
+# misc/workers/es_index_daemon.pl
+# That worker will handle all job processing.
+#=head3 process
+#
+#Process the modification.
+#
+#=cut
+#
+#sub process {
+#}
 
 =head3 enqueue
 
