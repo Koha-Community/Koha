@@ -1,0 +1,37 @@
+---
+type: object
+properties:
+  issue_id:
+    type: integer
+    description: internally assigned vendor identifier
+    readOnly: true
+  vendor_id:
+    type:
+      - string
+    description: Vendor id
+  type:
+    type:
+      - string
+      - "null"
+    description: Type of the issue
+  started_on:
+    type:
+      - string
+      - "null"
+    description: Start date
+  ended_on:
+    type:
+      - string
+      - "null"
+    description: End date
+  notes:
+    type:
+      - string
+      - "null"
+    description: Notes
+  _strings:
+    type:
+      - object
+      - "null"
+    description: A list of stringified coded values
+additionalProperties: false

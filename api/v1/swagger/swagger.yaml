@@ -112,6 +112,8 @@ definitions:
     $ref: ./definitions/transfer_limit.yaml
   vendor:
     $ref: ./definitions/vendor.yaml
+  vendor_issue:
+    $ref: ./definitions/vendor_issue.yaml
 paths:
   /acquisitions/baskets/managers:
     $ref: paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets~1managers
@@ -129,6 +131,8 @@ paths:
     $ref: ./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors
   "/acquisitions/vendors/{vendor_id}":
     $ref: "./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors~1{vendor_id}"
+  "/acquisitions/vendors/{vendor_id}/issues":
+    $ref: "./paths/acquisitions_vendor_issues.yaml#/~1acquisitions~1vendors~1{vendor_id}~1issues"
   /advanced_editor/macros:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros
   /advanced_editor/macros/shared:
