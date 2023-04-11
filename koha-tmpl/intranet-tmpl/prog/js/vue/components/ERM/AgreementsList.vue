@@ -214,7 +214,7 @@ export default {
             return url
         },
         filter_table: async function () {
-            if (!embedded) {
+            if (!this.embedded) {
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",
                     this.filters
