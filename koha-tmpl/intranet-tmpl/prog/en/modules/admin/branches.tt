@@ -654,8 +654,6 @@
     </style>
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
-        var saved_table = localStorage.getItem("DataTables_libraries_/cgi-bin/koha/admin/branches.pl");
-        var updated_settings = get_columns_saved_state(saved_table, table_settings);
         var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
 
         $(document).ready(function() {
@@ -667,7 +665,6 @@
                 },
                 'embed': [ 'smtp_server', 'library_hours' ],
                 'emptyTable': '<div class="alert alert-info">'+_("There are no libraries defined.")+' <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">'+_("Start defining libraries")+'</a>.</div>',
-                "stateSave": true,
                 "columnDefs": [ {
                     "targets": [0,1,3,4,7,10,11,12,13,14,15,16,17],
                     "render": function (data, type, row, meta) {
@@ -874,7 +871,7 @@
                         "orderable": false
                     }
                 ]
-            }, updated_settings);
+            }, table_settings);
 
             [% UNLESS library %]
                 $("#Aform").on("submit", function( event ) {
