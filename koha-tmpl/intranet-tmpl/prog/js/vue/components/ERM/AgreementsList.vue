@@ -39,6 +39,7 @@
                 @show="doShow"
                 @edit="doEdit"
                 @delete="doDelete"
+                @select="doSelect"
             ></KohaTable>
         </div>
         <div v-else class="dialog message">
@@ -127,7 +128,16 @@ export default {
                 },
                 actions: {
                     0: ["show"],
-                    "-1": ["edit", "delete"],
+                    "-1": this.embedded
+                        ? [
+                              {
+                                  select: {
+                                      text: this.$__("Select"),
+                                      icon: "fa fa-check",
+                                  },
+                              },
+                          ]
+                        : ["edit", "delete"],
                 },
                 default_filters: {
                     "user_roles.user_id": function () {
@@ -192,16 +202,16 @@ export default {
                 }
             )
         },
+        doSelect: function (agreement, dt, event) {
+            this.$emit("select-agreement", agreement.agreement_id)
+            this.$emit("close")
+        },
         table_url: function () {
             let url = "/api/v1/erm/agreements"
             if (this.filters.by_expired)
                 url +=
                     "?max_expiration_date=" + this.filters.max_expiration_date
             return url
-        },
-        select_agreement: function (agreement_id) {
-            this.$emit("select-agreement", agreement_id)
-            this.$emit("close")
         },
         filter_table: async function () {
             if (!embedded) {
