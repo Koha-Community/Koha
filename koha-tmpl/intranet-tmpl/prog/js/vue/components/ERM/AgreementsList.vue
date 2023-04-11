@@ -318,9 +318,10 @@ export default {
         },
     },
     mounted() {
+        // We this component is mounted from EHoldingsEBSCOPackageAgreements
         if (!this.building_table) {
             this.building_table = true
-            this.getAgreementCount()
+            this.getAgreementCount().then(() => (this.initialized = true))
         }
     },
     components: { flatPickr, Toolbar, KohaTable },
