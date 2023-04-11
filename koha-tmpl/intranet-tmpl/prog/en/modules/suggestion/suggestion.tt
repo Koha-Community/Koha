@@ -1387,16 +1387,13 @@
                 }
 
                 var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
-                var saved_table = localStorage.getItem("DataTables_suggestions_/cgi-bin/koha/suggestion/suggestion.pl");
-                var updated_settings = get_columns_saved_state(saved_table, table_settings);
 
                 [% FOREACH suggestion IN suggestions %]
                     [% IF suggestion.suggestions.size %]
                         KohaTable("table_[% suggestion.suggestiontype | html %]", {
                             "sorting": [[ 4, "asc" ]],
                             "autoWidth": false,
-                            "stateSave": true,
-                        }, updated_settings );
+                        }, table_settings );
                     [% END %]
                 [% END %]
 
