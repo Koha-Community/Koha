@@ -85,14 +85,19 @@ export default {
                     searchable: false,
                     render: (data, type, row) => {
                         let content = []
-                        this.actions["-1"].forEach(a => {
-                            if (a == "edit") {
+                        this.actions["-1"].forEach(action => {
+                            if (typeof action === "object") {
+                                let action_name = Object.keys(action)[0]
+                                content.push(
+                                    `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i>${action[action_name].text}</a>`
+                                )
+                            } else if (action == "edit") {
                                 content.push(
                                     '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i>' +
                                         this.$__("Edit") +
                                         "</a>"
                                 )
-                            } else if (a == "delete") {
+                            } else if (action == "delete") {
                                 content.push(
                                     '<a class="delete btn btn-default btn-xs" role="button"><i class="fa fa-trash"></i>' +
                                         this.$__("Delete") +
@@ -157,8 +162,12 @@ export default {
                         .each(function (idx) {
                             const data = dataSet[idx]
                             actions.forEach(action => {
-                                $("." + action, this).on("click", e => {
-                                    self.$emit(action, data, dt, e)
+                                let action_name =
+                                    typeof action === "object"
+                                        ? Object.keys(action)[0]
+                                        : action
+                                $("." + action_name, this).on("click", e => {
+                                    self.$emit(action_name, data, dt, e)
                                 })
                             })
                         })
