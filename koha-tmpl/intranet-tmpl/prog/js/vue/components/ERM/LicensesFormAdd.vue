@@ -25,12 +25,9 @@
                             <label for="license_vendor_id"
                                 >{{ $__("Vendor") }}:</label
                             >
-                            <v-select
+                            <FormSelectVendors
                                 id="license_vendor_id"
                                 v-model="license.vendor_id"
-                                label="display_name"
-                                :reduce="vendor => vendor.id"
-                                :options="vendors"
                             />
                         </li>
                         <li>
@@ -137,21 +134,18 @@ import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
+import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
-
         const AVStore = inject("AVStore")
         const { av_license_types, av_license_statuses, av_user_roles } =
             storeToRefs(AVStore)
 
         return {
-            vendors,
             av_license_types,
             av_license_statuses,
             av_user_roles,
@@ -271,6 +265,7 @@ export default {
         flatPickr,
         UserRoles,
         Documents,
+        FormSelectVendors,
     },
     name: "LicensesFormAdd",
 }

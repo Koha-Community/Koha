@@ -25,12 +25,9 @@
                             <label for="agreement_vendor_id"
                                 >{{ $__("Vendor") }}:</label
                             >
-                            <v-select
+                            <FormSelectVendors
                                 id="agreement_vendor_id"
                                 v-model="agreement.vendor_id"
-                                label="display_name"
-                                :reduce="vendor => vendor.id"
-                                :options="vendors"
                             />
                         </li>
                         <li>
@@ -178,15 +175,13 @@ import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
+import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
-
         const AVStore = inject("AVStore")
         const {
             av_agreement_statuses,
@@ -199,7 +194,6 @@ export default {
         } = storeToRefs(AVStore)
 
         return {
-            vendors,
             av_agreement_statuses,
             av_agreement_closure_reasons,
             av_agreement_renewal_priorities,
@@ -402,6 +396,7 @@ export default {
         AgreementRelationships,
         Documents,
         ButtonSubmit,
+        FormSelectVendors,
     },
     name: "AgreementsFormAdd",
 }

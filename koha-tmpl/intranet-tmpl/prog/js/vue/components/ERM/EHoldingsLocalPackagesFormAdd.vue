@@ -25,12 +25,9 @@
                             <label for="package_vendor_id"
                                 >{{ $__("Vendor") }}:</label
                             >
-                            <v-select
+                            <FormSelectVendors
                                 id="package_vendor_id"
                                 v-model="erm_package.vendor_id"
-                                label="display_name"
-                                :reduce="vendor => vendor.id"
-                                :options="vendors"
                             />
                         </li>
                         <li>
@@ -86,20 +83,18 @@
 <script>
 import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
+import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
         const AVStore = inject("AVStore")
         const { av_package_types, av_package_content_types } =
             storeToRefs(AVStore)
 
         return {
-            vendors,
             av_package_types,
             av_package_content_types,
         }
@@ -204,6 +199,7 @@ export default {
     },
     components: {
         EHoldingsPackageAgreements,
+        FormSelectVendors,
     },
     name: "EHoldingsEBSCOPackagesFormAdd",
 }

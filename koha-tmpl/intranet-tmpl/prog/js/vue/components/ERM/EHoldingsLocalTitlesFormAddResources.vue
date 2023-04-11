@@ -43,12 +43,9 @@
                     <label :for="`resource_vendor_id_${counter}`"
                         >{{ $__("Vendor") }}:</label
                     >
-                    <v-select
+                    <FormSelectVendors
                         :id="`resource_vendor_id_${counter}`"
                         v-model="resource.vendor_id"
-                        label="display_name"
-                        :reduce="vendor => vendor.id"
-                        :options="vendors"
                     />
                 </li>
 
@@ -92,17 +89,12 @@
 </template>
 
 <script>
-import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
-import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
+import FormSelectVendors from "../FormSelectVendors.vue"
 
 export default {
-    setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
-        return { vendors }
-    },
+    setup() {},
     data() {
         return {
             packages: [],
@@ -136,7 +128,7 @@ export default {
     props: {
         resources: Array,
     },
-    components: { flatPickr },
+    components: { flatPickr, FormSelectVendors },
     name: "EHoldingsLocalTitlesFormAddResources",
 }
 </script>
