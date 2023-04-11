@@ -73,9 +73,6 @@ import KohaTable from "../KohaTable.vue"
 
 export default {
     setup() {
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
-
         const AVStore = inject("AVStore")
         const { av_package_types, av_package_content_types } =
             storeToRefs(AVStore)
@@ -92,7 +89,6 @@ export default {
         })
 
         return {
-            vendors,
             av_package_types,
             av_package_content_types,
             get_lib_from_av,

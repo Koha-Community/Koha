@@ -108,11 +108,8 @@ export default {
     setup() {
         const format_date = $date
 
-        const vendorStore = inject("vendorStore")
-        const { vendors } = storeToRefs(vendorStore)
         return {
             format_date,
-            vendors,
         }
     },
     data() {
