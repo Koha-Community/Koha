@@ -20,6 +20,7 @@ use Modern::Perl;
 use Koha::Acquisition::Bookseller::Aliases;
 use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Bookseller::Interfaces;
+use Koha::Acquisition::Bookseller::Issues;
 use Koha::Subscriptions;
 
 use base qw( Koha::Object );
@@ -137,6 +138,17 @@ sub interfaces {
     return Koha::Acquisition::Bookseller::Interfaces->_new_from_dbic( $rs );
 }
 
+=head3 issues
+
+    my $issues = $vendor->issues
+
+=cut
+
+sub issues {
+    my ($self) = @_;
+    my $rs = $self->_result->aqbookseller_issues;
+    return Koha::Acquisition::Bookseller::Issues->_new_from_dbic( $rs );
+}
 
 =head3 to_api_mapping
 
