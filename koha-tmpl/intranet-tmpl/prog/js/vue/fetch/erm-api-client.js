@@ -250,7 +250,7 @@ export class ERMAPIClient extends HttpClient {
                 }),
             patch: (id, body) =>
                 this.patch({
-                    endpoint: "eholdings/ebsco/packages/" + id,
+                    endpoint: "eholdings/ebsco/resources/" + id,
                     body,
                 }),
         };
