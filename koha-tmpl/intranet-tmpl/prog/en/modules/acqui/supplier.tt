@@ -358,29 +358,25 @@
                     <h2>Interfaces</h2>
 
                     [% FOR i IN vendor.interfaces %]
-                        <fieldset class="rows">
-                            <legend>[% i.name | html %]</legend>
-                            <ul>
-                                [% IF i.type %]
-                                    <li>Type: [% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</li>
-                                [% END %]
-                                [% IF i.uri %]
-                                    <li>URI: [% i.uri | html %]</li>
-                                [% END %]
-                                [% IF i.login %]
-                                    <li>Login: [% i.login | html %]</li>
-                                [% END %]
-                                [% IF i.password %]
-                                    <li>Password: <span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></li>
-                                [% END %]
-                                [% IF i.account_email %]
-                                    <li>Account email: [% i.account_email | html %]</li>
-                                [% END %]
-                                [% IF i.notes %]
-                                    <li>Notes : [% i.notes | html %]</li>
-                                [% END %]
-                            </ul>
-                        </fieldset>
+                        <h3>[% i.name | html %]</h3>
+                        [% IF i.type %]
+                            <p><span>Type: [% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</span></p>
+                        [% END %]
+                        [% IF i.uri %]
+                            <p><span>URI: [% i.uri | html %]</span></p>
+                        [% END %]
+                        [% IF i.login %]
+                            <p><span>Login: [% i.login | html %]</span></p>
+                        [% END %]
+                        [% IF i.password %]
+                            <p><span>Password: <span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></span></p>
+                        [% END %]
+                        [% IF i.account_email %]
+                            <p><span>Account email: [% i.account_email | html %]</span></p>
+                        [% END %]
+                        [% IF i.notes %]
+                            <p><span>Notes : [% i.notes | html %]</span></p>
+                        [% END %]
                     [% END %]
                 </div>
                 [% END %]
