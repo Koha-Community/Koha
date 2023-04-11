@@ -1,0 +1,282 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE AuthorisedValues %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+    [% IF op =='add_form' %]
+        [% IF issue.issue_id %]
+            Modify vendor issue
+        [% ELSE %]
+            New vendor issue
+        [% END %] &rsaquo; [% ELSE %]
+        [% IF op == 'delete_confirm' %]
+            Confirm deletion of vendor issue &rsaquo; [% END %]
+    [% END %]
+    Vendor issue &rsaquo; Acquisition &rsaquo; Koha
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="acq_supplier_issues" class="acq">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'acquisitions-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+        </li>
+        [% IF op == 'list' %]
+            <li>
+                <a href="#" aria-current="page">Issues</a>
+            </li>
+        [% ELSE %]
+            <li>
+                <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]">Issues</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% IF issue %]
+                        Issue #[% issue.issue_id| html %]
+                    [% ELSE %]
+                        New issue
+                    [% END %]
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
+[% END %]
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+[% FOR m IN messages %]
+    <div class="dialog [% m.type | html %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            <span>An error occurred when updating this issue.</span>
+        [% CASE 'error_on_insert' %]
+            <span>An error occurred when adding this issue</span>
+        [% CASE 'error_on_delete' %]
+            <span>An error occurred when deleting this issue. Check the logs.</span>
+        [% CASE 'success_on_update' %]
+            <span>Issue updated successfully.</span>
+        [% CASE 'success_on_insert' %]
+            <span>Issue created successfully.</span>
+        [% CASE 'success_on_delete' %]
+            <span>Issue deleted successfully.</span>
+        [% CASE %]
+            <span>[% m.code | html %]</span>
+        [% END %]
+    </div>
+[% END %]
+
+[% IF op == 'add_form' %]
+    [% IF issue %]
+        <h1>Modify a vendor issue</h1>
+    [% ELSE %]
+        <h1>New vendor issue</h1>
+    [% END %]
+
+    <form action="/cgi-bin/koha/acqui/vendor_issues.pl" name="Aform" method="post" class="validated">
+        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="booksellerid" value="[% vendor.id | html %]" />
+        <input type="hidden" name="issue_id" value="[% issue.issue_id| html %]" />
+
+        <fieldset class="rows">
+            <ol>
+                [% IF issue %]
+                    <li><span class="label">Issue ID: </span>[% issue.issue_id | html %]</li>
+                [% END %]
+                <li>
+                    <label for="issue_type">Type: </label>
+                    [% PROCESS 'av-build-dropbox.inc' name="type", category="VENDOR_ISSUE_TYPE", default=issue.type, empty=1, size = 20 %]
+                </li>
+                <li>
+                    <label for="started_on">Started on: </label>
+                    <input type="text" size="10" id="from" name="started_on" value="[% issue.started_on| html %]" class="flatpickr" data-date_to="to" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </li>
+                <li>
+                    <label for="ended_on">Ended on: </label>
+                    <input type="text" size="10" id="to" name="ended_on" value="[% issue.ended_on | html %]" class="flatpickr" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </li>
+                <li>
+                    <label for="notes">Notes: </label>
+                    <textarea name="notes" id="notes" rows="3" cols="50">[% issue.notes | html %]</textarea>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'delete_confirm' %]
+    <div class="dialog alert">
+        <h1>Delete issue #[% issue.issue_id | html %]?<h1>
+        <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="issue_id" value="[% issue.issue_id | html %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
+[% END %]
+
+[% IF op == 'show' %]
+    <h1>Vendor issue #[% issue.issue_id | html %]</h1>
+
+        <fieldset class="rows">
+            <ol>
+                [% IF issue %]
+                    <li><span class="label">Issue ID: </span>[% issue.issue_id | html %]</li>
+                [% END %]
+                <li>
+                    <label for="issue_type">Type: </label>
+                    [% AuthorisedValues.GetByCode( 'VENDOR_ISSUE_TYPE', issue.type, 0 ) | html %]
+                </li>
+                <li>
+                    <label for="started_on">Started on: </label>
+                    [% issue.started_on | $KohaDates %]
+                </li>
+                <li>
+                    <label for="ended_on">Ended on: </label>
+                    [% issue.ended_on | $KohaDates %]
+                </li>
+                <li>
+                    <label for="notes">Notes: </label>
+                    [% issue.notes | html %]
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="action">
+            <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]">Back</a>
+        </fieldset>
+    </form>
+[% END %]
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="new_issue" href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]&op=add_form"><i class="fa fa-plus"></i> New issue</a>
+    </div>
+
+    <h1>Vendor issues</h1>
+
+    [% IF issues_count > 0 %]
+        <div class="page-section">
+            <div class="table_vendor_issues_table_controls"></div>
+            <table id="vendor_issues">
+                <thead>
+                    <tr>
+                        <th>Issue ID</th>
+                        <th>Type</th>
+                        <th>Started on</th>
+                        <th>Ended on</th>
+                        <th data-class-name="actions noExport">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div><!-- /.page-section -->
+    [% ELSE %]
+        <div class="dialog message">
+            There are no issues defined. <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]&op=add_form">Create a new issue</a>.
+        </div>
+    [% END %]
+[% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'vendor-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+
+        $(document).ready(function() {
+            var issues_table_url = '/api/v1/acquisitions/vendors/[% vendor.id | uri %]/issues?';
+
+            var issues_table = $("#vendor_issues").kohaTable({
+                ajax: {
+                    url: issues_table_url
+                },
+                embed: ["+strings"],
+                order: [[ 0, "desc" ]],
+                columns: [
+                    {
+                        data: "issue_id",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            return '<a href="/cgi-bin/koha/acqui/vendor_issues.pl?op=show&amp;issue_id=' + encodeURIComponent(row.issue_id) +'">' + escape_str(row.issue_id) + '</a>';
+                        },
+                    },
+                    {
+                        data: "type",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            return row._strings.type ? escape_str(row._strings.type.str) : "";
+                        }
+                    },
+                    {
+                        data: "started_on",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            return $date(row.started_on);
+                        }
+                    },
+                    {
+                        data: "ended_on",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            return $date(row.ended_on);
+                        }
+                    },
+                    {
+                        data: function( row, type, val, meta ) {
+
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/acqui/vendor_issues.pl?op=add_form&amp;issue_id='+ encodeURIComponent(row.issue_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/acqui/vendor_issues.pl?op=delete_confirm&amp;issue_id='+ encodeURIComponent(row.issue_id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            return result;
+                        },
+                        searchable: false,
+                        orderable: false
+                    }
+                ]
+            }, null, 1);
+
+        });
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

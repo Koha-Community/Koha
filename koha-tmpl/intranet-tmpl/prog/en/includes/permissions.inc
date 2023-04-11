@@ -454,6 +454,11 @@
             Manage all baskets and order lines, regardless of restrictions on them
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'issue_manage' -%]
+        <span class="sub_permission issues_manage_subpermission">
+            Manage issues
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'order_receive' -%]
         <span class="sub_permission order_receive_subpermission">
             Receive orders and manage shipments
