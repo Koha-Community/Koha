@@ -11,7 +11,26 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     var selector = '#' + id_selector;
 
     if ( table_settings ) {
-        var columns_settings = table_settings['columns'];
+
+        var table_key =
+          'DataTables_' +
+          table_settings['module'] +'_' +
+          table_settings['page'] +'_' +
+          table_settings['table'];
+
+        // enable stateSave
+        dt_parameters['stateSave']         = true;
+        dt_parameters['stateSaveCallback'] = function( settings, data ) {
+            localStorage.setItem( table_key, JSON.stringify(data) )
+        }
+        dt_parameters['stateLoadCallback'] = function(settings) {
+            return JSON.parse( localStorage.getItem(table_key) )
+        }
+
+        // merge stateSave for column settings
+        var local_settings = localStorage.getItem(table_key);
+        var system_settings = table_settings['columns'];
+        var columns_settings = get_columns_saved_state(local_settings, system_settings);
 
         $(columns_settings).each( function() {
             var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
