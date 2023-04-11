@@ -492,11 +492,11 @@
                 let input = $('<input type="hidden" name="alias" />');
                 input.val(a.alias);
                 n.append(input);
-                n.append(`<a onclick="remove_alias(${i});"><i class="fa fa-trash" aria-hidden="true"></i></a>`);
+                n.append(` <a style="cursor: pointer;" onclick="remove_alias(${i});"><i class="fa fa-trash" aria-hidden="true"></i> ` + _("Remove") + '</a>');
                 nodes.append(n);
             });
-            nodes.append("<input id='new_alias' type='text' />");
-            nodes.append(`<a onclick="add_alias();"><i class="fa fa-plus" aria-hidden="true"></i></a>`);
+            nodes.append("<input id='new_alias' type='text' class='noEnterSubmit' />");
+            nodes.append(' <a style="cursor: pointer;" onclick="add_alias();"><i class="fa fa-plus" aria-hidden="true"></i> ' + _("Add") + '</a>');
             $("#aliases").html(nodes.html());
         }
 
