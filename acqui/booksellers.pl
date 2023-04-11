@@ -89,6 +89,7 @@ if ($booksellerid) {
         {
             order_by => { -asc => 'name' },
             join     => 'aqbookseller_aliases',
+            distinct => 1,
         }
     )->as_list;
 }
