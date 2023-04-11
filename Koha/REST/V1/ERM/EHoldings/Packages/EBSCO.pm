@@ -116,7 +116,7 @@ sub get {
           );
     }
     catch {
-        $c->unhandled_exception($_);
+        return $c->unhandled_exception($_);
     };
 }
 
@@ -138,6 +138,11 @@ sub edit {
                     isSelected => $is_selected,
                 }
             );
+
+            return $c->render(
+                status  => 200,
+                openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
+            );
         }
         catch {
             if ( blessed $_ ) {
@@ -150,16 +155,11 @@ sub edit {
                 }
             }
 
-            $c->unhandled_exception($_);
+            return $c->unhandled_exception($_);
         };
-
-        return $c->render(
-            status  => 200,
-            openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
-        );
     }
     catch {
-        $c->unhandled_exception($_);
+        return $c->unhandled_exception($_);
     };
 }
 
