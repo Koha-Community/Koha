@@ -380,30 +380,31 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label for="scan-index">Indexed in:</label>
+                                        <label for="scan-index">Indexed in: </label>
                                         <select name="idx" id="scan-index">
-                                            <option value="">Any word</option>
-                                            [% IF ( ms_anycommaphr) %]<option selected="selected" value="any,phr">Any phrase</option>
+                                            [% IF ( header_pulldown == "" ) %]<option selected="selected" value="">Any word</option>
+                                            [% ELSE %]<option selected="selected" value="">Any word</option[% END %]
+                                            [% IF ( header_pulldown == "ms_anycommaphr" ) %]<option selected="selected" value="any,phr">Any phrase</option>
                                             [% ELSE %]<option value="any,phr">Any phrase</option>[% END %]
-                                            [% IF ( ms_ti ) %]<option selected="selected" value="ti">Title</option>
+                                            [% IF ( header_pulldown == "ms_ti" ) %]<option selected="selected" value="ti">Title</option>
                                             [% ELSE %]<option value="ti">Title</option>[% END %]
-                                            [% IF ( ms_ticommaphr ) %]<option selected="selected" value="ti,phr">Title phrase</option>
+                                            [% IF ( header_pulldown == "ms_ticommaphr" ) %]<option selected="selected" value="ti,phr">Title phrase</option>
                                             [% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
-                                            [% IF ( ms_au || ms_aucommaphr ) %]<option selected="selected" value="au,phr">Author</option>
+                                            [% IF ( header_pulldown == ( "ms_au" || "ms_aucommaphr" ) ) %]<option selected="selected" value="au,phr">Author</option>
                                             [% ELSE %]<option value="au,phr">Author</option>[% END %]
-                                            [% IF ( ms_su ) %]<option selected="selected" value="su">Subject</option>
+                                            [% IF ( header_pulldown == "ms_su" ) %]<option selected="selected" value="su">Subject</option>
                                             [% ELSE %]<option value="su">Subject</option>[% END %]
-                                            [% IF ( ms_sucommaphr ) %]<option selected="selected" value="su,phr">Subject phrase</option>
+                                            [% IF ( header_pulldown == "ms_sucommaphr" ) %]<option selected="selected" value="su,phr">Subject phrase</option>
                                             [% ELSE %]<option value="su,phr">Subject phrase</option>[% END %]
-                                            [% IF ( ms_se ) %]<option selected="selected" value="se">Series</option>
-                                            [% ELSE %]<option value="su">Series</option>[% END %]
-                                            [% IF ( ms_pb ) %]<option selected="selected" value="pb">Publisher</option>
+                                            [% IF ( header_pulldown ==  "ms_se" ) %]<option selected="selected" value="se">Series</option>
+                                            [% ELSE %]<option value="se">Series</option>[% END %]
+                                            [% IF ( header_pulldown ==  "ms_pb" ) %]<option selected="selected" value="pb">Publisher</option>
                                             [% ELSE %]<option value="pb">Publisher</option>[% END %]
-                                            [% IF ( ms_nt ) %]<option selected="selected" value="nt">Notes</option>
+                                            [% IF ( header_pulldown ==  "ms_nt" ) %]<option selected="selected" value="nt">Notes</option>
                                             [% ELSE %]<option value="nt">Notes</option>[% END %]
-                                            [% IF ( ms_sn ) %]<option selected="selected" value="sn">ISBN</option>
+                                            [% IF ( header_pulldown ==  "ms_sn" ) %]<option selected="selected" value="sn">ISBN</option>
                                             [% ELSE %]<option value="sn">ISBN</option>[% END %]
-                                            [% IF ( ms_ss ) %]<option selected="selected" value="ss">ISSN</option>
+                                            [% IF ( header_pulldown ==  "ms_ss" ) %]<option selected="selected" value="ss">ISSN</option>
                                             [% ELSE %]<option value="ss">ISSN</option>[% END %]
                                         </select>
                                         <input type="hidden" name="scan" value="1" />
