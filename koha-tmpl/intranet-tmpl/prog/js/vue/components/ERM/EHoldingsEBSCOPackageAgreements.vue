@@ -62,6 +62,9 @@ export default {
             delete erm_package.vendor
             delete erm_package.resources_count
             delete erm_package.is_selected
+            erm_package.package_agreements = erm_package.package_agreements.map(
+                ({ package_id, agreement, ...keepAttrs }) => keepAttrs
+            )
             return erm_package
         },
         addAgreement(agreement_id) {
