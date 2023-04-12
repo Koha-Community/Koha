@@ -9,7 +9,7 @@
         */
         window.$patron_to_html = function( patron, config ) {
 
-            if ( patron === undefined ) {
+            if ( patron == null ) {
                 return ''; // empty string for no patron
             }
 
