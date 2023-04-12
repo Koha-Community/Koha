@@ -230,8 +230,8 @@ $(document).ready(function() {
   [% IF ( serialslis.serialsadditems ) %]
           <tr>
           <td colspan="6">
-      <a id="label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]',  '[% serialslis.serialid | html %]');setStatus([% serialslis.serialid | html %]);">
-             Click to add item</a>
+      <a id="label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]" class="btn btn-default btn-sm" onclick="unHideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]',  '[% serialslis.serialid | html %]');setStatus([% serialslis.serialid | html %]);">
+             Click to edit item</a>
         <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]')">
                 Item</a>
@@ -383,7 +383,7 @@ $(document).ready(function() {
   [% IF ( newserialloo.serialsadditems ) %]
           <tr>
           <td colspan="6">
-      <a id="label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]', '[% newserialloo.serialid | html %]')">
+      <a id="label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]" class="btn btn-default btn-sm" onclick="unHideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]', '[% newserialloo.serialid | html %]')">
              Click to add item</a>
         <fieldset  class="rows" style="display:none;" id="items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]')">
