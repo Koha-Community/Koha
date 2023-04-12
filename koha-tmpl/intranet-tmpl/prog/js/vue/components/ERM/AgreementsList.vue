@@ -208,6 +208,12 @@ export default {
         },
         table_url: function () {
             let url = "/api/v1/erm/agreements"
+            if (this.filters.by_expired) {
+                if (!this.filters.max_expiration_date)
+                    this.filters.max_expiration_date = new Date()
+                        .toISOString()
+                        .substring(0, 10)
+            }
             if (this.filters.by_expired)
                 url +=
                     "?max_expiration_date=" + this.filters.max_expiration_date
@@ -220,12 +226,6 @@ export default {
                     this.filters
                 )
                 this.$router.push(new_route)
-            }
-            if (this.filters.by_expired) {
-                if (!this.filters.max_expiration_date)
-                    this.filters.max_expiration_date = new Date()
-                        .toISOString()
-                        .substring(0, 10)
             }
             this.$refs.table.redraw(this.table_url())
         },
