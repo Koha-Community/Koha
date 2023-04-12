@@ -96,7 +96,18 @@
                         <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
                     </form>
                 [% ELSE %]
-                    <div> Use the search form on the left to find sent notices. </div>
+                    Use the search form on the left to find sent notices, or go directly to a patron's notices.
+                    <div id="notices_patronsearch" class="toptabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#notices_patronsearch_pane" aria-controls="notices_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="notice_patronsearch_pane" role="tabpanel" class="tab-pane active">
+                                [% PROCESS patron_search_filters_simple %]
+                                [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
+                            </div>
+                        </div>
+                    </div>
 
                     [% IF notices && notices.count == 0 %]
                         <div class="dialog message"> No sent notices were found with those search parameters. </div>
@@ -108,17 +119,6 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                <fieldset class="sidebar brief">
-                    <h3>Go to a patron's notices</h3>
-                    <ol>
-                        <li>
-                            <div id="notices_patronsearch_pane" role="tabpanel" class="tab-pane active">
-                                [% PROCESS patron_search_filters_simple %]
-                                [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
-                            </div>
-                        </li>
-                    </ol>
-                </fieldset>
                 <fieldset class="sidebar brief">
                     <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="post">
                         <input type="hidden" name="op" value="search" />
