@@ -24,6 +24,7 @@ use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Clubs;
+use Koha::Club::Enrollment::Fields;
 
 my $cgi = CGI->new;
 
@@ -38,9 +39,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $id = $cgi->param('id');
 my $club = Koha::Clubs->find( $id );
+my @club_template_enrollment_fields = $club->club_template()->club_template_enrollment_fields()->as_list;
+my @club_enrollment_fields = Koha::Club::Enrollment::Fields->search({'club_template_enrollment_field_id'=> { -in => [map { $_->id } @club_template_enrollment_fields] }})->as_list;
 
 $template->param(
     club          => $club,
+    club_enrollment_fields => \@club_enrollment_fields,
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

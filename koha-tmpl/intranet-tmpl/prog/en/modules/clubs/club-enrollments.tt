@@ -3,6 +3,8 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% USE AuthorisedValues %]
+[% SET AuthorisedValuesCategories = AuthorisedValues.GetCategories %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Club enrollments &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha</title>
@@ -43,6 +45,9 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Card number</th>
+                                [% FOREACH club_template_enrollment_field IN club.club_template.club_template_enrollment_fields %]
+                                    <th>[% club_template_enrollment_field.name %] </th>
+                                [% END %]
                             </tr>
                         </thead>
 
@@ -56,6 +61,24 @@
                                     <td>
                                         [% p.cardnumber | html %]
                                     </td>
+                                    [% IF club_enrollment_fields %]
+                                        [% FOREACH club_enrollment_field IN club_enrollment_fields %]
+                                            [% IF e.id == club_enrollment_field.club_enrollment_id %]
+                                                [% FOREACH club_template_enrollment_field IN club.club_template.club_template_enrollment_fields %]
+                                                    [% IF club_enrollment_field.club_template_enrollment_field_id == club_template_enrollment_field.id %]
+                                                        [% IF club_template_enrollment_field.authorised_value_category %]
+                                                            [% FOREACH a IN AuthorisedValues.Get( club_template_enrollment_field.authorised_value_category ) %]
+                                                                [% IF a.authorised_value == club_enrollment_field.value %]
+                                                                    [% SET club_enrollment_field.value = a.lib %]
+                                                                [% END %]
+                                                            [% END %]
+                                                        [% END %]
+                                                        <td>[% club_enrollment_field.value | html %]</td>
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
                                 </tr>
                             [% END %]
                         </tbody>
