@@ -48,7 +48,7 @@
                                     <li>
                                         <ul>
                                             <li
-                                                v-for="provider in providers"
+                                                v-for="provider in sysprefs.ERMProviders"
                                                 :key="provider"
                                             >
                                                 <router-link
@@ -138,14 +138,13 @@ export default {
 
         const ERMStore = inject("ERMStore")
 
-        const { sysprefs, providers } = storeToRefs(ERMStore)
+        const { sysprefs } = storeToRefs(ERMStore)
 
         return {
             vendorStore,
             AVStore,
             ERMStore,
             sysprefs,
-            providers,
             setError,
             loading,
             loaded,
@@ -214,7 +213,7 @@ export default {
             promises.push(
                 sysprefs_client.sysprefs.get("ERMProviders").then(
                     providers => {
-                        this.providers = providers.value.split(",")
+                        this.sysprefs.ERMProviders = providers.value.split(",")
                     },
                     error => {}
                 )
