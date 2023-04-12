@@ -1,6 +1,6 @@
 [% USE AuthorisedValues %]
 
-<h1>
+<h1 id="heading">
     Enroll in <em>[% club.name | html %]</em>
 </h1>
 
@@ -8,8 +8,30 @@
     <form id="patron-enrollment-form">
         <input type="hidden" name="id" value="[% club.id | html %]" />
         <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+        <input type="hidden" name="enrollent_id" value="[% enrollent_id | html %]" />
         <fieldset class="rows">
             <ol>
+            [% IF club_enrollment_fields %]
+                [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
+                    [% FOREACH c IN club_enrollment_fields %]
+                        [% IF f.id == c.club_template_enrollment_field_id %]
+                            <li>
+                                <label>[% f.name %]</label>
+                                [% IF f.authorised_value_category %]
+                                    <select name="[% f.id %]">
+                                        [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
+                                        <option value="[% a.authorised_value %]" [% IF a.authorised_value == c.value %]selected="selected"[% END %]>[% a.lib %]</option>
+                                        [% END %]
+                                    </select>
+                                [% ELSE %]
+                                    <input type="text" name="[% f.id %]" value="[% c.value %]"/>
+                                [% END %]
+                                <span class="hint">[% f.description %]</span>
+                            </li>
+                        [% END %]
+                    [% END %]
+                [% END %]
+            [% ELSE %]
                 [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
                     <li>
                         <label>[% f.name | html %]</label>
@@ -25,7 +47,7 @@
                         <span class="hint">[% f.description | html %]</span>
                     </li>
                 [% END %]
-
+            [% END %]
                 <li>
                     <a href="#" class="btn btn-sm btn-default" onclick="addEnrollment(); return false;">Finish enrollment</a>
                     <a class="cancel" href="#" onclick="showClubs(); return false;">Cancel</a>
@@ -36,6 +58,9 @@
 </div>
 
 <script>
+if([% enrollent_id %]){
+    $("#heading").html(_("Modifying enrollment")+" <em>[% club.name %]</em>");
+}
 function addEnrollment() {
     $("body").css("cursor", "progress");
     $.ajax({

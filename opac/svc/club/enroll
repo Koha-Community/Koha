@@ -64,7 +64,7 @@ if ( $borrowernumber && $id ) {
                 {
                     club_enrollment_id                => $enrollment->id(),
                     club_template_enrollment_field_id => $e->id(),
-                    value                             => $cgi->param( $e->id() ),
+                    value                             => scalar $cgi->param( $e->id() ),
                 }
             )->store();
         }

@@ -38,11 +38,29 @@ if ( $auth_status ne "ok" ) {
 
 my $id             = $cgi->param('id');
 my $borrowernumber = $cgi->param('borrowernumber');
+my $enrollent_id   = scalar $cgi->param('enrollent_id');
 
 my $club = Koha::Clubs->find($id);
 
 my $enrollment;
-if ($club) {
+
+my @club_enrollment_fields;
+
+if($enrollent_id){
+    my @enrollment_fields = $club->club_template()->club_template_enrollment_fields()->as_list;
+    @club_enrollment_fields = Koha::Club::Enrollment::Fields->search({'club_enrollment_id'=> $enrollent_id})->as_list;
+
+    foreach my $club_enrollment_field (@club_enrollment_fields){
+        foreach my $e (@enrollment_fields){
+            if($e->id()==$club_enrollment_field->club_template_enrollment_field_id){
+                my $value = $cgi->param( $e->id() );
+                $club_enrollment_field->value($value);
+                $club_enrollment_field->update();
+            }
+        }
+    }
+}
+elsif ($club) {
     $enrollment = Koha::Club::Enrollment->new(
         {
             club_id        => $club->id(),
@@ -61,7 +79,7 @@ if ($club) {
                 {
                     club_enrollment_id                => $enrollment->id(),
                     club_template_enrollment_field_id => $e->id(),
-                    value                             => $cgi->param( $e->id() ),
+                    value                             => scalar $cgi->param( $e->id() ),
                 }
             )->store();
         }
@@ -71,4 +89,9 @@ if ($club) {
 binmode STDOUT, ':encoding(UTF-8)';
 print $cgi->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-print to_json( { success => $enrollment ? 1 : 0 } );
+if($enrollent_id){
+    print to_json( { success => @club_enrollment_fields ? 1 : 0 } );
+}
+else{
+    print to_json( { success => $enrollment ? 1 : 0 } );
+}
