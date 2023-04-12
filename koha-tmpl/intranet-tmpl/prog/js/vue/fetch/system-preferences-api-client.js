@@ -11,7 +11,7 @@ export class SysprefAPIClient extends HttpClient {
         return {
             get: (variable) =>
                 this.get({
-                    endpoint: `/?pref=${variable}`,
+                    endpoint: "/?pref=" + variable,
                 }),
             update: (variable, value) =>
                 this.post({
