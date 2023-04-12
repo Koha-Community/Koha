@@ -76,7 +76,7 @@
                 [% END %]
                 <a class="btn btn-xs btn-default" href="#reldebarments" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
 
-                [% IF (noissues && CAN_user_circulate_force_checkout) %]
+                [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
                     <span class="override_debarment">
                         <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber | uri %]" class="btn btn-xs btn-default">Override restriction temporarily</a>
                     </span>
