@@ -138,7 +138,7 @@ export default {
 
         const ERMStore = inject("ERMStore")
 
-        const { sysprefs, providers } = ERMStore
+        const { sysprefs, providers } = storeToRefs(ERMStore)
 
         return {
             vendorStore,
@@ -214,8 +214,7 @@ export default {
             promises.push(
                 sysprefs_client.sysprefs.get("ERMProviders").then(
                     providers => {
-                        this.ERMStore.providers = providers.value.split(",")
-                        this.providers = this.ERMStore.providers
+                        this.providers = providers.value.split(",")
                     },
                     error => {}
                 )
@@ -227,7 +226,7 @@ export default {
         sysprefs_client.sysprefs
             .get("ERMModule")
             .then(value => {
-                this.ERMStore.sysprefs.ERMModule = value.value
+                this.sysprefs.ERMModule = value.value
                 if (this.sysprefs.ERMModule != 1) {
                     return this.setError(
                         this.$__(
