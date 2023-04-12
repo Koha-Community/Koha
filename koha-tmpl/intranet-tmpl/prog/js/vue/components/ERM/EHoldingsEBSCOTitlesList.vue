@@ -85,7 +85,7 @@ export default {
         const { get_lib_from_av } = AVStore
 
         const ERMStore = inject("ERMStore")
-        const { providers } = ERMStore
+        const { sysprefs } = ERMStore
 
         const table = ref()
         const filters = reactive({
@@ -99,7 +99,7 @@ export default {
             av_title_publication_types,
             get_lib_from_av,
             escape_str,
-            providers,
+            sysprefs,
             table,
         }
     },
@@ -178,7 +178,7 @@ export default {
                         "/api/v1/erm/eholdings/ebsco/titles"
                     )
                 }
-                if (this.providers.includes("local")) {
+                if (this.sysprefs.ERMProviders.includes("local")) {
                     const client = APIClient.erm
 
                     const q = this.filters

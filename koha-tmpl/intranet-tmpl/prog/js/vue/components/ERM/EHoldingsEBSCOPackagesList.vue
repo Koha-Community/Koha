@@ -82,7 +82,7 @@ export default {
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const ERMStore = inject("ERMStore")
-        const { providers } = ERMStore
+        const { sysprefs } = ERMStore
 
         const table = ref()
         const filters = reactive({
@@ -98,7 +98,7 @@ export default {
             get_lib_from_av,
             escape_str,
             map_av_dt_filter,
-            providers,
+            sysprefs,
             table,
         }
     },
@@ -168,7 +168,7 @@ export default {
             this.show_table = true
             this.local_count_packages = null
 
-            if (this.providers.includes("local")) {
+            if (this.sysprefs.ERMProviders.includes("local")) {
                 const client = APIClient.erm
                 const query = this.filters
                     ? {

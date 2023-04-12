@@ -4,7 +4,7 @@ export const useERMStore = defineStore("erm", {
     state: () => ({
         sysprefs: {
             ERMModule: false,
+            ERMProviders: [],
         },
-        providers: [],
     }),
 });
