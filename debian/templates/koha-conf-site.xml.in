@@ -470,5 +470,13 @@ __END_SRU_PUBLICSERVER__
      <do_not_remove_cookie>KohaOpacLanguage</do_not_remove_cookie>
  -->
 
+ <message_domain_limits>
+     <!-- Two types are supported: a regular limit and a grouped limit that refers to a regular limit -->
+     <!-- <domain><name>DOMAIN_NAME</name><limit>NUMBER</limit><unit>{NUMBER}{m[inutes]|h[ours]|d[ays]}</unit></domain> -->
+     <!-- <domain><name>OTHER_DOMAIN_NAME</name><belongs_to>DOMAIN_NAME</belongs_to></domain> -->
+     <!-- Like: <domain><name>outlook.com</name><limit>30</limit><unit>1m</unit></domain> -->
+     <!-- Like: <domain><name>hotmail.com</name><belongs_to>outlook.com</belongs_to></domain> -->
+ </message_domain_limits>
+
 </config>
 </yazgfs>
