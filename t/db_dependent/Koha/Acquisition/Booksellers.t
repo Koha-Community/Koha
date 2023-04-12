@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 
@@ -222,6 +222,34 @@ subtest 'interfaces' => sub {
     isnt( $interface->password, '',            'Password is not removed' );
     isnt( $interface->password, undef,         'Password is not set to NULL' );
     is( $interface->plain_text_password, 'oneP@sswOrd', 'Password can be retrieved using ->plain_text_password' );
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'issues' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin();
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( $vendor->issues->count, 0, 'Vendor has no issues' );
+
+    Koha::Acquisition::Bookseller::Issue->new(
+        {
+            vendor_id => $vendor->id,
+            type      => 'MAINTENANCE',
+            notes     => 'a vendor issue'
+        }
+    )->store;
+
+    $vendor = $vendor->get_from_storage;
+    my $issues = $vendor->issues;
+    is( $issues->count, 1, '1 issue stored' );
+    is( ref($issues), 'Koha::Acquisition::Bookseller::Issues', 'Type is correct' );
+
+    is( $issues->next->strings_map->{type}->{str}, 'Maintenance' );
 
     $schema->storage->txn_rollback();
 };
