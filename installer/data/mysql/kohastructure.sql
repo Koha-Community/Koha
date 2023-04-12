@@ -4849,6 +4849,7 @@ DROP TABLE IF EXISTS `preservation_processings`;
 CREATE TABLE `preservation_processings` (
   `processing_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `name` varchar(80) NOT NULL COMMENT 'name of the processing',
+  `letter_code` varchar(20) DEFAULT NULL COMMENT 'Foreign key to the letters table',
   PRIMARY KEY (`processing_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -437,6 +437,13 @@ export default {
                 }
             )
         },
+        printSlip(train_item_id) {
+            window.open(
+                "/cgi-bin/koha/preservation/print_slip.pl?train_item_id=" +
+                    train_item_id,
+                "_blank"
+            )
+        },
         selectTrainForCopy(train_item_id) {
             this.show_modal = true
             this.train_item_id_to_copy = train_item_id
@@ -469,6 +476,7 @@ export default {
             let item_table = this.item_table
             let removeItem = this.removeItem
             let editItem = this.editItem
+            let printSlip = this.printSlip
             let selectTrainForCopy = this.selectTrainForCopy
             let train = this.train
 
@@ -481,8 +489,8 @@ export default {
                     var api = new $.fn.dataTable.Api(settings)
                     $.each($(this).find("td.actions"), function (index, e) {
                         let tr = $(this).parent()
-                        let train_item_id = api.row(tr).data()
-                            .item.train_item_id
+                        let train_item = api.row(tr).data().item
+                        let train_item_id = train_item.train_item_id
 
                         let editButton = createVNode(
                             "a",
@@ -545,6 +553,28 @@ export default {
                                     ]
                                 )
                             )
+                        }
+
+                        if (train_item.processing.letter_code !== null) {
+                            let printButton = createVNode(
+                                "a",
+                                {
+                                    class: "btn btn-default btn-xs",
+                                    role: "button",
+                                    onClick: () => {
+                                        printSlip(train_item_id)
+                                    },
+                                },
+                                [
+                                    createVNode("i", {
+                                        class: "fa fa-print",
+                                        "aria-hidden": "true",
+                                    }),
+                                    __("Print slip"),
+                                ]
+                            )
+                            buttons.push(" ")
+                            buttons.push(printButton)
                         }
 
                         let n = createVNode("span", {}, buttons)

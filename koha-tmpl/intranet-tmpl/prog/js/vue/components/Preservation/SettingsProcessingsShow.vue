@@ -24,6 +24,21 @@
                             {{ processing.name }}
                         </span>
                     </li>
+                    <li v-if="notice_template">
+                        <label
+                            >{{
+                                $__("Letter template for printing slip")
+                            }}:</label
+                        >
+                        <span>
+                            {{ notice_template.name }}
+                            <a
+                                :href="`/cgi-bin/koha/tools/letter.pl?op=add_form&module=preservation&code=${notice_template.code}`"
+                                ><i class="fa fa-edit"></i>
+                                {{ $__("Edit this template") }}</a
+                            >
+                        </span>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="rows">
@@ -77,14 +92,23 @@ export default {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
 
         return {
+            notice_templates,
             setConfirmationDialog,
             setMessage,
         }
+    },
+    computed: {
+        notice_template() {
+            return this.notice_templates.find(
+                n => n.id == this.processing.letter_code
+            )
+        },
     },
     data() {
         return {
             processing: {
                 processing_id: null,
+                letter_code: null,
                 name: "",
                 attributes: [],
             },

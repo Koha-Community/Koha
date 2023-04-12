@@ -168,6 +168,7 @@
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=ill">Interlibrary loans</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=orderacquisition">Order acquisition</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=members">Patrons</a></li>
+                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=preservation">Preservation</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
@@ -225,6 +226,7 @@
                                                     [% CASE 'reserves' %]<span>Holds</span>
                                                     [% CASE 'ill' %]<span>Interlibrary loans</span>
                                                     [% CASE 'members' %]<span>Patrons</span>
+                                                    [% CASE 'preservation' %]<span>Preservation</span>
                                                     [% CASE 'serial' %]<span>Serials (new issue)</span>
                                                     [% CASE 'suggestions' %]<span>Suggestions</span>
                                                     [% CASE 'pos' %]<span>Point of sale</span>
@@ -388,6 +390,11 @@
                                             <option value="members" selected="selected">Patrons</option>
                                         [% ELSE %]
                                             <option value="members">Patrons</option>
+                                        [% END %]
+                                        [% IF ( module == "preservation" ) %]
+                                            <option value="preservation" selected="selected">Preservation</option>
+                                        [% ELSE %]
+                                            <option value="preservation">Preservation</option>
                                         [% END %]
                                         [% IF ( module == "serial" ) %]
                                             <option value="serial" selected="selected">Serials (new issue)</option>

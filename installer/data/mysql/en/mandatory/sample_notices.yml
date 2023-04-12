@@ -2384,3 +2384,25 @@ tables:
             - "[% IF ( biblio.items.count > 0 ) %]<br>Items: <ul>[% FOREACH item IN biblio.items %]<li>[% Branches.GetName( item.holdingbranch ) | html %]"
             - "[% IF ( item.location ) %], [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %][% END %][% IF item.itemcallnumber %]([% item.itemcallnumber | html %])[% END %][% item.barcode | html %]</li>[% END %]</ul>[% END %]"
             - "<hr></li>[% END %]</ol>"
+
+        - module: preservation
+          code: PRES_TRAIN_ITEM
+          branchcode: ""
+          name: "Train item slip"
+          is_html: 0
+          title: "Train item slip"
+          message_transport_type: print
+          lang: default
+          content:
+            - "[%~ SET train = train_item.train ~%]"
+            - "[%~ SET item = train_item.catalogue_item ~%]"
+            - "Train name: [% train.name %]"
+            - "Sent on: [% train.sent_on | $KohaDates %]"
+            - ""
+            - "[% train.default_processing.name %]"
+            - ""
+            - "Item number #[% train_item.user_train_item_id %]"
+            - ""
+            - "[% FOREACH item_attribute IN train_item.attributes %]"
+            - "    [% item_attribute.processing_attribute.name %]: [% item_attribute.value %]"
+            - "[% END %]"

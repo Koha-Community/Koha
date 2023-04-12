@@ -62,6 +62,18 @@ sub catalogue_item {
     return Koha::Item->_new_from_dbic($item_rs);
 }
 
+=head3 train
+
+Return the train object for this item
+
+=cut
+
+sub train {
+    my ( $self ) = @_;
+    my $rs = $self->_result->train;
+    return Koha::Preservation::Train->_new_from_dbic($rs);
+}
+
 =head3 attributes
 
 Getter and setter for the attributes

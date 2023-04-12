@@ -23,7 +23,7 @@ export class PreservationAPIClient extends HttpClient {
                     endpoint: "trains/" + id,
                     headers: {
                         "x-koha-embed":
-                            "default_processing,default_processing.attributes,items,items.attributes,items.attributes+strings,items.attributes.processing_attribute",
+                            "default_processing,default_processing.attributes,items,items.attributes,items.attributes+strings,items.attributes.processing_attribute,items.processing",
                     },
                 }),
             getAll: (query = {}) =>

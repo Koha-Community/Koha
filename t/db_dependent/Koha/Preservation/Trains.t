@@ -57,7 +57,7 @@ subtest 'default_processing' => sub {
 };
 
 subtest 'add_items & items' => sub {
-    plan tests => 14;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -109,6 +109,10 @@ subtest 'add_items & items' => sub {
     is( $item_1->get_from_storage->notforloan, $not_for_loan_train_in );
     is( $item_2->get_from_storage->notforloan, 0 );
     is( $item_3->get_from_storage->notforloan, $not_for_loan_train_in );
+
+    is( ref( $item_train_1->train ),
+        'Koha::Preservation::Train',
+        'Train::Item->train returns a Koha::Preservation::Train object' );
 
     warning_is {
         $train->add_item( { item_id => $item_2->itemnumber }, { skip_waiting_list_check => 1 } );

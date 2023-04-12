@@ -1848,7 +1848,13 @@ sub _get_tt_params {
             singular => 'illrequest',
             plural   => 'illrequests',
             pk       => 'illrequest_id'
-        }
+        },
+        preservation_train_items => {
+            module   => 'Koha::Preservation::Train::Items',
+            singular => 'train_item',
+            plural   => 'train_items',
+            pk       => 'train_item_id'
+        },
     };
 
     foreach my $table ( keys %$tables ) {

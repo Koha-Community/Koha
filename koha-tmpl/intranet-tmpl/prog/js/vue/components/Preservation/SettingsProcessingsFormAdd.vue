@@ -21,6 +21,20 @@
                             />
                             <span class="required">{{ $__("Required") }}</span>
                         </li>
+                        <li>
+                            <label for="letter_code"
+                                >{{
+                                    $__("Letter template for printing slip")
+                                }}:</label
+                            >
+                            <v-select
+                                id="letter_code"
+                                label="name"
+                                v-model="processing.letter_code"
+                                :options="notice_templates"
+                                :reduce="n => n.code"
+                            />
+                        </li>
                     </ol>
                 </fieldset>
                 <fieldset class="rows">
@@ -199,6 +213,7 @@ export default {
             setWarning,
             authorised_value_categories,
             db_column_options,
+            notice_templates,
         }
     },
     data() {

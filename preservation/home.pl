@@ -22,6 +22,7 @@ use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Database::Columns;
+use Koha::Notice::Templates;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -47,6 +48,10 @@ $template->param(
         biblioitems => Koha::Biblioitem->to_api_mapping,
         biblio      => Koha::Biblio->to_api_mapping,
     },
+    notice_templates =>
+      [ map { { id => $_->id, code => $_->code, name => $_->name } }
+          Koha::Notice::Templates->search( { module => 'preservation' } )
+          ->as_list ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
