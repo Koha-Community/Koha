@@ -1002,7 +1002,7 @@ sub SendQueuedMessages {
         return unless $message_object->store;
 
         # warn Data::Dumper->Dump( [ $message ], [ 'message' ] );
-        warn sprintf( 'sending %s message to patron: %s',
+        warn sprintf( 'Processing %s message to patron: %s',
                       $message->{'message_transport_type'},
                       $message->{'borrowernumber'} || 'Admin' )
           if $params->{'verbose'};
