@@ -74,6 +74,8 @@
                     <h3>
                         [% total | html %] result(s) found [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc | html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span class="results_limit_desc">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
                     </h3>
+
+                [% UNLESS scan %]
                     <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
 
                     <div class="searchheader" id="searchheader">
@@ -317,6 +319,7 @@
 
                         </div> <!-- /#selection_ops -->
                     </div> <!-- /#searchheader -->
+                [% END %]
 
                 [% ELSE # /IF total %]
 
@@ -346,52 +349,42 @@
                 <!-- Search Results Table -->
                 [% IF ( total ) %]
                     [% IF ( scan ) %]
-                        <h1>Scan index:</h1>
+                        <h2>Scan index</h2>
                         <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
-                            <table>
-                                <tr>
-                                    <td>
-                                        [% IF ( scan_search_term_to_use ) %]
-                                            Scan index for: <input type="text" name="q" id="scan-index" size="35" value="[% scan_search_term_to_use | html %]" />
-                                        [% ELSE %]
-                                            Scan index for: <input type="text" name="q" id="scan-index" size="35" value="" />
-                                        [% END %]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label for="scan-index">Indexed in: </label>
-                                        <select name="idx" id="scan-index">
-                                            [% IF ( header_pulldown == "" ) %]<option selected="selected" value="">Any word</option>
-                                            [% ELSE %]<option selected="selected" value="">Any word</option[% END %]
-                                            [% IF ( header_pulldown == "ms_anycommaphr" ) %]<option selected="selected" value="any,phr">Any phrase</option>
-                                            [% ELSE %]<option value="any,phr">Any phrase</option>[% END %]
-                                            [% IF ( header_pulldown == "ms_ti" ) %]<option selected="selected" value="ti">Title</option>
-                                            [% ELSE %]<option value="ti">Title</option>[% END %]
-                                            [% IF ( header_pulldown == "ms_ticommaphr" ) %]<option selected="selected" value="ti,phr">Title phrase</option>
-                                            [% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
-                                            [% IF ( header_pulldown == ( "ms_au" || "ms_aucommaphr" ) ) %]<option selected="selected" value="au,phr">Author</option>
-                                            [% ELSE %]<option value="au,phr">Author</option>[% END %]
-                                            [% IF ( header_pulldown == "ms_su" ) %]<option selected="selected" value="su">Subject</option>
-                                            [% ELSE %]<option value="su">Subject</option>[% END %]
-                                            [% IF ( header_pulldown == "ms_sucommaphr" ) %]<option selected="selected" value="su,phr">Subject phrase</option>
-                                            [% ELSE %]<option value="su,phr">Subject phrase</option>[% END %]
-                                            [% IF ( header_pulldown ==  "ms_se" ) %]<option selected="selected" value="se">Series</option>
-                                            [% ELSE %]<option value="se">Series</option>[% END %]
-                                            [% IF ( header_pulldown ==  "ms_pb" ) %]<option selected="selected" value="pb">Publisher</option>
-                                            [% ELSE %]<option value="pb">Publisher</option>[% END %]
-                                            [% IF ( header_pulldown ==  "ms_nt" ) %]<option selected="selected" value="nt">Notes</option>
-                                            [% ELSE %]<option value="nt">Notes</option>[% END %]
-                                            [% IF ( header_pulldown ==  "ms_sn" ) %]<option selected="selected" value="sn">ISBN</option>
-                                            [% ELSE %]<option value="sn">ISBN</option>[% END %]
-                                            [% IF ( header_pulldown ==  "ms_ss" ) %]<option selected="selected" value="ss">ISSN</option>
-                                            [% ELSE %]<option value="ss">ISSN</option>[% END %]
-                                        </select>
-                                        <input type="hidden" name="scan" value="1" />
-                                        <input class="submit" type="submit" value="Submit" />
-                                    </td>
-                                </tr>
-                            </table>
+                           <label for="scan-index">Scan index:</label>
+                            <select name="idx" id="scan-index">
+                                [% IF ( header_pulldown == "" ) %]<option selected="selected" value="">Any word</option>
+                                [% ELSE %]<option selected="selected" value="">Any word</option>[% END %]
+                                [% IF ( header_pulldown == "ms_anycommaphr" ) %]<option selected="selected" value="any,phr">Any phrase</option>
+                                [% ELSE %]<option value="any,phr">Any phrase</option>[% END %]
+                                [% IF ( header_pulldown == "ms_ti" ) %]<option selected="selected" value="ti">Title</option>
+                                [% ELSE %]<option value="ti">Title</option>[% END %]
+                                [% IF ( header_pulldown == "ms_ticommaphr" ) %]<option selected="selected" value="ti,phr">Title phrase</option>
+                                [% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
+                                [% IF ( header_pulldown == ( "ms_au" || "ms_aucommaphr" ) ) %]<option selected="selected" value="au,phr">Author</option>
+                                [% ELSE %]<option value="au,phr">Author</option>[% END %]
+                                [% IF ( header_pulldown == "ms_su" ) %]<option selected="selected" value="su">Subject</option>
+                                [% ELSE %]<option value="su">Subject</option>[% END %]
+                                [% IF ( header_pulldown == "ms_sucommaphr" ) %]<option selected="selected" value="su,phr">Subject phrase</option>
+                                [% ELSE %]<option value="su,phr">Subject phrase</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_se" ) %]<option selected="selected" value="se">Series</option>
+                                [% ELSE %]<option value="se">Series</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_pb" ) %]<option selected="selected" value="pb">Publisher</option>
+                                [% ELSE %]<option value="pb">Publisher</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_nt" ) %]<option selected="selected" value="nt">Notes</option>
+                                [% ELSE %]<option value="nt">Notes</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_sn" ) %]<option selected="selected" value="sn">ISBN</option>
+                                [% ELSE %]<option value="sn">ISBN</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_ss" ) %]<option selected="selected" value="ss">ISSN</option>
+                                [% ELSE %]<option value="ss">ISSN</option>[% END %]
+                            </select>
+                            [% IF ( scan_search_term_to_use ) %]
+                                 <input type="text" name="q" id="scan-index-term" size="35" value="[% scan_search_term_to_use | html %]" />
+                            [% ELSE %]
+                                Scan index for: <input type="text" name="q" id="scan-index-term" size="35" value="" />
+                            [% END %]
+                            <input type="hidden" name="scan" value="1" />
+                            <input class="submit" type="submit" value="Submit" />
                         </form>
 
                         <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
