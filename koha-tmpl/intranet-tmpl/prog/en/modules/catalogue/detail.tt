@@ -2495,6 +2495,7 @@
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
             order: [[ 0, "asc" ]],
+            embed: ["+strings"],
             bAutoWidth: false,
             columns: [
             [% IF (StaffDetailItemSelection) %]
@@ -2524,7 +2525,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.effective_item_type_id; // FIXME Display the translated description and the image
+                    return row._strings.item_type_id.str; // FIXME Display the image
                 }
             },
             [% END %]
@@ -2533,7 +2534,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.holding_library_id; // FIXME Display library name
+                    return row._strings.holding_library_id.str;
                 }
             },
             {
@@ -2541,7 +2542,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.home_library_id; // FIXME Display library name
+                    return row._strings.home_library_id.str;
                 }
                 // FIXME Display the shelving location
             },
@@ -2551,7 +2552,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.collection_code; // FIXME Display str version
+                    return row._strings.collection_code.str;
                 }
             },
             [% END %]
@@ -2597,7 +2598,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.last_seen_date; // FIXME Format date
+                    return $date(row.last_seen_date);
                 }
             },
             {
@@ -2621,7 +2622,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.acquisition_date; // FIXME Format date
+                    return $date(row.acquisition_date);
                 }
             },
             {
@@ -2629,7 +2630,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.last_checkout_date; // FIXME Format date
+                    return $date(row.last_checkout_date);
                 }
             },
             {
