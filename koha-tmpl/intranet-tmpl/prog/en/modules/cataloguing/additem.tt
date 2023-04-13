@@ -27,13 +27,6 @@
 [% Asset.js("js/cataloging_additem.js") | $raw %]
     <script>
         var has_item_groups = "[% item_groups.size | html %]";
-        $(document).ready(function() {
-            [% IF item_doesnt_exist %]
-                $("#itemst_wrapper").hide();
-                $("#menu").hide();
-                $("#cataloguing_additem_newitem").hide();
-            [% END %]
-        });
     </script>
 </head>
 
@@ -68,7 +61,7 @@
             <main>
                 [% IF item_doesnt_exist %]
                     <div class="dialog alert">
-                        <a href="/cgi/bin/koha/catloguing/additem.pl?biblionumber=[% biblio.biblionumber | uri %]">Add a new item</a> or <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]#holdings">go to the records holdings</a>.
+                        <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | uri %]">Add a new item</a> or <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]#holdings">go to the records holdings</a>.
                     </div>
                 [% END %]
                 [% INCLUDE 'blocking_errors.inc' %]
