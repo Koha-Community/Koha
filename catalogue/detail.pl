@@ -640,6 +640,13 @@ my %can_edit_items_from = map {
 } @libraries;
 $template->param(can_edit_items_from => \%can_edit_items_from);
 
+my @itemtypes = Koha::ItemTypes->search->as_list;
+my %item_type_image_locations = map {
+    $_->itemtype => $_->image_location('intranet')
+} @itemtypes;
+$template->param(item_type_image_locations => \%item_type_image_locations);
+
+
 $template->param(found1 => scalar $query->param('found1') );
 
 $template->param(biblio => $biblio);

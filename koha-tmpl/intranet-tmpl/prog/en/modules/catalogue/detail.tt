@@ -2492,6 +2492,8 @@
             });
         [% END %]
 
+        const can_edit_items_from = [% To.json(can_edit_items_from) | $raw %];
+        const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
         let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
@@ -2529,7 +2531,16 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row._strings.item_type_id.str; // FIXME Display the image
+                    let node = '';
+                    [% UNLESS noItemTypeImages %]
+                        let image_location = item_type_image_locations[row.item_type_id];
+                        let item_type_description = row._strings.item_type_id.str;
+                        node += image_location
+                            ? '<img src="%s" alt="%s" title="%s" /> '.format(image_location, item_type_description, item_type_description)
+                            : '';
+                    [% END %]
+                    node += '<span class="itypedesc itypetext">%s</span>'.format(item_type_description);
+                    return node;
                 }
             },
             [% END %]
