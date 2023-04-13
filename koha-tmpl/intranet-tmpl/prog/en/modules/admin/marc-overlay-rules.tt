@@ -263,10 +263,10 @@
                                     </td>
                                     <td>[% rule.tag | html %]</td>
                                     <td class="rule-preset"></td>
-                                    <td class="rule-operation-action" data-operation="add">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="append">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="add" data-value="[% rule.add %]">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="append" data-value="[% rule.append %]">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="remove" data-value="[% rule.remove %]">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="delete" data-value="[% rule.delete %]">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                                     <td class="actions">
                                         <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
                                         <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
@@ -430,13 +430,6 @@
           'delete': 0
         };
 
-        var overlay_rules_label_to_value = {};
-        overlay_rules_label_to_value[_("Add")] = 1;
-        overlay_rules_label_to_value[_("Append")] = 1;
-        overlay_rules_label_to_value[_("Remove")] = 1;
-        overlay_rules_label_to_value[_("Delete")] = 1;
-        overlay_rules_label_to_value[_("Skip")] = 0;
-
         function hash_config(config) {
           return JSON.stringify(config, Object.keys(config).sort());
         }
@@ -456,10 +449,10 @@
           var operations_config = {};
           $('.rule-operation-action', $this).each(function() {
             var $operation = $(this);
-            operations_config[$operation.data('operation')] = overlay_rules_label_to_value[$operation.text()];
+            operations_config[$operation.data('operation')] = $operation.data('value');
           });
           $('.rule-preset', $this).text(
-            $('option[value="' + operations_config_overlay_rule_preset(operations_config) + '"]').text() || _("Custom")
+            $('select[name="preset"] option[value="' + operations_config_overlay_rule_preset(operations_config) + '"]').text()
           );
         });
 
