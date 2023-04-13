@@ -991,7 +991,7 @@
                                             [%- FOREACH cells IN result.cells %]
                                                 [%- place = loop.index %]
                                                 [%- IF header_row.$place.cell == batch_type || header_types.item(header_row.$place.cell) == batch_type %]
-    [%# We must not add whitespace to the cardnumbers %][% cells.cell | html %]
+[%# We must not add whitespace to the cardnumbers %][% cells.cell | html %]
                                                 [%- END %]
                                             [%- END %]
                                         [%- END -%]
