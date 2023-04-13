@@ -697,12 +697,10 @@
                 </div> <!-- /.dialog -->
             [% END # /FOR m %]
 
-            [% IF suggestions.size && !notabs %]
-                <div id="suggestiontabs" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        [% FOREACH suggestion IN suggestions %]
-                            <li role="presentation">
-                            <a href="#[% suggestion.suggestiontype | uri %]" aria-controls="[% suggestion.suggestiontype | uri %]" role="tab" data-toggle="tab">
+            [% WRAPPER tabs id= "suggestiontabs" %]
+                [% WRAPPER tabs_nav %]
+                    [% FOREACH suggestion IN suggestions %]
+                        [% WRAPPER tab_item tabname= suggestion.suggestiontype %]
                             [% IF ( suggestion.suggestiontypelabel ) %]
                                 [% IF (suggestion.suggestiontypelabel == "Pending") %]<span>Pending</span>
                                 [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]<span>Accepted</span>
@@ -721,299 +719,291 @@
                                 [% END %]
                             [% END %]
                             ([% suggestion.suggestions.size| html %])
-                            </a></li>
+                        [% END %]
+                    [% END # /FOREACH suggestion %]
+                [% END # /WRAPPER tabs_nav %]
 
-                        [% END # /FOREACH suggestion %]
-                    </ul> <!-- /.ui-tabs-nav -->
-                    <div class="tab-content">
-                [% END # IF suggestions.size && !notabs %]
+                [% WRAPPER tab_panels %]
+                    [% FOREACH suggestion IN suggestions %]
+                        [% WRAPPER tab_panel tabname= suggestion.suggestiontype %]
+                            <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
 
-                [% FOREACH suggestion IN suggestions %]
-                    [% UNLESS ( notabs ) %]
-                    <div id="[% suggestion.suggestiontype | html %]" role="tabpanel" class="tab-pane">
-                    [% ELSE %]
-                    <div id="[% suggestion.suggestiontype | html %]">
-                    [% END %]
-                        <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
+                                [% IF suggestion.suggestions.size %]
+                                    <p>
+                                        <a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a>
+                                    </p>
 
-                            [% IF suggestion.suggestions.size %]
-                                <p>
-                                    <a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a>
-                                </p>
-
-                                <table id="table_[% loop.count | html %]" class="sorted">
-                                    <thead>
-                                        <tr>
-                                            <th class="NoSort noExport">&nbsp;</th>
-                                            <th class="anti-the">Suggestion</th>
-                                            <th>Suggested by</th>
-                                            <th>Suggester category</th>
-                                            <th>Suggested on</th>
-                                            <th>Patron reason</th>
-                                            <th>Managed by</th>
-                                            <th>Managed on</th>
-                                            <th>Last modification by</th>
-                                            <th>Last modification on</th>
-                                            <th>Last updated</th>
-                                            <th>Library</th>
-                                            <th>Fund</th>
-                                            <th>Non-public note</th>
-                                            <th>Status</th>
-                                            <th class="NoSort noExport">&nbsp;</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH s IN suggestion.suggestions %]
+                                    <table id="table_[% loop.count | html %]" class="sorted">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" name="suggestionid" value="[% s.suggestionid | html %]" />
-                                                </td>
-                                                <td>
-                                                    <a href="suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show" title="suggestion" >
-                                                        [% s.title | html %][% IF ( s.author ) %], by [% s.author | html %][% END %]
-                                                    </a>
-                                                    <br />
-                                                    [% IF ( s.copyrightdate ) %]
-                                                        &copy; <span class="suggestion_copyrightdate">[% s.copyrightdate | html %]</span>
-                                                    [% END %]
-                                                    [% IF ( s.volumedesc ) %]
-                                                        ; <span class="suggestion_volume">Volume:<em>[% s.volumedesc | html %]</em></span>
-                                                    [% END %]
-                                                    [% IF ( s.isbn ) %]
-                                                        ; <span class="suggestion_isbn">ISBN: <em>[% s.isbn | html %]</em></span>
-                                                    [% END %]
-                                                    [% IF ( s.publishercode ) %]
-                                                        ; <span class="suggestion_publishercode">Published by [% s.publishercode | html %]</span>
-                                                    [% END %]
-                                                    [% IF ( s.publicationyear ) %]
-                                                        in <span class="suggestion_publicationyear"><em>[% s.publicationyear | html %]</em></span>
-                                                    [% END %]
-                                                    [% IF ( s.place ) %]
-                                                        in <span class="suggestion_place"><em>[% s.place | html %]</em></span>
-                                                    [% END %]
-                                                    [% IF ( s.collectiontitle ) %]
-                                                        ; <span class="suggestion_collectiontitle">[% s.collectiontitle | html %]</span>
-                                                    [% END %]
-                                                    [% IF ( s.itemtype ) %]
-                                                        ; <span class="suggestion_itype">[% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', s.itemtype, 0 ) | html %]</span>
-                                                    [% END %]
-                                                    <br />
-                                                    [% IF ( s.note ) %]
-                                                        <div class="suggestion_note"><i class="fa fa-comment"></i> [% s.note | html %]</div>
-                                                    [% END %]
-                                                    [% IF s.archived %]
-                                                        <br /><i class="fa fa-archive"></i> Archived
-                                                    [% END %]
-                                                </td>
-                                                <td>
-                                                    [% SET suggester = s.suggester %]
-                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggester.borrowernumber | uri %]">[% suggester.surname | html %][% IF suggester.firstname %], [% suggester.firstname | html %][% END %] [% IF suggester.cardnumber %]([% suggester.cardnumber | html %])[% END %]</a>
-                                                </td>
-                                                <td>
-                                                    [% suggester.category.description | html %]
-                                                </td>
-                                                <td data-order="[% s.suggesteddate | html %]">
-                                                    [% IF ( s.suggesteddate ) %][% s.suggesteddate | $KohaDates %][% END %]
-                                                </td>
-                                                <td>[% AuthorisedValues.GetByCode( 'OPAC_SUG', s.patronreason ) | html %]</td>
-                                                <td>
-                                                    [% SET manager = s.manager %]
-                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% manager.borrowernumber | uri %]">[% manager.surname | html %][% IF manager.firstname %], [% manager.firstname | html %][% END %]</a>
-                                                </td>
-                                                <td data-order="[% s.manageddate | html %]">
-                                                    [% IF ( s.manageddate ) %][% s.manageddate | $KohaDates %][% END %]
-                                                </td>
-                                                <td>
-                                                    [% SET last_modifier = s.last_modifier %]
-                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% last_modifier.borrowernumber | uri %]">[% last_modifier.surname | html %][% IF last_modifier.firstname %], [% last_modifier.firstname | html %][% END %]</a>
-                                                </td>
-                                                <td data-order="[% s.lastmodificationdate | html %]">
-                                                    [% IF ( s.lastmodificationdate ) %][% s.lastmodificationdate | $KohaDates %][% END %]
-                                                </td>
-                                                <td>
-                                                    [% s.lastmodificationdate | $KohaDates %]
-                                                </td>
-                                                <td>
-                                                    [% Branches.GetName( s.branchcode ) | html %]
-                                                </td>
-                                                <td>
-                                                    [% s.fund.budget_name | html %]
-                                                </td>
-                                                <td>
-                                                    [% s.staff_note | html %]
-                                                </td>
-                                                <td>
-                                                    [% IF s.STATUS == 'ASKED' %]
-                                                        <span>Pending</span>
-                                                    [% ELSIF s.STATUS == 'ACCEPTED' %]
-                                                        <span>Accepted</span>
-                                                    [% ELSIF s.STATUS == 'ORDERED' %]
-                                                        <span>Ordered</span>
-                                                    [% ELSIF s.STATUS == 'REJECTED' %]
-                                                        <span>Rejected</span>
-                                                    [% ELSIF s.STATUS == 'CHECKED' %]
-                                                        <span>Checked</span>
-                                                    [% ELSIF s.STATUS == 'AVAILABLE' %]
-                                                        <span>Available</span>
-                                                    [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) %]
-                                                        [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) | html %]
-                                                    [% ELSE %]
-                                                        <span>Status unknown</span>
-                                                    [% END %]
-
-                                                    [% IF ( s.reason ) %]
-                                                        <br />([% s.reason | html %])
-                                                    [% END %]
-                                                </td>
-                                                <td class="actions">
-                                                    <div class="btn-group dropup">
-                                                        <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
-                                                            <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a></li>
-                                                            [% UNLESS s.archived %]
-                                                                <li><a class="archivesuggestion" href="suggestion.pl?op=archive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Archive</a></li>
-                                                            [% ELSE %]
-                                                                <li><a class="unarchivesuggestion" href="suggestion.pl?op=unarchive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Unarchive</a></li>
-                                                            [% END %]
-                                                        </ul>
-                                                    </div>
-                                                </td>
+                                                <th class="NoSort noExport">&nbsp;</th>
+                                                <th class="anti-the">Suggestion</th>
+                                                <th>Suggested by</th>
+                                                <th>Suggester category</th>
+                                                <th>Suggested on</th>
+                                                <th>Patron reason</th>
+                                                <th>Managed by</th>
+                                                <th>Managed on</th>
+                                                <th>Last modification by</th>
+                                                <th>Last modification on</th>
+                                                <th>Last updated</th>
+                                                <th>Library</th>
+                                                <th>Fund</th>
+                                                <th>Non-public note</th>
+                                                <th>Status</th>
+                                                <th class="NoSort noExport">&nbsp;</th>
                                             </tr>
-                                        [% END # /FOREACH s %]
-                                    </tbody>
-                                </table> <!-- /#table_[% loop.count | html %] -->
+                                        </thead>
+                                        <tbody>
+                                            [% FOREACH s IN suggestion.suggestions %]
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="suggestionid" value="[% s.suggestionid | html %]" />
+                                                    </td>
+                                                    <td>
+                                                        <a href="suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show" title="suggestion" >
+                                                            [% s.title | html %][% IF ( s.author ) %], by [% s.author | html %][% END %]
+                                                        </a>
+                                                        <br />
+                                                        [% IF ( s.copyrightdate ) %]
+                                                            &copy; <span class="suggestion_copyrightdate">[% s.copyrightdate | html %]</span>
+                                                        [% END %]
+                                                        [% IF ( s.volumedesc ) %]
+                                                            ; <span class="suggestion_volume">Volume:<em>[% s.volumedesc | html %]</em></span>
+                                                        [% END %]
+                                                        [% IF ( s.isbn ) %]
+                                                            ; <span class="suggestion_isbn">ISBN: <em>[% s.isbn | html %]</em></span>
+                                                        [% END %]
+                                                        [% IF ( s.publishercode ) %]
+                                                            ; <span class="suggestion_publishercode">Published by [% s.publishercode | html %]</span>
+                                                        [% END %]
+                                                        [% IF ( s.publicationyear ) %]
+                                                            in <span class="suggestion_publicationyear"><em>[% s.publicationyear | html %]</em></span>
+                                                        [% END %]
+                                                        [% IF ( s.place ) %]
+                                                            in <span class="suggestion_place"><em>[% s.place | html %]</em></span>
+                                                        [% END %]
+                                                        [% IF ( s.collectiontitle ) %]
+                                                            ; <span class="suggestion_collectiontitle">[% s.collectiontitle | html %]</span>
+                                                        [% END %]
+                                                        [% IF ( s.itemtype ) %]
+                                                            ; <span class="suggestion_itype">[% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', s.itemtype, 0 ) | html %]</span>
+                                                        [% END %]
+                                                        <br />
+                                                        [% IF ( s.note ) %]
+                                                            <div class="suggestion_note"><i class="fa fa-comment"></i> [% s.note | html %]</div>
+                                                        [% END %]
+                                                        [% IF s.archived %]
+                                                            <br /><i class="fa fa-archive"></i> Archived
+                                                        [% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% SET suggester = s.suggester %]
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggester.borrowernumber | uri %]">[% suggester.surname | html %][% IF suggester.firstname %], [% suggester.firstname | html %][% END %] [% IF suggester.cardnumber %]([% suggester.cardnumber | html %])[% END %]</a>
+                                                    </td>
+                                                    <td>
+                                                        [% suggester.category.description | html %]
+                                                    </td>
+                                                    <td data-order="[% s.suggesteddate | html %]">
+                                                        [% IF ( s.suggesteddate ) %][% s.suggesteddate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>[% AuthorisedValues.GetByCode( 'OPAC_SUG', s.patronreason ) | html %]</td>
+                                                    <td>
+                                                        [% SET manager = s.manager %]
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% manager.borrowernumber | uri %]">[% manager.surname | html %][% IF manager.firstname %], [% manager.firstname | html %][% END %]</a>
+                                                    </td>
+                                                    <td data-order="[% s.manageddate | html %]">
+                                                        [% IF ( s.manageddate ) %][% s.manageddate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% SET last_modifier = s.last_modifier %]
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% last_modifier.borrowernumber | uri %]">[% last_modifier.surname | html %][% IF last_modifier.firstname %], [% last_modifier.firstname | html %][% END %]</a>
+                                                    </td>
+                                                    <td data-order="[% s.lastmodificationdate | html %]">
+                                                        [% IF ( s.lastmodificationdate ) %][% s.lastmodificationdate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% s.lastmodificationdate | $KohaDates %]
+                                                    </td>
+                                                    <td>
+                                                        [% Branches.GetName( s.branchcode ) | html %]
+                                                    </td>
+                                                    <td>
+                                                        [% s.fund.budget_name | html %]
+                                                    </td>
+                                                    <td>
+                                                        [% s.staff_note | html %]
+                                                    </td>
+                                                    <td>
+                                                        [% IF s.STATUS == 'ASKED' %]
+                                                            <span>Pending</span>
+                                                        [% ELSIF s.STATUS == 'ACCEPTED' %]
+                                                            <span>Accepted</span>
+                                                        [% ELSIF s.STATUS == 'ORDERED' %]
+                                                            <span>Ordered</span>
+                                                        [% ELSIF s.STATUS == 'REJECTED' %]
+                                                            <span>Rejected</span>
+                                                        [% ELSIF s.STATUS == 'CHECKED' %]
+                                                            <span>Checked</span>
+                                                        [% ELSIF s.STATUS == 'AVAILABLE' %]
+                                                            <span>Available</span>
+                                                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) %]
+                                                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) | html %]
+                                                        [% ELSE %]
+                                                            <span>Status unknown</span>
+                                                        [% END %]
 
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <h2>Change selected suggestions</h2>
+                                                        [% IF ( s.reason ) %]
+                                                            <br />([% s.reason | html %])
+                                                        [% END %]
+                                                    </td>
+                                                    <td class="actions">
+                                                        <div class="btn-group dropup">
+                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
+                                                                <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                                                                [% UNLESS s.archived %]
+                                                                    <li><a class="archivesuggestion" href="suggestion.pl?op=archive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Archive</a></li>
+                                                                [% ELSE %]
+                                                                    <li><a class="unarchivesuggestion" href="suggestion.pl?op=unarchive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Unarchive</a></li>
+                                                                [% END %]
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            [% END # /FOREACH s %]
+                                        </tbody>
+                                    </table> <!-- /#table_[% loop.count | html %] -->
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h2>Change selected suggestions</h2>
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="suggestions_batch_ops" class="row">
-                                    <div class="col-sm-4">
-                                        <fieldset class="brief">
-                                            <div id="select-reason[% loop.index | html %]">
-                                                <label for="STATUSreason[% loop.index | html %]">Mark selected as: </label>
-                                                <select name="STATUS" id="STATUSreason[% loop.index | html %]">
-                                                    <option value=""> -- Choose a status --</option>
+                                    <div id="suggestions_batch_ops" class="row">
+                                        <div class="col-sm-4">
+                                            <fieldset class="brief">
+                                                <div id="select-reason[% loop.index | html %]">
+                                                    <label for="STATUSreason[% loop.index | html %]">Mark selected as: </label>
+                                                    <select name="STATUS" id="STATUSreason[% loop.index | html %]">
+                                                        <option value=""> -- Choose a status --</option>
 
-                                                    [% IF (statusselected_ASKED ) %]
-                                                        <option value="ASKED" selected="selected">Pending</option>
-                                                    [% ELSE %]
-                                                        <option value="ASKED">Pending</option>
-                                                    [% END %]
+                                                        [% IF (statusselected_ASKED ) %]
+                                                            <option value="ASKED" selected="selected">Pending</option>
+                                                        [% ELSE %]
+                                                            <option value="ASKED">Pending</option>
+                                                        [% END %]
 
-                                                    [% IF (statusselected_ACCEPTED ) %]
-                                                        <option value="ACCEPTED" selected="selected">Accepted</option>
-                                                    [% ELSE %]
-                                                        <option value="ACCEPTED">Accepted</option>
-                                                    [% END %]
+                                                        [% IF (statusselected_ACCEPTED ) %]
+                                                            <option value="ACCEPTED" selected="selected">Accepted</option>
+                                                        [% ELSE %]
+                                                            <option value="ACCEPTED">Accepted</option>
+                                                        [% END %]
 
-                                                    [% IF (statusselected_CHECKED ) %]
-                                                        <option value="CHECKED" selected="selected">Checked</option>
-                                                    [% ELSE %]
-                                                        <option value="CHECKED">Checked</option>
-                                                    [% END %]
+                                                        [% IF (statusselected_CHECKED ) %]
+                                                            <option value="CHECKED" selected="selected">Checked</option>
+                                                        [% ELSE %]
+                                                            <option value="CHECKED">Checked</option>
+                                                        [% END %]
 
-                                                    [% IF ( statusselected_REJECTED ) %]
-                                                        <option value="REJECTED" selected="selected">Rejected</option>
-                                                    [% ELSE %]
-                                                        <option value="REJECTED">Rejected</option>
-                                                    [% END %]
+                                                        [% IF ( statusselected_REJECTED ) %]
+                                                            <option value="REJECTED" selected="selected">Rejected</option>
+                                                        [% ELSE %]
+                                                            <option value="REJECTED">Rejected</option>
+                                                        [% END %]
 
-                                                    [% IF ( statusselected_ORDERED ) %]
-                                                        <option value="ORDERED" selected="selected">Ordered</option>
-                                                    [% ELSE %]
-                                                        <option value="ORDERED">Ordered</option>
-                                                    [% END %]
+                                                        [% IF ( statusselected_ORDERED ) %]
+                                                            <option value="ORDERED" selected="selected">Ordered</option>
+                                                        [% ELSE %]
+                                                            <option value="ORDERED">Ordered</option>
+                                                        [% END %]
 
-                                                    [% FOREACH s IN SuggestionStatuses %]
-                                                        <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
-                                                    [% END %]
-                                                </select>
+                                                        [% FOREACH s IN SuggestionStatuses %]
+                                                            <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
+                                                        [% END %]
+                                                    </select>
 
-                                                <label for="choosereason[% loop.index | html %]">with this reason:</label>
-                                                <select name="reason" id="choosereason[% loop.index | html %]">
-                                                    <option value=""> -- Choose a reason -- </option>
-                                                    [% FOREACH reasonsloo IN suggestion.reasonsloop %]
-                                                        <option value="[% reasonsloo.lib | html %]">[% reasonsloo.lib | html %]</option>
-                                                    [% END %]
-                                                    <option value="other">Others...</option>
-                                                </select>
+                                                    <label for="choosereason[% loop.index | html %]">with this reason:</label>
+                                                    <select name="reason" id="choosereason[% loop.index | html %]">
+                                                        <option value=""> -- Choose a reason -- </option>
+                                                        [% FOREACH reasonsloo IN suggestion.reasonsloop %]
+                                                            <option value="[% reasonsloo.lib | html %]">[% reasonsloo.lib | html %]</option>
+                                                        [% END %]
+                                                        <option value="other">Others...</option>
+                                                    </select>
 
-                                                <span class="other_reason">
-                                                    <input type="text" size="31" name="other_reason" placeholder="please note your reason here..." />
-                                                    <a href="#" class="cancel_note">Cancel</a>
-                                                </span>
-                                            </div>
+                                                    <span class="other_reason">
+                                                        <input type="text" size="31" name="other_reason" placeholder="please note your reason here..." />
+                                                        <a href="#" class="cancel_note">Cancel</a>
+                                                    </span>
+                                                </div>
 
-                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                        </fieldset>
-                                        <fieldset class="action">
-                                            <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
-                                        </fieldset>
-                                    </div> <!-- /.col-sm-4 -->
-
-                                    <div class="col-sm-2">
-                                        <fieldset class="brief">
-                                            <label id="suggestion_itemtype">
-                                                Update item types with:
-                                            </label>
-                                            [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
-                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                        </fieldset>
-                                        <fieldset class="action">
-                                            <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
-                                        </fieldset>
-                                    </div> <!-- /.col-sm-4 -->
-
-                                    <div class="col-sm-2">
-                                        <fieldset class="brief">
-                                            <span class="label">Update manager</span>
-                                            <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
-                                            <span id="managedby_name[% loop.count | html %]"></span>
-                                            <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
-                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                        </fieldset>
-                                        <fieldset class="action">
-                                            <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
-                                        </fieldset>
-                                    </div> <!-- /.col-sm-2 -->
-
-                                    <div class="col-sm-2">
-                                        <fieldset class="brief">
-                                            <span class="label">Delete selected</span>
-                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                        </fieldset>
-                                        <fieldset class="action">
-                                            <button type="submit" class="btn btn-primary" value="delete">Delete</button>
-                                        </fieldset>
-                                    </div> <!-- /.col-sm-2 -->
-                                    <div class="col-sm-2">
-                                        <fieldset class="brief">
-                                            <span class="label">Archive selected</span>
-                                            <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                            <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="archive">Archive</button>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             </fieldset>
-                                        </fieldset>
-                                    </div> <!-- /.col-sm-2 -->
-                                </div> <!-- /.row -->
+                                            <fieldset class="action">
+                                                <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
+                                            </fieldset>
+                                        </div> <!-- /.col-sm-4 -->
 
-                            [% ELSE %]
-                                <strong>No results.</strong>
-                            [% END # /IF ( suggestion.suggestions_loop ) %]
-                        </form> <!-- /.update_suggestions -->
-                    </div> <!-- /#[% suggestion.suggestiontype | html %] -->
-                [% END # /FOREACH suggestion %]
-            [% IF suggestions.size && !notabs %]
-                    </div> <!-- /.tab-content -->
-                </div> <!-- /.notabs -->
-            [% END # /UNLESS notabs %]
+                                        <div class="col-sm-2">
+                                            <fieldset class="brief">
+                                                <label id="suggestion_itemtype">
+                                                    Update item types with:
+                                                </label>
+                                                [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                            </fieldset>
+                                            <fieldset class="action">
+                                                <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
+                                            </fieldset>
+                                        </div> <!-- /.col-sm-4 -->
+
+                                        <div class="col-sm-2">
+                                            <fieldset class="brief">
+                                                <span class="label">Update manager</span>
+                                                <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
+                                                <span id="managedby_name[% loop.count | html %]"></span>
+                                                <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                            </fieldset>
+                                            <fieldset class="action">
+                                                <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
+                                            </fieldset>
+                                        </div> <!-- /.col-sm-2 -->
+
+                                        <div class="col-sm-2">
+                                            <fieldset class="brief">
+                                                <span class="label">Delete selected</span>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                            </fieldset>
+                                            <fieldset class="action">
+                                                <button type="submit" class="btn btn-primary" value="delete">Delete</button>
+                                            </fieldset>
+                                        </div> <!-- /.col-sm-2 -->
+                                        <div class="col-sm-2">
+                                            <fieldset class="brief">
+                                                <span class="label">Archive selected</span>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                                <fieldset class="action">
+                                                    <button type="submit" class="btn btn-primary" value="archive">Archive</button>
+                                                </fieldset>
+                                            </fieldset>
+                                        </div> <!-- /.col-sm-2 -->
+                                    </div> <!-- /.row -->
+
+                                [% ELSE %]
+                                    <strong>No results.</strong>
+                                [% END # /IF ( suggestion.suggestions_loop ) %]
+                            </form> <!-- /.update_suggestions -->
+                        [% END # /tab_panel# %]
+                    [% END # /FOREACH suggestion %]
+                [% END # /WRAPPER tab_panels %]
+            [% END # /WRAPPER tabs %]
         [% END # /IF op == 'else' %]
 
         [% UNLESS op == 'save' %]
