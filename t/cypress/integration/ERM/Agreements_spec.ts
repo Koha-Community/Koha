@@ -156,6 +156,44 @@ describe("Agreement CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement);
         cy.visit("/cgi-bin/koha/erm/agreements");
         cy.get("#agreements_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get(".filters").find("label").should(($labels) => {
+              expect($labels).to.have.length(2)
+              expect($labels.eq(0)).to.contain('Filter by expired')
+              expect($labels.eq(1)).to.contain('Show mine only')
+        }); // Filter options appear
+
+        // Test filtering
+        cy.intercept("GET", "/api/v1/erm/agreements?max_expiration_date=*", []).as("getActiveAgreements");
+        cy.get("#expired_filter").check();
+        cy.get("#filter_table").click();
+        cy.wait('@getActiveAgreements')
+            .its('request.url')
+            .should('include', 'max_expiration_date='+dates["today_iso"]); // Defaults to today
+        cy.get("#max_expiration_date_filter").should("have.value", dates["today_iso"]); // Input box reflects default
+        cy.url().should('include', "/cgi-bin/koha/erm/agreements?by_expired=true"); // Browser url also updated
+
+        // Now test that the url for this particular state works
+        cy.visit("/cgi-bin/koha/erm/agreements?by_expired=true");
+        cy.wait('@getActiveAgreements').its('request.url').should('include', 'max_expiration_date='+dates["today_iso"]);
+
+        // Now test with a user entered date
+        cy.get("#max_expiration_date_filter+input").click({ force: true });
+        cy.get(".flatpickr-calendar")
+            .eq(0)
+            .find("span.today")
+            .next("span")
+            .click(); // select tomorrow
+        cy.get("#filter_table").click();
+        cy.wait('@getActiveAgreements').its('request.url').should('include', 'max_expiration_date='+dates["tomorrow_iso"]);
+        cy.get("#max_expiration_date_filter").should("have.value", dates["tomorrow_iso"]);
+        // Assert that browser url changed again to reflect the user entered date
+        cy.url().should('include', "/cgi-bin/koha/erm/agreements?by_expired=true&max_expiration_date="+dates["tomorrow_iso"]);
+
+        // Now test that the url for the updated state works
+        cy.visit("/cgi-bin/koha/erm/agreements?by_expired=true&max_expiration_date="+dates["tomorrow_iso"]);
+        cy.wait('@getActiveAgreements').its('request.url').should('include', 'max_expiration_date='+dates["tomorrow_iso"]);
+
+        // Test filter button with show mine_only ticked
     });
 
     it("Add agreement", () => {
