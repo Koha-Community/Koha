@@ -695,7 +695,48 @@
 [% IF ( count ) %]
     [% IF ( showncount ) %]
         [% PROCESS items_table tab="holdings" items=itemloop %]
+
+        [% SET tab="holdings" %]
+        <table id="table_items">
+            <thead>
+                [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
+                [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                    <th id="[% tab | html %]_cover_image" data-colname="[% tab | html %]_cover_image">Cover image</th>
+                [% END %]
+                [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
+                <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
+                <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
+                [% IF ( itemdata_ccode ) %]<th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>[% END %]
+                [% IF Koha.Preference('EnableItemGroups') %]
+                    <th id="[% tab | html %]_item_group" data-colname="[% tab | html %]_item_group">Item group</th>
+                [% END %]
+                <th id="[% tab | html %]_itemcallnumber" data-colname="[% tab | html %]_itemcallnumber">Call number</th>
+                [% IF volinfo %]
+                    <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
+                [% END %]
+                <th id="[% tab | html %]_status" data-colname="[% tab | html %]_status">Status</th>
+                <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen">Last seen</th>
+                <th id="[% tab | html %]_issues" data-colname="[% tab | html %]_issues">Checkouts</th>
+                <th id="[% tab | html %]_renewals" data-colname="[% tab | html %]_renewals">Renewals</th>
+                <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
+                <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
+                <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
+                [% IF ( itemdata_uri ) %]<th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>[% END %]
+                [% IF ( itemdata_copynumber ) %]<th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>[% END %]
+                [% IF ( itemdata_stocknumber ) %]<th id="[% tab | html %]_stocknumber" data-colname="[% tab | html %]_stocknumber">Inventory number</th>[% END %]
+                [% IF materials %]<th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>[% END %]
+                [% IF ( itemdata_itemnotes ) %]<th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>[% END %]
+                [% IF ( itemdata_nonpublicnotes ) %]<th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>[% END %]
+                [% IF ( hostrecords ) %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
+                [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
+                [% IF ( ShowCourseReserves ) %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions"class="NoSort noExport">&nbsp;</th>[% END %]
+                </tr>
+            </thead>
+        </table>
     [% END %]
+
     [% IF ( hiddencount ) %]
        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
     [% END %]
@@ -2449,6 +2490,268 @@
 
             });
         [% END %]
+
+        let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
+        var items_table = $("#table_items").kohaTable({
+            ajax: { url: table_url },
+            order: [[ 0, "asc" ]],
+            bAutoWidth: false,
+            columns: [
+            [% IF (StaffDetailItemSelection) %]
+            {
+                data: "me.item_id",
+                searchable: false,
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    // FIXME if item.can_be_edited
+                    return ('<input type="checkbox" value="%s" name="itemnumber" />'.format(row.item_id));
+                }
+            },
+            [% END %]
+            [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return ""; // FIXME Build cover images
+                }
+            },
+            [% END %]
+            [% IF ( item_level_itypes ) %]
+            {
+                data: "me.effective_item_type_id",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.effective_item_type_id; // FIXME Display the translated description and the image
+                }
+            },
+            [% END %]
+            {
+                data: "me.holding_library_id",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.holding_library_id; // FIXME Display library name
+                }
+            },
+            {
+                data: "me.home_library_id",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.home_library_id; // FIXME Display library name
+                }
+                // FIXME Display the shelving location
+            },
+            [% IF ( itemdata_ccode ) %]
+            {
+                data: "me.collection_code",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.collection_code; // FIXME Display str version
+                }
+            },
+            [% END %]
+            [% IF Koha.Preference('EnableItemGroups') %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return "item.item_group.description";// FIXME item.item_group.description
+                }
+            },
+            [% END %]
+            {
+                data: "me.callnumber",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.callnumber;
+                }
+
+            },
+            [% IF volinfo %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return "volinfo"; // FIXME volinfo/enumchron/serial_issue_number
+                }
+            },
+            [% END %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return "status"; // FIXME Display status
+                }
+            },
+            {
+                data: "me.last_seen_date",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.last_seen_date; // FIXME Format date
+                }
+            },
+            {
+                data: "me.checkouts_count",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.checkouts_count || 0;
+                }
+            },
+            {
+                data: "me.renewals_count",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.renewals_count || 0;
+                }
+            },
+            {
+                data: "me.acquisition_date",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.acquisition_date; // FIXME Format date
+                }
+            },
+            {
+                data: "me.last_checkout_date",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.last_checkout_date; // FIXME Format date
+                }
+            },
+            {
+                data: "me.external_id",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.external_id; // FIXME Display link to moredetail
+                }
+            },
+            [% IF itemdata_uri %]
+            {
+                data: "me.uri",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.uri; // FIXME Display link
+                }
+            },
+            [% END %]
+            [% IF ( itemdata_copynumber ) %]
+            {
+                data: "me.copy_number",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.copy_number; // FIXME Display str version
+                }
+            },
+            [% END %]
+            [% IF ( itemdata_stocknumber ) %]
+            {
+                data: "me.inventory_number",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.inventory_number;
+                }
+            },
+            [% END %]
+            [% IF materials %]
+            {
+                data: "me.materials_notes",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.materials_notes;
+                }
+            },
+            [% END %]
+            [% IF ( itemdata_itemnotes ) %]
+            {
+                data: "me.public_notes",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.public_notes; // FIXME Replace \n with br
+                }
+            },
+            [% END %]
+            [% IF itemdata_nonpublicnotes %]
+            {
+                data: "me.internal_notes",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.internal_notes;
+                }
+            },
+            [% END %]
+            [% IF ( hostrecords ) %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return ""; // FIXME Display host title with link
+                }
+            },
+            [% END %]
+            [% IF ( analyze ) %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return ""; // FIXME Display analytic count + link
+                }
+            },
+            [% END %]
+            [% IF ( ShowCourseReserves ) %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return ""; // FIXME Display course reserves
+                }
+            },
+            [% END %]
+            [% IF ( SpineLabelShowPrintOnBibDetails ) %]
+            {
+                data: "",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return ""; // FIXME Print label
+                }
+            },
+            [% END %]
+            [% IF CAN_user_editcatalogue_edit_items %]
+            {
+                data: function( row, type, val, meta ) {
+                    let result = 'Edit + Delete'; // FIXME Add links
+                    return result;
+                },
+                searchable: false,
+                orderable: false
+            }
+            [% END %]
+            ],
+        });
     </script>
     [% CoverImagePlugins | $raw %]
 [% END %]
