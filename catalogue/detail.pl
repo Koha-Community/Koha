@@ -634,6 +634,12 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     $template->param( course_reserves => $course_reserves );
 }
 
+my @libraries = $biblio->items({ host_items => 1 })->get_column('homebranch');
+my %can_edit_items_from = map {
+    $_ => $patron->can_edit_items_from($_)
+} @libraries;
+$template->param(can_edit_items_from => \%can_edit_items_from);
+
 $template->param(found1 => scalar $query->param('found1') );
 
 $template->param(biblio => $biblio);

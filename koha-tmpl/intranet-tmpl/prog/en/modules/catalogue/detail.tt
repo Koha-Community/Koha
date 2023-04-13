@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE To %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE KohaPlugins %]
@@ -2504,8 +2505,11 @@
                 searchable: false,
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    // FIXME if item.can_be_edited
-                    return ('<input type="checkbox" value="%s" name="itemnumber" />'.format(row.item_id));
+                    if ( can_edit_items_from[row.holding_library_id] ){
+                        return '<input type="checkbox" value="%s" name="itemnumber" />'.format(row.item_id);
+                    } else {
+                        return ''
+                    }
                 }
             },
             [% END %]
