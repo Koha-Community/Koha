@@ -707,7 +707,7 @@
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
                 <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
-                [% IF ( itemdata_ccode ) %]<th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>[% END %]
+                <th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>
                 [% IF Koha.Preference('EnableItemGroups') %]
                     <th id="[% tab | html %]_item_group" data-colname="[% tab | html %]_item_group">Item group</th>
                 [% END %]
@@ -2238,10 +2238,6 @@
 
         });
 
-        function columnsInit(table) {
-            activate_filters(table.id, false);
-        }
-
         [% IF found1 && Koha.Preference('RetainCatalogSearchTerms') %]
             $(document).ready(function() {
                 var search_index = localStorage.getItem("cat_search_pulldown_selection");
@@ -2499,6 +2495,7 @@
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
+        let table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %];
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
             order: [[ 0, "asc" ]],
@@ -2583,7 +2580,6 @@
                 }
                 // FIXME Display the shelving location
             },
-            [% IF ( itemdata_ccode ) %]
             {
                 data: "me.collection_code",
                 searchable: true,
@@ -2592,7 +2588,6 @@
                     return row._strings.collection_code.str;
                 }
             },
-            [% END %]
             [% IF Koha.Preference('EnableItemGroups') %]
             {
                 data: "",
@@ -2806,6 +2801,22 @@
             }
             [% END %]
             ],
+            initComplete: function( settings, json ){
+                let table = settings.oInstance.api();
+                table.columns().every(function(i){
+                    let is_empty = true;
+                    let nodes = this.nodes();
+                    nodes.each((td, ii) => {
+                        if ( $(td).html() !== '' ) {
+                            is_empty = false;
+                            return;
+                        }
+                    });
+                    if ( is_empty ) {
+                        table.columns(i).visible(false);
+                    }
+                });
+            },
         });
     </script>
     [% CoverImagePlugins | $raw %]
