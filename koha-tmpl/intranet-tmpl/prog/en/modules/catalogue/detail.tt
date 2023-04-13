@@ -701,7 +701,7 @@
         <table id="table_items">
             <thead>
                 [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
-                [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                [% IF Koha.Preference('LocalCoverImages') %]
                     <th id="[% tab | html %]_cover_image" data-colname="[% tab | html %]_cover_image">Cover image</th>
                 [% END %]
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
@@ -722,12 +722,12 @@
                 <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
                 <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
                 <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
-                [% IF ( itemdata_uri ) %]<th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>[% END %]
-                [% IF ( itemdata_copynumber ) %]<th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>[% END %]
-                [% IF ( itemdata_stocknumber ) %]<th id="[% tab | html %]_stocknumber" data-colname="[% tab | html %]_stocknumber">Inventory number</th>[% END %]
-                [% IF materials %]<th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>[% END %]
-                [% IF ( itemdata_itemnotes ) %]<th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>[% END %]
-                [% IF ( itemdata_nonpublicnotes ) %]<th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>[% END %]
+                <th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>
+                <th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>
+                <th id="[% tab | html %]_stocknumber" data-colname="[% tab | html %]_stocknumber">Inventory number</th>
+                <th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>
+                <th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>
+                <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>
                 [% IF ( hostrecords ) %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
                 [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
@@ -2517,7 +2517,7 @@
                 }
             },
             [% END %]
-            [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+            [% IF Koha.Preference('LocalCoverImages') %]
             {
                 data: "",
                 className: "cover",
@@ -2684,7 +2684,6 @@
                     return row.external_id; // FIXME Display link to moredetail
                 }
             },
-            [% IF itemdata_uri %]
             {
                 data: "me.uri",
                 className: "uri",
@@ -2694,8 +2693,6 @@
                     return row.uri; // FIXME Display link
                 }
             },
-            [% END %]
-            [% IF ( itemdata_copynumber ) %]
             {
                 data: "me.copy_number",
                 className: "copynumber",
@@ -2705,8 +2702,6 @@
                     return row.copy_number; // FIXME Display str version
                 }
             },
-            [% END %]
-            [% IF ( itemdata_stocknumber ) %]
             {
                 data: "me.inventory_number",
                 className: "stocknumber",
@@ -2716,8 +2711,6 @@
                     return row.inventory_number;
                 }
             },
-            [% END %]
-            [% IF materials %]
             {
                 data: "me.materials_notes",
                 className: "materials",
@@ -2727,8 +2720,6 @@
                     return row.materials_notes;
                 }
             },
-            [% END %]
-            [% IF ( itemdata_itemnotes ) %]
             {
                 data: "me.public_notes",
                 className: "itemnotes",
@@ -2738,8 +2729,6 @@
                     return row.public_notes; // FIXME Replace \n with br
                 }
             },
-            [% END %]
-            [% IF itemdata_nonpublicnotes %]
             {
                 data: "me.internal_notes",
                 className: "nonpublicnote",
@@ -2749,7 +2738,6 @@
                     return row.internal_notes;
                 }
             },
-            [% END %]
             [% IF ( hostrecords ) %]
             {
                 data: "",
