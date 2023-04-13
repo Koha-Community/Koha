@@ -2495,10 +2495,14 @@
         const can_edit_items_from = [% To.json(can_edit_items_from) | $raw %];
         const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
         let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
+        let embed = ["+strings"];
+        [% IF Koha.Preference('LocalCoverImages') %]
+            embed.push('cover_image_ids');
+        [% END %]
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
             order: [[ 0, "asc" ]],
-            embed: ["+strings"],
+            embed,
             bAutoWidth: false,
             columns: [
             [% IF (StaffDetailItemSelection) %]
@@ -2519,10 +2523,24 @@
             {
                 data: "",
                 className: "cover",
-                searchable: true,
-                orderable: true,
+                searchable: false,
+                orderable: false,
                 render: function (data, type, row, meta) {
-                    return ""; // FIXME Build cover images
+                    if ( !row.cover_image_ids.length > 0 ) {
+                        return '';
+                    }
+                    let node = '<div class="bookcoverimg">';
+                    node += '<div class="cover-slider">';
+                    row.cover_image_ids.forEach(id => {
+                        node += '<div class="cover-image local-coverimg">';
+                        node += '<a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=%s&amp;imagenumber=%s" title="Local cover image">'.format(id, id);
+                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=%s" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=%s" />'.format(id, id);
+                        node += '</a>';
+                        node += '</div>';
+                    });
+                    node += '</div>';
+                    node += '</div>';
+                    return node;
                 }
             },
             [% END %]

@@ -1214,9 +1214,19 @@ Return the cover images associated with this item.
 sub cover_images {
     my ( $self ) = @_;
 
-    my $cover_image_rs = $self->_result->cover_images;
-    return unless $cover_image_rs;
-    return Koha::CoverImages->_new_from_dbic($cover_image_rs);
+    my $cover_images_rs = $self->_result->cover_images;
+    return Koha::CoverImages->_new_from_dbic($cover_images_rs);
+}
+
+=head3 cover_image_ids
+
+Return the cover image ids associated with this item.
+
+=cut
+
+sub cover_image_ids {
+    my ($self) = @_;
+    return [ $self->cover_images->get_column('imagenumber') ];
 }
 
 =head3 columns_to_str
