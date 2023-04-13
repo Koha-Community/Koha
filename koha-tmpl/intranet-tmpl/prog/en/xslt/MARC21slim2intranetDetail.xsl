@@ -1129,6 +1129,51 @@
             </span>
         </xsl:if>
 
+        <!-- 765 - Original language entry -->
+        <xsl:for-each select="marc:datafield[@tag=765]">
+            <span class="results_summary original_language_entry">
+                <xsl:choose>
+                    <xsl:when test="@ind2!=8 or not(marc:subfield[@code='i'])">
+                        <!-- fallback to this label too if 765$i is empty -->
+                        <span class="label">Translation of: </span>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <span class="label">
+                            <xsl:value-of select="marc:subfield[@code='i']"/>
+                            <xsl:text>: </xsl:text>
+                        </span>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <span class="original_language_entry_data">
+                    <xsl:variable name="href">
+                        <!-- call template to get href of search URL -->
+                        <xsl:call-template name="GetCnumSearchURL">
+                            <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
+                            <xsl:with-param name="opac_url" select="0"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:variable name="f765">
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">tad</xsl:with-param>
+                            <xsl:with-param name="delimeter">, </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:choose>
+                        <xsl:when test="$href">
+                            <a>
+                                <xsl:attribute name="href"><xsl:value-of select="$href"/></xsl:attribute>
+                                <xsl:value-of select="$f765"/>
+                            </a>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$f765"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
+            </span>
+        </xsl:for-each>
+        <!-- End of 765 - Original language entry -->
+
         <!-- 770 - Supplement/Special issue entry -->
         <xsl:if test="marc:datafield[@tag=770]">
             <span class="results_summary supplement"><span class="label">Supplement: </span>
