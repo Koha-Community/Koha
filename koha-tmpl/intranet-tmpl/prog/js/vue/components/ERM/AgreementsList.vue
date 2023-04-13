@@ -208,18 +208,18 @@ export default {
         },
         table_url: function () {
             let url = "/api/v1/erm/agreements"
-            if (this.filters.by_expired) {
-                if (!this.filters.max_expiration_date)
-                    this.filters.max_expiration_date = new Date()
-                        .toISOString()
-                        .substring(0, 10)
-            }
             if (this.filters.by_expired)
                 url +=
                     "?max_expiration_date=" + this.filters.max_expiration_date
             return url
         },
         filter_table: async function () {
+            if (this.filters.by_expired) {
+                if (!this.filters.max_expiration_date)
+                    this.filters.max_expiration_date = new Date()
+                        .toISOString()
+                        .substring(0, 10)
+            }
             if (!this.embedded) {
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",

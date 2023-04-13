@@ -170,10 +170,10 @@ describe("Agreement CRUD operations", () => {
             .its('request.url')
             .should('include', 'max_expiration_date='+dates["today_iso"]); // Defaults to today
         cy.get("#max_expiration_date_filter").should("have.value", dates["today_iso"]); // Input box reflects default
-        cy.url().should('include', "/cgi-bin/koha/erm/agreements?by_expired=true"); // Browser url also updated
+        cy.url().should('include', "/cgi-bin/koha/erm/agreements?by_expired=true&max_expiration_date="+dates["today_iso"]); // Browser url also updated
 
         // Now test that the url for this particular state works
-        cy.visit("/cgi-bin/koha/erm/agreements?by_expired=true");
+        cy.visit("/cgi-bin/koha/erm/agreements?by_expired=true&max_expiration_date="+dates["today_iso"]);
         cy.wait('@getActiveAgreements').its('request.url').should('include', 'max_expiration_date='+dates["today_iso"]);
 
         // Now test with a user entered date
