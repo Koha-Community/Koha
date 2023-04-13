@@ -160,7 +160,7 @@ if ( $op eq 'edititem' || $op eq 'dupeitem' ) {
     my $item = Koha::Items->find($itemnumber);
     if ( !$item ) {
         $itemnumber = undef;
-        $template->param( item_doesnt_exist => 1 );
+        $template->param( biblio => $biblio, item_doesnt_exist => 1 );
         output_and_exit( $input, $cookie, $template, 'unknown_item' );
     }
 }
