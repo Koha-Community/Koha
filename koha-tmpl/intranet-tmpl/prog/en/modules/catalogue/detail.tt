@@ -695,7 +695,7 @@
 
 [% IF ( count ) %]
     [% IF ( showncount ) %]
-        [% PROCESS items_table tab="holdings" items=itemloop %]
+        [%# PROCESS items_table tab="holdings" items=itemloop %]
 
         [% SET tab="holdings" %]
         <table id="table_items">
@@ -2501,6 +2501,7 @@
             order: [[ 0, "asc" ]],
             embed,
             bAutoWidth: false,
+            bKohaColumnsUseNames: true, // FIXME We should not need that now, do we?
             columns: [
             [% IF (StaffDetailItemSelection) %]
             {
@@ -2817,7 +2818,9 @@
                     }
                 });
             },
-        });
+        },
+        table_settings,
+        true);
     </script>
     [% CoverImagePlugins | $raw %]
 [% END %]
