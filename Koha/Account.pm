@@ -102,6 +102,10 @@ sub pay {
         }
     );
 
+    Koha::Exceptions::Account::PaymentTypeRequired->throw()
+      if ( C4::Context->preference("RequirePaymentType")
+        && !defined($payment_type) );
+
     # NOTE: Pay historically always applied as much credit as it could to all
     # existing outstanding debits, whether passed specific debits or otherwise.
     if ( $payment->amountoutstanding ) {

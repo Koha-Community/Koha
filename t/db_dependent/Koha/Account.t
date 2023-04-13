@@ -665,17 +665,31 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     # Disable renewing upon fine payment
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
 
+
     my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
     my $account = $patron->account;
 
+    t::lib::Mocks::mock_preference( 'RequirePaymentType', 1 );
+    throws_ok {
+        $account->pay(
+            {
+                amount       => 5,
+                interface    => 'intranet'
+            }
+        );
+    }
+    'Koha::Exceptions::Account::PaymentTypeRequired',
+      'Exception thrown for RequirePaymentType:1 + payment_type:undef';
+
+    t::lib::Mocks::mock_preference( 'RequirePaymentType', 0 );
     my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', { branch => $library->id } );
 
@@ -688,7 +702,6 @@ subtest 'pay() tests' => sub {
     my $credit_2    = Koha::Account::Lines->find( $credit_2_id );
 
     is( $credit_2->branchcode, $library->id, 'branchcode set because library_id was passed' );
-
     # Enable cash registers
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
     throws_ok {
