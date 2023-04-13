@@ -109,6 +109,10 @@ sub add_credit {
         my $note         = $body->{note};
         my $library_id   = $body->{library_id};
 
+        if ( C4::Context->preference("RequirePaymentType") && !defined($payment_type) ) {
+            Koha::Exceptions::Account::PaymentTypeRequired->throw();
+        }
+
         my $credit = $account->add_credit(
             {   amount       => $amount,
                 type         => $credit_type,
