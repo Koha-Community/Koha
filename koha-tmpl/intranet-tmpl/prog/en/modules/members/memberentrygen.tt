@@ -272,7 +272,7 @@ legend:hover {
                             [% IF ( step_1 ) %]
                                 [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex && nopronouns %]
                                     <fieldset class="rows" id="memberentry_identity">
-                                        <legend id="identity_lgd">[% IF ( patron_category.category_type == 'I' ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
+                                        <legend id="identity_lgd">[% IF ( patron_category.category_type == 'I' ) %]<span>Organization [% ELSE %]Patron [% END %]identity</span></legend>
                                         <ol>
                                             [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS notitle %]
