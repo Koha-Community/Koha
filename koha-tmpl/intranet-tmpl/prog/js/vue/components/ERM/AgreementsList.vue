@@ -9,14 +9,13 @@
                 id="expired_filter"
                 v-model="filters.by_expired"
                 @keyup.enter="filter_table"
-                @change="updateMaxExpirationDate($event)"
             />
             {{ $__("on") }}
             <flat-pickr
                 id="max_expiration_date_filter"
-                v-model="this.filters.max_expiration_date"
+                v-model="filters.max_expiration_date"
                 :config="fp_config"
-                :disabled="is_fp_disabled"
+                :disabled="!filters.by_expired"
             />
 
             <label for="by_mine_filter">{{ $__("Show mine only") }}:</label>
@@ -53,7 +52,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
-import { inject, ref, reactive } from "vue"
+import { inject, ref, reactive, computed } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 import { build_url } from "../../composables/datatables"
@@ -71,12 +70,30 @@ export default {
 
         const table = ref()
 
-        const filters = reactive({
-            by_expired: false,
-            max_expiration_date: "",
-            by_mine: "",
-        })
+        const expiration_date = ref()
+        const by_expired = ref(false)
+        const by_mine = ref(false)
 
+        const filters = reactive({
+            by_expired,
+            max_expiration_date: computed({
+                get() {
+                    if (by_expired.value) {
+                        if (!expiration_date.value) {
+                            expiration_date.value = new Date()
+                                .toISOString()
+                                .substring(0, 10)
+                        }
+                        return expiration_date.value
+                    }
+                    return ""
+                },
+                set(new_date) {
+                    expiration_date.value = new_date
+                },
+            }),
+            by_mine,
+        })
         return {
             vendors,
             get_lib_from_av,
@@ -91,18 +108,15 @@ export default {
         }
     },
     data: function () {
-        this.filters = {
-            by_expired: this.$route.query.by_expired === "true" || false,
-            max_expiration_date: this.$route.query.max_expiration_date || "",
-            by_mine: this.$route.query.by_mine || false,
-        }
+        this.filters.by_expired =
+            this.$route.query.by_expired === "true" || false
+        this.filters.by_mine = this.$route.query.by_mine || false
+
         let filters = this.filters
-        this.updateMaxExpirationDate() // Set date to today if empty
 
         let logged_in_user = this.logged_in_user
         return {
             fp_config: flatpickr_defaults,
-            is_fp_disabled: !filters.by_expired,
             agreement_count: 0,
             initialized: false,
             tableOptions: {
@@ -218,29 +232,18 @@ export default {
             return url
         },
         filter_table: async function () {
-            this.updateMaxExpirationDate()
             if (!this.embedded) {
+                let filters = Object.assign({}, this.filters)
+                if (!filters.by_expired) {
+                    filters.max_expiration_date = null
+                }
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",
-                    this.filters
+                    filters
                 )
                 this.$router.push(new_route)
             }
             this.$refs.table.redraw(this.table_url())
-        },
-        updateMaxExpirationDate: function (event) {
-            if (event) {
-                this.is_fp_disabled = !event.target.checked
-            }
-            if (
-                this.filters.by_expired &&
-                (!this.filters.max_expiration_date ||
-                    this.filters.max_expiration_date === "")
-            ) {
-                this.filters.max_expiration_date = new Date()
-                    .toISOString()
-                    .substring(0, 10)
-            }
         },
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
