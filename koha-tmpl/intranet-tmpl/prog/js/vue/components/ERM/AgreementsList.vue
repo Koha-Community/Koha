@@ -9,12 +9,14 @@
                 id="expired_filter"
                 v-model="filters.by_expired"
                 @keyup.enter="filter_table"
+                @change="updateMaxExpirationDate($event)"
             />
             {{ $__("on") }}
             <flat-pickr
                 id="max_expiration_date_filter"
-                v-model="filters.max_expiration_date"
+                v-model="this.filters.max_expiration_date"
                 :config="fp_config"
+                :disabled="is_fp_disabled"
             />
 
             <label for="by_mine_filter">{{ $__("Show mine only") }}:</label>
@@ -90,15 +92,17 @@ export default {
     },
     data: function () {
         this.filters = {
-            by_expired: this.$route.query.by_expired || false,
+            by_expired: this.$route.query.by_expired === "true" || false,
             max_expiration_date: this.$route.query.max_expiration_date || "",
             by_mine: this.$route.query.by_mine || false,
         }
         let filters = this.filters
+        this.updateMaxExpirationDate() // Set date to today if empty
 
         let logged_in_user = this.logged_in_user
         return {
             fp_config: flatpickr_defaults,
+            is_fp_disabled: !filters.by_expired,
             agreement_count: 0,
             initialized: false,
             tableOptions: {
@@ -214,12 +218,7 @@ export default {
             return url
         },
         filter_table: async function () {
-            if (this.filters.by_expired) {
-                if (!this.filters.max_expiration_date)
-                    this.filters.max_expiration_date = new Date()
-                        .toISOString()
-                        .substring(0, 10)
-            }
+            this.updateMaxExpirationDate()
             if (!this.embedded) {
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",
@@ -228,6 +227,20 @@ export default {
                 this.$router.push(new_route)
             }
             this.$refs.table.redraw(this.table_url())
+        },
+        updateMaxExpirationDate: function (event) {
+            if (event) {
+                this.is_fp_disabled = !event.target.checked
+            }
+            if (
+                this.filters.by_expired &&
+                (!this.filters.max_expiration_date ||
+                    this.filters.max_expiration_date === "")
+            ) {
+                this.filters.max_expiration_date = new Date()
+                    .toISOString()
+                    .substring(0, 10)
+            }
         },
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av
