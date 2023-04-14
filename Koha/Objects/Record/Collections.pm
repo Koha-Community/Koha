@@ -47,6 +47,7 @@ This class must always be subclassed.
 =cut
 
 =head3 print_collection
+
     my $collection_text = $result_set->print_collection($format)
 
 Return a text representation of a collection (group of records) in the specified format.
@@ -83,7 +84,10 @@ sub print_collection {
         $end    = MARC::File::XML::footer();
     }
     while ( my $element = $self->next ) {
-        push @parts, $serializers{$format}->( $element->record );
+        my $metadata = $element->metadata;
+        MARC::File::XML->default_record_format( $metadata->schema // C4::Context->preference("marcflavour") )
+          if $format eq 'marcxml';
+        push @parts, $serializers{$format}->( $metadata->record );
     }
     return
         ( defined $start ? $start : '' )
