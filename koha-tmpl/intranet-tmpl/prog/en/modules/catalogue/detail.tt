@@ -2487,9 +2487,9 @@
 
             });
         [% END %]
-
         const can_edit_items_from = [% To.json(can_edit_items_from) | $raw %];
         const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
+        const av_loc = new Map([% To.json(AuthorisedValues.Get('LOC')) | $raw %].map( av => [av.authorised_value, av.lib]));
         let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
         let embed = ["+strings"];
         [% IF Koha.Preference('LocalCoverImages') %]
@@ -2577,9 +2577,23 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row._strings.home_library_id.str;
+                    let nodes = '<span class="homebranchdesc">%s</span>'.format(row._strings.home_library_id.str);
+                    nodes += '<span class="shelvingloc">'
+                    [%# If permanent location is defined, show description or code and
+                        display current location in parentheses. If not, display current location.
+                        Note that permanent location is a code, and location may be an authval.
+                    %]
+
+                    let loc_str = row._strings.location.str;
+                    if ( row.permanent_location && row.permanent_location != row.location ) {
+                        let permanent_loc_str = av_loc[row.permanent_location];
+                        nodes += '%s (%s)'.format(permanent_loc_str, loc_str);
+                    } else {
+                        nodes += loc_str;
+                    }
+                    nodes += '</span>';
+                    return nodes;
                 }
-                // FIXME Display the shelving location
             },
             {
                 data: "me.collection_code",
