@@ -192,11 +192,9 @@ sub _shared_preferences {
         HomeOrHoldingBranch
         IssueLostItem
         IssuingInProcess
-        ManInvInNoissuesCharge
         OverduesBlockCirc
         RenewalPeriodBase
         RenewalSendNotice
-        RentalsInNoissuesCharge
         ReturnBeforeExpiry
         TransfersMaxDaysWarning
         UseBranchTransferLimits
