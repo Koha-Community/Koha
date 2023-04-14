@@ -40,7 +40,6 @@ our @EXPORT  = qw(
   GetSuggestionInfo
   ModStatus
   ModSuggestion
-  NewSuggestion
   DelSuggestionsOlderThan
   GetUnprocessedSuggestions
   MarcRecordFromNewSuggestion
