@@ -9,7 +9,9 @@ return {
 
         if( !column_exists( 'account_debit_types', 'restricts_checkouts' ) ) {
           $dbh->do(q{
-              ALTER TABLE account_debit_types ADD COLUMN `restricts_checkouts` tinyint(1) NOT NULL DEFAULT 1 AFTER `archived`
+              ALTER TABLE account_debit_types ADD COLUMN `restricts_checkouts` tinyint(1) NOT NULL DEFAULT 1
+                  COMMENT 'boolean flag to denote if the noissuescharge syspref for this debit type is active'
+                  AFTER `archived`;
           });
 
           say $out "Added column 'account_debit_types.restricts_checkouts'";
@@ -20,7 +22,7 @@ return {
 
         # Hardcoded values from sub non_issues_charges
         my @holds = ('RESERVE');
-        my @renewals = ('RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW');
+        my @rentals = ('RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW');
         my @manual;
         my $sth = $dbh->prepare("SELECT code FROM account_debit_types WHERE is_system = 0");
         $sth->execute;
@@ -51,7 +53,7 @@ return {
                     my @debit_types_to_update;
 
                     if($_ eq 'ManInvInNoissuesCharge') { push @debit_types_to_update, @manual};
-                    if($_ eq 'RentalsInNoissuesCharge') { push @debit_types_to_update, @renewals};
+                    if($_ eq 'RentalsInNoissuesCharge') { push @debit_types_to_update, @rentals};
                     if($_ eq 'HoldsInNoissuesCharge') { push @debit_types_to_update, @holds};
 
                     my $string = join(",", map { $dbh->quote($_) } @debit_types_to_update);
