@@ -9,7 +9,7 @@ return {
         unless ( TableExists('aqbookseller_interfaces') ) {
             $dbh->do(q{
                 CREATE TABLE `aqbookseller_interfaces` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+                  `interface_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
                   `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
                   `type` varchar(80) DEFAULT NULL COMMENT "type of the interface, authorised value VENDOR_INTERFACE_TYPE",
                   `name` varchar(255) NOT NULL COMMENT 'name of the interface',
@@ -18,7 +18,7 @@ return {
                   `password` mediumtext DEFAULT NULL COMMENT 'hashed password',
                   `account_email` mediumtext DEFAULT NULL COMMENT 'account email',
                   `notes` longtext DEFAULT NULL COMMENT 'notes',
-                  PRIMARY KEY (`id`),
+                  PRIMARY KEY (`interface_id`),
                   CONSTRAINT `aqbookseller_interfaces_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
