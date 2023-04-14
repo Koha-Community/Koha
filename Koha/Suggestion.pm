@@ -48,7 +48,7 @@ sub store {
 
     $self->STATUS("ASKED") unless $self->STATUS;
 
-    $self->branchcode(undef) if $self->branchcode eq '';
+    $self->branchcode(undef) if defined $self->branchcode && $self->branchcode eq '';
     unless ( $self->suggesteddate() ) {
         $self->suggesteddate( dt_from_string()->ymd );
     }

@@ -41,6 +41,7 @@ use Koha::Biblios;
 use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
+use Koha::Suggestions;
 use Koha::SharedContent;
 use Scalar::Util qw( looks_like_number );
 
@@ -1528,9 +1529,9 @@ sub ReNewSubscription {
     my $biblio = $sth->fetchrow_hashref;
 
     if ( C4::Context->preference("RenewSerialAddsSuggestion") ) {
-        require C4::Suggestions;
-        C4::Suggestions::NewSuggestion(
-            {   'suggestedby'   => $user,
+        Koha::Suggestion->new(
+            {
+                'suggestedby'   => $user,
                 'title'         => $subscription->{bibliotitle},
                 'author'        => $biblio->{author},
                 'publishercode' => $biblio->{publishercode},
@@ -1538,7 +1539,7 @@ sub ReNewSubscription {
                 'biblionumber'  => $subscription->{biblionumber},
                 'branchcode'    => $branchcode,
             }
-        );
+        )->store;
     }
 
     $numberlength ||= 0; # Should not we raise an exception instead?

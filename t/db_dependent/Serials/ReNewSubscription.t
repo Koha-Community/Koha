@@ -22,7 +22,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 10;
 use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -85,8 +85,11 @@ my $subscriptionhistory = $builder->build({
     }
 });
 
+t::lib::Mocks::mock_preference( 'RenewSerialAddsSuggestion', '0' );
+my $suggestions_count = Koha::Suggestions->search()->count;
+
 # Actual testing starts here!
-# Renew the subscription and check that enddate has not been set
+# Renew the subscription and check that enddate has been set
 ReNewSubscription(
     {
         subscriptionid => $subscription->{subscriptionid},
@@ -95,7 +98,28 @@ ReNewSubscription(
     }
 );
 
+$subscription = Koha::Subscriptions->find( $subscription->{subscriptionid} );
+is( $subscription->enddate, '2017-01-01', "We don't update the subscription end date when renewing with a month length");
+
+is( $suggestions_count, Koha::Suggestions->search()->count, "Suggestion not added when RenewSerialAddsSuggestion set to Don't add");
+
+t::lib::Mocks::mock_preference( 'RenewSerialAddsSuggestion', '1' );
+
+ReNewSubscription(
+    {
+        subscriptionid => $subscription->{subscriptionid},
+        startdate      => "2016-01-01",
+        monthlength    => 12
+    }
+);
+
+is( $suggestions_count + 1, Koha::Suggestions->search()->count, "Suggestion added when RenewSerialAddsSuggestion set to add");
+
+my $history = Koha::Subscription::Histories->find($subscription->subscriptionid);
+
+is ( $history->histenddate(), undef, 'subscription history not empty after renewal');
 # Calculate the subscription length for the renewal for issues, days and months
+
 my ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('issues', 7);
 is ( $numberlength, 7, "Subscription length is 7 issues");
 
@@ -116,12 +140,6 @@ is ($monthlength, undef, "Subscription length is undef issues, invalid issue dat
 # Check subscription length when a special character is inputted into numberic sublength field
 ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('weeks', '!');
 is ($weeklength, undef, "Subscription length is undef weeks, invalid weeks data was not stored");
-
-# Renew the subscription and check that enddate has not been set
-
-my $history = Koha::Subscription::Histories->find($subscription->{subscriptionid});
-
-is ( $history->histenddate(), undef, 'subscription history not empty after renewal');
 
 # End of tests
 
