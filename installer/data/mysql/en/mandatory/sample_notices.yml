@@ -1321,12 +1321,12 @@ tables:
           code: PASSWORD_CHANGE
           branchcode: ""
           name: "Notification of password change"
-          is_html: 1
-          title: "Library account password change notification for [% patron.firstname %] [% patron.surname %]"
+          is_html: 0
+          title: "Library account password change notification"
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% patron.firstname %] [% patron.surname %],"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "We want to notify you that your password has been changed. If you did not change it yourself (or requested that change), please contact library staff."
             - ""
