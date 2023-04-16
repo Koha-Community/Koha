@@ -105,7 +105,7 @@
                                         :value="true"
                                         v-model="agreement.is_perpetual"
                                     />
-                                    Yes
+                                    {{ $__("Yes") }}:
                                 </label>
                                 <label for="agreement_is_perpetual_no">
                                     <input
@@ -115,7 +115,7 @@
                                         :value="false"
                                         v-model="agreement.is_perpetual"
                                     />
-                                    No
+                                    {{ $__("No") }}:
                                 </label>
                             </li>
                             <li>
@@ -137,7 +137,7 @@
                                 <textarea
                                     id="agreement_license_info"
                                     v-model="agreement.license_info"
-                                    placeholder="License info"
+                                    :placeholder="$__('License info')"
                                 />
                             </li>
                         </ol>
