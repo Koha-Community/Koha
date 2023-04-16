@@ -175,7 +175,7 @@
         [% END %]
     [% END %]
 [% ELSIF TwoFA_prompt %]
-    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
+    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" autocomplete="off">
         <input type="hidden" name="koha_login_context" value="intranet" />
         [% FOREACH INPUT IN INPUTS %]
             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
