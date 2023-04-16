@@ -184,7 +184,7 @@
                             ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a> )
                             renewed for
                             [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )
-                            now due on [% date_due | $KohaDates %]
+                            now due on [% date_due | $KohaDates as_due_date => 1 %]
                         </p>
                     </div>
                 [% END %]

@@ -101,7 +101,7 @@
                                                     <td class="due_date">
                                                         <span class="tdlabel">Due date</span>
                                                         [% IF ( RECALL.requested ) %]
-                                                            <span>Due to be returned by [% RECALL.checkout.date_due | $KohaDates %]</span>
+                                                            <span>Due to be returned by [% RECALL.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
                                                         [% ELSIF ( RECALL.waiting and RECALL.expiration_date ) %]
                                                             <span>Pick up by [% RECALL.expiration_date | $KohaDates %]</span>
                                                         [% ELSE %]

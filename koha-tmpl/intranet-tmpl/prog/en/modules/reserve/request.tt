@@ -852,7 +852,7 @@
                                                 [% END %]
                                                 [% IF ( itemloo.onloan ) %]
                                                     <td data-order="[% itemloo.date_due | html %]">
-                                                        <span class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
+                                                        <span class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 %]</span>
                                                 [% ELSE %]
                                                     <td>
                                                         [% IF ( itemloo.transfertwhen ) %]
