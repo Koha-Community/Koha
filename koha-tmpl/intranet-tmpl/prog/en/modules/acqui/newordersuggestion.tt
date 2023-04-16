@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -46,6 +47,7 @@
                 <tr>
                     <th>Mine</th>
                     <th>Suggestion</th>
+                    <th>Document type</th>
                     <th>Suggested by</th>
                     <th>Accepted by</th>
                     <th>Library</th>
@@ -72,6 +74,7 @@
                                     [% IF ( suggestion.note ) %]<p><em>([% suggestion.note | html %])</em></p> [% END %]
                                 </p>
                             </td>
+                            <td>[% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype ) | html %]</td>
                             <td>[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</td>
                             <td>[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</td>
                             <td>
