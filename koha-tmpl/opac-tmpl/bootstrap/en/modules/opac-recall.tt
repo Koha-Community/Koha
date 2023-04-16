@@ -128,7 +128,7 @@
                                                     <td>[% item.enumchron | html %]</td>
                                                     <td>
                                                         [% IF ( item.checkout ) %]
-                                                            <span class="checkedout">Due [% item.checkout.date_due | $KohaDates %]</span>
+                                                            <span class="checkedout">Due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
                                                         [% ELSIF ( item.get_transfer ) %]
                                                             <span class="intransit">In transit from [% Branches.GetName( item.get_transfer.frombranch ) | html %] to [% Branches.GetName( item.get_transfer.tobranch ) | html %] since [% item.get_transfer.datesent | $KohaDates %]</span>
                                                         [% END %]

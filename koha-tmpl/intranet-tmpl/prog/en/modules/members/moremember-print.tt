@@ -57,7 +57,7 @@
                             <td>[% issue.author | html %]</td>
                             <td>[% issue.itemcallnumber | html %]</td>
                             <td>[% ItemTypes.GetDescription( issue.itype ) | html %]</td>
-                            <td>[% issue.date_due | $KohaDates  as_due_date => 1 %]</td>
+                            <td>[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
                             <td>[% issue.barcode | html %]</td>
                             <td>[% issue.stocknumber | html %]</td>
                             [% IF ( issue.charge <= 0 ) %]

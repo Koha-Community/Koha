@@ -334,11 +334,11 @@
                                                     <td>[% ISSUE.itemcallnumber | html %]</td>
                                                     [% IF ( ISSUE.overdue ) %]
                                                         <td class="overdue" data-order="[% ISSUE.date_due | html %]">
-                                                            [% ISSUE.date_due | $KohaDates  as_due_date => 1 %]
+                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% ELSE   %]
                                                         <td data-order="[% ISSUE.date_due | html %]">
-                                                            [% ISSUE.date_due | $KohaDates  as_due_date => 1 %]
+                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% END %]
                                                     <td>
