@@ -852,6 +852,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 preservation_trains_items
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PreservationTrainsItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "preservation_trains_items",
+  "Koha::Schema::Result::PreservationTrainsItem",
+  { "foreign.item_id" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 recalls
 
 Type: has_many
@@ -943,8 +958,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 17:44:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FHB+BvL4it4HrzlfNCxoKw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-31 11:33:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:w/riz2YWgVUds0eMqZuGTg
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
