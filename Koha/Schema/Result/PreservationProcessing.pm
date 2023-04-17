@@ -39,6 +39,14 @@ primary key
 
 name of the processing
 
+=head2 letter_code
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 20
+
+Foreign key to the letters table
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -46,6 +54,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 80 },
+  "letter_code",
+  { data_type => "varchar", is_nullable => 1, size => 20 },
 );
 
 =head1 PRIMARY KEY
@@ -108,8 +118,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-17 18:47:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m7bHppTX3UpQY9CfmRPqQA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-17 18:58:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fIZfFuAY21nh+Fwwjd/kJw
 
 sub koha_object_class {
     'Koha::Preservation::Processing';
