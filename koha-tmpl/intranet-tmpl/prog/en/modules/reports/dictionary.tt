@@ -1,3 +1,4 @@
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Dictionary &rsaquo; Guided reports &rsaquo; Reports &rsaquo; Koha</title>
@@ -22,78 +23,45 @@
 [%- END -%]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
-        </li>
-
-        [% IF ( new_dictionary ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Name the new definition
-                </a>
-            </li>
-
-        [% ELSIF ( step_2 ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Step 2: Choose the area
-                </a>
-            </li>
-
-        [% ELSIF ( step_3 ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Step 3: Choose a column
-                </a>
-            </li>
-
-        [% ELSIF ( step_4 ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Step 4: Specify a value
-                </a>
-            </li>
-
-        [% ELSIF ( step_5 ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Step 5: Confirm definition
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Dictionary
-                </a>
-            </li>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
+        [% END %]
+        [% IF ( new_dictionary || step_2 || step_3 || step_4 || step_5 ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a>
+            [% END %]
+        [% END %]
+        [% IF ( new_dictionary ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Name the new definition</span>
+            [% END %]
+        [% ELSIF ( step_2 ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Step 2: Choose the area</span>
+            [% END %]
+        [% ELSIF ( step_3 ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Step 3: Choose a column</span>
+            [% END %]
+        [% ELSIF ( step_4 ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Step 4: Specify a value</span>
+            [% END %]
+        [% ELSIF ( step_5 ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Step 5: Confirm definition</span>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Dictionary</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

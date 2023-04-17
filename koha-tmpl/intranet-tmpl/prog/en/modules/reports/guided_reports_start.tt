@@ -68,87 +68,66 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
-        </li>
-
-        [% IF ( saved1 ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Saved reports
-                </a>
-            </li>
-        [% ELSIF ( create ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Create from SQL
-                </a>
-            </li>
-        [% ELSIF ( showsql ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% reportname | html %] ([% id | html %])
-                </a>
-            </li>
-        [% ELSIF ( editsql ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% reportname | html %] ([% id | html %])</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Edit
-                </a>
-            </li>
-        [% ELSIF ( execute ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% name | html %] ([% id | html %])</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Run
-                </a>
-            </li>
-        [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]
-            <li>
-                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ( build1 ) %]
-                        <span>Step 1 of 6: Choose a module</span>
-                    [% ELSIF ( build2 ) %]
-                        <span>Step 2 of 6: Pick a report type</span>
-                    [% ELSIF ( build3 ) %]
-                        <span>Step 3 of 6: Select columns for display</span>
-                    [% ELSIF ( build4 ) %]
-                        <span>Step 4 of 6: Select criteria to limit on</span>
-                    [% ELSIF ( build5 ) %]
-                        <span>Step 5 of 6: Pick which columns to total</span>
-                    [% ELSIF ( build6 ) %]
-                        <span>Step 6 of 6: Select how you want the report ordered</span>
-                    [% END %]
-                </a>
         [% END %]
-    </ol>
-</nav> <!-- /#breadcrumbs -->
-[% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
+        [% END %]
+        [% IF ( showsql || editsql || execute ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a>
+            [% END %]
+        [% END %]
+        [% IF ( saved1 ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Saved reports</span>
+            [% END %]
+        [% ELSIF ( create ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Create from SQL</span>
+            [% END %]
+        [% ELSIF ( showsql ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% reportname | html %] ([% id | html %])
+            [% END %]
+        [% ELSIF ( editsql ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% reportname | html %] ([% id | html %])</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Edit</span>
+            [% END %]
+        [% ELSIF ( execute ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% name | html %] ([% id | html %])</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Run</span>
+            [% END %]
+        [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF ( build1 ) %]
+                    <span>Step 1 of 6: Choose a module</span>
+                [% ELSIF ( build2 ) %]
+                    <span>Step 2 of 6: Pick a report type</span>
+                [% ELSIF ( build3 ) %]
+                    <span>Step 3 of 6: Select columns for display</span>
+                [% ELSIF ( build4 ) %]
+                    <span>Step 4 of 6: Select criteria to limit on</span>
+                [% ELSIF ( build5 ) %]
+                    <span>Step 5 of 6: Pick which columns to total</span>
+                [% ELSIF ( build6 ) %]
+                    <span>Step 6 of 6: Select how you want the report ordered</span>
+                [% END # /IF ( build1 ) %]
+            [% END # /WRAPPER breadcrumb_item %]
+        [% END # /IF ( saved1 ) %]
+    [% END # /WRAPPER breadcrumbs %]
+[% END # /WRAPPER 'sub-header.inc' %]
 
 <div id="update_sql" class="modal" tabindex="-1" role="dialog" aria-labelledby="update_sql_label" aria-hidden="true">
     <div class="modal-dialog">
