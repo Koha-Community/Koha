@@ -55,7 +55,7 @@
                 <li><a href="/cgi-bin/koha/admin/curbside_pickup.pl">Curbside pickup</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_patron_restrictions ) %]
-                <li><a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a></li>
+                <li><a href="/cgi-bin/koha/admin/restrictions.pl">Patron restriction types</a></li>
             [% END %]
         </ul>
     [% END %]
