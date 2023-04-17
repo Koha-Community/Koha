@@ -229,8 +229,13 @@ subtest 'fill() tests' => sub {
         is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
             $patron->borrowernumber, 'Patron link is kept' );
 
-        # 2 == delete immediately
+        my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+        # We need anonymous patron set to change patron privacy to never
+        # (2 == delete immediately)
+        # then we can undef for further tests
         $patron->privacy(2)->store;
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
         $hold = $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -247,7 +252,6 @@ subtest 'fill() tests' => sub {
 
         ok( !$hold->is_found, 'Hold is not filled' );
 
-        my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
         t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
         $hold = $builder->build_object(
@@ -563,8 +567,13 @@ subtest 'cancel() tests' => sub {
     is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
         $patron->borrowernumber, 'Patron link is kept' );
 
-    # 2 == delete immediately
+    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+    # We need anonymous patron set to change patron privacy to never
+    # (2 == delete immediately)
+    # then we can undef for further tests
     $patron->privacy(2)->store;
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
     $hold = $builder->build_object(
         {
             class => 'Koha::Holds',
@@ -580,7 +589,6 @@ subtest 'cancel() tests' => sub {
 
     ok( !$hold->is_found, 'Hold is not cancelled' );
 
-    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
     $hold = $builder->build_object(
