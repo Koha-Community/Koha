@@ -184,7 +184,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 63;
+    plan tests => 65;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -450,14 +450,25 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
-    my $records = [$marc_record_1, $marc_record_2, $marc_record_3];
+
+    my $marc_record_4 = MARC::Record->new();
+    $marc_record_4->leader('     cam  22      a 4500');
+    $marc_record_4->append_fields(
+        MARC::Field->new('008', '901111s19uu xxk|||| |00| ||eng c'),
+        MARC::Field->new('100', '', '', a => 'Author 2'),
+        MARC::Field->new('245', '', '4', a => 'The Title :', b => 'fourth record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => ' 89 '),
+        MARC::Field->new('999', '', '', c => '1234568'),
+    );
+
+    my $records = [$marc_record_1, $marc_record_2, $marc_record_3, $marc_record_4];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
     my $docs = $see->marc_records_to_documents($records);
 
     # First record:
-    is(scalar @{$docs}, 3, 'Two records converted to documents');
+    is(scalar @{$docs}, 4, 'Four records converted to documents');
 
     is_deeply($docs->[0]->{control_number}, ['123'], 'First record control number should be set correctly');
 
@@ -474,6 +485,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     is(scalar @{$docs->[0]->{title__sort}}, 1, 'First document title__sort field should have a single');
     is_deeply($docs->[0]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
+
+    is(scalar @{$docs->[3]->{title__sort}}, 1, 'First document title__sort field should have a single');
+    is_deeply($docs->[3]->{title__sort}, ['Title : fourth record The Title : fourth record'], 'Fourth document title__sort field should be set correctly');
 
     is($docs->[0]->{issues}, 6, 'Issues field should be sum of the issues for each item');
     is($docs->[0]->{issues__sort}, 6, 'Issues sort field should also be a sum of the issues');
