@@ -43,7 +43,7 @@
 
                                     [% IF ( SyndeticsEnabled ) %]
                                         [% IF ( SyndeticsCoverImages ) %]
-                                            [% IF ( content_identifier_exists ) %]
+                                            [% IF ( item.browser_normalized_isbn ) %]
                                                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc | html %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
