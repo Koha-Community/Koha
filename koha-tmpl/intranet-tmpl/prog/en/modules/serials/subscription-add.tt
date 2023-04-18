@@ -24,43 +24,27 @@ fieldset.rows table { clear: none; margin: 0; }
     [% INCLUDE 'serials-search.inc' %]
 [% END %]
 
-[% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-
-        [% IF blocking_error %]
-            <li>
-                <a href="#" aria-current="page">
-                    Serials
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
+    [% WRAPPER 'sub-header.inc' %]
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-            </li>
-            [% IF ( modify ) %]
-                <li>
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page">
-                        Modify subscription
-                    </a>
-                </li>
-            [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        New subscription
-                    </a>
-                </li>
             [% END %]
-        [% END %]
-    </ol>
-</nav>
-[% END %]
+            [% UNLESS ( blocking_error ) %]
+                [% IF ( modify ) %]
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a>
+                    [% END %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Modify subscription</span>
+                    [% END %]
+                [% ELSE %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>New subscription</span>
+                    [% END %]
+                [% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
 [% INCLUDE 'blocking_errors.inc' %]
 

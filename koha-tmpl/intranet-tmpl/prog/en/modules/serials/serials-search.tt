@@ -18,30 +18,21 @@
 [% END %]
 
     [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
+        [% WRAPPER breadcrumbs %]
             [% IF ( done_searched ) %]
-                <li>
+                [% WRAPPER breadcrumb_item %]
                     <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page">
-                        Search results
-                    </a>
-                </li>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Search results</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Serials
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Serials</span>
+                [% END %]
             [% END %]
-        </ol>
-    </nav>
-    [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     [% url_params = [] %]
     [% FOREACH param IN CGI.params.pairs %]
