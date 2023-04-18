@@ -437,7 +437,7 @@ subtest 'pickup_locations' => sub {
 
     foreach my $cbranch ('ItemHomeLibrary','PatronLibrary') {
         my $cache = Koha::Cache::Memory::Lite->get_instance();
-        $cache->flush();
+        $cache->flush(); # needed since we change ReservesControlBranch
         foreach my $biblio ($biblio1, $biblio2) {
             foreach my $patron ($patron1, $patron8) {
                 _doTest($cbranch, $biblio, $patron, $results);
