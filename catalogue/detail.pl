@@ -190,21 +190,18 @@ $template->param(
 );
 
 my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_localization->as_list } };
-my $params;
 my $patron = Koha::Patrons->find( $borrowernumber );
-$params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
+my $include_lost_items = !$patron->category->hidelostitems || $showallitems;
 my $items_params = {
     ( $invalid_marc_record ? () : ( host_items => 1 ) ),
 };
-my $items = $biblio->items($items_params)->search_ordered( $params, { prefetch => ['issue','current_branchtransfers'] } );
+my $all_items = $biblio->items($items_params);
+my $items_to_display = $all_items->search({ $include_lost_items ? () : ( itemlost => 0 ) });
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords = $biblio->host_items->count;
 
 my $dat = &GetBiblioData($biblionumber);
-$dat->{'count'} = $biblio->items($items_params)->count;
-$dat->{'showncount'} = $items->count;
-$dat->{'hiddencount'} = $dat->{'count'} - $dat->{'showncount'};
 
 #is biblio a collection and are bundles enabled
 my $leader = $marc_record->leader();
@@ -321,137 +318,17 @@ if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }->imageurl );
 }
 
-my (@itemloop, @otheritemloop, %itemfields);
-
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-if ( $mss->count ) {
-    $template->param( itemlostloop => GetAuthorisedValues( $mss->next->authorised_value ) );
+if ( C4::Context->preference('SeparateHoldings') ) {
+    my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
+    my $other_holdings_count = $items_to_display->search({ $SeparateHoldingsBranch => { '!=' => C4::Context->userenv->{branch} } })->count;
+    $template->param( other_holdings_count => $other_holdings_count );
 }
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-if ( $mss->count ) {
-    $template->param( itemdamagedloop => GetAuthorisedValues( $mss->next->authorised_value ) );
-}
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.withdrawn', authorised_value => { not => undef } });
-if ( $mss->count ) {
-    $template->param( itemwithdrawnloop => GetAuthorisedValues( $mss->next->authorised_value) );
-}
-
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my %materials_map;
-if ($mss->count) {
-    my $materials_authvals = GetAuthorisedValues($mss->next->authorised_value);
-    if ($materials_authvals) {
-        foreach my $value (@$materials_authvals) {
-            $materials_map{$value->{authorised_value}} = $value->{lib};
-        }
-    }
-}
-
-my $analytics_flag;
-my $materials_flag; # set this if the items have anything in the materials field
-my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
-if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
-    $template->param(SeparateHoldings => 1);
-}
-my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
-my ( $itemloop_has_images, $otheritemloop_has_images );
-
-while ( my $item = $items->next ) {
-    my $itembranchcode = $item->$separatebranch;
-
-    my $item_info = $item->unblessed;
-    $item_info->{itemtype} = $itemtypes->{$item->effective_itemtype};
-
-    foreach (qw(ccode enumchron copynumber stocknumber itemnotes itemnotes_nonpublic uri )) {
-        $itemfields{$_} = 1 if $item->$_;
-    }
-
-    # FIXME The following must be Koha::Item->serial
-    my $serial_item = Koha::Serial::Items->find($item->itemnumber);
-    if ( $serial_item ) {
-        my $serial = Koha::Serials->find($serial_item->serialid);
-        $item_info->{serial} = $serial if $serial;
-        $itemfields{publisheddate} = 1;
-    }
-
-    $item_info->{object} = $item;
-
-    # checking for holds
-    my $holds = $item->current_holds;
-    if ( my $first_hold = $holds->next ) {
-        $item_info->{first_hold} = $first_hold;
-    }
-
-    #item has a host number if its biblio number does not match the current bib
-
-    if ($item->biblionumber ne $biblionumber){
-        $item_info->{hostbiblionumber} = $item->biblionumber;
-        $item_info->{hosttitle} = $item->biblio->title;
-    }
-
-
-    if ( $analyze ) {
-        # count if item is used in analytical bibliorecords
-        # The 'countanalytics' flag is only used in the templates if analyze is set
-        my $countanalytics = GetAnalyticsCount( $item->itemnumber );
-        if ($countanalytics > 0){
-            $analytics_flag=1;
-            $item_info->{countanalytics} = $countanalytics;
-        }
-    }
-
-    if (defined($item->materials) && $item->materials =~ /\S/){
-        $materials_flag = 1;
-        if (defined $materials_map{ $item->materials }) {
-            $item_info->{materials} = $materials_map{ $item->materials };
-        }
-    }
-
-    if ( C4::Context->preference('UseCourseReserves') ) {
-        $item_info->{'course_reserves'} = GetItemCourseReservesInfo( itemnumber => $item->itemnumber );
-    }
-
-    $item_info->{can_be_edited} = $patron->can_edit_items_from( $item->homebranch );
-
-    if ( $item->is_bundle ) {
-        $item_info->{bundled} =
-          $item->bundle_items->search( { itemlost => { '!=' => 0 } } )
-          ->count;
-        $item_info->{bundled_lost} =
-          $item->bundle_items->search( { itemlost => 0 } )->count;
-        $item_info->{is_bundle} = 1;
-    }
-
-    if ($item->in_bundle) {
-        $item_info->{bundle_host} = $item->bundle_host;
-    }
-
-    if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
-        if ($itembranchcode and $itembranchcode eq $currentbranch) {
-            push @itemloop, $item_info;
-            $itemloop_has_images++ if $item->cover_images->count;
-        } else {
-            push @otheritemloop, $item_info;
-            $otheritemloop_has_images++ if $item->cover_images->count;
-        }
-    } else {
-        push @itemloop, $item_info;
-        $itemloop_has_images++ if $item->cover_images->count;
-    }
-}
-
 $template->param(
-    itemloop_has_images      => $itemloop_has_images,
-    otheritemloop_has_images => $otheritemloop_has_images,
+    count => $all_items->count, # FIXME 'count' is used in catalog-strings.inc
+                                # But it's not a meaningful variable, we should rename it there
+    all_items_count => $all_items->count,
+    items_to_display_count => $items_to_display->count,
 );
-
-# Display only one tab if one items list is empty
-if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
-    $template->param(SeparateHoldings => 0);
-    if (scalar(@itemloop) == 0) {
-        @itemloop = @otheritemloop;
-    }
-}
 
 my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
     {
@@ -476,23 +353,12 @@ $template->param(
 
 $template->param(
     MARCNOTES               => !$invalid_marc_record ? $biblio->get_marc_notes() : undef,
-    itemdata_ccode          => $itemfields{ccode},
-    itemdata_enumchron      => $itemfields{enumchron},
-    itemdata_uri            => $itemfields{uri},
-    itemdata_copynumber     => $itemfields{copynumber},
-    itemdata_stocknumber    => $itemfields{stocknumber},
-    itemdata_publisheddate  => $itemfields{publisheddate},
-    volinfo                 => $itemfields{enumchron},
-    itemdata_itemnotes      => $itemfields{itemnotes},
-    itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
     z3950_search_params     => C4::Search::z3950_search_args($dat),
     hostrecords             => $hostrecords,
-    analytics_flag          => $analytics_flag,
     C4::Search::enabled_staff_search_views,
-    materials => $materials_flag,
 );
 
-if (C4::Context->preference("AlternateHoldingsField") && $items->count == 0) {
+if (C4::Context->preference("AlternateHoldingsField") && $items_to_display->count == 0) {
     my $fieldspec = C4::Context->preference("AlternateHoldingsField");
     my $subfields = substr $fieldspec, 3;
     my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
@@ -528,8 +394,6 @@ foreach ( keys %{$dat} ) {
 # method query not found?!?!
 $template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("AmazonCoverImages"));
 $template->param(
-    itemloop        => \@itemloop,
-    otheritemloop   => \@otheritemloop,
     biblionumber        => $biblionumber,
     ($analyze? 'analyze':'detailview') =>1,
     subscriptions       => \@subs,
@@ -634,7 +498,7 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     $template->param( course_reserves => $course_reserves );
 }
 
-my @libraries = $biblio->items({ host_items => 1 })->get_column('homebranch');
+my @libraries = $biblio->items($items_params)->get_column('homebranch');
 my %can_edit_items_from = map {
     $_ => $patron->can_edit_items_from($_)
 } @libraries;
