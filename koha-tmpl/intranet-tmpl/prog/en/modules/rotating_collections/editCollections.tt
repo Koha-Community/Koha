@@ -17,37 +17,32 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        </li>
-        <li>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a>
-        </li>
+        [% END %]
 
         [%- IF ( action == "new" ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Add a new collection
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Add a new collection</span>
+            [% END %]
+        [% ELSIF ( action == "delete" ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Collection deleted</span>
+            [% END %]
         [% ELSE %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">Collection <em>[% editColTitle | html %]</em></a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Edit
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Edit collection</span>
+            [% END %]
         [% END -%]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
