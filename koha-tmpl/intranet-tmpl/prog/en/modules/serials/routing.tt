@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -10,39 +11,24 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-
-        [% IF blocking_error %]
-            <li>
-                <a href="#" aria-current="page">
-                    Serials
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% title | html %]</em></a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF ( op ) %]
-                        <span>Create routing list</span>
-                    [% ELSE %]
-                        <span>Edit routing list</span>
-                    [% END %]
-                </a>
-            </li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% UNLESS ( blocking_error ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% title | html %]</em></a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF ( op ) %]
+                    <span>Create routing list</span>
+                [% ELSE %]
+                    <span>Edit routing list</span>
+                [% END %]
+            [% END %]
+        [% END # UNLESS blocking_error %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
