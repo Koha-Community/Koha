@@ -57,7 +57,7 @@
             <main>
 
 [% FOR m IN messages %]
-    <div class="dialog [% m | html %]">
+    <div class="dialog message [% m.code | html %]">
         [% SWITCH m.code %]
         [% CASE 'add_success' %]
             Type added
