@@ -2493,6 +2493,11 @@
         const av_damaged = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.damaged' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_not_for_loan= new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.notforloan' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_restricted = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.restricted' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        [% IF Koha.Preference('URLLinkText') %]
+            const url_link_text = "[% Koha.Preference('URLLinkText') | html %]";
+        [% ELSE %]
+            const url_link_text = _("Link to resource");
+        [% END %]
         let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
         let embed = ["+strings,checkout,checkout.patron,transfer,first_hold,first_hold.patron,item_type"];
         [% IF Koha.Preference('LocalCoverImages') %]
@@ -2824,7 +2829,17 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.uri; // FIXME Display link
+                    if ( !row.uri ) return "";
+
+                    let nodes = '';
+                    if ( row.uri.split(' \| ').length > 1 ) {
+                        row.uri.split(' \| ').forEach((uri, i) => {
+                            nodes += '<a href="%s">%s</a><br/>'.format(uri, uri);
+                        });
+                    } else {
+                        nodes += '<a href="%s">%s</a><br/>'.format(row.uri, url_link_text);
+                    }
+                    return nodes;
                 }
             },
             {
