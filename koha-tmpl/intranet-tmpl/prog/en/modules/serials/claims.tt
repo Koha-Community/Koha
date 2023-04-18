@@ -13,34 +13,28 @@
     [% WRAPPER 'header.inc' %]
     [% INCLUDE 'serials-search.inc' %]
 [% END %]
+
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-        </li>
+        [% END %]
         [% IF ( supplierid ) -%]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/serials/claims.pl">
                     Claims
                 </a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">Claims for [% suppliername | html %]</a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Claims for [% suppliername | html %]</span>
+            [% END %]
         [% ELSE -%]
-            <li>
-                <a href="#" aria-current="page">
-                    Claims
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Claims</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
