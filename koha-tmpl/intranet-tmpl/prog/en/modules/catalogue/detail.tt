@@ -695,18 +695,10 @@
 [% IF ( count ) %]
     [% IF ( showncount ) %]
         [% PROCESS items_table tab="holdings" items=itemloop %]
-        [% END %]
-                [% IF ( hiddencount ) %]
-                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
-                [% END %] 		
-		[% IF ( debug_display ) %]
-		<br /><br />
-		<table>
-			<tr><td>itemdata_enumchron</td><td>[% itemdata_enumchron | html %]</td></tr>
-			<tr><td>itemdata_copynumber</td><td>[% itemdata_copynumber | html %]</td></tr>
-			<tr><td>serial</td><td>[% serial | html %]</td></tr>
-		</table>
-                [% END %]
+    [% END %]
+    [% IF ( hiddencount ) %]
+       <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
+    [% END %]
 [% ELSE %]
     [% IF ( ALTERNATEHOLDINGS ) %]
     [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
