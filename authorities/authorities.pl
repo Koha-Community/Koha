@@ -102,7 +102,7 @@ builds the <input ...> entry for a subfield.
 sub create_input {
     my ( $tag, $subfield, $value, $index_tag, $rec, $authorised_values_sth, $cgi ) = @_;
 
-    my $index_subfield = CreateKey(); # create a specifique key for each subfield
+    my $index_subfield = CreateKey(); # create a specific key for each subfield
 
     # determine maximum length; 9999 bytes per ISO 2709 except for leader and MARC21 008
     my $max_length = 9999;

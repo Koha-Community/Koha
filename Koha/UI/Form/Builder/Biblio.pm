@@ -76,7 +76,7 @@ sub generate_subfield_form {
     my $tagslib = $params->{tagslib};
     my $mandatory_z3950 = $params->{mandatory_z3950} // {};
 
-    my $index_subfield = $self->create_key(); # create a specifique key for each subfield
+    my $index_subfield = $self->create_key(); # create a specific key for each subfield
 
     # Apply optional framework default value when it is a new record,
     # or when editing as new (duplicating a record),
