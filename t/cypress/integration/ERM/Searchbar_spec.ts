@@ -1,3 +1,5 @@
+import { mount } from "@cypress/vue";
+
 describe("Searchbar header changes", () => {
     before(() => {
         cy.fetch_initial_ERM_sys_pref_value();
@@ -21,9 +23,9 @@ describe("Searchbar header changes", () => {
         cy.get("#agreement_search_tab").parent().should("have.class", "active")
     })
 
-    it("Default option also applies to licenses", () => {
-        cy.visit("/cgi-bin/koha/erm/license");
-        cy.get("#agreement_search_tab").parent().should("have.class", "active")
+    it("Should change to licenses when in licenses", () => {
+        cy.visit("/cgi-bin/koha/erm/licenses");
+        cy.get("#license_search_tab").parent().should("have.class", "active")
     })
 
     it("Should change to packages when in local packages", () => {
