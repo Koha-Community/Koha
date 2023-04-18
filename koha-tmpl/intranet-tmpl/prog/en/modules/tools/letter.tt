@@ -51,6 +51,12 @@
         .panel-group {
             margin-top: 3px;
         }
+        .css-helper::after {
+            content: " | ";
+        }
+        .css-helper:last-child::after {
+            content: none;
+        }
     </style>
 [% END %]
 </head>
@@ -657,6 +663,42 @@
                 [% END %]
             [% END # /collapse_item %]
         [% END # /FOR mtt %]
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="format_[% lang | html %]Heading">
+                <h3 class="panel-title">
+                    <a role="button" class="collapsed" data-toggle="collapse" data-parent="#group_[% lang | html %]" href="#format_[% lang | html %]" aria-expanded="false" aria-controls="format_[% lang | html %]">
+                        <span>Format</span>
+                    </a>
+                </h3>
+            </div> <!-- /.panel-heading -->
+            <div id="format_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="format_[% lang | html %]Heading">
+                <div class="panel-body">
+                    <fieldset class="rows">
+                    <div class="dialog message">These format settings apply when a notice is printed.</div>
+                    <div class="col-md-12">
+                        <ol>
+                            <li id="css-helpers">
+                                <label>Insert selectors to apply styles to: </label>
+                                <a class="css-helper" id="headings">Headings</a>
+                                <a class="css-helper" id="tables">Tables</a>
+                                <a class="css-helper" id="text">All text</a>
+                            </li>
+                            <li>
+                                <label for="style">Style (CSS): </label>
+                                <textarea id="style" name="style" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
+                            </li>
+                            <li>
+                                <label for="format_all">Apply format settings to all notices:</label>
+                                <input type="checkbox" name="format_all" id="format_all" value="1" />
+                                <span class="hint">Existing format settings will be overwritten.</span>
+                            </li>
+                        </ol>
+                    </div>
+                    </fieldset> <!-- /.rows.mtt -->
+                </div> <!-- /.panel-body -->
+            </div> <!-- /.panel-collapse -->
+        </div> <!-- /.panel.panel-default -->
     [% END # /WRAPPER accordion %]
 [% END %]
 
@@ -676,6 +718,32 @@
         var new_lettercode = '[% new_lettercode | html %]';
         var new_branchcode = '[% new_branchcode | html %]';
         var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
+        $(document).ready(function(){
+            $("#headings").click(function(){
+                $("#style").val(function(i, text) {
+                    return text + 'pre, #slip, #slip h1, #slip h2, #slip h3, #slip h4, #slip h5, #slip h6,\n' +
+                    '#receipt, #receipt h1, #receipt h2, #receipt h3, #receipt h4, #receipt h5, #receipt h6 {\n' +
+                    '// insert CSS here\n' +
+                    '}';
+                });
+            });
+            $("#tables").click(function(){
+                $("#style").val(function(i, text) {
+                    return text + '\nbody, table, th, td, th:last-child, td:last-child {\n' +
+                    '// insert CSS here\n' +
+                    '}';
+                });
+            });
+            $("#text").click(function(){
+                $("#style").val(function(i, text) {
+                    return text + 'pre, #slip, #slip h1, #slip h2, #slip h3, #slip h4, #slip h5, #slip h6,\n' +
+                    '#receipt, #receipt h1, #receipt h2, #receipt h3, #receipt h4, #receipt h5, #receipt h6,\n' +
+                    'table, th, td, th:last-child, td:last-child {\n' +
+                    '// insert CSS here\n' +
+                    '}';
+                });
+            });
+        });
      </script>
     [% Asset.js("js/letter.js") | $raw %]
 [% END %]

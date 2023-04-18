@@ -49,7 +49,6 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Letters qw( GetMessageTransportTypes );
 use C4::Log qw( logaction );
-
 use Koha::Notice::Templates;
 use Koha::Patron::Attribute::Types;
 
@@ -228,6 +227,7 @@ sub add_form {
                 content    => $letter->{content} // '',
                 tt_error   => $letter->{tt_error},
             };
+            $letters{ $lang }{params} = $letter;
         }
     }
     else {
@@ -307,12 +307,20 @@ sub add_validate {
     my $oldmodule     = $input->param('oldmodule');
     my $code          = $input->param('code');
     my $name          = $input->param('name');
+    my $style         = $input->param('style');
+    my $format_all    = $input->param('format_all');
     my @mtt           = $input->multi_param('message_transport_type');
     my @title         = $input->multi_param('title');
     my @content       = $input->multi_param('content');
     my @lang          = $input->multi_param('lang');
     for my $mtt ( @mtt ) {
         my $lang = shift @lang;
+        if ( $format_all ) {
+            my @letters = Koha::Notice::Templates->search({ lang => $lang })->as_list;
+            foreach my $letter ( @letters ) {
+                $letter->set({ style => $style })->store;
+            }
+        }
         my $is_html = $input->param("is_html_$mtt\_$lang");
         my $title   = shift @title;
         my $content = shift @content;
@@ -345,7 +353,8 @@ sub add_validate {
                     is_html    => $is_html || 0,
                     title      => $title,
                     content    => $content,
-                    lang       => $lang
+                    lang       => $lang,
+                    style      => $style
                 }
             )->store;
 
@@ -360,7 +369,8 @@ sub add_validate {
                     title                  => $title,
                     content                => $content,
                     message_transport_type => $mtt,
-                    lang                   => $lang
+                    lang                   => $lang,
+                    style                  => $style
                 }
             )->store;
             logaction( 'NOTICES', 'CREATE', $letter->id, $letter->content,

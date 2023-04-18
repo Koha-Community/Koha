@@ -48,6 +48,14 @@ function confirmOverwrite( new_lettercode, new_branchcode ){
     }
 }
 
+function confirmFormatOverwrite( event ) {
+    if ( confirm(__("Existing format settings for all notices will be overwritten by these format settings.")) ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 var Sticky;
 
 $(document).ready(function() {
@@ -85,8 +93,16 @@ $(document).ready(function() {
         window.location.href = "/cgi-bin/koha/tools/letter.pl?op=add_form&module=" + $(this).val() + "&branchcode=" + branchcode;
     });
 
-    $("#submit_form").on("click",function(){
-        $("#add_notice").submit();
+    $("#submit_form").on("click",function(e){
+        if ( $("#format_all").is(":checked") ){
+            if ( confirmFormatOverwrite(e) ) {
+                $("#add_notice").submit();
+            } else {
+                e.preventDefault();
+            }
+        } else {
+            $("#add_notice").submit();
+        }
     });
 
     $("#add_notice").validate({

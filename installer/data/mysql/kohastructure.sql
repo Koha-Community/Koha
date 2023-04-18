@@ -4284,6 +4284,7 @@ CREATE TABLE `letter` (
   `message_transport_type` varchar(20) NOT NULL DEFAULT 'email' COMMENT 'transport type for this notice',
   `lang` varchar(25) NOT NULL DEFAULT 'default' COMMENT 'lang of the notice',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'last modification',
+  `style` mediumtext DEFAULT NULL COMMENT 'custom styles for this notice',
   PRIMARY KEY (`id`),
   UNIQUE KEY `letter_uniq_1` (`module`,`code`,`branchcode`,`message_transport_type`,`lang`),
   KEY `message_transport_type_fk` (`message_transport_type`),

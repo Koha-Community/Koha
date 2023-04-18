@@ -29,6 +29,7 @@
 [% IF ( Koha.Preference('SlipCSS') ) %]
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
+[% IF slip.style %]<style>[% slip.style | $raw %]</style>[% END %]
 
 [% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>

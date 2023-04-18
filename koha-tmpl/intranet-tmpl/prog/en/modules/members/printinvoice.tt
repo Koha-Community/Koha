@@ -15,6 +15,7 @@
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
 
 [% Asset.css("css/printreceiptinvoice.css") | $raw %]
+[% IF slip.style %]<style>[% slip.style | $raw %]</style>[% END %]
 [% INCLUDE 'blocking_errors.inc' %]
 </head>
 
