@@ -1,8 +1,23 @@
 #!/usr/bin/perl
 
+# This file is part of Koha
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
-use Test::More;
+use Test::More tests => 7;
 
 use C4::ClassSource;
 
@@ -10,6 +25,9 @@ use Koha::ClassSources;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Libraries;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 use_ok('Koha::UI::Form::Builder::Biblio');
 
@@ -179,4 +197,4 @@ subtest 'generate_subfield_form framework plugin' => sub {
     like($subfield->{marc_value}->{javascript}, qr,<script>.*</script>,s);
 };
 
-done_testing();
+$schema->storage->txn_rollback;
