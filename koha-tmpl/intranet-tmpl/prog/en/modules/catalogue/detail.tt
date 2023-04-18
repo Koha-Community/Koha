@@ -2875,7 +2875,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.public_notes; // FIXME Replace \n with br
+                    return row.public_notes ? row.public_notes.replaceAll('\n', '<br />') : '';
                 }
             },
             {
