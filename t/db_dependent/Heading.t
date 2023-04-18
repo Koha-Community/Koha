@@ -65,7 +65,7 @@ subtest "UNIMARC tests" => sub {
 
 subtest "_search tests" => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
@@ -80,12 +80,25 @@ subtest "_search tests" => sub {
         return ($search_query, 1 );
     });
 
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus', '0');
 
     my $field = MARC::Field->new( '650', ' ', '0', a => 'Uncles', x => 'Fiction' );
     my $heading = C4::Heading->new_from_field($field);
     my ($search_query) = $heading->_search( 'match-heading' );
     my $terms = $search_query->{query}->{bool}->{must};
     my $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+    ];
+    is_deeply( $terms, $expected_terms, "Search formed only using heading content, not thesaurus, when LinkerConsiderThesaurus disabled");
+
+
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus', '1');
+
+    $field = MARC::Field->new( '650', ' ', '0', a => 'Uncles', x => 'Fiction' );
+    $heading = C4::Heading->new_from_field($field);
+    ($search_query) = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
         { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
         { term => { 'subject-heading-thesaurus.ci_raw' => 'a' } },
     ];
@@ -151,7 +164,10 @@ subtest "_search tests" => sub {
     $search->mock('search_auth_compat', sub {
         my $self = shift;
         my $search_query = shift;
-        if( $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq 'special_sauce' ){
+        if(
+            scalar @{$search_query->{query}->{bool}->{must}} == 2 &&
+            $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq 'special_sauce'
+        ){
             return;
         }
         return ($search_query, 1);
@@ -167,5 +183,15 @@ subtest "_search tests" => sub {
         { term => { 'subject-heading-thesaurus.ci_raw' => 'z' } },
     ];
     is_deeply( $terms, $expected_terms, "When thesaurus in subfield 2, and nothing is found, we should search again for notdefined (008_11 = z) ");
+
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus', '0');
+
+    $search_query = undef;
+    ($search_query) = $heading->_search( 'match-heading' );
+    $terms = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
+    ];
+    is_deeply( $terms, $expected_terms, "When thesaurus in subfield 2, and nothing is found, we don't search again if LinkerConsiderThesaurusDisabled");
 
 };

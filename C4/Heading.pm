@@ -202,6 +202,8 @@ sub _search {
     my @operator;
     my @value;
 
+    my $check_thesaurus = C4::Context->preference('LinkerConsiderThesaurus');
+
     # FIXME: We specify values for @and_or and @excluding
     # but these fields are not used anywhere and should be removed
     if ($index) {
@@ -211,7 +213,7 @@ sub _search {
         push @value,    $self->{'search_form'};
     }
 
-    if ( $thesaurus ) {
+    if ( $check_thesaurus && $thesaurus ) {
         push @marclist, 'thesaurus';
         push @and_or, 'and';
         push @excluding, '';
@@ -240,7 +242,8 @@ sub _search {
     # Some auth records may not contain the 040$f to specify their source
     # This is legal, so we do a fallback search
     if (
-          !$total
+           $check_thesaurus
+        && !$total
         && $thesaurus
         && none { $_ eq $thesaurus } (
             'lcsh',         'lcac', 'mesh', 'nal',

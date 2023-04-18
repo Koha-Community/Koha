@@ -119,3 +119,10 @@ Authorities:
                   1: Do
                   0: "Don't"
             - attempt to automatically link headings when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for record edits.
+        -
+            - pref: LinkerConsiderThesaurus
+              default: no
+              choices:
+                  1: Do
+                  0: "Don't"
+            - compare the source for 6XX headings to the thesaurus source for authority records when linking. Enabling this preference may require a reindex, and may generate new authority records if AutoCreateAuthorities is enabled.
