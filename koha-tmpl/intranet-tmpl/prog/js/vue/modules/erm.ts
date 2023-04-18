@@ -67,7 +67,9 @@ router.beforeEach((to, from) => {
 router.afterEach((to, from) => {
     let tab_id = 'agreement'; // Agreements
 
-    if (to.path.match(/\/erm\/eholdings\/local\/packages/)) {
+    if (to.path.match(/\/erm\/licenses/)) {
+        tab_id = 'license';
+    } else if (to.path.match(/\/erm\/eholdings\/local\/packages/)) {
         tab_id = 'package';
     } else if (to.path.match(/\/erm\/eholdings\/local\/titles/)) {
         tab_id = 'title';
