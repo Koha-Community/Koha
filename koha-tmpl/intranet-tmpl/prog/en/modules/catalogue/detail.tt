@@ -2921,10 +2921,10 @@
             [% IF ( SpineLabelShowPrintOnBibDetails ) %]
             {
                 data: "",
-                searchable: false, // FIXME
-                orderable: true,
+                searchable: false,
+                orderable: false,
                 render: function (data, type, row, meta) {
-                    return ""; // FIXME Print label
+                    return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> Print label</a>'.format(row.external_id);
                 }
             },
             [% END %]
