@@ -465,6 +465,14 @@ sub item_group {
     return $item_group;
 }
 
+sub item_group_item {
+    my ( $self ) = @_;
+    my $rs = $self->_result->item_group_item;
+    return unless $rs;
+    return Koha::Biblio::ItemGroup::Item->_new_from_dbic($rs);
+}
+
+
 =head3 return_claims
 
   my $return_claims = $item->return_claims;

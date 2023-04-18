@@ -2495,6 +2495,9 @@
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
+        [% IF Koha.Preference('EnableItemGroups') %]
+            embed.push('item_group_item.item_group.description');
+        [% END %]
         let table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %];
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
@@ -2605,12 +2608,16 @@
             },
             [% IF Koha.Preference('EnableItemGroups') %]
             {
-                data: "",
+                data: "item_group_item.item_group.description",
                 className: "item_group",
-                searchable: false, // FIXME
+                searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return "item.item_group.description";// FIXME item.item_group.description
+                    if ( row.item_group_item ) {
+                        return row.item_group_item.item_group.description;
+                    } else {
+                        return "";
+                    }
                 }
             },
             [% END %]

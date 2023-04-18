@@ -19,11 +19,25 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use Koha::Biblio::ItemGroup;
+
 =head1 NAME
 
 Koha::Biblio::ItemGroup::Item - Koha ItemGroup Item Object class
 
 =head1 API
+
+=head2 Class methods
+
+=head3 item_group
+
+=cut
+
+sub item_group {
+    my ($self) = @_;
+    my $rs = $self->_result->item_group;
+    return Koha::Biblio::ItemGroup->_new_from_dbic($rs);
+}
 
 =head2 Internal methods
 
