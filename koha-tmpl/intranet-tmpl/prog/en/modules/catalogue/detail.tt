@@ -2931,8 +2931,25 @@
             [% IF CAN_user_editcatalogue_edit_items %]
             {
                 data: function( row, type, val, meta ) {
-                    let result = 'Edit + Delete'; // FIXME Add links
-                    return result;
+                    let nodes = '';
+                    if ( can_edit_items_from[row.holding_library_id] ){
+                        [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
+                            nodes += '<div class="btn-group">';
+                            nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id);
+                            nodes += ' <ul class="dropdown-menu pull-right">';
+                            nodes += '  <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> Upload image</a></li>'.format(row.item_id);
+                            nodes += ' </ul>';
+                            nodes += '</div>';
+                        [% ELSE %]
+                            nodes += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa fa-pencil"></i> Edit</a>'.format(row.biblio_id, row.item_id);
+                        [% END %]
+                    }
+                    [% IF bundlesEnabled %]
+                        // FIXME How do we handle that correctly?
+                        //nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(row.bundled, row.bundled_lost);
+                    [% END %]
+
+                    return nodes;
                 },
                 className: "actions",
                 searchable: false,
