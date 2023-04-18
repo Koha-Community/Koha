@@ -2815,7 +2815,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return row.external_id; // FIXME Display link to moredetail
+                    return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=%s#item%s">%s</a>'.format(row.biblio_id, row.item_id, row.external_id);
                 }
             },
             {
