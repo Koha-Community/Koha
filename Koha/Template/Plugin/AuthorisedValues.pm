@@ -69,8 +69,8 @@ sub GetCategories {
 
 sub GetDescriptionsByKohaField {
     my ( $self, $params ) = @_;
-    return Koha::AuthorisedValues->get_descriptions_by_koha_field(
-        { kohafield => $params->{kohafield} } );
+    return [ Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { kohafield => $params->{kohafield} } ) ];
 }
 
 sub GetDescriptionByKohaField {

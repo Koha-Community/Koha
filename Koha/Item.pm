@@ -767,6 +767,10 @@ sub get_transfer {
     return  Koha::Item::Transfer->_new_from_dbic($transfer) if $transfer;
 }
 
+sub transfer {
+    return shift->get_transfer(@_);
+}
+
 =head3 get_transfers
 
   my $transfer = $item->get_transfers;
@@ -1047,6 +1051,11 @@ sub current_holds {
     };
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
+}
+
+sub first_hold {
+    my ( $self ) = @_;
+    return $self->current_holds->next;
 }
 
 =head3 stockrotationitem
@@ -1743,6 +1752,9 @@ sub itemtype {
     my ( $self ) = @_;
 
     return Koha::ItemTypes->find( $self->effective_itemtype );
+}
+sub item_type {
+    return shift->itemtype;
 }
 
 =head3 orders

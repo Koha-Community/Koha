@@ -2485,11 +2485,16 @@
 
             });
         [% END %]
-        const can_edit_items_from = [% To.json(can_edit_items_from) | $raw %];
+        const can_edit_items_from = [% To.json(can_edit_items_from || {}) | $raw %];
         const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
         const av_loc = new Map([% To.json(AuthorisedValues.Get('LOC')) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_lost = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.itemlost' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_withdrawn = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.withdrawn' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_damaged = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.damaged' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_not_for_loan= new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.notforloan' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_restricted = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.restricted' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         let table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-        let embed = ["+strings"];
+        let embed = ["+strings,checkout,checkout.patron,transfer,first_hold,first_hold.patron,item_type"];
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
@@ -2499,6 +2504,10 @@
         [% IF biblio.serial %]
             embed.push('serialitem.serial');
         [% END %]
+        [% IF Koha.Preference('UseRecalls') %]
+            embed.push('recall', 'recall.patron')
+        [% END %]
+        embed.push('in_bundle', 'bundle_host');
         let table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %];
         var items_table = $("#table_items").kohaTable({
             ajax: { url: table_url },
@@ -2659,12 +2668,100 @@
                 }
             },
             {
-                data: "",
+                data: "me.lost_status",
                 className: "status",
-                searchable: false, // FIXME
-                orderable: true,
+                searchable: false, // FIXME We are losing the ability to search on the status
+                orderable: false,
                 render: function (data, type, row, meta) {
-                    return "status"; // FIXME Display status
+                    let nodes = "";
+                    if ( row.checkout ) {
+                        nodes += '<span>';
+                        if ( row.checkout.onsite_checkout ) {
+                            if ( can_edit_items_from[row.holding_library_id] ){
+                                let patron_to_html = $patron_to_html(row.checkout.patron); [%# FIXME What about hide_patron_infos_if_needed?? %]
+                                nodes += _("Currently in local use by %s").format(patron_to_html);
+                            } else {
+                                nodes += _("Currently in local use");
+                            }
+                        } else {
+                            nodes += '<span class="datedue">';
+                            if ( can_edit_items_from[row.holding_library_id] ){
+                                let patron_to_html = $patron_to_html(row.checkout.patron); [%# FIXME What about hide_patron_infos_if_needed?? %]
+                                nodes += _("Checked out to %s").format(patron_to_html);
+                            } else {
+                                nodes += _("Checked out");
+                            }
+                        }
+                        nodes += ': ';
+                        nodes += _("due %s").format($date(row.checkout.due_date)); [%# FIXME Missing due date formatting here, $date do not have as_due_date option %]
+                        nodes += "</span>"
+                    } else if ( row.transfer ) {
+                        if ( row.transfer.datesent ) {
+                            nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(row.transfer.frombranch, row.transfer.tobranch, $date(row.transfer.datesent))); [%# FIXME display library names, not codes, do we use _strings here? %]
+                        } else {
+                            nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(row.transfer.frombranch, row.transfer.tobranch, $date(row.transfer.daterequested))); [%# FIXME See above %]
+                        }
+                    }
+
+                    if ( row.lost_status ) {
+                        let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
+                        nodes += '<span class="lost">%s</span>'.format(lost_lib);
+                    }
+
+                    if ( row.withdrawn ) {
+                        let withdrawn_lib = av_withdrawn.get(row.withdrawn.toString()) || _("Withdrawn");
+                        nodes += '<span class="wdn">%s</span>'.format(withdrawn_lib);
+                    }
+
+                    if ( row.damaged ) {
+                        let damaged_lib = av_damaged.get(row.damaged.toString()) || _("Damaged");
+                        nodes += '<span class="dmg">%s</span>'.format(damaged_lib);
+                    }
+
+                    if ( row.not_for_loan_status || row.item_type.notforloan ) {
+                        let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
+                        nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(not_for_loan_lib) : '' ) + '</span>';
+                    }
+
+                    if ( row.first_hold ) {
+                        if ( row.first_hold.waiting_date ) {
+                            [%# FIXME Display library names instead of codes %]
+                            [%# FIXME We lost the desk name, we need an additional embed %]
+                            nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s since %s.".format(row.first_hold.pickup_library_id, $date(row.first_hold.waiting_date))));
+                            [% IF Koha.Preference('canreservefromotherbranches') %]
+                                if ( row.first_hold.waiting_date || row.first_hold.priority == 1 ) {
+                                    let patron_to_html = $patron_to_html(row.first_hold.patron); [%# FIXME What about hide_patron_infos_if_needed?? %]
+                                    nodes += ' <span class="heldfor">%s</span>'.format(_("Hold for: %s").format(patron_to_html));
+                                }
+                            [% END %]
+                        } else {
+                            nodes += '<span class="holdonitem">%s</span>'.format(_("There is an item level hold on this item (priority = %s).").format(row.first_hold.priority));
+                        }
+                    }
+
+                    [% IF Koha.Preference('UseRecalls') %]
+                        if ( row.recall ) {
+                            if ( row.recall.waiting_date ) {
+                                nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(row.recall.pickup_library_id, $date(row.recall.waiting_date))); # FIXME Display library names instead of codes
+                            } else {
+                                let patron_to_html = $patron_to_html(row.recall.patron);
+                                nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, row.recall.created_date));
+                            }
+                        }
+                    [% END %]
+
+                    if ( ! ( row.not_for_loan_status || row.item_type.notforloan || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged || row.transfer || row.first_hold || row.recall ) ) {
+                        nodes += ' <span>%s</span>'.format(_("Available"))
+                    }
+
+                    if ( row.restricted_status ) {
+                        nodes += '<span class="restricted">(%s)</span>'.format(av_restricted.get(row.restricted_status.toString()));
+                    }
+
+                    if ( row.in_bundle ) {
+                        nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
+                    }
+                    return nodes;
                 }
             },
             {
