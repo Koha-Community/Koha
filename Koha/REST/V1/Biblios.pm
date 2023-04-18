@@ -302,6 +302,7 @@ sub get_items {
 
         my $items_rs = $biblio->items;
         $items_rs = $items_rs->filter_by_bookable if $bookable_only;
+        # FIXME We need to order_by serial.publisheddate if we have _order_by=+me.serial_issue_number
         my $items = $c->objects->search($items_rs);
         return $c->render(
             status  => 200,

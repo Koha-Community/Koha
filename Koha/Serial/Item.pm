@@ -24,6 +24,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::Serials;
+
 =head1 NAME
 
 Koha::Serial::Item - Koha Serial Item Object class
@@ -33,6 +35,17 @@ Koha::Serial::Item - Koha Serial Item Object class
 =head2 Class Methods
 
 =cut
+
+=head3 serial
+
+=cut
+
+sub serial {
+    my ($self) = @_;
+    my $rs = $self->_result->serialid;
+    return unless $rs;
+    return Koha::Serial->_new_from_dbic($rs);
+}
 
 =head3 type
 

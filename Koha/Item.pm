@@ -51,6 +51,7 @@ use Koha::Plugins;
 use Koha::Recalls;
 use Koha::Result::Boolean;
 use Koha::SearchEngine::Indexer;
+use Koha::Serial::Items;
 use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
 use Koha::TrackedLinks;
@@ -442,6 +443,17 @@ sub checkout {
     my $checkout_rs = $self->_result->issue;
     return unless $checkout_rs;
     return Koha::Checkout->_new_from_dbic( $checkout_rs );
+}
+
+=head3 serialitem
+
+=cut
+
+sub serialitem {
+    my ( $self ) = @_;
+    my $rs = $self->_result->serialitem;
+    return unless $rs;
+    return Koha::Serial::Item->_new_from_dbic($rs);
 }
 
 =head3 item_group
