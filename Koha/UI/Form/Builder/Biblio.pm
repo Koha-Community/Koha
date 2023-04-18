@@ -57,7 +57,7 @@ sub new {
 
 =head3 generate_subfield_form
 
-Generate subfield's info for given tag, subfieldtag, etc.
+    Generate subfield's info for given tag, subfieldtag, etc.
 
 =cut
 
@@ -280,6 +280,12 @@ sub generate_subfield_form {
     return \%subfield_data;
 }
 
+=head3 build_authorized_values_list
+
+    Return list of authorized values for given tag, subfield
+
+=cut
+
 sub build_authorized_values_list {
     my ($self, $params) = @_;
 
@@ -364,6 +370,12 @@ sub build_authorized_values_list {
     };
 
 }
+
+=head3 create_key
+
+    Create unique key for subfields
+
+=cut
 
 sub create_key {
     return int(rand(1000000));
