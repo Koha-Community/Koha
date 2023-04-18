@@ -65,16 +65,16 @@
                     <a class="select-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
                     |
                     <a class="clear-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-remove"></i> Clear all</a>
-                    <span class="itemselection_actions">
+                    <span class="itemselection_actions [% tab | html %]">
                         | Actions:
-                        <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
+                        <a href="#" data-tab="[% tab | html %]" class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
                     </span>
                 </div>
             [% END %]
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th class="NoSort noExport"></th>
                         <th>ISSN</th>
                         <th class="anti-the">Title</th>
                         <th>Notes</th>
@@ -96,7 +96,7 @@
                             <tr>
                                 <td>
                                     [% UNLESS subscription.cannotedit %]
-                                        <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
+                                        <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" class="[% tab | html %]" />
                                     [% ELSE %]
                                         <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" disabled="disabled" title="You cannot edit this subscription" />
                                     [% END %]
@@ -322,30 +322,30 @@
     [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script>
 
-            function itemSelectionBuildEditLink(div) {
-                var subscription_ids = new Array();
-                $("input[name='subscriptionid'][type='checkbox']:checked", div).each(function() {
-                    subscription_ids.push($(this).val());
-                });
-                if (subscription_ids.length > 0) {
-                    var url = "[% edit_action_link | html %]";
-                    url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
-                    $('a.itemselection_action_modify').attr('href', url);
-                } else {
-                    return false;
-                }
-                return true;
-            }
+        function itemSelectionBuildEditLink( tab ) {
+            var subscription_ids = new Array();
+            $( "input:checkbox." + tab + ":checked" ).each(function() {
+                subscription_ids.push( $(this).val() );
+            });
 
-            function itemSelectionBuildActionLinks(tab) {
-                var div = $("#" + tab);
-                var modify_link_ok = itemSelectionBuildEditLink(div);
-                if (modify_link_ok) {
-                    $('.itemselection_actions', div).show();
-                } else {
-                    $('.itemselection_actions', div).hide();
-                }
+            if (subscription_ids.length > 0) {
+                var url = "[% edit_action_link | html %]";
+                url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
+                location.href = url;
+            } else {
+                return false;
             }
+        }
+
+        function enableCheckboxActions( tab ){
+            // Enable/disable controls if checkboxes are checked
+            var checked_count = $("input:checkbox." + tab + ":checked").length;
+            if( checked_count > 0 ){
+                $(".itemselection_actions." + tab ).show();
+            } else {
+                $(".itemselection_actions." + tab ).hide();
+            }
+        }
 
         $(document).ready(function() {
             var osrlt = $("#opened_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -385,17 +385,24 @@
 
             $('.select-all, .clear-all').on('click', function(e) {
                 e.preventDefault();
-                var checkboxes = $(this).parents('form').find('input[type="checkbox"]');
-                checkboxes.prop('checked', $(this).hasClass('select-all'));
                 var tab = $(this).data("tab");
-                itemSelectionBuildActionLinks(tab);
+                var checkboxes = $("input:checkbox." + tab );
+                checkboxes.prop('checked', $(this).hasClass('select-all')).change();
+                enableCheckboxActions(tab);
             });
 
-            itemSelectionBuildActionLinks("opened");
-            itemSelectionBuildActionLinks("closed");
+            enableCheckboxActions("opened");
+            enableCheckboxActions("closed");
+
             $("input[name='subscriptionid'][type='checkbox']").change(function() {
-                var div = $(this).parents('form').parent().attr("id");
-                itemSelectionBuildActionLinks(div);
+                var tab = $(this).attr("class");
+                enableCheckboxActions( tab );
+            });
+
+            $(".itemselection_action_modify").on("click", function(e){
+                e.preventDefault();
+                var tab = $(this).data("tab");
+                itemSelectionBuildEditLink( tab );
             });
 
             [% IF ( mana ) %]
