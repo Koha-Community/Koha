@@ -2889,11 +2889,12 @@
             },
             [% IF ( hostrecords ) %]
             {
-                data: "",
+                data: "biblio.biblio_id",
                 searchable: false, // FIXME
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return ""; // FIXME Display host title with link
+                    if ( row.biblio_id == [% biblio.biblionumber %] ) return "";
+                    return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s>%s</a>'.format(row.biblio_id, row.biblio.title);
                 }
             },
             [% END %]
