@@ -62,8 +62,10 @@
                     </li>
                     <li>
                         <label>{{ $__("Is perpetual") }}:</label>
-                        <span v-if="agreement.is_perpetual">Yes</span>
-                        <span v-else>No</span>
+                        <span v-if="agreement.is_perpetual">{{
+                            $__("Yes")
+                        }}</span>
+                        <span v-else>{{ $__("No") }}</span>
                     </li>
                     <li>
                         <label>{{ $__("Renewal priority") }}:</label>
