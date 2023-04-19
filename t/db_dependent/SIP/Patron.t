@@ -296,6 +296,7 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
             value  => {
                 borrowernumber => $patron->borrowernumber,
                 amountoutstanding => 11,
+                debit_type_code   => 'OVERDUE',
             }
         }
     )->store;
@@ -306,6 +307,7 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
             value  => {
                 borrowernumber => $child->borrowernumber,
                 amountoutstanding => 0.11,
+                debit_type_code   => 'OVERDUE',
             }
         }
     )->store;
@@ -346,6 +348,7 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
             value  => {
                 borrowernumber => $patron->borrowernumber,
                 amountoutstanding => 11,
+                debit_type_code   => 'OVERDUE',
             }
         }
     )->store;
@@ -356,6 +359,7 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
             value  => {
                 borrowernumber => $child->borrowernumber,
                 amountoutstanding => 0.11,
+                debit_type_code   => 'OVERDUE',
             }
         }
     )->store;
