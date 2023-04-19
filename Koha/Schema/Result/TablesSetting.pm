@@ -52,6 +52,11 @@ __PACKAGE__->table("tables_settings");
   is_nullable: 1
   size: 255
 
+=head2 default_save_state
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -65,6 +70,8 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", is_nullable => 1 },
   "default_sort_order",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "default_save_state",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -84,8 +91,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("module", "page", "tablename");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-12-16 11:41:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:42x+rSLgXvSZBVLx5mh2ng
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-19 18:48:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+Bsg0TAz2CfvQ5MJsiOFRw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
