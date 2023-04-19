@@ -43,17 +43,13 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        </li>
+        [% END %]
 
         [% IF op == 'add_form' %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 [% IF category == 'news' %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
                 [% ELSIF category == 'pages' %]
@@ -61,34 +57,34 @@
                 [% ELSE %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
                 [% END %]
-            </li>
-            <li>
-                <a href="#" aria-current="page">
+            [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% IF additional_content.idnew %]
                         <span>Modify additional content</span>
                     [% ELSE %]
                         <span>Add additional content</span>
                     [% END %]
-                    ([% IF category == 'news' %]<span>News</span>[% ELSIF category == 'pages' %]<span>Pages</span>[% ELSE %]<span>HTML customizations</span>[% END %])
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
                     [% IF category == 'news' %]
-                        News
+                        <span>(News)</span>
                     [% ELSIF category == 'pages' %]
-                        Pages
+                        <span>(Pages)</span>
                     [% ELSE %]
-                        HTML customizations
+                        <span>(HTML customizations)</span>
                     [% END %]
-                </a>
-            </li>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF category == 'news' %]
+                    <span>News</span>
+                [% ELSIF category == 'pages' %]
+                    <span>Pages</span>
+                [% ELSE %]
+                    <span>HTML customizations</span>
+                [% END %]
+            [% END %]
         [% END %]
-
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 [% IF op == 'add_form' %]
 <div class="main container-fluid">
