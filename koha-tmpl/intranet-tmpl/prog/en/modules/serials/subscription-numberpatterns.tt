@@ -12,43 +12,30 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-        </li>
-
-        [% IF ( new ) %]
-            <li>
-                <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    New numbering pattern
-                </a>
-            </li>
-        [% ELSIF ( modify ) %]
-            <li>
-                <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Modifying numbering pattern '[% label | html %]'
-                </a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Numbering patterns
-                </a>
-            </li>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% IF ( new || modify ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
+            [% END %]
+        [% END %]
+        [% IF ( new ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>New numbering pattern</span>
+            [% END %]
+        [% ELSIF ( modify ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Modifying numbering pattern '[% label | html %]'</span>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Numbering patterns</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
