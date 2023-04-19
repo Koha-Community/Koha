@@ -559,6 +559,7 @@ subtest do_checkout_with_sysprefs_override => sub {
             value  => {
                 borrowernumber => $patron_under_noissuescharge->borrowernumber,
                 amountoutstanding => 4,
+                debit_type_code   => 'OVERDUE',
             }
         }
     );
@@ -579,6 +580,7 @@ subtest do_checkout_with_sysprefs_override => sub {
             value  => {
                 borrowernumber => $patron_over_noissuescharge->borrowernumber,
                 amountoutstanding => 6,
+                debit_type_code   => 'OVERDUE',
             }
         }
     );
@@ -677,6 +679,7 @@ subtest do_checkout_with_patron_blocked => sub {
             value  => {
                 borrowernumber => $fines_patron->borrowernumber,
                 amountoutstanding => 10,
+                debit_type_code   => 'OVERDUE',
             }
         }
     );
