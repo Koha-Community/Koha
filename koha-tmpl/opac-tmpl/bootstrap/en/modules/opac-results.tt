@@ -5,7 +5,7 @@
 [% USE To %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) %]
-[% SET CoverImagePlugins = KohaPlugins.get_plugins_intranet_cover_images %]
+[% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
 
 [% IF firstPage %]
      [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
@@ -591,9 +591,7 @@
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         [% Asset.js("js/openlibrary.js") | $raw %]
     [% END %]
-    [% IF ( CoverImagePlugins ) %]
-        [% KohaPlugins.get_plugins_opac_cover_images | $raw %]
-    [% END %]
+    [% CoverImagePlugins | $raw %]
     <script>
         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) %]
             function holdMultiple() {

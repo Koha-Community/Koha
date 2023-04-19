@@ -2448,8 +2448,6 @@
             });
         [% END %]
     </script>
-    [% IF ( CoverImagePlugins ) %]
-        [% KohaPlugins.get_plugins_intranet_cover_images | $raw %]
-    [% END %]
+    [% CoverImagePlugins | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

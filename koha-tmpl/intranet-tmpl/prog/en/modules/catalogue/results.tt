@@ -914,7 +914,7 @@
         [% END %]
     </script>
     [% Asset.js("js/pages/results.js") | $raw %]
-    [% KohaPlugins.get_plugins_intranet_cover_images | $raw %]
+    [% CoverImagePlugins | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

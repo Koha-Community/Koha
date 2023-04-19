@@ -9,7 +9,7 @@
 [% USE KohaPlugins %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
-[% SET CoverImagePlugins = KohaPlugins.get_plugins_intranet_cover_images %]
+[% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
 [% ELSE %]
@@ -1456,9 +1456,7 @@
         [% Asset.js("js/ratings.js") | $raw %]
     [% END %]
 
-    [% IF ( CoverImagePlugins ) %]
-        [% KohaPlugins.get_plugins_opac_cover_images | $raw %]
-    [% END %]
+    [% CoverImagePlugins | $raw %]
 
     [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
     [% IF ( Koha.Preference('OPACDetailQRCode') ) %]
