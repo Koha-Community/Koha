@@ -1250,6 +1250,19 @@
 
         <!-- Availability line -->
         <div class="results_summary availability">
+
+            <xsl:variable name="item_status_list">
+                <status english="Checked out">Checked out</status>
+                <status english="Withdrawn">Withdrawn</status>
+                <status english="Lost">Lost</status>
+                <status english="Damaged">Damaged</status>
+                <status english="Pending hold">Pending hold</status>
+                <status english="In transit">In transit</status>
+                <status english="Hold waiting">On hold</status>
+                <status english="Recall waiting">Waiting recall</status>
+                <status english="Not for loan">Not for loan</status>
+            </xsl:variable>
+
             <span class="label">Availability: </span>
 
             <xsl:choose>
@@ -1310,7 +1323,10 @@
                                 <xsl:call-template name="listCallNumbers">
                                     <xsl:with-param name="items" select="$reference_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
                                     <xsl:with-param name="max" select="$OPACResultsMaxItems"/>
-                                    <xsl:with-param name="status_text" select="concat($currentbranch,': ',$current_substatus)"/>
+                                    <xsl:with-param name="status_text">
+                                        <xsl:value-of select="concat($currentbranch,': ')"/>
+                                        <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
+                                    </xsl:with-param>
                                     <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
                                     <xsl:with-param name="class_status" select="'ItemBranch'"/>
                                     <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
@@ -1323,16 +1339,6 @@
                     <!-- Availability part 3: UNAVAILABLE ITEMS (see also pref Reference_NFL_Statuses); status reallynotforloan or status other -->
                     <xsl:if test="number($sumAv+$sumRef) &lt; number($itemcount)"><span class="unavailable">
                         <span class="AvailabilityLabel"><strong><xsl:text>Not available: </xsl:text></strong></span>
-                        <xsl:variable name="other_status_list">
-                            <status english="Checked out">Checked out</status>
-                            <status english="Withdrawn">Withdrawn</status>
-                            <status english="Lost">Lost</status>
-                            <status english="Damaged">Damaged</status>
-                            <status english="Pending hold">Pending hold</status>
-                            <status english="In transit">In transit</status>
-                            <status english="Hold waiting">On hold</status>
-                            <status english="Recall waiting">Waiting recall</status>
-                        </xsl:variable>
                         <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')|key('item-by-status', 'other')"/>
                         <xsl:choose>
                             <xsl:when test="$OPACResultsUnavailableGroupingBy='branch'">
@@ -1351,12 +1357,7 @@
                                                 <xsl:with-param name="status_text">
                                                     <xsl:value-of select="$currentbranch"/>
                                                     <xsl:text>: </xsl:text>
-                                                    <xsl:if test="items:status='other'">
-                                                        <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
-                                                    </xsl:if>
-                                                    <xsl:if test="items:status='reallynotforloan'">
-                                                        <xsl:value-of select="$current_substatus"/>
-                                                    </xsl:if>
+                                                    <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
                                                 </xsl:with-param>
                                                 <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
                                                 <xsl:with-param name="class_status" select="'ItemBranch'"/>
@@ -1375,12 +1376,7 @@
                                         <xsl:with-param name="items" select="$unavailable_items[items:substatus=$current_substatus]"/>
                                         <xsl:with-param name="max" select="0"/>
                                         <xsl:with-param name="status_text">
-                                            <xsl:if test="items:status='other'">
-                                                <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
-                                            </xsl:if>
-                                            <xsl:if test="items:status='reallynotforloan'">
-                                                <xsl:value-of select="$current_substatus"/>
-                                            </xsl:if>
+                                            <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
                                         </xsl:with-param>
                                         <xsl:with-param name="class_block" select="concat('unavailable_',$current_substatus)"/>
                                         <xsl:with-param name="class_status" select="UnavailableSubstatus"/>
