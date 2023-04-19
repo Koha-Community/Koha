@@ -1,0 +1,17 @@
+use Modern::Perl;
+
+return {
+    bug_number => "33484",
+    description => "Add state save as an option to datatables",
+    up => sub {
+        my ($args) = @_;
+        my ($dbh, $out) = @$args{qw(dbh out)};
+        if ( !column_exists( 'tables_settings', 'default_save_state' ) ) {
+            $dbh->do(q{
+                ALTER TABLE tables_settings
+                  ADD COLUMN default_save_state tinyint(1) DEFAULT NULL AFTER default_sort_order
+            });
+            say $out "Added column 'tables_settings.default_save_state'";
+        }
+    },
+};

@@ -1035,6 +1035,9 @@ function _dt_get_saved_state( localstorage_config, columns_settings ){
             if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
                 settings["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
             }
+            if ( table_settings.hasOwnProperty('default_save_state') && table_settings['default_save_state'] === 0 ) {
+                localStorage.removeItem(table_key);
+            }
         }
 
         var table = $(this).dataTable(settings);

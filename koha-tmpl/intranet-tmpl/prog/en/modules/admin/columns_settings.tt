@@ -148,6 +148,16 @@
                                         </select>
                                     </p>
                                 [% END %]
+                                [% IF table_settings.default_save_state.defined %]
+                                    <p>
+                                        Save state on page change:
+                                        [%- IF table_settings.default_save_state -%]
+                                            <input type="checkbox" name="[% pagename | html %]#[% tablename | html %]_default_save_state" value="1" checked="checked" />
+                                        [%- ELSE -%]
+                                            <input type="checkbox" name="[% pagename | html %]#[% tablename | html %]_default_save_state" value="1" />
+                                        [%- END -%]
+                                    </p>
+                                [% END %]
 
                             </div>
                         [% END %]

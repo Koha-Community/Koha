@@ -50,11 +50,13 @@ if ( $op eq 'cud-save' ) {
         next unless $table_id =~ m{^([^\|]*)\|(.*)$};
         my $default_display_length = $input->param( $table_id . '_default_display_length' );
         my $default_sort_order     = $input->param( $table_id . '_default_sort_order' );
+        my $default_save_state     = $input->param( $table_id . '_default_save_state' );
 
         undef $default_display_length if defined $default_display_length && $default_display_length eq "";
         undef $default_sort_order if defined $default_sort_order && $default_sort_order eq "";
+        $default_save_state = 0 if !defined($default_save_state);
 
-        if ( defined $default_display_length || defined $default_sort_order )
+        if ( defined $default_display_length || defined $default_sort_order || defined $default_save_state )
         {
             C4::Utils::DataTables::TablesSettings::update_table_settings(
                 {
@@ -63,6 +65,7 @@ if ( $op eq 'cud-save' ) {
                     tablename              => $2,
                     default_display_length => $default_display_length,
                     default_sort_order     => $default_sort_order,
+                    default_save_state     => $default_save_state,
                 }
             );
         }

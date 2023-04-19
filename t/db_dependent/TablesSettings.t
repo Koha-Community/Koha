@@ -25,6 +25,7 @@ $module->mock(
                         'currencies-table' => {
                             default_display_length => 20,
                             default_sort_order => 1,
+                            default_save_state => 1,
                             columns => [
                                 {
                                     columnname         => 'currency',
@@ -125,6 +126,7 @@ my $modules_expected = {
             'currencies-table' => {
                 default_display_length => 20,
                 default_sort_order => 1,
+                default_save_state => 1,
                 columns => [
                     {
                         columnname         => 'currency',
@@ -192,10 +194,12 @@ for my $m ( keys %$modules ) {
                 {
                     default_display_length => $table_settings->{default_display_length},
                     default_sort_order     => $table_settings->{default_sort_order}
+                    default_save_state     => $table_settings->{default_save_state}
                 },
                 {
                     default_display_length => $modules->{$m}{$p}{$t}{default_display_length},
                     default_sort_order     => $modules->{$m}{$p}{$t}{default_sort_order},
+                    default_save_state     => $modules->{$m}{$p}{$t}{default_save_state},
                 }
             );
         }

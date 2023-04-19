@@ -103,7 +103,9 @@ sub get_table_settings {
         default_display_length => $rs ? $rs->default_display_length
         : $list->{modules}{$module}{$page}{$tablename}{default_display_length},
         default_sort_order => $rs ? $rs->default_sort_order
-        : $list->{modules}{$module}{$page}{$tablename}{default_sort_order}
+        : $list->{modules}{$module}{$page}{$tablename}{default_sort_order},
+        default_save_state => $rs ? $rs->default_save_state
+        : $list->{modules}{$module}{$page}{$tablename}{default_save_state},
     };
 }
 
@@ -153,10 +155,11 @@ sub update_columns {
   C4::Utils::DataTables::TablesSettings::update_table_settings(
     {
         module                 => $module,
-        pag                    => $page,
+        page                   => $page,
         tablename              => $tablename,
         default_display_length => $default_display_length,
-        default_sort_order     => $default_sort_order
+        default_sort_order     => $default_sort_order,
+        default_save_state     => $default_save_state,
     }
   );
 
@@ -171,6 +174,7 @@ sub update_table_settings {
     my $tablename              = $params->{tablename};
     my $default_display_length = $params->{default_display_length};
     my $default_sort_order     = $params->{default_sort_order};
+    my $default_save_state     = $params->{default_save_state};
 
     my $schema = Koha::Database->new->schema;
 
@@ -181,6 +185,7 @@ sub update_table_settings {
             tablename              => $tablename,
             default_display_length => $default_display_length,
             default_sort_order     => $default_sort_order,
+            default_save_state     => $default_save_state,
         }
     );
 }

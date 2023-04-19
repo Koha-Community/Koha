@@ -45,6 +45,10 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
             }
             counter++;
         });
+
+        if ( table_settings.hasOwnProperty('default_save_state') && table_settings['default_save_state'] === 0 ) {
+            localStorage.removeItem(table_key);
+        }
     }
 
     var exportColumns = ":visible:not(.noExport)";
