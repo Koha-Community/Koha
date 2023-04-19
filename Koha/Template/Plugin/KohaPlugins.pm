@@ -230,4 +230,56 @@ sub get_plugins_intranet_catalog_biblio_tab {
     return $tabs;
 }
 
+=head3 get_plugins_intranet_cover_images
+
+[% KohaPlugins. get_plugins_intranet_cover_images %]
+
+This method collects the output of all plugins for injecting cover images into the intranet template and appends it to the javascript at the bottom of the page.
+
+=cut
+
+sub get_plugins_intranet_cover_images {
+    return q{} unless C4::Context->config("enable_plugins");
+
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
+        {
+            method => 'intranet_cover_images',
+        }
+    );
+
+    my @data = map { $_->intranet_cover_images || q{} } @plugins;
+
+    return join( "\n", @data );
+}
+
+=head3 get_plugins_opac_cover_images
+
+[% KohaPlugins. get_plugins_opac_cover_images %]
+
+This method collects the output of all plugins for injecting cover images into the opac template and appends it to the javascript at the bottom of the page.
+
+=cut
+
+sub get_plugins_opac_cover_images {
+    return q{} unless C4::Context->config("enable_plugins");
+
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
+        {
+            method => 'opac_cover_images',
+        }
+    );
+
+    my @data = map { $_->opac_cover_images || q{} } @plugins;
+
+    return join( "\n", @data );
+}
+
 1;
