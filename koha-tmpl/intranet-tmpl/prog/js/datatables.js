@@ -938,6 +938,25 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
     });
 }
 
+function _dt_get_saved_state( localstorage_config, columns_settings ){
+    var tables = JSON.parse( localstorage_config );
+    // if a table configuration was found in local storage, parse it
+    if( tables ){
+        var stateSave_column_visibility = [];
+        $(tables.columns).each(function(){
+            stateSave_column_visibility.push( this.visible === true ? 0 : 1 );
+        });
+        $.each( columns_settings, function( index, key ){
+            if( stateSave_column_visibility[ index ] !== columns_settings[key] ){
+                columns_settings[ index ].is_hidden = stateSave_column_visibility[ index ];
+            }
+        });
+        return columns_settings;
+    } else {
+        return columns_settings;
+    }
+}
+
 (function($) {
 
     /**
@@ -992,6 +1011,24 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
         }
 
         if ( table_settings ) {
+
+            var table_key =
+                'DataTables_' +
+                table_settings['module'] +'_' +
+                table_settings['page'] +'_' +
+                table_settings['table'];
+
+            settings["stateSave"] = true;
+            settings["stateSaveCallback"] = function( settings, data ) {
+                localStorage.setItem( table_key, JSON.stringify(data) )
+            }
+            settings["stateLoadCallback"] = function(settings) {
+                return JSON.parse( localStorage.getItem(table_key) )
+            }
+            var local_settings = localStorage.getItem(table_key);
+            var system_settings = table_settings["columns"];
+            var columns_settings = _dt_get_saved_state(local_settings, system_settings);
+
             if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
                 settings["pageLength"] = table_settings['default_display_length'];
             }
