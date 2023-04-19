@@ -4,8 +4,11 @@
 [% USE Koha %]
 [% USE Biblio %]
 [% USE KohaDates %]
+[% USE KohaPlugins %]
+[% USE To %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% SET CoverImagePlugins = KohaPlugins.get_plugins_intranet_cover_images %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 
@@ -446,7 +449,7 @@
                                 <table>
                                     <thead>
                                     <tr>
-                                        [% IF ( AmazonCoverImages  || LocalCoverImages || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                                        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
                                             <th>&nbsp;</th>
                                         [% END %]
                                         <th colspan="2">Results</th>
@@ -458,9 +461,9 @@
                                     <tbody>
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr id="row[% SEARCH_RESULT.biblionumber | html %]">
-                                            [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                                            [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
     <td class="bookcoverimg">
-        <div id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]" class="cover-slides" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]">
+        <div id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]" class="cover-slides" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" data-isbn="[% To.json(SEARCH_RESULT.normalized_isbn) | $raw %]" data-processedbiblio="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber | $raw %]">
             [% IF ( LocalCoverImages ) %][% SEARCH_RESULT.localimage | html %]
                 <div id="local-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image local-coverimg">
                     <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]">
@@ -911,6 +914,7 @@
         [% END %]
     </script>
     [% Asset.js("js/pages/results.js") | $raw %]
+    [% KohaPlugins.get_plugins_intranet_cover_images | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

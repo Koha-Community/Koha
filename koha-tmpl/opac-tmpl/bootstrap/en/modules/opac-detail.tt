@@ -6,8 +6,10 @@
 [% USE Branches %]
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
+[% USE KohaPlugins %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
+[% SET CoverImagePlugins = KohaPlugins.get_plugins_intranet_cover_images %]
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
 [% ELSE %]
@@ -59,7 +61,7 @@
 
                     <div class="bookcover">
 
-                        <div id="biblio-cover-slider" class="cover-slider cover-slides"><!-- cover-slides shows spinner -->
+                        <div id="biblio-cover-slider" class="cover-slider cover-slides" data-isbn="[% normalized_isbn | html %]">
                             [% IF ( OPACLocalCoverImages ) %]
                                 [% IF localimages.count %]
                                     [% FOREACH image IN localimages %]
@@ -1452,6 +1454,10 @@
     [% IF ( OpacStarRatings != 'disable' ) %]
         [% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %]
         [% Asset.js("js/ratings.js") | $raw %]
+    [% END %]
+
+    [% IF ( CoverImagePlugins ) %]
+        [% KohaPlugins.get_plugins_opac_cover_images | $raw %]
     [% END %]
 
     [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
