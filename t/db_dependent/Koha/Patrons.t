@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::More tests => 43;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1058,20 +1058,6 @@ subtest 'holds and old_holds' => sub {
 
     $old_holds->delete;
     $holds->delete;
-    $patron->delete;
-};
-
-subtest 'notice_email_address' => sub {
-    plan tests => 2;
-
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
-    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off");
-
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
-    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
-
     $patron->delete;
 };
 

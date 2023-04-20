@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 use Test::Exception;
 use Test::Warn;
 
@@ -1391,6 +1391,32 @@ subtest 'notify_library_of_registration()' => sub {
     $dbh->do(q|DELETE FROM message_queue|);
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'notice_email_address' => sub {
+    plan tests => 2;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
+    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off");
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
+    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
+
+    $patron->delete;
+};
+
+subtest 'first_valid_email_address' => sub {
+    plan tests => 1;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { emailpro => ''}});
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro|email' );
+    is ($patron->first_valid_email_address, $patron->email, "Koha::Patron->first_valid_email_address returns correct value when EmailFieldPrecedence is 'emailpro|email' and emailpro is empty");
+
+    $patron->delete;
 };
 
 subtest 'get_savings tests' => sub {
