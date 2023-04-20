@@ -278,6 +278,8 @@ subtest 'pickup_locations() tests' => sub {
     my $item_2_1 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
     my $item_2_2 = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
 
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
     my $biblios = Koha::Biblios->search(
         {
             biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
@@ -298,7 +300,7 @@ subtest 'pickup_locations() tests' => sub {
     ];
 
     my $pickup_locations_ids = [
-        $biblios->pickup_locations->_resultset->get_column('branchcode')->all
+        $biblios->pickup_locations({ patron => $patron })->_resultset->get_column('branchcode')->all
     ];
 
     is_deeply(
