@@ -38,6 +38,7 @@ use Koha::Biblioitems;
 use Koha::Cache::Memory::Lite;
 use Koha::Checkouts;
 use Koha::CirculationRules;
+use Koha::Exceptions;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
@@ -255,17 +256,21 @@ sub can_be_transferred {
 
 =head3 pickup_locations
 
-    my $pickup_locations = $biblio->pickup_locations( { patron => $patron } );
+    my $pickup_locations = $biblio->pickup_locations({ patron => $patron });
 
 Returns a Koha::Libraries set of possible pickup locations for this biblio's items,
 according to patron's home library and if item can be transferred to each pickup location.
 
-Patron is a required parameter.
+Throws a I<Koha::Exceptions::MissingParameter> exception if the B<mandatory> parameter I<patron>
+is not passed.
 
 =cut
 
 sub pickup_locations {
     my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
+      unless exists $params->{patron};
 
     my $patron = $params->{patron};
 

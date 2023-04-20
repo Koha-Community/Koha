@@ -234,7 +234,7 @@ $schema->storage->txn_rollback;
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -285,6 +285,13 @@ subtest 'pickup_locations() tests' => sub {
             biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
         }
     );
+
+    throws_ok
+      { $biblios->pickup_locations }
+      'Koha::Exceptions::MissingParameter',
+      'Exception thrown on missing parameter';
+
+    is( $@->parameter, 'patron', 'Exception param correctly set' );
 
     my $library_ids = [
         Koha::Libraries->search(

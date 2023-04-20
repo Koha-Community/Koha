@@ -42,12 +42,16 @@ Koha::Biblios - Koha Biblio object set class
 
 For a given resultset, it returns all the pickup locations.
 
-Patron is a required parameter.
+Throws a I<Koha::Exceptions::MissingParameter> exception if the B<mandatory> parameter I<patron>
+is not passed.
 
 =cut
 
 sub pickup_locations {
     my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
+      unless exists $params->{patron};
 
     my $patron = $params->{patron};
 

@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 23; # +1
+use Test::Exception;
 use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
@@ -214,8 +215,9 @@ subtest 'is_serial() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'pickup_locations' => sub {
-    plan tests => 9;
+subtest 'pickup_locations() tests' => sub {
+
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -356,6 +358,13 @@ subtest 'pickup_locations' => sub {
 
     my $biblio1  = $builder->build_sample_biblio({ title => '1' });
     my $biblio2  = $builder->build_sample_biblio({ title => '2' });
+
+    throws_ok
+      { $biblio1->pickup_locations }
+      'Koha::Exceptions::MissingParameter',
+      'Exception thrown on missing parameter';
+
+    is( $@->parameter, 'patron', 'Exception param correctly set' );
 
     my $item1_1  = $builder->build_sample_item({
         biblionumber     => $biblio1->biblionumber,

@@ -36,6 +36,7 @@ use Koha::Biblio::ItemGroups;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::CoverImages;
+use Koha::Exceptions;
 use Koha::Exceptions::Checkin;
 use Koha::Exceptions::Item::Bundle;
 use Koha::Exceptions::Item::Transfer;
@@ -734,20 +735,23 @@ sub can_be_transferred {
 
 =head3 pickup_locations
 
-$pickup_locations = $item->pickup_locations( {patron => $patron } )
+    my $pickup_locations = $item->pickup_locations({ patron => $patron })
 
 Returns possible pickup locations for this item, according to patron's home library
 and if item can be transferred to each pickup location.
 
-Patron parameter is required.
+Throws a I<Koha::Exceptions::MissingParameter> exception if the B<mandatory> parameter I<patron>
+is not passed.
 
 =cut
 
 sub pickup_locations {
     my ($self, $params) = @_;
 
+    Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
+      unless exists $params->{patron};
+
     my $patron = $params->{patron};
-    # FIXME We should throw an exception if not passed
 
     my $circ_control_branch =
       C4::Reserves::GetReservesControlBranch( $self->unblessed(), $patron->unblessed );

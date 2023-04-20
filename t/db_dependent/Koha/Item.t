@@ -443,8 +443,9 @@ subtest "as_marc_field() tests" => sub {
     Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
 };
 
-subtest 'pickup_locations' => sub {
-    plan tests => 66;
+subtest 'pickup_locations() tests' => sub {
+
+    plan tests => 68;
 
     $schema->storage->txn_begin;
 
@@ -496,6 +497,12 @@ subtest 'pickup_locations' => sub {
         }
     );
 
+    throws_ok
+      { $item1->pickup_locations }
+      'Koha::Exceptions::MissingParameter',
+      'Exception thrown on missing parameter';
+
+    is( $@->parameter, 'patron', 'Exception param correctly set' );
 
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode, firstname => '1' } } );
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
