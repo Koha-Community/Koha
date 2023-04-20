@@ -79,6 +79,14 @@ the date and time the message was written
 
 creator of message
 
+=head2 patron_read_date
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+the date and time the patron dismissed the message
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -101,6 +109,12 @@ __PACKAGE__->add_columns(
   },
   "manager_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "patron_read_date",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -153,8 +167,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EvxjiNgWGReZ9rEVmS5YVw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-20 18:35:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y3cJsv6T0LekoQiyi3T/aA
 
 sub koha_object_class {
     'Koha::Patron::Message';
