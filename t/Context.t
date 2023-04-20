@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -78,6 +78,36 @@ subtest 'csv_delimiter() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'CSVDelimiter', 'tabulation' );
     is( C4::Context->csv_delimiter, "\t", "csv_delimiter returns '\t' if system preference CSVDelimiter is tabulation" );
+};
+
+subtest 'default_catalog_sort_by() tests' => sub {
+
+    plan tests => 5;
+
+    my $context = Test::MockModule->new( 'C4::Context' );
+
+    $context->mock( 'interface', 'intranet' );
+
+    t::lib::Mocks::mock_preference( 'defaultSortField', undef );
+    is( C4::Context->default_catalog_sort_by, undef, "default_catalog_sort_by() returns undef if system preference defaultSortField is undefined" );
+
+    t::lib::Mocks::mock_preference( 'defaultSortField', 'title' );
+    t::lib::Mocks::mock_preference( 'defaultSortOrder', 'az' );
+    is( C4::Context->default_catalog_sort_by, 'title_az', "default_catalog_sort_by() returns concatenation of system preferences defaultSortField and defaultSortOrder" );
+
+    t::lib::Mocks::mock_preference( 'defaultSortField', 'relevance' );
+    is( C4::Context->default_catalog_sort_by, 'relevance', "default_catalog_sort_by() returns only system preference defaultSortField if it is relevance" );
+
+    $context->mock( 'interface', 'opac' );
+
+    t::lib::Mocks::mock_preference( 'OPACdefaultSortField', 'pubdate' );
+    t::lib::Mocks::mock_preference( 'OPACdefaultSortOrder', 'desc' );
+    is( C4::Context->default_catalog_sort_by, 'pubdate_desc', "default_catalog_sort_by() returns concatenation of system preferences OPACdefaultSortField and OPACdefaultSortOrder" );
+
+    t::lib::Mocks::mock_preference( 'OPACdefaultSortField', 'relevance' );
+    is( C4::Context->default_catalog_sort_by, 'relevance', "default_catalog_sort_by() returns only system preference OPACdefaultSortField if it is relevance" );
+
+    $context->unmock( 'interface' );
 };
 
 my $context = Test::MockModule->new('C4::Context');

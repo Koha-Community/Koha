@@ -224,7 +224,7 @@
                                     Sort <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    [% IF ( sort_by == "relevance_dsc" ) %]
+                                    [% IF ( sort_by == "relevance" ) %]
                                         <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=relevance[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Relevance</a></li>
                                     [% ELSE %]
                                         <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=relevance[% PROCESS sort_search_query %]">Relevance</a></li>
