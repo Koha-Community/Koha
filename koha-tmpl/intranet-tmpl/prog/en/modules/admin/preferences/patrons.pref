@@ -185,11 +185,10 @@ Patrons:
          - 'for sending out email notices.'
          - '<br><strong>NOTE:</strong> If set to "first valid", the order in which the email addresses are checked is set in <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrecedence">EmailFieldPrecedence</a>.'
      -
-         - Use the following patron email fields in order of highest precedence first
+         - When <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrimary">EmailFieldPrimary</a> is set to '<strong>first valid</strong>', check the patron email address fields in the following order and use the first valid email address found:
          - pref: EmailFieldPrecedence
            class: multi
-         - when selecting which email address to use to send patron notices.
-         - '<br><strong>NOTE:</strong> This preference only takes effect if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrimary">EmailFieldPrimary</a> is set to <strong>first valid<strong>.'
+         - '<br><strong>NOTE:</strong> All patron fields are valid, but to work correctly they must contain a valid email address or an empty string.'
      -
          - pref: TalkingTechItivaPhoneNotification
            choices:
