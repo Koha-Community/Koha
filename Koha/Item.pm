@@ -735,8 +735,10 @@ sub can_be_transferred {
 
 $pickup_locations = $item->pickup_locations( {patron => $patron } )
 
-Returns possible pickup locations for this item, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
+Returns possible pickup locations for this item, according to patron's home library
 and if item can be transferred to each pickup location.
+
+Patron parameter is required.
 
 =cut
 
@@ -744,16 +746,15 @@ sub pickup_locations {
     my ($self, $params) = @_;
 
     my $patron = $params->{patron};
+    # FIXME We should throw an exception if not passed
 
     my $circ_control_branch =
       C4::Reserves::GetReservesControlBranch( $self->unblessed(), $patron->unblessed );
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
-    if(defined $patron) {
-        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_local_hold_group' && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_home_library' && $self->home_branch->branchcode ne $patron->branchcode;
-    }
+    return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_local_hold_group' && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
+    return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_home_library' && $self->home_branch->branchcode ne $patron->branchcode;
 
     my $pickup_libraries = Koha::Libraries->search();
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {

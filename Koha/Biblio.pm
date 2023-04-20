@@ -240,11 +240,12 @@ sub can_be_transferred {
 
 =head3 pickup_locations
 
-    my $pickup_locations = $biblio->pickup_locations( {patron => $patron } );
+    my $pickup_locations = $biblio->pickup_locations( { patron => $patron } );
 
 Returns a Koha::Libraries set of possible pickup locations for this biblio's items,
-according to patron's home library (if patron is defined and holds are allowed
-only from hold groups) and if item can be transferred to each pickup location.
+according to patron's home library and if item can be transferred to each pickup location.
+
+Patron is a required parameter.
 
 =cut
 

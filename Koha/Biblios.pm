@@ -40,7 +40,9 @@ Koha::Biblios - Koha Biblio object set class
     my $biblios = Koha::Biblios->search(...);
     my $pickup_locations = $biblios->pickup_locations({ patron => $patron });
 
-For a given resultset, it returns all the pickup locations
+For a given resultset, it returns all the pickup locations.
+
+Patron is a required parameter.
 
 =cut
 
