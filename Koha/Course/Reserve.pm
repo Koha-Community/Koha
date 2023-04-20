@@ -17,14 +17,31 @@ package Koha::Course::Reserve;
 
 use Modern::Perl;
 
-
 use base qw(Koha::Object);
+
+use Koha::Courses;
 
 =head1 NAME
 
 Koha::Course::Reserve - Koha Course Reserve Object class
 
 =head1 API
+
+=head2 Methods
+
+=head3 course
+
+    my $course = $course_reserve->course;
+
+Return the course for this course reserve.
+
+=cut
+
+sub course {
+    my ($self) = @_;
+    my $rs = $self->_result->course;
+    return Koha::Course->_new_from_dbic($rs);
+}
 
 =head2 Internal methods
 

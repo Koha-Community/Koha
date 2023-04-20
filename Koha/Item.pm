@@ -35,6 +35,8 @@ use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblio::ItemGroups;
 use Koha::Checkouts;
 use Koha::CirculationRules;
+use Koha::Courses;
+use Koha::Course::Items;
 use Koha::CoverImages;
 use Koha::Exceptions;
 use Koha::Exceptions::Checkin;
@@ -1785,6 +1787,21 @@ sub tracked_links {
 
     my $tracked_links = $self->_result->linktrackers;
     return Koha::TrackedLinks->_new_from_dbic($tracked_links);
+}
+
+=head3 course_item
+
+  my $course_item = $item->course_item;
+
+Returns a Koha::Course::Item object
+
+=cut
+
+sub course_item {
+    my ($self) = @_;
+    my $rs = $self->_result->course_item;
+    return unless $rs;
+    return Koha::Course::Item->_new_from_dbic($rs);
 }
 
 =head3 move_to_biblio

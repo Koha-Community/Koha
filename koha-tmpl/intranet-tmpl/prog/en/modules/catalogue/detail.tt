@@ -19,19 +19,6 @@
     [% AmazonAssocTag = '' %]
 [% END %]
 
-[% ShowCourseReserves = 0 | html %]
-[% IF UseCourseReserves %]
-    [% FOREACH item IN itemloop %]
-       [% IF item.course_reserves %]
-           [% FOREACH r IN item.course_reserves %]
-               [% IF r.course.enabled == 'yes' %]
-                   [% ShowCourseReserves = 1 | html %]
-               [% END %]
-           [% END %]
-        [% END %]
-    [% END %]
-[% END %]
-
 [% SET plugins_intranet_catalog_biblio_tabs = KohaPlugins.get_plugins_intranet_catalog_biblio_tab({ biblio => biblio, biblio_id => biblionumber }) %]
 
 [% SET footerjs = 1 %]
@@ -379,7 +366,7 @@
             <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>
             [% IF ( hostrecords ) %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
             [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
-            [% IF ( ShowCourseReserves ) %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
+            [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
             [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
             [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions"class="NoSort noExport">&nbsp;</th>[% END %]
             </tr>
@@ -2174,6 +2161,9 @@
         const av_damaged = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.damaged' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_not_for_loan= new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.notforloan' })) | $raw %].map( av => [av.authorised_value, av.lib]));
         const av_restricted = new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.restricted' })) | $raw %].map( av => [av.authorised_value, av.lib]));
+        [% IF Koha.Preference('UseCourseReserves') %]
+            const av_courses_term = new Map([% To.json(AuthorisedValues.Get('TERM')) | $raw %].map( av => [av.authorised_value, av.lib]));
+        [% END %]
         [% IF Koha.Preference('URLLinkText') %]
             const url_link_text = "[% Koha.Preference('URLLinkText') | html %]";
         [% ELSE %]
@@ -2197,6 +2187,9 @@
             embed.push('recall', 'recall.patron')
         [% END %]
         embed.push('in_bundle', 'bundle_host');
+        [% IF Koha.Preference('UseCourseReserves') %]
+            embed.push('course_item.course_reserves.course');
+        [% END %]
 
         function build_table (table_id, table_settings, filters) {
             [% IF hidden_count %]
@@ -2586,13 +2579,29 @@
                     }
                 },
                 [% END %]
-                [% IF ( ShowCourseReserves ) %]
+                [% IF Koha.Preference('UseCourseReserves') %]
                 {
-                    data: "",
-                    searchable: false, // FIXME
+                    data: "course_item.course_reserves.course.course_name",
+                    searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return ""; // FIXME Display course reserves
+                        let nodes = '';
+                        if (!row.course_item) return nodes;
+                        row.course_item.course_reserves.forEach((cr, i) => {
+                            let c = cr.course;
+                            if ( c.enabled != 'yes' ) return;
+                            nodes += '<p>';
+                            nodes += '<a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=%s">'.format(c.course_id);
+                            nodes += c.course_name;
+                            if ( c.section ) {
+                                nodes += ' ' + c.section;
+                            }
+                            if ( c.term ) {
+                                nodes += ' ' + av_courses_term.get(c.term.toString());
+                            }
+                            nodes += '</p>';
+                        });
+                        return nodes;
                     }
                 },
                 [% END %]
