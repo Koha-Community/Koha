@@ -37,7 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 17;
+    plan tests => 18;
 
     t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     t::lib::Mocks::mock_preference( 'OPACResultsLibrary', 'holdingbranch' );
@@ -83,6 +83,9 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '2');
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
         like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan when we change Reference_NFL_Statuses");
+        t::lib::Mocks::mock_preference('Reference_NFL_Statuses', q{}); # empty, same effect
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan when we empty Reference_NFL_Statuses");
         t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     }
 
