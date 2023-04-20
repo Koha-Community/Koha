@@ -1301,6 +1301,13 @@
     [% END %]
 
     <script>
+        $(document).ready(function () {
+            hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
+            KohaTable("patron_holds_table", {
+                "bPaginate":false,
+                "bKohaColumnsUseNames": true,
+           }, hold_table_settings);
+        });
         var Sticky;
         var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
