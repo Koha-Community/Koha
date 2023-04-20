@@ -2253,10 +2253,10 @@
                             let image_location = item_type_image_locations[row.item_type_id];
                             let item_type_description = row._strings.item_type_id.str;
                             node += image_location
-                                ? '<img src="%s" alt="%s" title="%s" /> '.format(image_location, item_type_description, item_type_description)
+                                ? '<img src="%s" alt="%s" title="%s" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description))
                                 : '';
                         [% END %]
-                        node += '<span class="itypedesc itypetext">%s</span>'.format(item_type_description);
+                        node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));
                         return node;
                     }
                 },
@@ -2267,7 +2267,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row._strings.holding_library_id.str;
+                        return escape_str(row._strings.holding_library_id.str);
                     }
                 },
                 {
@@ -2276,7 +2276,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        let nodes = '<span class="homebranchdesc">%s</span>'.format(row._strings.home_library_id.str);
+                        let nodes = '<span class="homebranchdesc">%s</span>'.format(escape_str(row._strings.home_library_id.str));
                         nodes += '<span class="shelvingloc">'
                         [%# If permanent location is defined, show description or code and             %]
                         [%# display current location in parentheses. If not, display current location. %]
@@ -2284,9 +2284,9 @@
                         let loc_str = row._strings.location.str;
                         if ( row.permanent_location && row.permanent_location != row.location ) {
                             let permanent_loc_str = av_loc[row.permanent_location];
-                            nodes += '%s (%s)'.format(permanent_loc_str, loc_str);
+                            nodes += '%s (%s)'.format(escape_str(permanent_loc_str), escape_str(loc_str));
                         } else {
-                            nodes += loc_str;
+                            nodes += escape_str(loc_str);
                         }
                         nodes += '</span>';
                         return nodes;
@@ -2297,7 +2297,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row._strings.collection_code.str;
+                        return escape_str(row._strings.collection_code.str);
                     }
                 },
                 [% IF Koha.Preference('EnableItemGroups') %]
@@ -2308,7 +2308,7 @@
                     orderable: true,
                     render: function (data, type, row, meta) {
                         if ( row.item_group_item ) {
-                            return row.item_group_item.item_group.description;
+                            return escape_str(row.item_group_item.item_group.description);
                         } else {
                             return "";
                         }
@@ -2321,7 +2321,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.callnumber;
+                        return escape_str(row.callnumber);
                     }
 
                 },
@@ -2335,15 +2335,15 @@
                         [%# FIXME Previously we displayed the column if at least one item of the biblio had an enumchron/serial_issue_number. Now it's only if one item of the ones displayed on the current page, how is that bad? How can it be fixed in an elegant way? Should we display the column only if biblio.serial? %]
                         let serial = row.serialitem ? row.serialitem.serial : null;
                         if ( row.serial_issue_number && serial && serial.serialseq ) {
-                            nodes += '<span class="enum">%s</span>'.format(row.serial_issue_number);
+                            nodes += '<span class="enum">%s</span>'.format(escape_str(row.serial_issue_number));
                             if ( serial.serialseq && row.serial_issue_number != serial.serialseq ) {
                                 nodes += ' <span class="sep"> -- </span>'
-                                nodes += ' <span class="serialseq">%s</span>'.format(serial.serialseq);
+                                nodes += ' <span class="serialseq">%s</span>'.format(escape_str(serial.serialseq));
                             }
                         } else if ( row.serial_issue_number ) {
-                            nodes += ' <span class="enum">%s</span>'.format(row.serial_issue_number);
+                            nodes += ' <span class="enum">%s</span>'.format(escape_str(row.serial_issue_number));
                         } else if ( serial && serial.serialseq ) {
-                            nodes += '<span class="serialseq">%s</span>'.format(serial.serialseq);
+                            nodes += '<span class="serialseq">%s</span>'.format(escape_str(serial.serialseq));
                         }
                         if ( serial && serial.publisheddate ) {
                             nodes += ' <span class="pubdate">(%s)</span>'.format($date(serial.publisheddate));
@@ -2373,30 +2373,30 @@
                             nodes += "</span>"
                         } else if ( row.transfer ) {
                             if ( row.transfer.datesent ) {
-                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(row.transfer.frombranch, row.transfer.tobranch, $date(row.transfer.datesent))); [%# FIXME display library names, not codes, do we use _strings here? %]
+                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer.frombranch), escape_str(row.transfer.tobranch), $date(row.transfer.datesent))); [%# FIXME display library names, not codes, do we use _strings here? %]
                             } else {
-                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(row.transfer.frombranch, row.transfer.tobranch, $date(row.transfer.daterequested))); [%# FIXME See above %]
+                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer.frombranch), escape_str(row.transfer.tobranch), $date(row.transfer.daterequested))); [%# FIXME See above %]
                             }
                         }
 
                         if ( row.lost_status ) {
                             let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
-                            nodes += '<span class="lost">%s</span>'.format(lost_lib);
+                            nodes += '<span class="lost">%s</span>'.format(escape_str(lost_lib));
                         }
 
                         if ( row.withdrawn ) {
                             let withdrawn_lib = av_withdrawn.get(row.withdrawn.toString()) || _("Withdrawn");
-                            nodes += '<span class="wdn">%s</span>'.format(withdrawn_lib);
+                            nodes += '<span class="wdn">%s</span>'.format(escape_str(withdrawn_lib));
                         }
 
                         if ( row.damaged ) {
                             let damaged_lib = av_damaged.get(row.damaged.toString()) || _("Damaged");
-                            nodes += '<span class="dmg">%s</span>'.format(damaged_lib);
+                            nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
                         }
 
                         if ( row.not_for_loan_status || row.item_type.notforloan ) {
                             let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
-                            nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(not_for_loan_lib) : '' ) + '</span>';
+                            nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
                         }
 
                         if ( row.first_hold ) {
@@ -2418,10 +2418,10 @@
                         [% IF Koha.Preference('UseRecalls') %]
                             if ( row.recall ) {
                                 if ( row.recall.waiting_date ) {
-                                    nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(row.recall.pickup_library_id, $date(row.recall.waiting_date))); # FIXME Display library names instead of codes
+                                    nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(escape_str(row.recall.pickup_library_id), $date(row.recall.waiting_date))); # FIXME Display library names instead of codes
                                 } else {
                                     let patron_to_html = $patron_to_html(row.recall.patron);
-                                    nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, row.recall.created_date))
+                                    nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, $date(row.recall.created_date)))
                                 }
                             }
                         [% END %]
@@ -2431,7 +2431,7 @@
                         }
 
                         if ( row.restricted_status ) {
-                            nodes += '<span class="restricted">(%s)</span>'.format(av_restricted.get(row.restricted_status.toString()));
+                            nodes += '<span class="restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
                         }
 
                         if ( row.in_bundle ) {
@@ -2505,10 +2505,10 @@
                         let nodes = '';
                         if ( row.uri.split(' \| ').length > 1 ) {
                             row.uri.split(' \| ').forEach((uri, i) => {
-                                nodes += '<a href="%s">%s</a><br/>'.format(uri, uri);
+                                nodes += '<a href="%s">%s</a><br/>'.format(escape_str(uri), escape_str(uri));
                             });
                         } else {
-                            nodes += '<a href="%s">%s</a><br/>'.format(row.uri, url_link_text);
+                            nodes += '<a href="%s">%s</a><br/>'.format(escape_str(row.uri), escape_str(url_link_text));
                         }
                         return nodes;
                     }
@@ -2519,7 +2519,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row._strings.copy_number ? row._strings.copy_number.str : row.copy_number;
+                        return escape_str(row._strings.copy_number ? row._strings.copy_number.str : row.copy_number);
                     }
                 },
                 {
@@ -2528,7 +2528,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.inventory_number;
+                        return escape_str(row.inventory_number);
                     }
                 },
                 {
@@ -2537,7 +2537,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.materials_notes;
+                        return escape_str(row.materials_notes);
                     }
                 },
                 {
@@ -2546,7 +2546,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.public_notes ? row.public_notes.replaceAll('\n', '<br />') : '';
+                        return row.public_notes ? escape_str(row.public_notes).replaceAll('\n', '<br />') : '';
                     }
                 },
                 {
@@ -2555,7 +2555,7 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.internal_notes;
+                        return escape_str(row.internal_notes);
                     }
                 },
                 [% IF ( hostrecords ) %]
@@ -2592,9 +2592,9 @@
                             if ( c.enabled != 'yes' ) return;
                             nodes += '<p>';
                             nodes += '<a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=%s">'.format(c.course_id);
-                            nodes += c.course_name;
+                            nodes += escape_str(c.course_name);
                             if ( c.section ) {
-                                nodes += ' ' + c.section;
+                                nodes += ' ' + escape_str(c.section);
                             }
                             if ( c.term ) {
                                 nodes += ' ' + av_courses_term.get(c.term.toString());
@@ -2611,7 +2611,7 @@
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> Print label</a>'.format(row.external_id);
+                        return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> Print label</a>'.format(escape_str(row.external_id));
                     }
                 },
                 [% END %]
@@ -2633,7 +2633,7 @@
                         }
                         [% IF bundlesEnabled %]
                             // FIXME How do we handle that correctly?
-                            //nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(row.bundled, row.bundled_lost);
+                            //nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(escape_str(row.bundled), escape_str(row.bundled_lost));
                         [% END %]
 
                         return nodes;
