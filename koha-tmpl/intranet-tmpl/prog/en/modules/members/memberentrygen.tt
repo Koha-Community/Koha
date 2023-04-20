@@ -1467,9 +1467,9 @@ legend:hover {
                                                             [% FOREACH restriction_type IN restriction_types %]
                                                                 [% IF !restriction_type.is_system %]
                                                                     [% IF restriction_type.is_default %]
-                                                                    <option value="[% code | html %]" selected>[% PROCESS restriction_type_description %]</option>
+                                                                    <option value="[% restriction_type.code | html %]" selected>[% PROCESS restriction_type_description %]</option>
                                                                     [% ELSE %]
-                                                                    <option value="[% code | html %]">[% PROCESS restriction_type_description %]</option>
+                                                                    <option value="[% restriction_type.code | html %]">[% PROCESS restriction_type_description %]</option>
                                                                     [% END %]
                                                                 [% END %]
                                                             [% END %]
