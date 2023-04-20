@@ -111,8 +111,9 @@ sub process_bibs {
     }
 
     if ( not $test_only ) {
-        $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
         $dbh->commit;
+        $dbh->{AutoCommit} = 1;
+        $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
     }
 
     my $headings_linked   = 0;
@@ -248,7 +249,9 @@ sub process_bib {
 sub print_progress_and_commit {
     my $recs = shift;
     $dbh->commit();
+    $dbh->{AutoCommit} = 1;
     $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
+    $dbh->{AutoCommit} = 0;
     @updated_biblios = ();
     print "... processed $recs records\n";
 }
