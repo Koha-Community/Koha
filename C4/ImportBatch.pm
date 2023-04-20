@@ -714,15 +714,16 @@ sub BatchCommitRecords {
 
     $sth->finish();
 
+    SetImportBatchStatus($batch_id, 'imported');
+
+    # Moved final commit to the end
+    $schema->txn_commit;
+
     if ( @biblio_ids ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( \@biblio_ids, "specialUpdate", "biblioserver" );
     }
 
-    SetImportBatchStatus($batch_id, 'imported');
-
-    # Moved final commit to the end
-    $schema->txn_commit;
 
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }
