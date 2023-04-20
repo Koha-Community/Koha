@@ -318,8 +318,12 @@
     [% items_table_block_iter = items_table_block_iter + 1 %]
     <div class="[% tab | html %]_table_table_controls">
         [% IF (StaffDetailItemSelection) %]
-            | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a> |
-            <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
+            <span class="show_hide_filters">
+                <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
+                <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
+            </span>
+            | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
+            | <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
             <span class="itemselection_actions">
               | Actions:
               [% IF CAN_user_tools_items_batchdel %]
@@ -1397,6 +1401,24 @@
                     $("input[name='itemnumber'][type='checkbox']", $("#"+tab)).prop('checked', false);
                     itemSelectionBuildActionLinks(tab);
                 });
+
+                $(".show_filters").on("click",function(e){
+                    e.preventDefault();
+                    let tab = $(this).data("tab");
+                    $("#"+tab).find(".show_filters").hide();
+                    $("#"+tab).find(".hide_filters").show();
+                    $("#"+tab+"_table thead tr:eq(1)").remove();
+                    build_items_table(tab+"_table", true, { dom: dataTablesDefaults.dom, destroy: true } );
+                });
+
+                $(".hide_filters").on("click",function(e){
+                    e.preventDefault();
+                    let tab = $(this).data("tab");
+                    $("#"+tab).find(".hide_filters").hide();
+                    $("#"+tab).find(".show_filters").show();
+                    $("#"+tab+"_table thead tr:eq(1)").remove();
+                    build_items_table(tab+"_table", false, { dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>', destroy: true } );
+                });
             });
         [% END %]
 
@@ -1532,6 +1554,7 @@
         var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
         var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
         [% END %]
+
         $(document).ready(function() {
 
             [% IF bundlesEnabled %] // Bundle handling
@@ -1839,21 +1862,9 @@
             // End bundle handling
             [% END %]
 
-            var table_ids = [ 'holdings_table', 'otherholdings_table' ];
-            var table_settings = [ [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
-            table_ids.forEach( function( table_id, index ) {
-                let filters = {};
-                [% IF Koha.Preference('SeparateHoldings') %]
-                    [% SET SeparateHoldingsBranch = Koha.Preference('SeparateHoldingsBranch') || 'homebranch' %];
-                    let branch = '[% IF SeparateHoldingsBranch == 'homebranch' %]home_library_id[% ELSE %]holding_library_id[% END %]';
-                    if ( table_id == 'holdings_table' ) {
-                        filters[branch] = '[% Branches.GetLoggedInBranchcode() | html %]';
-                    } else {
-                        filters[branch] = { '!=': '[% Branches.GetLoggedInBranchcode() | html  %]' };
-                    }
-                [% END %]
-
-                var table = build_table(table_id, table_settings[index], filters);
+            let items_table_ids = [ 'holdings_table', 'otherholdings_table' ];
+            items_table_ids.forEach( function( table_id, index ) {
+                build_items_table(table_id, false, { dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>' });
 
                 [% IF bundlesEnabled %]
                 // Add event listener for opening and closing bundle details
@@ -2191,16 +2202,33 @@
             embed.push('course_item.course_reserves.course');
         [% END %]
 
-        function build_table (table_id, table_settings, filters) {
+        let items_table_settings = {
+            holdings_table: [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %],
+            otherholdings_table: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
+        };
+
+        function build_items_table (table_id, add_filters, dt_options) {
+
+            let default_filters = {};
+            [% IF Koha.Preference('SeparateHoldings') %]
+                [% SET SeparateHoldingsBranch = Koha.Preference('SeparateHoldingsBranch') || 'homebranch' %];
+                let branch = '[% IF SeparateHoldingsBranch == 'homebranch' %]me.home_library_id[% ELSE %]me.holding_library_id[% END %]';
+                if ( table_id == 'holdings_table' ) {
+                    default_filters[branch] = '[% Branches.GetLoggedInBranchcode() | html %]';
+                } else {
+                    default_filters[branch] = { '!=': '[% Branches.GetLoggedInBranchcode() | html  %]' };
+                }
+            [% END %]
+
             [% IF hidden_count %]
-                filters.lost_status = "0";
+                default_filters.lost_status = "0";
             [% END %]
             var items_table = $("#" + table_id).kohaTable({
                 ajax: { url: item_table_url },
                 order: [[ 0, "asc" ]],
                 embed,
                 autoWidth: false,
-                bKohaColumnsUseNames: true, // FIXME We should not need that now, do we?
+                bKohaColumnsUseNames: true,
                 columns: [
                 [% IF (StaffDetailItemSelection) %]
                 {
@@ -2660,10 +2688,11 @@
                         }
                     });
                 },
+                ...dt_options,
             },
-            table_settings,
-            true,
-            filters,
+            items_table_settings[table_id],
+            add_filters,
+            default_filters,
             );
             return items_table;
         }
