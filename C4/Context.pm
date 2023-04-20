@@ -499,6 +499,38 @@ sub csv_delimiter {
     return $delimiter;
 }
 
+=head2 default_catalog_sort_by
+
+    $delimiter = C4::Context->default_catalog_sort_by;
+
+    Returns default sort by for catalog search.
+    For relevance no sort order is used.
+
+    For staff interface, depends on system preferences 'defaultSortField' and 'defaultSortOrder'.
+    For OPAC interface, depends on system preferences 'OPACdefaultSortField' and 'OPACdefaultSortOrder'.
+
+=cut
+
+sub default_catalog_sort_by {
+    my $self = shift;
+    my ( $sort_by, $sort_field, $sort_order );
+    if ( C4::Context->interface eq 'opac' ) {
+        $sort_field = C4::Context->preference('OPACdefaultSortField');
+        $sort_order = C4::Context->preference('OPACdefaultSortOrder');
+    } else {
+        $sort_field = C4::Context->preference('defaultSortField');
+        $sort_order = C4::Context->preference('defaultSortOrder');
+    }
+    if ( $sort_field && $sort_order ) {
+        if ( $sort_field eq 'relevance' ) {
+            $sort_by = $sort_field;
+        } else {
+            $sort_by = $sort_field . '_' . $sort_order;
+        }
+    }
+    return $sort_by;
+}
+
 =head2 Zconn
 
   $Zconn = C4::Context->Zconn

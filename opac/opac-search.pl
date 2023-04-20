@@ -304,6 +304,8 @@ foreach my $advanced_srch_type (@advanced_search_types) {
 }
 $template->param(advancedsearchesloop => \@advancedsearchesloop);
 
+my $default_sort_by = C4::Context->default_catalog_sort_by;
+
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type && $template_type eq 'advsearch' ) {
     # load the servers (used for searching -- to do federated searching, etc.)
@@ -314,11 +316,7 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting
-    if (   C4::Context->preference('OPACdefaultSortField')
-        && C4::Context->preference('OPACdefaultSortOrder') ) {
-        my $default_sort_by =
-            C4::Context->preference('OPACdefaultSortField') . '_'
-          . C4::Context->preference('OPACdefaultSortOrder');
+    if ($default_sort_by) {
         $template->param( sort_by => $default_sort_by );
     }
 
@@ -378,14 +376,6 @@ for (keys %$params) {
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
 my @sort_by;
-my $default_sort_by;
-if (   C4::Context->preference('OPACdefaultSortField')
-    && C4::Context->preference('OPACdefaultSortOrder') ) {
-    $default_sort_by =
-        C4::Context->preference('OPACdefaultSortField') . '_'
-      . C4::Context->preference('OPACdefaultSortOrder');
-}
-
 my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number_asc call_number_dsc popularity_asc popularity_dsc pubdate_asc pubdate_dsc relevance title_az title_za/; 
 @sort_by = $cgi->multi_param('sort_by');
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);

@@ -259,6 +259,8 @@ $template->param(advancedsearchesloop => $advancedsearchesloop);
 
 $template->param( searchid => scalar $cgi->param('searchid'), );
 
+my $default_sort_by = C4::Context->default_catalog_sort_by;
+
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
 
@@ -322,12 +324,8 @@ if ( $template_type eq 'advsearch' ) {
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting
-    if (   C4::Context->preference('defaultSortField')
-        && C4::Context->preference('defaultSortOrder') ) {
-        my $default_sort_by =
-            C4::Context->preference('defaultSortField') . '_'
-          . C4::Context->preference('defaultSortOrder');
-        $template->param( sort_by => $default_sort_by  );
+    if ($default_sort_by) {
+        $template->param( sort_by => $default_sort_by );
     }
 
     $template->param(uc(C4::Context->preference("marcflavour")) =>1 );
@@ -361,14 +359,6 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
 my @sort_by;
-my $default_sort_by;
-if (   C4::Context->preference('defaultSortField')
-    && C4::Context->preference('defaultSortOrder') ) {
-    $default_sort_by =
-        C4::Context->preference('defaultSortField') . '_'
-      . C4::Context->preference('defaultSortOrder');
-}
-
 @sort_by = $cgi->multi_param('sort_by');
 $sort_by[0] = $default_sort_by unless $sort_by[0];
 foreach my $sort (@sort_by) {

@@ -238,7 +238,7 @@ if ($session->param('busc')) {
         @servers = ("biblioserver") unless (@servers);
 
         my ($default_sort_by, @sort_by);
-        $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Context->preference('OPACdefaultSortOrder') if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
+        $default_sort_by = C4::Context->default_catalog_sort_by;
         @sort_by = @{$arrParamsBusc->{'sort_by'}} if $arrParamsBusc->{'sort_by'};
         $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
         my ($error, $results_hashref, $facets);
