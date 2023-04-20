@@ -14,24 +14,19 @@
 
 <body id="tools_batchMod-edit" class="tools">
     [% WRAPPER 'header.inc' %]
-    [% INCLUDE 'cat-search.inc' %]
-[% END %]
+        [% INCLUDE 'cat-search.inc' %]
+    [% END %]
 
-[% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
-        </li>
-        <li>
-            <a href="#" aria-current="page">Batch item modification</a>
-        </li>
-    </ol>
-</nav>
-[% END %]
+    [% WRAPPER 'sub-header.inc' %]
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Batch item modification</span>
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
 
