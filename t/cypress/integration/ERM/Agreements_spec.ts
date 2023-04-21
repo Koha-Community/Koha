@@ -193,6 +193,12 @@ describe("Agreement CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/agreements?by_expired=true&max_expiration_date="+dates["tomorrow_iso"]);
         cy.wait('@getActiveAgreements').its('request.url').should('include', 'max_expiration_date='+dates["tomorrow_iso"]);
 
+        // Verify that the date input is automatically filled if "by_expired" ticked but date is empty
+        cy.get("#max_expiration_date_filter+input").clear();
+        cy.get("#expired_filter").check();
+        cy.get("#filter_table").click();
+        cy.get("#max_expiration_date_filter").should('have.value', dates["today_iso"]);
+
         // Test filter button with show mine_only ticked
     });
 
