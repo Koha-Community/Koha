@@ -19,22 +19,12 @@
                     <label :for="`license_id_${counter}`" class="required"
                         >{{ $__("License") }}:</label
                     >
-                    <v-select
+                    <InfiniteScrollSelect
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
-                        label="name"
-                        :reduce="l => l.license_id"
-                        :options="licenses"
-                    >
-                        <template #search="{ attributes, events }">
-                            <input
-                                :required="!agreement_license.license_id"
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                            />
-                        </template>
-                    </v-select>
+                        dataType="licenses"
+                        :required="true"
+                    />
                     <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>
@@ -102,6 +92,7 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js"
+import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 
 export default {
     name: "AgreementLicenses",
@@ -138,6 +129,9 @@ export default {
         deleteLicense(counter) {
             this.agreement_licenses.splice(counter, 1)
         },
+    },
+    components: {
+        InfiniteScrollSelect,
     },
 }
 </script>
