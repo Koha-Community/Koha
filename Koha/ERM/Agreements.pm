@@ -70,7 +70,7 @@ sub filter_by_expired {
         push @expired_agreement_ids, $p->agreement_id;
     }
 
-    return $self->search( { agreement_id => \@expired_agreement_ids } );
+    return $self->search( { "me.agreement_id" => \@expired_agreement_ids } );
 }
 
 =head3 type
