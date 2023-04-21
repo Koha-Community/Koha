@@ -1625,15 +1625,8 @@ Returns the items associated with this bundle
 sub bundle_items {
     my ($self) = @_;
 
-    if ( !$self->{_bundle_items_cached} ) {
-        my $bundle_items = Koha::Items->search(
-            { 'item_bundles_item.host' => $self->itemnumber },
-            { join                     => 'item_bundles_item' } );
-        $self->{_bundle_items}        = $bundle_items;
-        $self->{_bundle_items_cached} = 1;
-    }
-
-    return $self->{_bundle_items};
+    my $rs = $self->_result->bundle_items;
+    return Koha::Items->_new_from_dbic($rs);
 }
 
 =head3 is_bundle
