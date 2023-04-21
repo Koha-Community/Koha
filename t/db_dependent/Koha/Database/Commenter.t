@@ -15,7 +15,7 @@ our $dbh = C4::Context->dbh;
 our $mgr;
 
 subtest '->new, dry_run' => sub {
-    plan tests => 6;
+    plan tests => 9;
     $schema->storage->txn_begin; # just cosmetic, no changes expected in a dry run
 
     # Two exceptions on dbh parameter
@@ -27,6 +27,12 @@ subtest '->new, dry_run' => sub {
     $mgr = Koha::Database::Commenter->new({ dbh => $dbh, schema_file => $filename });
     unlink $filename;
     throws_ok { $mgr->reset_to_schema({ dry_run => 1, table => 'biblio' }) } 'Koha::Exceptions::FileNotFound', 'Schema deleted';
+
+    # Check case of columns from information_schema (MySQL8 defaults to uppercase)
+    my $columns = $mgr->_fetch_stored_comments({ table => 'article_requests' });
+    ok( exists $columns->[0]->{table_name}, 'Check table_name column' );
+    ok( exists $columns->[0]->{column_name}, 'Check column_name column' );
+    ok( exists $columns->[0]->{column_comment}, 'Check column_comment column' );
 
     # Clear comments for article_requests in dry run mode
     my $messages = [];

@@ -202,9 +202,11 @@ sub _fetch_schema_comments {
 sub _fetch_stored_comments {
     my ( $self, $params ) = @_; # params: table
     my $sql = q|
-SELECT table_name, column_name, column_comment FROM information_schema.columns
+SELECT table_name AS `table_name`, column_name AS `column_name`, column_comment AS `column_comment`
+FROM information_schema.columns
 WHERE table_schema=? AND table_name=?
 ORDER BY table_name, column_name|;
+# The AS `table_name` etc. is needed for MySQL8 which returns uppercase columns in information_schema
     $sql =~ s/AND table_name=\?// unless $params->{table};
     return $self->{dbh}->selectall_arrayref( $sql, { Slice => {} }, $self->{database}, $params->{table} || () );
 }
