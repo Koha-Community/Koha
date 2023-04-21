@@ -16,7 +16,7 @@
             <th id="pickup_library" data-colname="pickup_library">Pickup library</th>
             <th id="details" data-colname="details">Details</th>
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                <th id="set_lowest_priority" data-colname="set_lowest_priority"><i class="fa fa-lg fa-rotate-90 fa-fast-forward" title="Toggle set to lowest priority"></i></th>
+                <th id="set_lowest_priority" data-colname="set_lowest_priority"><span style="display:none;">Set lowest priority</span><i class="fa fa-lg fa-rotate-90 fa-fast-forward" title="Toggle set to lowest priority"></i></th>
             [% END %]
             <th id="delete" data-colname="delete">Delete</th>
             <th id="suspend" data-colname="suspend">Suspend</th>
