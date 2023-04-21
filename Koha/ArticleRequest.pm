@@ -178,7 +178,7 @@ Returns the Koha::Biblio object for this article request
 sub biblio {
     my ($self) = @_;
 
-    my $rs = $self->result->biblionumber;
+    my $rs = $self->_result->biblionumber;
     return unless $rs;
     return Koha::Biblio->_new_from_dbic($rs);
 }
