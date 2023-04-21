@@ -59,7 +59,7 @@
 
                     <div class="bookcover">
 
-                        <div id="biblio-cover-slider" class="cover-slider">
+                        <div id="biblio-cover-slider" class="cover-slider cover-slides"><!-- cover-slides shows spinner -->
                             [% IF ( OPACLocalCoverImages ) %]
                                 [% IF localimages.count %]
                                     [% FOREACH image IN localimages %]
@@ -1222,7 +1222,7 @@
                 [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <td class="cover">
                         <div class="bookcover">
-                            <div class="cover-slider">
+                            <div class="cover-slider cover-slides">
                                 [% FOR image IN ITEM_RESULT.cover_images %]
                                     <div class="cover-image local-coverimg">
                                         <a href="/cgi-bin/koha/opac-image.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
@@ -1606,16 +1606,14 @@
                 if( $(coverSlide).find(".cover-image:visible").length < 1 ){
                     $(coverSlide).remove();
                 } else {
-                    $(coverSlide).addClass("cover-slides");
-                    $(coverSlide).find("img").one("load", function(index) {
-                        if(this.complete && this.naturalHeight !== 0){
-                            $(coverSlide).css({"background-image":"none"});
-                        }
-                    }).each(function() {
-                        if(this.complete) {
-                            $(this).trigger('load');
-                        }
+                    // This is a suboptimal workaround; we should do this via load, but
+                    // the image code is scattered all over now. We come here now after
+                    // window load and wait_for_images (so load completed).
+                    var check_complete = 1;
+                    $(coverSlide).find("img").each( function() {
+                        if( !this.complete || this.naturalHeight == 0 ) check_complete = 0;
                     });
+                    if( check_complete ) $(coverSlide).removeClass('cover-slides');
                 }
             });
 
