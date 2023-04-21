@@ -982,6 +982,9 @@ __PACKAGE__->has_many(
   }
 );
 
+# Relationship with bundled items
+__PACKAGE__->many_to_many( bundle_items => 'item_bundles_hosts', 'item' );
+
 __PACKAGE__->might_have(
   "last_returned_by",
   "Koha::Schema::Result::ItemsLastBorrower",
