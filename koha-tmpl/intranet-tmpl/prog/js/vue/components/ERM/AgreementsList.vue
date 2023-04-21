@@ -52,7 +52,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "./AgreementsToolbar.vue"
-import { inject, ref, reactive, computed } from "vue"
+import { inject, ref, reactive } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
 import { build_url } from "../../composables/datatables"
@@ -70,29 +70,10 @@ export default {
 
         const table = ref()
 
-        const expiration_date = ref()
-        const by_expired = ref(false)
-        const by_mine = ref(false)
-
         const filters = reactive({
-            by_expired,
-            max_expiration_date: computed({
-                get() {
-                    if (by_expired.value) {
-                        if (!expiration_date.value) {
-                            expiration_date.value = new Date()
-                                .toISOString()
-                                .substring(0, 10)
-                        }
-                        return expiration_date.value
-                    }
-                    return ""
-                },
-                set(new_date) {
-                    expiration_date.value = new_date
-                },
-            }),
-            by_mine,
+            by_expired: false,
+            max_expiration_date: "",
+            by_mine: false,
         })
         return {
             vendors,
@@ -111,6 +92,8 @@ export default {
         this.filters.by_expired =
             this.$route.query.by_expired === "true" || false
         this.filters.by_mine = this.$route.query.by_mine || false
+        this.filters.max_expiration_date =
+            this.$route.query.max_expiration_date || ""
 
         let filters = this.filters
 
@@ -224,6 +207,9 @@ export default {
             this.$emit("select-agreement", agreement.agreement_id)
             this.$emit("close")
         },
+        get_today_date: function () {
+            return new Date().toISOString().substring(0, 10)
+        },
         table_url: function () {
             let url = "/api/v1/erm/agreements"
             if (this.filters.by_expired)
@@ -233,13 +219,18 @@ export default {
         },
         filter_table: async function () {
             if (!this.embedded) {
-                let filters = Object.assign({}, this.filters)
-                if (!filters.by_expired) {
-                    filters.max_expiration_date = null
+                if (
+                    this.filters.by_expired &&
+                    !this.filters.max_expiration_date
+                ) {
+                    this.filters.max_expiration_date = this.get_today_date()
+                }
+                if (!this.filters.by_expired) {
+                    this.filters.max_expiration_date = ""
                 }
                 let new_route = build_url(
                     "/cgi-bin/koha/erm/agreements",
-                    filters
+                    this.filters
                 )
                 this.$router.push(new_route)
             }
@@ -341,6 +332,15 @@ export default {
         if (this.embedded) {
             this.getAgreementCount().then(() => (this.initialized = true))
         }
+    },
+    watch: {
+        "filters.by_expired": function (newVal, oldVal) {
+            if (newVal) {
+                this.filters.max_expiration_date = this.get_today_date()
+            } else {
+                this.filters.max_expiration_date = ""
+            }
+        },
     },
     components: { flatPickr, Toolbar, KohaTable },
     props: {
