@@ -21,39 +21,30 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-        </li>
+        [% END %]
         [% IF op == 'add_form' %]
-            <li>
-                <a href="/cgi-bin/koha/tools/csv-profiles.pl">
-                    CSV profiles
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV profiles</a>
+            [% END %]
             [% IF csv_profile %]
-                <li>
-                    <a href="#" aria-current="page">Modify a CSV profile</a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Modify a CSV profile</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">New CSV profile</a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New CSV profile</span>
+                [% END %]
             [% END %]
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    CSV profiles
-                </a>
-            </li>
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>CSV profiles</span>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
