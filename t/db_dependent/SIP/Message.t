@@ -380,7 +380,7 @@ subtest "Test build_custom_field_string" => sub {
 };
 
 subtest "Test cr_item_field" => sub {
-    plan tests => 3;
+    plan tests => 8;
 
     my $builder = t::lib::TestBuilder->new();
     my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
@@ -405,6 +405,7 @@ subtest "Test cr_item_field" => sub {
         restricted => 0,
         homebranch => $branchcode,
         holdingbranch => $branchcode,
+        datelastseen => '1900-01-01',
     });
 
     my $mockILS = $mocks->{ils};
@@ -448,7 +449,24 @@ subtest "Test cr_item_field" => sub {
 
     $server->{account}->{cr_item_field} = 'itype';
 
+    $server->{account}->{seen_on_item_information} = '';
     $msg->handle_item_information( $server );
+    $item_object->get_from_storage;
+    is( $item_object->datelastseen, "1900-01-01", "datelastseen remains unchanged" );
+
+    $item_object->update({ itemlost => 1, datelastseen => '1900-01-01' });
+    $server->{account}->{seen_on_item_information} = 'keep_lost';
+    $msg->handle_item_information( $server );
+    $item_object = Koha::Items->find( $item_object->id );
+    isnt( $item_object->datelastseen, "1900-01-01", "datelastseen updated" );
+    is( $item_object->itemlost, 1, "item remains lost" );
+
+    $item_object->update({ itemlost => 1, datelastseen => '1900-01-01' });
+    $server->{account}->{seen_on_item_information} = 'mark_found';
+    $msg->handle_item_information( $server );
+    $item_object = Koha::Items->find( $item_object->id );
+    isnt( $item_object->datelastseen, "1900-01-01", "datelastseen updated" );
+    is( $item_object->itemlost, 0, "item is no longer lost" );
 
     my $itype = $item_object->itype;
     ok( $response =~ m/CR$itype/, "Found correct CR field in response");

@@ -17,6 +17,7 @@ use C4::SIP::Sip::Checksum qw(verify_cksum);
 use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
+use C4::Items qw(ModDateLastSeen);
 
 use Koha::Patrons;
 use Koha::Patron::Attributes;
@@ -1232,6 +1233,8 @@ sub handle_item_information {
         # title id is required, but we don't have one
         $resp .= add_field( FID_TITLE_ID, '', $server );
     } else {
+        my $seen = $account->{seen_on_item_information};
+        ModDateLastSeen( $item->itemnumber, $seen eq 'keep_lost' ) if $seen;
 
         # Valid Item ID, send the good stuff
         my $circulation_status = $item->sip_circulation_status;
