@@ -430,7 +430,7 @@
                                     [% IF warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist %]
                                         <tr>
                                             <th scope="row"><strong class="error">Error</strong> </th>
-                                            <td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number or checkins for these patrons will fail.</td>
+                                            <td>Some patrons have requested a privacy on returning item, but the AnonymousPatron preference is not set correctly. Set it to a valid borrower number or checkins for these patrons will fail.</td>
                                         </tr>
                                     [% END %]
                                     [% IF warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist %]
@@ -451,7 +451,7 @@
                                             <td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</th></tr>
                                     [% END %]
                                     [% IF warnPrefPatronSelfRegistrationDefaultCategory %]
-                                        <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'PatronSelfRegistration' is set but 'PatronSelfRegistrationDefaultCategory' does not contain a valid patron category code. Patron self-registration is disabled.</td></tr>
+                                        <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'PatronSelfRegistration' is set, but 'PatronSelfRegistrationDefaultCategory' does not contain a valid patron category code. Patron self-registration is disabled.</td></tr>
                                     [% END %]
                                     [% IF warnXSLT %]
                                         [% FOR p IN warnXSLT %]
