@@ -411,11 +411,10 @@
                     <td class="homebranch">
                         <span class="homebranchdesc">[% Branches.GetName(item.homebranch) | html %]</span>
                         <span class="shelvingloc">
-                    [%# If permanent location is defined, show description or code and
-                        display current location in parentheses. If not, display current location.
-                        Note that permanent location is a code, and location may be an authval.
-                    %]
-                            [% IF item.permanent_location %]
+                        [%# If permanent location is defined, show description or code and             %]
+                        [%# display current location in parentheses. If not, display current location. %]
+                        [%# Note that permanent location is a code, and location may be an authval.    %]
+                                [% IF item.permanent_location %]
                                 [% SET permloc_authval = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) %]
                                 [% permloc_authval | html %]
                                 [% SET item_location = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) %]
