@@ -185,10 +185,12 @@ Patrons:
          - 'for sending out email notices.'
          - '<br><strong>NOTE:</strong> If set to "first valid", the order in which the email addresses are checked is set in <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrecedence">EmailFieldPrecedence</a>.'
      -
-         - When <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrimary">EmailFieldPrimary</a> is set to '<strong>first valid</strong>', check the patron email address fields in the following order and use the first valid email address found:
+         - "When <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrimary'>EmailFieldPrimary</a> is set to '<strong>first valid</strong>', check the patron email address fields in the following order and use the first valid email address found:"
          - pref: EmailFieldPrecedence
            class: multi
-         - '<br><strong>NOTE:</strong> All patron fields are valid, but to work correctly they must contain a valid email address or an empty string.'
+         - '<br><strong>NOTE:</strong> All patron fields can be used, but to work correctly they must contain a valid email address or an empty string.'
+         - "Valid options are the <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> of the borrowers table, separated by | (pipe)."
+         - "Example: email|emailpro|B_email"
      -
          - pref: TalkingTechItivaPhoneNotification
            choices:
