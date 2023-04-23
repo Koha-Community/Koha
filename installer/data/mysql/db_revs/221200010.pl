@@ -121,7 +121,7 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-                VALUES ( 'catalogue', 'TICKET_NOTIFY', '', 'Catalog concern notification', '1', 'Catalog concern reported', "[%- USE Koha -%][%- PROCESS 'html_helpers.inc' -%]\r\nDear cataloger,<br><br>[%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%]reported the following concern with [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 -%]<br><br>[%- ticket.body -%]<br><br>You can mark this concern as resolved from the concern management <a href='[%- Koha.Preference('IntranetBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>.", 'email' );
+                VALUES ( 'catalogue', 'TICKET_NOTIFY', '', 'Catalog concern notification', '1', 'Catalog concern reported', "[%- USE Koha -%][%- PROCESS 'html_helpers.inc' -%]\r\nDear cataloger,<br><br>[%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%]reported the following concern with [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 -%]<br><br>[%- ticket.body -%]<br><br>You can mark this concern as resolved from the concern management <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>.", 'email' );
             }
         );
         say $out "Added new notice 'TICKET_NOTIFY'";
