@@ -112,11 +112,11 @@ tables:
             - "[%- PROCESS 'html_helpers.inc' -%]"
             - "[%- USE Koha -%]"
             - "Dear cataloger,<br>"
-            - "[%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%] reported the following concern with [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 1 -%]<br>"
+            - "[%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%] reported the following concern with <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ticket.biblio.biblionumber %]' >[%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%]</a><br>"
             - "<br>"
             - "[%- ticket.body -%]<br>"
             - "<br>"
-            - "You can mark this concern as resolved from the concern management <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>page</a>."
+            - "You can mark this concern as resolved from the <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>concern management page</a>."
 
         - module: circulation
           code: ACCOUNT_CREDIT
