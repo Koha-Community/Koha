@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Self checkout help &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,8 +13,14 @@
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( SCOUserCSS ) %]<style>[% SCOUserCSS | $raw %]</style>[% END %]
 <script>
+    var Koha = {};
     function _(s) { return s } // dummy function for gettext
 </script>
+[% IF lang && lang != 'en' %]
+    [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
+[% END %]
+[% Asset.js('js/Gettext.js') | $raw %]
+[% Asset.js('js/i18n.js') | $raw %]
 </head>
 <body id="sco_help" class="sco">
     [% INCLUDE 'masthead-sco.inc' %]
