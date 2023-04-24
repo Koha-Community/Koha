@@ -55,67 +55,46 @@
 [% END %]
 
     [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-            </li>
+            [% END %]
+
+            [% IF ( add_form OR copy_form OR add_validate OR copy_validate OR delete_confirm ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
+                [% END %]
+            [% END %]
 
             [% IF ( add_form or copy_form) %]
                 [% IF ( modify ) %]
-                    <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Modify notice
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Modify notice</span>
+                    [% END %]
                 [% ELSE %]
-                    <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Add notice
-                        </a>
-                    </li>
-                [% END %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Add notice</span>
+                    [% END %]
+                [% END # /IF modify %]
             [% ELSE %]
                 [% IF ( add_validate or copy_validate) %]
-                    <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Notice added
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Notice added</span>
+                    [% END %]
                 [% ELSE %]
                     [% IF ( delete_confirm ) %]
-                        <li>
-                            <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
-                        </li>
-                        <li>
-                            <a href="#" aria-current="page">
-                                Confirm deletion
-                            </a>
-                        </li>
+                        [% WRAPPER breadcrumb_item bc_active= 1 %]
+                            <span>Confirm deletion</span>
+                        [% END %]
                     [% ELSE %]
-                        <li>
-                            <a href="#" aria-current="page">
-                                Notices and slips
-                            </a>
-                        </li>
-                    [% END %]
-                [% END %]
-            [% END %]
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
-    [% END %]
+                        [% WRAPPER breadcrumb_item bc_active= 1 %]
+                            <span>Notices and slips</span>
+                        [% END %]
+                    [% END # /IF ( delete_confirm ) %]
+                [% END # /IF ( add_validate or copy_validate) %]
+            [% END # /IF ( add_form or copy_form) %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     <div id="preview_template" class="modal in" tabindex="-1" role="dialog" aria-labelledby="preview_template_label" aria-hidden="true">
         <div class="modal-dialog modal-lg">
