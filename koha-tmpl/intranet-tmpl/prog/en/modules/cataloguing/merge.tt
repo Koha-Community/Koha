@@ -50,48 +50,50 @@ div#result { margin-top: 1em; }
        [% END %]
 
     [% ELSE %]
-        <p>The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber | uri %]">View the merged record.</a></p>
-        <h3>Report</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Biblionumber</th>
-                    [% FOREACH key IN report_header.keys.sort %]
-                        [% tag = key.substr(0, 3) %]
-                        [% code = key.substr(3, 1) %]
-                        [% IF code == '@' %]
-                            [% header = tag %]
-                        [% ELSE %]
-                            [% header = tag _ '$' _ code %]
-                        [% END %]
-                        <th>[% header | html %]</th>
-                    [% END %]
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH record IN report_records %]
+        <div class="dialog message">The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber | uri %]">View the merged record.</a></div>
+        <div class="page-section">
+            <h3>Report</h3>
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            [% record.biblionumber | html %]
-                            [% IF loop.first %]
-                                <span>(record kept)</span>
-                            [% END %]
-                        </td>
+                        <th>Biblionumber</th>
                         [% FOREACH key IN report_header.keys.sort %]
-                            <td>
-                                [% values = record.fields.$key %]
-                                [% IF values %]
-                                    [% FOREACH value IN record.fields.$key %]
-                                        [% value | html %]
-                                        [% UNLESS loop.last %]<br />[% END %]
-                                    [% END %]
-                                [% END %]
-                            </td>
+                            [% tag = key.substr(0, 3) %]
+                            [% code = key.substr(3, 1) %]
+                            [% IF code == '@' %]
+                                [% header = tag %]
+                            [% ELSE %]
+                                [% header = tag _ '$' _ code %]
+                            [% END %]
+                            <th>[% header | html %]</th>
                         [% END %]
                     </tr>
-                [% END %]
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    [% FOREACH record IN report_records %]
+                        <tr>
+                            <td>
+                                [% record.biblionumber | html %]
+                                [% IF loop.first %]
+                                    <span>(record kept)</span>
+                                [% END %]
+                            </td>
+                            [% FOREACH key IN report_header.keys.sort %]
+                                <td>
+                                    [% values = record.fields.$key %]
+                                    [% IF values %]
+                                        [% FOREACH value IN record.fields.$key %]
+                                            [% value | html %]
+                                            [% UNLESS loop.last %]<br />[% END %]
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                            [% END %]
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div> <!-- /.page-section -->
     [% END %]
 
 [% ELSE %]
