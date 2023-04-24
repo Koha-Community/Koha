@@ -7,22 +7,24 @@
 </head>
 
 <body id="tools_page_[% page.idnew | html %]" class="tools">
-    [% INCLUDE 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">[% IF page %][% page.title | html %][% ELSE %]Page error[% END %]</a>
-            </li>
-        </ol>
-    </nav>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF page %]
+                [% page.title | html %]
+            [% ELSE %]
+                <span>Page error</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
