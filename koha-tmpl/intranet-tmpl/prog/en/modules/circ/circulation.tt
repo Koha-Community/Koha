@@ -1072,10 +1072,10 @@
 
         [% IF borrowernumber and patron %]
             if( Cookies.get("holdfor") != [% patron.borrowernumber | html %]){
-                Cookies.remove("holdfor", { path: '/' });
+                Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
             }
         [% ELSE %]
-            Cookies.remove("holdfor", { path: '/' });
+            Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
         [% END %]
 
         [% UNLESS ( patron.borrowernumber ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %]
