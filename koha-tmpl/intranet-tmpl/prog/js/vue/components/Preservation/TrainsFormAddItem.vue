@@ -46,6 +46,13 @@
                                     :options="
                                         av_options[attribute.option_source]
                                     "
+                                    taggable
+                                    :create-option="
+                                        attribute => ({
+                                            value: attribute,
+                                            description: attribute,
+                                        })
+                                    "
                                 />
                             </span>
                             <span v-else-if="attribute.type == 'free_text'">

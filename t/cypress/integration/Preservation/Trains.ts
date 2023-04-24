@@ -103,7 +103,7 @@ function get_train_items() {
             processing_attribute: processing_attributes[0],
             processing_attribute_id:
                 processing_attributes[0].processing_attribute_id,
-            value: "Paraguay",
+            value: "Not a country",
         },
         {
             processing_attribute: processing_attributes[1],
