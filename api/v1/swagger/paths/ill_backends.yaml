@@ -1,10 +1,10 @@
 ---
-/ill_backends:
+/ill/backends:
   get:
     x-mojo-to: Illbackends#list
     operationId: listIllbackends
     tags:
-      - illbackends
+      - ill_backends
     summary: List ILL backends
     parameters: []
     produces:
@@ -40,12 +40,12 @@
     x-koha-authorization:
       permissions:
         ill: "1"
-"/ill_backends/{ill_backend_id}":
+"/ill/backends/{ill_backend_id}":
   get:
     x-mojo-to: Illbackends#get
     operationId: getIllbackends
     tags:
-      - illbackends
+      - ill_backends
     summary: Get ILL backend
     parameters:
       - name: ill_backend_id
@@ -60,6 +60,52 @@
         description: An ILL backends
         schema:
           $ref: "../swagger.yaml#/definitions/ill_backend"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: ILL backends not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+"/ill/backends/{ill_backend_id}/statuses":
+  get:
+    x-mojo-to: Illbackends#list_statuses
+    operationId: getIllbackendsStatuses
+    tags:
+      - ill_backends
+    summary: Get existing ILL statuses
+    parameters:
+      - name: ill_backend_id
+        in: path
+        description: ILL backend id/name
+        required: true
+        type: string
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of existing ILL statuses
+        schema:
+          $ref: "../swagger.yaml#/definitions/ill_statuses"
       "401":
         description: Authentication required
         schema:

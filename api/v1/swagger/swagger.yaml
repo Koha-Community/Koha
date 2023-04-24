@@ -52,6 +52,10 @@ definitions:
     $ref: ./definitions/ill_backend.yaml
   ill_backends:
     $ref: ./definitions/ill_backends.yaml
+  ill_status:
+    $ref: ./definitions/ill_status.yaml
+  ill_statuses:
+    $ref: ./definitions/ill_statuses.yaml
   ill_request:
     $ref: ./definitions/ill_request.yaml
   import_batch_profile:
@@ -235,14 +239,14 @@ paths:
     $ref: "./paths/holds.yaml#/~1holds~1{hold_id}~1priority"
   "/holds/{hold_id}/suspension":
     $ref: "./paths/holds.yaml#/~1holds~1{hold_id}~1suspension"
-  /ill_backends:
-    $ref: ./paths/ill_backends.yaml#/~1ill_backends
-  "/ill_backends/{ill_backend_id}":
-    $ref: "./paths/ill_backends.yaml#/~1ill_backends~1{ill_backend_id}"
-  /illrequests:
-    $ref: ./paths/illrequests.yaml#/~1illrequests
-  /ill_requests:
-    $ref: ./paths/illrequests.yaml#/~1ill_requests
+  /ill/backends:
+    $ref: ./paths/ill_backends.yaml#/~1ill~1backends
+  "/ill/backends/{ill_backend_id}":
+    $ref: "./paths/ill_backends.yaml#/~1ill~1backends~1{ill_backend_id}"
+  "/ill/backends/{ill_backend_id}/statuses":
+    $ref: "./paths/ill_backends.yaml#/~1ill~1backends~1{ill_backend_id}~1statuses"
+  /ill/requests:
+    $ref: ./paths/ill_requests.yaml#/~1ill~1requests
   "/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen":
     $ref: "./paths/import_batches.yaml#/~1import_batches~1{import_batch_id}~1records~1{import_record_id}~1matches~1chosen"
   /import_batch_profiles:
@@ -760,10 +764,10 @@ tags:
     name: holds
     x-displayName: Holds
   - description: "Manage ILL module backends\n"
-    name: illbackends
+    name: ill_backends
     x-displayName: ILL backends
   - description: "Manage ILL requests\n"
-    name: illrequests
+    name: ill_requests
     x-displayName: ILL requests
   - description: "Manage import batches\n"
     name: import_batches
