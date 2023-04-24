@@ -229,8 +229,19 @@ $(document).ready(function() {
   [% IF ( serialslis.serialsadditems ) %]
           <tr>
           <td colspan="6">
+          [% SET item_count = 0 %]
+          [% FOREACH item IN serialslis.items %]
+              [% IF ( item.itemnumber ) %]
+                  [% item_count = item_count + 1 %]
+              [% END %]
+          [% END %]
+          [% IF item_count > 0 %]
       <a id="label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]" class="btn btn-default btn-sm" onclick="unHideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]',  '[% serialslis.serialid | html %]');setStatus([% serialslis.serialid | html %]);">
         Edit item</a>
+          [% ELSE %]
+      <a id="label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]" class="btn btn-default btn-sm" onclick="unHideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]',  '[% serialslis.serialid | html %]');setStatus([% serialslis.serialid | html %]);">
+        Add item</a>
+         [% END %]
         <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]')">
                 Item</a>
