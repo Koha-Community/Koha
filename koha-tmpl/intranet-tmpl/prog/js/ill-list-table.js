@@ -180,7 +180,7 @@ $(document).ready(function() {
 
     var ill_requests_table = $("#ill-requests").kohaTable({
         "ajax": {
-            "url": '/api/v1/ill_requests'
+            "url": '/api/v1/ill/requests'
         },
         "embed": [
             '+strings',
@@ -430,7 +430,7 @@ $(document).ready(function() {
     function populateStatusFilter(backend) {
         $.ajax({
             type: "GET",
-            url: "/api/v1/ill_backends/"+backend+"/statuses",
+            url: "/api/v1/ill/backends/"+backend+"/statuses",
             success: function(statuses){
                 $('#illfilter_status').append(
                     '<option value="">'+ill_all_statuses+'</option>'
@@ -448,7 +448,7 @@ $(document).ready(function() {
     function populateBackendFilter() {
         $.ajax({
             type: "GET",
-            url: "/api/v1/ill_backends",
+            url: "/api/v1/ill/backends",
             success: function(backends){
                 backends.sort((a, b) => a.ill_backend_id.localeCompare(b.ill_backend_id)).forEach(function(backend) {
                     $('#illfilter_backend').append(

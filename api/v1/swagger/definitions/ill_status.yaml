@@ -1,0 +1,19 @@
+---
+type: object
+properties:
+  str:
+    type: string
+    description: Internal ILL status display string
+  code:
+    type: string
+    description: Internal ILL status code or av code
+  type:
+    type: string
+    description: This is 'ill_status' or 'av' depending on if coming from backend or authorised values i.e. alias
+  backend:
+    type: string
+    description: The backend in which this status is used
+  category:
+    type: string
+    description: The AV category in which the status aliases exists in
+additionalProperties: false
