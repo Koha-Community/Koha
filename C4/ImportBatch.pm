@@ -716,14 +716,13 @@ sub BatchCommitRecords {
 
     SetImportBatchStatus($batch_id, 'imported');
 
-    # Moved final commit to the end
+    # final commit should be before Elastic background indexing in order to find job data
     $schema->txn_commit;
 
     if ( @biblio_ids ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( \@biblio_ids, "specialUpdate", "biblioserver" );
     }
-
 
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }

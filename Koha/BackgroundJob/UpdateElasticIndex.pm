@@ -29,7 +29,7 @@ Koha::BackgroundJob::UpdateElasticIndex - Update Elastic index
 This is a subclass of Koha::BackgroundJob.
 
 While most background jobs provide a I<process> method, the ES indexing has its
-own dedicated worker: misc/workers/es_index_daemon.pl
+own dedicated worker: misc/workers/es_indexer_daemon.pl
 
 That worker handles all job processing.
 
