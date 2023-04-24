@@ -245,6 +245,7 @@ sub _change_column {
     }
 
     # Extra (like autoincrement)
+    $info->{Extra} =~ s/DEFAULT_GENERATED//; # need to remove it for mysql8 timestamps
     $rv .= $info->{Extra}. ' ' if $info->{Extra};
 
     # Comment if passed; not passing means clearing actually.
