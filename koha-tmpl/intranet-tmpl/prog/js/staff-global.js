@@ -194,7 +194,7 @@ function checkEnter(e){ //e is event object passed from function invocation
 }
 
 function clearHoldFor(){
-    Cookies.remove("holdfor", { path: '/' });
+    Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
 }
 
 function logOut(){

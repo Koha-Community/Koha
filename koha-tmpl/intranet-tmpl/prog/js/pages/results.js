@@ -348,8 +348,8 @@ function placeHold () {
 }
 
 function forgetPatronAndClub(){
-    Cookies.remove("holdfor", { path: '/' });
-    Cookies.remove("holdforclub", { path: '/' });
+    Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
+    Cookies.remove("holdforclub", { path: '/', SameSite: 'Lax' });
     $(".holdforlink").remove();
     $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> " + __("Place hold") + "</a>");
 }
