@@ -23,6 +23,14 @@ __PACKAGE__->table("preservation_processing_attributes_items");
 
 =head1 ACCESSORS
 
+=head2 processing_attribute_item_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
+primary key
+
 =head2 processing_attribute_id
 
   data_type: 'integer'
@@ -50,6 +58,8 @@ value for this attribute
 =cut
 
 __PACKAGE__->add_columns(
+  "processing_attribute_item_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "processing_attribute_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "train_item_id",
@@ -62,15 +72,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</processing_attribute_id>
-
-=item * L</train_item_id>
+=item * L</processing_attribute_item_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("processing_attribute_id", "train_item_id");
+__PACKAGE__->set_primary_key("processing_attribute_item_id");
 
 =head1 RELATIONS
 
@@ -105,8 +113,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-17 18:47:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CiFAelBwfhQzRX1cL0ssqA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-24 13:35:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q7q8ThZAW9HGDWaemSTS3A
 
 sub koha_object_class {
     'Koha::Preservation::Train::Item::Attribute';
