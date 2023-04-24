@@ -98,55 +98,36 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-[% UNLESS ( multi_hold ) %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-            </li>
-            <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        [% END %]
+        [% UNLESS ( multi_hold ) %]
+            [% WRAPPER breadcrumb_item %]
                 [% INCLUDE 'biblio-title.inc' link =1 %]
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Place a hold
-                </a>
-            </li>
-        </ol>
-    </nav>
-[% ELSE %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-            </li>
-            <li>
-                [% IF ( patron ) %]
-                    <a href="#" aria-current="page">
-                        Place holds
-                    </a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Place a hold</span>
+            [% END %]
+        [% ELSE %]
+            [% IF ( patron ) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Place holds</span>
+                [% END %]
+            [% ELSE %]
+                [% IF clubcount %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Search patrons or clubs</span>
+                    [% END %]
                 [% ELSE %]
-                    [% IF clubcount %]
-                        <a href="#" aria-current="page">
-                            Search patrons or clubs
-                        </a>
-                    [% ELSE %]
-                        <a href="#" aria-current="page">
-                            Search patrons
-                        </a>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Search patrons</span>
                     [% END %]
                 [% END %]
-            </li>
-        </ol>
-    </nav>
-[% END # UNLESS multi_hold %]
-[% END %]
+            [% END %]
+        [% END # UNLESS multi_hold %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">

@@ -59,54 +59,36 @@
     [% END %]
 
     [% WRAPPER 'sub-header.inc' %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-            </li>
-
+            [% END %]
+            [% IF ( op == 'save' || op == 'show' ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
+                [% END %]
+            [% END %]
             [% IF op == 'save' %]
                 [% IF ( suggestionid ) %]
-                    <li>
-                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Edit suggestion #[% suggestionid | html %]
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Edit suggestion #[% suggestionid | html %]</span>
+                    [% END %]
                 [% ELSE %]
-                    <li>
-                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page">
-                            Add suggestion
-                        </a>
-                    </li>
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Add suggestion</span>
+                    [% END %]
                 [% END %]
             [% ELSIF ( op == 'show' ) %]
-                <li>
-                    <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page">
-                        Show suggestion #[% suggestionid | html %]
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Show suggestion #[% suggestionid | html %]</span>
+                [% END %]
             [% ELSE %]
-                <li>
-                    <a href="#" aria-current="page">
-                        Suggestions management
-                    </a>
-                </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Suggestions management</span>
+                [% END %]
             [% END %]
-        </ol>
-    </nav> <!-- /.breadcrumbs -->
-    [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
     [% IF ( op == 'show' ) %]
         <div class="main container-fluid">

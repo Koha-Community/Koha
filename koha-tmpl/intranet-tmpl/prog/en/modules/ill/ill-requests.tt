@@ -19,40 +19,28 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-
+    [% WRAPPER breadcrumbs %]
         [% IF query_type == 'create' %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    New request
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>New request</span>
+            [% END %]
         [% ELSIF query_type == 'illview' %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Manage request [% request.id_prefix _ request.illrequest_id | html %]
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% END %]
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    ILL requests
-                </a>
-            </li>
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>ILL requests</span>
+            [% END %]
         [% END %]
-    </ol>
-</nav>
-[% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
