@@ -60,6 +60,29 @@
                                     v-model="attribute.value"
                                 />
                             </span>
+                            <a
+                                v-if="
+                                    attributes.length == counter + 1 ||
+                                    attributes[counter + 1]
+                                        .processing_attribute_id !=
+                                        attribute.processing_attribute_id
+                                "
+                                class="btn btn-link"
+                                @click="
+                                    addAttribute(
+                                        attribute.processing_attribute_id
+                                    )
+                                "
+                                ><font-awesome-icon icon="plus" />
+                                {{ $__("Add") }}</a
+                            >
+                            <a
+                                v-else
+                                class="btn btn-link"
+                                @click="removeAttribute(counter)"
+                                ><font-awesome-icon icon="minus" />
+                                {{ $__("Remove") }}</a
+                            >
                         </li>
                     </ol>
                 </fieldset>
@@ -238,28 +261,34 @@ export default {
                 error => {}
             )
             this.updateDefaultValues()
-            this.attributes = this.processing.attributes.map(attribute => {
-                let value = ""
+            this.attributes = []
+            this.processing.attributes.forEach(attribute => {
+                let values = []
                 if (!apply_default_value) {
-                    let existing_attribute = this.train_item.attributes.find(
-                        a =>
-                            a.processing_attribute_id ==
-                            attribute.processing_attribute_id
-                    )
-                    if (existing_attribute) {
-                        value = existing_attribute.value
-                    }
+                    this.train_item.attributes
+                        .filter(
+                            a =>
+                                a.processing_attribute_id ==
+                                attribute.processing_attribute_id
+                        )
+                        .forEach(a => values.push(a.value))
                 } else if (attribute.type == "db_column") {
-                    value =
+                    values.push(
                         this.default_values[attribute.processing_attribute_id]
+                    )
+                } else {
+                    values.push("")
                 }
-                return {
-                    processing_attribute_id: attribute.processing_attribute_id,
-                    name: attribute.name,
-                    type: attribute.type,
-                    option_source: attribute.option_source,
-                    value,
-                }
+                values.forEach(value =>
+                    this.attributes.push({
+                        processing_attribute_id:
+                            attribute.processing_attribute_id,
+                        name: attribute.name,
+                        type: attribute.type,
+                        option_source: attribute.option_source,
+                        value,
+                    })
+                )
             })
             const client_av = APIClient.authorised_values
             let av_cat_array = this.processing.attributes
@@ -279,6 +308,19 @@ export default {
                     })
                 })
                 .then(() => this.loaded())
+        },
+        addAttribute(processing_attribute_id) {
+            let last_index = this.attributes.findLastIndex(
+                attribute =>
+                    attribute.processing_attribute_id == processing_attribute_id
+            )
+            let new_attribute = (({ value, ...keepAttrs }) => keepAttrs)(
+                this.attributes[last_index]
+            )
+            this.attributes.splice(last_index + 1, 0, new_attribute)
+        },
+        removeAttribute(counter) {
+            this.attributes.splice(counter, 1)
         },
         onSubmit(e) {
             e.preventDefault()

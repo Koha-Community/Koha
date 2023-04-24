@@ -263,21 +263,15 @@ export default {
                             let item_row = {}
                             this.train.default_processing.attributes.forEach(
                                 attribute => {
-                                    let v = ""
-                                    if (item.attributes.length >= 0) {
-                                        let a = item.attributes.find(
+                                    item_row[
+                                        attribute.processing_attribute_id
+                                    ] = item.attributes
+                                        .filter(
                                             a =>
                                                 a.processing_attribute_id ==
                                                 attribute.processing_attribute_id
                                         )
-                                        if (a) {
-                                            v = a.value
-                                        }
-                                    }
-
-                                    item_row[
-                                        attribute.processing_attribute_id
-                                    ] = v
+                                        .map(a => a.value)
                                 }
                             )
                             item_row.item = item
@@ -294,6 +288,9 @@ export default {
                                 name: a.name,
                                 title: a.name,
                                 data: a.processing_attribute_id,
+                                render: (data, type, row) => {
+                                    return data.join("<br/>")
+                                },
                             })
                         )
                         this.item_table.columns.push({

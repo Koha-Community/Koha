@@ -4860,10 +4860,11 @@ DROP TABLE IF EXISTS `preservation_processing_attributes_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `preservation_processing_attributes_items` (
+  `processing_attribute_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `processing_attribute_id` int(11) NOT NULL COMMENT 'link with preservation_processing_attributes',
   `train_item_id` int(11) NOT NULL COMMENT 'link with preservation_trains_items',
   `value` varchar(255) NULL COMMENT 'value for this attribute',
-  PRIMARY KEY (`processing_attribute_id`,`train_item_id`),
+  PRIMARY KEY (`processing_attribute_item_id`),
   CONSTRAINT `preservation_processing_attributes_items_ibfk_1` FOREIGN KEY (`processing_attribute_id`) REFERENCES `preservation_processing_attributes` (`processing_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `preservation_processing_attributes_items_ibfk_2` FOREIGN KEY (`train_item_id`) REFERENCES `preservation_trains_items` (`train_item_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -100,6 +100,12 @@ function get_train_items() {
             value: "Argentina",
         },
         {
+            processing_attribute: processing_attributes[0],
+            processing_attribute_id:
+                processing_attributes[0].processing_attribute_id,
+            value: "Paraguay",
+        },
+        {
             processing_attribute: processing_attributes[1],
             processing_attribute_id:
                 processing_attributes[1].processing_attribute_id,
