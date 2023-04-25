@@ -3,6 +3,7 @@ import TrainsList from "../components/Preservation/TrainsList.vue";
 import TrainsShow from "../components/Preservation/TrainsShow.vue";
 import TrainsFormAdd from "../components/Preservation/TrainsFormAdd.vue";
 import TrainsFormAddItem from "../components/Preservation/TrainsFormAddItem.vue";
+import TrainsFormAddItems from "../components/Preservation/TrainsFormAddItems.vue";
 import WaitingList from "../components/Preservation/WaitingList.vue";
 import Settings from "../components/Preservation/Settings.vue";
 import SettingsProcessingsShow from "../components/Preservation/SettingsProcessingsShow.vue";
@@ -114,6 +115,17 @@ export const routes = [
                                         build_breadcrumb(
                                             breadcrumb_paths.trains,
                                             "Add item to train" // $t("Add item to train")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "add/:item_ids",
+                                component: TrainsFormAddItems,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            breadcrumb_paths.trains,
+                                            "Add items to train" // $t("Add items to train")
                                         ),
                                 },
                             },

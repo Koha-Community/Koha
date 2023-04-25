@@ -189,40 +189,13 @@ export default {
         },
         addItemsToTrain: function (e) {
             e.preventDefault()
-            this.loading()
-            let item_ids = Object.values(this.last_items)
-            const client = APIClient.preservation
-            client.train_items
-                .createAll(item_ids, this.train_id_selected_for_add)
-                .then(
-                    result => {
-                        if (result.length) {
-                            this.setMessage(
-                                this.$__(
-                                    "%s items have been added to train %s."
-                                ).format(
-                                    result.length,
-                                    this.train_id_selected_for_add
-                                ),
-                                true
-                            )
-                        } else {
-                            this.setMessage(
-                                this.$__(
-                                    "No items have been added to the train."
-                                )
-                            )
-                        }
-
-                        this.$refs.table.redraw(
-                            "/api/v1/preservation/waiting-list/items"
-                        )
-                        this.show_modal_add_to_train = false
-                        this.last_items = []
-                    },
-                    error => {}
-                )
-                .then(() => this.loaded())
+            let item_ids = this.last_items.map(i => i.item_id)
+            this.$router.push(
+                "/cgi-bin/koha/preservation/trains/" +
+                    this.train_id_selected_for_add +
+                    "/items/add/" +
+                    item_ids.join(",")
+            )
         },
         addItemsToWaitingList: function (e) {
             e.preventDefault()

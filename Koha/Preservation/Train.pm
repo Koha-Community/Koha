@@ -120,7 +120,9 @@ sub add_items {
     my @added_items;
     for my $train_item (@$train_items) {
         try {
-            push @added_items, $self->add_item($train_item);
+            my $added_item = $self->add_item($train_item);
+            $added_item->attributes($train_item->{attributes});
+            push @added_items, $added_item;
         } catch {
 
             # FIXME Do we rollback and raise an error or just skip it?
