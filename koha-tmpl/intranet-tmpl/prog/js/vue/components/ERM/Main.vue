@@ -1,5 +1,5 @@
 <template>
-    <div v-if="initialized && sysprefs.ERMModule == 1">
+    <div v-if="initialized && config.settings.ERMModule == 1">
         <div id="sub-header">
             <Breadcrumbs />
             <Help />
@@ -49,13 +49,13 @@ export default {
 
         const ERMStore = inject("ERMStore")
 
-        const { sysprefs } = storeToRefs(ERMStore)
+        const { config } = storeToRefs(ERMStore)
 
         return {
             vendorStore,
             AVStore,
             ERMStore,
-            sysprefs,
+            config,
             setError,
             loading,
             loaded,
@@ -128,23 +128,15 @@ export default {
                     })
             )
 
-            promises.push(
-                sysprefs_client.sysprefs.get("ERMProviders").then(
-                    providers => {
-                        this.sysprefs.ERMProviders = providers.value.split(",")
-                    },
-                    error => {}
-                )
-            )
             return Promise.all(promises)
         }
 
-        const sysprefs_client = APIClient.sysprefs
-        sysprefs_client.sysprefs
-            .get("ERMModule")
-            .then(value => {
-                this.sysprefs.ERMModule = value.value
-                if (this.sysprefs.ERMModule != 1) {
+        const client = APIClient.erm
+        client.config
+            .get()
+            .then(config => {
+                this.config = config
+                if (this.config.settings.ERMModule != 1) {
                     return this.setError(
                         this.$__(
                             'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
@@ -164,7 +156,7 @@ export default {
             const eHoldings = navigationTree.find(
                 element => element.path === "/cgi-bin/koha/erm/eholdings"
             )
-            const providers = this.sysprefs.ERMProviders
+            const providers = this.config.settings.ERMProviders
             eHoldings.children = eHoldings.children.filter(element =>
                 providers
                     .map(provider => `${eHoldings.path}/${provider}`)

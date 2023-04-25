@@ -31,6 +31,28 @@ Koha::REST::V1::Acquisitions::Funds
 
 =head2 Class methods
 
+=head3 config
+
+Return the configuration options needed for the ERM Vue app
+
+=cut
+
+sub config {
+    my $c = shift->openapi->valid_input or return;
+    return $c->render(
+        status => 200,
+        openapi => {
+            settings => {
+                ERMModule => C4::Context->preference('ERMModule'),
+                ERMProviders => [split ',', C4::Context->preference('ERMProviders')]
+            },
+            #permissions => {
+            #    erm =>
+            #}
+        },
+    )
+}
+
 =head3 list_users
 
 Return the list of possible ERM' users
