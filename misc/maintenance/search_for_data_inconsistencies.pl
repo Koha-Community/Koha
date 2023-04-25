@@ -121,8 +121,39 @@ use C4::Biblio qw( GetMarcFromKohaField );
     my @decoding_errors;
     my $biblios = Koha::Biblios->search;
     while ( my $biblio = $biblios->next ) {
-        eval{$biblio->metadata->record;};
-        push @decoding_errors, $@ if $@;
+        my $record = eval{$biblio->metadata->record;};
+        if ($@) {
+            push @decoding_errors, $@;
+            next;
+        }
+        my ( $biblionumber, $biblioitemnumber );
+        if ( $biblio_tag < 10 ) {
+            my $biblio_control_field = $record->field($biblio_tag);
+            $biblionumber = $biblio_control_field->data if $biblio_control_field;
+        } else {
+            $biblionumber = $record->subfield( $biblio_tag, $biblio_subfield );
+        }
+        if ( $biblioitem_tag < 10 ) {
+            my $biblioitem_control_field = $record->field($biblioitem_tag);
+            $biblioitemnumber = $biblioitem_control_field->data if $biblioitem_control_field;
+        } else {
+            $biblioitemnumber = $record->subfield( $biblioitem_tag, $biblioitem_subfield );
+        }
+        if ( $biblionumber != $biblio->biblionumber ) {
+            push @ids_not_in_marc,
+              {
+                biblionumber         => $biblio->biblionumber,
+                biblionumber_in_marc => $biblionumber,
+              };
+        }
+        if ( $biblioitemnumber != $biblio->biblioitem->biblioitemnumber ) {
+            push @ids_not_in_marc,
+            {
+                biblionumber     => $biblio->biblionumber,
+                biblioitemnumber => $biblio->biblioitem->biblioitemnumber,
+                biblioitemnumber_in_marc => $biblionumber,
+            };
+        }
     }
     if ( @decoding_errors ) {
         new_section("Bibliographic records have invalid MARCXML");
