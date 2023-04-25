@@ -6,6 +6,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Biblio %]
+[% USE Frameworks %]
 [% USE Price %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
@@ -136,6 +137,10 @@
                     </span>
         [% END %]
         <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
+        <span id="catalogue_detail_framework" class="results_summary">
+            <span class="label">MARC framework:</span>
+            <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
+        </span>
         [% IF !item_level_itypes ||  Koha.Preference("BiblioItemtypeInfo") %]
            <span class="results_summary itemtype"><span class="label">Itemtype:</span>
           [% IF ( !noItemTypeImages && imageurl ) %]
