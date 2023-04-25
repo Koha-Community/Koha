@@ -38,13 +38,8 @@ describe("License CRUD operations", () => {
         cy.title().should("eq", "Koha staff interface");
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
-            '{"value":"1"}'
-        );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
-            '{"value":"local"}'
+            "/api/v1/erm/config",
+            '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
         );
     });
 
