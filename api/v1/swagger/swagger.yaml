@@ -32,6 +32,8 @@ definitions:
     $ref: ./definitions/city.yaml
   erm_agreement:
     $ref: ./definitions/erm_agreement.yaml
+  erm_config:
+    $ref: ./definitions/erm_config.yaml
   erm_eholdings_title:
     $ref: ./definitions/erm_eholdings_title.yaml
   erm_eholdings_package:
@@ -195,6 +197,8 @@ paths:
     $ref: ./paths/config_smtp_servers.yaml#/~1config~1smtp_servers
   "/config/smtp_servers/{smtp_server_id}":
     $ref: "./paths/config_smtp_servers.yaml#/~1config~1smtp_servers~1{smtp_server_id}"
+  /erm/config:
+    $ref: ./paths/erm_config.yaml#/~1erm~1config
   /erm/agreements:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
   "/erm/agreements/{agreement_id}":

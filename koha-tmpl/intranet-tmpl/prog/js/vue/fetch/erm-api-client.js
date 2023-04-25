@@ -7,6 +7,15 @@ export class ERMAPIClient extends HttpClient {
         });
     }
 
+    get config() {
+        return {
+            get: () =>
+                this.get({
+                    endpoint: "config",
+                }),
+        };
+    }
+
     get agreements() {
         return {
             get: id =>
