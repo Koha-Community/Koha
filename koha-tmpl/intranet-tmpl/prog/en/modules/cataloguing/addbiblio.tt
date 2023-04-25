@@ -462,20 +462,6 @@ function PopupMARCFieldDoc(field) {
         }
     }
 
-    function PopupMARCFieldDoc(field) {
-        [% IF Koha.Preference('marcfielddocurl') %]
-            var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
-            docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
-            docurl = docurl.replace("{FIELD}", ""+field);
-            docurl = docurl.replace("{LANG}", "[% lang | html %]");
-            window.open(docurl);
-        [% ELSIF ( marcflavour == 'MARC21' ) %]
-            _MARC21FieldDoc(field);
-        [% ELSIF ( marcflavour == 'UNIMARC' ) %]
-            _UNIMARCFieldDoc(field);
-        [% END %]
-    }
-
     function _MARC21FieldDoc(field) {
         if(field == 0) {
             window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
