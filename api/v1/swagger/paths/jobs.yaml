@@ -14,6 +14,11 @@
         required: false
         type: boolean
         description: Only include current jobs
+      - name: only_last_hour
+        in: query
+        required: false
+        type: boolean
+        description: Only include jobs started in the last hour
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"

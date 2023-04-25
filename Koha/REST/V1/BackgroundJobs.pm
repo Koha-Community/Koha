@@ -38,13 +38,19 @@ sub list {
 
     return try {
 
-        my $only_current = $c->param('only_current');
+        my $only_current   = $c->param('only_current');
+        my $only_last_hour = $c->param('only_last_hour');
         $c->req->params->remove('only_current');
+        $c->req->params->remove('only_last_hour');
 
         my $bj_rs = Koha::BackgroundJobs->new;
 
         if ($only_current) {
             $bj_rs = $bj_rs->filter_by_current;
+        }
+
+        if ($only_last_hour) {
+            $bj_rs = $bj_rs->filter_by_last_hour;
         }
 
         return $c->render(

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 16;
 use Test::MockModule;
 
 use List::MoreUtils qw(any);
@@ -119,6 +119,64 @@ subtest 'filter_by_current() tests' => sub {
 
     is( $rs->count, 1, 'Only 1 job in filtered resultset' );
     is( $rs->next->status, 'new', "The only job in resultset is 'new'"  );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_last_hour() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $job_now =
+        $builder->build_object( { class => 'Koha::BackgroundJobs', value => { enqueued_on => dt_from_string } } );
+    my $job_old = $builder->build_object(
+        { class => 'Koha::BackgroundJobs', value => { enqueued_on => dt_from_string->subtract( hours => 2 ) } } );
+    my $rs = Koha::BackgroundJobs->search( { id => [ $job_now->id, $job_old->id ] } );
+
+    is( $rs->count, 2, '2 jobs in resultset' );
+
+    $rs = $rs->filter_by_last_hour;
+
+    is( $rs->count, 1, 'Only 1 job in filtered resultset' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_last_hour() and filter_by_current() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $job_new_now = $builder->build_object(
+        { class => 'Koha::BackgroundJobs', value => { status => 'new', enqueued_on => dt_from_string } } );
+    my $job_new_old = $builder->build_object(
+        {
+            class => 'Koha::BackgroundJobs',
+            value => { status => 'new', enqueued_on => dt_from_string->subtract( hours => 2 ) }
+        }
+    );
+    my $job_cancelled = $builder->build_object(
+        { class => 'Koha::BackgroundJobs', value => { status => 'cancelled', enqueued_on => dt_from_string } } );
+    my $job_failed = $builder->build_object(
+        { class => 'Koha::BackgroundJobs', value => { status => 'failed', enqueued_on => dt_from_string } } );
+    my $job_finished = $builder->build_object(
+        { class => 'Koha::BackgroundJobs', value => { status => 'finished', enqueued_on => dt_from_string } } );
+
+    my $rs = Koha::BackgroundJobs->search(
+        { id => [ $job_new_now->id, $job_new_old->id, $job_cancelled->id, $job_failed->id, $job_finished->id ] } );
+
+    is( $rs->count, 5, '5 jobs in resultset' );
+
+    $rs = $rs->filter_by_last_hour;
+
+    is( $rs->count, 4, '4 jobs in last hour' );
+
+    $rs = $rs->filter_by_current;
+
+    is( $rs->count, 1, 'Only 1 current job in last hour' );
 
     $schema->storage->txn_rollback;
 };

@@ -259,29 +259,21 @@
                 $("#job_details").show();
             [% END %]
 
-            let additional_filters = {
-                enqueued_on: function(){
-                    let now = new Date();
-                    if ( $("#include_last_hour").is(":checked") ) {
-                        now.setHours(now.getHours() - 1);
-                        return { ">": now.toISOString() };
-                    } else {
-                        return { "<": now.toISOString() };
-                    }
-                }
-            };
-
-            let only_current_filter = function(){
-                if ( $("#only_current").is(":checked") ) {
-                    return 'only_current=1';
+            let query_filters = function(){
+                if ( $("#only_current").is(":checked") && !$("#include_last_hour").is(":checked") ) {
+                    return 'only_current=1&only_last_hour=0';
+                } else if ( $("#include_last_hour").is(":checked") && !$("#only_current").is(":checked")) {
+                    return 'only_current=0&only_last_hour=1';
+                } else if ( $("#only_current").is(":checked") && $("#include_last_hour").is(":checked") ) {
+                    return 'only_current=1&only_last_hour=1';
                 } else {
-                    return 'only_current=0';
+                    return 'only_current=0&only_last_hour=0';
                 }
             }
 
             let jobs_table = $("#table_jobs").kohaTable({
                 "ajax": {
-                    "url": "/api/v1/jobs?" + only_current_filter()
+                    "url": "/api/v1/jobs?" + query_filters(),
                 },
                 "order": [[ 1, "desc" ]],
                 "columns": [
@@ -350,15 +342,10 @@
                         "orderable": false
                     }
                 ]
-            }, null, 1, additional_filters);
+            }, null, 1);
 
-            $("#include_last_hour").on("change", function(){
-                jobs_table.DataTable().draw();
-                return false;
-            });
-
-            $("#only_current").on("change", function(){
-                jobs_table.DataTable().ajax.url("/api/v1/jobs?" + only_current_filter()).load();
+            $("#only_current, #include_last_hour").on("change", function(){
+                jobs_table.DataTable().ajax.url("/api/v1/jobs?" + query_filters()).load();
                 return false;
             });
         });

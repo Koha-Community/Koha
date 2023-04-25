@@ -72,6 +72,20 @@ sub filter_by_current {
     );
 }
 
+=head3 filter_by_last_hour
+
+    my $current_jobs = $jobs->filter_by_last_hour;
+
+Returns a new resultset, filtering out jobs that were enqueued more than an hour ago.
+
+=cut
+
+sub filter_by_last_hour {
+    my ($self) = @_;
+
+    return $self->search( { enqueued_on => { '>', \"NOW() - INTERVAL 1 HOUR" } } );
+}
+
 =head2 Internal methods
 
 =head3 _type
