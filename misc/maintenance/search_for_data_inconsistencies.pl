@@ -129,8 +129,19 @@ use C4::Biblio qw( GetMarcFromKohaField );
             push @decoding_errors, $@;
             next;
         }
-        my $biblionumber = $record->subfield($biblio_tag, $biblio_subfield);
-        my $biblioitemnumber = $record->subfield($biblioitem_tag, $biblioitem_subfield);
+        my ( $biblionumber, $biblioitemnumber );
+        if ( $biblio_tag < 10 ) {
+            my $biblio_control_field = $record->field($biblio_tag);
+            $biblionumber = $biblio_control_field->data if $biblio_control_field;
+        } else {
+            $biblionumber = $record->subfield( $biblio_tag, $biblio_subfield );
+        }
+        if ( $biblioitem_tag < 10 ) {
+            my $biblioitem_control_field = $record->field($biblioitem_tag);
+            $biblioitemnumber = $biblioitem_control_field->data if $biblioitem_control_field;
+        } else {
+            $biblioitemnumber = $record->subfield( $biblioitem_tag, $biblioitem_subfield );
+        }
         if ( $biblionumber != $biblio->biblionumber ) {
             push @ids_not_in_marc,
               {
