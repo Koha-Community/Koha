@@ -63,7 +63,7 @@
     $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
         let itemnumber = $('#claims-returned-itemnumber').val();
         let notes = $('#claims-returned-notes').val();
-        let fee = $('#claims-returned-charge-lost-fee').attr('checked') ? true : false;
+        let fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
 
         $('#claims-returned-modal').modal('hide');
 
