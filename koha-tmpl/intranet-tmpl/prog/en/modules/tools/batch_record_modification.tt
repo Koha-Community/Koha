@@ -73,9 +73,9 @@
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="record_ids_selection">
                             <fieldset class="rows">
                                 <legend>Record type</legend>
-                                <ol>
-                                    <li><label for="biblio_type">Biblios: </label><input type="radio" name="recordtype" value="biblio" id="biblio_type" checked="checked" /></li>
-                                    <li><label for="authority_type">Authorities: </label><input type="radio" name="recordtype" value="authority" id="authority_type" /></li>
+                                <ol class="radio">
+                                    <li><label for="biblio_type"><input type="radio" name="recordtype" value="biblio" id="biblio_type" checked="checked" /> Bibliographic records</label></li>
+                                    <li><label for="authority_type"><input type="radio" name="recordtype" value="authority" id="authority_type" /> Authority records</label></li>
                                 </ol>
                             </fieldset>
 
@@ -290,8 +290,10 @@
             $("input[type='radio']").click(function() {
                 if ($(this).attr('id') == 'authority_type') {
                     $("a[href='#shelves_tab_panel']").parent().hide();
+                    $("a[href='#uploadfile_tab_panel']").tab("show");
                 } else if ($(this).attr('id') == 'biblio_type') {
                     $("a[href='#shelves_tab_panel']").parent().show();
+                    $("a[href='#uploadfile_tab_panel']").tab("show");
                 }
             });
 
@@ -346,14 +348,11 @@
             $("#record_ids_selection").on("submit", function(e) {
                 var tab = $(this).find('#batch_mod_form li.active:first a').attr('href');
                 if (tab == '#uploadfile_tab_panel') {
-                    $("#shelf_number").empty('');
-                    $("#recordnumber_list").val('');
+                    $("#recordnumber_list, #shelf_number").val('');
                 } else if (tab == '#shelves_tab_panel') {
-                    $("#uploadfile").val('')
-                    $("#recordnumber_list").val('');
+                    $("#recordnumber_list, #uploadfile").val('');
                 } else { // enterlist
-                    $("#uploadfile").val('')
-                    $("#shelf_number").empty('');
+                    $("#uploadfile, #shelf_number").val('')
                 }
             });
 
