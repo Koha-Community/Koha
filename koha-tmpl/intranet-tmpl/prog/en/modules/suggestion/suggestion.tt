@@ -97,13 +97,17 @@
                     [% INCLUDE 'messages.inc' %]
 
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit_form&amp;suggestionid=[% suggestionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                        <form class="delete_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-delete" />
-                            <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
-                            <button type="submit" class="btn btn-default deletesuggestion"><i class="fa fa-trash-can"></i> Delete</button>
-                        </form>
+                        [% IF CAN_user_suggestions_suggestions_manage %]
+                            <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit_form&amp;suggestionid=[% suggestionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        [% END %]
+                        [% IF CAN_user_suggestions_suggestions_delete %]
+                            <form class="delete_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete" />
+                                <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
+                                <button type="submit" class="btn btn-default deletesuggestion"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
+                        [% END %]
                     </div>
 
                     <fieldset class="rows">
@@ -338,6 +342,12 @@
                         <span>A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.</span>
                     [%  CASE 'manager_not_enough_permissions' %]
                         <span>The manager you selected does not have sufficient permissions.</span>
+                    [% CASE 'no_manage_permission' %]
+                        <span>You do not have permissions to manage suggestions</span>
+                    [% CASE 'no_create_permission' %]
+                        <span>You do not have permissions to create suggestions</span>
+                    [% CASE 'no_delete_permission' %]
+                        <span>You do not have permissions to delete suggestions</span>
                     [% CASE %]
                         <span>[% m.code | html %]</span>
                     [% END %]
@@ -558,7 +568,11 @@
                             <label for="managedby_name">by:</label>
                             <div>
                                 <span id="managedby_name" name="managedby_name">
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% logged_in_user.borrowernumber | uri %]">You</a>
+                                    [% IF CAN_user_suggestions_suggestions_manage %]
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% logged_in_user.borrowernumber | uri %]">You</a>
+                                    [% ELSE %]
+                                        Nobody
+                                    [% END %]
                                 </span>
                                 [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
                                     | Previously was [% INCLUDE 'patron-title.inc' patron=managedby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
@@ -568,7 +582,9 @@
                                 [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
                                     <a id="restore_previous_manager" href="#"><i class="fa fa-trash-can"></i> Keep existing manager</a>
                                 [% END %]
-                                <input type="hidden" name="managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
+                                [% IF CAN_user_suggestions_suggestions_manage %]
+                                    <input type="hidden" name="managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
+                                [% END %]
 
                                 <br/>
                                 <label for="notify">Notify manager:</label>
@@ -649,7 +665,9 @@
 
         [% IF op == 'else' %]
             <div id="toolbar" class="btn-toolbar">
-                <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add_form&branchcode=[% branchcode | uri %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                [% IF CAN_user_suggestions_suggestions_create %]
+                    <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add_form&branchcode=[% branchcode | uri %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                [% END %]
             </div>
 
             <h1>Suggestions management</h1>
@@ -843,23 +861,29 @@
                                                         [% END %]
                                                     </td>
                                                     <td class="actions">
-                                                        <div class="btn-group dropup">
-                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
-                                                                <li>
-                                                                    <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-default trigger_action">Delete</button>
-                                                                </li>
-                                                                [% UNLESS s.archived %]
-                                                                    <li>
-                                                                        <button class="btn btn-default trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</button>
-                                                                    </li>
-                                                                [% ELSE %]
-                                                                    <li>
-                                                                        <button class="btn btn-default trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</button>
-                                                                    </li>
-                                                                [% END %]
-                                                            </ul>
-                                                        </div>
+                                                        [% IF CAN_user_suggestions_suggestions_manage %]
+                                                            <div class="btn-group dropup">
+                                                                <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
+                                                                    [% IF CAN_user_suggestions_suggestions_delete %]
+                                                                        <li>
+                                                                            <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-default trigger_action">Delete</button>
+                                                                        </li>
+                                                                    [% END %]
+                                                                    [% UNLESS s.archived %]
+                                                                        <li>
+                                                                            <button class="btn btn-default trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</button>
+                                                                        </li>
+                                                                    [% ELSE %]
+                                                                        <li>
+                                                                            <button class="btn btn-default trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</button>
+                                                                        </li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                        [% ELSIF CAN_user_suggestions_suggestions_delete %]
+                                                            <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-default trigger_action">Delete</button>
+                                                        [% END %]
                                                     </td>
                                                 </tr>
                                             [% END # /FOREACH s %]
@@ -872,6 +896,7 @@
                                         </div>
                                     </div>
                                     <div class="suggestions_batch_ops row">
+                                        [% IF CAN_user_suggestions_suggestions_manage %]
                                         <div class="col-sm-4">
                                             <fieldset class="brief">
                                                 <div id="select-reason[% loop.index | html %]">
@@ -964,7 +989,9 @@
                                                 <button type="submit" data-op="cud-update_manager" class="btn btn-primary">Submit</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
+                                        [% END %]
 
+                                        [% IF CAN_user_suggestions_suggestions_delete %]
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Delete selected</span>
@@ -975,6 +1002,9 @@
                                                 <button type="submit" data-op="cud-delete" class="btn btn-primary">Delete</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
+                                        [% END %]
+
+                                        [% IF CAN_user_suggestions_suggestions_manage %]
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Archive selected</span>
@@ -985,6 +1015,7 @@
                                                 </fieldset>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
+                                        [% END %]
                                     </div> <!-- /.row -->
 
                                 [% ELSE %]

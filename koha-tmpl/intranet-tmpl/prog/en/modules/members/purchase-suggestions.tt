@@ -44,7 +44,9 @@
                 <h1>Purchase suggestions</h1>
 
                 <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-default" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add_form&amp;suggestedby=[% patron.borrowernumber | html %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                    [% IF CAN_user_suggestions_suggestions_create %]
+                        <a class="btn btn-default" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add_form&amp;suggestedby=[% patron.borrowernumber | html %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                    [% END %]
                 </div>
 
                 [% IF suggestions.size %]

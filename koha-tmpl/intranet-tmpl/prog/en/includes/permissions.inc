@@ -437,9 +437,19 @@
             Add manual credits to a patron account
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'suggestions_create' -%]
+        <span class="sub_permission suggestions_create_subpermission">
+            Create purchase suggestions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_manage' -%]
         <span class="sub_permission suggestions_manage_subpermission">
             Manage purchase suggestions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'suggestions_delete' -%]
+        <span class="sub_permission suggestions_delete_subpermission">
+            Delete purchase suggestions
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'budget_add_del' -%]

@@ -41,7 +41,10 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        suggestions: suggestions_manage
+        suggestions:
+          - suggestions_manage
+          - suggestions_delete
+          - suggestions_create
   post:
     x-mojo-to: Suggestions#add
     operationId: addSuggestions
@@ -100,7 +103,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        suggestions: suggestions_manage
+        suggestions: suggestions_create
 "/suggestions/{suggestion_id}":
   get:
     x-mojo-to: Suggestions#get
@@ -139,7 +142,10 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        suggestions: suggestions_manage
+        suggestions:
+          - suggestions_manage
+          - suggestions_delete
+          - suggestions_create
   put:
     x-mojo-to: Suggestions#update
     operationId: updateSuggestion
@@ -229,7 +235,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        suggestions: suggestions_manage
+        suggestions: suggestions_delete
 /suggestions/managers:
   get:
     x-mojo-to: Suggestions#list_managers
@@ -281,4 +287,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        suggestions: suggestions_manage
+        suggestions:
+          - suggestions_manage
+          - suggestions_delete
+          - suggestions_create
