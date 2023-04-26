@@ -1276,6 +1276,7 @@
                     <ul>
                         <li>The hold policies are applied based on the ReservesControlBranch system preference which is set to <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesControlBranch">[% Koha.Preference('ReservesControlBranch') | html %]</a>.</li>
                         <li>The return policy is applied based on the CircControlReturnsBranch system preference which is set to <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CircControlReturnsBranch">[% Koha.Preference('CircControlReturnsBranch') | html %]</a>.</li>
+                        <li>When return policy is set to 'item floats by library group' the item's homebranch will be used to find groups.</li>
                     </ul>
 
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
