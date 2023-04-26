@@ -380,13 +380,13 @@
             $(".CheckAll").on("click", function(e){
                 e.preventDefault();
                 var years = $(this).data("year");
-                $("#subscription-year-" + years + " input:checkbox").prop("checked", true );
+                $("#subscription-year-" + years + "_panel" + " input:checkbox").prop("checked", true );
             });
 
             $(".CheckNone").on("click", function(e){
                 e.preventDefault();
                 var years = $(this).data("year");
-                $("#subscription-year-" + years + " input:checkbox").prop("checked", false );
+                $("#subscription-year-" + years + "_panel" + " input:checkbox").prop("checked", false );
             });
 
             $(".generatenext").on("click", function(e){
