@@ -894,6 +894,7 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
 
+    t::lib::Mocks::mock_preference('RedirectGuaranteeEmail', '0');
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
         INSERT INTO message_queue(borrowernumber, subject, content, message_transport_type, status, letter_code)

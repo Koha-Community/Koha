@@ -1319,9 +1319,10 @@ sub _send_message_by_email {
 
     my $patron;
     my $to_address = $message->{'to_address'};
-    unless ($to_address) {
+    my $use_garantor = C4::Context->preference('RedirectGuaranteeEmail');
+    if($use_garantor eq 'yes' || !$to_address) {
         $patron = Koha::Patrons->find( $message->{borrowernumber} );
-        unless ($patron) {
+        unless ($patron or $to_address) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status(
                 {
@@ -1332,7 +1333,9 @@ sub _send_message_by_email {
             );
             return;
         }
-        $to_address = $patron->notice_email_address;
+        if ($patron) {
+            $to_address = $patron->notice_email_address;
+        }
         unless ($to_address) {  
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?
@@ -1469,6 +1472,10 @@ sub _send_message_by_email {
 
     $smtp_transports->{ $smtp_server->id // 'default' } ||= $smtp_server->transport;
     my $smtp_transport = $smtp_transports->{ $smtp_server->id // 'default' };
+
+    _update_message_from_address($message->{'message_id'},$email->email->header('From') )
+      if !$message->{from_address}
+      || $message->{from_address} ne $email->email->header('From');
 
     try {
         $email->send_or_die({ transport => $smtp_transport });
