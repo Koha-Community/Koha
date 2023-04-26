@@ -272,6 +272,7 @@ __PACKAGE__->add_columns(
     '+ft_search_groups_staff' => { is_boolean => 1 },
     '+ft_local_hold_group'    => { is_boolean => 1 },
     '+ft_limit_item_editing'  => { is_boolean => 1 },
+    '+ft_local_float_group'   => { is_boolean => 1 },
 );
 
 1;

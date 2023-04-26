@@ -376,7 +376,7 @@ sub opac_info {
     });
 }
 
-=head3 get_float_group_libraries
+=head3 get_float_libraries
 
 Return all libraries belonging to the same float group
 
