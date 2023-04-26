@@ -606,6 +606,19 @@ if ( $record && $op eq 'duplicate' &&
     my @control_num = $record->field('001');
     $record->delete_fields(@control_num);
 }
+if ( $record && $op eq 'duplicate' ) {
+    if ( C4::Context->preference('marcflavour') eq 'MARC21' && $record->field('008') ) {
+        my $s008 = $record->field('008')->data;
+        my $date = POSIX::strftime( "%y%m%d", localtime );
+        substr( $s008, 0, 6, $date );
+        $record->field('008')->update($s008);
+    } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' && $record->subfield( '100', 'a' ) ) {
+        my $s100a = $record->subfield( '100', 'a' );
+        my $date  = POSIX::strftime( "%Y%m%d", localtime );
+        substr( $s100a, 0, 8, $date );
+        $record->field('100')->update( a => $s100a );
+    }
+}
 #populate hostfield if hostbiblionumber is available
 if ($hostbiblionumber) {
     my $marcflavour = C4::Context->preference("marcflavour");
