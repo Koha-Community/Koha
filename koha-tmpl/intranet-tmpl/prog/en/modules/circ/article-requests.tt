@@ -521,15 +521,15 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        var active_tab = "#article-requests-requested";
+        var active_tab = "#article-requests-requested_panel";
         var last_cancel_reason, requested_datatable, pending_datatable, processing_datatable, active_datatable;
         $(document).ready(function() {
 
             $("#article-request-tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
                 active_tab = e.target.hash;
-                if( active_tab == "#article-requests-requested" ){
+                if( active_tab == "#article-requests-requested_panel" ){
                     active_datatable = requested_datatable;
-                } else if( active_tab == "#article-requests-pending" ){
+                } else if( active_tab == "#article-requests-pending_panel" ){
                     active_datatable = pending_datatable;
                 } else {
                     active_datatable = processing_datatable;
