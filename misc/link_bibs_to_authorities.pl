@@ -17,6 +17,7 @@ use Time::HiRes qw( time );
 use POSIX qw( ceil strftime );
 use Module::Load::Conditional qw( can_load );
 
+use Koha::Database;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 
@@ -81,9 +82,9 @@ my $dbh = C4::Context->dbh;
 my @updated_biblios = ();
 my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
 
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->schema;
+$schema->txn_begin;
 process_bibs( $linker, $bib_limit, $auth_limit, $commit, { tagtolink => $tagtolink, allowrelink => $allowrelink });
-$dbh->commit();
 
 exit 0;
 
@@ -111,8 +112,7 @@ sub process_bibs {
     }
 
     if ( not $test_only ) {
-        $dbh->commit;
-        $dbh->{AutoCommit} = 1;
+        $schema->txn_commit;
         $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
     }
 
@@ -248,11 +248,10 @@ sub process_bib {
 
 sub print_progress_and_commit {
     my $recs = shift;
-    $dbh->commit();
-    $dbh->{AutoCommit} = 1;
+    $schema->txn_commit();
     $indexer->index_records( \@updated_biblios, "specialUpdate", "biblioserver" );
-    $dbh->{AutoCommit} = 0;
     @updated_biblios = ();
+    $schema->txn_begin();
     print "... processed $recs records\n";
 }
 
