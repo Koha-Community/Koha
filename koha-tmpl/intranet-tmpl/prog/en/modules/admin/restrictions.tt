@@ -45,7 +45,7 @@
 
         [% IF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Delete restriction type?</span>
+                <span>Delete restriction type '[% PROCESS restriction_type_description %]'</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
