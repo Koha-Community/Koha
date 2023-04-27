@@ -90,7 +90,14 @@ export default {
         async fetchInitialData(dataType) {
             const client = APIClient.erm
             await client[dataType]
-                .getAll("_page=1&_per_page=20&_match=contains")
+                .getAll(
+                    {},
+                    {
+                        _page: 1,
+                        _per_page: 20,
+                        _match: "contains",
+                    }
+                )
                 .then(
                     items => {
                         this.data = items
@@ -107,10 +114,13 @@ export default {
                 this.data = []
                 this.search = e
                 const client = APIClient.erm
+                const attribute = "me." + this.queryProperty
+                const q = {}
+                q[attribute] = { like: `%${e}%` }
                 await client[this.dataType]
-                    .getAll(
-                        `q={"me.${this.queryProperty}":{"like":"%${e}%"}}&_per_page=-1`
-                    )
+                    .getAll(q, {
+                        _per_page: -1,
+                    })
                     .then(
                         items => {
                             this.data = items
@@ -143,7 +153,12 @@ export default {
                 const client = APIClient.erm
                 await client[this.dataType]
                     .getAll(
-                        `_page=${this.scrollPage}&_per_page=20&_match=contains`
+                        {},
+                        {
+                            _page: this.scrollPage,
+                            _per_page: 20,
+                            _match: "contains",
+                        }
                     )
                     .then(
                         items => {
