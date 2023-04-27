@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 99;
+use Test::More tests => 101;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -26,7 +26,7 @@ use t::lib::TestBuilder;
 use DateTime;
 
 use C4::Context;
-use C4::Circulation qw( AddIssue AddReturn );
+use C4::Circulation qw( AddIssue AddReturn CanBookBeIssued );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -232,3 +232,179 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/all
         current_renewals => 1,
         error            => 'too_many'
     });
+
+$schema->storage->txn_rollback;
+
+subtest 'get_availability' => sub {
+
+    plan tests => 27;
+
+    $schema->storage->txn_begin;
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $unauth_password = 'thePassword000';
+    $patron->set_password(
+        { password => $unauth_password, skip_validattion => 1 } );
+    my $unauth_userid = $patron->userid;
+    my $patron_id     = $patron->borrowernumber;
+
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    my $item1    = $builder->build_sample_item;
+    my $item1_id = $item1->id;
+
+    my %issuingimpossible = ();
+    my %needsconfirmation = ();
+    my %alerts            = ();
+    my %messages          = ();
+    my $mocked_circ = Test::MockModule->new('C4::Circulation');
+    $mocked_circ->mock(
+        'CanBookBeIssued',
+        sub {
+            return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages );
+        }
+    );
+
+    $t->get_ok(
+"//$unauth_userid:$unauth_password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+    )->status_is(403)->json_is(
+        {
+            error => "Authorization failure. Missing required permission(s).",
+            required_permissions =>
+              { circulate => "circulate_remaining_permissions" }
+        }
+    );
+
+    # Available
+    $t->get_ok(
+"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+    )->status_is(200)->json_is( '/blockers' => {} )
+      ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
+      ->json_is( '/confirmation_token' => undef );
+
+    # Blocked
+    %issuingimpossible = ( GNA => 1 );
+    $t->get_ok(
+"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+    )->status_is(200)->json_is( '/blockers' => { GNA => 1 } )
+      ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
+      ->json_is( '/confirmation_token' => undef );
+    %issuingimpossible = ();
+
+    # Warnings/Info
+    %alerts   = ( alert1   => "this is an alert" );
+    %messages = ( message1 => "this is a message" );
+    $t->get_ok(
+"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+    )->status_is(200)->json_is( '/blockers' => {} )
+      ->json_is( '/confirms' => {} )
+      ->json_is( '/warnings' =>
+          { alert1 => "this is an alert", message1 => "this is a message" } )
+      ->json_is( '/confirmation_token' => undef );
+    %alerts   = ();
+    %messages = ();
+
+    # Needs confirm
+    %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
+    $t->get_ok(
+"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+    )->status_is(200)->json_is( '/blockers' => {} )
+      ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )
+      ->json_is( '/warnings' => {} )
+      ->json_is( '/confirmation_token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25maXJtMSI6MSwiY29uZmlybTIiOjF9.4QBpITwnIGOAfohyKjaFDoeBWnGmQTdyJrPn9pavArw' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add checkout' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $unauth_password = 'thePassword000';
+    $patron->set_password(
+        { password => $unauth_password, skip_validattion => 1 } );
+    my $unauth_userid = $patron->userid;
+    my $patron_id     = $patron->borrowernumber;
+
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    my $item1    = $builder->build_sample_item;
+    my $item1_id = $item1->id;
+
+    my %issuingimpossible = ();
+    my %needsconfirmation = ();
+    my %alerts            = ();
+    my %messages          = ();
+    my $mocked_circ = Test::MockModule->new('C4::Circulation');
+    $mocked_circ->mock(
+        'CanBookBeIssued',
+        sub {
+            return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages );
+        }
+    );
+
+    $t->post_ok(
+        "//$unauth_userid:$unauth_password@/api/v1/checkouts" => json =>
+          { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)
+      ->json_is(
+        {
+            error => "Authorization failure. Missing required permission(s).",
+            required_permissions =>
+              { circulate => "circulate_remaining_permissions" }
+        }
+      );
+
+    $t->post_ok( "//$userid:$password@/api/v1/checkouts" => json =>
+          { item_id => $item1_id, patron_id => $patron_id } )->status_is(201);
+
+    # Needs confirm
+    %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts" => json => {
+            item_id            => $item1_id,
+            patron_id          => $patron_id,
+        }
+    )->status_is(412);
+
+    my $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25maXJtMSI6MSwiY29uZmlybTIiOjF9.4QBpITwnIGOAfohyKjaFDoeBWnGmQTdyJrPn9pavArw";
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts?confirmation=$token" => json => {
+            item_id            => $item1_id,
+            patron_id          => $patron_id
+        }
+    )->status_is(201)->or(sub { diag $t->tx->res->body });
+    %needsconfirmation = ();
+
+    $schema->storage->txn_rollback;
+};
