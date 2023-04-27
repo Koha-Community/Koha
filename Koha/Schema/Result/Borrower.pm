@@ -1312,6 +1312,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 erm_counter_logs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmCounterLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_counter_logs",
+  "Koha::Schema::Result::ErmCounterLog",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 erm_user_roles
 
 Type: has_many
