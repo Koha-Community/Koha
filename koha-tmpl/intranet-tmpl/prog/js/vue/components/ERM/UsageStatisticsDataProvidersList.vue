@@ -1,0 +1,297 @@
+<template>
+    <div v-if="!initialized">{{ $__("Loading") }}</div>
+    <div v-else id="usage_data_providers_list">
+        <template class="toolbar_options">
+            <Toolbar />
+            <div
+                v-if="usage_data_provider_count > 0"
+                id="toolbar"
+                class="btn-toolbar"
+            >
+                <router-link
+                    :to="{ name: 'UsageStatisticsDataProvidersSummary' }"
+                    class="btn btn-default"
+                >
+                    <i class="fa fa-list"></i>
+                    {{ $__("Data providers summary") }}</router-link
+                >
+            </div>
+        </template>
+        <div v-if="usage_data_provider_count > 0" class="page-section">
+            <KohaTable
+                ref="table"
+                v-bind="tableOptions"
+                @show="show_usage_data_provider"
+                @edit="edit_usage_data_provider"
+                @delete="delete_usage_data_provider"
+                @run_now="run_harvester_now"
+            ></KohaTable>
+        </div>
+        <div v-else-if="initialized" class="dialog message">
+            {{ $__("There are no usage data providers defined") }}
+        </div>
+    </div>
+</template>
+
+<script>
+import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue"
+import { inject, ref } from "vue"
+import { APIClient } from "../../fetch/api-client.js"
+import KohaTable from "../KohaTable.vue"
+
+export default {
+    setup() {
+        const AVStore = inject("AVStore") // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
+
+        const { setConfirmationDialog, setMessage } = inject("mainStore")
+
+        const table = ref()
+
+        return {
+            get_lib_from_av,
+            map_av_dt_filter,
+            setConfirmationDialog,
+            setMessage,
+            table,
+        }
+    },
+    data: function () {
+        return {
+            usage_data_provider_count: 0,
+            initialized: false,
+            building_table: false,
+            tableOptions: {
+                columns: this.getTableColumns(),
+                options: { embed: "counter_files" },
+                url: () => this.table_url(),
+                table_settings: this.usage_data_provider_table_settings,
+                add_filters: true,
+                actions: {
+                    0: ["show"],
+                    "-1": [
+                        {
+                            run_now: {
+                                text: this.$__("Run now"),
+                                icon: "fa fa-play",
+                            },
+                        },
+                        "edit",
+                        "delete",
+                    ],
+                },
+            },
+        }
+    },
+    methods: {
+        async getUsageDataProviderCount() {
+            const client = APIClient.erm
+            await client.usage_data_providers.count().then(
+                count => {
+                    this.usage_data_provider_count = count
+                    this.initialized = true
+                },
+                error => {}
+            )
+        },
+        table_url() {
+            let url = "/api/v1/erm/usage_data_providers"
+            return url
+        },
+        show_usage_data_provider(usage_data_provider, dt, event) {
+            event.preventDefault()
+
+            this.$router.push({
+                name: "UsageStatisticsDataProvidersShow",
+                params: {
+                    usage_data_provider_id:
+                        usage_data_provider.erm_usage_data_provider_id,
+                },
+            })
+        },
+        edit_usage_data_provider(usage_data_provider, dt, event) {
+            this.$router.push({
+                name: "UsageStatisticsDataProvidersFormAddEdit",
+                params: {
+                    usage_data_provider_id:
+                        usage_data_provider.erm_usage_data_provider_id,
+                },
+            })
+        },
+        delete_usage_data_provider(usage_data_provider, dt, event) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this data provider?"
+                    ),
+                    message: usage_data_provider.name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm
+                    client.usage_data_providers
+                        .delete(usage_data_provider.erm_usage_data_provider_id)
+                        .then(
+                            success => {
+                                this.setMessage(
+                                    this.$__("Data provider %s deleted").format(
+                                        usage_data_provider.name
+                                    ),
+                                    true
+                                )
+                                dt.draw()
+                            },
+                            error => {}
+                        )
+                }
+            )
+        },
+        run_harvester_now(usage_data_provider, dt, event) {
+            const { erm_usage_data_provider_id: id, name } = usage_data_provider
+
+            if (!usage_data_provider.active) {
+                this.setConfirmationDialog(
+                    {
+                        title: this.$__(
+                            "This data provider is set to 'Inactive', do you wish to update the status to 'Active'?"
+                        ),
+                        message: name,
+                        accept_label: this.$__("Yes, update status"),
+                        cancel_label: this.$__("No, do not update status"),
+                    },
+                    () => {
+                        usage_data_provider.active = 1
+                        delete usage_data_provider.erm_usage_data_provider_id
+                        const counter_files = usage_data_provider.counter_files
+                        delete usage_data_provider.counter_files
+                        const client = APIClient.erm
+                        client.usage_data_providers
+                            .update(usage_data_provider, id)
+                            .then(
+                                success => {
+                                    this.setMessage(
+                                        this.$__(
+                                            "Updated status for usage data provider %s"
+                                        ).format(name),
+                                        true
+                                    )
+                                    usage_data_provider.counter_files =
+                                        counter_files
+                                    dt.draw()
+                                },
+                                error => {}
+                            )
+                    }
+                )
+            } else {
+                this.setConfirmationDialog(
+                    {
+                        title: this.$__(
+                            "Are you sure you want to run the harvester for this data provider?"
+                        ),
+                        message: name,
+                        accept_label: this.$__("Yes, run"),
+                        cancel_label: this.$__("No, do not run"),
+                    },
+                    () => {
+                        const client = APIClient.erm
+                        // TODO: below begin_date and end_date need to be dynamic, or are they needed at all?
+                        client.usage_data_providers
+                            .run(id, "2022-06-01", "2022-12-31")
+                            .then(
+                                success => {
+                                    this.setMessage(
+                                        this.$__(
+                                            "Ran harvester for usage data provider %s"
+                                        ).format(name),
+                                        true
+                                    )
+                                },
+                                error => {}
+                            )
+                    }
+                )
+            }
+        },
+        getTableColumns() {
+            return [
+                {
+                    title: __("Name"),
+                    data: "me.erm_usage_data_provider_id:me.name",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/cgi-bin/koha/erm/eusage/usage_data_providers/' +
+                            row.erm_usage_data_provider_id +
+                            '" class="show">' +
+                            escape_str(
+                                `${row.name} (#${row.erm_usage_data_provider_id})`
+                            ) +
+                            "</a>"
+                        )
+                    },
+                },
+                {
+                    title: __("Description"),
+                    data: "description",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    render: function (data, type, row, meta) {
+                        const status = row.active ? "Active" : "Inactive"
+                        return status
+                    },
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Last run"),
+                    render: function (data, type, row, meta) {
+                        const counter_files = row.counter_files
+                        if (counter_files.length === 0) {
+                            return "No run history found"
+                        }
+                        const findMostRecent = counter_files.sort(
+                            (a, b) =>
+                                new Date(b.date_uploaded) -
+                                new Date(a.date_uploaded)
+                        )
+                        const date = findMostRecent[0].date_uploaded.substr(
+                            0,
+                            10
+                        )
+                        const time = findMostRecent[0].date_uploaded.substr(
+                            11,
+                            8
+                        )
+                        return `${date} ${time}`
+                    },
+                    searchable: true,
+                    orderable: true,
+                },
+            ]
+        },
+    },
+    mounted() {
+        if (!this.building_table) {
+            this.building_table = true
+            this.getUsageDataProviderCount()
+        }
+    },
+    components: { Toolbar, KohaTable },
+    name: "DataProvidersList",
+}
+</script>
+
+<style scoped>
+#usage_data_provider_list {
+    display: table;
+}
+.toolbar_options {
+    display: flex;
+}
+</style>

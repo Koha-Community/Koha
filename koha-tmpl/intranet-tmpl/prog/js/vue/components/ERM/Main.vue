@@ -95,6 +95,11 @@ export default {
                 av_package_types: "ERM_PACKAGE_TYPE",
                 av_package_content_types: "ERM_PACKAGE_CONTENT_TYPE",
                 av_title_publication_types: "ERM_TITLE_PUBLICATION_TYPE",
+                av_report_types: "ERM_REPORT_TYPES",
+                av_platform_reports_metrics: "ERM_PLATFORM_REPORTS_METRICS",
+                av_database_reports_metrics: "ERM_DATABASE_REPORTS_METRICS",
+                av_title_reports_metrics: "ERM_TITLE_REPORTS_METRICS",
+                av_item_reports_metrics: "ERM_ITEM_REPORTS_METRICS",
             }
 
             let av_cat_array = Object.keys(authorised_values).map(function (
