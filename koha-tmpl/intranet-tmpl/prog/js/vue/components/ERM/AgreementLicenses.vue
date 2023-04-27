@@ -83,7 +83,7 @@
                 </li>
             </ol>
         </fieldset>
-        <a v-if="licenses.length" class="btn btn-default" @click="addLicense"
+        <a v-if="license_count > 0" class="btn btn-default" @click="addLicense"
             ><font-awesome-icon icon="plus" /> {{ $__("Add new license") }}</a
         >
         <span v-else>{{ $__("There are no licenses created yet") }}</span>
@@ -98,7 +98,7 @@ export default {
     name: "AgreementLicenses",
     data() {
         return {
-            licenses: [],
+            license_count: null,
         }
     },
     props: {
@@ -108,9 +108,9 @@ export default {
     },
     beforeCreate() {
         const client = APIClient.erm
-        client.licenses.getAll().then(
-            licenses => {
-                this.licenses = licenses
+        client.licenses.count().then(
+            count => {
+                this.license_count = count
                 this.initialized = true
             },
             error => {}
