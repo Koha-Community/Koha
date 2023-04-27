@@ -54,14 +54,12 @@ foreach my $index ( ('biblios','authorities') ){
     # The scroll lets us iterate through, it fetches chunks of 'size' as we move through
     my $scroll = $es->scroll_helper(
         index => $searcher->index_name,
-        size => 5000,
         body => {
+            size => 5000,
             query => {
                 match_all => {}
             },
-            stored_fields => []
         },
-        scroll_in_qs => 1,
     );
 
     my @es_ids;
