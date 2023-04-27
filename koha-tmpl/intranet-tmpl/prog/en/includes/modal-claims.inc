@@ -82,8 +82,7 @@
 
             id = "#return_claim_spinner_" + data.item_id;
 
-            let created_on = new Date(data.created_on);
-            let formated_date = $datetime(created_on);
+            let formated_date = $datetime(data.created_on);
 
             let content = "";
             if ( data.claim_id ) {
