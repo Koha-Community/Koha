@@ -13,7 +13,6 @@ requires 'CGI::Carp', '1.29';
 requires 'CGI::Compile', '>= 0.17, != 0.24';
 requires 'CGI::Emulate::PSGI', '0.20';
 requires 'CGI::Session', '4.2';
-requires 'CPAN::Meta', '2.150006';
 requires 'Cache::Memcached', '1.30';
 requires 'Cache::Memcached::Fast::Safe', '0.06';
 requires 'Class::Accessor', '0.3';
