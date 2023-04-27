@@ -9,7 +9,7 @@ export class ERMAPIClient extends HttpClient {
 
     get agreements() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "agreements/" + id,
                     headers: {
@@ -17,15 +17,20 @@ export class ERMAPIClient extends HttpClient {
                             "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
-                    endpoint: "agreements?" + (query || "_per_page=-1"),
+                    endpoint:
+                        "agreements?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "agreements/" + id,
                 }),
-            create: (agreement) =>
+            create: agreement =>
                 this.post({
                     endpoint: "agreements",
                     body: agreement,
@@ -50,7 +55,7 @@ export class ERMAPIClient extends HttpClient {
 
     get licenses() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "licenses/" + id,
                     headers: {
@@ -58,18 +63,23 @@ export class ERMAPIClient extends HttpClient {
                             "user_roles,user_roles.patron,vendor,documents",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
-                    endpoint: "licenses?" + (query || "_per_page=-1"),
+                    endpoint:
+                        "licenses?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                     headers: {
                         "x-koha-embed": "vendor",
                     },
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "licenses/" + id,
                 }),
-            create: (license) =>
+            create: license =>
                 this.post({
                     endpoint: "licenses",
                     body: license,
@@ -79,7 +89,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "licenses/" + id,
                     body: license,
                 }),
-                count: (query = {}) =>
+            count: (query = {}) =>
                 this.count({
                     endpoint:
                         "licenses?" +
@@ -94,7 +104,7 @@ export class ERMAPIClient extends HttpClient {
 
     get localPackages() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/local/packages/" + id,
                     headers: {
@@ -102,19 +112,23 @@ export class ERMAPIClient extends HttpClient {
                             "package_agreements,package_agreements.agreement,resources+count,vendor",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
                     endpoint:
-                        "eholdings/local/packages?" + (query || "_per_page=-1"),
+                        "eholdings/local/packages?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                     headers: {
                         "x-koha-embed": "resources+count,vendor.name",
                     },
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "eholdings/local/packages/" + id,
                 }),
-            create: (local_package) =>
+            create: local_package =>
                 this.post({
                     endpoint: "eholdings/local/packages",
                     body: local_package,
@@ -139,22 +153,27 @@ export class ERMAPIClient extends HttpClient {
 
     get localTitles() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/local/titles/" + id,
                     headers: {
                         "x-koha-embed": "resources,resources.package",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
-                    endpoint: "eholdings/local/titles?" + (query || "_per_page=-1"),
+                    endpoint:
+                        "eholdings/local/titles?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "eholdings/local/titles/" + id,
                 }),
-            create: (local_package) =>
+            create: local_package =>
                 this.post({
                     endpoint: "eholdings/local/titles",
                     body: local_package,
@@ -174,7 +193,7 @@ export class ERMAPIClient extends HttpClient {
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
-            import: (body) =>
+            import: body =>
                 this.post({
                     endpoint: "eholdings/local/titles/import",
                     body,
@@ -184,7 +203,7 @@ export class ERMAPIClient extends HttpClient {
 
     get localResources() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/local/resources/" + id,
                     headers: {
@@ -196,7 +215,7 @@ export class ERMAPIClient extends HttpClient {
 
     get EBSCOPackages() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/ebsco/packages/" + id,
                     headers: {
@@ -204,12 +223,16 @@ export class ERMAPIClient extends HttpClient {
                             "package_agreements,package_agreements.agreement,resources+count,vendor",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
                     endpoint:
                         "eholdings/ebsco/packages/" +
                         id +
-                        (query || "_per_page=-1"),
+                        "?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                     headers: {
                         "x-koha-embed": "resources+count,vendor.name",
                     },
@@ -224,24 +247,29 @@ export class ERMAPIClient extends HttpClient {
 
     get EBSCOTitles() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/ebsco/titles/" + id,
                     headers: {
                         "x-koha-embed": "resources,resources.package",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
                     endpoint:
-                        "eholdings/local/ebsco/titles" + (query || "_per_page=-1"),
+                        "eholdings/local/ebsco/titles" +
+                        "?" +
+                        new URLSearchParams({
+                            _per_page: -1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
         };
     }
 
     get EBSCOResources() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "eholdings/ebsco/resources/" + id,
                     headers: {
