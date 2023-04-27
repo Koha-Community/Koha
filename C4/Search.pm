@@ -1653,6 +1653,8 @@ sub searchResults {
 
     my $shelflocations =
       { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
+    my $shelfccodes =
+      { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' } ) };
 
     # get notforloan authorised value list (see $shelflocations  FIXME)
     my $av = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
@@ -1840,6 +1842,7 @@ sub searchResults {
             my $prefix =
                 ( $item->{$hbranch} ? $item->{$hbranch} . '--' : q{} )
               . ( $item->{location} ? $item->{location} : q{} )
+              . ( $item->{ccode} ? $item->{ccode} : q{} )
               . ( $item->{itype}    ? $item->{itype}    : q{} )
               . ( $item->{itemcallnumber} ? $item->{itemcallnumber} : q{} );
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
@@ -1853,6 +1856,7 @@ sub searchResults {
                 $onloan_items->{$key}->{count}++ if $item->{$hbranch};
                 $onloan_items->{$key}->{branchname}     = $item->{branchname};
                 $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} } if $item->{location};
+                $onloan_items->{$key}->{ccode}          = $shelfccodes->{ $item->{ccode} } if $item->{ccode};
                 $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
                 $onloan_items->{$key}->{description}    = $item->{description};
                 $onloan_items->{$key}->{imageurl} =
@@ -1946,6 +1950,7 @@ sub searchResults {
                     $other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value and $item->{notforloan};
                     $other_items->{$key}->{count}++ if $item->{$hbranch};
                     $other_items->{$key}->{location} = $shelflocations->{ $item->{location} } if $item->{location};
+                    $other_items->{$key}->{ccode} = $shelfccodes->{ $item->{ccode} } if $item->{ccode};
                     $other_items->{$key}->{description} = $item->{description};
                     $other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype}//q{} }->{imageurl} );
                 }
@@ -1957,6 +1962,7 @@ sub searchResults {
                         $available_items->{$prefix}->{$_} = $item->{$_};
                     }
                     $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} } if $item->{location};
+                    $available_items->{$prefix}->{ccode}    = $shelfccodes->{ $item->{ccode} } if $item->{ccode};
                     $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype}//q{} }->{imageurl} );
                 }
             }
