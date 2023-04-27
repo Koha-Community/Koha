@@ -33,6 +33,11 @@
         const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
         const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
         const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
+        const usage_data_provider_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'usage_data_providers', 'usage_data_providers', 'json' ) | $raw %];
+        const title_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'titles', 'titles', 'json' ) | $raw %];
+        const counter_log_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'counter_logs', 'counter_logs', 'json' ) | $raw %];
+        const monthly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'monthly_usages', 'monthly_usages', 'json' ) | $raw %];
+        const yearly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'yearly_usages', 'yearly_usages', 'json' ) | $raw %];
 
         const max_allowed_packet = [% To.json(max_allowed_packet) | $raw %];
 
