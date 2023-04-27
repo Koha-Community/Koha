@@ -2930,6 +2930,45 @@ CREATE TABLE `erm_agreements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `erm_counter_files`
+--
+
+DROP TABLE IF EXISTS `erm_counter_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_counter_files` (
+  `erm_counter_files_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_usage_data_providers',
+  `type` varchar(80) DEFAULT NULL COMMENT 'type of counter file',
+  `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
+  `file_content` longblob DEFAULT NULL COMMENT 'content of the counter file',
+  `date_uploaded` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file upload date',
+  PRIMARY KEY (`erm_counter_files_id`),
+  CONSTRAINT `erm_counter_files_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_counter_logs`
+--
+
+DROP TABLE IF EXISTS `erm_counter_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_counter_logs` (
+  `erm_counter_log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key to borrowers',
+  `counter_files_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_counter_files',
+  `importdate` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file import date',
+  `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
+  `logdetails` longtext DEFAULT NULL COMMENT 'details from the counter log',
+  PRIMARY KEY (`erm_counter_log_id`),
+  CONSTRAINT `erm_counter_log_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `erm_counter_log_ibfk_2` FOREIGN KEY (`counter_files_id`) REFERENCES `erm_counter_files` (`erm_counter_files_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `erm_documents`
 --
 
@@ -3081,6 +3120,98 @@ CREATE TABLE `erm_licenses` (
   PRIMARY KEY (`license_id`),
   KEY `erm_licenses_ibfk_1` (`vendor_id`),
   CONSTRAINT `erm_licenses_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_usage_data_providers`
+--
+
+DROP TABLE IF EXISTS `erm_usage_data_providers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_data_providers` (
+  `erm_usage_data_provider_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `name` varchar(80) NOT NULL COMMENT 'name of the data provider',
+  `description` longtext DEFAULT NULL COMMENT 'description of the data provider',
+  `active` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'current status of the harvester - active/inactive',
+  `method` varchar(80) DEFAULT NULL COMMENT 'method of the harvester',
+  `aggregator` varchar(80) DEFAULT NULL COMMENT 'aggregator of the harvester',
+  `service_type` varchar(80) DEFAULT NULL COMMENT 'service_type of the harvester',
+  `service_url` varchar(80) DEFAULT NULL COMMENT 'service_url of the harvester',
+  `report_release` varchar(80) DEFAULT NULL COMMENT 'report_release of the harvester',
+  `begin_date` date DEFAULT NULL COMMENT 'start date of the harvester',
+  `end_date` date DEFAULT NULL COMMENT 'end date of the harvester',
+  `customer_id` varchar(50) DEFAULT NULL COMMENT 'sushi customer id',
+  `requestor_id` varchar(50) DEFAULT NULL COMMENT 'sushi requestor id',
+  `api_key` varchar(80) DEFAULT NULL COMMENT 'sushi api key',
+  `requestor_name` varchar(80) DEFAULT NULL COMMENT 'requestor name',
+  `requestor_email` varchar(80) DEFAULT NULL COMMENT 'requestor email',
+  `report_types` varchar(255) DEFAULT NULL COMMENT 'report types provided by the harvester',
+  PRIMARY KEY (`erm_usage_data_provider_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_usage_mus`
+--
+
+DROP TABLE IF EXISTS `erm_usage_mus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_mus` (
+  `monthly_usage_summary_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `title_id` int(11) DEFAULT NULL COMMENT 'item title id number',
+  `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'item title id number',
+  `year` int(4) DEFAULT NULL COMMENT 'year of usage statistics',
+  `month` int(2) DEFAULT NULL COMMENT 'month of usage statistics',
+  `usage_count` int(11) DEFAULT NULL COMMENT 'usage count for the title',
+  `metric_type` varchar(50) DEFAULT NULL COMMENT 'metric type for the usage statistic',
+  `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
+  PRIMARY KEY (`monthly_usage_summary_id`),
+  CONSTRAINT `erm_usage_mus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `erm_usage_mus_ibfk_2` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_usage_titles`
+--
+
+DROP TABLE IF EXISTS `erm_usage_titles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_titles` (
+  `title_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `title` varchar(255) DEFAULT NULL COMMENT 'item title',
+  `usage_data_provider_id` int(11) NOT NULL COMMENT 'platform the title is harvested by',
+  `title_doi` varchar(24) DEFAULT NULL COMMENT 'DOI number for the title',
+  `print_issn` varchar(24) DEFAULT NULL COMMENT 'Print ISSN number for the title',
+  `online_issn` varchar(24) DEFAULT NULL COMMENT 'Online ISSN number for the title',
+  `title_uri` varchar(24) DEFAULT NULL COMMENT 'URI number for the title',
+  PRIMARY KEY (`title_id`),
+  CONSTRAINT `erm_usage_titles_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_usage_yus`
+--
+
+DROP TABLE IF EXISTS `erm_usage_yus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_yus` (
+  `yearly_usage_summary_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `title_id` int(11) DEFAULT NULL COMMENT 'item title id number',
+  `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'item title id number',
+  `year` int(4) DEFAULT NULL COMMENT 'year of usage statistics',
+  `totalcount` int(11) DEFAULT NULL COMMENT 'usage count for the title',
+  `metric_type` varchar(50) DEFAULT NULL COMMENT 'metric type for the usage statistic',
+  `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
+  PRIMARY KEY (`yearly_usage_summary_id`),
+  CONSTRAINT `erm_usage_yus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `erm_usage_yus_ibfk_2` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
