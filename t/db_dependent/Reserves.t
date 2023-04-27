@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 78;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1734,4 +1734,30 @@ subtest 'CanItemBeReserved() tests' => sub {
     is_deeply( $res, { status => 'tooManyReserves', limit => 2 }, 'Holds on itemtype limit reached' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'DefaultHoldExpiration tests' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdate', 1 );
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', 365 );
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationUnitOfTime', 'days;' );
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item();
+
+    my $reserve_id = AddReserve({
+        branchcode     => $item->homebranch,
+        borrowernumber => $patron->id,
+        biblionumber   => $item->biblionumber,
+    });
+
+    my $today = dt_from_string();
+    my $hold = Koha::Holds->find( $reserve_id );
+
+    is( $hold->reservedate, $today->ymd, "Hold created today" );
+    is( $hold->expirationdate, $today->add( days => 365)->ymd, "Reserve date set 1 year from today" );
+
+    $schema->txn_rollback;
 };
