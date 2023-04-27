@@ -68,8 +68,8 @@ sub dt_from_string {
 
     $date_format = C4::Context->preference('dateformat') unless $date_format;
 
-    if ( ref($date_string) eq 'DateTime' ) {    # already a dt return it
-        return $date_string;
+    if ( ref($date_string) eq 'DateTime' ) {    # already a dt return a clone
+        return $date_string->clone();
     }
 
     my $regex;
