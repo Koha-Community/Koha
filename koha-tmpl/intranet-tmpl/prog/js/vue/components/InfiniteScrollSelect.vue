@@ -1,14 +1,23 @@
 <template>
     <v-select
-        v-bind:id="id"
+        :id="id"
         v-model="model"
         :label="queryProperty"
-        :options="search ? data : paginated"
+        :options="paginationRequired ? paginated : data"
         :reduce="item => item[dataIdentifier]"
         @open="onOpen"
         @close="onClose"
         @search="searchFilter($event)"
+        ref="select"
     >
+        <template #search="{ attributes, events }">
+            <input
+                :required="required"
+                class="vs__search"
+                v-bind="attributes"
+                v-on="events"
+            />
+        </template>
         <template #list-footer>
             <li v-show="hasNextPage && !this.search" ref="load">
                 {{ $__("Loading more options...") }}
@@ -22,7 +31,6 @@ import { APIClient } from "../fetch/api-client.js"
 
 export default {
     created() {
-        this.fetchInitialData(this.dataType)
         switch (this.dataType) {
             case "vendors":
                 this.dataIdentifier = "id"
@@ -60,6 +68,7 @@ export default {
             search: "",
             scrollPage: null,
             data: [],
+            paginationRequired: true,
         }
     },
     computed: {
@@ -110,6 +119,7 @@ export default {
         },
         async searchFilter(e) {
             if (e) {
+                this.paginationRequired = false
                 this.observer.disconnect()
                 this.data = []
                 this.search = e
@@ -123,16 +133,16 @@ export default {
                     })
                     .then(
                         items => {
-                            this.data = items
+                            this.data = [...items]
                         },
                         error => {}
                     )
             } else {
-                await this.fetchInitialData(this.dataType)
-                await this.resetSelect()
+                this.resetSelect()
             }
         },
         async onOpen() {
+            this.paginationRequired = true
             await this.fetchInitialData(this.dataType)
             if (this.hasNextPage) {
                 await this.$nextTick()
@@ -141,39 +151,45 @@ export default {
         },
         onClose() {
             this.observer.disconnect()
-            this.search = ""
         },
         async infiniteScroll([{ isIntersecting, target }]) {
-            if (isIntersecting) {
-                const ul = target.offsetParent
-                const scrollTop = target.offsetParent.scrollTop
-                this.limit += 20
-                this.scrollPage++
-                await this.$nextTick()
-                const client = APIClient.erm
-                await client[this.dataType]
-                    .getAll(
-                        {},
-                        {
-                            _page: this.scrollPage,
-                            _per_page: 20,
-                            _match: "contains",
-                        }
-                    )
-                    .then(
-                        items => {
-                            const existingData = [...this.data]
-                            this.data = [...existingData, ...items]
-                        },
-                        error => {}
-                    )
-                ul.scrollTop = scrollTop
-            }
+            setTimeout(async () => {
+                if (isIntersecting) {
+                    const ul = target.offsetParent
+                    const scrollTop = target.offsetParent.scrollTop
+                    this.limit += 20
+                    this.scrollPage++
+                    await this.$nextTick()
+                    const client = APIClient.erm
+                    await client[this.dataType]
+                        .getAll(
+                            {},
+                            {
+                                _page: this.scrollPage,
+                                _per_page: 20,
+                                _match: "contains",
+                            }
+                        )
+                        .then(
+                            items => {
+                                const existingData = [...this.data]
+                                this.data = [...existingData, ...items]
+                            },
+                            error => {}
+                        )
+                    ul.scrollTop = scrollTop
+                }
+            }, 250)
         },
         async resetSelect() {
-            if (this.hasNextPage) {
-                await this.$nextTick()
-                this.observer.observe(this.$refs.load)
+            if (this.$refs.select.open) {
+                await this.fetchInitialData(this.dataType)
+                if (this.hasNextPage) {
+                    await this.$nextTick()
+                    this.observer.observe(this.$refs.load)
+                }
+            } else {
+                this.paginationRequired = false
             }
         },
     },
