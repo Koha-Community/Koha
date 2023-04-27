@@ -250,6 +250,80 @@ export class ERMAPIClient extends HttpClient {
                 }),
         };
     }
+
+    get usage_data_providers() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "usage_data_providers/" + id,
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint: "usage_data_providers",
+                    query
+                }),
+            delete: (id) =>
+                this.delete({
+                    endpoint: "usage_data_providers/" + id,
+                }),
+            create: (usage_data_provider) =>
+                this.post({
+                    endpoint: "usage_data_providers",
+                    body: usage_data_provider,
+                }),
+            update: (usage_data_provider, id) =>
+                this.put({
+                    endpoint: "usage_data_providers/" + id,
+                    body: usage_data_provider,
+                }),
+            //count: () => this.count("usage_data_providers"), //TODO: Implement count method
+        };
+    }
+
+    get titles() {
+        return {
+            get: (id) =>
+                this.get({
+                    endpoint: "usage_titles/" + id,
+                    headers: {
+                        "x-koha-embed":
+                            "usage_mus",
+                    },
+                }),
+            getAll: (query) =>
+                this.get({
+                    endpoint: "usage_titles",
+                    query
+                }),
+            getReport: (query, embed) =>
+                this.get({
+                    endpoint: "usage_titles/report",
+                    query,
+                    headers: {
+                        "x-koha-embed":
+                            `${embed}`,
+                    },
+                }),
+        };
+    }
+
+    get counter_files() {
+        return {
+            getAll: (query) =>
+                this.get({
+                    endpoint: "counter_files",
+                    query,
+                    headers: {
+                        "x-koha-embed":
+                            "counter_logs",
+                    }
+                }),
+            delete: (id) =>
+                this.delete({
+                    endpoint: "counter_files/" + id,
+                }),
+        };
+    }
 }
 
 export default ERMAPIClient;
