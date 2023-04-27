@@ -1,0 +1,362 @@
+---
+/erm/usage_data_providers:
+  get:
+    x-mojo-to: ERM::UsageDataProviders#list
+    operationId: listErmUsageDataProviders
+    tags:
+      - usage_data_provider
+    summary: List usage_data_providers
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on usage_data_provider usage_data_provider_id
+        in: query
+        name: usage_data_provider_id
+        required: false
+        type: integer
+      - description: Case insensitive search on usage_data_provider name
+        in: query
+        name: name
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider description
+        in: query
+        name: description
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider active
+        in: query
+        name: active
+        required: false
+        type: integer
+      - description: Case insensitive search on usage_data_provider method
+        in: query
+        name: method
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider aggregator
+        in: query
+        name: aggregator
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider service_type
+        in: query
+        name: service_type
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider service_url
+        in: query
+        name: service_url
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider report_release
+        in: query
+        name: report_release
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider begin_date
+        in: query
+        name: begin_date
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider end_date
+        in: query
+        name: end_date
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider customer_id
+        in: query
+        name: customer_id
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider requestor_id
+        in: query
+        name: requestor_id
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider api_key
+        in: query
+        name: api_key
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider requestor_name
+        in: query
+        name: requestor_name
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider requestor_email
+        in: query
+        name: requestor_email
+        required: false
+        type: string
+      - description: Case insensitive search on usage_data_provider report_types
+        in: query
+        name: report_types
+        required: false
+        type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - counter_files
+        collectionFormat: csv
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of usage_data_providers
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  post:
+    x-mojo-to: ERM::UsageDataProviders#add
+    operationId: addErmUsageDataProviders
+    tags:
+      - usage_data_provider
+    summary: Add usage_data_provider
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new usage_data_provider
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+    responses:
+      201:
+        description: A successfully created usage_data_provider
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/usage_data_providers/{erm_usage_data_provider_id}":
+  get:
+    x-mojo-to: ERM::UsageDataProviders#get
+    operationId: getERMUsageDataProvider
+    tags:
+      - usage_data_provider
+    summary: get usage_data_provider
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/erm_usage_data_provider_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+        collectionFormat: csv
+    responses:
+      200:
+        description: usage_data_provider
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      401:
+        description: authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  put:
+    x-mojo-to: ERM::UsageDataProviders#update
+    operationId: updateERMUsageDataProviders
+    tags:
+      - usage_data_provider
+    summary: update usage_data_provider
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/erm_usage_data_provider_id_pp"
+      - name: body
+        in: body
+        description: a json object containing new information about existing usage_data_provider
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+        collectionFormat: csv
+    responses:
+      200:
+        description: a successfully updated usage_data_provider
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      400:
+        description: bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  delete:
+    x-mojo-to: ERM::UsageDataProviders#delete
+    operationId: deleteERMUsageDataProviders
+    tags:
+      - usage_data_provider
+    summary: Delete usage_data_provider
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/erm_usage_data_provider_id_pp"
+    responses:
+      204:
+        description: usage_data_provider deleted
+      400:
+        description: usage_data_provider deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

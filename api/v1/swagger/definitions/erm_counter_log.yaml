@@ -1,0 +1,37 @@
+---
+type: object
+properties:
+  erm_counter_log_id:
+    type: integer
+    description: internally assigned counter_log identifier
+    readOnly: true
+  counter_files_id:
+    description: counter_files_id of the counter_log
+    type:
+    - integer
+    - "null"
+  borrowernumber:
+    description: borrowernumber of the counter_log
+    type:
+    - integer
+    - "null"
+  importdate:
+    type: string
+    format: date-time
+    description: Timestamp for the date of upload
+  filename:
+    description: filename of the counter_file
+    type: 
+    - string
+    - "null"
+  logdetails:
+    description: logdetails of the counter_log
+    type: 
+    - string
+    - "null"
+
+additionalProperties: false
+required:
+  - filename
+  - borrowernumber
+  - counter_files_id

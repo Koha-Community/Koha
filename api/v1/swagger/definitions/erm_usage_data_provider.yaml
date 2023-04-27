@@ -1,0 +1,100 @@
+---
+type: object
+properties:
+  erm_usage_data_provider_id:
+    type: integer
+    description: internally assigned data provider identifier
+    readOnly: true
+  name:
+    description: name of the data provider
+    type: string
+  description:
+    description: description of the data provider
+    type: 
+    - string
+    - "null"
+  active:
+    description: status of the harvester
+    type: 
+    - integer
+    - "null"
+  method:
+    description: method of the harvester
+    type: 
+    - string
+    - "null"
+  aggregator:
+    description: aggregator of the harvester
+    type: 
+    - string
+    - "null"
+  service_type:
+    description: service_type of the harvester
+    type: 
+    - string
+    - "null"
+  service_url:
+    description: service_url of the harvester
+    type: 
+    - string
+    - "null"
+  report_release:
+    description: report_release of the harvester
+    type: 
+    - string
+    - "null"
+  begin_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: Start of the harvester
+  end_date:
+    type:
+      - string
+      - "null"
+    format: date
+    description: End of the harvester
+  customer_id:
+    description: customer_id of the harvester
+    type:
+      - string
+      - "null"
+  requestor_id:
+    description: requestor_id of the harvester
+    type:
+      - string
+      - "null"
+  api_key:
+    description: api_key of the harvester
+    type: 
+    - string
+    - "null"
+  requestor_name:
+    description: requestor_name of the harvester
+    type: 
+    - string
+    - "null"
+  requestor_email:
+    description: requestor_email of the harvester
+    type: 
+    - string
+    - "null"
+  report_types:
+    description: report types of the harvester
+    type: 
+    - string
+    - "null"
+  counter_files:
+    type: array
+    description: counter files
+    items:
+      $ref: erm_counter_file.yaml
+
+additionalProperties: false
+required:
+  - name
+  - customer_id
+  - requestor_id
+  - service_url
+  - report_release

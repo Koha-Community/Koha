@@ -1,0 +1,43 @@
+---
+type: object
+properties:
+  yearly_usage_summary_id:
+    type: integer
+    description: internally assigned yearly usage summary identifier
+    readOnly: true
+  title_id:
+    description: title_id of the yearly usage summary
+    type:
+    - integer
+    - "null"
+  usage_data_provider_id:
+    description: usage_data_provider_id of the yearly usage summary
+    type:
+    - integer
+    - "null"
+  year:
+    description: year of the yearly usage summary
+    type:
+    - integer
+    - "null"
+  totalcount:
+    description: total count of the yearly usage summary
+    type:
+    - integer
+    - "null"
+  metric_type:
+    description: metric type of the yearly usage summary
+    type:
+    - string
+    - "null"
+  report_type:
+    description: report type of the yearly usage summary
+    type:
+    - string
+    - "null"
+
+
+additionalProperties: false
+required:
+  - title_id
+  - usage_data_provider_id

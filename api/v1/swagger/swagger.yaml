@@ -40,6 +40,10 @@ definitions:
     $ref: ./definitions/erm_config.yaml
   erm_agreement:
     $ref: ./definitions/erm_agreement.yaml
+  erm_counter_file:
+    $ref: ./definitions/erm_counter_file.yaml
+  erm_counter_log:
+    $ref: ./definitions/erm_counter_log.yaml
   erm_eholdings_title:
     $ref: ./definitions/erm_eholdings_title.yaml
   erm_eholdings_package:
@@ -48,6 +52,14 @@ definitions:
     $ref: ./definitions/erm_eholdings_resource.yaml
   erm_license:
     $ref: ./definitions/erm_license.yaml
+  erm_usage_data_provider:
+    $ref: ./definitions/erm_usage_data_provider.yaml
+  erm_usage_mus:
+    $ref: ./definitions/erm_usage_mus.yaml
+  erm_usage_title:
+    $ref: ./definitions/erm_usage_title.yaml
+  erm_usage_yus:
+    $ref: ./definitions/erm_usage_yus.yaml
   error:
     $ref: ./definitions/error.yaml
   fund:
@@ -243,6 +255,16 @@ paths:
     $ref: "./paths/erm_agreements.yaml#/~1erm~1agreements~1{agreement_id}"
   "/erm/documents/{document_id}/file/content":
     $ref: "./paths/erm_documents.yaml#/~1erm~1documents~1{document_id}~1file~1content"
+  /erm/counter_files:
+    $ref: ./paths/erm_counter_files.yaml#/~1erm~1counter_files
+  "/erm/counter_files/{erm_counter_files_id}":
+    $ref: "./paths/erm_counter_files.yaml#/~1erm~1counter_files~1{erm_counter_files_id}"
+  "/erm/counter_files/{erm_counter_files_id}/file/content":
+    $ref: "./paths/erm_counter_files.yaml#/~1erm~1counter_files~1{erm_counter_files_id}~1file~1content"
+  /erm/default_usage_reports:
+    $ref: ./paths/erm_default_usage_reports.yaml#/~1erm~1default_usage_reports
+  "/erm/default_usage_reports/{erm_default_usage_report_id}":
+    $ref: "./paths/erm_default_usage_reports.yaml#/~1erm~1default_usage_reports~1{erm_default_usage_report_id}"
   "/erm/eholdings/{provider}/titles":
     $ref: "./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1{provider}~1titles"
   /erm/eholdings/local/titles/import:
@@ -265,6 +287,12 @@ paths:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":
     $ref: "./paths/erm_licenses.yaml#/~1erm~1licenses~1{license_id}"
+  /erm/usage_data_providers:
+    $ref: ./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers
+  "/erm/usage_data_providers/{erm_usage_data_provider_id}":
+    $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1{erm_usage_data_provider_id}"
+  /erm/usage_titles:
+    $ref: ./paths/erm_usage_titles.yaml#/~1erm~1usage_titles
   /erm/users:
     $ref: ./paths/erm_users.yaml#/~1erm~1users
   /holds:
@@ -553,6 +581,30 @@ parameters:
     description: Resource internal identifier
     in: path
     name: resource_id
+    required: true
+    type: string
+  erm_counter_files_id_pp:
+    description: ERM counter_files internal identifier
+    in: path
+    name: erm_counter_files_id
+    required: true
+    type: integer
+  erm_counter_log_id_pp:
+    description: ERM counter_log internal identifier
+    in: path
+    name: erm_counter_log_id
+    required: true
+    type: integer
+  erm_usage_data_provider_id_pp:
+    description: ERM usage_data_provider internal identifier
+    in: path
+    name: erm_usage_data_provider_id
+    required: true
+    type: integer
+  data_type_pp:
+    description: ERM custom report data type
+    in: path
+    name: data_type
     required: true
     type: string
   fund_id_pp:

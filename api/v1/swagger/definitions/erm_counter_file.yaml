@@ -1,0 +1,36 @@
+---
+type: object
+properties:
+  erm_counter_files_id:
+    type: integer
+    description: internally assigned counter_files identifier
+    readOnly: true
+  usage_data_provider_id:
+    description: usage_data_provider_id of the counter_files
+    type: integer
+  type:
+    description: type of the counter_files
+    type: 
+    - string
+    - "null"
+  filename:
+    description: filename
+    type: string
+  file_content:
+    description: file_content
+    type: string
+  date_uploaded:
+    type: string
+    format: date-time
+    description: Timestamp for the date of upload
+  counter_logs:
+    type: array
+    description: counter logs
+    items:
+      $ref: erm_counter_log.yaml
+
+additionalProperties: false
+required:
+  - usage_data_provider_id
+  - filename
+  - file_content
