@@ -430,8 +430,12 @@ $(document).ready(function() {
     function populateStatusFilter(backend) {
         $.ajax({
             type: "GET",
-            url: "/api/v1/ill/backends/"+backend+"/statuses",
-            success: function(statuses){
+            url: "/api/v1/ill/backends/"+backend,
+            headers: {
+                'x-koha-embed': 'statuses+strings'
+            },
+            success: function(response){
+                let statuses = response.statuses
                 $('#illfilter_status').append(
                     '<option value="">'+ill_all_statuses+'</option>'
                 );
