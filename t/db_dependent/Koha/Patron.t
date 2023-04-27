@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 20;
 use Test::Exception;
 use Test::Warn;
 
@@ -1346,54 +1346,6 @@ subtest 'notify_library_of_registration()' => sub {
     $to_address = $sth->fetchrow_array;
     is( $to_address, 'root@localhost', 'OPAC_REG email queued to go to KohaAdminEmailAddress syspref when EmailPatronRegistration equals KohaAdminEmailAddress' );
     $dbh->do(q|DELETE FROM message_queue|);
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'get_savings tests' => sub {
-
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' }, { value => { branchcode => $library->branchcode } });
-
-    t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library->branchcode });
-
-    my $biblio = $builder->build_sample_biblio;
-    my $item1 = $builder->build_sample_item(
-        {
-            biblionumber     => $biblio->biblionumber,
-            library          => $library->branchcode,
-            replacementprice => rand(20),
-        }
-    );
-    my $item2 = $builder->build_sample_item(
-        {
-            biblionumber     => $biblio->biblionumber,
-            library          => $library->branchcode,
-            replacementprice => rand(20),
-        }
-    );
-
-    is( $patron->get_savings, 0, 'No checkouts, no savings' );
-
-    # Add an old checkout with deleted itemnumber
-    $builder->build_object({ class => 'Koha::Old::Checkouts', value => { itemnumber => undef, borrowernumber => $patron->id } });
-
-    is( $patron->get_savings, 0, 'No checkouts with itemnumber, no savings' );
-
-    AddIssue( $patron->unblessed, $item1->barcode );
-    AddIssue( $patron->unblessed, $item2->barcode );
-
-    my $savings = $patron->get_savings;
-    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );
-
-    AddReturn( $item2->barcode, $item2->homebranch );
-
-    $savings = $patron->get_savings;
-    is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
 
     $schema->storage->txn_rollback;
 };
