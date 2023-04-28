@@ -83,7 +83,7 @@ subtest 'store' => sub {
 
     is( t::lib::Dates::compare( $item->replacementpricedate, $today ),
         0, 'replacementpricedate must have been set to today if not given' );
-    is( t::lib::Dates::compare( $item->datelastseen, $today ),
+    is( t::lib::Dates::compare( dt_from_string($item->datelastseen)->ymd, $today ),
         0, 'datelastseen must have been set to today if not given' );
     is(
         $item->itype,

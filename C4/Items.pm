@@ -56,7 +56,7 @@ use DateTime::Format::MySQL;
                   # debugging; so please don't remove this
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 
 use Koha::Biblios;

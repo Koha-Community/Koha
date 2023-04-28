@@ -42,7 +42,7 @@ use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblioitems;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Checkouts;
 use Koha::Illrequests;
