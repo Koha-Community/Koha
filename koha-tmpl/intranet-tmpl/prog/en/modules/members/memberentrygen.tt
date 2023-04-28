@@ -1149,7 +1149,7 @@ legend:hover {
                                                     [% END %]
                                                         Circulation note:
                                                     </label>
-                                                    <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrower_data.borrowernotes | html UNLESS opduplicate %]</textarea>
+                                                    <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrower_data.borrowernotes | $raw UNLESS opduplicate %]</textarea>
                                                     <div class="hint">This message displays when checking out to this patron</div>
                                                     [% IF ( mandatoryborrowernotes ) %]
                                                         <span class="required">Required</span>

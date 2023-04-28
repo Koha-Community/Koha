@@ -202,7 +202,7 @@
                                 <td>[% p.borrowernumber.categorycode.description | html %] ([% p.borrowernumber.categorycode.categorycode | html %])</td>
                                 <td>[% p.borrowernumber.branchcode.branchname | html %]</td>
                                 <td data-order="[% p.borrowernumber.dateexpiry | html %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</td>
-                                <td>[% p.borrowernumber.borrowernotes | html %]</td>
+                                <td>[% p.borrowernumber.borrowernotes | $raw | html_line_break %]</td>
                             </tr>
                         [% END %]
                     </tbody>

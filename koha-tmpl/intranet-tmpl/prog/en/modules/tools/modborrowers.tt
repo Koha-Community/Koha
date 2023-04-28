@@ -275,7 +275,7 @@
                                                             <td data-order="9999-99-99">Never</td>
                                                         [% END %]
                                                     [% END %]
-                                                    <td>[% borrower.borrowernotes | html %]</td>
+                                                    <td>[% borrower.borrowernotes | $raw | html_line_break %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
                                                     <td data-order="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</td>
                                                     <td>[% borrower.debarredcomment | html %]</td>
