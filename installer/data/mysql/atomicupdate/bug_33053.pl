@@ -7,7 +7,7 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
         $dbh->do(q{
-            ALTER TABLE item_groups CHANGE COLUMN `biblio_id` `biblio_id` int(11) NOT NULL COMMENT 'id for the bibliographic record the group belongs to'`
+            ALTER TABLE item_groups CHANGE COLUMN `biblio_id` `biblio_id` int(11) NOT NULL COMMENT 'id for the bibliographic record the group belongs to'
         });
         $dbh->do(q{
             ALTER TABLE recalls CHANGE COLUMN `biblio_id` `biblio_id` int(11) NOT NULL COMMENT 'Identifier for bibliographic record that has been recalled'
