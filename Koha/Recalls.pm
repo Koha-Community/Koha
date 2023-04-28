@@ -173,7 +173,8 @@ sub add_recall {
                 borrowernumber => $recall->patron_id,
                 itemtype       => $item->effective_itemtype,
                 ccode          => $item->ccode,
-                categorycode   => $checkout->patron->categorycode
+                categorycode   => $checkout->patron->categorycode,
+                interface      => $interface,
             }
         );
 

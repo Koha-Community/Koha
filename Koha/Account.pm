@@ -256,6 +256,7 @@ sub add_credit {
                         type           => lc($credit_type),
                         amount         => $amount,
                         borrowernumber => $self->{patron_id},
+                        interface      => $interface,
                     }
                 ) if grep { $credit_type eq $_ } ( 'PAYMENT', 'WRITEOFF' );
 

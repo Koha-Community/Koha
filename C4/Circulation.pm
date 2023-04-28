@@ -825,6 +825,7 @@ sub CanBookBeIssued {
                 ccode          => $item_object->ccode,
                 categorycode   => $patron->categorycode,
                 location       => $item_object->location,
+                interface      => C4::Context->interface,
             }
         );
         ModDateLastSeen( $item_object->itemnumber ); # FIXME Move to Koha::Item
@@ -1773,7 +1774,8 @@ sub AddIssue {
                     location       => $item_object->location,
                     borrowernumber => $borrower->{'borrowernumber'},
                     ccode          => $item_object->ccode,
-                    categorycode   => $borrower->{'categorycode'}
+                    categorycode   => $borrower->{'categorycode'},
+                    interface      => C4::Context->interface,
                 }
             );
 
@@ -2407,6 +2409,7 @@ sub AddReturn {
         borrowernumber => $borrowernumber,
         ccode          => $item->ccode,
         categorycode   => $categorycode,
+        interface      => C4::Context->interface,
     });
 
     # Send a check-in slip. # NOTE: borrower may be undef. Do not try to send messages then.
@@ -3265,6 +3268,7 @@ sub AddRenewal {
                 borrowernumber => $borrowernumber,
                 ccode          => $item_object->ccode,
                 categorycode   => $patron->categorycode,
+                interface      => C4::Context->interface,
             }
         );
 
