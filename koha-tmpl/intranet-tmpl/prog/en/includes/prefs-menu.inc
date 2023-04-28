@@ -177,7 +177,7 @@
             <ul>
                 [% FOREACH LINE IN TAB.LINES %]
                     [% IF ( LINE.is_group_title ) %]
-                        <li><a class="pref_sublink" href="#[% LINE.title | $HtmlId %]">[% LINE.title | html %]</a></li>
+                        <li><a class="pref_sublink" href="#[% TAB.tab_id | html %]_[% LINE.title | $HtmlId %]">[% LINE.title | html %]</a></li>
                     [% END %]
                 [% END %]
             </ul>
