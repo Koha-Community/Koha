@@ -722,7 +722,7 @@
         <xsl:choose>
             <!-- search for (1) controlnumber AND orgcode, or (2) only controlnumber, or (3) title -->
             <xsl:when test="$controlnumber!='' and $orgcode!=''">
-                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber,' and Control-number-identifier:',$orgcode),false())"/>
+                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber,' AND Control-number-identifier:',$orgcode),false())"/>
             </xsl:when>
             <xsl:when test="$controlnumber!=''">
                 <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber),false())"/>
