@@ -82,11 +82,11 @@
 
             id = "#return_claim_spinner_" + data.item_id;
 
-            let formated_date = $datetime(data.created_on);
+            let formatted_date = $datetime(data.created_on);
 
             let content = "";
             if ( data.claim_id ) {
-                content = '<span class="badge">' + formated_date + '</span>';
+                content = '<span class="badge">' + formatted_date + '</span>';
                 $(id).parent().parent().addClass('ok');
             } else {
                 content = _("Unable to claim as returned");
