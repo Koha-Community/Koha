@@ -1623,7 +1623,7 @@
                 var value = parseInt($(this).val());
                 var found_holds = $("select[name='rank-request'][disabled='disabled']").length ; //Count how many are found
                 if( !isNaN(value) ) {  //If moved to 'del'
-                    var after = row.parent().find("tr:nth-child("+(value+1+found_holds )+")"); //Go to the row 1 after the new value (and skip found holds)
+                    var after = row.parent().find(`tr:nth-child(${value+found_holds})`); //Go to the row 1 after the new value (and skip found holds)
                     if (prev_rank_request > value) {
                         row.insertBefore(after);
                     } else {
