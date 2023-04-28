@@ -336,12 +336,12 @@
 
             $("li.csv_profiles").hide();
 
-            $("#bibs select[name='output_format']").on('change', function(){
+            $("#bibs_panel select[name='output_format']").on('change', function(){
                 var format = $(this).val();
                 if ( format == 'csv' ) {
-                    $("#bibs li.csv_profiles").show();
+                    $("#bibs_panel li.csv_profiles").show();
                 } else {
-                    $("#bibs li.csv_profiles").hide();
+                    $("#bibs_panel li.csv_profiles").hide();
                 }
             });
             $("#checkall").on("click",function(e){
