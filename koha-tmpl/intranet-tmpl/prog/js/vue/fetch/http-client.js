@@ -50,6 +50,19 @@ class HttpClient {
         });
     }
 
+    getAll(params = {}) {
+        let url =
+            params.endpoint + "?" +
+            new URLSearchParams({
+                _per_page: -1,
+                ...(params.query && { q: JSON.stringify(params.query) }),
+            })
+        return this._fetchJSON(url, params.headers, {
+            ...params.options,
+            method: "GET",
+        });
+    }
+
     post(params = {}) {
         const body = params.body
             ? typeof params.body === "string"

@@ -18,13 +18,9 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: query =>
-                this.get({
-                    endpoint:
-                        "agreements?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
+                this.getAll({
+                    endpoint: "agreements",
+                    query: query,
                 }),
             delete: id =>
                 this.delete({
@@ -64,13 +60,9 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: query =>
-                this.get({
-                    endpoint:
-                        "licenses?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
+                this.getAll({
+                    endpoint: "licenses",
+                    query: query,
                     headers: {
                         "x-koha-embed": "vendor",
                     },
@@ -113,13 +105,9 @@ export class ERMAPIClient extends HttpClient {
                     },
                 }),
             getAll: query =>
-                this.get({
-                    endpoint:
-                        "eholdings/local/packages?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
+                this.getAll({
+                    endpoint: "eholdings/local/packages",
+                    query: query,
                     headers: {
                         "x-koha-embed": "resources+count,vendor.name",
                     },
@@ -159,15 +147,6 @@ export class ERMAPIClient extends HttpClient {
                     headers: {
                         "x-koha-embed": "resources,resources.package",
                     },
-                }),
-            getAll: query =>
-                this.get({
-                    endpoint:
-                        "eholdings/local/titles?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
                 }),
             delete: id =>
                 this.delete({
@@ -223,20 +202,6 @@ export class ERMAPIClient extends HttpClient {
                             "package_agreements,package_agreements.agreement,resources+count,vendor",
                     },
                 }),
-            getAll: query =>
-                this.get({
-                    endpoint:
-                        "eholdings/ebsco/packages/" +
-                        id +
-                        "?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
-                    headers: {
-                        "x-koha-embed": "resources+count,vendor.name",
-                    },
-                }),
             patch: (id, body) =>
                 this.patch({
                     endpoint: "eholdings/ebsco/packages/" + id,
@@ -253,16 +218,6 @@ export class ERMAPIClient extends HttpClient {
                     headers: {
                         "x-koha-embed": "resources,resources.package",
                     },
-                }),
-            getAll: query =>
-                this.get({
-                    endpoint:
-                        "eholdings/local/ebsco/titles" +
-                        "?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
                 }),
         };
     }

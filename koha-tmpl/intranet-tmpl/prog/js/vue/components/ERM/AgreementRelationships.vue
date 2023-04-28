@@ -99,15 +99,15 @@ export default {
     },
     beforeCreate() {
         const client = APIClient.erm
-        client.agreements.getAll().then(
-            agreements => {
-                this.agreements = agreements.filter(
-                    agreement => agreement.agreement_id !== this.agreement_id
-                )
-                this.initialized = true
-            },
-            error => {}
-        )
+        client.agreements
+            .getAll({ "me.agreement_id": { "!=": this.agreement_id } })
+            .then(
+                agreements => {
+                    this.agreements = agreements
+                    this.initialized = true
+                },
+                error => {}
+            )
     },
     methods: {
         addRelationship() {
