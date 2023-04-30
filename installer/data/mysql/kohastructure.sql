@@ -5384,6 +5384,7 @@ CREATE TABLE `statistics` (
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key from the borrowers table, links transaction to a specific borrower',
   `ccode` varchar(80) DEFAULT NULL COMMENT 'foreign key from the items table, links transaction to a specific collection code',
   `categorycode` varchar(10) DEFAULT NULL COMMENT 'foreign key from the borrowers table, links transaction to a specific borrower category',
+  `interface` varchar(30) DEFAULT NULL COMMENT 'the context this action was taken in',
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `type_idx` (`type`),
