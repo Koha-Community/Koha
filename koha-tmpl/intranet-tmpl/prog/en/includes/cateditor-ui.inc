@@ -1022,6 +1022,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 $('.modal-body').each( function() {
                     $(this).height( $(window).height() * .8 - $(this).prevAll('.modal-header').height() );
                 } );
+                editor.refresh();
             }, 100);
         }
 
