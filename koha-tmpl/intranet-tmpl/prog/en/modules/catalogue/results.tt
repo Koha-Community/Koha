@@ -369,6 +369,7 @@
                 <!-- Search Results Table -->
                 [% IF ( total ) %]
                     [% IF ( scan ) %]
+                    <div class="page-section">
                         <h2>Scan index</h2>
                         <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
                            <label for="scan-index">Scan index:</label>
@@ -425,6 +426,7 @@
                                 [% END %]
                             </table>
                         </form>
+                    </div>
                     [% ELSE # /IF scan %]
 
                         <div id="searchresults">
