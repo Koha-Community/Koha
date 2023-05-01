@@ -25,10 +25,10 @@
             <div class="col-xs-6">
                 <fieldset class="rows">
                 <ol>
-                    <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
-                    <li><label for="controlnumber">Control number: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
-                    <li><label for="nameany">Name (any): </label> <input type="text" id="nameany" name="nameany" value="" /></li>
-                    <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="" /></li>
+                    <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="[% srchany | html %]" /></li>
+                    <li><label for="controlnumber">Control number: </label> <input type="text" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" /></li>
+                    <li><label for="nameany">Name (any): </label> <input type="text" id="nameany" name="nameany" value="[% nameany | html %]" /></li>
+                    <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="[% authorany | html %]" /></li>
                     <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" /></li>
                     <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" /></li>
                     <li><label for="authormeetingcon">Author (meeting / conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
@@ -40,7 +40,7 @@
                     <fieldset class="rows">
                     <ol>
                         <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="[% subject | html %]" /></li>
-                        <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="" /></li>
+                        <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" /></li>
                         <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
                         <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
                         <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
@@ -131,6 +131,7 @@
         <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
         <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
         <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+        <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
         <input type="hidden" name="authid" value="[% authid | html %]" />
 
         [% FOREACH server IN servers %]
@@ -160,6 +161,7 @@
             <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
             <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
             <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+            <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
             <input type="hidden" name="authid" value="[% authid | html %]" />
             <input type="submit" class="btn btn-primary" value="Try another search" />
         </form>
@@ -189,6 +191,7 @@
             <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
             <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
             <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+            <input type="hidden" id="controlnumber" name="controlnumber" value="[% controlnumber | html %]" />
             <input type="hidden" name="authid" value="[% authid | html %]" />
             <input type="submit" class="btn btn-primary" value="Try another search" />
         </form>
