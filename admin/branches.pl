@@ -125,10 +125,10 @@ if ( $op eq 'add_form' ) {
                     my @close_times = $input->multi_param("close_time");
 
                     foreach my $day ( @days ) {
-                        if ( $open_times[$day] and $open_times[$day] eq '' ) {
+                        if ( $open_times[$day] !~ /([0-9]{2}:[0-9]{2})/ ) {
                             $open_times[$day] = undef;
                         }
-                        if ( $close_times[$day] and $close_times[$day] eq '' ) {
+                        if ( $close_times[$day] !~ /([0-9]{2}:[0-9]{2})/ ) {
                             $close_times[$day] = undef;
                         }
 
@@ -178,10 +178,10 @@ if ( $op eq 'add_form' ) {
                     my @close_times = $input->multi_param("close_time");
 
                     foreach my $day ( @days ) {
-                        if ( $open_times[$day] and $open_times[$day] eq '' ) {
+                        if ( $open_times[$day] !~ /([0-9]{2}:[0-9]{2})/ ) {
                             $open_times[$day] = undef;
                         }
-                        if ( $close_times[$day] and $close_times[$day] eq '' ) {
+                        if ( $close_times[$day] !~ /([0-9]{2}:[0-9]{2})/ ) {
                             $close_times[$day] = undef;
                         }
 

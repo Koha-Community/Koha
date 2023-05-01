@@ -368,13 +368,14 @@ Koha::CirculationRules->set_rules(
         rules        => {
             issuelength   => 3, # loan period is 3 hours
             lengthunit    => 'hours',
+            daysmode      => '',
         }
     }
 );
 
-my $open = DateTime->now->subtract( hours => 4 )->hms;
-my $close = DateTime->now->add( hours => 2 )->hms;
-my $now = DateTime->now;
+my $open = DateTime->new( year => 2023, month => 5, day => 1, hour => 10 )->hms;
+my $close = DateTime->new( year => 2023, month => 5, day => 1, hour => 16 )->hms;
+my $now = DateTime->new( year => 2023, month => 5, day => 1, hour => 14 );
 
 foreach (0..6) {
     # library opened 4 hours ago and closes in 2 hours.
@@ -387,17 +388,17 @@ t::lib::Mocks::mock_preference('ConsiderLibraryHoursInCirculation', 'close');
 # shorten loan period
 
 $date = C4::Circulation::CalcDateDue( $now, $itemtype, $library1->{branchcode}, $borrower );
-my $expected_duetime = DateTime->now->add( hours => 2 );
+my $expected_duetime = $now->clone->add( hours => 2 );
 is( $date, $expected_duetime, "Loan period was shortened because ConsiderLibraryHoursInCirculation is set to close time" );
 
 t::lib::Mocks::mock_preference('ConsiderLibraryHoursWhenIssuing', 'open');
 # extend loan period
 
 $date = C4::Circulation::CalcDateDue( $now, $itemtype, $library1->{branchcode}, $borrower );
-$expected_duetime = DateTime->now->add( days => 1 )->subtract( hours => 4 );
+$expected_duetime = $now->clone->add( days => 1 )->subtract( hours => 4 );
 is( $date, $expected_duetime, "Loan period was extended because ConsiderLibraryHoursInCirculation is set to open time" );
 
-my $holiday_tomorrow = DateTime->now->add( days => 1 );
+my $holiday_tomorrow = $now->clone->add( days => 1 );
 
 # consider calendar
 my $library1_calendar = C4::Calendar->new( branchcode => $library1->{branchcode} );
@@ -414,7 +415,7 @@ Koha::CirculationRules->set_rules(
         itemtype     => $itemtype,
         branchcode   => $library1->{branchcode},
         rules        => {
-            issuelength   => 13, # loan period must cross over into tomorrow
+            issuelength   => 18, # loan period must cross over into tomorrow
             lengthunit    => 'hours',
         }
     }
@@ -425,14 +426,14 @@ t::lib::Mocks::mock_preference('ConsiderLibraryHoursInCirculation', 'close');
 # shorten loan period
 
 $date = C4::Circulation::CalcDateDue( $now, $itemtype, $library1->{branchcode}, $borrower );
-$expected_duetime = DateTime->now->add( days => 2, hours => 2 );
+$expected_duetime = $now->clone->add( days => 2, hours => 2 );
 is( $date, $expected_duetime, "Loan period was shortened (but considers the holiday) because ConsiderLibraryHoursInCirculation is set to close time" );
 
 t::lib::Mocks::mock_preference( 'ConsiderLibraryHoursInCirculation', 'open' );
 # extend loan period
 
 $date = C4::Circulation::CalcDateDue( $now, $itemtype, $library1->{branchcode}, $borrower );
-$expected_duetime = DateTime->now->add( days => 2 )->subtract( hours => 4 );
+$expected_duetime = $now->clone->add( days => 2 )->subtract( hours => 4 );
 is( $date, $expected_duetime, "Loan period was extended (but considers the holiday) because ConsiderLibraryHoursInCirculation is set to open time" );
 
 $cache->clear_from_cache($key);
