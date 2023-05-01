@@ -147,7 +147,23 @@
         <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
     </form>
 
-<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid | html %]" /><input type="submit" class="btn btn-primary" value="Try another search" /></form></p>
+    <p>
+        <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
+            <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
+            <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
+            <input type="hidden" id="authorcorp"  name="authorcorp" value="[% authorcorp | html %]" />
+            <input type="hidden" id="authorpersonal"  name="authorpersonal" value="[% authorpersonal | html %]" />
+            <input type="hidden" id="authormeetingcon"  name="authormeetingcon" value="[% authormeetingcon | html %]" />
+            <input type="hidden" id="title"  name="title" value="[% title | html %]" />
+            <input type="hidden" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" />
+            <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+            <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
+            <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
+            <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+            <input type="hidden" name="authid" value="[% authid | html %]" />
+            <input type="submit" class="btn btn-primary" value="Try another search" />
+        </form>
+    </p>
     [% ELSE %]
         [% IF ( errconn ) %]
             <div class="dialog alert">
@@ -160,7 +176,23 @@
             </div>
          [% END %]
    <div class="dialog message">Nothing found.</div>
-    <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid | html %]" /><input type="submit" class="btn btn-primary" value="Try another search" /></form></p>
+    <p>
+        <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
+            <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
+            <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
+            <input type="hidden" id="authorcorp"  name="authorcorp" value="[% authorcorp | html %]" />
+            <input type="hidden" id="authorpersonal"  name="authorpersonal" value="[% authorpersonal | html %]" />
+            <input type="hidden" id="authormeetingcon"  name="authormeetingcon" value="[% authormeetingcon | html %]" />
+            <input type="hidden" id="title"  name="title" value="[% title | html %]" />
+            <input type="hidden" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" />
+            <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+            <input type="hidden" id="subjectsubdiv" name="subjectsubdiv" value="[% subjectsubdiv | html %]" />
+            <input type="hidden" id="heading"  name="heading" value="[% heading | html %]" />
+            <input type="hidden" id="srchany" name="srchany" value="[% srchany | html %]" />
+            <input type="hidden" name="authid" value="[% authid | html %]" />
+            <input type="submit" class="btn btn-primary" value="Try another search" />
+        </form>
+    </p>
     [% END %]
 
 [% END %]
