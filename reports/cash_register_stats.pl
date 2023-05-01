@@ -82,6 +82,10 @@ if ($do_it) {
         }
     }
 
+    if ( $transaction_type eq 'PAYMENT' || $transaction_type eq 'ACT' ) {
+        $whereTType .= q{ AND status != 'VOID' };
+    }
+
     my $whereBranchCode = q{};
     if ($manager_branchcode ne 'ALL') {
         $whereBranchCode = q{ AND m.branchcode = ?};
