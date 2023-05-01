@@ -304,21 +304,21 @@
                             [% IF opening_hours # Existing library %]
                                 [% daycount = 0 %]
                                 [% FOREACH hr IN opening_hours %]
-                                <tr id="hours_[% daycount %]">
+                                <tr id="hours_[% daycount | html %]">
                                     <td>
                                         [% PROCESS dayname day=daycount %]
-                                        <input type="hidden" value="[% daycount %]" name="day">
+                                        <input type="hidden" value="[% daycount | html %]" name="day">
                                     </td>
                                     <td>
                                         [% IF hr.day == daycount && hr.open_time %]
-                                        <input type="time" value="[% hr.open_time %]" name="open_time">
+                                        <input type="time" value="[% hr.open_time | html %]" name="open_time">
                                         [% ELSE %]
                                         <input type="time" value="" name="open_time">
                                         [% END %]
                                     </td>
                                     <td>
                                         [% IF hr.day == daycount && hr.close_time %]
-                                        <input type="time" value="[% hr.close_time %]" name="close_time">
+                                        <input type="time" value="[% hr.close_time | html %]" name="close_time">
                                         [% ELSE %]
                                         <input type="time" value="" name="close_time">
                                         [% END %]
@@ -328,10 +328,10 @@
                                 [% END %]
                             [% ELSE # New library %]
                                 [% FOREACH daycount IN [0..6] %]
-                                <tr id="hours_[% day %]">
+                                <tr id="hours_[% day | html %]">
                                     <td>
                                         [% PROCESS dayname day=daycount %]
-                                        <input type="hidden" value="[% daycount %]" name="day">
+                                        <input type="hidden" value="[% daycount | html %]" name="day">
                                     </td>
                                     <td>
                                         <input type="time" value="" name="open_time">
