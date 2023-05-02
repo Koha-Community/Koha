@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2023-02-16 20:42+0000\n"
-"Last-Translator: Pablo Bianchi <pablo.bianchi@gmail.com>\n"
+"PO-Revision-Date: 2023-04-27 18:20+0000\n"
+"Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /es/22.11/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1676580153.472649\n"
+"X-POOTLE-MTIME: 1682619600.566378\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -9680,9 +9680,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "No permitir"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "a usuarios elegir sus propia configuración de privacidad para mostrar sus "
@@ -10066,9 +10067,10 @@ msgstr ""
 "tienen menos de"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] en multas (dejar en blanco para deshabilitar)."
 
 # OPAC > Policy
@@ -10324,26 +10326,12 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "biblioteca de origen"
 
 # OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"(disponible) items individuales en la XSLT de resultados de búsqueda del "
-"OPAC, y mostrar más de"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"(no disponible) items individuales para categorías como Prestado, Dañado, "
-"Reservado, pero sólo cuando se los agrupa por biblioteca.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (NOTA: Para grandes consorcios se recomienda agrupar items no disponibles "
 "por sub-status, sólo listando totales de items.)"
@@ -10352,16 +10340,43 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Agrupar items no disponibles por"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "No mostrar más de"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr ""
+"(disponible) items individuales en la XSLT de resultados de búsqueda del "
+"OPAC.<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"(no disponible) items individuales para categorías como Prestado, Dañado, "
+"Reservado, pero sólo cuando se los agrupa por biblioteca.<br>"
+
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "biblioteca y sub-status"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "biblioteca"
 
 # OPAC > Appearance
@@ -12173,9 +12188,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "No permitir"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "al personal configurar la posibilidad de que las multas de un usuario sean "
 "visibles para usuarios vinculados en el OPAC."

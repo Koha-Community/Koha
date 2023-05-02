@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 18:34-0300\n"
+"POT-Creation-Date: 2023-04-26 14:33-0300\n"
 "PO-Revision-Date: 2022-10-26 15:52+0000\n"
 "Last-Translator: Hamar Zoltán <zhamarusa@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Pootle-Revision: 1\n"
 "X-POOTLE-MTIME: 1666799522.929324\n"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
 msgid "(search field {field_name} with mapping {marc_field}.)"
 msgstr ""
@@ -76,6 +76,10 @@ msgstr "Cím"
 #: Koha/Database/Columns.pm:117
 msgid "Address 2"
 msgstr "Cím 2"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Administration"
+msgstr ""
 
 #: Koha/Database/Columns.pm:266
 #, fuzzy
@@ -192,20 +196,20 @@ msgstr "Más kapcsolattartó"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "Más kapcsolattartó"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:44
 #, fuzzy
 msgid ""
 "An error occurred when deleting the existing mappings. Nothing has been "
 "changed!"
 msgstr "A lista törlése közben hiba történt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
 #, fuzzy, perl-brace-format
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
 msgstr "A lista frissítése közben hiba történt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, fuzzy, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "A lista frissítése közben hiba történt."
@@ -298,7 +302,7 @@ msgstr ""
 msgid "Budgeted cost, tax incl."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, fuzzy, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
@@ -355,6 +359,10 @@ msgstr ""
 msgid "Circulation note"
 msgstr "Kölcsönzési megjegyzés"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Cities"
+msgstr ""
+
 #: Koha/Database/Columns.pm:146
 msgid "City"
 msgstr "Város"
@@ -383,6 +391,10 @@ msgstr "Megjegyzés"
 #: cataloguing/value_builder/unimarc_field_146c.pl:66
 #: cataloguing/value_builder/unimarc_field_146e.pl:66
 msgid "Conductors"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
+msgid "Confirm deletion of city"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -417,8 +429,8 @@ msgctxt "basket created by"
 msgid "Created by:"
 msgstr "Létrehozva"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:514
 #, fuzzy
 msgctxt "purchase suggestion created by"
 msgid "Created by:"
@@ -511,7 +523,28 @@ msgctxt "music"
 msgid "E flat"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:27
+msgctxt "Edit course reserve"
+msgid "Edit"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, perl-brace-format
+msgid "Edit {title}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#, perl-brace-format
+msgid "Edit {title} by {author}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#, fuzzy
+msgctxt "Editing MARC record titled:"
+msgid "Editing"
+msgstr "Várakozó előjegyzések:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:61
 #, fuzzy
 msgid "Elasticsearch is currently disabled."
 msgstr "Az olvasóra nem érvényes jelenleg semmilyen korlátozás."
@@ -597,12 +630,17 @@ msgstr "%sTéves postacím: %s %sElvesztett kártya:%s "
 msgid "Hide SQL code"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1113
 #, fuzzy
 msgid "Hold"
 msgid_plural "Holds"
 msgstr[0] "Előjegyzések"
 msgstr[1] "Előjegyzések"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:98
+#, perl-brace-format
+msgid "Holds waiting over {count} days:"
+msgstr ""
 
 #: Koha/Database/Columns.pm:142
 msgid "Home library"
@@ -620,12 +658,12 @@ msgstr "ISSN"
 msgid "Illustrations"
 msgstr "Illusztrációk"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
 msgstr ""
@@ -644,7 +682,7 @@ msgstr ""
 msgid "Internal note"
 msgstr "Interlingva"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:47
 #, perl-brace-format
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr ""
@@ -670,20 +708,20 @@ msgstr ""
 msgid "Item damaged"
 msgstr "Rongálódott példány"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:288
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:297
 msgid "Item does not belong to your library"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:289
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:298
 #, fuzzy
 msgid "Item has a waiting hold"
 msgstr ": ennek a dokumentumnak van egy várakozó előjegyzése."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:290
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:299
 msgid "Item has linked analytics"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:287
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:296
 #, fuzzy
 msgid "Item is checked out"
 msgstr "Kölcsönzött kiadványok"
@@ -712,6 +750,12 @@ msgstr "Kiadványtípus"
 msgid "Item withdrawn"
 msgstr "A példányt kivonták a kölcsönzésből."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:53
+#, fuzzy
+msgctxt "Items attached to a bibliographic record"
+msgid "Items"
+msgstr "Elveszett dokumentum"
+
 #: Koha/Database/Columns.pm:296
 #, fuzzy
 msgid "Itemtype"
@@ -722,6 +766,10 @@ msgstr "Kiadványtípus"
 #: cataloguing/value_builder/unimarc_field_146e.pl:62
 #: cataloguing/value_builder/unimarc_field_146f.pl:61
 msgid "Keyboard"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Koha"
 msgstr ""
 
 #: Koha/Database/Columns.pm:226
@@ -742,7 +790,7 @@ msgstr "LCCN"
 msgid "Last activity date"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:291
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:300
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr ""
 
@@ -784,12 +832,12 @@ msgstr "Elveszett ("
 msgid "Lost status"
 msgstr "05 Bejegyzés állapota"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, fuzzy
 msgid "Mappings have been reset successfully."
 msgstr "%s olvasókat sikeresen törölte"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:57
 #, fuzzy
 msgid "Mappings updated successfully."
 msgstr "sikeresen frissítve"
@@ -821,12 +869,21 @@ msgstr "Mobil telefonszám"
 msgid "Modification date"
 msgstr "Módosítás dátuma"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
+#, fuzzy
+msgid "Modify city"
+msgstr "Időszakos"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
 msgstr ""
 
 #: Koha/Database/Columns.pm:256
 msgid "Name of part/section of a work"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:12
+msgid "New city"
 msgstr ""
 
 #: Koha/Database/Columns.pm:230
@@ -884,21 +941,21 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:458
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:706
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:104
 #, fuzzy
 msgctxt "noun"
 msgid "Order"
 msgstr "Megrendelve"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:209
 #, fuzzy
 msgctxt "verb"
 msgid "Order"
@@ -934,6 +991,11 @@ msgstr "További telefonszám:"
 #: Koha/Database/Columns.pm:173
 msgid "Overdrive auth token"
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:21
+#, fuzzy, perl-brace-format
+msgid "Overdues at {library}"
+msgstr "Állandó könyvtár"
 
 #: Koha/Database/Columns.pm:87
 #, fuzzy
@@ -1008,8 +1070,8 @@ msgstr "Elsődleges email"
 msgid "Primary phone"
 msgstr "Elsődleges telefonszám"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:562
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:101
 msgctxt "Message transport type"
 msgid "Print"
 msgstr ""
@@ -1049,6 +1111,25 @@ msgstr "Mennyiség:"
 msgid "Quantity received"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:309
+#, fuzzy
+msgctxt "EDIFACT message QUOTE"
+msgid "Quotes"
+msgstr "Megjegyzések"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:108
+#, fuzzy
+msgctxt "citations"
+msgid "Quotes"
+msgstr "Megjegyzések"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, fuzzy
+msgctxt "Bibliographic record number"
+msgid "Record #"
+msgstr "#rekord"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Beiratkozás dátuma"
@@ -1063,6 +1144,11 @@ msgstr ""
 
 #: Koha/Database/Columns.pm:91 Koha/Database/Columns.pm:236
 msgid "Replacement price"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:29
+msgctxt "Place course reserve"
+msgid "Reserve"
 msgstr ""
 
 #: Koha/Database/Columns.pm:156
@@ -1257,23 +1343,23 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:51
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
 #, fuzzy
 msgctxt "Semester"
 msgid "Term"
 msgstr "Kifejezés"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
 #, fuzzy
 msgctxt "Semester"
 msgid "Term:"
 msgstr "Félév:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:917
 #, fuzzy, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -1335,7 +1421,7 @@ msgstr "videófelvétel azonosító"
 msgid "Uniform title"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:292
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:301
 msgid "Unknown reason"
 msgstr "Ismeretlen ok"
 
@@ -1409,7 +1495,7 @@ msgstr "Bevonás"
 msgid "Woodwinds"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
@@ -3095,7 +3181,7 @@ msgid_plural "{count} library limitations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:57
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."

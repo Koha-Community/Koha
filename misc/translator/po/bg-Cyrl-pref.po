@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2022-12-23 18:45+0000\n"
+"PO-Revision-Date: 2023-05-02 07:03+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: bg\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/22.11/bg-Cyrl-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1671821143.303352\n"
+"X-POOTLE-MTIME: 1683011036.915459\n"
 
 msgid "accounting.pref"
 msgstr "Транзакции"
@@ -9183,7 +9183,6 @@ msgstr ""
 "адреса в описанието библиотеката:"
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
 "left empty, all ILL requests will be displayed. The request codes are "
@@ -9192,9 +9191,9 @@ msgid ""
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "разделени с |). Ако оставите полето празно, ще бъдат показани всички заявки "
-"за МБЗ. Кодовете на заявката могат да бъдат намерени в категорията <a href="
-"\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> константни стойности."
+"за МБЗ. Кодовете на заявката могат да бъдат намерени в категорията <a href"
+"=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
+">ILLSTATUS</a> константни стойности."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -9675,9 +9674,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Не разрешавайте"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "на читателите да избират свои собствени настройки за поверителност за "
@@ -10060,9 +10060,10 @@ msgstr ""
 "имат по-малко"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] в глоби (оставете празно, за да деактивирате)."
 
 # OPAC > Policy
@@ -10310,26 +10311,12 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "Основна библиотека"
 
 # OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"(Налични) отделни екземпляри в резултата от търсенето в OPAC XSLT и не "
-"показват повече от"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"(недостъпни) отделни екземпляри за категории като Отчислени, Повредени, "
-"Задържани, но само когато ги групирате по библиотеки.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (ЗАБЕЛЕЖКА: За големи консорциуми препоръчваме да групирате неналичните "
 "екземпляри по подстатус, броят се само екземпляри в списъка.)"
@@ -10338,16 +10325,41 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Групирайте неналичните екземпляри по"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Показвайте не повече от"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "(Налични) отделни екземпляри в резултата от търсенето в OPAC XSLT.<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"(недостъпни) отделни екземпляри за категории като Отчислени, Повредени, "
+"Задържани, но само когато ги групирате по библиотеки.<br>"
+
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "библиотека и под статус"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "само по библиотека"
 
 # OPAC > Appearance
@@ -12145,9 +12157,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Не разрешавайте"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "персонала, да може да зададе възможността глобите на читател да бъдат "
 "гледани от свързани читатели в OPAC."

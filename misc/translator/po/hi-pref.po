@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2023-03-10 04:35+0000\n"
+"PO-Revision-Date: 2023-04-03 09:22+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hi/22.11/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1678422904.574466\n"
+"X-POOTLE-MTIME: 1680513770.073412\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -9519,7 +9519,6 @@ msgid ""
 msgstr "स्टाफ ILL नोटिस के लिए फालबैक ईमेल पता, पुस्तकालय के पते के अभाव में भेजा जाएगा:"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
 "left empty, all ILL requests will be displayed. The request codes are "
@@ -9527,9 +9526,10 @@ msgid ""
 "href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
-"यदि खाली छोड़ दिया जाता है, तो सभी ILL अनुरोध प्रदर्शित किए जाएंगे। अनुरोध कोड <a "
-"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILLSTATUS"
-"\">ILLSTATUS</a> अधिकृत मान श्रेणी में पाया जा सकता है।"
+"(के साथ अलग किया गया । ) यदि खाली छोड़ दिया जाता है, तो सभी बीमार अनुरोध प्रदर्शित "
+"किए जाएंगे। अनुरोध कोड को बैकेंड में परिभाषित किया गया है और अतिरिक्त उपनामों को <a "
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> अधिकृत मान श्रेणी के माध्यम से कॉन्फ़िगर किया जा सकता है।"
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -9997,9 +9997,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# अनुमति नही"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# संरक्षक के गारंटर को "
@@ -10377,9 +10378,10 @@ msgstr ""
 "नवीनीकृत करने की अनुमति"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr ""
 "opac.pref # OPACFineNoRenewals # [% LOCAL_CURRENCY%] जुर्माने के रूप में (निष्क्रिय "
 "करने के लिए खाली छोड़ दें)।"
@@ -10640,26 +10642,12 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "opac.pref#OPACResultsLibrary# होम पुस्तकालय"
 
 # OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"opac.pref#OPACResultsMaxItems# (उपलब्ध) ओपेक XSLT खोज परिणामों पर अलग-अलग आइटम, "
-"और इससे अधिक नहीं दिखाएं"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"opac.pref#OPACResultsMaxItems# (अनुपलब्ध) श्रेणियों के लिए अलग-अलग आइटम जैसे चेक आउट, "
-"क्षतिग्रस्त, होल्ड पर, लेकिन केवल तभी जब आप उन्हें शाखा द्वारा समूहित करते हैं।<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 "opac.pref#OPACResultsMaxItems# . (नोट: बड़े कंसोर्टिया के लिए हम अनुशंसा करते हैं कि "
 "अनुपलब्ध आइटम को सबस्टैटस के आधार पर समूहित किया जाए, केवल आइटम की गणना की जाती है।)"
@@ -10668,16 +10656,44 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "opac.pref#OPACResultsMaxItems# अनुपलब्ध आइटमों को समूह द्वारा"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "opac.pref#OPACResultsMaxItems# से अधिक न दिखाएं"
 
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr ""
+"opac.pref#OPACResultsMaxItems# (उपलब्ध) ओपेक XSLT खोज परिणामों पर अलग-अलग आइटम, "
+"और इससे अधिक नहीं दिखाएं"
+
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"opac.pref#OPACResultsMaxItems# (अनुपलब्ध) श्रेणियों के लिए अलग-अलग आइटम जैसे चेक आउट, "
+"क्षतिग्रस्त, होल्ड पर, लेकिन केवल तभी जब आप उन्हें शाखा द्वारा समूहित करते हैं।<br>"
+
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "शाखा और उपस्थिति"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "केवल शाखा"
 
 # OPAC > Appearance
@@ -12530,9 +12546,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# अनुमति न दें"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# ओपैक में जुड़े संरक्षकों "
 "द्वारा एक संरक्षक के जुर्माना की क्षमता निर्धारित करने के लिए कर्मचारी."
@@ -13427,9 +13444,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - जिप/पोस्टल कोड"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Surname"
-msgstr "patrons.pref#PrefillGuaranteeField# वैकल्पिक पता: फैक्स"
+msgstr "सरनेम"
 
 # Patrons > Patron relationships
 msgid ""

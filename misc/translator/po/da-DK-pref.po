@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2023-02-25 10:41+0000\n"
+"PO-Revision-Date: 2023-04-28 14:34+0000\n"
 "Last-Translator: Poul Wachmann <poul@wachmann.dk>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: da\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /da/22.11/da-DK-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1677321708.298395\n"
+"X-POOTLE-MTIME: 1682692456.013269\n"
 
 # Cataloging
 #, fuzzy
@@ -9579,9 +9579,8 @@ msgstr "når tidsskrifter tilføjes, slettes eller ændres."
 msgid "opac.pref"
 msgstr "opac.pref"
 
-#, fuzzy
 msgid "opac.pref Advanced search options"
-msgstr "Avanceret søgning"
+msgstr "opac.pref Avanceret søgning valg"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -9656,10 +9655,10 @@ msgstr "Tillad"
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Tillad ikke"
 
-# OPAC > Privacy
+# OPAC > Privacy > AllowPatronToSetFinesVisibilityForGuarantor
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 
@@ -10040,9 +10039,10 @@ msgstr ""
 "Tillad kun lånere at forlænge deres bøger i OPAC, hvis de har mindre end"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] i bøder (blank for "
 "deaktivering)."
@@ -10311,25 +10311,22 @@ msgstr "hjemmebibliotek"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
+msgstr ""
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
 msgstr ""
 
 # OPAC > Features
@@ -10337,14 +10334,27 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Vis"
 
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "for eksemplarer i OPAC søgeresultater."
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "Medtag"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "Medtag"
 
 # OPAC > Appearance
@@ -12158,10 +12168,10 @@ msgstr ""
 msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Tillad ikke"
 
-# Patrons > Patron relationships
+# Patrons > Patron relationships > AllowStaffToSetFinesVisibilityForGuarantor
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 
 # Patrons > General

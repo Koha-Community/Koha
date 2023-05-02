@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-03-08 08:43+0000\n"
+"PO-Revision-Date: 2023-04-27 06:53+0000\n"
 "Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nb\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nb/22.11/nb-NO-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1678264991.091180\n"
+"X-POOTLE-MTIME: 1682578403.547213\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -9410,7 +9410,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
 "left empty, all ILL requests will be displayed. The request codes are "
@@ -9419,9 +9418,9 @@ msgid ""
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "(adskilt med \"|\"). Om denne er tom vil alle bestillinger vises, uavhengig "
-"av status. Kodene finnes i kategorien <a href=\"/cgi-bin/koha/admin/"
-"authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</a> for autoriserte "
-"verdier."
+"av status. Kodene defineres av de ulike \"backendene\" som er i bruk og/"
+"eller i kategorien <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a> for autoriserte verdier."
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
 msgid ""
@@ -9928,7 +9927,7 @@ msgstr "Ikke tillat"
 #, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "at lånere velger sine egne personverninnstillinger for å vise lånerens utlån "
@@ -10319,9 +10318,10 @@ msgstr ""
 "mindre enn"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] i gebyrer (la stå tom for å deaktivere)."
 
 # OPAC > Appearance
@@ -10591,21 +10591,10 @@ msgstr "hjemmebibliotek"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 
 # OPAC > Appearance
@@ -10613,19 +10602,39 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "hjemmebibliotek"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "hjemmebibliotek"
 
+# OPAC > Features
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "individuelle (tilgjengelige) eksemplar i OPAC XSLT søkeresultater.<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "aktuelle plassering"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "hjemmebibliotek"
 
 # OPAC > Appearance
@@ -12489,7 +12498,7 @@ msgstr "Ikke tillat"
 #, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "ansatte for å angi lånerens mulighet for at utlån skal kunne vises av "
 "tilkoblede lånere i publikumskatalogen."

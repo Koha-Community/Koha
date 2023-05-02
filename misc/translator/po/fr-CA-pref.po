@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-02-14 20:39+0000\n"
-"Last-Translator: marieluce <marie-luce.laflamme@inLibro.com>\n"
+"PO-Revision-Date: 2023-04-28 17:53+0000\n"
+"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fr_CA/22.11/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1676407156.940406\n"
+"X-POOTLE-MTIME: 1682704413.383906\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -642,7 +642,7 @@ msgstr "Authentification CAS"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref Google OpenID Connect"
-msgstr "Options d'authentification"
+msgstr "Google OpenID Connect"
 
 # Administration > Interface options
 msgid "admin.pref Interface options"
@@ -3691,7 +3691,7 @@ msgstr "Le numéro de contrôle (001)"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
-msgstr "est généré comme numéro de notice (biblionumber)."
+msgstr "est généré avec le numéro de notice (biblionumber)."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#autoControlNumber# not generated automatically."
@@ -5392,9 +5392,7 @@ msgstr "Demander de choisir"
 msgid ""
 "circulation.pref#FilterBeforeOverdueReport# staff to choose which checkouts "
 "to show before running the overdues report."
-msgstr ""
-"permet de filtrer les résultats avant de lancer le rapport des documents en "
-"retard (Circulation > Retards)."
+msgstr "des filtres avant de lancer le rapport des documents en retard."
 
 # Circulation > Interface
 msgid "circulation.pref#FineNotifyAtCheckin# Don't notify"
@@ -9275,7 +9273,6 @@ msgstr ""
 "de PEB destinés au personnel à l'adresse suivante :"
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
 "left empty, all ILL requests will be displayed. The request codes are "
@@ -9284,9 +9281,10 @@ msgid ""
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
 "(séparés par |). Si cette préférence système est vide, toutes les demandes "
-"de PEB seront affichées. Les codes de demande se trouvent dans la catégorie "
-"de valeurs autorisées <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
-"searchfield=ILLSTATUS\">ILLSTATUS</a>."
+"de PEB seront affichées. Les codes de demande se trouvent dans l'application "
+"dorsale (backend) et des statuts additionnels peuvent être ajoutés à la "
+"catégorie de valeurs autorisées <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a>."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -9769,9 +9767,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Interdire"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 " aux utilisateurs de choisir s'ils souhaitent montrer leurs amendes à leur "
@@ -10159,9 +10158,10 @@ msgstr ""
 "moins de"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] en amendes (laissez vide pour désactiver)."
 
 # OPAC > Policy
@@ -10420,53 +10420,63 @@ msgstr "la bibliothèque propriétaire"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"exemplaires (disponibles) distincts dans les résultats de recherche à l'OPAC "
-"(XSLT), et n'afficher au maximum que"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"exemplaires (non disponibles) distincts pour les catégories telles que "
-"Prêté, Endommagé, Réservé, mais seulement lorsque les exemplaires non "
-"disponibles sont regroupés par bibliothèque.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (NOTE : Pour les grands réseaux de bibliothèques, nous recommandons de "
-"regrouper les exemplaires non disponibles par statut, en affichant le nombre "
-"d'exemplaires seulement.)"
+"regrouper les exemplaires non disponibles par 'statut seulement', en "
+"affichant le nombre d'exemplaires par statut. L'option 'bibliothèque "
+"seulement' montrera le nombre d'exemplaires indisponibles par bibliothèque.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Regrouper les exemplaires non disponibles par"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+"Si la préférence système <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACResultsUnavailableGroupingBy\">OPACResultsUnavailableGroupingBy</a> est "
+"paramétrée à \"bibliothèque et statut\", n'afficher au maximum que"
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "N'afficher au maximum que"
 
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
-msgstr "statut"
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr ""
+"exemplaires (disponibles) distincts dans les résultats de recherche à l'OPAC "
+"(XSLT).<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"exemplaires (non disponibles) distincts pour les catégories telles que "
+"Prêté, Endommagé, Réservé, etc. par bibliothèque<br>"
 
 # OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
-msgstr "bibliothèque"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
+msgstr "bibliothèque et statut"
 
 # OPAC > Appearance
-#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library only"
+msgstr "bibliothèque seulement"
+
+# OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# substatus only"
-msgstr "statut"
+msgstr "statut seulement"
 
 # OPAC > Appearance
 msgid ""
@@ -12285,9 +12295,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Interdire"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "au personnel de paramétrer la possibilité de voir les amendes d'un "
 "utilisateur à partir d'un compte lié (garant) à l'OPAC."
@@ -12608,18 +12619,17 @@ msgstr ""
 "d'utilisateurs avec l'option \"standard\" :"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
 "\"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional "
 "fields added to this preference will be added as search options in the "
 "dropdown menu on the patron search page."
 msgstr ""
-"Si cette préférence est vide, Koha utilisera les champs \"surname,firstname,"
-"othernames,cardnumber,userid\" (prénom, nom de famille, autres noms, numéro "
-"de carte, identifiant) par défaut. Les champs supplémentaires ajoutés ici "
-"seront ajoutés comme options de recherche dans le menu déroulant sur la page "
-"de recherche d'utilisateurs."
+"Si cette préférence est vide, Koha utilisera les champs \"firstname,"
+"middle_name,surname,othernames,cardnumber,userid\" (prénom, second prénom, "
+"nom de famille, autres noms, numéro de carte, identifiant) par défaut. Les "
+"champs supplémentaires ajoutés ici seront ajoutés comme options de recherche "
+"dans le menu déroulant sur la page de recherche d'utilisateurs."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12835,6 +12845,8 @@ msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
 "patron deletion, use borrowernumber "
 msgstr ""
+"<br/>Si les listes sont transférées, utiliser le numéro d'utilisateur "
+"(borrowernumber) "
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12842,12 +12854,17 @@ msgid ""
 "this patron are either deleted or transferred to a new owner according to "
 "your choice; other private lists (not shared) are deleted."
 msgstr ""
+"Toutes les listes publiques ou partagées d'un utilisateur sont soit "
+"supprimées ou transférées à un nouveau propriétaire; les listes privées sont "
+"supprimées."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# When deleting a patron who "
 "owns public or shared lists,"
 msgstr ""
+"Lors de la suppression d'un utilisateur propriétaire de listes publiques ou "
+"partagées,"
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12855,15 +12872,17 @@ msgid ""
 "this field empty in order to change owner to the active staff member who "
 "deletes the patron."
 msgstr ""
+"comme nouveau propriétaire, ou laisser ce champ vide pour que le membre du "
+"personnel qui supprime l'utilisateur soit le nouveau propriétaire."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# change owner of these lists."
-msgstr ""
+msgstr "changer le propriétaire de ces listes."
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid "patrons.pref#ListOwnershipUponPatronDeletion# delete these lists."
-msgstr ""
+msgstr "supprimer ces listes."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -14265,23 +14284,19 @@ msgid "searching.pref#SearchWithISBNVariations# search"
 msgstr "chercher"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
-msgstr "Quand une recherche est faite sur l'index ISBN,"
+msgstr "Quand une recherche est faite sur l'index ISSN,"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# don't search"
 msgstr "ne pas chercher"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# on all variations of the ISSN."
-msgstr "toutes les variations de l'ISBN."
+msgstr "toutes les variations de l'ISSN."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchWithISSNVariations# search"
 msgstr "chercher"
 

@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2023-02-22 06:12+0000\n"
-"Last-Translator: Josef Moravec <josef.moravec@knihovna-uo.cz>\n"
+"PO-Revision-Date: 2023-04-16 20:18+0000\n"
+"Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /cs/22.11/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1677046366.500064\n"
+"X-POOTLE-MTIME: 1681676309.569639\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2432,7 +2432,6 @@ msgid "authorities.pref#AutoLinkBiblios# Don't"
 msgstr "Neobnovovat"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
 "when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
@@ -2441,12 +2440,12 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"službu ThingISBN k zobrazení dalších vydání titulu (je nutné mít aktivní <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> nebo <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
-"\">OPACFRBRizeEditions</a>). Toto nastavení je nezávislé na službě Library "
-"Thing pro knihovny."
+"pokus o automatické propojení záhlaví při ukládání záznamů v modulu "
+"katalogizace, dodržuje nastavení <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=LinkerRelink'>LinkerRelink</a> a <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> přo "
+"úpravě záznamů."
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# Do"
@@ -2458,15 +2457,16 @@ msgid "authorities.pref#CatalogModuleRelink# Don't"
 msgstr "Nepropojovat"
 
 # Authorities > Linker
-#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module "
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"při ukládání katalogizačních záznamů automaticky znovu ta záhlaví, která již "
-"byla dříve propojena."
+"při ukládání záznamů v modulu katalogizace automaticky znovu propojí "
+"záhlaví, které byly dříve propojeny (vyžaduje nastavení <a href='/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # Enhanced content > Library Thing
 #, fuzzy
@@ -9862,7 +9862,7 @@ msgstr "Nepovolit"
 #, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "nastavit vlastní úroveň soukromí při zobrazení výpůjček čtenáře jeho ručiteli"
@@ -10258,9 +10258,10 @@ msgstr ""
 "než"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] na pokutách (ponechat prázdné pro zablokování)."
 
 # OPAC > Appearance
@@ -10529,21 +10530,10 @@ msgstr "domovskou knihovnu"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 
 # OPAC > Appearance
@@ -10551,19 +10541,40 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "domovskou knihovnu"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "domovskou knihovnu"
 
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "pro výtisky ve výsledcích hledání na OPACu."
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "aktuální umístění"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "domovskou knihovnu"
 
 # OPAC > Appearance
@@ -12430,7 +12441,7 @@ msgstr "Nepovolit"
 #, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "knihovníkům možnost nastavit zobrazování výpůjček čtenáře prknihovníkům "
 "možnost nastavit zobrazování výpůjček čtenáře propojeným čtenářům v OPAC."

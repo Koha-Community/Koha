@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 18:53-0300\n"
+"POT-Creation-Date: 2023-04-26 15:32-0300\n"
 "PO-Revision-Date: 2022-05-01 10:33-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ko\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Pootle-Path: /ko/22.11/ko-Kore-KP-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
 msgid "(search field {field_name} with mapping {marc_field}.)"
 msgstr ""
@@ -71,6 +71,10 @@ msgstr "주소"
 #: Koha/Database/Columns.pm:117
 msgid "Address 2"
 msgstr "주소 2"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Administration"
+msgstr ""
 
 #: Koha/Database/Columns.pm:266
 msgid "Age restriction"
@@ -167,20 +171,20 @@ msgstr "다른 연락처: 제목"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "다른 연락처: 주기"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:44
 #, fuzzy
 msgid ""
 "An error occurred when deleting the existing mappings. Nothing has been "
 "changed!"
 msgstr "이미지를 삭제하는중에 오류가 발생했습니다"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
 #, fuzzy, perl-brace-format
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
 msgstr "이미지를 삭제하는중에 오류가 발생했습니다"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, fuzzy, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "이미지를 삭제하는중에 오류가 발생했습니다"
@@ -272,7 +276,7 @@ msgstr ""
 msgid "Budgeted cost, tax incl."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, fuzzy, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
@@ -330,6 +334,10 @@ msgstr ""
 msgid "Circulation note"
 msgstr "대출 주기"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Cities"
+msgstr ""
+
 #: Koha/Database/Columns.pm:146
 msgid "City"
 msgstr "시"
@@ -359,6 +367,10 @@ msgstr "설명"
 #: cataloguing/value_builder/unimarc_field_146c.pl:66
 #: cataloguing/value_builder/unimarc_field_146e.pl:66
 msgid "Conductors"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
+msgid "Confirm deletion of city"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -393,8 +405,8 @@ msgctxt "basket created by"
 msgid "Created by:"
 msgstr "작성자:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:514
 #, fuzzy
 msgctxt "purchase suggestion created by"
 msgid "Created by:"
@@ -484,7 +496,28 @@ msgctxt "music"
 msgid "E flat"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:27
+msgctxt "Edit course reserve"
+msgid "Edit"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, perl-brace-format
+msgid "Edit {title}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#, perl-brace-format
+msgid "Edit {title} by {author}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#, fuzzy
+msgctxt "Editing MARC record titled:"
+msgid "Editing"
+msgstr "예약 대기중:"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:61
 #, fuzzy
 msgid "Elasticsearch is currently disabled."
 msgstr "현재 사용 가능한 %s가 없습니다."
@@ -569,12 +602,17 @@ msgstr ""
 msgid "Hide SQL code"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1113
 #, fuzzy
 msgid "Hold"
 msgid_plural "Holds"
 msgstr[0] "예약"
 msgstr[1] "예약"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:98
+#, perl-brace-format
+msgid "Holds waiting over {count} days:"
+msgstr ""
 
 #: Koha/Database/Columns.pm:142
 msgid "Home library"
@@ -592,12 +630,12 @@ msgstr "ISSN"
 msgid "Illustrations"
 msgstr "삽화"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
 msgstr ""
@@ -615,7 +653,7 @@ msgstr ""
 msgid "Internal note"
 msgstr "내부 주기"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:47
 #, perl-brace-format
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr ""
@@ -641,22 +679,22 @@ msgstr ""
 msgid "Item damaged"
 msgstr "파손자료"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:288
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:297
 #, fuzzy
 msgid "Item does not belong to your library"
 msgstr ": 항목이 도서관에 소장되어있지 않습니다."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:289
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:298
 #, fuzzy
 msgid "Item has a waiting hold"
 msgstr ": 항목이 예약 대기중입니다."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:290
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:299
 #, fuzzy
 msgid "Item has linked analytics"
 msgstr ": 항목이 링크됨"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:287
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:296
 #, fuzzy
 msgid "Item is checked out"
 msgstr "항목 대출"
@@ -682,6 +720,12 @@ msgstr "항목형식"
 msgid "Item withdrawn"
 msgstr "등록 취소된 자료"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:53
+#, fuzzy
+msgctxt "Items attached to a bibliographic record"
+msgid "Items"
+msgstr "자료 분실"
+
 #: Koha/Database/Columns.pm:296
 msgid "Itemtype"
 msgstr "항목형식"
@@ -691,6 +735,10 @@ msgstr "항목형식"
 #: cataloguing/value_builder/unimarc_field_146e.pl:62
 #: cataloguing/value_builder/unimarc_field_146f.pl:61
 msgid "Keyboard"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Koha"
 msgstr ""
 
 #: Koha/Database/Columns.pm:226
@@ -710,7 +758,7 @@ msgstr "미국의회도서관 청구기호"
 msgid "Last activity date"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:291
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:300
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr ""
 
@@ -750,12 +798,12 @@ msgstr "분실은"
 msgid "Lost status"
 msgstr "분실 상태"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 #, fuzzy
 msgid "Mappings have been reset successfully."
 msgstr "맵핑이 저장되었습니다"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:57
 #, fuzzy
 msgid "Mappings updated successfully."
 msgstr "성공적으로 업데이트되었습니다"
@@ -787,12 +835,21 @@ msgstr "휴대폰 번호"
 msgid "Modification date"
 msgstr "수정일"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
+#, fuzzy
+msgid "Modify city"
+msgstr "주기성"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
 msgstr ""
 
 #: Koha/Database/Columns.pm:256
 msgid "Name of part/section of a work"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:12
+msgid "New city"
 msgstr ""
 
 #: Koha/Database/Columns.pm:230
@@ -849,21 +906,21 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:458
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:706
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:104
 #, fuzzy
 msgctxt "noun"
 msgid "Order"
 msgstr "주문"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:209
 #, fuzzy
 msgctxt "verb"
 msgid "Order"
@@ -897,6 +954,11 @@ msgstr "다른 전화"
 #: Koha/Database/Columns.pm:173
 msgid "Overdrive auth token"
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:21
+#, fuzzy, perl-brace-format
+msgid "Overdues at {library}"
+msgstr "영구도서관"
 
 #: Koha/Database/Columns.pm:87
 #, fuzzy
@@ -969,8 +1031,8 @@ msgstr "주요 이메일"
 msgid "Primary phone"
 msgstr "주요 전화"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:562
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:101
 msgctxt "Message transport type"
 msgid "Print"
 msgstr ""
@@ -1009,6 +1071,25 @@ msgstr "수량"
 msgid "Quantity received"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:309
+#, fuzzy
+msgctxt "EDIFACT message QUOTE"
+msgid "Quotes"
+msgstr "주"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:108
+#, fuzzy
+msgctxt "citations"
+msgid "Quotes"
+msgstr "주"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, fuzzy
+msgctxt "Bibliographic record number"
+msgid "Record #"
+msgstr "#기록"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "등록일"
@@ -1024,6 +1105,11 @@ msgstr ""
 #: Koha/Database/Columns.pm:91 Koha/Database/Columns.pm:236
 msgid "Replacement price"
 msgstr "대체 가격"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:29
+msgctxt "Place course reserve"
+msgid "Reserve"
+msgstr ""
 
 #: Koha/Database/Columns.pm:156
 #, fuzzy
@@ -1217,23 +1303,23 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:51
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
 #, fuzzy
 msgctxt "Semester"
 msgid "Term"
 msgstr "용어"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
 #, fuzzy
 msgctxt "Semester"
 msgid "Term:"
 msgstr "용어:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:917
 #, fuzzy, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -1292,7 +1378,7 @@ msgstr "URI (Uniform Resource Identifier)"
 msgid "Uniform title"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:292
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:301
 #, fuzzy
 msgid "Unknown reason"
 msgstr "알 수 없는 오류."
@@ -1367,7 +1453,7 @@ msgstr "중지 상태"
 msgid "Woodwinds"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
@@ -3055,7 +3141,7 @@ msgid_plural "{count} library limitations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:57
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 18:23-0300\n"
+"POT-Creation-Date: 2023-04-26 13:57-0300\n"
 "PO-Revision-Date: 2023-02-27 12:47+0000\n"
 "Last-Translator: grenier <aurelie.grenier@orleans-metropole.fr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Pootle-Revision: 1\n"
 "X-POOTLE-MTIME: 1677502072.378277\n"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
 msgid "(search field {field_name} with mapping {marc_field}.)"
 msgstr "(champ de recherche {field_name} avec sa correspondance {marc_field}.)"
@@ -74,6 +74,10 @@ msgstr "Adresse"
 #: Koha/Database/Columns.pm:117
 msgid "Address 2"
 msgstr "Adresse 2"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Administration"
+msgstr ""
 
 #: Koha/Database/Columns.pm:266
 msgid "Age restriction"
@@ -167,7 +171,7 @@ msgstr "Autre contact : Civilité"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "Autre contact : Code postal"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:44
 msgid ""
 "An error occurred when deleting the existing mappings. Nothing has been "
 "changed!"
@@ -175,7 +179,7 @@ msgstr ""
 "Une erreur est survenue lors de la suppression des correspondances "
 "existantes. Aucune modification n'a été apportée !"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
 #, perl-brace-format
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
@@ -183,7 +187,7 @@ msgstr ""
 "Une erreur est survenue lors de la mise à jour des correspondances des index "
 "d'Elasticsearch : {message}."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr ""
@@ -272,7 +276,7 @@ msgstr "Prix budgété HT."
 msgid "Budgeted cost, tax incl."
 msgstr "Prix budgété TTC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
@@ -326,6 +330,10 @@ msgstr "Choeurs"
 msgid "Circulation note"
 msgstr "Note de circulation"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Cities"
+msgstr ""
+
 #: Koha/Database/Columns.pm:146
 msgid "City"
 msgstr "Ville"
@@ -355,6 +363,10 @@ msgstr "Commentaire"
 msgid "Conductors"
 msgstr "Chefs d'orchestre"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
+msgid "Confirm deletion of city"
+msgstr ""
+
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
 msgstr "Numéro d'exemplaire"
@@ -383,8 +395,8 @@ msgctxt "basket created by"
 msgid "Created by:"
 msgstr "Créé par :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:513
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:514
 msgctxt "purchase suggestion created by"
 msgid "Created by:"
 msgstr "Créée par :"
@@ -469,7 +481,28 @@ msgctxt "music"
 msgid "E flat"
 msgstr "E bémol"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:27
+msgctxt "Edit course reserve"
+msgid "Edit"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, perl-brace-format
+msgid "Edit {title}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#, perl-brace-format
+msgid "Edit {title} by {author}"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#, fuzzy
+msgctxt "Editing MARC record titled:"
+msgid "Editing"
+msgstr "réservation disponible"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:61
 msgid "Elasticsearch is currently disabled."
 msgstr "Elasticsearch est actuellement désactivé."
 
@@ -552,11 +585,16 @@ msgstr "Fanion «Parti sans laisser d'adresse»"
 msgid "Hide SQL code"
 msgstr "Masquer le code SQL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1113
 msgid "Hold"
 msgid_plural "Holds"
 msgstr[0] "Réservation"
 msgstr[1] "Réservations"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:98
+#, perl-brace-format
+msgid "Holds waiting over {count} days:"
+msgstr ""
 
 #: Koha/Database/Columns.pm:142
 msgid "Home library"
@@ -574,12 +612,12 @@ msgstr "ISSN"
 msgid "Illustrations"
 msgstr "Illustrations"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
 msgstr "L'index '{index}' doit être recréé."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
 msgstr "L'index '{index}' doit être ré-indexé."
@@ -597,7 +635,7 @@ msgstr "Instrument joué de manière non conventionnelle"
 msgid "Internal note"
 msgstr "Note interne"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:47
 #, perl-brace-format
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
 msgstr ""
@@ -624,19 +662,19 @@ msgstr "Est un périodique ?"
 msgid "Item damaged"
 msgstr "Exemplaire endommagé"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:288
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:297
 msgid "Item does not belong to your library"
 msgstr "Cet exemplaire n'appartient pas à votre site"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:289
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:298
 msgid "Item has a waiting hold"
 msgstr "Cet exemplaire a une réservation en attente"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:290
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:299
 msgid "Item has linked analytics"
 msgstr "L'exemplaire a des notices de dépouillement liées"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:287
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:296
 msgid "Item is checked out"
 msgstr "Cet exemplaire est prêté"
 
@@ -660,6 +698,12 @@ msgstr "Type de document"
 msgid "Item withdrawn"
 msgstr "Retiré des collections"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:53
+#, fuzzy
+msgctxt "Items attached to a bibliographic record"
+msgid "Items"
+msgstr "Perdu"
+
 #: Koha/Database/Columns.pm:296
 msgid "Itemtype"
 msgstr "Type de document"
@@ -670,6 +714,10 @@ msgstr "Type de document"
 #: cataloguing/value_builder/unimarc_field_146f.pl:61
 msgid "Keyboard"
 msgstr "Clavier"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+msgid "Koha"
+msgstr ""
 
 #: Koha/Database/Columns.pm:226
 msgid "Koha item type"
@@ -687,7 +735,7 @@ msgstr "LCCN"
 msgid "Last activity date"
 msgstr "Date de dernière activité"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:291
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:300
 msgid "Last item for bibliographic record with biblio-level hold on it"
 msgstr ""
 "Dernier exemplaire d'une notice bibliographique sur laquelle il y a une "
@@ -727,11 +775,11 @@ msgstr "Perdu le"
 msgid "Lost status"
 msgstr "Statut perdu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 msgid "Mappings have been reset successfully."
 msgstr "Les correspondances ont été réinitialisées avec succès."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:57
 msgid "Mappings updated successfully."
 msgstr "Les correspondances ont été mises à jour avec succès."
 
@@ -762,6 +810,11 @@ msgstr "Numéro de téléphone portable"
 msgid "Modification date"
 msgstr "Date de modification"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
+#, fuzzy
+msgid "Modify city"
+msgstr "Périodicité"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
 msgstr "Lundi"
@@ -769,6 +822,10 @@ msgstr "Lundi"
 #: Koha/Database/Columns.pm:256
 msgid "Name of part/section of a work"
 msgstr "Nom de partie / section d'une œuvre"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:12
+msgid "New city"
+msgstr ""
 
 #: Koha/Database/Columns.pm:230
 msgid "New status"
@@ -821,20 +878,20 @@ msgstr "Orchestres, ensembles"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:458
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:706
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:256
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:104
 msgctxt "noun"
 msgid "Order"
 msgstr "Commande"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:103
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:105
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:90
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:209
 msgctxt "verb"
 msgid "Order"
 msgstr "Commande"
@@ -864,6 +921,11 @@ msgstr "Autre téléphone"
 #: Koha/Database/Columns.pm:173
 msgid "Overdrive auth token"
 msgstr "Surpasser le jeton d'authentification"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:21
+#, fuzzy, perl-brace-format
+msgid "Overdues at {library}"
+msgstr "Site permanent"
 
 #: Koha/Database/Columns.pm:87
 msgid "Parent order number (internal)"
@@ -932,8 +994,8 @@ msgstr "Courriel principal"
 msgid "Primary phone"
 msgstr "Téléphone principal"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:562
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:101
 msgctxt "Message transport type"
 msgid "Print"
 msgstr "Imprimer"
@@ -971,6 +1033,25 @@ msgstr "Quantité"
 msgid "Quantity received"
 msgstr "Quantité reçue"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:309
+#, fuzzy
+msgctxt "EDIFACT message QUOTE"
+msgid "Quotes"
+msgstr "Notes"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:108
+#, fuzzy
+msgctxt "citations"
+msgid "Quotes"
+msgstr "Notes"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
+#, fuzzy
+msgctxt "Bibliographic record number"
+msgid "Record #"
+msgstr "notice"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Date d'inscription"
@@ -986,6 +1067,11 @@ msgstr "Reste du titre"
 #: Koha/Database/Columns.pm:91 Koha/Database/Columns.pm:236
 msgid "Replacement price"
 msgstr "Prix de remplacement"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:29
+msgctxt "Place course reserve"
+msgid "Reserve"
+msgstr ""
 
 #: Koha/Database/Columns.pm:156
 msgid "Restricted [until] flag"
@@ -1174,21 +1260,21 @@ msgstr "Sauvegarde de la valeur de la TVA (obsolète)"
 msgid "Templates"
 msgstr "Modèles"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:51
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
 msgctxt "Semester"
 msgid "Term"
 msgstr "Terme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:87
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:92
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
 msgctxt "Semester"
 msgid "Term:"
 msgstr "Terme :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:924
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:917
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -1246,7 +1332,7 @@ msgstr "URI (Uniform Resource Identifier)"
 msgid "Uniform title"
 msgstr "Titre uniforme"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:292
+#: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:301
 msgid "Unknown reason"
 msgstr "Raison inconnue"
 
@@ -1319,7 +1405,7 @@ msgstr "Statut retiré des collections"
 msgid "Woodwinds"
 msgstr "Bois"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
@@ -2986,7 +3072,7 @@ msgid_plural "{count} library limitations"
 msgstr[0] "{count} limite par site"
 msgstr[1] "{count} limites par site"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:57
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."

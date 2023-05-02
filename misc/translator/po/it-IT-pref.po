@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2023-03-29 05:37+0000\n"
-"Last-Translator: ztajoli <ztajoli@gmail.com>\n"
+"PO-Revision-Date: 2023-04-21 11:20+0000\n"
+"Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /it/22.11/it-IT-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1680068249.955750\n"
+"X-POOTLE-MTIME: 1682076017.903123\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -9182,9 +9182,8 @@ msgid ""
 msgstr ""
 " (separate con |). Se vuoto, tutte le richieste ILL verranno visualizzate. I "
 "codici richiesti sono definiti nei backend e alias addizionali posso essere "
-"configurati con la lista di valori <a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
-">ILL_STATUS_ALIAS</a>."
+"configurati con la lista di valori <a href=\"/cgi-bin/koha/admin/"
+"authorised_values.pl?searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a>."
 
 # Circulation > Interlibrary loans
 #, fuzzy
@@ -9666,9 +9665,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Non consentire"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "agli utenti di scegliere nelle loro configurazioni della privacy se far "
@@ -10055,9 +10055,10 @@ msgstr ""
 "meno di"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %]come multa (lascia vuoto per disabilitare)."
 
 # OPAC > Policy
@@ -10309,26 +10310,12 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "la biblioteca che le possiede"
 
 # OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-" (disponibile) specifiche copie nei risultati dell'Opac usando XSLT, e non "
-"mostrare più di"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-" (non disponibile) specifiche copie per categorie tipo In prestito, "
-"Dannegiate, Prenotate, ma solo quando le raggruppi per biblioteca.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (NOTA: Per ampli consorzi consigliamo di raggruppare le copie non "
 "disponibili per sottostatus, in modo da elencara solo il loro conteggio.)"
@@ -10337,18 +10324,44 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Raggruppa copie non disponibili per"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Mostra non più di"
 
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr ""
+" (disponibile) specifiche copie nei risultati dell'Opac usando XSLT, e non "
+"mostrare più di"
+
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+" (non disponibile) specifiche copie per categorie tipo In prestito, "
+"Dannegiate, Prenotate, ma solo quando le raggruppi per biblioteca.<br>"
+
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr " substratus"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "biblioteca"
 
 # OPAC > Appearance
@@ -12140,9 +12153,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Non permettere"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "allo staff di consentire a un utente garante di vedere le multe del suo "
 "utente."
@@ -14384,7 +14398,7 @@ msgstr ""
 msgid ""
 "serials.pref#RoutingListNote# Include the following note on all routing "
 "lists:"
-msgstr "Includin la seguente nota in tutte le routing lists:"
+msgstr "Includi la seguente nota in tutte le routing lists:"
 
 # Serials
 msgid "serials.pref#RoutingSerials# Don't use"

@@ -2,19 +2,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"PO-Revision-Date: 2023-03-17 15:02+0000\n"
-"Last-Translator: AnfisaS <sbam@tpu.ru>\n"
+"PO-Revision-Date: 2023-04-20 05:31+0000\n"
+"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.11/ru-RU-installer.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1679065336.835343\n"
+"X-POOTLE-MTIME: 1681968677.034309\n"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:21
 msgid "                B   - Board"
@@ -791,7 +791,8 @@ msgid "Added to bundle"
 msgstr "Добавлено в комплект"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:26
-msgid "Address Notes"
+#, fuzzy
+msgid "Address notes"
 msgstr "Примечания к адресу"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:3
@@ -1120,19 +1121,16 @@ msgstr "Предполагаемый автор"
 msgid "Auctioneer"
 msgstr "Аукционист"
 
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:13
-msgid "Audio Visual"
-msgstr "Аудиовизуальное"
-
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:11
 msgid "Audio tape"
 msgstr "Аудиозапись"
 
-#: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:51
-msgid "AudioBook"
-msgstr "Аудиокнига"
+#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:13
+#, fuzzy
+msgid "Audio visual"
+msgstr "Аудиовизуальное"
 
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:2:row:4
+#: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:51
 msgid "Audiobook"
 msgstr "Аудиокнига"
 
@@ -1385,7 +1383,7 @@ msgid "Binder"
 msgstr "Переплетчик"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:19
-msgid "Binder An agent who binds an item."
+msgid "Binder an agent who binds an item."
 msgstr ""
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:20
@@ -1429,7 +1427,8 @@ msgid "Book"
 msgstr "Книга"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:15
-msgid "Book Cart"
+#, fuzzy
+msgid "Book cart"
 msgstr "Книжная корзина"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:21
@@ -1658,7 +1657,7 @@ msgstr "Наличные"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:3
 msgid "Cash via SIP2"
-msgstr ""
+msgstr "Наличные через SIP2"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:71
 msgid "Catalan; Valencian"
@@ -1729,7 +1728,6 @@ msgid "Chechen"
 msgstr "Чеченский"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:12
-#, fuzzy
 msgid "Check-ins"
 msgstr "Возврат"
 
@@ -1742,9 +1740,8 @@ msgid "Checked out to %s %s %s %s %s"
 msgstr "Выдано: %s %s %s %s %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:71
-#, fuzzy
 msgid "Checkin slip"
-msgstr "Возвращение "
+msgstr "Квитанция о возврате"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:14
 msgid "Checkout note"
@@ -1779,7 +1776,8 @@ msgid "Child - patron with a guarantor"
 msgstr "Ребенок - читатель с поручителем"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:8
-msgid "Children's Area"
+#, fuzzy
+msgid "Children's area"
 msgstr "Детская зона"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:46
@@ -1876,6 +1874,8 @@ msgid ""
 "Coded values conforming to the Z39.71-2006 holdings statements for "
 "bibliographic items."
 msgstr ""
+"Кодированные значения в соответствии с Z39.71-2006 заявлениями о фондах для "
+"библиографических единиц."
 
 # 205 (Collaborator) Используется только в случае, когда не может быть использован другой код, более точно определяющий функцию.
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:31
@@ -1978,48 +1978,40 @@ msgid "Computer file, chip cartridge"
 msgstr "Компьютерный файл, чип-картридж"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:18
-#, fuzzy
 msgid "Computer file, computer optical disk cartridge"
-msgstr "Картридж с компьютерным оптическим диском"
+msgstr "Компьютерный файл, картридж с компьютерным оптическим диском"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:21
-#, fuzzy
 msgid "Computer file, magnetic disk"
-msgstr "Характеристики компьютерного файла"
+msgstr "Компьютерный файл, магнитный диск"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:22
-#, fuzzy
 msgid "Computer file, magneto-optical disk"
-msgstr "магнитно-оптический диск"
+msgstr "Компьютерный файл, магнитооптический диск"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:23
-#, fuzzy
 msgid "Computer file, optical disk"
-msgstr "Картридж с компьютерным оптическим диском"
+msgstr "Компьютерный файл, оптический диск"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:25
 msgid "Computer file, other"
 msgstr "Компьютерный файл, другое"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:24
-#, fuzzy
 msgid "Computer file, remote"
-msgstr "Компьютерный файл"
+msgstr "Компьютерный файл, удаленно"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:16
-#, fuzzy
 msgid "Computer file, tape cartridge"
-msgstr "Картридж для компьютерных дисков"
+msgstr "Компьютерный файл, кассета с магнитной лентой"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:19
-#, fuzzy
 msgid "Computer file, tape cassette"
-msgstr "Компьютерный диск, тип не указан"
+msgstr "Компьютерный файл, магнитофонная кассета"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:20
-#, fuzzy
 msgid "Computer file, tape reel"
-msgstr "Компьютерный файл"
+msgstr "Компьютерный файл, катушка магнитофонной ленты"
 
 # 245 (Conceptor) Лицо или организация, ответственные за оригинальную идею, на которой основано произведение. Включает также автора концепции аудио-визуальной постановки и автора рекламной идеи.
 # Автор «книги» оперы, балета или другого музыкального произведения.     см. Либреттист (480)
@@ -2052,9 +2044,8 @@ msgid "Conservator"
 msgstr "Хранитель"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:13
-#, fuzzy
 msgid "Consortial"
-msgstr "Цензор"
+msgstr "Консорциум"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:59
 msgid "Consultant"
@@ -2181,16 +2172,15 @@ msgstr "Кредитная карта"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:5
 msgid "Creditcard via SIP2"
-msgstr ""
+msgstr "Банковская карта через SIP2"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:97
 msgid "Cree"
 msgstr "Кри"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:294
-#, fuzzy
 msgid "Creek"
-msgstr "греческий"
+msgstr "Крикский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:99
 msgid "Creoles and pidgins"
@@ -2585,11 +2575,6 @@ msgstr "Электронное издание книги"
 msgid "E-journal"
 msgstr "Электронное издание журнала"
 
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:2:row:3
-#, fuzzy
-msgid "EBook"
-msgstr "Книга"
-
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:10
 #, fuzzy
 msgid "ERM librarian"
@@ -2616,11 +2601,6 @@ msgstr ""
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:142
 msgid "Eastern Frisian"
 msgstr "Восточно-фризский"
-
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:2:row:3
-#, fuzzy
-msgid "Ebook"
-msgstr "книги"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:63
 msgid "Ecuador"
@@ -2848,6 +2828,11 @@ msgstr "Формат: %sКопировать%sСканировать%s"
 msgid "Former Attributed author"
 msgstr "Автор, которому произведение было атрибутировано ранее"
 
+#: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:65
+#, fuzzy
+msgid "Former attributed author"
+msgstr "Автор, которому произведение было атрибутировано ранее"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:66
 msgid "Former owner"
 msgstr "Бывший владелец"
@@ -2961,10 +2946,10 @@ msgstr "Гбайя"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:152
 msgid "Geez"
-msgstr ""
+msgstr "Геэз"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:12
-msgid "General Stacks"
+msgid "General stacks"
 msgstr ""
 
 #: installer/data/mysql/en/mandatory/class_sources.yml:class_sort_rules:1:row:3
@@ -3032,7 +3017,6 @@ msgid "Globe"
 msgstr "глобус"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:27
-#, fuzzy
 msgid "Globe, celestial"
 msgstr "Глобус Земли"
 
@@ -3046,9 +3030,8 @@ msgstr "Глобус Луны"
 # 124^b - другие
 # 125^a - другие
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:31
-#, fuzzy
 msgid "Globe, other"
-msgstr ", другие"
+msgstr "Глобус, другое"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:28
 msgid "Globe, planetary or lunar"
@@ -3059,9 +3042,8 @@ msgid "Globe, terrestrial"
 msgstr "Глобус Земли"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:70
-#, fuzzy
 msgid "Glossator"
-msgstr "Разделитель для CSV-файла"
+msgstr "Глоссатор"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:160
 msgid "Gondi"
@@ -3250,9 +3232,8 @@ msgid "Hold slip"
 msgstr "Бланк резервирований"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:3
-#, fuzzy
 msgid "Home Bound"
-msgstr "Обслуживание на дому"
+msgstr "Домой"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:97
 msgid "Honduras"
@@ -3299,6 +3280,8 @@ msgstr ""
 msgid ""
 "I don't mind living in a man's world, as long as I get to be a woman in it."
 msgstr ""
+"Я согласна жить в мире мужчин до тех пор, пока я могу себе позволить быть "
+"там женщиной."
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:5
 msgid ""
@@ -3373,10 +3356,12 @@ msgid ""
 "If America shows weakness and uncertainty, the world will drift toward "
 "tragedy. That will not happen on my watch."
 msgstr ""
+"Если Америка проявит слабость и неуверенность, мир будет дрейфовать в "
+"сторону трагедии. Это произойдет не в мои часы."
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:15
 msgid "If you can't stand the heat, get out of the kitchen."
-msgstr ""
+msgstr "Тому, кто не выносит жара, на кухне делать нечего."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:42:mul:7
 msgid ""
@@ -3394,7 +3379,7 @@ msgstr ""
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:11
 msgid "If you don't say anything, you won't be called on to repeat it."
-msgstr ""
+msgstr "Если вы ничего не скажете, вас не попросят это повторить."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:48:mul:10
 msgid ""
@@ -3462,7 +3447,7 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:3
 msgid "In negotiation"
-msgstr ""
+msgstr "В процессе переговоров"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:392
 msgid "Inari Sami"
@@ -3541,9 +3526,8 @@ msgid "Interlibrary loan request ready for pickup"
 msgstr "Запрос по МБА готов к выдаче"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:32
-#, fuzzy
 msgid "Interlibrary loan request to partners"
-msgstr "Информация о запросах по МБА"
+msgstr "Запросы по МБА для партнеров"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:29
 msgid "Interlibrary loan request unavailable"
@@ -3672,6 +3656,8 @@ msgid ""
 "It took me quite a long time to develop a voice, and now that I have it, I "
 "am not going to be silent."
 msgstr ""
+"Мне потребовалось довольно много времени, чтобы развить голос, и теперь, "
+"когда он у меня есть, я не собираюсь молчать."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:13
 msgid "It's too late to renew this item."
@@ -3754,9 +3740,8 @@ msgid "Jordan"
 msgstr "Иордания"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:37
-#, fuzzy
 msgid "Journal"
-msgstr "Журнал в переплете"
+msgstr "Журнал"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:208
 msgid "Judeo-Arabic"
@@ -4048,7 +4033,7 @@ msgstr "Латышский"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:119
 msgid "Lead"
-msgstr ""
+msgstr "Руководитель"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:127
 msgid "Lebanon"
@@ -4115,11 +4100,6 @@ msgstr "Библиотекарь"
 msgid "Library"
 msgstr "Библиотека"
 
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:3
-#, fuzzy
-msgid "Library Copy Lost"
-msgstr "Библиотечные группы"
-
 #: installer/data/mysql/en/optional/sample_creator_data.yml:printers_profile:3:row:1
 #, fuzzy
 msgid "Library Laser"
@@ -4130,6 +4110,13 @@ msgid ""
 "Library account password change notification for [% patron.firstname %] [% "
 "patron.surname %]"
 msgstr ""
+"Уведомление об изменении пароля учетной записи библиотеки для [% patron."
+"firstname %] [% patron.surname %]"
+
+#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:3
+#, fuzzy
+msgid "Library copy lost"
+msgstr "Библиотечные группы"
 
 #: installer/data/mysql/en/mandatory/class_sources.yml:class_sources:3:row:2
 msgid "Library of Congress Classification"
@@ -4144,7 +4131,6 @@ msgid "Libya"
 msgstr "Ливия"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:81
-#, fuzzy
 msgid "Licensee"
 msgstr "Лицензии"
 
@@ -4166,7 +4152,7 @@ msgstr "Лимбургский язык"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:112
 msgid "Limited retention (only some parts kept)"
-msgstr ""
+msgstr "Ограниченное удержание (сохранены только некоторые части)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:251
 msgid "Lingala"
@@ -4185,9 +4171,8 @@ msgid "Lithuanian"
 msgstr "Литовский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:12
-#, fuzzy
 msgid "Local"
-msgstr "Вокалист"
+msgstr "Местный (муниципальный)"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:25:mul:8
 msgid "Location: %s"
@@ -4198,7 +4183,8 @@ msgid "Lojban"
 msgstr "Ложбан"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:1
-msgid "Long Overdue (Lost)"
+#, fuzzy
+msgid "Long overdue (lost)"
 msgstr "Давно просрочено (потеряно)"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:2
@@ -4206,8 +4192,9 @@ msgid "Lost"
 msgstr "Утеряно"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:3
-msgid "Lost and Paid For"
-msgstr ""
+#, fuzzy
+msgid "Lost and paid for"
+msgstr "Потеряно и оплачено"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:307
 msgid "Low German; Low Saxon; German, Low; Saxon, Low"
@@ -4266,6 +4253,8 @@ msgid ""
 "MARC code list for relators, as of http://www.loc.gov/marc/relators/relaterm."
 "html"
 msgstr ""
+"Список кодов MARC для соотношений http://www.loc.gov/marc/relators/relaterm."
+"html"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:148
 msgid "Macao"
@@ -4461,9 +4450,8 @@ msgid "Microform"
 msgstr "микропечать (печать на микроносителях)"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:34
-#, fuzzy
 msgid "Microform, aperture card"
-msgstr "апертурная карта"
+msgstr "Микроформа, апертурная карта"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:40
 #, fuzzy
@@ -4479,9 +4467,8 @@ msgid "Microform, microfiche cassette"
 msgstr "Микроформа, кассета микрофиш"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:41
-#, fuzzy
 msgid "Microform, other"
-msgstr "Микроформа, микрофиша"
+msgstr "Микроформа, другое"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:73
 msgid "Micronesia"
@@ -4512,9 +4499,8 @@ msgid "Mixed Materials"
 msgstr "Разнотипные материалы"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:31
-#, fuzzy
 msgid "Mixed content"
-msgstr "Ответственный за метаданные"
+msgstr "Смешанное содержание"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:137
 msgid "Moderator"
@@ -4581,24 +4567,20 @@ msgid "Motion picture"
 msgstr "Кинофильм"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:43
-#, fuzzy
 msgid "Motion picture, film cartridge"
-msgstr "Картриджный микрофильм"
+msgstr "Кинокартина, пленочный картридж"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:44
-#, fuzzy
 msgid "Motion picture, film cassette"
-msgstr "Кассетный микрофильм"
+msgstr "Кинокартина, кинокассета"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:45
-#, fuzzy
 msgid "Motion picture, film reel"
-msgstr "Кинофильм"
+msgstr "Кинокартина, кинолента"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:46
-#, fuzzy
 msgid "Motion picture, other"
-msgstr "Кинофильм"
+msgstr "Кинокартинка, другое"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:159
 msgid "Mozambique"
@@ -4650,7 +4632,7 @@ msgstr "Мьянма"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:318
 msgid "N'Ko"
-msgstr ""
+msgstr "Нко"
 
 #: installer/data/mysql/en/optional/sample_z3950_servers.yml:z3950servers:3:row:1
 msgid "NATIONAL LIBRARY OF FRANCE"
@@ -4669,9 +4651,8 @@ msgid "Narrator"
 msgstr "Диктор"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:14
-#, fuzzy
 msgid "National"
-msgstr "Сезонный"
+msgstr "Национальный"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:169
 msgid "Nauru"
@@ -4717,10 +4698,6 @@ msgstr "Нидерлады"
 msgid "New Caledonia"
 msgstr "Новая Каледония"
 
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:10
-msgid "New Materials Shelf"
-msgstr "Полка с новыми материалами"
-
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:79
 msgid "New OPAC self-registration"
 msgstr "Новая самостоятельная регистрация OPAC"
@@ -4740,6 +4717,11 @@ msgstr "Новая Зеландия"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60
 msgid "New curbside pickup"
 msgstr "Новый курс"
+
+#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:10
+#, fuzzy
+msgid "New materials shelf"
+msgstr "Полка с новыми материалами"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:61
 msgid "New serial issue"
@@ -4812,7 +4794,7 @@ msgstr "Информация не предоставлена"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:113
 msgid "No retention (no parts kept)"
-msgstr ""
+msgstr "Без удержания (части не сохранены)"
 
 #: installer/data/mysql/en/mandatory/sample_numberpatterns.yml:subscription_numberpatterns:1:row:1
 msgid "No. {X}"
@@ -4820,7 +4802,7 @@ msgstr "№ {X}"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:315
 msgid "Nogai"
-msgstr ""
+msgstr "Ногай"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:19
 msgid "Non-fiction"
@@ -4831,63 +4813,52 @@ msgid "Nonprojected graphic"
 msgstr "Непроекционная графика"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:57
-#, fuzzy
 msgid "Nonprojected graphic, chart"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, диаграмма"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:48
-#, fuzzy
 msgid "Nonprojected graphic, collage"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, коллаж"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:49
-#, fuzzy
 msgid "Nonprojected graphic, drawing"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, рисунок"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:58
-#, fuzzy
 msgid "Nonprojected graphic, flash card"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, флэш карта"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:59
 msgid "Nonprojected graphic, other"
 msgstr "Непроекционная графика, прочее"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:50
-#, fuzzy
 msgid "Nonprojected graphic, painting"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, живопись"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:51
-#, fuzzy
 msgid "Nonprojected graphic, photomechanical print"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, фотопечать"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:52
-#, fuzzy
 msgid "Nonprojected graphic, photonegative"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, фотонегатив"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:53
-#, fuzzy
 msgid "Nonprojected graphic, photoprint"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, фотопечать"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:54
-#, fuzzy
 msgid "Nonprojected graphic, picture"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, изображение"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:55
-#, fuzzy
 msgid "Nonprojected graphic, print"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, печать"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:56
-#, fuzzy
 msgid "Nonprojected graphic, technical drawing"
-msgstr "Непроекционная графика, прочее"
+msgstr "Непроекционная графика, чертеж"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:163
 msgid "Norfolk Island"
@@ -4895,7 +4866,7 @@ msgstr "Норфолк"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:316
 msgid "Norse, Old"
-msgstr ""
+msgstr "Древнескандинавский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:300
 msgid "North American Indian languages"
@@ -4910,18 +4881,16 @@ msgid "North Macedonia"
 msgstr "Северная Македония"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:141
-#, fuzzy
 msgid "Northern Frisian"
-msgstr "северное"
+msgstr "Северная Фризия"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:149
 msgid "Northern Mariana Islands"
 msgstr "Северные Марианские острова"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:389
-#, fuzzy
 msgid "Northern Sami"
-msgstr "северное"
+msgstr "Северносаамский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:167
 msgid "Norway"
@@ -4933,11 +4902,7 @@ msgstr "Норвежский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:313
 msgid "Norwegian Nynorsk; Nynorsk, Norwegian"
-msgstr ""
-
-#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:22
-msgid "Not For Loan"
-msgstr "Не для выдачи"
+msgstr "Нюнорск"
 
 # 115^b - не используется (когда невозможно определить или неважно знать полноту материала, например для любительских кинофильмов, нередактированных черновых материалов, неидентифицированных материалов)
 # 110^a - ..?
@@ -4950,10 +4915,14 @@ msgstr "Не применяется"
 msgid "Not currently received"
 msgstr "Не получено в настоящее время"
 
-#: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:17
+#: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:22
 #, fuzzy
+msgid "Not for loan"
+msgstr "Не для выдачи"
+
+#: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:17
 msgid "Not yet active"
-msgstr "Не получено в настоящее время"
+msgstr "Не активен"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:90
 msgid "Notary"
@@ -4968,9 +4937,8 @@ msgid "Notes: %s"
 msgstr "Заметки: %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:46
-#, fuzzy
 msgid "Notification about an accepted share"
-msgstr "Уведомление об автоматическом продлении"
+msgstr "Уведомление о принятой доле"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70
 msgid "Notification of automatic renewal"
@@ -5015,19 +4983,19 @@ msgstr "Номер"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:323
 msgid "Nyamwezi"
-msgstr ""
+msgstr "Ньямвези"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:324
 msgid "Nyankole"
-msgstr ""
+msgstr "Ньянколе"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:325
 msgid "Nyoro"
-msgstr ""
+msgstr "Ньоро"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:326
 msgid "Nzima"
-msgstr ""
+msgstr "Нзима"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:69
 msgid "OPAC problem report"
@@ -5039,15 +5007,15 @@ msgstr "e-mail с подтверждением самостоятельной р
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:327
 msgid "Occitan (post 1500)"
-msgstr ""
+msgstr "Окситанский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:22
 msgid "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)"
-msgstr ""
+msgstr "Арамейский язык (700-300 гг. до н.э.)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:328
 msgid "Ojibwa"
-msgstr ""
+msgstr "Оджибве"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:172
 msgid "Oman"
@@ -5055,13 +5023,12 @@ msgstr "Оман"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:9
 #, fuzzy
-msgid "On Display"
+msgid "On display"
 msgstr "Отображение"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:25:mul:10
-#, fuzzy
 msgid "On loan?: %s"
-msgstr "Число с плавающей запятой: %s"
+msgstr "Выдано?: %s"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:103
 msgid "On order"
@@ -5073,6 +5040,8 @@ msgid ""
 "click the \"Alert staff of your arrival\" button to let them know you are "
 "there."
 msgstr ""
+"По приезде позвоните в библиотеку или войдите в свой аккаунт и оповестите "
+"персонал библиотеки о прибытии."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:47:mul:3
 msgid ""
@@ -5087,9 +5056,8 @@ msgid "Online password reset"
 msgstr "Сброс пароля онлайн"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:33
-#, fuzzy
 msgid "Online reference"
-msgstr "Параметр"
+msgstr "Справка"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:91
 msgid "Opponent"
@@ -5126,11 +5094,11 @@ msgstr "Инициатор идеи"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:329
 msgid "Oriya"
-msgstr ""
+msgstr "Ория"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:330
 msgid "Oromo"
-msgstr ""
+msgstr "Оромо"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:331
 msgid "Osage"
@@ -5192,7 +5160,7 @@ msgstr "Страницы: %s"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:337
 msgid "Pahlavi"
-msgstr ""
+msgstr "Пехлеви"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:178
 msgid "Pakistan"
@@ -5204,7 +5172,7 @@ msgstr "Палау"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:341
 msgid "Palauan"
-msgstr ""
+msgstr "Палауский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:183
 msgid "Palestinian Territories"
@@ -5212,11 +5180,11 @@ msgstr "Палестинские территории"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:346
 msgid "Pali"
-msgstr ""
+msgstr "Пали"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:338
 msgid "Pampanga; Kapampangan"
-msgstr ""
+msgstr "Капампанганский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:173
 msgid "Panama"
@@ -5224,11 +5192,11 @@ msgstr "Панама"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:336
 msgid "Pangasinan"
-msgstr ""
+msgstr "Пангасинанский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:339
 msgid "Panjabi; Punjabi"
-msgstr ""
+msgstr "Панджаби"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:95
 msgid "Papermaker"
@@ -5276,12 +5244,11 @@ msgstr "Читатели"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:319
 msgid "Pedi; Sepedi; Northern Sotho"
-msgstr ""
+msgstr "Северный сото"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:8
-#, fuzzy
 msgid "Pending article request"
-msgstr "Разместить запрос на статью"
+msgstr "Ожидающий запрос статьи"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:22
 msgid ""
@@ -5299,7 +5266,7 @@ msgstr "Исследователь"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:114
 msgid "Permanent retention (all parts kept permanently)"
-msgstr ""
+msgstr "Постоянное удержание (все части сохраняются постоянно)"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:157
 #, fuzzy
@@ -5311,9 +5278,8 @@ msgid "Persian"
 msgstr "Персидский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:342
-#, fuzzy
 msgid "Persian, Old (ca.600-400 B.C.)"
-msgstr "Немецкий, очень старый (пр. 750-1050)"
+msgstr "Древнеперсидский язык (ок.600-400 до н.э.)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:174
 msgid "Peru"
@@ -5321,7 +5287,7 @@ msgstr "Перу"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:344
 msgid "Philippine languages"
-msgstr ""
+msgstr "Языки Филиппин"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:177
 msgid "Philippines"
@@ -5329,7 +5295,7 @@ msgstr "Филиппины"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:345
 msgid "Phoenician"
-msgstr ""
+msgstr "Финикийский язык"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:20:mul:8
 msgid "Phone: %s"
@@ -5340,9 +5306,8 @@ msgid "Photographer"
 msgstr "Фотограф"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:92
-#, fuzzy
 msgid "Physical form is unspecified"
-msgstr "Физическая форма издания"
+msgstr "Физическая форма издания не указана"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58:mul:6
 msgid "Pickup location: %s"
@@ -5369,14 +5334,12 @@ msgid "Platemaker"
 msgstr "Изготовитель печатных форм"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:45:mul:5
-#, fuzzy
 msgid "Please create your new password using the following link:"
-msgstr ""
-"Теперь вы можете создать свой новый пароль, используя следующую ссылку:"
+msgstr "Создайте новый пароль по ссылке:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:32:mul:7
 msgid "Please let us know if you are able to supply this to us."
-msgstr ""
+msgstr "Пожалуйста сообщите, если эта поставка возможна."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:51:mul:8
 msgid "Please order for the library:"
@@ -5388,11 +5351,11 @@ msgstr "Пожалуйста, получите его, когда вам буд�
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58:mul:2
 msgid "Please update the hold information for this item."
-msgstr ""
+msgstr "Обновите информацию об удержании экземпляра."
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:348
 msgid "Pohnpeian"
-msgstr ""
+msgstr "Понапе"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:52
 msgid "Point of sale receipt"
@@ -5426,10 +5389,8 @@ msgid "Presenter"
 msgstr "Демонстратор"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:34
-#, fuzzy
 msgid "Print"
-msgstr ""
-"Типограф, батыйщик, батырщик, печатник, тередорщик, типографщик, тискальщик"
+msgstr "Печать"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:103
 msgid "Printer"
@@ -5450,7 +5411,7 @@ msgstr "Проблемная страница: %s"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:40
 msgid "Proceedings"
-msgstr ""
+msgstr "Материалы"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:162
 #, fuzzy
@@ -5459,7 +5420,7 @@ msgstr "Поиск договоров"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:16
 #, fuzzy
-msgid "Processing Center"
+msgid "Processing center"
 msgstr "Обработка "
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:105
@@ -5539,12 +5500,11 @@ msgstr "Корректор печатного текста"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:351
 msgid "Provençal, Old (to 1500);Occitan, Old (to 1500)"
-msgstr ""
+msgstr "Провансальский диалект (до 1500);Староокситанский язык (до 1500)"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:175
-#, fuzzy
 msgid "Publication place"
-msgstr "Место публикации:"
+msgstr "Место публикации"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:107
 msgid "Publisher"
@@ -5573,7 +5533,7 @@ msgstr "Предложение о покупке отклонено"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:352
 msgid "Pushto; Pashto"
-msgstr ""
+msgstr "Пушту"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:187
 msgid "Qatar"
@@ -5581,39 +5541,35 @@ msgstr "Катар"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:354
 msgid "Quechua"
-msgstr ""
+msgstr "Кечуа"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:355
 msgid "Rajasthani"
-msgstr ""
+msgstr "Раджастхани"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:356
 msgid "Rapanui"
-msgstr ""
+msgstr "Рапануйский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:357
 msgid "Rarotongan; Cook Islands Maori"
-msgstr ""
+msgstr "Кукский язык"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:76:mul:3
-#, fuzzy
 msgid "Recall for pickup at %s"
-msgstr "Этот экземпляр зарезервирован для получения %s"
+msgstr "Экземпляр зарезервирован для получения в %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:75
-#, fuzzy
 msgid "Recalled item awaiting pickup"
-msgstr "Резервирования, ожидающие получения"
+msgstr "Экземпляры, ожидающие получения"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:52
-#, fuzzy
 msgid "Receipt"
-msgstr "Получение"
+msgstr "Квитанция"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:102
-#, fuzzy
 msgid "Received and complete or Ceased"
-msgstr "Принимает претензии по задержанным заказам"
+msgstr "Получено и завершено или Отменено"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:178
 msgid "Recipient"
@@ -5637,17 +5593,15 @@ msgstr "Редактор-составитель"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:description:2
 msgid "Refer to https://www.niso.org/publications/standards for details."
-msgstr ""
+msgstr "Подробнее см. https://www.niso.org/publications/standards."
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:14
-#, fuzzy
 msgid "Reference"
-msgstr "Параметр"
+msgstr "Справка"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:19
-#, fuzzy
 msgid "Rejected"
-msgstr "Предмет изображения"
+msgstr "Отклонено"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:113
 msgid "Remixer"
@@ -5663,12 +5617,11 @@ msgstr "Создатель эскизов"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:8
 msgid "Renew"
-msgstr ""
+msgstr "Продление"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:39
-#, fuzzy
 msgid "Report"
-msgstr "Репортёр"
+msgstr "Отчет"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:184
 msgid "Reporter"
@@ -5691,9 +5644,8 @@ msgid "Researcher"
 msgstr "Исследователь"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:353
-#, fuzzy
 msgid "Reserved for local use"
-msgstr "Найдено резервирование"
+msgstr "Зарезервировано для местного использования"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:188
 msgid "Respondent"
@@ -5720,9 +5672,8 @@ msgid "Restager"
 msgstr "Постановщик"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:20
-#, fuzzy
 msgid "Restocking"
-msgstr "(проверка)"
+msgstr "Пополнение"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:117
 #, fuzzy
@@ -5731,8 +5682,8 @@ msgstr "Дата регистрации"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:25
 #, fuzzy
-msgid "Restricted Access"
-msgstr "Ограничить доступ в: "
+msgid "Restricted access"
+msgstr "Доступ ограничен"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:108
 msgid "Retained except as replaced by updates"
@@ -5764,17 +5715,15 @@ msgstr "Румыния"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:361
 msgid "Romanian; Moldavian; Moldovan"
-msgstr ""
+msgstr "Румынский язык; Молдавский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:359
-#, fuzzy
 msgid "Romansh"
-msgstr "Римский (?)"
+msgstr "Романшский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:360
-#, fuzzy
 msgid "Romany"
-msgstr "Римский (?)"
+msgstr "Румынский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:118
 msgid "Rubricator"
@@ -5784,7 +5733,7 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:362
 msgid "Rundi"
-msgstr ""
+msgstr "Рунди"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:191
 msgid "Russia"
@@ -5808,7 +5757,7 @@ msgstr "Салишские языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:370
 msgid "Samaritan Aramaic"
-msgstr ""
+msgstr "Самаритянский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:390
 msgid "Sami languages"
@@ -5820,7 +5769,7 @@ msgstr "Западное Самоа"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:393
 msgid "Samoan"
-msgstr ""
+msgstr "Самоанский язык"
 
 #: installer/data/mysql/en/mandatory/sample_frequencies.yml:description:1
 msgid "Sample frequencies for subscriptions"
@@ -5881,16 +5830,15 @@ msgstr "Сандаве (Sandawe)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:366
 msgid "Sango"
-msgstr ""
+msgstr "Санго"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:371
 msgid "Sanskrit"
 msgstr "Санскрит (Sanskrit)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:373
-#, fuzzy
 msgid "Santali"
-msgstr "фантазия"
+msgstr "Сантали"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:403
 msgid "Sardinian"
@@ -5898,7 +5846,7 @@ msgstr "Сардинский (Sardinian)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:372
 msgid "Sasak"
-msgstr ""
+msgstr "Сасакский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:193
 msgid "Saudi Arabia"
@@ -5919,7 +5867,7 @@ msgstr "Научный консультант"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:375
 msgid "Scots"
-msgstr ""
+msgstr "Шотландский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:121
 msgid "Scribe"
@@ -5959,7 +5907,7 @@ msgstr "Секретарь"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:376
 msgid "Selkup"
-msgstr ""
+msgstr "Селькупский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:377
 msgid "Semitic languages"
@@ -5995,50 +5943,48 @@ msgstr "Сейшельские острова"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:380
 msgid "Shan"
-msgstr ""
+msgstr "Шанский язык"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:47
 msgid "Share list <<listname>>"
 msgstr "Поделиться списком<<listname>"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:46
-#, fuzzy
 msgid "Share on list <<listname>> accepted"
-msgstr "Поделиться списком<<listname>"
+msgstr "Поделиться списком <<listname>"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:2
-msgid "Shelf Copy Damaged"
-msgstr ""
+#, fuzzy
+msgid "Shelf copy damaged"
+msgstr "Копия на полке повреждена"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:395
 msgid "Shona"
-msgstr ""
+msgstr "Шона"
 
 #: installer/data/mysql/en/optional/patron_atributes.yml:borrower_attribute_types:1:row:1
 msgid "Show barcode on the summary screen items listings"
-msgstr ""
+msgstr "Показывать штрих-код в сводных списках экземпляров"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:190
 msgid "Sichuan Yi; Nuosu"
-msgstr ""
+msgstr "Носу"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:374
-#, fuzzy
 msgid "Sicilian"
-msgstr "Сицилийский итальянский"
+msgstr "Сицилийский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:381
 msgid "Sidamo"
-msgstr ""
+msgstr "Сидамо"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:203
 msgid "Sierra Leone"
 msgstr "Сьерра-Леоне"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:379
-#, fuzzy
 msgid "Sign Languages"
-msgstr "Языки жестов"
+msgstr "Жестовые языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:124
 msgid "Signer"
@@ -6046,7 +5992,7 @@ msgstr "Автор подписи"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:57
 msgid "Siksika"
-msgstr ""
+msgstr "Язык коренных американцев"
 
 #: installer/data/mysql/en/mandatory/sample_numberpatterns.yml:subscription_numberpatterns:1:row:1
 msgid "Simple Numbering method"
@@ -6054,7 +6000,7 @@ msgstr "Простой метод нумерации"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:396
 msgid "Sindhi"
-msgstr ""
+msgstr "Синдхи"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:198
 msgid "Singapore"
@@ -6066,7 +6012,7 @@ msgstr "Певец"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:382
 msgid "Sinhala; Sinhalese"
-msgstr ""
+msgstr "Сингальский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:384
 msgid "Sino-Tibetan languages"
@@ -6082,12 +6028,11 @@ msgstr "Сиу языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:394
 msgid "Skolt Sami"
-msgstr ""
+msgstr "Колтта-саамский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:108
-#, fuzzy
 msgid "Slave (Athapascan)"
-msgstr "Атапаскский (другой)"
+msgstr "Слэйви"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:385
 msgid "Slavic languages"
@@ -6119,7 +6064,7 @@ msgstr "Соломоновы Острова"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:399
 msgid "Somali"
-msgstr ""
+msgstr "Сомалийский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:206
 msgid "Somalia"
@@ -6143,7 +6088,7 @@ msgstr "Языки Сонгаи"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:397
 msgid "Soninke"
-msgstr ""
+msgstr "Сонинке"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:468
 msgid "Sorbian languages"
@@ -6210,9 +6155,8 @@ msgid "South Africa"
 msgstr "Южно-Африканская Республика"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:368
-#, fuzzy
 msgid "South American Indian languages"
-msgstr "Северный Американский Индийский (другой)"
+msgstr "Индейские языки Южной Америки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:90
 msgid "South Georgia & South Sandwich Islands"
@@ -6228,11 +6172,11 @@ msgstr "Судан"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:16
 msgid "Southern Altai"
-msgstr ""
+msgstr "Алтайский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:388
 msgid "Southern Sami"
-msgstr ""
+msgstr "Южносаамский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:68
 msgid "Spain"
@@ -6240,11 +6184,11 @@ msgstr "Испания"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:402
 msgid "Spanish; Castilian"
-msgstr ""
+msgstr "Кастильский диалект"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:8
 msgid "Speak softly and carry a big stick."
-msgstr ""
+msgstr "Говори тихо и носи с собой большую дубинку."
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:201
 msgid "Speaker"
@@ -6256,7 +6200,7 @@ msgstr "Спонсор"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:404
 msgid "Sranan Tongo"
-msgstr ""
+msgstr "Сранан-тонго"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:130
 msgid "Sri Lanka"
@@ -6296,13 +6240,13 @@ msgstr "Работник библиотеки"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:23
 #, fuzzy
-msgid "Staff Collection"
-msgstr "Собрание сериального издания"
+msgid "Staff collection"
+msgstr "Сотрудники"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:11
 #, fuzzy
-msgid "Staff Office"
-msgstr "Сотрудник библиотеки"
+msgid "Staff office"
+msgstr "Офис для сотрудников"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:207
 msgid "Stage manager"
@@ -6310,7 +6254,7 @@ msgstr "Режиссер"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:481
 msgid "Standard Moroccan Tamazight"
-msgstr ""
+msgstr "Стандартный марокканский берберский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:127
 msgid "Standards body"
@@ -6373,9 +6317,8 @@ msgid "Sudan"
 msgstr "Судан"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:65
-#, fuzzy
 msgid "Suggested item ordered"
-msgstr "Предложение заказано"
+msgstr "Предложенный экземпляр заказан"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:63
 msgid "Suggested purchase available"
@@ -6399,7 +6342,7 @@ msgstr "Предложение отклонено"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:409
 msgid "Sukuma"
-msgstr ""
+msgstr "Сукума"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:412
 msgid "Sumerian"
@@ -6414,9 +6357,8 @@ msgid "Sundays"
 msgstr "По воскресеньям"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:199
-#, fuzzy
 msgid "Supporting host"
-msgstr "Стоимость доставки:"
+msgstr "Хост поддержки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:207
 msgid "Suriname"
@@ -6428,7 +6370,7 @@ msgstr "Землемер"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:411
 msgid "Susu"
-msgstr ""
+msgstr "Сусу"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:201
 msgid "Svalbard & Jan Mayen"
@@ -6436,11 +6378,11 @@ msgstr "Шпицберген и Ян-Майен"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:413
 msgid "Swahili"
-msgstr ""
+msgstr "Суахили"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:408
 msgid "Swati"
-msgstr ""
+msgstr "Свати"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:197
 msgid "Sweden"
@@ -6452,7 +6394,7 @@ msgstr "Шведский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:167
 msgid "Swiss German; Alemannic; Alsatian"
-msgstr ""
+msgstr "Швейцарский диалект"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:43
 msgid "Switzerland"
@@ -6464,7 +6406,7 @@ msgstr "Сирия"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:416
 msgid "Syriac"
-msgstr ""
+msgstr "Сирийский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:209
 msgid "São Tomé & Príncipe"
@@ -6500,7 +6442,7 @@ msgstr "Таджикистан"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:435
 msgid "Tamashek"
-msgstr ""
+msgstr "Тамашек"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:419
 msgid "Tamil"
@@ -6524,16 +6466,15 @@ msgstr "Технический директор"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:421
 msgid "Telugu"
-msgstr ""
+msgstr "Телугу"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:423
 msgid "Tereno"
-msgstr ""
+msgstr "Терена"
 
 #: installer/data/mysql/en/optional/sample_creator_data.yml:creator_layouts:1:row:4
-#, fuzzy
 msgid "Test Layout"
-msgstr "Макет"
+msgstr "Тестовый макет"
 
 #: installer/data/mysql/en/optional/sample_creator_data.yml:printers_profile:3:row:4
 #, fuzzy
@@ -6542,7 +6483,7 @@ msgstr "Новый принтер"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:424
 msgid "Tetum"
-msgstr ""
+msgstr "Тетум"
 
 # для /marc21_field_007.tmpl можно в нижнем регистре
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:80
@@ -6568,9 +6509,8 @@ msgstr "обновляемое листовое издание, с отрывн�
 # 124^b - другие
 # 125^a - другие
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:85
-#, fuzzy
 msgid "Text, other"
-msgstr ", другие"
+msgstr "Текст, другое"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:81
 msgid "Text, regular print"
@@ -6585,9 +6525,8 @@ msgid "Thailand"
 msgstr "Таиланд"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:48:mul:4
-#, fuzzy
 msgid "Thank you for joining %s%s%sthe library%s"
-msgstr "Новости из %s%s%sбиблиотеки%s"
+msgstr "Спасибо, что присоединились к %s%s%sбиблиотеке%s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:13:mul:5
 msgid "Thank you for visiting %s."
@@ -6651,22 +6590,18 @@ msgid "The following item is now due:"
 msgstr "Следующий экземпляр скоро ожидается:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:22:mul:3
-#, fuzzy
 msgid "The following item will be due soon:"
 msgstr "Следующий экземпляр скоро ожидается:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:16:mul:3
-#, fuzzy
 msgid "The following item(s) are now due:"
-msgstr "Следующий экземпляр скоро ожидается:"
+msgstr "Следующий экземпляр необходимо оплатить:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:20:mul:14
-#, fuzzy
 msgid "The following item(s) is/are currently overdue:"
-msgstr "Следующий экземпляр скоро ожидается:"
+msgstr "Следующий экземпляр просрочен:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:23:mul:3
-#, fuzzy
 msgid "The following item(s) will be due soon:"
 msgstr "Следующий экземпляр скоро ожидается:"
 
@@ -6722,17 +6657,18 @@ msgstr ""
 msgid ""
 "The patron for interlibrary loans request %s, with the following details, "
 "has modified this ILL request:"
-msgstr ""
+msgstr "Читатель изменил заявку на межбиблиотечный абонемент %s, детали:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:30:mul:1
 msgid ""
 "The patron for interlibrary loans request %s, with the following details, "
 "has requested cancellation of this ILL request:"
 msgstr ""
+"Читатель запросил отменить заявку на межбиблиотечный абонемент %s, детали:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58:mul:1
 msgid "The patron picking up %s (%s) has changed to %s %s (%s)."
-msgstr ""
+msgstr "Самовывоз читателя %s (%s), изменен %s %s (%s)."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:66:mul:7
 msgid "The reason given is: %s"
@@ -6750,32 +6686,28 @@ msgid ""
 msgstr ""
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:73:mul:3
-#, fuzzy
 msgid "There were %s items that were not renewed."
-msgstr "%s слишком длинных штрих-кодов ."
+msgstr "Осталось %s непродленных экземпляров."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:73:mul:6
-#, fuzzy
 msgid "There were %s items that were renewed."
-msgstr "%s слишком длинных штрих-кодов ."
+msgstr "%s продленных экземпляров."
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:129
 msgid "Thesis advisor"
 msgstr "Научный руководитель"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:48
-#, fuzzy
 msgid "Thesis/Dissertation"
-msgstr "Соискатель"
+msgstr "Диссертация"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:7
 msgid "This item is on hold for another patron."
 msgstr "Этот экземпляр находится на резервировании для другого читателя"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:17
-#, fuzzy
 msgid "This item must be renewed at the library."
-msgstr "Необходимо продлить в библиотеке"
+msgstr "Экземпляр необходимо продлить в библиотеке."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:4:mul:4
 msgid "This payment affected the following fees:"
@@ -6787,19 +6719,19 @@ msgstr "Это списание (отмена) затронуло следующ
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:428
 msgid "Tibetan"
-msgstr ""
+msgstr "Тибетский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:429
 msgid "Tigre"
-msgstr ""
+msgstr "Тигре"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:430
 msgid "Tigrinya"
-msgstr ""
+msgstr "Тигринья"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:422
 msgid "Timne"
-msgstr ""
+msgstr "Темне"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:221
 msgid "Timor-Leste"
@@ -6815,7 +6747,7 @@ msgstr "Тиви (Tiv)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:434
 msgid "Tlingit"
-msgstr ""
+msgstr "Тлингитский язык"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:47:mul:5
 msgid ""
@@ -6837,7 +6769,7 @@ msgstr "Того"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:438
 msgid "Tok Pisin"
-msgstr ""
+msgstr "Ток-писин"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:220
 msgid "Tokelau"
@@ -6849,29 +6781,27 @@ msgstr "Тонга"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:436
 msgid "Tonga (Nyasa)"
-msgstr ""
+msgstr "Язык тонга (Малави)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:437
 msgid "Tonga (Tonga Islands)"
-msgstr ""
+msgstr "Язык тонга (Тонга)"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:213
 msgid "Transcriber"
 msgstr "Переписчик"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:26
-#, fuzzy
 msgid "Transfer slip"
-msgstr "Перемещения"
+msgstr "Квитанция о перемещении"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:130
 msgid "Translator"
 msgstr "Переводчик"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:131
-#, fuzzy
 msgid "Transliterator"
-msgstr "Код транслитерации"
+msgstr "Транслитератор"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:34
 msgid ""
@@ -6885,7 +6815,7 @@ msgstr "Тринидад и Тобаго"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:439
 msgid "Tsimshian"
-msgstr ""
+msgstr "Цимшианские языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:441
 msgid "Tsonga"
@@ -6893,11 +6823,11 @@ msgstr "Тсонга (Tsonga)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:440
 msgid "Tswana"
-msgstr ""
+msgstr "Тсвана"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:443
 msgid "Tumbuka"
-msgstr ""
+msgstr "Тумбука"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:223
 msgid "Tunisia"
@@ -6905,7 +6835,7 @@ msgstr "Тунис"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:444
 msgid "Tupi languages"
-msgstr ""
+msgstr "Языки тупи"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:225
 msgid "Turkey"
@@ -6916,9 +6846,8 @@ msgid "Turkish"
 msgstr "Турецкий"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:333
-#, fuzzy
 msgid "Turkish, Ottoman (1500-1928)"
-msgstr "Турецкий, Оттоманский"
+msgstr "Турецкий, Оттоманский (1500-1928)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:442
 msgid "Turkmen"
@@ -6938,15 +6867,15 @@ msgstr "Тувалу"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:449
 msgid "Tuvinian"
-msgstr ""
+msgstr "Тувинский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:448
 msgid "Twi"
-msgstr ""
+msgstr "Чви"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:49
 msgid "Two-authentication token"
-msgstr ""
+msgstr "Токен двухфакторной аутентификации"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:132
 msgid "Type designer"
@@ -6974,11 +6903,11 @@ msgstr "Уганда"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:451
 msgid "Ugaritic"
-msgstr ""
+msgstr "Угаритский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:452
 msgid "Uighur; Uyghur"
-msgstr ""
+msgstr "Уйгурский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:230
 msgid "Ukraine"
@@ -6990,20 +6919,19 @@ msgstr "Украинский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:454
 msgid "Umbundu"
-msgstr ""
+msgstr "Южный мбунду"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:282
 msgid "Uncoded languages"
-msgstr ""
+msgstr "Некодированные языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:455
 msgid "Undetermined"
 msgstr "Неизвестно"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:1
-#, fuzzy
 msgid "Undetermined function"
-msgstr "Неопределенные 2 цвета"
+msgstr "Неопределенная функция"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:2
 msgid "United Arab Emirates"
@@ -7028,11 +6956,11 @@ msgstr "Место доставки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:36
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:43
 msgid "Unspecified"
-msgstr ""
+msgstr "Не определено"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:4:row:2
 msgid "Upcoming title by popular author"
@@ -7040,7 +6968,7 @@ msgstr "Предстоящее название популярного авто�
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:183
 msgid "Upper Sorbian"
-msgstr ""
+msgstr "Верхнелужицкий язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:456
 msgid "Urdu"
@@ -7051,9 +6979,8 @@ msgid "Uruguay"
 msgstr "Уругвая"
 
 #: installer/data/mysql/en/optional/patron_atributes.yml:description:1
-#, fuzzy
 msgid "Useful patron attribute types:"
-msgstr "Новый вид атрибута посетителя"
+msgstr "Виды атрибутов посетителей:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:69:mul:1
 msgid "Username: %s"
@@ -7097,10 +7024,9 @@ msgstr "Подтвердите вашу учетную запись"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:98
 msgid "Very incomplete or scattered (less than 50% held)"
-msgstr ""
+msgstr "Неполные или разрозненные (удержано менее 50%)"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:12
-#, fuzzy
 msgid "Video tape"
 msgstr "Видеокассета"
 
@@ -7117,24 +7043,20 @@ msgid "Videorecording, other"
 msgstr "Видеозапись, другое"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:87
-#, fuzzy
 msgid "Videorecording, videocartridge"
-msgstr "Видеозапись, другое"
+msgstr "Видеозапись, видеокартридж"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:89
-#, fuzzy
 msgid "Videorecording, videocassette"
-msgstr "Видеозапись, другое"
+msgstr "Видеозапись, кассета"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:88
-#, fuzzy
 msgid "Videorecording, videodisc"
-msgstr "Видеозапись, другое"
+msgstr "Видеозапись, видеодиск"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:90
-#, fuzzy
 msgid "Videorecording, videoreel"
-msgstr "Видеозапись, другое"
+msgstr "Видеозапись, видеолента"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:241
 msgid "Vietnam"
@@ -7146,11 +7068,11 @@ msgstr "Вьетнамский"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:4
 msgid "Visa"
-msgstr ""
+msgstr "Visa"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:4
 msgid "Visa via SIP2"
-msgstr ""
+msgstr "Visa через SIP2"
 
 #: installer/data/mysql/en/optional/sample_itemtypes.yml:itemtypes:1:row:5
 msgid "Visual Materials"
@@ -7201,9 +7123,8 @@ msgid "Votic"
 msgstr "Удмуртский (Вотяцкий)"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:59
-#, fuzzy
 msgid "Waiting hold reminder"
-msgstr "Ожидается с"
+msgstr "Уведомление об ожидающем резервировании"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:76:mul:13
 msgid "Waiting since: %s"
@@ -7227,7 +7148,7 @@ msgstr "Варай (Waray)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:466
 msgid "Washo"
-msgstr ""
+msgstr "Вашо"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:10:mul:3
 msgid "We are now processing your request for an article from %s (%s)."
@@ -7256,14 +7177,12 @@ msgid "We have ...drawn a line in the sand."
 msgstr ""
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:7:mul:3
-#, fuzzy
 msgid "We have completed your request for an article from %s (%s)."
-msgstr "Мы сейчас обрабатываем ваш запрос статьи от %s (%s)."
+msgstr "Мы выполнили ваш запрос статьи от %s (%s)."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:9:mul:3
-#, fuzzy
 msgid "We have received your request for an article from %s (%s)."
-msgstr "Мы сейчас обрабатываем ваш запрос статьи от %s (%s)."
+msgstr "Мы получили ваш запрос статьи от %s (%s)."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:54:mul:3
 msgid ""
@@ -7286,25 +7205,25 @@ msgid ""
 "We want to notify you that your password has been changed. If you did not "
 "change it yourself (or requested that change), please contact library staff."
 msgstr ""
+"Пароль изменен. Обратитесь в библиотеку, если это не Вы изменили пароль."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:32:mul:3
 msgid ""
 "We would like to request an interlibrary loan for a title matching the "
 "following description:"
-msgstr ""
+msgstr "Запрос по МБА соответствующий следующему описанию:"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:41
 msgid "Website"
-msgstr ""
+msgstr "Веб-сайт"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:48
 msgid "Welcome notice "
 msgstr "Приветственное письмо "
 
 #: installer/data/mysql/en/optional/sample_news.yml:additional_contents:1:row:1
-#, fuzzy
 msgid "Welcome to Koha"
-msgstr "Добро пожаловать, "
+msgstr "Добро пожаловать"
 
 #: installer/data/mysql/en/optional/sample_news.yml:additional_contents:1:row:1:mul:1
 msgid ""
@@ -7327,7 +7246,7 @@ msgstr "Валлийский (Уэльский) (Welsh)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:143
 msgid "Western Frisian"
-msgstr ""
+msgstr "Западнофризский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:66
 msgid "Western Sahara"
@@ -7353,12 +7272,11 @@ msgstr ""
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:20
 msgid "Withdrawn"
-msgstr "Изъято"
+msgstr "Изъят"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:223
-#, fuzzy
 msgid "Witness"
-msgstr "Яркость"
+msgstr "Заверитель"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:464
 msgid "Wolaitta; Wolaytta"
@@ -7366,7 +7284,7 @@ msgstr "Воламо"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:470
 msgid "Wolof"
-msgstr ""
+msgstr "Волоф"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:136
 msgid "Wood-engraver"
@@ -7382,7 +7300,7 @@ msgstr "Автор сопроводительного материала"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:472
 msgid "Xhosa"
-msgstr ""
+msgstr "Коса"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:367
 msgid "Yakut"
@@ -7394,7 +7312,7 @@ msgstr "Яо (Yao)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:474
 msgid "Yapese"
-msgstr ""
+msgstr "Япский язык"
 
 #: installer/data/mysql/en/mandatory/sample_numberpatterns.yml:subscription_numberpatterns:1:row:4
 msgid "Year"
@@ -7415,16 +7333,15 @@ msgstr "Идиш"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:476
 msgid "Yoruba"
-msgstr ""
+msgstr "Йоруба"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:9
-#, fuzzy
 msgid "You are currently restricted."
-msgstr ") в настоящее время ограничен."
+msgstr "Вы заблокированы."
 
 #: installer/data/mysql/en/optional/auth_val.yml:description:2
 msgid "You can change these at any time after installation."
-msgstr ""
+msgstr "Это можно изменить в любое время после установки."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:44:mul:5
 msgid "You can now create your new password using the following link:"
@@ -7433,7 +7350,7 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:48:mul:6
 msgid "You can search for all our materials in our %scatalog%s."
-msgstr ""
+msgstr "Поиск производится в %sкаталоге%s."
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:10
 msgid ""
@@ -7443,13 +7360,12 @@ msgid ""
 msgstr ""
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:37
-#, fuzzy
 msgid "You cannot shake hands with a clenched fist."
-msgstr "Вы не можете поделиться общедоступным списком."
+msgstr "Нельзя пожать друг другу руки со сжатыми кулаками."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60:mul:4
 msgid "You have a curbside pickup scheduled for %s at %s."
-msgstr ""
+msgstr "Самовывоз запланирован %s в %s."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:55:mul:3
 msgid "You have a hold available for pickup as of %s:"
@@ -7460,45 +7376,40 @@ msgid "You have overdue items."
 msgstr "У Вас есть просроченные экземпляры."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:5
-#, fuzzy
 msgid "You have reached the maximum number of renewals possible."
-msgstr "Вы достигли максимально возможного количества книговыдач."
+msgstr "Вы достигли максимально возможного количества продлений."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60
 msgid "You have scheduled a curbside pickup for [% branch.branchname %]"
-msgstr ""
+msgstr "Самовывоз запланирован для [% branch.branchname %]"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62:mul:3
 msgid "You have suggested that the library acquire %s by %s."
 msgstr "Вы предложили библиотеке приобрести %s до %s."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:59
-#, fuzzy
 msgid "You have waiting holds."
-msgstr "ожидаемые резервирования:"
+msgstr "У вас есть ожидающие резервирования."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:65:mul:7
 msgid "You will be notified again when the book is available."
 msgstr "Вы снова получите уведомление, когда книга станет доступна."
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:6
-#, fuzzy
 msgid "Young Adult"
-msgstr "для детей старшего школьного возраста, юношества (14-20 лет)"
+msgstr "Для детей старшего школьного возраста, юношества (14-20 лет)"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:19
-#, fuzzy
 msgid "Your account has expired."
-msgstr "Срок действия учетной записи истек"
+msgstr "Срок действия учетной записи истек."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:49:mul:3
 msgid "Your authentication token is %s."
-msgstr ""
+msgstr "Ваш токен аутентификации %s."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:19
-#, fuzzy
 msgid "Your library"
-msgstr "Исходная библиотека: "
+msgstr "Библиотека"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:42:mul:3
 msgid ""
@@ -7513,14 +7424,12 @@ msgid "Your library card number is %s"
 msgstr "Номер вашего читательского билета %s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:41:mul:3
-#, fuzzy
 msgid "Your library card will expire soon, on:"
-msgstr "Срок Вашего билета заканчивается "
+msgstr "Срок действия читательского билета заканчивается:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:1:mul:5
-#, fuzzy
 msgid "Your library."
-msgstr "Исходная библиотека: "
+msgstr "Библиотека."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:3
 msgid ""
@@ -7529,9 +7438,8 @@ msgid ""
 msgstr "Ваш запрос статьи из %s (%s) отменен по следующей причине:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:8:mul:3
-#, fuzzy
 msgid "Your request for an article from %s (%s) is now in pending state."
-msgstr "Ваш запрос статьи из %s (%s) отменен по следующей причине:"
+msgstr "Ваш запрос статьи из %s (%s) сейчас находится в состоянии ожидания."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:15
 msgid "Your total unpaid fines are too high."
@@ -7539,7 +7447,7 @@ msgstr "Ваша общая сумма неоплаченных штрафов �
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:477
 msgid "Yupik languages"
-msgstr ""
+msgstr "Юпикские языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:248
 msgid "Zambia"
@@ -7547,24 +7455,23 @@ msgstr "Замбия"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:483
 msgid "Zande languages"
-msgstr ""
+msgstr "Занде"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:478
 msgid "Zapotec"
-msgstr ""
+msgstr "Сапотекские языки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:487
 msgid "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
-msgstr ""
+msgstr "Зазаки"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:480
-#, fuzzy
 msgid "Zenaga"
-msgstr "Деванагари"
+msgstr "Зенага"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:482
 msgid "Zhuang; Chuang"
-msgstr ""
+msgstr "Чжуанский язык"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:249
 msgid "Zimbabwe"
@@ -7583,11 +7490,13 @@ msgid ""
 "[% USE Koha %][% IF Koha.Preference('LibraryName') %]Welcome to [% Koha."
 "Preference('LibraryName') %][% ELSE %]Welcome to the library[% END %]"
 msgstr ""
+"[% USE Koha %][% IF Koha.Preference('LibraryName') %]Добро пожаловать в [% "
+"Koha.Preference('LibraryName') %][% ELSE %]Добро пожаловать в библиотеку[% "
+"END %]"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:33:mul:7
-#, fuzzy
 msgid "has been updated."
-msgstr "Резервирование было отменено"
+msgstr "обновлено."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:40:mul:6
 msgid "has returned all items.%s"
@@ -7595,21 +7504,19 @@ msgstr "вернул все экземпляры.%s"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:28:mul:7
 msgid "is ready for pick up from %s."
-msgstr ""
+msgstr "готово к получению с %s."
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:29:mul:7
-#, fuzzy
 msgid "is unfortunately unavailable."
-msgstr "К сожалению, резервных копий нет."
+msgstr "недоступно."
 
 #: installer/data/mysql/en/optional/csv_profiles.yml:export_format:1:row:1
-#, fuzzy
 msgid "issues to claim"
-msgstr "Претензия по поступлениям"
+msgstr "выдача требований"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:49
 msgid "two-authentication step token"
-msgstr ""
+msgstr "токен двухфакторной аутентификации"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:73:mul:11
 msgid "was renewed until %s"
@@ -7625,3 +7532,12 @@ msgstr "Аландские острова"
 
 #~ msgid "      Card number: %s%s"
 #~ msgstr "      Номер читательского билета: %s%s"
+
+#~ msgid "AudioBook"
+#~ msgstr "Аудиокнига"
+
+#~ msgid "EBook"
+#~ msgstr "Электронная книга"
+
+#~ msgid "Ebook"
+#~ msgstr "Электронная книга"

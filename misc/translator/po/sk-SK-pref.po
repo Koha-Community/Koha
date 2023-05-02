@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-15 16:43+0000\n"
-"PO-Revision-Date: 2023-02-03 11:47+0000\n"
+"PO-Revision-Date: 2023-04-14 09:15+0000\n"
 "Last-Translator: Ondrej Lipták <ondrejliptak767@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sk/22.11/sk-SK-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1675424850.354145\n"
+"X-POOTLE-MTIME: 1681463737.540988\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -114,7 +114,6 @@ msgid ""
 msgstr ""
 "pri platbe automaticky zobraziť tlačový dialóg pre tlač potvrdenia o platbe."
 
-# Accounting > Features
 #, fuzzy
 msgid ""
 "accounting.pref#RequireCashRegister# . (Requires <a href=\"/cgi-bin/koha/"
@@ -2586,7 +2585,6 @@ msgstr ""
 msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
 msgstr "negenerovať"
 
-# Authorities > General
 #, fuzzy
 msgid "authorities.pref#RequireChoosingExistingAuthority# require"
 msgstr "generovať"
@@ -9768,7 +9766,7 @@ msgstr "Nepovoliť"
 #, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "čitateľom, aby si zvolili svoje vlastné nastavenia súkromia pri zobrazení "
@@ -10160,9 +10158,10 @@ msgstr ""
 "ako"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] (prázdnym deaktivujte)."
 
 # OPAC > Policy
@@ -10420,21 +10419,10 @@ msgstr "domovskú knižnicu"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 
 # OPAC > Appearance
@@ -10442,19 +10430,40 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "domovskú knižnicu"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "domovskú knižnicu"
 
+# OPAC > Features
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "pri exemplároch vo výsledkoch hľadania v OPACu."
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "opac.pref#OPACResultsLibrary# momentálnu lokáciu"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "domovskú knižnicu"
 
 # OPAC > Appearance
@@ -12280,9 +12289,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Nepovoliť"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "knihovníkom nastaviť možnosť, aby si prepojení čitatelia v OPACu mohli "
 "pozrieť pokuty čitateľa."

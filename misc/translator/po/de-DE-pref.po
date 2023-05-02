@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2023-03-24 09:40+0000\n"
+"PO-Revision-Date: 2023-04-27 09:49+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /de/22.11/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1679650818.803961\n"
+"X-POOTLE-MTIME: 1682588941.484801\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -9168,8 +9168,8 @@ msgstr ""
 "(getrennt mit |). Wenn das Feld frei gelassen wird, werden alle "
 "Fernleihbestellungen angezeigt. Die Fernleihstatus werden über die Backends "
 "definiert, zusätzliche Status können in der Normierten-Werte-Kategorie <a "
-"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield="
-"ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a> konfiguriert werden."
+"href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
+"\">ILL_STATUS_ALIAS</a> konfiguriert werden."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -9640,11 +9640,11 @@ msgstr "Erlaube nicht"
 # OPAC > Privacy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
-",dass Benutzer die Einstellungen für die Anzeige von Gebühren für den Bürgen "
-"selbst festlegen."
+"den Benutzern die eigenen Datenschutzoptionen bezüglich der Anzeige von "
+"Gebühren gegenüber ihren Bürgen zu bearbeiten."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -10023,8 +10023,8 @@ msgstr "Erlaube Verlängerungen im OPAC nur, wenn Benutzer weniger als"
 
 # OPAC > Policy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] Gebühren (leer lassen, wenn nicht verwendet)."
 
 # OPAC > Policy
@@ -10277,45 +10277,56 @@ msgstr "Heimatbibliothek"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"(verfügbare) einzelne Exemplare bei den OPAC XSLT Suchergebnissen, zeige "
-"nicht mehr als"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"(nicht verfügbare) einzelne Exemplare mit Status wie Ausgeliehen, "
-"Beschädigt, Vorgemerkt. Allerdings nur, wenn diese nach Bibliotheken "
-"gruppiert wurden.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (HINWEIS: Für große Konsortien wird empfohlen nicht verfügbare Exemplare "
-"zu Unterstatus zu gruppieren um die Anzahl der Exemplare aufzulisten.)"
+"mit 'nur Unterstatus' zu gruppieren, so dass nur die Exemplaranzahl je "
+"Unterstatus angezeigt wird. Ähnlich verhält es sich mit der Option 'nur "
+"Bibliothek' mit Exemplaranzahl je Bibliothek.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Gruppiere nicht verfügbare Exemplare zu"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+"Wenn <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACResultsUnavailableGroupingBy\">OPACResultsUnavailableGroupingBy</a> auf "
+"\"Bibliothek und Unterstatus\" gesetzt ist, zeige nicht mehr als"
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Zeige nicht mehr als"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr "(verfügbare) einzelne Exemplare in der OPAC-Trefferliste.<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"(nicht verfügbare) einzelne Exemplare je Bibliothek und Kategorie (z.B. "
+"Ausgeliehen, Beschädigt, Vorgemerkt, etc.)<br>"
+
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "Bibliothek und Unterstatus"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch only"
-msgstr "nur die Bibliothek"
+msgid "opac.pref#OPACResultsMaxItems# library only"
+msgstr "nur Bibliothek"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# substatus only"
@@ -12114,10 +12125,10 @@ msgstr "Erlaube nicht"
 # Patrons > Patron relationships
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
-", dass Bibliothekspersonal die Einstellungen für die Anzeige von Gebühren "
-"eines Benutzers für seinen Bürgen verändern darf."
+", dass Bibliothekspersonal die Einstellungen für die Sichtbarkeit von "
+"Gebühren im OPAC für verknüpfte Benutzerkonten ändern darf."
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
@@ -13962,7 +13973,7 @@ msgstr ""
 "werden Vorkommen von \"/\" in Suchbegriffen automatisch escaped und damit "
 "aus reguläre Zeichenketten interpretiert. Wenn \"Unescape escaped\" "
 "ausgewählt wird, ist es möglich reguläre Ausdrücke wie \"\\/wie diesen\\/\" "
-"zu verwenden, während \"/dies/\", \"oder/dies\" escpaed und damit als "
+"zu verwenden, während \"/dies/\", \"oder/dies\" escaped und damit als "
 "Zeichenketten interpretiert werden. (Nur für Elasticsearch)"
 
 # Searching > Features

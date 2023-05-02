@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2023-03-19 09:01+0000\n"
-"Last-Translator: grenier <aurelie.grenier@orleans-metropole.fr>\n"
+"PO-Revision-Date: 2023-04-27 13:39+0000\n"
+"Last-Translator: Axelle Clarisse <axelle.clarisse@univ-amu.fr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fr/22.11/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1679216511.168870\n"
+"X-POOTLE-MTIME: 1682602760.577060\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -4548,8 +4548,8 @@ msgid ""
 "circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
 "when the modal is dismissed without clicking 'Yes'."
 msgstr ""
-"confirmer automatiquement le transfert des exemplaires à leur bibliothèque "
-"propriétaire quand ils sont retournés."
+"confirmer automatiquement le transfert des exemplaires même si la fenêtre "
+"modale est fermée sans que l'on ait cliqué sur \"Oui\"."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -6880,11 +6880,11 @@ msgstr "le module de Rotation de stock."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Don't store"
-msgstr "Ne pas stocker"
+msgstr "Ne pas conserver trace"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Store"
-msgstr "Stocker"
+msgstr "Conserver trace"
 
 # Circulation > Checkin policy
 msgid ""
@@ -9106,7 +9106,7 @@ msgstr "Renseigner les dates au format"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd.mm.yyyy"
-msgstr "dd.mm.yyyy"
+msgstr "jj.mm.aaaa"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd/mm/yyyy"
@@ -9215,9 +9215,9 @@ msgstr ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). Si "
 "laissé vide, toutes les demandes de PEB s'afficheront. Les codes de demandes "
 "sont définis dans les serveurs et des alias additionnels peuvent être "
-"configurés via la <a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
-">ILL_STATUS_ALIAS</a> catégorie de valeur autorisée."
+"configurés via la <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a> catégorie de valeur "
+"autorisée."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -9696,9 +9696,10 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Ne pas autoriser"
 
 # OPAC > Privacy
+#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
-"their own privacy settings for showing the patron's fines to the patron's "
+"their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
 "les adhérents à choisir leurs propres paramètres de confidentialité pour "
@@ -10085,9 +10086,10 @@ msgstr ""
 "moins de"
 
 # OPAC > Policy
+#, fuzzy
 msgid ""
-"opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to "
-"disable)."
+"opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
+"to disable)."
 msgstr "[% local_currency %] d'amende (laisser vide pour désactiver)."
 
 # OPAC > Policy
@@ -10342,26 +10344,12 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "la bibliothèque de rattachement"
 
 # OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
-"search results, and show no more than"
-msgstr ""
-"exemplaires individuels (disponibles) dans les résultats de recherche XSLT à "
-"l'OPAC, et ne pas afficher plus de"
-
-# OPAC > Appearance > OPACResultsMaxItems
-msgid ""
-"opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
-"like Checked out, Damaged, On Hold, but only when you group them by branch."
-"<br>"
-msgstr ""
-"exemplaires individuels (indisponibles) pour les catégories telles que En "
-"prêt, endommagé, Réservé, mais seulement s'ils sont groupés par site.<br>"
-
-# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
-"group unavailable items by substatus, listing item counts only.)"
+"group unavailable items by 'substatus only', listing item counts per "
+"substatus. Similarly the option 'library only' results in unavailable item "
+"counts per library.)"
 msgstr ""
 ". (NOTE : Pour de gros réseaux, il est recommandé de regrouper les "
 "exemplaires indisponibles par sous-statuts, ne listant que leur nombre.)"
@@ -10370,16 +10358,43 @@ msgstr ""
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
 msgstr "Grouper les exemplaires indisponibles"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# If <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
+"show no more than"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Ne pas afficher plus de"
 
+# OPAC > Appearance > OPACResultsMaxItems
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
+"search results.<br>"
+msgstr ""
+"exemplaires individuels (disponibles) dans les résultats de recherche XSLT à "
+"l'OPAC.<br>"
+
+# OPAC > Appearance > OPACResultsMaxItems
+#, fuzzy
+msgid ""
+"opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
+"and category (like Checked out, Damaged, On hold, etc.)<br>"
+msgstr ""
+"exemplaires individuels (indisponibles) pour les catégories telles que En "
+"prêt, endommagé, Réservé, mais seulement s'ils sont groupés par site.<br>"
+
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch and substatus"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "par site et par sous-statut"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACResultsMaxItems# branch only"
+#, fuzzy
+msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "seulement par site"
 
 # OPAC > Appearance
@@ -12178,9 +12193,10 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Ne pas autoriser"
 
 # Patrons > Patron relationships
+#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
-"ability for a patron's fines to be viewed by linked patrons in the OPAC."
+"ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
 "les bibliothécaires à choisir de rendre visibles, à l'OPAC, les amendes d'un "
 "adhérent par des adhérents liés."
