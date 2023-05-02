@@ -176,7 +176,7 @@ $(document).ready(function() {
         if( langtab != "" ){
             $("#tabs a[href='#" + langtab + "']").tab("show");
         } else {
-            $("#tabs a:first").tab("show");
+            $("#tabs a[href='#lang_default_panel']").tab("show");
         }
     }
 

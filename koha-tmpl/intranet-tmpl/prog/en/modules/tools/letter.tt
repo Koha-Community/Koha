@@ -431,7 +431,7 @@
                             <div style="clear:both"></div>
                             [% WRAPPER tabs id= "tabs" %]
                                 [% WRAPPER tabs_nav %]
-                                    [% WRAPPER tab_item tabname= "lang_default" bt_active= 1 %] <span>Default</span> [% END %]
+                                    [% WRAPPER tab_item tabname= "lang_default" %] <span>Default</span> [% END %]
                                     [% FOR language IN languages %]
                                         [% FOR sublanguage IN language.sublanguages_loop %]
                                             [% IF language.plural %]
@@ -445,12 +445,7 @@
 
                                 [% WRAPPER tab_panels %]
                                     [% FOREACH lang IN letters.keys %]
-                                        [% IF( loop.first ) %]
-                                            [% SET bt_active = 1 %]
-                                        [% ELSE %]
-                                            [% SET bt_active = 0 %]
-                                        [% END %]
-                                        [% WRAPPER tab_panel tabname="lang_${lang}" bt_active= bt_active %]
+                                        [% WRAPPER tab_panel tabname="lang_${lang}" %]
                                             [% PROCESS message_templates %]
                                         [% END # /WRAPPER tab_panel %]
                                     [% END # /FOREACH lang %]
