@@ -25,8 +25,16 @@ describe("Dialog operations", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
+            '{"value":"1"}'
+        );
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
+            '{"value":"local"}'
+        );
     });
 
     it("There are no ... defined", () => {
@@ -58,7 +66,9 @@ describe("Dialog operations", () => {
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
         cy.get("#navmenulist").contains("Agreements").click();
         // Info messages should be cleared when view is changed
-        cy.get("main div[class='dialog message']").contains("There are no agreements defined");
+        cy.get("main div[class='dialog message']").contains(
+            "There are no agreements defined"
+        );
         cy.get("main div[class='dialog message']").should("have.length", 1);
     });
 

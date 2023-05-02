@@ -9,7 +9,7 @@ export class PatronAPIClient extends HttpClient {
 
     get patrons() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "patrons/" + id,
                 }),

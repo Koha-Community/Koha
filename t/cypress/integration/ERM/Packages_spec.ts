@@ -13,11 +13,11 @@ function get_package() {
                 agreement: {
                     agreement_id: 2,
                     description: "agreement description",
-                    name: "agreement name"
+                    name: "agreement name",
                 },
                 agreement_id: 2,
-                package_id: 1
-            }
+                package_id: 1,
+            },
         ],
         resources_count: 0,
     };
@@ -27,8 +27,16 @@ describe("Package CRUD operations", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
+            '{"value":"1"}'
+        );
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
+            '{"value":"local"}'
+        );
     });
 
     it("List package", () => {
@@ -77,7 +85,6 @@ describe("Package CRUD operations", () => {
     });
 
     it("Add package", () => {
-
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
 
         // Click the button in the toolbar
@@ -137,7 +144,9 @@ describe("Package CRUD operations", () => {
         cy.get("#agreement_id_0 .vs__search").type(
             related_agreement.agreement.name
         );
-        cy.get("#agreement_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first agreement suggestion
+        cy.get("#agreement_id_0 .vs__dropdown-menu li")
+            .eq(0)
+            .click({ force: true }); //click first agreement suggestion
     });
 
     it("Edit package", () => {
@@ -174,7 +183,9 @@ describe("Package CRUD operations", () => {
         cy.get("#package_content_type .vs__selected").contains("Print");
 
         //Test related content
-        cy.get("#package_agreement_0 #agreement_id_0 .vs__selected").contains("second agreement name");
+        cy.get("#package_agreement_0 #agreement_id_0 .vs__selected").contains(
+            "second agreement name"
+        );
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
@@ -311,7 +322,9 @@ describe("Package CRUD operations", () => {
             .click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Local package").contains("deleted");
+        cy.get("main div[class='dialog message']")
+            .contains("Local package")
+            .contains("deleted");
 
         // Delete from show
         // Click the "name" link from the list
@@ -343,11 +356,11 @@ describe("Package CRUD operations", () => {
             "Package #" + erm_package.package_id
         );
 
-        cy.get('#packages_show .action_links .fa-trash').click();
+        cy.get("#packages_show .action_links .fa-trash").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#packages_list table tbody tr:first")
+        cy.get("#packages_list table tbody tr:first");
     });
 });

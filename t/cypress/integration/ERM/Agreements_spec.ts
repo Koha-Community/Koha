@@ -43,13 +43,13 @@ function get_agreement() {
                     license_id: 1,
                     name: "license name",
                     status: "expired",
-                    type: "alliance"
+                    type: "alliance",
                 },
-                license_id:1,
+                license_id: 1,
                 notes: "license notes",
                 physical_location: "cupboard",
                 status: "controlling",
-                uri: "license uri"
+                uri: "license uri",
             },
             {
                 agreement_id: 1,
@@ -59,39 +59,39 @@ function get_agreement() {
                     license_id: 2,
                     name: "second license name",
                     status: "expired",
-                    type: "alliance"
+                    type: "alliance",
                 },
-                license_id:2,
+                license_id: 2,
                 notes: "second license notes",
                 physical_location: "cupboard",
                 status: "future",
-                uri: "license uri"
-            }
+                uri: "license uri",
+            },
         ],
         agreement_relationships: [
             {
                 agreement_id: 1,
-                notes: 'related agreement notes',
+                notes: "related agreement notes",
                 related_agreement: {
                     agreement_id: 2,
                     description: "agreement description",
-                    name: "agreement name"
+                    name: "agreement name",
                 },
                 related_agreement_id: 2,
-                relationship: "supersedes"
-            }
+                relationship: "supersedes",
+            },
         ],
         agreement_packages: [],
         documents: [
             {
-                agreement_id:1,
+                agreement_id: 1,
                 file_description: "file description",
                 file_name: "file.json",
                 notes: "file notes",
                 physical_location: "file physical location",
                 uri: "file uri",
-                uploaded_on: "2022-10-27T11:57:02+00:00"
-            }
+                uploaded_on: "2022-10-27T11:57:02+00:00",
+            },
         ],
     };
 }
@@ -101,27 +101,35 @@ function get_licenses_to_relate() {
         {
             license_id: 1,
             description: "a license",
-            name: "first license name"
+            name: "first license name",
         },
         {
             license_id: 2,
             description: "a second license",
-            name: "second license name"
+            name: "second license name",
         },
         {
             license_id: 3,
             description: "a third license",
-            name: "third license name"
+            name: "third license name",
         },
-    ]
+    ];
 }
 
 describe("Agreement CRUD operations", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
+            '{"value":"1"}'
+        );
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
+            '{"value":"local"}'
+        );
     });
 
     it("List agreements", () => {
@@ -309,12 +317,18 @@ describe("Agreement CRUD operations", () => {
         // Add new document
         cy.get("#documents").contains("Add new document").click();
         cy.get("#document_0 input[id=file_0]").click();
-        cy.get('#document_0 input[id=file_0]').selectFile('t/cypress/fixtures/file.json');
+        cy.get("#document_0 input[id=file_0]").selectFile(
+            "t/cypress/fixtures/file.json"
+        );
         cy.get("#document_0 .file_information span").contains("file.json");
-        cy.get('#document_0 input[id=file_description_0]').type('file description');
-        cy.get('#document_0 input[id=physical_location_0]').type('file physical location');
-        cy.get('#document_0 input[id=uri_0]').type('file URI');
-        cy.get('#document_0 input[id=notes_0]').type('file notes');
+        cy.get("#document_0 input[id=file_description_0]").type(
+            "file description"
+        );
+        cy.get("#document_0 input[id=physical_location_0]").type(
+            "file physical location"
+        );
+        cy.get("#document_0 input[id=uri_0]").type("file URI");
+        cy.get("#document_0 input[id=notes_0]").type("file notes");
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/agreements", {
@@ -354,7 +368,9 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
             related_license.license.name
         );
-        cy.get("#agreement_license_0 #license_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first license suggestion
+        cy.get("#agreement_license_0 #license_id_0 .vs__dropdown-menu li")
+            .eq(0)
+            .click({ force: true }); //click first license suggestion
         cy.get("#agreement_license_0 #license_status_0 .vs__search").type(
             related_license.status + "{enter}",
             { force: true }
@@ -363,7 +379,9 @@ describe("Agreement CRUD operations", () => {
             related_license.physical_location + "{enter}",
             { force: true }
         );
-        cy.get("#agreement_license_0 #license_notes_0").type(related_license.notes);
+        cy.get("#agreement_license_0 #license_notes_0").type(
+            related_license.notes
+        );
         cy.get("#agreement_license_0 #license_uri_0").type(related_license.uri);
 
         // Add new related agreement
@@ -373,17 +391,24 @@ describe("Agreement CRUD operations", () => {
             body: cy.get_agreements_to_relate(),
         });
         cy.visit("/cgi-bin/koha/erm/agreements/add");
-        cy.get("#agreement_relationships").contains("Add new related agreement").click();
+        cy.get("#agreement_relationships")
+            .contains("Add new related agreement")
+            .click();
         cy.get("#related_agreement_0").contains("Related agreement 1");
         cy.get("#related_agreement_0 #related_agreement_id_0 .vs__search").type(
             related_agreement.related_agreement.name
         );
-        cy.get("#related_agreement_0 #related_agreement_id_0 .vs__dropdown-menu li").eq(0).click( { force: true } ); //click first agreement suggestion
-        cy.get("#related_agreement_0 #related_agreement_notes_0").type(related_agreement.notes);
-        cy.get("#related_agreement_0 #related_agreement_relationship_0 .vs__search").type(
-            related_agreement.relationship + "{enter}",
-            { force: true }
+        cy.get(
+            "#related_agreement_0 #related_agreement_id_0 .vs__dropdown-menu li"
+        )
+            .eq(0)
+            .click({ force: true }); //click first agreement suggestion
+        cy.get("#related_agreement_0 #related_agreement_notes_0").type(
+            related_agreement.notes
         );
+        cy.get(
+            "#related_agreement_0 #related_agreement_relationship_0 .vs__search"
+        ).type(related_agreement.relationship + "{enter}", { force: true });
     });
 
     it("Edit agreement", () => {
@@ -396,10 +421,10 @@ describe("Agreement CRUD operations", () => {
             {
                 method: "GET",
                 url: "/api/v1/erm/agreements*",
-                times: 1
+                times: 1,
             },
             {
-                body: agreements
+                body: agreements,
             }
         );
 
@@ -458,13 +483,19 @@ describe("Agreement CRUD operations", () => {
         cy.get("#notes_1").should("have.value", "this is a note");
 
         //Test related content
-        cy.get("#agreement_license_0 #license_id_0 .vs__selected").contains("first license name");
-        cy.get("#agreement_license_1 #license_id_1 .vs__selected").contains("second license name");
-        cy.get("#document_0 .file_information span").contains("file.json" );
-        cy.get("#related_agreement_0 #related_agreement_id_0 .vs__selected").contains("agreement name");
+        cy.get("#agreement_license_0 #license_id_0 .vs__selected").contains(
+            "first license name"
+        );
+        cy.get("#agreement_license_1 #license_id_1 .vs__selected").contains(
+            "second license name"
+        );
+        cy.get("#document_0 .file_information span").contains("file.json");
+        cy.get(
+            "#related_agreement_0 #related_agreement_id_0 .vs__selected"
+        ).contains("agreement name");
 
         // Submit the form, get 500
-        cy.intercept("PUT", "/api/v1/erm/agreements/*", (req) => {
+        cy.intercept("PUT", "/api/v1/erm/agreements/*", req => {
             req.reply({
                 statusCode: 500,
                 error: "Something went wrong",
@@ -545,7 +576,9 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
+        cy.get(".dialog.alert.confirmation h1").contains(
+            "remove this agreement"
+        );
         cy.contains(agreement.name);
 
         // Accept the confirmation dialog, get 500
@@ -566,9 +599,13 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
+        cy.get(".dialog.alert.confirmation h1").contains(
+            "remove this agreement"
+        );
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("Agreement").contains("deleted");
+        cy.get("main div[class='dialog message']")
+            .contains("Agreement")
+            .contains("deleted");
 
         // Delete from show
         // Click the "name" link from the list
@@ -598,11 +635,13 @@ describe("Agreement CRUD operations", () => {
             "Agreement #" + agreement.agreement_id
         );
 
-        cy.get('#agreements_show .action_links .fa-trash').click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this agreement");
+        cy.get("#agreements_show .action_links .fa-trash").click();
+        cy.get(".dialog.alert.confirmation h1").contains(
+            "remove this agreement"
+        );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#agreements_list table tbody tr:first")
+        cy.get("#agreements_list table tbody tr:first");
     });
 });

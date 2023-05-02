@@ -13,7 +13,7 @@ export function useDataTable(table_id) {
 export function build_url_params(filters) {
     return Object.entries(filters)
         .map(([k, v]) => (v ? k + "=" + v : undefined))
-        .filter((e) => e !== undefined)
+        .filter(e => e !== undefined)
         .join("&");
 }
 export function build_url(base_url, filters) {

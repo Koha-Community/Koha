@@ -47,11 +47,11 @@ export const useAVStore = defineStore("authorised_values", {
                 );
                 return;
             }
-            let o = this[arr_name].find((e) => e.value == av);
+            let o = this[arr_name].find(e => e.value == av);
             return o ? o.description : av;
         },
         map_av_dt_filter(arr_name) {
-            return this[arr_name].map((e) => {
+            return this[arr_name].map(e => {
                 e["_id"] = e["value"];
                 e["_str"] = e["description"];
                 return e;

@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useVendorStore = defineStore('vendors', {
-  state: () => ({
-    vendors: [],
-  }),
-})
+export const useVendorStore = defineStore("vendors", {
+    state: () => ({
+        vendors: [],
+    }),
+});

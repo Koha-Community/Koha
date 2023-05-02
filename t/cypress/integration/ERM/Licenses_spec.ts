@@ -20,14 +20,14 @@ function get_license() {
         user_roles: [],
         documents: [
             {
-                license_id:1,
+                license_id: 1,
                 file_description: "file description",
                 file_name: "file.json",
                 notes: "file notes",
                 physical_location: "file physical location",
                 uri: "file uri",
-                uploaded_on: "2022-10-27T11:57:02+00:00"
-            }
+                uploaded_on: "2022-10-27T11:57:02+00:00",
+            },
         ],
     };
 }
@@ -36,8 +36,16 @@ describe("License CRUD operations", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
+            '{"value":"1"}'
+        );
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
+            '{"value":"local"}'
+        );
     });
 
     it("List license", () => {
@@ -91,8 +99,12 @@ describe("License CRUD operations", () => {
         cy.get("#license_name").type(license.name);
         cy.get("#license_description").type(license.description);
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("#license_type .vs__search").type(license.type + '{enter}',{force:true});
-        cy.get("#license_status .vs__search").type(license.status + '{enter}',{force:true});
+        cy.get("#license_type .vs__search").type(license.type + "{enter}", {
+            force: true,
+        });
+        cy.get("#license_status .vs__search").type(license.status + "{enter}", {
+            force: true,
+        });
 
         cy.get("#started_on+input").click();
         cy.get(".flatpickr-calendar")
@@ -110,12 +122,18 @@ describe("License CRUD operations", () => {
         // Add new document
         cy.get("#documents").contains("Add new document").click();
         cy.get("#document_0 input[id=file_0]").click();
-        cy.get('#document_0 input[id=file_0]').selectFile('t/cypress/fixtures/file.json');
+        cy.get("#document_0 input[id=file_0]").selectFile(
+            "t/cypress/fixtures/file.json"
+        );
         cy.get("#document_0 .file_information span").contains("file.json");
-        cy.get('#document_0 input[id=file_description_0]').type('file description');
-        cy.get('#document_0 input[id=physical_location_0]').type('file physical location');
-        cy.get('#document_0 input[id=uri_0]').type('file URI');
-        cy.get('#document_0 input[id=notes_0]').type('file notes');
+        cy.get("#document_0 input[id=file_description_0]").type(
+            "file description"
+        );
+        cy.get("#document_0 input[id=physical_location_0]").type(
+            "file physical location"
+        );
+        cy.get("#document_0 input[id=uri_0]").type("file URI");
+        cy.get("#document_0 input[id=notes_0]").type("file notes");
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/licenses", {
@@ -133,9 +151,7 @@ describe("License CRUD operations", () => {
             body: license,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
-            "License created"
-        );
+        cy.get("main div[class='dialog message']").contains("License created");
     });
 
     it("Edit license", () => {
@@ -154,9 +170,7 @@ describe("License CRUD operations", () => {
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
-        cy.get("#licenses_list table tbody tr:first")
-            .contains("Edit")
-            .click();
+        cy.get("#licenses_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_add h2").contains("Edit license");
@@ -173,7 +187,7 @@ describe("License CRUD operations", () => {
         cy.get("#ended_on").invoke("val").should("eq", dates["tomorrow_iso"]);
 
         // Test related document
-        cy.get("#document_0 .file_information span").contains("file.json" );
+        cy.get("#document_0 .file_information span").contains("file.json");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/licenses/*", {
@@ -191,9 +205,7 @@ describe("License CRUD operations", () => {
             body: license,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
-            "License updated"
-        );
+        cy.get("main div[class='dialog message']").contains("License updated");
     });
 
     it("Show license", () => {
@@ -222,9 +234,7 @@ describe("License CRUD operations", () => {
         name_link.click();
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#licenses_show h2").contains(
-            "License #" + license.license_id
-        );
+        cy.get("#licenses_show h2").contains("License #" + license.license_id);
     });
 
     it("Delete license", () => {
@@ -269,7 +279,9 @@ describe("License CRUD operations", () => {
             .click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains("License").contains("deleted");
+        cy.get("main div[class='dialog message']")
+            .contains("License")
+            .contains("deleted");
 
         // Delete from show
         // Click the "name" link from the list
@@ -295,15 +307,13 @@ describe("License CRUD operations", () => {
         name_link.click();
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#licenses_show h2").contains(
-            "License #" + license.license_id
-        );
+        cy.get("#licenses_show h2").contains("License #" + license.license_id);
 
-        cy.get('#licenses_show .action_links .fa-trash').click();
+        cy.get("#licenses_show .action_links .fa-trash").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#licenses_list table tbody tr:first")
+        cy.get("#licenses_list table tbody tr:first");
     });
 });

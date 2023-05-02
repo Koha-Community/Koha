@@ -34,7 +34,7 @@ const pinia = createPinia();
 
 const i18n = {
     install: (app, options) => {
-        app.config.globalProperties.$__ = (key) => {
+        app.config.globalProperties.$__ = key => {
             return window["__"](key);
         };
     },
@@ -65,14 +65,14 @@ router.beforeEach((to, from) => {
     removeMessages(); // This will actually flag the messages as displayed already
 });
 router.afterEach((to, from) => {
-    let tab_id = 'agreement'; // Agreements
+    let tab_id = "agreement"; // Agreements
 
     if (to.path.match(/\/erm\/licenses/)) {
-        tab_id = 'license';
+        tab_id = "license";
     } else if (to.path.match(/\/erm\/eholdings\/local\/packages/)) {
-        tab_id = 'package';
+        tab_id = "package";
     } else if (to.path.match(/\/erm\/eholdings\/local\/titles/)) {
-        tab_id = 'title';
+        tab_id = "title";
     }
     let node = document.getElementById(`${tab_id}_search_tab`);
 

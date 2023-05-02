@@ -9,7 +9,7 @@ export class SysprefAPIClient extends HttpClient {
 
     get sysprefs() {
         return {
-            get: (variable) =>
+            get: variable =>
                 this.get({
                     endpoint: "/?pref=" + variable,
                 }),
