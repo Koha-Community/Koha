@@ -132,11 +132,13 @@ elsif ($op eq 'doedit' || $op eq 'add') {
     }
 }
 
-my $categorycodes = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
+my $categories = Koha::Patron::Categories->search_with_library_limits( {},
+    { order_by => ['description'] } )->unblessed;
+
 $template->param(
-    rules         => $rules,
-    categorycodes => $categorycodes,
-    messages      => $errors
+    rules      => $rules,
+    categories => $categories,
+    messages   => $errors
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
