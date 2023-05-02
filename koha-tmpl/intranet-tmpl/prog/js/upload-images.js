@@ -162,7 +162,7 @@ function ParseFile(file) {
         reader.readAsDataURL(file);
     } else if( file.type.indexOf("zip") > 0) {
         Output(
-            '<p><i class="fa-solid fa-zipper" aria-hidden="true"></i></p>'
+            '<p><i class="fa-solid fa-file-zipper" aria-hidden="true"></i></p>'
         );
         $("#biblionumber_entry").hide();
         $("#image").prop("checked", false );

@@ -53,7 +53,7 @@
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a id="agreement_search_tab" title="Search agreements" href="#agreement_search" aria-controls="agreement_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-check-circle-o"></i> <span class="tab-title">Search agreements</span></a>
+            <a id="agreement_search_tab" title="Search agreements" href="#agreement_search" aria-controls="agreement_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-check-circle"></i> <span class="tab-title">Search agreements</span></a>
         </li>
         <li role="presentation">
             <a id="license_search_tab" title="Search licenses" href="#license_search" aria-controls="license_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-gavel"></i> <span class="tab-title">Search licenses</span></a>
