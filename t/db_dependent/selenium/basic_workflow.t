@@ -132,10 +132,6 @@ SKIP: {
 
     my $itemtype = $sample_data->{itemtype};
 
-    my $homelibrary = $sample_data->{homelibrary};
-
-    my $currentlibrary = $sample_data->{currentlibrary};
-
     my @biblionumbers;
     for my $i ( 1 .. $number_of_biblios_to_insert ) {
         my $biblio = MARC::Record->new();
@@ -145,16 +141,12 @@ SKIP: {
                 MARC::Field->new('200', ' ', ' ', a => 'test biblio '.$i),
                 MARC::Field->new('200', ' ', ' ', f => 'test author '.$i),
                 MARC::Field->new('200', ' ', ' ', b => $itemtype->{itemtype}),
-                MARC::Field->new('200', ' ', ' ', c => $homelibrary->{homelibrary}),
-                MARC::Field->new('200', ' ', ' ', d => $currentlibrary->{currentlibrary}),
             );
         } else {
             $biblio->append_fields(
                 MARC::Field->new('245', ' ', ' ', a => 'test biblio '.$i),
                 MARC::Field->new('100', ' ', ' ', a => 'test author '.$i),
                 MARC::Field->new('942', ' ', ' ', c => $itemtype->{itemtype}),
-                MARC::Field->new('942', ' ', ' ', b => $homelibrary->{homelibrary}),
-                MARC::Field->new('942', ' ', ' ', d => $currentlibrary->{currentlibrary}),
             );
         }
         my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
@@ -219,11 +211,6 @@ SKIP: {
             ) {
                 next; # auto-filled
             }
-            elsif (
-                $id =~ m|^tag_952_subfield_a| # homelibrary
-            ) {
-            elsif ( =~ m|^tag_952_subfield_b| # currentlibrary
-            ) {
             elsif (
                 $id =~ m|^tag_952_subfield_d| # dateaccessioned
             ) {
