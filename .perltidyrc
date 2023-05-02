@@ -3,17 +3,16 @@
 
 --character-encoding=utf8
 --output-line-ending=unix
---add-terminal-newline
 --iterations=2
 
 # } else {
 --cuddled-else
 
-# do not vertically align "qw()" after use
---valign-exclusion-list='q'
-
 # Use the full indent size for continuations
 --continuation-indentation=4
---extended-continuation-indentation
 
 --no-outdent-long-lines
+
+--maximum-line-length=120
+
+--break-at-old-comma-breakpoints
