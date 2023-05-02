@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE To %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE Koha %]
@@ -454,11 +455,9 @@
           }
         });
 
-        var $category = {};
-
-        [% FOR categorycode IN categorycodes %]
-            $category["[% categorycode.categorycode %]"] = "[% categorycode.description | html %]";
-        [% END %]
+        var categories = [% To.json( categories ) | $raw %];
+        categories.unshift({ categorycode: '*', description: '*'});
+        categories = categories.reduce( ( a,c ) => ( { ...a, [c.categorycode]: c.description } ), {} );
 
         var module_filter_options = {
         source: {
@@ -471,7 +470,7 @@
             import_lexile: _("import_lexile.pl")
         },
 
-        categorycode: $category
+            categorycode: categories,
         };
 
         //Kind of hack: Replace filter value with label when one exist
