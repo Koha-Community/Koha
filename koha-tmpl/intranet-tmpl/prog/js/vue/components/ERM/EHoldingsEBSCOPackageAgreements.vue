@@ -1,6 +1,6 @@
 <template>
     <transition name="modal">
-        <div v-if="showModal" class="modal">
+        <div v-if="showModal" class="add_agreement_modal">
             <AgreementsList :embedded="true" @select-agreement="addAgreement" />
             <input
                 type="button"
@@ -130,7 +130,7 @@ export default {
 }
 </script>
 <style>
-.modal {
+.add_agreement_modal {
     position: fixed;
     z-index: 9998;
     top: 0;
@@ -151,13 +151,13 @@ export default {
 </style>
 
 <style>
-#agreements_list table {
+.add_agreement_modal #agreements_list table {
     display: table;
 }
-.filters label {
+.add_agreement_modal .filters label {
     float: none !important;
 }
-.filters input[type="checkbox"] {
+.add_agreement_modal .filters input[type="checkbox"] {
     margin-left: 0 !important;
 }
 </style>
