@@ -76,8 +76,10 @@ if ($plugins_enabled) {
                 my $response = from_json( get($url) );
                 foreach my $result ( @{ $response->{items} } ) {
                     next unless $result->{name} =~ /^koha-plugin-/;
-                    my $releases = $result->{url} . "/releases/latest";
-                    my $release  = from_json( get($releases) );
+                    my $releases     = $result->{url} . "/releases/latest";
+                    my $release_info = get($releases);
+                    next unless $release_info;
+                    my $release  = from_json( $release_info );
                     my $tag_name = $release->{tag_name};
                     for my $asset ( @{$release->{assets}} ) {
                         if ($asset->{browser_download_url} =~ m/\.kpz$/) {
