@@ -124,73 +124,77 @@
 
     flatpickr.setDefaults(flatpickr_defaults);
 
+    function apply_flatpickr(input){
+        let options = {};
+        let refresh_max_date = 0;
+        let disable_buttons = [];
+
+        if( $(input).data("flatpickr-futureinclusive") === true
+         || $(input).data("flatpickr-futuredate") === true ) {
+            let original_date = $(input).val();
+            if ( original_date ) {
+                original_date = Date_from_syspref( original_date ).getTime();
+                let tomorrow = new Date().fp_incr(1).getTime();
+
+                options['enable'] = [function(date){
+                    date = date.getTime();
+                    if ( date == original_date ) return true;
+                    if ( date >= tomorrow)       return true;
+                }];
+            }
+            else {
+                if( $(input).data("flatpickr-futureinclusive") === true ) {
+                    options['minDate'] = new Date().setHours(00, 00, 00, 00);
+                } else {
+                    options['minDate'] = new Date().fp_incr(1);
+                }
+            }
+
+            disable_buttons.push(0); /* Yesterday */
+
+            if ( $(input).data("flatpickr-futuredate") === true ) {
+                disable_buttons.push(1); /* Today */
+            }
+        }
+        if( $(input).data("flatpickr-pastinclusive") === true ) {
+            options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
+            refresh_max_date = 1;
+            disable_buttons.push(2); /* Tomorrow */
+        }
+        if( $(input).data("flatpickr-pastdate") === true ) {
+            options['maxDate'] = new Date().fp_incr(-1).setHours(23, 59, 00, 00);
+            disable_buttons.push(1); /* Today */
+            disable_buttons.push(2); /* Tomorrow */
+        }
+        if ( $(input).data('flatpickr-enable-time') === true ) {
+            options['enableTime'] = true;
+            options['dateFormat'] = "Y-m-d H:i";
+            options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
+        }
+
+        let fp = $(input).flatpickr(options);
+
+        $(disable_buttons).each(function(index, value){
+            $(fp.calendarContainer).find(".shortcut-buttons-flatpickr-button[data-index='"+value+"']").prop("disabled", "disabled");
+        });
+
+        if ( refresh_max_date ) {
+            /* Refresh the maxDate every 30 secondes to make sure the user will not
+               be stuck with the minute passed.
+               Adding 1 minute to not introduce a gap.
+               Example: last update at 40s, a new minute passed at 00.
+               Between 00 and 10s the user won't be able click 'Today'.
+            */
+            setInterval(() => {
+                let now = new Date();
+                fp.set("maxDate", now.setMinutes(now.getMinutes() + 1));
+            }, 30000);
+        }
+    }
+
     $(document).ready(function(){
         $(".flatpickr").each(function(){
-            let options = {};
-            let refresh_max_date = 0;
-            let disable_buttons = [];
-
-            if( $(this).data("flatpickr-futureinclusive") === true
-             || $(this).data("flatpickr-futuredate") === true ) {
-                let original_date = $(this).val();
-                if ( original_date ) {
-                    original_date = Date_from_syspref( original_date ).getTime();
-                    let tomorrow = new Date().fp_incr(1).getTime();
-
-                    options['enable'] = [function(date){
-                        date = date.getTime();
-                        if ( date == original_date ) return true;
-                        if ( date >= tomorrow)       return true;
-                    }];
-                }
-                else {
-                    if( $(this).data("flatpickr-futureinclusive") === true ) {
-                        options['minDate'] = new Date().setHours(00, 00, 00, 00);
-                    } else {
-                        options['minDate'] = new Date().fp_incr(1);
-                    }
-                }
-
-                disable_buttons.push(0); /* Yesterday */
-
-                if ( $(this).data("flatpickr-futuredate") === true ) {
-                    disable_buttons.push(1); /* Today */
-                }
-            }
-            if( $(this).data("flatpickr-pastinclusive") === true ) {
-                options['maxDate'] = new Date(); /* Not today or hh:mm will be 00:00 */
-                refresh_max_date = 1;
-                disable_buttons.push(2); /* Tomorrow */
-            }
-            if( $(this).data("flatpickr-pastdate") === true ) {
-                options['maxDate'] = new Date().fp_incr(-1).setHours(23, 59, 00, 00);
-                disable_buttons.push(1); /* Today */
-                disable_buttons.push(2); /* Tomorrow */
-            }
-            if ( $(this).data('flatpickr-enable-time') === true ) {
-                options['enableTime'] = true;
-                options['dateFormat'] = "Y-m-d H:i";
-                options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
-            }
-
-            let fp = $(this).flatpickr(options);
-
-            $(disable_buttons).each(function(index, value){
-                $(fp.calendarContainer).find(".shortcut-buttons-flatpickr-button[data-index='"+value+"']").prop("disabled", "disabled");
-            });
-
-            if ( refresh_max_date ) {
-                /* Refresh the maxDate every 30 secondes to make sure the user will not
-                   be stuck with the minute passed.
-                   Adding 1 minute to not introduce a gap.
-                   Example: last update at 40s, a new minute passed at 00.
-                   Between 00 and 10s the user won't be able click 'Today'.
-                */
-                setInterval(() => {
-                    let now = new Date();
-                    fp.set("maxDate", now.setMinutes(now.getMinutes() + 1));
-                }, 30000);
-            }
+            apply_flatpickr(this);
         });
     });
 </script>

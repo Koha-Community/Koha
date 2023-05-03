@@ -1912,6 +1912,10 @@ legend:hover {
                     $("#memberentry_guarantor").appendTo("#quick_add_form");
                 }
                 $("#quick_add_form").show();
+                $("#quick_add_form").find(".flatpickr:hidden").each( (i, input) => {
+                    $(input).siblings(".flatpickr_wrapper").remove(); // Remove leftover from the previous flatpickr that has been cloned
+                    apply_flatpickr(input);
+                } );
             });
         [% END %]
         $("#guarantor_template").hide();
