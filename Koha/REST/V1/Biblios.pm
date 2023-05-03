@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Biblios;
+use Koha::DateUtils;
 use Koha::Ratings;
 use Koha::RecordProcessor;
 use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
@@ -291,7 +292,7 @@ sub add_item {
 
     try {
         my $biblio_id = $c->validation->param('biblio_id');
-        my $biblio = Koha::Biblios->find( $biblio_id );
+        my $biblio    = Koha::Biblios->find( $biblio_id );
 
         unless ($biblio) {
             return $c->render(
@@ -309,15 +310,76 @@ sub add_item {
 
         my $item = Koha::Item->new_from_api($body);
 
-        if ( ! defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
-            my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
-            $item->barcode($barcode);
+        if ( !defined $item->barcode ) {
+
+            # FIXME This should be moved to Koha::Item->store
+            my $autoBarcode = C4::Context->preference('autoBarcode');
+            my $barcode     = '';
+
+            if ( !$autoBarcode || $autoBarcode eq 'OFF' ) {
+                #We do nothing
+            }
+            elsif ( $autoBarcode eq 'incremental' ) {
+                ($barcode) =
+                  C4::Barcodes::ValueBuilder::incremental::get_barcode;
+            }
+            elsif ( $autoBarcode eq 'annual' ) {
+                my $year = Koha::DateUtils::dt_from_string()->year();
+                ($barcode) =
+                  C4::Barcodes::ValueBuilder::annual::get_barcode(
+                    { year => $year } );
+            }
+            elsif ( $autoBarcode eq 'hbyymmincr' ) {
+
+                # Generates a barcode where
+                #  hb = home branch Code,
+                #  yymm = year/month catalogued,
+                #  incr = incremental number,
+                #  reset yearly -fbcit
+                my $now        = Koha::DateUtils::dt_from_string();
+                my $year       = $now->year();
+                my $month      = $now->month();
+                my $homebranch = $item->homebranch // '';
+                ($barcode) =
+                  C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(
+                    { year => $year, mon => $month } );
+                $barcode = $homebranch . $barcode;
+            }
+            elsif ( $autoBarcode eq 'EAN13' ) {
+
+                # not the best, two catalogers could add the same
+                # barcode easily this way :/
+                my $query = "select max(abs(barcode)) from items";
+                my $dbh   = C4::Context->dbh;
+                my $sth   = $dbh->prepare($query);
+                $sth->execute();
+                my $nextnum;
+                while ( my ($last) = $sth->fetchrow_array ) {
+                    $nextnum = $last;
+                }
+                my $ean = CheckDigits('ean');
+                if ( $ean->is_valid($nextnum) ) {
+                    my $next = $ean->basenumber($nextnum) + 1;
+                    $nextnum = $ean->complete($next);
+                    $nextnum =
+                      '0' x ( 13 - length($nextnum) ) . $nextnum;    # pad zeros
+                }
+                else {
+                    warn "ERROR: invalid EAN-13 $nextnum, using increment";
+                    $nextnum++;
+                }
+                $barcode = $nextnum;
+            }
+            else {
+                warn "ERROR: unknown autoBarcode: $autoBarcode";
+            }
+            $item->barcode($barcode) if $barcode;
         }
 
         $item->store->discard_changes;
 
         $c->render(
-            status => 201,
+            status  => 201,
             openapi => $item->to_api
         );
     }
