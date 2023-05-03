@@ -148,11 +148,24 @@ Return the MARC::Record for this authority
 sub record {
     my ( $self ) = @_;
 
-    my $flavour =
-      C4::Context->preference('marcflavour') eq 'UNIMARC'
+    my $flavour = $self->record_schema;
+    return MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
+}
+
+=head3 record_schema
+
+my $schema = $biblio->record_schema();
+
+Returns the record schema (MARC21 or UNIMARCAUTH).
+
+=cut
+
+sub record_schema {
+    my ( $self ) = @_;
+
+    return C4::Context->preference('marcflavour') eq 'UNIMARC'
       ? 'UNIMARCAUTH'
       : 'MARC21';
-    return MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
 }
 
 =head2 Class Methods

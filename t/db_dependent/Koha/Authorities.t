@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use MARC::Field;
 use MARC::File::XML;
 use MARC::Record;
@@ -319,6 +319,20 @@ subtest 'record tests' => sub {
     is ($fields_024[0]->subfield('a'), '0000-0002-1234-5678');
     is ($fields_024[1]->subfield('a'), '01234567890');
 
+};
+
+subtest 'record_schema tests' => sub {
+    plan tests => 2;
+
+    my $authority = $builder->build_object({class => 'Koha::Authorities'});
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    is($authority->record_schema, 'MARC21');
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+
+    is($authority->record_schema, 'UNIMARCAUTH');
 };
 
 $schema->storage->txn_rollback;

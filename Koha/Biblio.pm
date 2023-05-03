@@ -105,6 +105,20 @@ sub record {
     return $self->metadata->record;
 }
 
+=head3 record_schema
+
+my $schema = $biblio->record_schema();
+
+Returns the record schema (MARC21, USMARC or UNIMARC).
+
+=cut
+
+sub record_schema {
+    my ( $self ) = @_;
+
+    return $self->metadata->schema // C4::Context->preference("marcflavour");
+}
+
 =head3 orders
 
 my $orders = $biblio->orders();

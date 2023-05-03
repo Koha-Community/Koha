@@ -84,10 +84,13 @@ sub print_collection {
         $end    = MARC::File::XML::footer();
     }
     while ( my $element = $self->next ) {
-        my $metadata = $element->metadata;
-        MARC::File::XML->default_record_format( $metadata->schema // C4::Context->preference("marcflavour") )
+        my $schema = C4::Context->preference("marcflavour");
+        if ($element->can('record_schema')) {
+            $schema = $element->record_schema;
+        }
+        MARC::File::XML->default_record_format( $schema )
           if $format eq 'marcxml';
-        push @parts, $serializers{$format}->( $metadata->record );
+        push @parts, $serializers{$format}->( $element->record );
     }
     return
         ( defined $start ? $start : '' )
