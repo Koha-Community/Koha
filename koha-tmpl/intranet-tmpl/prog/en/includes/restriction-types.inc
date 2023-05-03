@@ -1,10 +1,11 @@
+[% PROCESS 'i18n.inc' %]
 [%- BLOCK restriction_type_description -%]
     [%- ddisplay = restriction_type.display_text -%]
     [%- SWITCH ddisplay -%]
-        [%- CASE 'Manual' -%]<span>Manual</span>
-        [%- CASE 'Overdues' -%]<span>Overdues</span>
-        [%- CASE 'Suspension' -%]<span>Suspension</span>
-        [%- CASE 'Discharge' -%]<span>Discharge</span>
-        [%- CASE -%]<span>[% ddisplay | html %]</span>
+        [%- CASE 'Manual' -%][% t("Manual") %]
+        [%- CASE 'Overdues' -%][% t("Overdues") %]
+        [%- CASE 'Suspension' -%][% t("Suspension") %]
+        [%- CASE 'Discharge' -%][% t("Discharge") %]
+        [%- CASE -%][% ddisplay | html %]
     [%- END -%]
 [%- END -%]
