@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -779,6 +779,60 @@ subtest 'ModBiblio called from linker test' => sub {
     $called = 0;
     C4::Biblio::ModBiblio($record,$biblionumber,'',{ disable_autolink => 1 });
     is($called,0,"We didn't call to link bibs because from linker");
+};
+
+subtest "LinkBibHeadingsToAuthorities tests" => sub {
+    plan tests => 5;
+
+    # Set up mocks to return more than 1 match
+    my $biblio_mod = Test::MockModule->new( 'C4::Linker::Default' );
+    $biblio_mod->mock( 'get_link', sub {
+        return (undef, undef, 2);
+    });
+    # UNIMARC return values should be consistent with MARC21
+    # testing with MARC21 should be sufficient for now
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', '0');
+
+    my $linker = C4::Linker::Default->new();
+    my $biblio = $builder->build_sample_biblio();
+    my $record = $biblio->metadata->record;
+
+    # Generate a field, no current link
+    my $field = MARC::Field->new('650','','','a' => 'Duplicated' );
+
+    $record->append_fields($field);
+    my ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650, 1 );
+    is( $num_headings_changed, 0, 'We did not make any changes because we found 2' );
+    is_deeply( $results->{unlinked},
+        {"Duplicated" => 1 },
+        "The heading was not linked"
+    );
+    is_deeply( $results->{details}[0],
+        {
+            tag => 650,
+            authid => undef,
+            status => 'MULTIPLE_MATCH',
+            auth_type => 'TOPIC_TERM',
+            tag_to_report => 150
+        },
+        "The heading was not linked"
+    );
+
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', '1');
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $record, "", undef, 650, 1 );
+    is( $num_headings_changed, 0, 'We did not make any changes because we found 2' );
+    is_deeply( $results->{details}[0],
+        {
+            tag => 650,
+            authid => undef,
+            status => 'MULTIPLE_MATCH',
+            auth_type => 'TOPIC_TERM',
+            tag_to_report => 150
+        },
+        "When AutoCreateAuthorities is enabled, multiple results are reported"
+    );
+
 };
 
 subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
