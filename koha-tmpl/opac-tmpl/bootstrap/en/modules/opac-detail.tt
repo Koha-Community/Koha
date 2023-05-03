@@ -1873,7 +1873,7 @@
                                     KOHA.Google.GetCoverFromIsbn([% covernewwindow | html %]);
                                 [% END %]
                                 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                    KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]',[% covernewwindow | html %]);
+                                    KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]', $("#bibliodescriptions"));
                                 [% END %]
                                 [% IF OpenLibraryCovers %]
                                     KOHA.OpenLibrary.GetCoverFromIsbn();
@@ -1899,7 +1899,7 @@
                                     KOHA.Google.GetCoverFromIsbn([% covernewwindow | html %]);
                                 [% END %]
                                 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                    KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]',[% covernewwindow | html %]);
+                                    KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]', $("#bibliodescriptions"));
                                 [% END %]
                                 [% IF OpenLibraryCovers %]
                                     KOHA.OpenLibrary.GetCoverFromIsbn();

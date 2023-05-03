@@ -14,9 +14,11 @@ KOHA.coce = {
      * and run a search with all collected isbns to coce cover service.
      * The result is asynchronously returned, and used to append <img>.
      */
-    getURL: function(host, provider) {
+    getURL: function(host, provider, parent=null) {
         var ids = [];
-        $("[id^=coce-thumbnail]").each(function() {
+        const thumbnail_selector = "[id^=coce-thumbnail]";
+        let thumbnail_nodes = parent ? parent.find(thumbnail_selector) : $(thumbnail_selector);
+        thumbnail_nodes.each(function() {
             var id = $(this).attr("class"); // id=isbn
             if (id !== '') { ids.push(id); }
         });
@@ -40,7 +42,7 @@ KOHA.coce = {
                             }
                         };
                         $(this).attr('href', url);
-                        $(this).empty().append(img);
+                        $(this).append(img);
                     });
                 }
             },
