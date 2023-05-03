@@ -90,7 +90,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                 my $biblionumber = $content->biblionumber;
 
                 my $biblio = Koha::Biblios->find($biblionumber);
-                my $record = $biblio->metadata->record->(
+                my $record = $biblio->metadata->record(
                     {
                         embed_items => 1,
                         opac        => 1,
