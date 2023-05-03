@@ -174,9 +174,8 @@ publication place (MARC21 260$a)
 
 =head2 lccn
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 25
 
 library of congress control number (MARC21 010$a)
 
@@ -294,7 +293,7 @@ __PACKAGE__->add_columns(
   "place",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "lccn",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
+  { data_type => "longtext", is_nullable => 1 },
   "url",
   { data_type => "mediumtext", is_nullable => 1 },
   "cn_source",
@@ -358,8 +357,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q5VdRYkLa95Kc96wiwLh/g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-03 13:35:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4+THJV78AKMkqswe76Ul0Q
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 

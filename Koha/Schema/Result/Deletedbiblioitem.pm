@@ -173,9 +173,8 @@ publication place (MARC21 260$a)
 
 =head2 lccn
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 25
 
 library of congress control number (MARC21 010$a)
 
@@ -288,7 +287,7 @@ __PACKAGE__->add_columns(
   "place",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "lccn",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
+  { data_type => "longtext", is_nullable => 1 },
   "url",
   { data_type => "mediumtext", is_nullable => 1 },
   "cn_source",
@@ -320,8 +319,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rGXNjpclQJ3+na+MYa4YFA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-03 13:35:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/l/jW3IssAIEgceZPBIEGQ
 
 sub koha_objects_class {
     'Koha::Old::Biblioitems';
