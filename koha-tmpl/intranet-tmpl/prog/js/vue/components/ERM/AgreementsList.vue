@@ -59,7 +59,6 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             table_id,
-            logged_in_user,
             setConfirmationDialog,
             setMessage,
         }
