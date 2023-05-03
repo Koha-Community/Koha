@@ -100,8 +100,10 @@ if ($plugins_enabled) {
                     my $project_id   = $result->{id};
                     my $description  = $result->{description} // '';
                     my $web_url      = $result->{web_url};
-                    my $releases_url = "https://gitlab.com/api/v4/projects/$project_id/releases";
-                    my @releases     = @{ from_json( get($releases_url) ) };
+                    my $releases_url  = "https://gitlab.com/api/v4/projects/$project_id/releases";
+                    my $releases_info = get($releases_url);
+                    next unless $releases_info;
+                    my @releases = @{ from_json($releases_info) };
 
                     if ( scalar @releases > 0 ) {
 
