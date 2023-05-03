@@ -44,22 +44,22 @@ Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'AddBiblio' => sub {
-    plan tests => 5;
+    plan tests => 9;
 
     my $marcflavour = 'MARC21';
     t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour );
-    my $record = MARC::Record->new();
 
-    my ( $f, $sf ) = GetMarcFromKohaField('biblioitems.lccn');
-    my $lccn_field = MARC::Field->new( $f, ' ', ' ',
-        $sf => 'ThisisgoingtobetoomanycharactersfortheLCCNfield' );
-    $record->append_fields($lccn_field);
+    my ( $f, $sf ) = GetMarcFromKohaField('biblioitems.cn_item');
+    my $cn_item_field = MARC::Field->new( $f, ' ', ' ',
+        $sf => 'Thisisgoingtobetoomanycharactersforthe.cn_item.field' );
+    my $record = MARC::Record->new();
+    $record->append_fields($cn_item_field);
 
     my $nb_biblios = Koha::Biblios->count;
     my ( $biblionumber, $biblioitemnumber );
     warnings_like { ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' ) }
-        [ qr/Data too long for column 'lccn'/, qr/Data too long for column 'lccn'/ ],
-        "expected warnings when adding too long LCCN";
+        [ qr/Data too long for column 'cn_item'/, qr/Data too long for column 'cn_item'/ ],
+        "expected warnings when adding too long cn_item";
     is( $biblionumber, undef,
         'AddBiblio returns undef for biblionumber if something went wrong' );
     is( $biblioitemnumber, undef,
@@ -67,6 +67,23 @@ subtest 'AddBiblio' => sub {
     );
     is( Koha::Biblios->count, $nb_biblios,
         'No biblio should have been added if something went wrong' );
+
+    ( $f, $sf ) = GetMarcFromKohaField('biblioitems.lccn');
+    my $lccn_field = MARC::Field->new( $f, ' ', ' ',
+        $sf => 'ThisisNOTgoingtobetoomanycharactersfortheLCCNfield' );
+    $record = MARC::Record->new();
+    $record->append_fields($lccn_field);
+
+    warnings_like { ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' ) }
+        [],
+        "No warning expected when adding a long LCCN";
+    isnt( $biblionumber, undef,
+        'AddBiblio returns the biblionumber' );
+    isnt( $biblioitemnumber, undef,
+        'AddBiblio returns the biblioitemnumber'
+    );
+    is( Koha::Biblios->count, $nb_biblios + 1,
+        'The biblio should have been added if nothing went wrong' );
 
     t::lib::Mocks::mock_preference( 'AutoLinkBiblios', $marcflavour );
     t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', $marcflavour );
