@@ -132,7 +132,7 @@ sub filter_by_lates {
                 : ()
             ),
 
-            ( orderstatus => { '!=' => 'cancelled' } ),
+            ( orderstatus => { '-not_in' => ['cancelled', 'complete'] } ),
 
         },
         {
