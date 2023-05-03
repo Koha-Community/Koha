@@ -295,7 +295,7 @@ div#result { margin-top: 1em; }
             // Uncheck all checkboxes in both tabs, then check all checkboxes in first tab
             // to avoid inconsistencies from a page refresh.
             $("#tabs input[type='checkbox']").prop("checked", false);
-            $("#tabrecord[% ref_biblionumber | html %] input[type='checkbox']").prop("checked", true );
+            $("#tabrecord[% ref_biblionumber | html %]_panel input[type='checkbox']").prop("checked", true );
 
             //Set focus to cataloging search
             $("input[name=q]:eq(0)").focus();
