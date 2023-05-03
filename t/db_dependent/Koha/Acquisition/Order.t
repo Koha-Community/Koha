@@ -416,6 +416,7 @@ subtest 'filter_by_late' => sub {
                 datereceived            => undef,
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
+                orderstatus             => 'ordered',
             }
         }
     );
@@ -436,6 +437,7 @@ subtest 'filter_by_late' => sub {
                 datereceived            => undef,
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
+                orderstatus             => 'ordered',
             }
         }
     );
@@ -456,6 +458,7 @@ subtest 'filter_by_late' => sub {
                 datereceived            => undef,
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
+                orderstatus             => 'ordered',
             }
         }
     );
@@ -476,6 +479,19 @@ subtest 'filter_by_late' => sub {
                 datereceived            => undef,
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
+                orderstatus             => 'ordered',
+            }
+        }
+    );
+    my $order_42 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_4->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+                estimated_delivery_date => undef,
+                orderstatus             => 'complete',
             }
         }
     );
