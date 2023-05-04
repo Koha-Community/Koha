@@ -38,17 +38,17 @@ Interlibrary loans:
             - pref: ILLHiddenRequestStatuses
               class: multi
             - (separated with |). If left empty, all ILL requests will be displayed. The request codes are defined in the backends and additional aliases can be configured via the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS">ILL_STATUS_ALIAS</a> authorized value category.
+        -
+            - "Use patrons from category"
+            - pref: ILLPartnerCode
+              choices: patron-categories
+            - "as partners to place ILL requests with."
     Notifications:
         -
             - "Send these ILL notices to staff when appropriate:"
             - pref: ILLSendStaffNotices
               class: multi
             - "(separated with |). e.g. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices will be sent."
-        -
-            - "Use patrons from category"
-            - pref: ILLPartnerCode
-              choices: patron-categories
-            - "as partners to place ILL requests with."
         -
             - "Fallback email address for staff ILL notices to be sent to in the absence of a library address:"
             - pref: ILLDefaultStaffEmail
