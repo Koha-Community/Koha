@@ -471,9 +471,9 @@ Returns Koha::Patron::Relationships object for this patron's guarantors
 
 Returns the set of relationships for the patrons that are guarantors for this patron.
 
-This is returned instead of a Koha::Patron object because the guarantor
-may not exist as a patron in Koha. If this is true, the guarantors name
-exists in the Koha::Patron::Relationship object and will have no guarantor_id.
+Note that a guarantor should exist as a patron in Koha; it was not possible
+to add them without a guarantor_id in the interface for some time. Bug 30472
+restricts it on db level.
 
 =cut
 
