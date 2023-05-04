@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 4;
 
 use Test::Mojo;
 
@@ -265,6 +265,83 @@ subtest 'add_credit() tests' => sub {
     my $outstanding_debits = $account->outstanding_debits;
     is( $outstanding_debits->total_outstanding, 65 );
     is( $outstanding_debits->count,             1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list_credits() test' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid    = $patron->userid;
+    my $patron_id = $patron->borrowernumber;
+    my $account   = $patron->account;
+
+    $account->add_credit({
+        type   => 'PAYMENT',
+        amount => 35,
+        interface => 'staff',
+    });
+    $account->add_credit({
+        type   => 'PAYMENT',
+        amount => 70,
+        interface => 'staff',
+    });
+
+    my $ret = $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits")
+      ->status_is(200)
+      ->tx->res->json;
+
+    is(-105, $ret->[0]->{amount} + $ret->[1]->{amount}, 'Total credits are -105');
+
+    $schema->storage->txn_rollback;
+};
+
+
+subtest 'list_debits() test' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid    = $patron->userid;
+    my $patron_id = $patron->borrowernumber;
+    my $account   = $patron->account;
+
+    $account->add_debit(
+        {   amount      => 100,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            interface   => 'test',
+        }
+    );
+    $account->add_debit(
+        {   amount      => 40,
+            description => "A description",
+            type        => "NEW_CARD",
+            user_id     => $patron->borrowernumber,
+            interface   => 'test',
+        }
+    );
+
+    my $ret = $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/debits")
+      ->status_is(200)
+      ->tx->res->json;
+
+    is(140, $ret->[0]->{amount} + $ret->[1]->{amount}, 'Total debits are 140');
 
     $schema->storage->txn_rollback;
 };
