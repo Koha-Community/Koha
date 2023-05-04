@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:59-0300\n"
+"POT-Creation-Date: 2023-04-17 08:21-0300\n"
 "PO-Revision-Date: 2015-10-08 08:45+0000\n"
 "Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -265,6 +265,24 @@ msgstr "%s 이것을 찾으셨나요?: "
 #, c-format
 msgid "%s %s End date: "
 msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s자료 대출기한 %s사전 통고 %s예정 일정 %s예약이 꽉 참 %s자료 반납 %s자료 대"
+"출 %s불명 %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1496,30 +1514,6 @@ msgid ""
 msgstr ""
 "%s예정됨%s %s도착함%s %s지연됨%s %s누락됨%s %s이용불가%s %s삭제%s %s클레임%s "
 "%s중단됨%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%s자료 대출기한 %s사전 통고 %s예정 일정 %s예약이 꽉 참 %s자료 반납 %s자료 대"
-"출 %s불명 %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2899,6 +2893,11 @@ msgstr "청소년"
 #, c-format
 msgid "Adult"
 msgstr "성인"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "태그 추가"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6025,6 +6024,11 @@ msgstr "예약일:"
 msgid "Hold date:"
 msgstr "예약일:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6034,6 +6038,11 @@ msgstr "이날 이후에는 예약이 필요하지 않습니다: "
 #, c-format
 msgid "Hold notes:"
 msgstr "예약 주기사항:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "예약일:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6625,6 +6634,11 @@ msgstr "자료 청구기호"
 msgid "Item cannot be checked out."
 msgstr "대출 불가능한 자료입니다."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "대출됨 (%s)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6644,6 +6658,11 @@ msgstr "파손자료"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "더 자세히"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "만료일"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12031,7 +12050,7 @@ msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, fuzzy, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 바랍니다."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

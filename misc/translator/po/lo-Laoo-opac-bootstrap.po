@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:00-0300\n"
+"POT-Creation-Date: 2023-04-17 08:23-0300\n"
 "PO-Revision-Date: 2012-06-14 17:45+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,6 +269,24 @@ msgstr "%s ຄວາມໝາຍຂອງເຈົ້າແມ່ນ: "
 #, c-format
 msgid "%s %s End date: "
 msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sກຳນົດລາຍການ %sໜາຍເຫດຂັ້ນສູງ %sເຫດການທີ່ຈະເກີດຂື້ນໃໜ່ %sຂໍ້ມູນການຈ່ອງຖືກເຕີ່ມເຂົ້າແລ້ວ "
+"%sລາຍການທີ່ສົ່ງຄືນ %sລາຍການທີ່ຢື່ມອອກ %sບໍ່ຮັບຮູ້ %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1478,30 +1496,6 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr "%sລໍຖ້າ%s %sມາຮອດແລ້ວ%s %sຊ້າ%s %sເສັຍຫາຍ%s %sບໍ່ຫວ້າງ%s %sການຮ້ອງຂໍ%s %s(%s)%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sກຳນົດລາຍການ %sໜາຍເຫດຂັ້ນສູງ %sເຫດການທີ່ຈະເກີດຂື້ນໃໜ່ %sຂໍ້ມູນການຈ່ອງຖືກເຕີ່ມເຂົ້າແລ້ວ "
-"%sລາຍການທີ່ສົ່ງຄືນ %sລາຍການທີ່ຢື່ມອອກ %sບໍ່ຮັບຮູ້ %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2875,6 +2869,11 @@ msgstr ""
 #, c-format
 msgid "Adult"
 msgstr "ຜູ້ອາວຸໂສ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "ຕື່ມໃສ່ ຕົວເລືອກ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -5992,6 +5991,11 @@ msgstr "ວັນທີ່ຈ່ອງ"
 msgid "Hold date:"
 msgstr "ວັນທີ່ຈ່ອງ"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "ຫົວຂໍ້ການຈ່ອງ"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
 msgid "Hold not needed after:"
@@ -6001,6 +6005,11 @@ msgstr "ການຈ່ອງບໍ່ຕ້ອງການອີກຫລັງ
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "ຂຽນລາຍລະອຽດກ່ຽວກັບສິ່ງທີ່ຈ່ອງ:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "ວັນທີ່ຈ່ອງ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6582,6 +6591,11 @@ msgstr ""
 msgid "Item cannot be checked out."
 msgstr "ບໍ່ສະມາດຢືມລາຍການນີ້ອອກໄດ້."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "ໄດ້ຢືມອອກ ("
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6601,6 +6615,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "ລາຍລະອຽດເພີ່ມເຕີ່ມ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "ປະເພດລາຍການ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -11978,7 +11997,7 @@ msgstr "ເພື່ອທີ່ຈະປ່ຽນແປງທະບຽນຂອ
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, fuzzy, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "ເພື່ອທີ່ຈະປ່ຽນແປງທະບຽນຂອງທ່ານ ກະລຸນາຕິດຕໍຫໍສະຫມຸດ."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

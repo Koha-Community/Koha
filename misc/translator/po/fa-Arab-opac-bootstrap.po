@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:46-0300\n"
+"POT-Creation-Date: 2023-04-17 07:58-0300\n"
 "PO-Revision-Date: 2023-03-15 08:45+0000\n"
 "Last-Translator: Hamideh Aliakbari <h.aliakbari2014@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
@@ -273,6 +273,24 @@ msgstr "%s آیا منظور شما: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "‏%s %s ‏تاریخ پایان:"
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sتاریخ بازگشت منبع %sاعلان پیشبرد %sرخدادهای آینده نزدیک %sمنابع رزرو شده "
+"تکمیل است %sمنبع بازگشت %sمنبع امانت گرفته شده %sنامشخص %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1513,30 +1531,6 @@ msgid ""
 msgstr ""
 "%sدر انتظار%s %sرسیده%s %sتأخیری%s %sمفقودی%s %sغیر قابل دسترس%s %sحذف شده%s "
 "%sپیگیری شده%s %sمتوقف شده%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sتاریخ بازگشت منبع %sاعلان پیشبرد %sرخدادهای آینده نزدیک %sمنابع رزرو شده "
-"تکمیل است %sمنبع بازگشت %sمنبع امانت گرفته شده %sنامشخص %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2916,6 +2910,11 @@ msgstr "نوجوان"
 #, c-format
 msgid "Adult"
 msgstr "بزرگسال"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "افزودن برچسب"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6036,6 +6035,11 @@ msgstr "تاریخ رزرو:"
 msgid "Hold date:"
 msgstr "تاریخ رزرو:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "عنوان منبع رزرو شده"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6045,6 +6049,11 @@ msgstr "رزرو مورد نیاز نیست پس از تاریخ:"
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "یادداشت موجودی:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "تاریخ رزرو:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6638,6 +6647,11 @@ msgstr "رقم طلب مادة"
 msgid "Item cannot be checked out."
 msgstr "منبع نمی‌تواند امانت گرفته شود."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "عودت نیافته %s"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6657,6 +6671,11 @@ msgstr "آسیب دیده"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "جزئیات بیشتر"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "تاریخ بازگشت"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12038,8 +12057,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "برای گزارش این خطا، لطفاً با مدیر سامانه کوها تماس بگیرید. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "برای گزارش این خطا، شما می توانید به مدیر سامانه کوها ایمیل بفرستید."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

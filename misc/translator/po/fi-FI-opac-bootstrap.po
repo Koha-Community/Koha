@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:46-0300\n"
-"PO-Revision-Date: 2023-02-22 11:04+0000\n"
+"POT-Creation-Date: 2023-04-17 07:59-0300\n"
+"PO-Revision-Date: 2023-04-28 09:18+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1677063883.983373\n"
+"X-POOTLE-MTIME: 1682673502.049416\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -285,6 +285,24 @@ msgstr "%s %s Tarkoititko: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Loppupvm: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Lainaus ja uusinta %s Lainaus %s %sKaukolaina noudettavissa %"
+"sKaukolainaa ei saatavilla %sAutomaattinen uusinta %sTuntematon %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1150,8 +1168,8 @@ msgstr "%s / %s %s %s %s "
 #, c-format
 msgid "%s for patron %s at %s expected at %s %s since %s %s %s %s %s %s %s. "
 msgstr ""
-"%s asiakkaalle %s toimipisteessä %s odotetaan toimipisteessä %s %s %s %s %s %"
-"s %s lähtien %s %s. "
+"%s asiakkaalle %s toimipisteessä %s odotetaan toimipisteessä %s %s %s %s %s "
+"%s %s lähtien %s %s. "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
@@ -1554,32 +1572,6 @@ msgstr ""
 "%sOdotetaan%s %sSaapunut%s %sMyöhässä%s %sPuuttuu%s %sEi saatavilla%s "
 "%sLoppuunmyyty%s %sVahingoittunut%s %sKadonnut%s %sEi saatavilla%s %sPoista"
 "%s %sReklamoitu%s %sLopetettu%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sIlmoitus eräpäivänä %sEnnakkoilmoitus %sSaapumisilmoitus %sVarauksen "
-"noutomuistutus %sPalautus %s %s Lainaus ja uusinta %s Lainaus %s "
-"%sKaukolaina noudettavissa %sKaukolainaa ei saatavilla %sAutomaattinen "
-"uusinta %sTuntematon %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2981,6 +2973,11 @@ msgstr "Lukioikäiset ja vastaavat"
 #, c-format
 msgid "Adult"
 msgstr "Aikuiset"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Lisää huomautus"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6075,6 +6072,11 @@ msgstr "Varauspvm"
 msgid "Hold date:"
 msgstr "Varauspvm:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6084,6 +6086,11 @@ msgstr "Varauksen raukeamispäivä:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Varaushuomautus:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Varauspvm"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6669,6 +6676,11 @@ msgstr "Niteen luokka"
 msgid "Item cannot be checked out."
 msgstr "Ei lainata"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Item checked in"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6688,6 +6700,11 @@ msgstr "Nide vaurioitunut"
 #, c-format
 msgid "Item details"
 msgstr "Niteen tiedot"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Eräpäivä"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12038,8 +12055,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Voit ilmoittaa tästä virheestä sähköpostitse ylläpitäjälle. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Voit ilmoittaa tästä virheestä sähköpostitse ylläpitäjälle."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

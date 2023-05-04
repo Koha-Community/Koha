@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:11-0300\n"
-"PO-Revision-Date: 2023-03-09 12:41+0000\n"
+"POT-Creation-Date: 2023-04-17 08:40-0300\n"
+"PO-Revision-Date: 2023-04-18 11:43+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1678365679.487565\n"
+"X-POOTLE-MTIME: 1681818203.758305\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -289,6 +289,25 @@ msgstr "%s %s Será que quis dizer: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Data de término: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Empréstimo e renovação de exemplar %s Empréstimo de exemplar %s %"
+"sEmpréstimo inter-bibliotecas pronto %sEmpréstimo inter-bibliotecas "
+"indisponível %sAuto renovação %sDesconhecido %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1585,33 +1604,6 @@ msgstr ""
 "%sEsperado%s %sRecebido%s %sAtrasado%s %sEm falta%s %sEm falta (nunca "
 "recebido)%s %sEm falta (esgotado)%s %sEm falta (danificado)%s %sEm falta "
 "(perdido)%s %sNão disponível%s %sEliminar%s %sReclamado%s %sCancelado%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sExemplar em atraso %sPré-aviso de atraso %sReserva preenchida %sLembrança "
-"de reserva %sDevolução de exemplar %s %s Empréstimo e renovação de exemplar "
-"%s Empréstimo de exemplar %s %sEmpréstimo inter-bibliotecas pronto "
-"%sEmpréstimo inter-bibliotecas indisponível %sAuto-renovação %sDesconhecido "
-"%s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -3031,6 +3023,11 @@ msgstr "Adolescente"
 #, c-format
 msgid "Adult"
 msgstr "Adulto"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, c-format
+msgid "Advance notice"
+msgstr "Pré-aviso"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -5401,8 +5398,8 @@ msgid ""
 "Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
-"Introduza o seu nome de utilizador%s e palavra passe%s, e clique no botão ("
-"ou carregue na tecla de ENTER)."
+"Introduza o seu nome de utilizador%s e palavra passe%s, e clique no botão "
+"(ou carregue na tecla de ENTER)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext | html 
@@ -6153,6 +6150,11 @@ msgstr "Data de reserva"
 msgid "Hold date:"
 msgstr "Data de reserva:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, c-format
+msgid "Hold filled"
+msgstr "Reserva preenchida"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6162,6 +6164,11 @@ msgstr "Reserva não necessária depois de:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Nota de reserva:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, c-format
+msgid "Hold reminder"
+msgstr "Lembrete de reserva"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6769,6 +6776,11 @@ msgstr "Cota do exemplar"
 msgid "Item cannot be checked out."
 msgstr "O exemplar não pode ser emprestado."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid "Item check-in"
+msgstr "Devolução"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6788,6 +6800,11 @@ msgstr "Exemplar danificado"
 #, c-format
 msgid "Item details"
 msgstr "Detalhes do exemplar"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, c-format
+msgid "Item due"
+msgstr "Empréstimo em atraso"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12239,8 +12256,8 @@ msgstr "Para reportar este erro, por favor contacte o administrador do Koha. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
-msgstr "Para relatar esse erro, pode enviar email ao administrador do Koha."
+msgid "To report this error, you can email the Koha Administrator. "
+msgstr "Para reportar este erro, pode enviar email ao administrador do Koha. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
 #, c-format

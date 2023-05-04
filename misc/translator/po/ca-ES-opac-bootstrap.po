@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:38-0300\n"
+"POT-Creation-Date: 2023-04-17 07:45-0300\n"
 "PO-Revision-Date: 2021-08-17 07:17+0000\n"
 "Last-Translator: Rbellido <rbellido@orex.es>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -286,6 +286,26 @@ msgstr "%s %s Voleu dir: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Fins a data: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sVenciment d'exemplar %sAvís anticipat %sPropers esdeveniments %sReserva "
+"completada %sDevolució d'exemplar %s %sPréstec d'exemplar i renovació "
+"%sPréstec d'exemplar %s %sPréstec interbibliotecari disponible %sPréstec "
+"interbibliotecari no disponible %sDesconegut %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1559,32 +1579,6 @@ msgstr ""
 "%sPendent%s %sRebut%s %sEndarrerit%s %sPerdut%s %sNo disponible (no rebut)%s "
 "%sNo disponible (esgotat)%s %sNo disponible (malmès)%s %sNo disponible "
 "(perdut)%s %sNo disponible%s %sSuprimit%s %sReclamat%s %sAturat%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sVenciment d'exemplar %sAvís anticipat %sPropers esdeveniments %sReserva "
-"completada %sDevolució d'exemplar %s %sPréstec d'exemplar i renovació "
-"%sPréstec d'exemplar %s %sPréstec interbibliotecari disponible %sPréstec "
-"interbibliotecari no disponible %sDesconegut %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2996,6 +2990,11 @@ msgstr "Tot"
 #, c-format
 msgid "Adult"
 msgstr "Adult"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Afegir etiqueta"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6110,6 +6109,11 @@ msgstr "Data de la reserva"
 msgid "Hold date:"
 msgstr "Data de la reserva:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "Fons"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6119,6 +6123,11 @@ msgstr "Reserva no necessària després del:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Notes de la reserva:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Data de la reserva"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6721,6 +6730,11 @@ msgstr "Signatura topogràfica de l' exemplar"
 msgid "Item cannot be checked out."
 msgstr "L'exemplar no pot sortir en préstec."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Exemplar retornat"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6740,6 +6754,11 @@ msgstr "Exemplar malmès"
 #, c-format
 msgid "Item details"
 msgstr "Informació de l'exemplar"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Data de venciment"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12156,8 +12175,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Per reportar aquest error, contacteu amb la Biblioteca."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Per reportar aquest error, contacteu amb la Biblioteca."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-03-16 23:51-0300\n"
-"PO-Revision-Date: 2023-02-28 11:24+0000\n"
+"POT-Creation-Date: 2023-04-17 08:06-0300\n"
+"PO-Revision-Date: 2023-04-18 10:52+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1677583448.904866\n"
+"X-POOTLE-MTIME: 1681815159.993493\n"
 "X-Pootle-Path: /hi/21.05/hi-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -638,7 +638,7 @@ msgstr "%s %s %s %s %s %s योग%s %s "
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:723
 #, c-format
 msgid "%s %s %s %s %s %s There are no recorded logs for this request %s "
 msgstr "%s %s %s %s %s %s इस अनुरोध के लिए कोई रिकॉर्ड किए गए लॉग नहीं हैं %s "
@@ -2510,7 +2510,7 @@ msgstr ""
 #. %17$s:  CASE 
 #. %18$s:  m.code | html 
 #. %19$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:78
 #, c-format
 msgid ""
 "%s %s An error occurred when updating this library. Perhaps it already "
@@ -2881,6 +2881,24 @@ msgstr ""
 "नियंत्रण क्षेत्र के नियम \"जोड़ें: संलग्न करें\" और \"हटाए गए: छोड़ें\" की अनुमति नहीं देते हैं\". "
 "%s %s %s "
 
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:27
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %sआइटम चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंतर पुस्तकालय ऋण तैयार %sइंटर "
+"लाइब्रेरी लोन अनुपलब्ध %sऑटो नवीकरण %sअंजान %s"
+
 #. %1$s:  IF itemloo.not_holdable 
 #. %2$s:  IF itemloo.not_holdable == 'damaged' 
 #. %3$s:  ELSIF itemloo.not_holdable == 'ageRestricted' 
@@ -3185,7 +3203,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  library.branchcode | html 
 #. %8$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:8
 #, c-format
 msgid ""
 "%s %s Modify library %s New library %s %s &rsaquo; %s Confirm deletion of "
@@ -5009,7 +5027,7 @@ msgstr "%s (शायद रिक्त अगर ठीक है)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1045
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1044
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - इस टैग का विस्तार करने के लिए क्लिक करें"
 
@@ -5221,7 +5239,7 @@ msgstr "%s इस फ्रेमवर्क में नई ग्रन्�
 #. %1$s:  IF mode=='new' || mode =='deleted'
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:37
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s नया अपलोड करें या खोज %s परिणाम %s "
@@ -5328,6 +5346,17 @@ msgid ""
 msgstr ""
 "%s हमेशा आइटम जोड़ने %s आइटम जोड़ें ही अगर मिलान बिब मिला था %s आइटम जोड़ें ही अगर "
 "कोई मिलता-जुलता बिब मिला था %s पर ध्यान न दें आइटम %s %s %s %s "
+
+#. %1$s:  ELSE -
+#. %2$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#, c-format
+msgid ""
+"%s An administrator must add values to the UPLOAD authorized value category "
+"otherwise all uploads will be marked as temporary. %s "
+msgstr ""
+"%s एक व्यवस्थापक को UPLOAD अधिकृत मूल्य श्रेणी में मान जोड़ना होगा अन्यथा सभी"
+" अपलोड अस्थायी के रूप में चिह्नित किए जाएंगे. %s "
 
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
@@ -5726,7 +5755,7 @@ msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s दिन%s घटें %s अपरिभाषित %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
 #, c-format
 msgid "%s Default "
 msgstr "%s डिफाल्ट"
@@ -5740,14 +5769,40 @@ msgstr "%s डिफाल्ट"
 msgid "%s Default %s %s %s "
 msgstr "%s डिफाल्ट %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
+#. %1$s:  END 
+#. %2$s:  pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
-msgid "%s Default: "
-msgstr "%s डिफाल्ट: "
+msgid ""
+"%s Default: %s system preference %s Default: ILLDefaultStaffEmail system "
+"preference %s "
+msgstr "%s डिफ़ॉल्ट:%s सिस्टम वरीयता %s ILLDefaultStaffEmail सिस्टम वरीयता %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReplyToDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReplyToDefault system "
+"preference %s "
+msgstr ""
+"%s डिफ़ॉल्ट: %s सिस्टम वरीयता %s डिफ़ॉल्ट: ReplyToDefault सिस्टम वरीयता %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReturnpathDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReturnpathDefault system "
+"preference %s "
+msgstr ""
+"%s डिफ़ॉल्ट: %sसिस्टम वरीयता %s डिफ़ॉल्ट: ReturnpathDefault सिस्टम वरीयता %s "
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -5876,8 +5931,8 @@ msgstr "%s प्रिंटर प्रोफ़ाइल संपादि�
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:816
 #, c-format
 msgid "%s Editing "
 msgstr "%s संपादन"
@@ -6064,11 +6119,19 @@ msgstr "%s अपेक्षित होल्ड करें"
 msgid "%s Hold(s)"
 msgstr "%s होल्ड(ओ)"
 
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
+#. %1$s:  END 
+#. %2$s:  pref_MARCOrgCode_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
-msgid "%s If not filled in defaults to system preference "
-msgstr "%s यदि सिस्टम वरीयता में डिफॉल्ट नहीं भरी जाती है "
+msgid ""
+"%s If not filled in defaults to system preference %s. %s If not filled in "
+"defaults to system preference MARCOrgCode. %s You can obtain your code from "
+msgstr ""
+"%s यदि सिस्टम वरीयता के लिए डिफॉल्ट में नहीं भरा है %s. %sयदि सिस्टम वरीयता "
+"MARCOrgCode के लिए डिफॉल्ट में नहीं भरा गया है।. %s आप अपना कोड प्राप्त कर "
+"सकते हैं "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-nomatch-action.inc:11
@@ -6498,7 +6561,7 @@ msgstr "%s नही"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #, c-format
 msgid "%s No %s "
 msgstr "%s नही %s "
@@ -7948,7 +8011,7 @@ msgid "%s checked out:"
 msgstr "%s चेक आउट:"
 
 #. %1$s:  request.illcomments.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #, c-format
 msgid "%s comments"
 msgstr "%s टिप्पणियाँ"
@@ -9653,31 +9716,6 @@ msgstr "%sहोल्ड:%s "
 msgid "%sHolds policy by item type for %s%sDefault holds policy by item type%s"
 msgstr "%s धारण के लिए आइटम प्रकार से नीति %s %s डिफ़ॉल्ट आइटम प्रकार से नीति रखती %s"
 
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:23
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sआइटम देय %sअग्रिम नोटिस %sहोल्ड भरा गया %sहोल्ड स्मरण%sआइटम चैक-इन %s %sआइटम "
-"चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंतर पुस्तकालय ऋण तैयार %sइंटर लाइब्रेरी लोन "
-"अनुपलब्ध %sऑटो नवीकरण %sअंजान %s"
-
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
@@ -9810,7 +9848,7 @@ msgstr "%sफ्रेमवर्क पाठ संशोधन%sफ्रे
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:114
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%sसंशोधित पुस्तकालय%sनया पुस्तकालय%s"
@@ -9888,7 +9926,7 @@ msgstr "%sनया %sबास्केट %s (%s) के लिए %s &rsaquo;
 #. %1$s:  IF record.permanent 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:233
 #, c-format
 msgid "%sNo%sYes%s"
 msgstr "%sनही%sहाँ%s"
@@ -10947,7 +10985,7 @@ msgstr "(खोया नहीं)"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:818
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(रिकार्ड संख्या %s) %sमार्क रिकार्ड जोड़े %s "
@@ -10955,7 +10993,7 @@ msgstr "(रिकार्ड संख्या %s) %sमार्क रि�
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(रिकार्ड संख्या %s) %sमार्क रिकार्ड जोड़े %s"
@@ -11088,7 +11126,7 @@ msgstr "(अंकों में राशि प्रविष्ट कर�
 msgid "(exclusive) "
 msgstr "(समावेशी)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:820
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:151
 #, c-format
 msgid "(fast cataloging)"
@@ -11497,17 +11535,6 @@ msgstr "-- कोई नहीं -- "
 #, c-format
 msgid "-- please choose --"
 msgstr "-- कृपया चुनें --"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
-#, c-format
-msgid ""
-". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
-"obtain your code from "
-msgstr ""
-". %s यदि सिस्टम वरीयता के लिए डिफॉल्ट में नहीं भरा है MARCOrgCode. %s आप अपना कोड से "
-"प्राप्त कर सकते हैं "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -12326,8 +12353,8 @@ msgstr "अधिग्रहण के आँकड़े विज़ार्
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:103
@@ -12378,7 +12405,7 @@ msgstr "क्रिया अगर कोई मिलान नहीं प�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:551
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -12439,7 +12466,7 @@ msgstr "क्रिया अगर कोई मिलान नहीं प�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -12687,7 +12714,7 @@ msgstr "एक नया आइटम जोड़ें"
 msgid "Add a new message"
 msgstr "एक नया संदेश जोड़ें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "Add a new record"
 msgstr "एक नया रिकार्ड जोड़े"
@@ -12698,7 +12725,7 @@ msgid "Add a new regular expression"
 msgstr "एक नई नियमित अभिव्यक्ति जोड़ें"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Add a new upload"
 msgstr "एक नया अपलोड जोड़ें"
 
@@ -12833,7 +12860,7 @@ msgstr "जाँच जोड़ें"
 msgid "Add classification source"
 msgstr "वर्गीकरण स्रोत जोड़ें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:757
 #, c-format
 msgid "Add comment"
 msgstr "टिप्पणी जोड़ें"
@@ -13397,6 +13424,16 @@ msgstr "उपयोक्ता जोड़ें"
 msgid "Add users"
 msgstr "उपयोक्ता जोड़ें"
 
+#. %1$s:  av_UPLOAD_link | $raw | $KohaSpan 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#, c-format
+msgid ""
+"Add values to the %s authorized value category otherwise all uploads will be "
+"marked as temporary."
+msgstr ""
+"में मान जोड़ें %sअधिकृत मूल्य श्रेणी अन्यथा सभी अपलोड को अस्थायी के रूप में "
+"चिह्नित किया जाएगा।"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:144
 #, c-format
 msgid "Add vendor"
@@ -13591,7 +13628,7 @@ msgstr "अतिरिक्त धन्यवाद को..."
 msgid "Additional tools"
 msgstr "अतिरिक्त उपकरण"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
@@ -13629,7 +13666,7 @@ msgstr "पता प्रश्न में"
 msgid "Address line 1:"
 msgstr "पता पंक्ति 1:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, c-format
 msgid "Address line 1: "
 msgstr "पता पंक्ति 1:"
@@ -13639,12 +13676,12 @@ msgstr "पता पंक्ति 1:"
 msgid "Address line 2:"
 msgstr "पता पंक्ति 2:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, c-format
 msgid "Address line 2: "
 msgstr "पता पंक्ति 2:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #, c-format
 msgid "Address line 3: "
 msgstr "पता पंक्ति 3: "
@@ -13691,7 +13728,7 @@ msgstr "समायोजन प्लस शिपिंग:%s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
@@ -13806,6 +13843,11 @@ msgstr "किशोर"
 #, c-format
 msgid "Adult"
 msgstr "प्रौढ़"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:24
+#, c-format
+msgid "Advance notice"
+msgstr "अग्रिम सूचना"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -14308,7 +14350,7 @@ msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
 msgstr "इस संरक्षक के गारंटरों को ओपेक के इस संरक्षक के जुर्माना को देखने की अनुमति दें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:95
 #, c-format
 msgid "Allow public downloads:"
 msgstr "सार्वजनिक डाउनलोड की अनुमति दें:"
@@ -14659,6 +14701,7 @@ msgstr "अमेरिकन न्यूमिस्मैटिक सोस�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -14666,7 +14709,6 @@ msgstr "अमेरिकन न्यूमिस्मैटिक सोस�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
@@ -15323,7 +15365,7 @@ msgstr "क्या आप वाकई इस को हटाना चाह
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "क्या आप वाकई इस को हटाना चाहते हैं? %s (%s)?"
@@ -16547,7 +16589,7 @@ msgstr "स्वचालित आदेश:"
 msgid "Automatic renewal"
 msgstr "स्वचालित नवीकरण"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:9
 #, c-format
 msgid "Availability"
@@ -16664,7 +16706,7 @@ msgstr "BULAC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Back"
@@ -16698,7 +16740,7 @@ msgstr "सिस्टम प्राथमिकताओं पर वाप
 msgid "Back to the list"
 msgstr "वापस सूची में"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:36
 #, c-format
 msgid "Backend"
 msgstr "बैकएंड"
@@ -16771,6 +16813,7 @@ msgstr "बार"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
@@ -16778,7 +16821,6 @@ msgstr "बार"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:779
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:78
@@ -17600,7 +17642,6 @@ msgstr "ग्रंथ सूची के बारे में जानक�
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
 #, c-format
 msgid "Bibliographic record"
 msgstr "ग्रन्थसूची का रिकार्ड"
@@ -17611,13 +17652,16 @@ msgstr "ग्रन्थसूची का रिकार्ड"
 msgid "Bibliographic record %s"
 msgstr "ग्रन्थसूची का रिकार्ड  %s"
 
+#. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
+#, c-format
 msgid "Bibliographic record ID"
 msgstr "ग्रन्थसूची का रिकार्ड आईडी"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:625
 #, c-format
 msgid "Bibliographic record ID:"
 msgstr "ग्रन्थसूची रिकार्डआईडी"
@@ -17949,11 +17993,6 @@ msgstr "नीचे"
 msgid "Braille"
 msgstr "ब्रेल"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#, c-format
-msgid "Branch"
-msgstr "शाखा"
-
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:16
@@ -18006,7 +18045,7 @@ msgstr "शाखा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:13
@@ -18057,7 +18096,7 @@ msgstr "शाखा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -18106,6 +18145,9 @@ msgstr "शाखा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -18132,9 +18174,6 @@ msgstr "शाखा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:14
@@ -18225,7 +18264,7 @@ msgstr "शाखा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
@@ -18834,7 +18873,7 @@ msgstr "Calyx,, ऑस्ट्रेलिया"
 msgid "Camden County, USA"
 msgstr "कैमडेन काउंटी, यूएसए"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr "जैसे प्रवेश किया जा सकता है एक ही आई पी, या एक subnet के रूप में 192.168.1.*"
@@ -18994,7 +19033,7 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:511
@@ -19036,11 +19075,11 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:943
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:947
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:960
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:942
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:946
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:950
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:959
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -19148,7 +19187,7 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:68
@@ -20004,7 +20043,7 @@ msgstr "कैटलॉग आँकड़े "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:797
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
@@ -20088,7 +20127,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:8
 #, c-format
 msgid "Category"
@@ -20146,8 +20185,8 @@ msgstr "श्रेणी:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Category: "
@@ -20262,7 +20301,7 @@ msgstr "श्रेणी बदलें"
 msgid "Change currency"
 msgstr "मुद्रा बदलें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:913
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -21151,8 +21190,8 @@ msgstr "विकल्प"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
 #, c-format
 msgid "Choose"
 msgstr "चुनना"
@@ -21610,7 +21649,7 @@ msgstr "नगर खोजें:"
 msgid "City:"
 msgstr "नगरः"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:607
 #, c-format
@@ -22008,7 +22047,7 @@ msgstr "जोड़ सकते हैं या एक छुट्टी स
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:359
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1085
 msgid "Click to Expand this Tag"
 msgstr "पर क्लिक करें इस टैग का विस्तार करने के लिए"
 
@@ -22058,7 +22097,7 @@ msgstr "क्लिपबोर्ड"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22086,7 +22125,7 @@ msgstr "करने के लिए इन नियमों का क्ल
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22137,8 +22176,8 @@ msgstr "परिसंचरण और ठीक नियमों की क�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:734
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:182
@@ -22167,8 +22206,8 @@ msgstr "परिसंचरण और ठीक नियमों की क�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
@@ -22361,7 +22400,7 @@ msgstr "ओपेन लाइब्रेरी से कोस की छव�
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:532
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -22652,7 +22691,7 @@ msgstr "टिप्पणी "
 msgid "Comment "
 msgstr "टिप्पणी "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:748
 #, c-format
 msgid "Comment by: "
 msgstr "द्वारा टिप्पणी: "
@@ -22664,7 +22703,7 @@ msgstr "द्वारा टिप्पणी: "
 msgid "Comment:"
 msgstr "टिप्पणी:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1413
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
@@ -22681,7 +22720,7 @@ msgstr "टिप्पणीकार"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
@@ -23005,7 +23044,7 @@ msgid "Confirm deletion of desk "
 msgstr "डेस्क को हटाने की पुष्टि करें "
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:57
 #, c-format
 msgid "Confirm deletion of library '%s' "
 msgstr "पुस्तकालय हटाने की पुष्टि करें %s"
@@ -23534,7 +23573,7 @@ msgid "Copy holidays to:"
 msgstr "छुट्टियों कॉपी:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Copy link to this file"
 msgstr "इस फ़ाइल का लिंक कॉपी करें"
 
@@ -23648,7 +23687,7 @@ msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "लागत एक दशमलव संख्या> = 0 के रूप में व्यक्त किया जाना चाहिए"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, c-format
 msgid "Cost:"
 msgstr "लागत:"
@@ -23809,7 +23848,7 @@ msgstr "देश"
 msgid "Country:"
 msgstr "देश:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:626
 #, c-format
@@ -24914,13 +24953,13 @@ msgstr "डाटाली टेक, ग्रीस"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:393
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1412
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2346
@@ -24958,7 +24997,7 @@ msgstr "दिनांक प्राप्त (आइटम)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:423
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #, c-format
 msgid "Date added"
 msgstr "तिथि जोड़ी गई"
@@ -25272,9 +25311,9 @@ msgstr "उच्च धारणों (दिन) के लिए ऋण अ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:396
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
@@ -25706,7 +25745,7 @@ msgstr "देरी के दिनों की संख्या एक च
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:680
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -25747,18 +25786,18 @@ msgstr "देरी के दिनों की संख्या एक च
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:290
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
@@ -25791,7 +25830,7 @@ msgstr "देरी के दिनों की संख्या एक च
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:355
@@ -26215,8 +26254,8 @@ msgstr "एक सीमा पर एकल छुट्टियों को 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1094
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1095
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1096
 msgid "Delete this Tag"
 msgstr "हटाएँ इस टैग"
 
@@ -26253,7 +26292,7 @@ msgstr "हटाएँ इस रिपोर्ट को बचाया"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 msgid "Delete this subfield"
 msgstr "हटाएँ इस उपक्षेत्र"
 
@@ -26401,7 +26440,7 @@ msgstr "वितरण समयः"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Denied"
 msgstr "वंचित"
 
@@ -26733,7 +26772,7 @@ msgstr "विवरण के लिए %s "
 msgid "Details for %s &rsaquo; Housebound &rsaquo; Koha"
 msgstr "के लिए विवरण %s &rsaquo; हाउसबाउंड &rsaquo; कोहा"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:785
 #, c-format
 msgid "Details for all requests"
 msgstr "सभी अनुरोधों का विवरण"
@@ -26750,13 +26789,13 @@ msgstr "सदस्यता के लिए विवरण #%s "
 msgid "Details for subscription #%s &rsaquo; Serials &rsaquo; Koha"
 msgstr "सदस्यता के लिए विवरण #%s &rsaquo; सीरियल &rsaquo; कोहा"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:609
 #, c-format
 msgid "Details from library"
 msgstr "पुस्तकालय से विवरण"
 
 #. %1$s:  request.backend | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
 #, c-format
 msgid "Details from supplier (%s)"
 msgstr "आपूर्तिकर्ता से विवरण (%s)"
@@ -27148,7 +27187,7 @@ msgid "Displaying %sall%s %sapproved%s %spending%s %srejected%s terms "
 msgstr ""
 "प्रदर्शित %s सभी %s %s को मंजूरी दे दी %s %s लंबित %s %s को खारिज कर दिया %s शर्तों "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:793
 #, c-format
 msgid "Displaying availability results"
 msgstr "उपलब्धता के परिणाम प्रदर्शित करना"
@@ -27208,7 +27247,7 @@ msgid "Do not use template"
 msgstr "टेम्पलेट का प्रयोग न करें"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Do you really want to delete this upload?"
 msgstr "आप वास्तव में इस अपलोड को मिटाना चाहते हैं?"
 
@@ -27331,7 +27370,7 @@ msgid "DoverNet, USA"
 msgstr "डोवरनेट, यूएसए"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
 #, c-format
 msgid "Download"
 msgstr "डाउनलोड"
@@ -27625,7 +27664,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "डुप्लीकेट संरक्षक बैच नंबर से हटा दिया %s: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "डुप्लिकेट रिकार्ड संदिग्ध"
@@ -27832,7 +27871,7 @@ msgstr "जल्द से जल्द होल्ड दिनांक"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -28498,7 +28537,7 @@ msgstr "ईमेल:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:552
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
@@ -29741,7 +29780,7 @@ msgstr "Facetable"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Failed"
 msgstr "विफल "
 
@@ -29931,8 +29970,8 @@ msgstr "फैक्स"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:148
 #, c-format
@@ -30041,7 +30080,7 @@ msgid "Field 3"
 msgstr "क्षेत्र 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
 msgid "Field autofilled by plugin"
 msgstr "प्लगइन द्वारा फ़ील्ड स्वतःभरण"
 
@@ -30133,12 +30172,12 @@ msgstr ""
 "csv और .txt)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be created. Check permissions."
 msgstr "फ़ाइल बनाया नहीं जा सका। चेक अनुमतियाँ।"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be read."
 msgstr "फ़ाइल को पढ़ने नहीं जा सका।"
 
@@ -30149,7 +30188,7 @@ msgid "File format: "
 msgstr "फ़ाइल प्रारूप: "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File has been deleted."
 msgstr "फ़ाइल हटा दिया गया है।"
 
@@ -30188,7 +30227,7 @@ msgid "File not found!"
 msgstr "फाइल नहीं मिली!"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File or upload record could not be deleted."
 msgstr "फ़ाइल या अपलोड रिकॉर्ड हटाया नहीं जा सका."
 
@@ -30234,7 +30273,7 @@ msgid "FileSaver library"
 msgstr "FileSaver पुस्तकालय"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
 #, c-format
 msgid "Filename"
 msgstr "फ़ाइलनाम"
@@ -31715,7 +31754,7 @@ msgstr "समूह कोड"
 msgid "Group name"
 msgstr "समूह नाम"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:145
 #, c-format
 msgid "Group(s):"
 msgstr "समूह (एँ):"
@@ -31878,7 +31917,7 @@ msgstr "हार्ड देय तारीख:  "
 msgid "Harrison Carmel Public Library, USA"
 msgstr "हैरिसन कार्मल पब्लिक लाइब्रेरी, यूएसए"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
 #, c-format
 msgid "Hashvalue"
 msgstr "हैशमूल्य"
@@ -32277,6 +32316,11 @@ msgstr "शुल्क पकड़ो"
 msgid "Hold fee: "
 msgstr "होल्ड शुल्कः "
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:25
+#, c-format
+msgid "Hold filled"
+msgstr "होल्ड भरा गया"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:75
 #, c-format
 msgid "Hold filled for:"
@@ -32368,6 +32412,11 @@ msgstr "होल्ड अनुपात &rsaquo; परिसंचालन 
 #, c-format
 msgid "Hold ratios to calculate items needed"
 msgstr "आइटम की गणना करने के लिए होल्ड अनुपात की आवश्यकता"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:26
+#, c-format
+msgid "Hold reminder"
+msgstr "होल्ड स्मरण"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:526
 #, c-format
@@ -32718,7 +32767,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:16
@@ -32769,7 +32818,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -32819,6 +32868,9 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:28
@@ -32845,9 +32897,6 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:17
@@ -32938,7 +32987,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
@@ -33205,11 +33254,11 @@ msgid "ILL module configuration problem. Take a look at the "
 msgstr "आईएलएल मॉड्यूल विन्यास समस्या। इस पर एक नज़र डालें"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
 msgid "ILL request log"
 msgstr "आईएलएल अनुरोध लॉग"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:599
 #, c-format
 msgid "ILL request log "
 msgstr "आईएलएल अनुरोध लॉग"
@@ -33255,12 +33304,12 @@ msgstr "आईएलएल अनुरोधों का इतिहास %s
 msgid "ILL requests:"
 msgstr "आईएलएल अनुरोध:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:175
 #, c-format
 msgid "ILL staff email: "
 msgstr "आईएलएल स्टाफ ईमेल: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr "ILLDefaultStaffEmail"
@@ -33280,7 +33329,7 @@ msgstr "INSTID:12345,LANG:fr"
 msgid "INTERMARC"
 msgstr "INTERMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "IP"
 msgstr "आईपी"
@@ -33295,7 +33344,7 @@ msgstr "आईपी पता बदल चूका है , फिर से 
 msgid "IP address has changed. Please log in again "
 msgstr "आईपी पता बदल गया है , फिर से प्रवेश करें "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #, c-format
 msgid "IP: "
 msgstr "IP "
@@ -33797,7 +33846,7 @@ msgstr ""
 "यदि आप बारकोड के बिना किसी लेआउट का उपयोग कर रहे हैं, तो इसका परिणाम अनुपलब्ध "
 "प्रविष्टियों या रिक्त पृष्ठ हो सकता है"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr "अगर आपको वह नहीं मिल रहा है जिसकी आप तलाश कर रहे हैं, तो आप कर सकते हैं"
@@ -34316,7 +34365,7 @@ msgid "Import this batch into the catalog"
 msgstr "सूची में इस बैच आयात"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1171
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:172
 #, c-format
 msgid "Important"
@@ -35298,7 +35347,7 @@ msgid "Is new"
 msgstr "नया है"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "यह एक की नकल है? "
@@ -35515,6 +35564,11 @@ msgstr "आइटम कॉलनंबर :"
 msgid "Item cannot be renewed because it's an onsite checkout"
 msgstr "आइटम नवीनीकृत नहीं किया जा सकता क्योंकि यह एक ऑनसाइट चेकआउट है"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:27
+#, c-format
+msgid "Item check-in"
+msgstr "आइटम चेक-इन"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:581
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:273
 #, c-format
@@ -35565,6 +35619,11 @@ msgstr "आइटम विवरण"
 #, c-format
 msgid "Item details for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "आइटम विवरण के लिए %s &rsaquo; केटालॉग &rsaquo; कोहा"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:23
+#, c-format
+msgid "Item due"
+msgstr "आइटम देय"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1030
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1082
@@ -36998,7 +37057,7 @@ msgid "Last updated"
 msgstr "अंतिम अद्यतन"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:467
 #, c-format
 msgid "Last updated:"
@@ -37249,9 +37308,9 @@ msgid "Librarian:"
 msgstr "लाइब्रेरियन:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2348
@@ -37260,7 +37319,7 @@ msgstr "लाइब्रेरियन:"
 msgid "Libraries"
 msgstr "पुस्तकालय"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #, c-format
 msgid "Libraries "
 msgstr "पुस्तकालयों: "
@@ -37301,8 +37360,8 @@ msgstr "पुस्तकालयों: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:116
@@ -37334,6 +37393,7 @@ msgstr "पुस्तकालयों: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:108
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:148
 #, c-format
@@ -37394,8 +37454,8 @@ msgid ""
 "Library checkin and transfer policy &rsaquo; Administration &rsaquo; Koha"
 msgstr "लाइब्रेरी चेकइन और ट्रांसफर पॉलिसी &rsaquo; प्रशासन &rsaquo; कोहा"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -37472,7 +37532,7 @@ msgstr "पुस्तकालय प्रबंधन"
 msgid "Library name: "
 msgstr "लाइब्रेरी नाम:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:244
 #, c-format
 msgid "Library of Congress"
 msgstr "लाइब्रेरी ऑफ कांग्रेस "
@@ -37511,13 +37571,13 @@ msgstr "लाइब्रेरी का उपयोग करें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:633
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:903
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:220
@@ -37734,13 +37794,13 @@ msgstr "लिंक:"
 msgid "Link a host record to "
 msgstr "एक मेजबान रिकॉर्ड से लिंक करें "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #, c-format
 msgid "Link authorities automatically"
 msgstr "अधिकारियों को स्वचालित रूप से लिंक करें"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Link copied to the clipboard"
 msgstr "लिंक को क्लिपबोर्ड पर कॉपी किया गया"
 
@@ -37990,7 +38050,7 @@ msgid "Loading records, please wait..."
 msgstr "रिकार्ड लोड हो रहा है, कृपया प्रतीक्षा करें ..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:785
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -38588,8 +38648,8 @@ msgstr "मार्क संशोधन टेमप्लेट %s"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "मार्क संशोधन टेमप्लेट&rsaquo; उपकरण &rsaquo; कोहा"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #, c-format
 msgid "MARC organization code"
 msgstr "मार्क संगठन कोड"
@@ -38695,7 +38755,7 @@ msgstr "आइटम के बिना मार्क"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "MARCOrgCode"
 msgstr "MARCOrgCode"
@@ -40599,7 +40659,7 @@ msgstr "संशोधित आइटम प्रकार '%s' "
 msgid "Modify items in a batch"
 msgstr "एक बैच में संशोधित आइटम"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:40
 #, c-format
 msgid "Modify library "
 msgstr "पुस्तकालय संशोधित करें "
@@ -41011,11 +41071,11 @@ msgstr "MySQL संस्करण: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:662
 #, c-format
 msgid "N/A"
 msgstr "एन/ए"
@@ -41069,17 +41129,17 @@ msgstr "NT"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:113
@@ -41195,7 +41255,7 @@ msgid "Name:"
 msgstr "नाम:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
@@ -41760,13 +41820,13 @@ msgstr "नया लेबल लेआउट"
 msgid "New label template"
 msgstr "नया नोट टेंपलेट"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:109
 #, c-format
 msgid "New library"
 msgstr "नई पुस्तकालय"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:46
 #, c-format
 msgid "New library %s "
 msgstr "नया पुस्तकालय %s "
@@ -41889,7 +41949,7 @@ msgstr "नया रोटा"
 msgid "New routing list"
 msgstr "नई अनुमार्गण सूची"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:193
 #, c-format
 msgid "New search"
 msgstr "नई खोज"
@@ -42100,11 +42160,11 @@ msgstr "अगला पृष्ठ"
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "निकोलस Rosasco (प्रलेखन संकलक)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:322
@@ -43035,7 +43095,7 @@ msgstr ""
 "पार्टनर लाइब्रेरी रिकॉर्ड्स की जांच करें।"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "No temporary directory found."
 msgstr "कोई अस्थायी निर्देशिका नही पाया।"
 
@@ -43076,7 +43136,7 @@ msgstr "नहीं, नष्ट नहीं करें"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:290
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -43146,8 +43206,8 @@ msgstr "नहीं, नवीनीकृत नहीं है (एन)"
 msgid "No, let me think about it"
 msgstr "नहीं, मुझे इसके बारे में सोचने दो"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:846
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:845
 #, c-format
 msgid "No, save as new record"
 msgstr "नहीं: नया रिकार्ड के रूप में सहेजें"
@@ -43637,16 +43697,17 @@ msgstr ""
 "नोट: सावधान रहो चयन जब स्तम्भों का चयन. यदि आपकी पसंद भी है कि या तो पूरा नहीं होगा "
 "एक बहुत बड़ी रिपोर्ट में परिणाम कर सकता है विस्तृत या नीचे आपके सिस्टम धीमा."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:77
 #, c-format
 msgid "Note: For temporary uploads do not select a category."
 msgstr "नोट: अस्थायी अपलोड एक वर्ग का चयन नहीं करते।"
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:78
+#. %2$s:  av_UPLOAD_link = BLOCK 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:79
 #, c-format
-msgid "Note: No upload categories are defined. %s Add values to the "
-msgstr "नोट: कोई अपलोड श्रेणियां परिभाषित नहीं हैं। %s में मान जोड़ें"
+msgid "Note: No upload categories are defined. %s %s"
+msgstr "नोट: कोई अपलोड श्रेणियां परिभाषित नहीं हैं। %s %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:218
 #, c-format
@@ -43675,7 +43736,7 @@ msgstr "नोट: दो निम्नलिखित क्षेत्र�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:89
@@ -43744,7 +43805,7 @@ msgstr "नोट्स:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, c-format
 msgid "Notes: "
@@ -44274,7 +44335,7 @@ msgstr "OPAC"
 msgid "OPAC - %s %s"
 msgstr "ओपेक - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, c-format
 msgid "OPAC info: "
 msgstr "ओपेक सूचनाः "
@@ -44298,13 +44359,13 @@ msgstr "OPAC ध्यान दें"
 msgid "OPAC note:"
 msgstr "OPAC ध्यान दें:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
 #, c-format
 msgid "OPAC notes"
 msgstr "ओपेक टिप्पणीयाँ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #, c-format
 msgid "OPAC notes:"
 msgstr "ओपेक नोट:"
@@ -44973,7 +45034,7 @@ msgstr "आदेश"
 msgid "Order ID"
 msgstr "आदेश आईडी"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:613
 #, c-format
 msgid "Order ID:"
 msgstr "आदेश आईडी:"
@@ -46766,7 +46827,7 @@ msgid "Patron's record has guaranteed accounts attached."
 msgstr "संरक्षक का रिकॉर्ड खातों संलग्न गारंटी है."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:473
 #, c-format
 msgid "Patron:"
@@ -47284,7 +47345,7 @@ msgid "Permissions (code)"
 msgstr "अनुमतियाँ (कोड)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "Ph: "
 msgstr "फोन: "
 
@@ -47299,7 +47360,7 @@ msgstr "फोन"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:632
 #, c-format
@@ -47377,14 +47438,14 @@ msgstr "चुना पुस्तकालय अलग है"
 msgid "Pickup library:"
 msgstr "पिकअप पुस्तकालय:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:814
 #, c-format
 msgid "Pickup location"
 msgstr "उठाने की जगह"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:248
 #, c-format
 msgid "Pickup location: "
 msgstr "उठाने की जगह :"
@@ -47842,7 +47903,7 @@ msgstr ""
 "कृपया साझा करने से पहले एक रिपोर्ट नाम और वर्णनात्मक नोट दर्ज करें (न्यूनतम 20 वर्ण) "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Please enter a search term."
 msgstr "कृपया खोज शब्द एंटर करें."
 
@@ -48674,8 +48735,13 @@ msgstr "मूल्य"
 msgid "Price effective from"
 msgstr "मूल्य से प्रभावी"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#, c-format
+msgid "Price paid"
+msgstr "मूल्य भुगतान"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:661
 #, c-format
 msgid "Price paid:"
 msgstr "मूल्य का भुगतान:"
@@ -49217,14 +49283,14 @@ msgstr "रक्षा करना"
 msgid "Protect from deletion"
 msgstr "डिलीट होने से बचाए"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
 #, c-format
 msgid "Public"
 msgstr "सार्वजनिक"
@@ -49290,7 +49356,7 @@ msgstr "सार्वजनिक टिप्पणी:"
 msgid "Public notes"
 msgstr "सार्वजनिक टिप्पणीयाँ: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #, c-format
 msgid "Public: "
@@ -50950,8 +51016,8 @@ msgstr "मरम्मत"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:364
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 msgid "Repeat this Tag"
 msgstr "दोहराएँ इस टैग"
 
@@ -51010,7 +51076,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "Z39.50 / एसआरयू के माध्यम से रिकॉर्ड बदलें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:892
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "Z39.50/एसआरयू के माध्यम से रिकॉर्ड बदलें"
@@ -51056,12 +51122,12 @@ msgstr "प्रतिस्थापन मूल्य: "
 msgid "Replied"
 msgstr "जवाब दिया गया"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Reply-To: "
 msgstr "को- उत्तर:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid "ReplyToDefault"
 msgstr "ReplyToDefault"
@@ -51236,6 +51302,12 @@ msgstr "अनुरोध %s"
 msgid "Request ID"
 msgstr "अनुरोध आईडी"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#, c-format
+msgid "Request ID:"
+msgstr "अनुरोध आईडी:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:529
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
@@ -51259,29 +51331,28 @@ msgid "Request article from %s"
 msgstr "से अनुरोध अनुच्छेद %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:393
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:606
 #, c-format
 msgid "Request details"
 msgstr "अनुरोध विवरण"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
 #, c-format
 msgid "Request log"
 msgstr "अनुरोध लॉग"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
-#, c-format
-msgid "Request number:"
-msgstr "अनुरोध संख्या :"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:513
 #, c-format
 msgid "Request specific item type:"
 msgstr "का अनुरोध विशेष आइटम के प्रकार:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
+#, c-format
+msgid "Request type"
+msgstr "अनुरोध प्रकार"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
 #, c-format
 msgid "Request type:"
 msgstr "अनुरोध प्रकार:"
@@ -51358,8 +51429,8 @@ msgstr "Require.js जेएस मॉड्यूल प्रणाली"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -51408,15 +51479,16 @@ msgstr "Require.js जेएस मॉड्यूल प्रणाली"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:768
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:308
@@ -51463,7 +51535,6 @@ msgstr "Require.js जेएस मॉड्यूल प्रणाली"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1521
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
@@ -52056,7 +52127,7 @@ msgstr "उपकरण के लिए लौटे"
 msgid "Return to where you were"
 msgstr "तुम कहाँ थे पर लौटें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #, c-format
 msgid "Return-Path: "
 msgstr "वापसी का पथ:"
@@ -52068,7 +52139,7 @@ msgstr "वापसी का पथ:"
 msgid "Returned to patron: "
 msgstr "संरक्षक पर लौटें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "ReturnpathDefault"
 msgstr "ReturnpathDefault"
@@ -52510,12 +52581,12 @@ msgstr "एसएमएस प्रदाता"
 msgid "SMS provider:"
 msgstr "एसएमएस प्रदाता: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #, c-format
 msgid "SMTP server"
 msgstr "एसएमटीपी सर्वर"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
 #, c-format
 msgid "SMTP server: "
 msgstr "एसएमटीपी सर्वर: "
@@ -52689,9 +52760,9 @@ msgstr "शनिवार को"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:874
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:887
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:869
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:873
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:886
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:138
@@ -52764,14 +52835,14 @@ msgstr "सहेजें (यदि सहेजा गया प्लगइ�
 msgid "Save all %s preferences"
 msgstr "सभी सहेजे %s वरीयताएँ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:881
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:266
 #, c-format
 msgid "Save and continue editing"
 msgstr "सहेजें और संपादन जारी"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
 #, c-format
 msgid "Save and edit items"
 msgstr "सहेजें और आइटम संपादित"
@@ -52786,7 +52857,7 @@ msgstr "सहेजें और भुगतान करें"
 msgid "Save and preview routing slip"
 msgstr "सहेजे ओर पूर्वावलोकन अनुमार्गण पर्ची"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:878
 #, c-format
 msgid "Save and view record"
 msgstr "सहेजें और रिकॉर्ड को देखने"
@@ -53059,8 +53130,8 @@ msgstr "स्क्रीन"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
@@ -53583,7 +53654,7 @@ msgstr "खोज सिस्टम वरीयताएँ"
 msgid "Search targets"
 msgstr "खोज लक्ष्यों"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:154
 #, c-format
 msgid "Search term: "
 msgstr "खोज शर्तेः"
@@ -53641,12 +53712,12 @@ msgstr "खोज प्रकारः"
 msgid "Search unavailable"
 msgstr "खोज अनुपलब्ध"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:122
 #, c-format
 msgid "Search uploads by category"
 msgstr "श्रेणी के अनुसार अपलोड खोजें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:151
 #, c-format
 msgid "Search uploads by name or hashvalue"
 msgstr "नाम या hashvalue द्वारा अपलोड खोजें"
@@ -53787,7 +53858,7 @@ msgid "Section"
 msgstr "अनुभाग"
 
 #. %1$s:  BIG_LOO.number | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1022
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1021
 #, c-format
 msgid "Section %s"
 msgstr "अनुभाग %s"
@@ -54156,7 +54227,7 @@ msgstr "चुनें दिन: "
 msgid "Select download format: "
 msgstr "चुनें डाउनलोड प्रारूप: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:57
 #, c-format
 msgid "Select files: "
 msgstr "फ़ाइल चुनें"
@@ -55021,7 +55092,7 @@ msgstr "स्थिति सेट करें"
 msgid "Set the date received to today?"
 msgstr "आज प्राप्त तारीख को सेट करें?"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr "इस पुस्तकालय को ओपेक में पुस्तकालय पृष्ठ पर दिखाने के लिए 'हाँ' पर सेट करें।"
@@ -55087,7 +55158,7 @@ msgstr ""
 msgid "Settings"
 msgstr "सेटिंग"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55378,7 +55449,7 @@ msgstr "दिखाए %s अनसुलझे दावे "
 msgid "Show MARC"
 msgstr "दिखाएँ मार्क"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:908
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "दिखाएँ मार्क टैग प्रलेखन लिंक"
@@ -55675,7 +55746,7 @@ msgstr "दिखाएँ सदस्यताएँ"
 msgid "Show suggestion #%s "
 msgstr "सुझाव दिखाएं #%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
 #, c-format
 msgid "Show tags"
 msgstr "दिखाएँ टैग"
@@ -55730,7 +55801,7 @@ msgstr "क्योंकि"
 msgid "Single holiday: %s"
 msgstr "एकल छुट्टी: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:137
 #, c-format
@@ -55910,7 +55981,7 @@ msgstr "क्षमा करें, कैस लॉग इन विफल �
 msgid "Sorry, there is no result for your search."
 msgstr "क्षमा करें, आपकी खोज के लिए कोई परिणाम है."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:306
 #, c-format
 msgid "Sorry, your request had no results."
 msgstr "क्षमा करें, आपके अनुरोध कोई परिणाम नहीं है।"
@@ -56347,13 +56418,13 @@ msgstr "स्टाफ टिप्पणी"
 msgid "Staff note:"
 msgstr "स्टाफ टिप्पणीः"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
 #, c-format
 msgid "Staff notes"
 msgstr "स्टाफ टिप्पणी"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #, c-format
 msgid "Staff notes:"
 msgstr "स्टाफ टिप्पणीः"
@@ -56524,8 +56595,8 @@ msgstr "प्रारंभ तिथि:"
 msgid "Start date: "
 msgstr "प्रारंभ तिथि: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, c-format
 msgid "Start defining libraries"
 msgstr "पुस्तकालयों को परिभाषित करने शुरू"
@@ -56615,7 +56686,7 @@ msgstr "राज्य"
 msgid "State:"
 msgstr "राज्य:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:614
 #, c-format
@@ -56747,7 +56818,7 @@ msgstr "स्थिति परिवर्तन"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1071
@@ -57125,7 +57196,7 @@ msgstr "विषय:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:153
@@ -57153,7 +57224,7 @@ msgstr "विषय:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:773
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
@@ -57702,7 +57773,7 @@ msgstr "सूपरस्क्रिप्ट"
 msgid "Supplemental issue "
 msgstr "पूरक इशयू"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, c-format
 msgid "Supplier metadata"
 msgstr "आपूर्तिकर्ता मेटाडाटा"
@@ -57779,7 +57850,7 @@ msgid "Switch languages"
 msgstr "भाषा बदलें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:905
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "उन्नत संपादक को स्विच"
@@ -58205,8 +58276,8 @@ msgstr "टैग हटाए गए"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1186
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:127
 #, c-format
@@ -58405,7 +58476,7 @@ msgstr "टेम्पलेट्स: "
 msgid "Templates"
 msgstr "टेम्पलेट्स"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:211
 #, c-format
 msgid "Temporary"
 msgstr "अस्थायी"
@@ -59338,7 +59409,7 @@ msgid ""
 msgstr "रिपोर्ट चलाए जाने पर दिखाए गए फ़ील्ड के लिए लेबल, उदा. \"लाइब्रेरी चुनें।\""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -59638,7 +59709,7 @@ msgstr ""
 msgid "The record id "
 msgstr "रिकॉर्ड आईडी "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:995
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:994
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "जो रिकॉर्ड आप संपादित करने का प्रयास कर रहे हैं वह मौजूद नहीं है."
@@ -59991,11 +60062,11 @@ msgid "There are no late orders."
 msgstr "कोई देर से आदेश हैं."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "There are no libraries defined."
 msgstr "इसमें कोई पुस्तकालय परिभाषित नही हैं।"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "There are no libraries defined. "
@@ -60467,7 +60538,7 @@ msgid "This field is required."
 msgstr "यह क्षेत्र की आवश्यकता है।"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "This file already exists (in this category)."
 msgstr "इस फ़ाइल में पहले से ही मौजूद है (इस श्रेणी में) ।"
 
@@ -61767,7 +61838,7 @@ msgstr "उपकरण प्लगइन:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
@@ -62477,7 +62548,6 @@ msgstr "फ़ीरोजा"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:110
@@ -62513,10 +62583,10 @@ msgstr "UKMARC"
 msgid "UNIMARC"
 msgstr "UNIMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:82
 #, c-format
-msgid "UPLOAD authorized value category"
-msgstr "अधिकृत मूल्य श्रेणी अपलोड करें"
+msgid "UPLOAD"
+msgstr "अपलोड"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -62534,7 +62604,7 @@ msgstr "यूआरएल"
 msgid "URL(s)"
 msgstr "यूआरएल (ओं)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:227
 #, c-format
 msgid "URL: "
 msgstr "यूआरएल: "
@@ -63186,21 +63256,21 @@ msgstr "डेटाबेस संरचना अद्यतन"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Upload"
 msgstr "अपलोड करें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:13
 #, c-format
 msgid "Upload &rsaquo; Tools &rsaquo; Koha"
 msgstr "अपलोड &rsaquo; उपकरण &rsaquo; कोहा "
@@ -63286,11 +63356,11 @@ msgstr "अपलोड निर्देशिका करें : "
 
 #. INPUT type=submit name=upload
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:298
 #, c-format
 msgid "Upload file"
 msgstr "फ़ाइल अपलोड करें"
@@ -63360,7 +63430,7 @@ msgstr "अपलोड अधिक छवियाँ करे"
 msgid "Upload new file"
 msgstr "नई फ़ाइल अपलोड करें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #, c-format
 msgid "Upload new files"
 msgstr "नई फ़ाइल अपलोड करें"
@@ -63409,7 +63479,7 @@ msgid "Upload patron images in a batch or one at a time "
 msgstr "एक बैच या एक समय में एक संरक्षक चित्र अपलोड करें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:11
 #, c-format
 msgid "Upload plugin"
 msgstr "प्लगिन अपलोड करें"
@@ -63432,7 +63502,7 @@ msgstr "प्लगिन अपलोड करें"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:106
 #, c-format
 msgid "Upload progress: "
 msgstr "अपलोड प्रगति: "
@@ -63452,14 +63522,14 @@ msgstr "परिणाम अपलोड करें "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: "
 msgstr "स्थिति अपलोड करें "
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: Cancelled "
 msgstr "अपलोड की स्थिति: रद्द "
 
@@ -64310,7 +64380,7 @@ msgstr "देखें"
 msgid "View ILL availability plugins"
 msgstr "आईएलएल उपलब्धता प्लगइन्स देखें"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
 #, c-format
 msgid "View ILL requests"
 msgstr "आईएलएल अनुरोध देखें"
@@ -64359,18 +64429,13 @@ msgstr "बास्केट देखें"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View biblio details"
-msgstr "बिब्लियों विवरण देखें"
+msgid "View bibliographic record"
+msgstr "ग्रन्थसूची रिकार्ड देखें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:49
 #, c-format
 msgid "View bibliographic record enhancement plugins for the staff interface"
 msgstr "स्टाफ इंटरफ़ेस के लिए ग्रंथ सूची रिकॉर्ड एन्हांसमेंट प्लगइन्स देखें"
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View borrower details"
-msgstr "उधारकर्ता विवरण देखें"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:173
 #, c-format
@@ -64443,8 +64508,9 @@ msgid "View online payment plugins"
 msgstr "ऑनलाइन भुगतान प्लग इन देखें"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 msgid "View patron details"
 msgstr "संरक्षक विवरण देखें"
 
@@ -65356,11 +65422,11 @@ msgstr "वार्षिक छुट्टियाँः %s"
 msgid "Yellow"
 msgstr "पीला"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:321
@@ -65418,7 +65484,7 @@ msgstr "पीला"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:236
@@ -65509,7 +65575,7 @@ msgstr "हाँ, बन्द (Y)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:263
@@ -65578,7 +65644,7 @@ msgstr "हाँ, हटाएँ इस उपक्षेत्र"
 msgid "Yes, delete this tag"
 msgstr "हाँ, हटाएँ इस टैग"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:833
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "हाँ: मौजूदा आइटम संपादित करें"
@@ -65610,7 +65676,7 @@ msgid "Yes: Edit existing authority"
 msgstr "हाँ: मौजूदा प्राधिकरण संपादित करें"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 msgid "Yes: View existing items"
 msgstr "हाँ: मौजूदा आइटम संपादित करें"
 
@@ -66490,7 +66556,7 @@ msgstr ""
 "परिसंचरण क्रियाओं में संसाधित करें."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr "आपका koha-conf.xml एक वैध upload_path शामिल नहीं है।"
 
@@ -66568,7 +66634,7 @@ msgstr ""
 msgid "Your report will be generated with the following SQL statement."
 msgstr "अपनी रिपोर्ट में निम्नलिखित SQL बयान के साथ उत्पन्न हो जाएगा."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:301
 #, c-format
 msgid "Your request gave the following results:"
 msgstr "आपका अनुरोध दे दी है निम्न परिणाम:"
@@ -66661,7 +66727,7 @@ msgstr "Z39.50 विभिन्न स्वरूपों में रि�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:894
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -66734,7 +66800,7 @@ msgstr "जिप/डाक कोड"
 msgid "ZIP/Postal code:"
 msgstr "जिप/डाक कोड"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:620
 #, c-format
@@ -67376,7 +67442,7 @@ msgstr "केवल जगह कर सकते हैं की एक अ�
 msgid "can place %s of the requested %s holds for a maximum of %s total holds."
 msgstr "जगह कर सकते हैं %s अनुरोध के %s की एक अधिकतम के लिए रखती है %s की कुल रखती है।"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:815
 #, c-format
 msgid "cancel your request"
 msgstr "अपना अनुरोध रद्द करें"
@@ -67530,7 +67596,7 @@ msgstr "युक्त"
 msgid "contains"
 msgstr "शामिल"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #, c-format
 msgid "continue creating your request"
 msgstr "अपना अनुरोध बनाते रहें"
@@ -67687,7 +67753,7 @@ msgstr "'माना' प्रणाली वरीयता को अक्
 msgid "display detail for this librarian."
 msgstr "इस पुस्तकालय अध्यक्ष के लिए प्रदर्शन विस्तार."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "do a catalog search"
 msgstr "एक सूची खोज करें"
@@ -68800,8 +68866,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "या"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:374
@@ -68842,19 +68908,6 @@ msgstr "या दर्ज करें"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 msgid "order(s) left"
 msgstr "आदेश छोड़ दिया"
-
-#. %1$s:  ELSE -
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, c-format
-msgid ""
-"otherwise all uploads will be marked as temporary. %s An administrator must "
-"add values to the UPLOAD authorized value category otherwise all uploads "
-"will be marked as temporary. %s "
-msgstr ""
-"अन्यथा सभी अपलोड अस्थायी के रूप में चिह्नित किए जाएंगे। %s एक व्यवस्थापक को UPLOAD "
-"अधिकृत मूल्य श्रेणी में मान जोड़ना होगा अन्यथा सभी अपलोड अस्थायी के रूप में चिह्नित किए "
-"जाएंगे।%s "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -69322,28 +69375,6 @@ msgstr "Suomi, Suomen केइलि (फिनिश) पासी कोर�
 msgid "superlibrarian"
 msgstr "सुपरलाइब्रेरियन"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
-#, c-format
-msgid ""
-"system preference %s Default: ILLDefaultStaffEmail system preference %s "
-msgstr "सिस्टम वरीयता %s डिफ़ॉल्ट: ILLDefaultStaffEmail सिस्टम वरीयता %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "system preference %s Default: ReplyToDefault system preference %s "
-msgstr "सिस्टम वरीयता %s डिफ़ॉल्ट: ReplyToDefault सिस्टम वरीयता %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
-#, c-format
-msgid "system preference %s Default: ReturnpathDefault system preference %s "
-msgstr "सिस्टम वरीयता %s डिफ़ॉल्ट: ReturnpathDefault सिस्टम वरीयता %s "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:44
 #, c-format
@@ -69351,7 +69382,7 @@ msgid "system preference if you wish to enable this feature."
 msgstr "यदि आप इस सुविधा को सक्षम करना चाहते हैं तो सिस्टम वरीयता."
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:985
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:984
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -69857,8 +69888,8 @@ msgstr "| स्थिति: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
@@ -70112,8 +70143,14 @@ msgstr ""
 #~ msgid "%s Country:"
 #~ msgstr "%s देश:"
 
+#~ msgid "%s Default: "
+#~ msgstr "%s डिफाल्ट: "
+
 #~ msgid "%s Edit news item %s Add news item %s "
 #~ msgstr "%s नई आइटम संपादित करें%sनई आइटम जोड़े %s"
+
+#~ msgid "%s If not filled in defaults to system preference "
+#~ msgstr "%s यदि सिस्टम वरीयता में डिफॉल्ट नहीं भरी जाती है "
 
 #~ msgid "%s In transit from %s, to %s, since %s %s "
 #~ msgstr "%s से पारगमन में %s, को %s,के बाद से %s %s "
@@ -71019,6 +71056,9 @@ msgstr ""
 #~ "quote to be saved."
 #~ msgstr ""
 #~ "दोनों 'स्रोत' और 'पाठ' क्षेत्रों के लिए बोली सहेजने के लिए में सामग्री होनी चाहिए."
+
+#~ msgid "Branch"
+#~ msgstr "शाखा"
 
 #~ msgid "Branches limitation"
 #~ msgstr "शाखाओं की सीमाए"
@@ -72593,6 +72633,9 @@ msgstr ""
 #~ msgid "Report ID:"
 #~ msgstr "रिपोर्ट"
 
+#~ msgid "Request number:"
+#~ msgstr "अनुरोध संख्या :"
+
 #, fuzzy
 #~ msgid "Requested by"
 #~ msgstr "अनुरोध किया"
@@ -72683,6 +72726,9 @@ msgstr ""
 #~ msgid "Type of change"
 #~ msgstr "परिवर्तन का प्रकार"
 
+#~ msgid "UPLOAD authorized value category"
+#~ msgstr "अधिकृत मूल्य श्रेणी अपलोड करें"
+
 #~ msgid "Unit cost search"
 #~ msgstr "इकाई लागत खोज"
 
@@ -72713,6 +72759,12 @@ msgstr ""
 
 #~ msgid "View authority record"
 #~ msgstr "प्राधिकरण रिकॉर्ड देखें"
+
+#~ msgid "View biblio details"
+#~ msgstr "बिब्लियों विवरण देखें"
+
+#~ msgid "View borrower details"
+#~ msgstr "उधारकर्ता विवरण देखें"
 
 #~ msgid "View patron"
 #~ msgstr "संरक्षक देखें"

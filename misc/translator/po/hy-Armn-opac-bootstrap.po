@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:53-0300\n"
-"PO-Revision-Date: 2023-02-21 06:09+0000\n"
+"POT-Creation-Date: 2023-04-17 08:09-0300\n"
+"PO-Revision-Date: 2023-04-19 07:18+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1676959766.208918\n"
+"X-POOTLE-MTIME: 1681888724.074555\n"
 "X-Pootle-Path: /hy/21.05/hy-Armn-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -283,6 +283,25 @@ msgstr "%s %s Նկատի ունես: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Ավարտի ամսաթիվ: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Նյութի տացք և թարմացում %s Նյութի տացք %s %sՄիջգրադարանային բաժնույթը "
+"պատրաստ է %sՄիջգրադարանային բաժնույթը անհասանելի է %sԻնքնաթարմացում %"
+"sՉճանաչված %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1558,32 +1577,6 @@ msgstr ""
 "%sՍպասվող%s %sԺամանած%s %sՈւշացած%s %sԲացակա%s %sԲացակա (երբեք չստացված)%s "
 "%sԲացակա (վաճառված)%s %sԲացակա (վնասված)%s %sԲացակա (կորած)%s %sՀասանելի չէ"
 "%s %sՋնջել%s %sԽարանված%s %sԿանգնեցված%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sնյութը ենթակա է վերադարձի %sԽորացված նշում %sՊահումը լրացվեց %sՊահման "
-"հիշեցում %sՆյութի հետ ընդունում %s %s Նյութի տացք և թարմացում %s Նյութի տացք "
-"%s %sՄիջգրադարանային բաժնույթը պատրաստ է %sՄիջգրադարանային բաժնույթը "
-"անհասանելի է %sԻնքնաթարմացում %sՉճանաչված %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2984,6 +2977,11 @@ msgstr "Անչափահաս"
 #, c-format
 msgid "Adult"
 msgstr "Մեծահասակ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, c-format
+msgid "Advance notice"
+msgstr "Նախապես ծանուցում"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6089,6 +6087,11 @@ msgstr "Պահման ամսաթիվ"
 msgid "Hold date:"
 msgstr "Պահման ամսաթիվ։"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, c-format
+msgid "Hold filled"
+msgstr "Պահումը լրացված է"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6098,6 +6101,11 @@ msgstr "Պահումը հետո պետք չէ։"
 #, c-format
 msgid "Hold notes:"
 msgstr "Պահման նշումներ:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, c-format
+msgid "Hold reminder"
+msgstr "Պահման հիշեցում"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6690,6 +6698,11 @@ msgstr "Նյութի դասիչ"
 msgid "Item cannot be checked out."
 msgstr "Նյութը հնարավոր չէ դուրս տալ"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid "Item check-in"
+msgstr "Նյութի հետ ընդունում"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6709,6 +6722,11 @@ msgstr "Նյութը վնասված է"
 #, c-format
 msgid "Item details"
 msgstr "Նյութի մանրամասներ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, c-format
+msgid "Item due"
+msgstr "Նյութը ենթակա է վերադարձի"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12098,8 +12116,8 @@ msgstr "Այս սխալի մասին տեղեկացնելու համար կապ�
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
-msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։"
+msgid "To report this error, you can email the Koha Administrator. "
+msgstr "Այս սխալի մասին տեղեկացնելու համար էլ. նամակ ուղարկիր Կոհա կառավարչին։ "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
 #, c-format

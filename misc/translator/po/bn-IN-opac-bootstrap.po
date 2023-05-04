@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:37-0300\n"
+"POT-Creation-Date: 2023-04-17 07:44-0300\n"
 "PO-Revision-Date: 2020-11-30 12:16+0000\n"
 "Last-Translator: Mubassir Ahsan <mahsandu@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -269,6 +269,25 @@ msgstr "%s %s আপনি কি বুঝাচ্ছেন: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s শেষের তারিখ: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sআইটেম বাকি %sঅগ্রিম নোটিশ %sআসন্ন ঘটনাবলী %sহোল্ড পূরণ %sআইটেম চেক-ইন %s "
+"%sআইটেম চেক আউট এবং রি-ইস্যু %s আইটেম চেক আউট %s %s আন্ত-লাইব্রেরী লেনদেন উপযোগী "
+"%s আন্ত-লাইব্রেরী লেনদেন অনুপযোগী %s অজানা %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1521,31 +1540,6 @@ msgstr ""
 "%sপ্রত্যাশিত%s %sআগত%s %sবিলম্বে%s %sনিখোঁজ%s %sঅনুপস্থিত(কখনও প্রাপ্ত হয়নি)%s "
 "%sঅনুপস্থিত (বিক্রি শেষ)%s %sঅনুপস্থিত (ক্ষতিগ্রস্ত)%s %sঅনুপস্থিত(বিনষ্ট)%s %sউপলব্ধ নেই"
 "%s %sমুছে ফেলা হয়েচ্ছে%s %sদাবি করা হয়েছে%s %sবন্ধ%s"
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sআইটেম বাকি %sঅগ্রিম নোটিশ %sআসন্ন ঘটনাবলী %sহোল্ড পূরণ %sআইটেম চেক-ইন %s "
-"%sআইটেম চেক আউট এবং রি-ইস্যু %s আইটেম চেক আউট %s %s আন্ত-লাইব্রেরী লেনদেন উপযোগী "
-"%s আন্ত-লাইব্রেরী লেনদেন অনুপযোগী %s অজানা %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2943,6 +2937,11 @@ msgstr "কিশোর"
 #, c-format
 msgid "Adult"
 msgstr "প্রাপ্তবয়স্ক"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "ট্যাগ যোগ করুন"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6077,6 +6076,11 @@ msgstr "বছর"
 msgid "Hold date:"
 msgstr "বছর"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "হোল্ডকৃতশিরোনাম"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
 msgid "Hold not needed after:"
@@ -6086,6 +6090,11 @@ msgstr "বছর"
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "নোট হোল্ড করাঃ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "বছর"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6680,6 +6689,11 @@ msgstr "আইটেম কল নাম্বার"
 msgid "Item cannot be checked out."
 msgstr "আইটেমটি নেওয়া যাবে না."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "চেক-ইন কপি"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6699,6 +6713,11 @@ msgstr "আইটেমটি ক্ষতিগ্রস্থ"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "আরো বিস্তারিত"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "নির্দিষ্ট তারিখ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, fuzzy, c-format
@@ -12025,7 +12044,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

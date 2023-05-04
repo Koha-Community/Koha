@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:39-0300\n"
-"PO-Revision-Date: 2022-11-20 21:28+0000\n"
+"POT-Creation-Date: 2023-04-17 07:46-0300\n"
+"PO-Revision-Date: 2023-05-03 21:22+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1668979724.371469\n"
+"X-POOTLE-MTIME: 1683148939.583284\n"
 "X-Pootle-Path: /cs/21.05/cs-CZ-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -283,6 +283,24 @@ msgstr "%s %s Měli jste na mysli: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Konec omezení: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Vypůjčení jednotky nebo prodloužení výpůjčky %s Vypůjčení jednoitky %s "
+"%sPřipravená MVS %sMVS nedostupná %sAutomatické prodloužení %sNeznámý %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -654,7 +672,7 @@ msgstr "%s Automatické prodloužení"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "%s Automatické prodloužení selhalo, vaše registrace již skončila."
+msgstr "%s Automatické prodloužení selhalo, vaše registrace již skončila. "
 
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
@@ -1559,32 +1577,6 @@ msgstr ""
 "%sOčekáváno%s %sDodáno%s %sOpožděno%s %sChybějící%s %sChybějící (nikdy "
 "nepřišlo)%s %sChybějící (vyprodáno)%s %sChybějící(Poškozeno)%s %sChybějící "
 "(ztraceno)%s %sNedostupné%s %sOdstraněno%s %sReklamováno%s %sZastaveno%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sVypršení termínu vrácení %sPředběžné upozornění na termín vrácení "
-"%sPotvrzení rezervace %sPřipomenutí rezervace %sVrácení výpůjček %s %s "
-"Vypůjčení a prodloužení %s Vypůjčení %s %sPřipravená MVS %sNedostupná MVS "
-"%sAutomatické prodloužení %sNeznámý typ %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2849,7 +2841,7 @@ msgstr ""
 "prosím. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "Account payment"
 msgstr "Vaše platba"
 
@@ -2985,6 +2977,11 @@ msgstr "Dospívající (14-17 let)"
 #, c-format
 msgid "Adult"
 msgstr "Dospělí"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Vložit poznámku"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6081,6 +6078,11 @@ msgstr "Datum rezervace"
 msgid "Hold date:"
 msgstr "Datum rezervace:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6090,6 +6092,11 @@ msgstr "Rezervace platí do:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Poznámka k rezervaci:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Datum rezervace"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6686,6 +6693,11 @@ msgstr "Signatura jednotky"
 msgid "Item cannot be checked out."
 msgstr "Jednotku nelze vypůjčit."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Výpůjčka byla vrácena"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6705,6 +6717,11 @@ msgstr "Poškozeno"
 #, c-format
 msgid "Item details"
 msgstr "Podrobnosti o jednotce"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Půjčeno do"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -8765,7 +8782,7 @@ msgstr "Potvrďte svou registraci &rsaquo; %s%s%sKoha online%s katalog"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:58
 #, c-format
 msgid "Please contact a librarian for details."
-msgstr "Kontaktujte knihovnu, aby vám sdělila podrobnosti."
+msgstr "Kontaktujte obsluhu, aby vám sdělila podrobnosti."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:204
 #, c-format
@@ -12110,8 +12127,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha.  "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
@@ -13513,7 +13530,7 @@ msgstr "Vaše nastavení soukromí &rsaquo; %s%s%sKoha online%s katalog"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:49
 #, c-format
 msgid "Your privacy rules have been updated."
-msgstr "Vaše nastavení bylo uloženo."
+msgstr "Vaše pravidla ochrany osobních údajů byla aktualizována."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:368

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:16-0300\n"
+"POT-Creation-Date: 2023-04-17 08:47-0300\n"
 "PO-Revision-Date: 2020-08-12 10:00+0000\n"
 "Last-Translator: albcanon <elton.luku@albcanon.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,6 +274,24 @@ msgstr "%s %s Mos ndoshta nënkuptonit: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Data e mbarimit: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
+"%sItem checkout %sUnknown %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1515,30 +1533,6 @@ msgstr ""
 "asnjëherë në dorëzim)%s %sHumbur (shitur)%s %sHumbur (dëmtuar)%s %sHumbur "
 "(humbur)%s %sNuk është i disponueshëm%s %sFshij%s %sI kërkuar%s %sI pezulluar"
 "%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
-"%sItem checkout %sUnknown %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2926,6 +2920,11 @@ msgstr "Adoleshent"
 #, c-format
 msgid "Adult"
 msgstr "I/e rritur"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Shto tag"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6057,6 +6056,11 @@ msgstr "Data e kopjes:"
 msgid "Hold date:"
 msgstr "Data e kopjes:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6066,6 +6070,11 @@ msgstr "Kopja nuk nevojitet pas:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Shënime:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Data e kopjes:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6661,6 +6670,11 @@ msgstr "Numri i regjistrit i titullit"
 msgid "Item cannot be checked out."
 msgstr "Titulli nuk mund të jepet në dorëzim."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Dhënë në dorëzim"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6680,6 +6694,11 @@ msgstr "Titulli i dëmtuar"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Detaje të mëtejshme"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Afati"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12105,8 +12124,8 @@ msgstr ""
 "Për të raportuar këtë gabim, ju lutemi kontaktoni administratorin e Koha. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "Për të raportuar këtë gabim, mund të dërgoni email tek Administratori i Koha."
 

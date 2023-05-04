@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 12:36-0300\n"
+"POT-Creation-Date: 2023-04-17 07:41-0300\n"
 "PO-Revision-Date: 2014-03-17 10:29+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: none\n"
@@ -276,6 +276,25 @@ msgstr "%s Вы имели в виду: "
 #, c-format
 msgid "%s %s End date: "
 msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s Экземпляр ожидается %s Заблаговременное сообщение %s Предстоящие события "
+"%s Резервирование выполнено %s Возвращение экземпляра %s Выдача экземпляра "
+"%s Неизвестно %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1514,31 +1533,6 @@ msgid ""
 msgstr ""
 "%s Ожидается %s %s Поступил %s %s Задерживается %s %s Отсутствует %s %s Не "
 "доступно %s %s Удалено %s %s Есть претензия %s %s Остановленно %s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%s Экземпляр ожидается %s Заблаговременное сообщение %s Предстоящие события "
-"%s Резервирование выполнено %s Возвращение экземпляра %s Выдача экземпляра "
-"%s Неизвестно %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -3034,6 +3028,11 @@ msgstr "для детей старшего школьного возраста (
 #, c-format
 msgid "Adult"
 msgstr "взрослый"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Добавить мэтку"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6198,6 +6197,12 @@ msgstr "Дата резервирования"
 msgid "Hold date:"
 msgstr "Дата резервирования"
 
+# название функции ILS-DI
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
 msgid "Hold not needed after:"
@@ -6208,6 +6213,11 @@ msgstr "Зарезервированое не потребуется после"
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Примечание о хранении:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Дата резервирования"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6810,6 +6820,11 @@ msgstr "Шифр хранения экземпляра"
 msgid "Item cannot be checked out."
 msgstr "Экземпляр не выдается."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Выдано ("
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6829,6 +6844,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Подробности"
+
+# --Дата возвращения (конфликт с Return date)
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Ожидается на дату"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12281,7 +12302,7 @@ msgstr "Чтобы внести изменения в запись, пожалу
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, fuzzy, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Чтобы внести изменения в запись, пожалуйста, свяжитесь с библиотекой."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

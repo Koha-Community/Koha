@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-03-16 23:53-0300\n"
-"PO-Revision-Date: 2023-02-21 06:16+0000\n"
+"POT-Creation-Date: 2023-04-17 08:09-0300\n"
+"PO-Revision-Date: 2023-04-19 07:32+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1676960160.947878\n"
+"X-POOTLE-MTIME: 1681889562.702762\n"
 "X-Pootle-Path: /hy/21.05/hy-Armn-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -641,7 +641,7 @@ msgstr "%s %s %s %s %s %s ԸՆԴԱՄԵՆԸ%s %s "
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:723
 #, c-format
 msgid "%s %s %s %s %s %s There are no recorded logs for this request %s "
 msgstr "%s %s %s %s %s %s Այս հարցման համար չկան գրանցված լոգեր։ %s "
@@ -2549,7 +2549,7 @@ msgstr ""
 #. %17$s:  CASE 
 #. %18$s:  m.code | html 
 #. %19$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:78
 #, c-format
 msgid ""
 "%s %s An error occurred when updating this library. Perhaps it already "
@@ -2929,6 +2929,25 @@ msgstr ""
 "համակցություն %s պիտակի համար։ Կառավարման դաշտի կանոնները թույլ չեն տալիս "
 "«Ավելացվել է. Կցել» և «Հեռացվել է՝ Բաց թողնել»: %s %s %s "
 
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:27
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Նյութի տացք և թարմացում %s Նյութի դուրս տրում %s %sՄիջգրադարանային "
+"բաժնույթը պատրաստ է %sՄիջգրադարանային բաժնույթը անհասանելի է %"
+"sԻնքնաթարմացում %sՉճանաչված %s"
+
 #. %1$s:  IF itemloo.not_holdable 
 #. %2$s:  IF itemloo.not_holdable == 'damaged' 
 #. %3$s:  ELSIF itemloo.not_holdable == 'ageRestricted' 
@@ -3238,7 +3257,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  library.branchcode | html 
 #. %8$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:8
 #, c-format
 msgid ""
 "%s %s Modify library %s New library %s %s &rsaquo; %s Confirm deletion of "
@@ -3964,7 +3983,7 @@ msgstr "%s %s տեղափոխված։"
 #. %63$s:     END 
 #. %64$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "%s %s%s %s %s %s %s %sAdd %sDelete %sModify %sCheckout %sReturn %sCreate "
 "%sCancel %sResume %sSuspend %sRenew %sRenew %sChange password %sAdd "
@@ -5094,7 +5113,7 @@ msgstr "%s (հավանաբար ԼԱՎ եթե դատարկ է)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1045
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1044
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - Սեղմիր այս ցուցիչը ընդլայնելու համար"
 
@@ -5309,7 +5328,7 @@ msgstr "%s Ավելացրու նոր մատենագիտական գրառումն
 #. %1$s:  IF mode=='new' || mode =='deleted'
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:37
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
 msgstr "%s Ավելացրու նոր բեռնում կամ փնտրում %s Արդյունքներ %s "
@@ -5421,6 +5440,17 @@ msgstr ""
 "%s Միշտ ավելացրու նյութեր %s Ավելացրու նյութեր միայն եթե համընկնող մատենը "
 "գտնված է %s Ավելացրու նյութեր միայն եթե համընկնող մատեն չի գտնված %s Անտեսիր "
 "նյութերը %s %s %s %s "
+
+#. %1$s:  ELSE -
+#. %2$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#, c-format
+msgid ""
+"%s An administrator must add values to the UPLOAD authorized value category "
+"otherwise all uploads will be marked as temporary. %s "
+msgstr ""
+"%sԿառավարիչը պետք է ավելացնի արժեքները UPLOAD լիազորված արժեքի դասին, "
+"հակառակ դեպքում բոլոր վերբեռնումները կնշվեն որպես ժամանակավոր։ %s "
 
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
@@ -5826,7 +5856,7 @@ msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s Օր %s Ժամ %s Չսահմանված %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:920
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
 #, c-format
 msgid "%s Default "
 msgstr "%s Լռակյաց "
@@ -5840,14 +5870,44 @@ msgstr "%s Լռակյաց "
 msgid "%s Default %s %s %s "
 msgstr "%sԼռակյաց %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:199
+#. %1$s:  END 
+#. %2$s:  pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
-msgid "%s Default: "
-msgstr "%s Լռակյաց։ "
+msgid ""
+"%s Default: %s system preference %s Default: ILLDefaultStaffEmail system "
+"preference %s "
+msgstr ""
+"%s Լռակյաց: %s համակարգային նախապատվություն %s Լռակյաց: ILLDefaultStaffEmail "
+"համակարգային նախապատվություն %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReplyToDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReplyToDefault system "
+"preference %s "
+msgstr ""
+"%s Լռակյաց: %s համակարգային նախապատվություն %s Լռակյաց: ReplyToDefault "
+"համակարգային նախապատվություն %s "
+
+#. %1$s:  END 
+#. %2$s:  pref_ReturnpathDefault_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
+#, c-format
+msgid ""
+"%s Default: %s system preference %s Default: ReturnpathDefault system "
+"preference %s "
+msgstr ""
+"%s Լռակյաց: %s համակարգային նախապատվություն %s Լռակյաց: ReturnpathDefault "
+"համակարգային նախապատվություն %s "
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -5979,8 +6039,8 @@ msgstr "%s Խմբագրեք տպիչի պրոֆայլը %s %s Նոր տպիչի 
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:800
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:816
 #, c-format
 msgid "%s Editing "
 msgstr "%s Խմբագրում "
@@ -6169,11 +6229,19 @@ msgstr "%s Պահումը սպասվում է "
 msgid "%s Hold(s)"
 msgstr "%s Պահում(ներ)"
 
-#. %1$s:  IF ( CAN_user_parameters_manage_sysprefs ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:233
+#. %1$s:  END 
+#. %2$s:  pref_MARCOrgCode_link | $raw | $KohaSpan 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
-msgid "%s If not filled in defaults to system preference "
-msgstr "%s Եթե լրացված չէ, լռակյացը համակարգային նախապատվությունում "
+msgid ""
+"%s If not filled in defaults to system preference %s. %s If not filled in "
+"defaults to system preference MARCOrgCode. %s You can obtain your code from "
+msgstr ""
+"%s Եթե լրացված չէ համակարգի նախապատվության լռելյայներում %s. %s Եթե լրացված "
+"չէ համակարգի նախապատվության լռելյայներում MARCOrgCode. %s Դու կարող ես "
+"ստանալ քո կոդը այստեղից "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-nomatch-action.inc:11
@@ -6613,7 +6681,7 @@ msgstr "%s Ոչ "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #, c-format
 msgid "%s No %s "
 msgstr "%s Ոչ %s "
@@ -8086,7 +8154,7 @@ msgid "%s checked out:"
 msgstr "%s սպասարկված։"
 
 #. %1$s:  request.illcomments.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:740
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #, c-format
 msgid "%s comments"
 msgstr "%s դիտողություններ"
@@ -9807,32 +9875,6 @@ msgstr ""
 "%sՆյութի տեսակի պահման քաղաքականություն ըստ նյութի տեսակի սրա համար %s"
 "%sՊահման լռակյաց քաղաքականություն ըստ նյութի տեսակի%s"
 
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:23
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sնյութի վերադարձի ժամկետ %sՆախապես ծանուցում %sՊահումը լրացվեց %sՊահման "
-"հիշեցում %sնյութը հետ ընդունվեց %s %s նյութի դուրս տրվեց և թարմացում %s "
-"Նյութը դուրս տրվեց %s %sՄիջգրադարանային բաժնույթը պատրաստ է "
-"%sՄիջգրադարանային բաժնույթը անհասանելի է %sԻնքնաթարմացում %sՉճանաչված %s"
-
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
@@ -9968,7 +10010,7 @@ msgstr "%sՁևափոխիր շրջանակի տեքստը%sԱվելացրու շ�
 #. %1$s:  IF library 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:114
 #, c-format
 msgid "%sModify library%sNew library%s"
 msgstr "%sՁևափոխիր գրադարանը%sՆոր գրադարան%s"
@@ -10047,7 +10089,7 @@ msgstr ""
 #. %1$s:  IF record.permanent 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:233
 #, c-format
 msgid "%sNo%sYes%s"
 msgstr "%sՈչ%sԱյո%s"
@@ -11115,7 +11157,7 @@ msgstr "(Կորած չէ)"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:818
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(Գրառման համար %s) %s Ավելացրու ՄԵԸՔ գրառում %s"
@@ -11123,7 +11165,7 @@ msgstr "(Գրառման համար %s) %s Ավելացրու ՄԵԸՔ գրառո
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(Գրառման համար %s) %s Ավելացրու ՄԵԸՔ գրառում %s "
@@ -11259,7 +11301,7 @@ msgstr "(մուտք արեք քանակը թվերի տեսքով) "
 msgid "(exclusive) "
 msgstr "(բացառող) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:820
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:151
 #, c-format
 msgid "(fast cataloging)"
@@ -11677,17 +11719,6 @@ msgstr "-- ոչ մեկը -- "
 #, c-format
 msgid "-- please choose --"
 msgstr "-- խնդրում եմ ընտրել --"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
-#, c-format
-msgid ""
-". %s If not filled in defaults to system preference MARCOrgCode. %s You can "
-"obtain your code from "
-msgstr ""
-". %s Եթե լրացված չէ, կընդունվի MARCOrgCode համակարգային նախապատվության "
-"լռակյացը։ %s Դու կարող ես ստանալ քո կոդը այստեղից "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -12566,7 +12597,7 @@ msgstr "Գործողություն, եթե համընկնում չի գտնվե�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:551
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:190
@@ -12592,14 +12623,14 @@ msgstr "Գործողություն, եթե համընկնում չի գտնվե�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:87
@@ -12626,7 +12657,7 @@ msgstr "Գործողություն, եթե համընկնում չի գտնվե�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
@@ -12875,7 +12906,7 @@ msgstr "Ավելացրու նոր նյութ"
 msgid "Add a new message"
 msgstr "Ավելացրու նոր հաղորդագրություն"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "Add a new record"
 msgstr "Ավելացրու նոր գրառում"
@@ -12886,7 +12917,7 @@ msgid "Add a new regular expression"
 msgstr "Ավելացրու նոր կանոնավոր արտահայտություն"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Add a new upload"
 msgstr "Ավելացրու նոր բեռնավորում"
 
@@ -13021,7 +13052,7 @@ msgstr "Ավելացրու ստուգված է"
 msgid "Add classification source"
 msgstr "Ավելացրու դասակարգման աղբյուր"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:757
 #, c-format
 msgid "Add comment"
 msgstr "Ավելացրու նշում"
@@ -13586,6 +13617,16 @@ msgstr "Ավելացրու օգտվող"
 msgid "Add users"
 msgstr "Ավելացրու օգտվողներ"
 
+#. %1$s:  av_UPLOAD_link | $raw | $KohaSpan 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:83
+#, c-format
+msgid ""
+"Add values to the %s authorized value category otherwise all uploads will be "
+"marked as temporary."
+msgstr ""
+"Արժեքներ ավելացրեք %s թույլատրված արժեքների դասին, հակառակ դեպքում բոլոր "
+"վերբեռնումները կնշվեն որպես ժամանակավոր:"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:144
 #, c-format
 msgid "Add vendor"
@@ -13782,9 +13823,9 @@ msgstr "Հավելյալ շնորհակալություններ..."
 msgid "Additional tools"
 msgstr "Լրացուցիչ գործիքներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:298
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:114
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:213
@@ -13820,7 +13861,7 @@ msgstr "Հասցեն հարցական է"
 msgid "Address line 1:"
 msgstr "Հասցեի տող 1։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
 #, c-format
 msgid "Address line 1: "
 msgstr "Հասցեի տող 1 "
@@ -13830,12 +13871,12 @@ msgstr "Հասցեի տող 1 "
 msgid "Address line 2:"
 msgstr "Հասցեի տող 2։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
 #, c-format
 msgid "Address line 2: "
 msgstr "Հասցեի տող 2 "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
 #, c-format
 msgid "Address line 3: "
 msgstr "Հասցեի տող 3 "
@@ -13882,7 +13923,7 @@ msgstr "Կարգավորումներ գումարած առաքումը: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
@@ -13997,6 +14038,11 @@ msgstr "Անչափահաս"
 #, c-format
 msgid "Adult"
 msgstr "Մեծահասակ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:24
+#, c-format
+msgid "Advance notice"
+msgstr "Նախապես ծանուցում"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -14236,10 +14282,10 @@ msgstr "Alingsås հանրային գրադարան, Շվեդիա"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:263
@@ -14503,7 +14549,7 @@ msgid ""
 msgstr ""
 "Թույլ տուր այս ընթերցողի երաշխավորներին ՀՕԱՔ-ից դիտելու ընթերցողի տուգանքները"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:93
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:95
 #, c-format
 msgid "Allow public downloads:"
 msgstr "Թույլ տուր հանրային բեռնաթափումները։"
@@ -15143,13 +15189,13 @@ msgstr "Այս անունով մեկ այլ ձևանմուշ արդեն գոյո
 msgid "Antenna.io"
 msgstr "Antenna.io"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:38
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:177
@@ -15522,7 +15568,7 @@ msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s %s"
 
 #. %1$s:  library.branchname | html 
 #. %2$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:278
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:283
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել  %s (%s)"
@@ -16766,7 +16812,7 @@ msgstr "Ավտոմատ պատվիրում։ "
 msgid "Automatic renewal"
 msgstr "Հեղինակավորների աղյուսակներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/includes/facets.inc:9
 #, c-format
 msgid "Availability"
@@ -16883,7 +16929,7 @@ msgstr "BULAC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Back"
@@ -16917,7 +16963,7 @@ msgstr "Հետ դեպի համակարգային նախապատվություն�
 msgid "Back to the list"
 msgstr "Հետ դեպի ցուցակ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:36
 #, c-format
 msgid "Backend"
 msgstr "Հետնամաս"
@@ -17821,7 +17867,6 @@ msgstr "Մատենագիտական տեղեկատվություն"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:149
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
 #, c-format
 msgid "Bibliographic record"
 msgstr "Մատենագիտական գրառում"
@@ -17832,13 +17877,16 @@ msgstr "Մատենագիտական գրառում"
 msgid "Bibliographic record %s"
 msgstr "Մատենագիտական գրառում %s"
 
+#. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:20
+#, c-format
 msgid "Bibliographic record ID"
 msgstr "Մատենագիտական գրառման ID"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:625
 #, c-format
 msgid "Bibliographic record ID:"
 msgstr "Մատենագիտական գրառման ID։"
@@ -18172,11 +18220,6 @@ msgstr "Ներքև"
 msgid "Braille"
 msgstr "Բրայլ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#, c-format
-msgid "Branch"
-msgstr "Մասնաճյուղ"
-
 #. NAV
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:16
@@ -18224,7 +18267,7 @@ msgstr "Մասնաճյուղ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:13
@@ -18280,13 +18323,17 @@ msgstr "Մասնաճյուղ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
@@ -18307,10 +18354,6 @@ msgstr "Մասնաճյուղ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -18447,7 +18490,7 @@ msgstr "Մասնաճյուղ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
@@ -19058,7 +19101,7 @@ msgstr "Calyx, Australia"
 msgid "Camden County, USA"
 msgstr "Քամդեն համայնք, ԱՄՆ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #, c-format
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr ""
@@ -19221,7 +19264,7 @@ msgstr "Չի կարող հիշել այս գրառումը քանի որ հետ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:511
@@ -19263,19 +19306,22 @@ msgstr "Չի կարող հիշել այս գրառումը քանի որ հետ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:262
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:943
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:947
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:955
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:960
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:942
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:946
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:950
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:959
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:73
@@ -19284,9 +19330,6 @@ msgstr "Չի կարող հիշել այս գրառումը քանի որ հետ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:139
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:149
@@ -19372,7 +19415,7 @@ msgstr "Չի կարող հիշել այս գրառումը քանի որ հետ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
@@ -20237,7 +20280,7 @@ msgstr "Քարտարանի վիճակագրություն "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:797
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
@@ -20316,12 +20359,12 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:177
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:8
 #, c-format
 msgid "Category"
@@ -20379,8 +20422,8 @@ msgstr "Դաս։"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:415
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Category: "
@@ -20495,7 +20538,7 @@ msgstr "Փոխիր դասը"
 msgid "Change currency"
 msgstr "Փոխեք տարադրամը"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:914
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:913
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -21405,8 +21448,8 @@ msgstr "Ընտրություն"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
 #, c-format
 msgid "Choose"
 msgstr "Ընտրիր"
@@ -21870,7 +21913,7 @@ msgstr "Քաղաքի փնտրում։"
 msgid "City:"
 msgstr "Քաղաք:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:607
 #, c-format
@@ -22274,7 +22317,7 @@ msgstr "Սեղմիր ամսաթվի վրա տոնը ավելացնելու կա�
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:359
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1085
 msgid "Click to Expand this Tag"
 msgstr "Սեղմիր այս ցուցիչը ընդլայնելու համար"
 
@@ -22324,7 +22367,7 @@ msgstr "Փոխանակման բուֆեր"
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22352,7 +22395,7 @@ msgstr "Կլոնավորիր այս օրենքները:"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22400,13 +22443,13 @@ msgstr "Սպասարկման և տուգանքների օրենքների կլո
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:710
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:734
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:182
@@ -22434,8 +22477,8 @@ msgstr "Սպասարկման և տուգանքների օրենքների կլո
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:176
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
@@ -22631,7 +22674,7 @@ msgstr "Coce պատկեր Open Library -ից"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:532
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:347
@@ -22922,7 +22965,7 @@ msgstr "Դիտողություն"
 msgid "Comment "
 msgstr "Դիտողություն "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:746
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:748
 #, c-format
 msgid "Comment by: "
 msgstr "Նկատառում։ "
@@ -22934,7 +22977,7 @@ msgstr "Նկատառում։ "
 msgid "Comment:"
 msgstr "Դիտողություն։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1413
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #, c-format
@@ -22951,7 +22994,7 @@ msgstr "Commenter "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:18
 #, c-format
 msgid "Comments"
@@ -23276,7 +23319,7 @@ msgid "Confirm deletion of desk "
 msgstr "Հաստատիր գրասեղանի ջնջումը "
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:57
 #, c-format
 msgid "Confirm deletion of library '%s' "
 msgstr "Հաստատիր '%s' գրադարանի ջնջումը "
@@ -23809,7 +23852,7 @@ msgid "Copy holidays to:"
 msgstr "Պատճենիր տոները"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Copy link to this file"
 msgstr "Պատճենեք հղումը այս նիշքում"
 
@@ -23923,7 +23966,7 @@ msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "Արժեքը պետք է ներկայացվի որպես տասական թիվ >= 0"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, c-format
 msgid "Cost:"
 msgstr "Արժեք։"
@@ -24085,7 +24128,7 @@ msgstr "Երկիր"
 msgid "Country:"
 msgstr "Երկիր։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:626
 #, c-format
@@ -25240,7 +25283,7 @@ msgstr "Ձեռք բերման ամսաթիվ"
 msgid "Date acquired (item)"
 msgstr "Ձեռք բերման ամսաթիվ (նյութ)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:423
@@ -25560,9 +25603,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:212
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:214
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:396
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:404
@@ -26006,7 +26049,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:680
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
@@ -26049,7 +26092,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
@@ -26093,7 +26136,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:93
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:241
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:355
@@ -26519,8 +26562,8 @@ msgstr "Ջնջիր այս տիրույթի միակ տոնը"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1094
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1095
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1096
 msgid "Delete this Tag"
 msgstr "Ջնջիր այս ցուցիչը"
 
@@ -26557,7 +26600,7 @@ msgstr "Ջնջիր այս հիշված հաշվետվությունը"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 msgid "Delete this subfield"
 msgstr "Ջնջիր այս ենթադաշտը"
 
@@ -26706,7 +26749,7 @@ msgstr "Առաքման ժամ: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Denied"
 msgstr "Արգելված է"
 
@@ -27041,7 +27084,7 @@ msgstr "Մանրամասներ %s "
 msgid "Details for %s &rsaquo; Housebound &rsaquo; Koha"
 msgstr "Մանրամասներ սրա համար %s &rsaquo; Տանը կցված &rsaquo; Կոհա"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:785
 #, c-format
 msgid "Details for all requests"
 msgstr "Ջնջիր բոլոր հարցումները"
@@ -27058,13 +27101,13 @@ msgstr "Բաժանորդագրության մանրամասներ #%s "
 msgid "Details for subscription #%s &rsaquo; Serials &rsaquo; Koha"
 msgstr "Բաժանորդագրության մանրամասներ #%s &rsaquo; Պարբերականներ &rsaquo; Կոհա"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:609
 #, c-format
 msgid "Details from library"
 msgstr "Մանրամասներ գրադարանից"
 
 #. %1$s:  request.backend | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:677
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:679
 #, c-format
 msgid "Details from supplier (%s)"
 msgstr "Մանրամասներ մատակարարից (%s)"
@@ -27458,7 +27501,7 @@ msgstr "Արտածված է գրադարանի խմբի որոնման բացվ�
 msgid "Displaying %sall%s %sapproved%s %spending%s %srejected%s terms "
 msgstr "Արտածվում է %sall%s %sհաստատված%s %sՍպասող%s %sմերժված%s Ժամկետներ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:791
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:793
 #, c-format
 msgid "Displaying availability results"
 msgstr "Արտածվում են հասանելի արդյունքները"
@@ -27519,7 +27562,7 @@ msgid "Do not use template"
 msgstr "Մի օգտագործիր կաղապարը"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Do you really want to delete this upload?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս ներբեռնումը։"
 
@@ -27642,7 +27685,7 @@ msgid "DoverNet, USA"
 msgstr "DoverNet, USA"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:237
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:239
 #, c-format
 msgid "Download"
 msgstr "Բեռնաթափիր"
@@ -27936,7 +27979,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Պատճենիր փաթեթի համարից հեռացված %s: %s ընթերցողներին"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "Գրառման պատճենումը կասեցվել է"
@@ -28145,7 +28188,7 @@ msgstr "Պահման ամենաշուտ ամսաթիվ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:292
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:679
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
@@ -28812,7 +28855,7 @@ msgstr "էլ փոստ։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:552
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
@@ -28945,8 +28988,8 @@ msgid "End date is not consistent with subscription length."
 msgstr "Ավարտի ամսաթիվը չի համապատասխանում բաժանորդագրության երկարությանը։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:139
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:379
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:116
 #, c-format
@@ -30061,7 +30104,7 @@ msgstr "Դիմերեսի աղյուսակ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Failed"
 msgstr "Ձախողվեց"
 
@@ -30252,8 +30295,8 @@ msgstr "Ֆաքս։"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:323
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:148
 #, c-format
@@ -30364,7 +30407,7 @@ msgid "Field 3"
 msgstr "Դաշտ 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
 msgid "Field autofilled by plugin"
 msgstr "Դաշտը ինքնալրացվել է պլագինով"
 
@@ -30457,12 +30500,12 @@ msgstr ""
 "(Նիշքերի ընդունված տեսակները: .csv և .txt)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be created. Check permissions."
 msgstr "Նիշքը հնարավոր չէ ստեղծել։ Ստուգիր իրավասությունները։"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File could not be read."
 msgstr "Նիշքը հնարավոր չէ կարդալ։"
 
@@ -30473,7 +30516,7 @@ msgid "File format: "
 msgstr "Նիշքի ձևաչափ։ "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File has been deleted."
 msgstr "Նիշքը ջնջված է։"
 
@@ -30512,7 +30555,7 @@ msgid "File not found!"
 msgstr "Նիշքը չի գտնված․"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "File or upload record could not be deleted."
 msgstr "Նիշքը կամ բեռնավորվող գրառումը հնարավոր չէ ջնջել։"
 
@@ -30558,7 +30601,7 @@ msgid "FileSaver library"
 msgstr "FileSaver գրադարան"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
 #, c-format
 msgid "Filename"
 msgstr "Filename"
@@ -32043,7 +32086,7 @@ msgstr "Խմբի կոդ"
 msgid "Group name"
 msgstr "Խմբի անուն"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:145
 #, c-format
 msgid "Group(s):"
 msgstr "Խմբեր։"
@@ -32206,7 +32249,7 @@ msgstr "Վերադարձի վերջնական ամսաթիվ։ "
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Harrison Carmel Public Library, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:205
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:207
 #, c-format
 msgid "Hashvalue"
 msgstr "Hashvalue"
@@ -32610,6 +32653,11 @@ msgstr "Պահման գումար"
 msgid "Hold fee: "
 msgstr "Պահման գումար: "
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:25
+#, c-format
+msgid "Hold filled"
+msgstr "Պահումը լրացված է"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:75
 #, c-format
 msgid "Hold filled for:"
@@ -32701,6 +32749,11 @@ msgstr "Պահման գործակիցներ &rsaquo; Տացք &rsaquo; Կոհա"
 #, c-format
 msgid "Hold ratios to calculate items needed"
 msgstr "Պահանջվող նյութերի հաշվարկի համար պահման հարաբերակցություն"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:26
+#, c-format
+msgid "Hold reminder"
+msgstr "Պահման հիշեցում"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:526
 #, c-format
@@ -33049,7 +33102,7 @@ msgstr "Տոնը կրկնվում է ամեն տարի այս տիրույթու
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:16
@@ -33105,13 +33158,17 @@ msgstr "Տոնը կրկնվում է ամեն տարի այս տիրույթու
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:14
@@ -33133,10 +33190,6 @@ msgstr "Տոնը կրկնվում է ամեն տարի այս տիրույթու
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:19
@@ -33273,7 +33326,7 @@ msgstr "Տոնը կրկնվում է ամեն տարի այս տիրույթու
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
@@ -33541,11 +33594,11 @@ msgid "ILL module configuration problem. Take a look at the "
 msgstr "ՄԳԲ մոդուլի կարգաբերման խնդիր։ Նայիր "
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
 msgid "ILL request log"
 msgstr "ՄԳԲ հարցման լոգ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:599
 #, c-format
 msgid "ILL request log "
 msgstr "ՄԳԲ հարցման լոգ "
@@ -33592,12 +33645,12 @@ msgstr ""
 msgid "ILL requests:"
 msgstr "ՄԳԲ հարցումներ։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:175
 #, c-format
 msgid "ILL staff email: "
 msgstr "ՄԳԲ աշխատակազմի է․ փոստ։ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #, c-format
 msgid "ILLDefaultStaffEmail"
 msgstr "ILLDefaultStaffEmail"
@@ -33617,7 +33670,7 @@ msgstr "INSTID:12345,LANG:fr"
 msgid "INTERMARC"
 msgstr "INTERMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:300
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "IP"
 msgstr "IP"
@@ -33632,7 +33685,7 @@ msgstr "IP հասցեն փոխվել է, մուտք եղեք նորից "
 msgid "IP address has changed. Please log in again "
 msgstr "IP հասցեն փոխվել է, մուտք եղեք նորից "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #, c-format
 msgid "IP: "
 msgstr "IP: "
@@ -34137,7 +34190,7 @@ msgstr ""
 "Եթե օգտագործում եք առանց շտրիխի ուրվագիծը, ապա դա կարող է հանգեցնել բացակա "
 "մուտքերի կամ դատարկ էջի"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #, c-format
 msgid "If you can't find what you are looking for, you can "
 msgstr "Եթե չես գտնում այն ինչ փնտրում ես, դու կարող ես "
@@ -34670,7 +34723,7 @@ msgid "Import this batch into the catalog"
 msgstr "Ներմուծիր այս փաթեթը քարտարան"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1171
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:172
 #, c-format
 msgid "Important"
@@ -35654,7 +35707,7 @@ msgid "Is new"
 msgstr "Նոր է"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "Սա սրա պատճենն է "
@@ -35871,6 +35924,11 @@ msgstr "Նյութի դասիչ"
 msgid "Item cannot be renewed because it's an onsite checkout"
 msgstr "Նյութը հնարավոր չէ թարմացնել, այն տեղային տացքի համար է։"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:27
+#, c-format
+msgid "Item check-in"
+msgstr "Նյութի հետ ընդունում"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:581
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:273
 #, c-format
@@ -35921,6 +35979,11 @@ msgstr "Նյութի մանրամասներ "
 #, c-format
 msgid "Item details for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "Նյութի մանրամասներ սրա համար %s &rsaquo; Քարտարան &rsaquo; Կոհա"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/messaging-preference-form.inc:23
+#, c-format
+msgid "Item due"
+msgstr "Նյութը ենթակա է վերադարձի"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1030
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1082
@@ -37360,7 +37423,7 @@ msgid "Last updated"
 msgstr "Վերջին թարմացվածը"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:434
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:467
 #, c-format
 msgid "Last updated:"
@@ -37613,9 +37676,9 @@ msgid "Librarian:"
 msgstr "Գրադարանավար ։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:54
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2348
@@ -37624,7 +37687,7 @@ msgstr "Գրադարանավար ։"
 msgid "Libraries"
 msgstr "Գրադարաններ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #, c-format
 msgid "Libraries "
 msgstr "Գրադարաններ "
@@ -37662,11 +37725,11 @@ msgstr "Գրադարաններ։ "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/overdrive.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:116
@@ -37698,6 +37761,7 @@ msgstr "Գրադարաններ։ "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:15
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:108
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:148
 #, c-format
@@ -37760,8 +37824,8 @@ msgstr ""
 "Գրադարանի տացքի և փոխանցման քաղաքականություն &rsaquo; Կառավարում &rsaquo; "
 "Կոհա"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:123
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:37
 #, c-format
 msgid "Library code: "
@@ -37839,7 +37903,7 @@ msgstr "Գրադարանի կառավարում"
 msgid "Library name: "
 msgstr "Գրադարանի անուն։ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:244
 #, c-format
 msgid "Library of Congress"
 msgstr "Կոնգրեսի գրադարան"
@@ -37884,7 +37948,7 @@ msgstr "Գրադարանից օգտվել"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:633
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:903
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:220
@@ -38105,13 +38169,13 @@ msgstr "Հղում"
 msgid "Link a host record to "
 msgstr "Կապիր հյուրընկալող գրառումը "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:897
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #, c-format
 msgid "Link authorities automatically"
 msgstr "Կապիր հեղինակավորները ինքնաշխատ կերպով"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Link copied to the clipboard"
 msgstr "Հղումը պատճենված է միջանկյալ հիշողությունում"
 
@@ -38366,7 +38430,7 @@ msgid "Loading records, please wait..."
 msgstr "Գրառումների բեռնավորում, խնդրում ենք սպասել..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:785
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -38801,9 +38865,9 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:213
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
@@ -38965,8 +39029,8 @@ msgstr "ՄԵԸՔ ձևափոխման ձևանմուշներ %s"
 msgid "MARC modification templates &rsaquo; Tools &rsaquo; Koha"
 msgstr "ՄԵԸՔ ձևափոխման ձևանմուշներ &rsaquo; Գործիքներ &rsaquo; Կոհա"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #, c-format
 msgid "MARC organization code"
 msgstr "ՄԵԸՔ կազմակերպության կոդ"
@@ -39073,7 +39137,7 @@ msgstr "ՄԵԸՔ-ը առանց նյութերի"
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:235
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "MARCOrgCode"
 msgstr "MARCOrgCode"
@@ -41001,7 +41065,7 @@ msgstr "Ձևափոխիր նյութի տեսակը '%s' "
 msgid "Modify items in a batch"
 msgstr "Ձևափոխիր նյութեր փաթեթում"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:40
 #, c-format
 msgid "Modify library "
 msgstr "Ձևափոխիր գրադարանը "
@@ -41417,11 +41481,11 @@ msgstr "MySQL տարբերակ: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:612
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:662
 #, c-format
 msgid "N/A"
 msgstr "Անհասանելի"
@@ -41475,17 +41539,17 @@ msgstr "ՆՏ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:127
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:113
@@ -41601,7 +41665,7 @@ msgid "Name:"
 msgstr "Անուն …"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
@@ -42168,13 +42232,13 @@ msgstr "Պիտակի նոր ուրվագիծ "
 msgid "New label template"
 msgstr "Պիտակի նոր ձևանմուշ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:109
 #, c-format
 msgid "New library"
 msgstr "Նոր գրադարան"
 
 #. %1$s:  library.branchcode | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:46
 #, c-format
 msgid "New library %s "
 msgstr "Նոր գրադարան %s "
@@ -42297,7 +42361,7 @@ msgstr "Նոր երթուղի"
 msgid "New routing list"
 msgstr "Նոր շրջաբերական ցուցակ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:191
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:193
 #, c-format
 msgid "New search"
 msgstr "Նոր փնտրում"
@@ -42507,11 +42571,11 @@ msgstr "Հաջորդ էջը"
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco, (փաստաթղթերի ձևավորող)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:261
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:252
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:266
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:322
@@ -43451,7 +43515,7 @@ msgstr ""
 "կամ ստուգիր քո ՄԳԲ գործընկեր գրադարանի գրառումները։ "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "No temporary directory found."
 msgstr "Ժամանակավոր ուղեցույցը գտնված չէ։"
 
@@ -43492,7 +43556,7 @@ msgstr "Ոչ, մի Ջնջիր"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:290
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
@@ -43562,8 +43626,8 @@ msgstr "Ոչ, մի թարմացրու (N)"
 msgid "No, let me think about it"
 msgstr "Ոչ, թող դրա մասին մտածեմ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:844
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:846
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:845
 #, c-format
 msgid "No, save as new record"
 msgstr "Ոչ, հիշիր որպես նոր գրառում"
@@ -44055,16 +44119,17 @@ msgstr ""
 "հնարավորությունները շատ լայն են, սա կհանգեցնի շատ մեծ հաշվետվությունների, "
 "որը կամ չի ավարտվի կամ համակարգի աշխատանքը կդանդաղի։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:77
 #, c-format
 msgid "Note: For temporary uploads do not select a category."
 msgstr "Նշում։ Ժամանակավոր ներբեռնումների համար դաս մի ընտրիր։"
 
 #. %1$s:  IF ( CAN_user_parameters_manage_auth_values ) -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:78
+#. %2$s:  av_UPLOAD_link = BLOCK 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:79
 #, c-format
-msgid "Note: No upload categories are defined. %s Add values to the "
-msgstr "Նշում. Վերբեռնման դասերը սահմանված չեն: %s Ավելացնել արժեքները "
+msgid "Note: No upload categories are defined. %s %s"
+msgstr "Նշում. Վերբեռնման դասերը սահմանված չեն: %s %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:218
 #, c-format
@@ -44093,13 +44158,13 @@ msgstr "Նշում. նշված երկու դաշտերից մեկը պետք է 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:383
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:108
@@ -44163,7 +44228,7 @@ msgstr "Նշումներ։"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:25
 #, c-format
 msgid "Notes: "
@@ -44696,7 +44761,7 @@ msgstr "ՀՕԱՔ"
 msgid "OPAC - %s %s"
 msgstr "ՀՕԱՔ - %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:228
 #, c-format
 msgid "OPAC info: "
 msgstr "ՀՕԱՔ տեղեկույթ։ "
@@ -44720,13 +44785,13 @@ msgstr "ՀՕԱՔ նշում"
 msgid "OPAC note:"
 msgstr "ՀՕԱՔ նշում։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:33
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
 #, c-format
 msgid "OPAC notes"
 msgstr "ՀՕԱՔ նշումներ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:458
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #, c-format
 msgid "OPAC notes:"
 msgstr "ՀՕԱՔ նշումներ։"
@@ -45405,7 +45470,7 @@ msgstr "Պատվեր"
 msgid "Order ID"
 msgstr "Պատվիրիր ID"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:613
 #, c-format
 msgid "Order ID:"
 msgstr "Պատվերի ID:"
@@ -47209,7 +47274,7 @@ msgid "Patron's record has guaranteed accounts attached."
 msgstr "Հաճախորդի գրառումը ունի կցված երաշխավորված հաշիվներ։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:473
 #, c-format
 msgid "Patron:"
@@ -47731,7 +47796,7 @@ msgid "Permissions (code)"
 msgstr "Թույլատրելիություններ (կոդ)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "Ph: "
 msgstr "Ph: "
 
@@ -47746,7 +47811,7 @@ msgstr "Հեռախոս"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:545
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:632
 #, c-format
@@ -47824,14 +47889,14 @@ msgstr "Վերցնելու գրադարանը տարբեր է։ "
 msgid "Pickup library:"
 msgstr "Վերցնելու գրադարան։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:814
 #, c-format
 msgid "Pickup location"
 msgstr "Վերցնելու վայր"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:243
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:248
 #, c-format
 msgid "Pickup location: "
 msgstr "Վերցնելու վայր։ "
@@ -48294,7 +48359,7 @@ msgstr ""
 "(առնվազն 20 նիշ) "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Please enter a search term."
 msgstr "Խնդրվում է մուտք անել որոնման տերմինը։"
 
@@ -49137,8 +49202,13 @@ msgstr "Գին"
 msgid "Price effective from"
 msgstr "Գինը արդյունավետ է` սկսած"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:32
+#, c-format
+msgid "Price paid"
+msgstr "Վճարված գին"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:661
 #, c-format
 msgid "Price paid:"
 msgstr "Վճարված գին։"
@@ -49682,11 +49752,11 @@ msgstr "Պաշտպանեք"
 msgid "Protect from deletion"
 msgstr "Պաշտպանեք ջնջումից"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:277
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
@@ -49755,7 +49825,7 @@ msgstr "Հանրային նշում։"
 msgid "Public notes"
 msgstr "Հանրային նշումներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:353
 #, c-format
 msgid "Public: "
@@ -51419,8 +51489,8 @@ msgstr "Վերանորոգում"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:364
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 msgid "Repeat this Tag"
 msgstr "Կրկնիր այս ցուցիչը"
 
@@ -51480,7 +51550,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "Փոխարինի գրառումը Z39.50/SRU-ի օգնությամբ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:892
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "Փոխարինիր գրառումը Z39.50/SRU-ի որոնման օգնությամբ"
@@ -51526,12 +51596,12 @@ msgstr "Փոխարինման գին։ "
 msgid "Replied"
 msgstr "Պատասխանեց"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Reply-To: "
 msgstr "Արձագանքիր։ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid "ReplyToDefault"
 msgstr "ReplyToDefault"
@@ -51707,6 +51777,12 @@ msgstr "Պահանջ %s"
 msgid "Request ID"
 msgstr "Պահանջված ID"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:665
+#, c-format
+msgid "Request ID:"
+msgstr "Պահանջիր ID։"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:529
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:195
 #, c-format
@@ -51730,29 +51806,28 @@ msgid "Request article from %s"
 msgstr "Պահանջիր հոդված այստեղից %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:393
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:606
 #, c-format
 msgid "Request details"
 msgstr "Հարցման մանրամասներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:721
 #, c-format
 msgid "Request log"
 msgstr "Պահանջված լոգ"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:450
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
-#, c-format
-msgid "Request number:"
-msgstr "Հարցման համար։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:513
 #, c-format
 msgid "Request specific item type:"
 msgstr "Պահանջիր որոշակի նյութի տեսակ։"
 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
+#, c-format
+msgid "Request type"
+msgstr "Պահանջի տեսակ"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:438
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:652
 #, c-format
 msgid "Request type:"
 msgstr "Պահանջի տեսակ։"
@@ -51828,8 +51903,8 @@ msgstr "Require.js JS համակարգի մոդուլ է"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:129
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:159
@@ -51879,13 +51954,13 @@ msgstr "Require.js JS համակարգի մոդուլ է"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:446
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:768
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
@@ -52528,7 +52603,7 @@ msgstr "Վերադարձիր գործիքներին"
 msgid "Return to where you were"
 msgstr "Վերադարձիր որտեղ որ էիր"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #, c-format
 msgid "Return-Path: "
 msgstr "Return-Path: "
@@ -52540,7 +52615,7 @@ msgstr "Return-Path: "
 msgid "Returned to patron: "
 msgstr "Վերադարձիր հաճախորդին։ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "ReturnpathDefault"
 msgstr "ReturnpathDefault"
@@ -52982,12 +53057,12 @@ msgstr "SMS մատակարար"
 msgid "SMS provider:"
 msgstr "SMS մատակարար։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #, c-format
 msgid "SMTP server"
 msgstr "SMTP Կայան"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:211
 #, c-format
 msgid "SMTP server: "
 msgstr "SMTP կայաններ։ "
@@ -53161,15 +53236,15 @@ msgstr "Շաբաթ օրերը"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:874
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:887
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:869
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:873
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:886
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:205
@@ -53238,14 +53313,14 @@ msgstr "Պահպանել (եթե պահպանել plugin-ը ակտիվացված
 msgid "Save all %s preferences"
 msgstr "Հիշիր բոլոր %s նախապատվությունները"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:881
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:266
 #, c-format
 msgid "Save and continue editing"
 msgstr "Հիշիր և շարունակիր խմբագրումը"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
 #, c-format
 msgid "Save and edit items"
 msgstr "Հիշիր և խմբագրի նյութերը"
@@ -53260,7 +53335,7 @@ msgstr "Հիշեք և վճարեք"
 msgid "Save and preview routing slip"
 msgstr "Հիշիր և նախնական դիտիր շրջաբերականի թերթիկը"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:878
 #, c-format
 msgid "Save and view record"
 msgstr "Հիշիր և դիտիր գրառումը"
@@ -53519,8 +53594,8 @@ msgstr "Պաստառ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:104
@@ -53533,8 +53608,8 @@ msgstr "Պաստառ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:430
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:182
 #: koha-tmpl/intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
@@ -54059,7 +54134,7 @@ msgstr "Փնտրիր համակարգային նախապատվություննե
 msgid "Search targets"
 msgstr "Փնտրման թիրախներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:154
 #, c-format
 msgid "Search term: "
 msgstr "Որոնման տերմին։ "
@@ -54117,12 +54192,12 @@ msgstr "Որոնման տեսակներ։"
 msgid "Search unavailable"
 msgstr "Որոնումը անհնար է"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:122
 #, c-format
 msgid "Search uploads by category"
 msgstr "Փնտրեք վերբեռնումները ըստ դասի"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:151
 #, c-format
 msgid "Search uploads by name or hashvalue"
 msgstr "Փնտրման ներբեռնումներ ըստ անվան կամ hashvalue"
@@ -54263,7 +54338,7 @@ msgid "Section"
 msgstr "Բաժին"
 
 #. %1$s:  BIG_LOO.number | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1022
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1021
 #, c-format
 msgid "Section %s"
 msgstr "Բաժին %s"
@@ -54635,7 +54710,7 @@ msgstr "Ընտրիր օրը։ "
 msgid "Select download format: "
 msgstr "Ընտրիր բեռնաթափման ձևաչափը։ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:57
 #, c-format
 msgid "Select files: "
 msgstr "Ընտրել նիշքերը։ "
@@ -55509,7 +55584,7 @@ msgstr "Դիր կարգավիճակը"
 msgid "Set the date received to today?"
 msgstr "Կարգաբերե՞լ ստացման ամսաթիվը այսօրվանով։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:264
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
 #, c-format
 msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr ""
@@ -55576,7 +55651,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Կարգաբերումներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:902
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55870,7 +55945,7 @@ msgstr "Ցույց տուր %s չլուծված հայց"
 msgid "Show MARC"
 msgstr "Ցույց տուր ՄԵԸՔ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:908
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "Ցույց տուր ՄԵԸՔ փաստաթղթերի կապերը"
@@ -56167,7 +56242,7 @@ msgstr "Ցույց տուր բաժանորդագրությունները"
 msgid "Show suggestion #%s "
 msgstr "Ցույց տուր առաջարկը #%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:911
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
 #, c-format
 msgid "Show tags"
 msgstr "Ցույց տուր ցուցիչները"
@@ -56222,7 +56297,7 @@ msgstr "Մինչ"
 msgid "Single holiday: %s"
 msgstr "Եզակի տոն: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:204
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:137
 #, c-format
@@ -56407,7 +56482,7 @@ msgstr "Ցավում եմ, CAS գրանցումը ձախողվեց։"
 msgid "Sorry, there is no result for your search."
 msgstr "Ցավում եմ, բայց քո որոնման համար արդյունքներ չկան։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:306
 #, c-format
 msgid "Sorry, your request had no results."
 msgstr "Քո փնտրումը անարդյունք է։"
@@ -56851,13 +56926,13 @@ msgstr "Աշխատակազմի նշում"
 msgid "Staff note:"
 msgstr "Աշխատակազմի նշում։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:34
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:35
 #, c-format
 msgid "Staff notes"
 msgstr "Աշխատակազմի նշումներ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:669
 #, c-format
 msgid "Staff notes:"
 msgstr "Աշխատակազմի նշումներ։"
@@ -57013,8 +57088,8 @@ msgid "Start date"
 msgstr "Սկզբի ամսաթիվ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:134
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:378
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:112
 #, c-format
@@ -57029,8 +57104,8 @@ msgstr "Սկզբի ամսաթիվ:"
 msgid "Start date: "
 msgstr "Սկզբի ամսաթիվ: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #, c-format
 msgid "Start defining libraries"
 msgstr "Սկսիր սահմանել գրադարաններ"
@@ -57120,7 +57195,7 @@ msgstr "Վիճակ"
 msgid "State:"
 msgstr "Նահանգ:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:614
 #, c-format
@@ -57252,7 +57327,7 @@ msgstr "Վիճակը փոխված է"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:411
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:637
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1071
@@ -57631,7 +57706,7 @@ msgstr "Խորագրեր։"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:222
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:132
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:153
@@ -57659,16 +57734,16 @@ msgstr "Խորագրեր։"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:773
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:127
@@ -58208,7 +58283,7 @@ msgstr "Վերնասկրիպտ"
 msgid "Supplemental issue "
 msgstr "Հավելյալ համար "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, c-format
 msgid "Supplier metadata"
 msgstr "Մատակարարի մետատվյալներ"
@@ -58285,7 +58360,7 @@ msgid "Switch languages"
 msgstr "Փոխել լեզուները"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:905
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "Անցիր խորացված խմբագրիչին"
@@ -58718,8 +58793,8 @@ msgstr "Ցուցիչը ջնջված է"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1186
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:127
 #, c-format
@@ -58918,7 +58993,7 @@ msgstr "Ձևանմուշ։ "
 msgid "Templates"
 msgstr "Ձևանմուշներ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:211
 #, c-format
 msgid "Temporary"
 msgstr "Ժամանակավոր"
@@ -59867,7 +59942,7 @@ msgstr ""
 "Զեկույցը գործարկելիս ցուցադրված դաշտի պիտակը, օրինակ. «Ընտրիր գրադարանը»:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
@@ -60168,7 +60243,7 @@ msgstr ""
 msgid "The record id "
 msgstr "Գրառման բնութագրիչ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:995
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:994
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "Գրառումը որ ցանկանում ես խմբագրել, գոյություն չունի։"
@@ -60522,11 +60597,11 @@ msgid "There are no late orders."
 msgstr "Չկան ուշացված պատվերներ։"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 msgid "There are no libraries defined."
 msgstr "Չկան սահմանված գրադարաններ․"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "There are no libraries defined. "
@@ -61008,7 +61083,7 @@ msgid "This field is required."
 msgstr "Այս դաշտը պահանջվում է։"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "This file already exists (in this category)."
 msgstr "Նիշքը արդեն առկա է (այս դասում)։"
 
@@ -62325,7 +62400,7 @@ msgstr "Պլագինների գործիք"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:59
@@ -63037,7 +63112,6 @@ msgstr "Փիրուզագույն"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:403
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:110
@@ -63073,10 +63147,10 @@ msgstr "UKMARC"
 msgid "UNIMARC"
 msgstr "UNIMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:82
 #, c-format
-msgid "UPLOAD authorized value category"
-msgstr "UPLOAD լիազորված արժեքի դաս"
+msgid "UPLOAD"
+msgstr "UPLOAD"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -63094,7 +63168,7 @@ msgstr "URL"
 msgid "URL(s)"
 msgstr "URL(s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:227
 #, c-format
 msgid "URL: "
 msgstr "URL: "
@@ -63402,9 +63476,9 @@ msgid "Units:"
 msgstr "Միավորներ։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:105
 #, c-format
 msgid "Units: "
 msgstr "Միավորներ։ "
@@ -63746,21 +63820,21 @@ msgstr "Շտեմարանի կառուցվածքի թարմացում"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/picture-upload.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:275
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
 msgid "Upload"
 msgstr "Բեռնավորում"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:13
 #, c-format
 msgid "Upload &rsaquo; Tools &rsaquo; Koha"
 msgstr "Բեռնավորիր &rsaquo; Գործիքներ &rsaquo; Կոհա"
@@ -63850,7 +63924,7 @@ msgstr "Վերբեռնման թղթապանակ։ "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:124
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:298
 #, c-format
 msgid "Upload file"
 msgstr "Նիշքի բեռնավորում"
@@ -63920,7 +63994,7 @@ msgstr "Բեռնավորիր ավելի պատկերներ"
 msgid "Upload new file"
 msgstr "Բեռնավորիր նոր նիշք"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:53
 #, c-format
 msgid "Upload new files"
 msgstr "Բեռնավորիր նոր նիշքեր"
@@ -63969,7 +64043,7 @@ msgid "Upload patron images in a batch or one at a time "
 msgstr "Բեռնավորիր ընթերցողի պատկերները փաթեթով կամ մեկ առ մեկ "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:11
 #, c-format
 msgid "Upload plugin"
 msgstr "Բեռնավորիր պլագինը"
@@ -63993,7 +64067,7 @@ msgstr "Բեռնավորիր պլագինները "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:106
 #, c-format
 msgid "Upload progress: "
 msgstr "Բեռնավորումը ընթացքում է "
@@ -64013,14 +64087,14 @@ msgstr "Պատկերի արդյունքները "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: "
 msgstr "Բեռնավորիր վիճակը։ "
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Upload status: Cancelled "
 msgstr "Բեռնավորիր վիճակը։ Չեղյալ արված "
 
@@ -64887,7 +64961,7 @@ msgstr "Ցուցադրել "
 msgid "View ILL availability plugins"
 msgstr "Դիտիր հասանելի ՄԳԲ պլագինները"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:783
 #, c-format
 msgid "View ILL requests"
 msgstr "Դիտիր ՄԳԲ հարցումները"
@@ -64937,8 +65011,8 @@ msgstr "Դիտիր զամբյուղը"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View biblio details"
-msgstr "Դիտիր բիբլիոյի մանրամասները"
+msgid "View bibliographic record"
+msgstr "Դիտիր մատենագիտական գրառումը"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:49
 #, c-format
@@ -64946,11 +65020,6 @@ msgid "View bibliographic record enhancement plugins for the staff interface"
 msgstr ""
 "Դիտեք մատենագրական գրառումների բարելավման հավելումները աշխատակազմի միջերեսի "
 "համար"
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
-msgid "View borrower details"
-msgstr "Դիտիր ստացողի մանրամասները"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:173
 #, c-format
@@ -65023,8 +65092,9 @@ msgid "View online payment plugins"
 msgstr "Դիտիր առցանց վճարումների պլագինները"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:617
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:2
 msgid "View patron details"
 msgstr "Դիտեք ընթերցողի մանրամասները"
 
@@ -65953,11 +66023,11 @@ msgstr "Տարին մեկ անգամ տոն։ %s"
 msgid "Yellow"
 msgstr "Դեղին"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:246
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:249
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:329
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:251
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:262
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:321
@@ -66015,7 +66085,7 @@ msgstr "Դեղին"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:379
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:228
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:236
@@ -66106,7 +66176,7 @@ msgstr "Այո, փակիր (Y)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:239
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:282
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:263
@@ -66175,7 +66245,7 @@ msgstr "Այո, ջնջիր այս ենթադաշտը"
 msgid "Yes, delete this tag"
 msgstr "Այո, ջնջիր այս պիտակը"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:833
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "Այո, խմբագրիր առկա նյութերը"
@@ -66207,7 +66277,7 @@ msgid "Yes: Edit existing authority"
 msgstr "Այո։ Խմբագրիր առկա հեղինակավորը"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 msgid "Yes: View existing items"
 msgstr "Այո։ Դիտիր առկա նյութերը"
 
@@ -67114,7 +67184,7 @@ msgstr ""
 "մշակել ցանցից անջատված տացքի սպասող գործողություններով։"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:337
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:339
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr "Քո koha-conf.xml չի պարունակում ճիշտ upload_path."
 
@@ -67192,7 +67262,7 @@ msgstr ""
 msgid "Your report will be generated with the following SQL statement."
 msgstr "Քո հաշվետվությունը կգեներացվի հետևյալ SQL հաստատումներով։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:301
 #, c-format
 msgid "Your request gave the following results:"
 msgstr "Քո հարցումը տվեց հետևյալ արդյունքները։"
@@ -67287,7 +67357,7 @@ msgstr "Z39.50-ը կարող է ուղարկել գրառումներ տարբե
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:325
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:894
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -67360,7 +67430,7 @@ msgstr "Զիպ/փոստային կոդ"
 msgid "ZIP/Postal code:"
 msgstr "Զիպ/փոստային կոդ։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:167
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:620
 #, c-format
@@ -68007,7 +68077,7 @@ msgstr ""
 "կարող է տեղադրել %s պահանջված %s պահումներից, ամենաշատը %s ընդհանուր "
 "պահումներից։"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:815
 #, c-format
 msgid "cancel your request"
 msgstr "չեղարկիր քո հարցումը"
@@ -68161,7 +68231,7 @@ msgstr "պարունակող "
 msgid "contains"
 msgstr "պարունակում է"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #, c-format
 msgid "continue creating your request"
 msgstr "շարունակիր քո հարցման ստեղծումը"
@@ -68322,7 +68392,7 @@ msgstr "'Mana' համակարգային նախապատվության արգել�
 msgid "display detail for this librarian."
 msgstr "այս գրադարանի համար արտածիր մանրամասները"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "do a catalog search"
 msgstr "իրականացրու քարտարանի որոնում"
@@ -69436,8 +69506,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "կամ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:997
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:814
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:374
@@ -69478,19 +69548,6 @@ msgstr "կամ enter"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:346
 msgid "order(s) left"
 msgstr "մնացել են պահում(ներ)"
-
-#. %1$s:  ELSE -
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:81
-#, c-format
-msgid ""
-"otherwise all uploads will be marked as temporary. %s An administrator must "
-"add values to the UPLOAD authorized value category otherwise all uploads "
-"will be marked as temporary. %s "
-msgstr ""
-"հակառակ դեպքում բոլոր վերբեռնումները կնշվեն որպես ժամանակավոր։ %s Կառավարիչը "
-"պետք է ավելացնի արժեքները UPLOAD լիազորված արժեքի դասին, հակառակ դեպքում "
-"բոլոր վերբեռնումները կնշվեն որպես ժամանակավոր։ %s "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -69959,34 +70016,6 @@ msgstr "սուոմի, սուոմեցի, կիելի (Ֆիներեն) Պասի Կ�
 msgid "superlibrarian"
 msgstr "superlibrarian"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:178
-#, c-format
-msgid ""
-"system preference %s Default: ILLDefaultStaffEmail system preference %s "
-msgstr ""
-"համակարգային նախապատվություն %s Լռակյաց: ILLDefaultStaffEmail համակարգային "
-"նախապատվություն %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "system preference %s Default: ReplyToDefault system preference %s "
-msgstr ""
-"համակարգային նախապատվություն %s Լռակյաց: ReplyToDefault համակարգային "
-"նախապատվություն %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:201
-#, c-format
-msgid "system preference %s Default: ReturnpathDefault system preference %s "
-msgstr ""
-"համակարգային նախապատվություն %s Լռակյաց: ReturnpathDefault համակարգային "
-"նախապատվություն %s "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:44
 #, c-format
@@ -69996,7 +70025,7 @@ msgstr ""
 "հնարավորությունը։"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:985
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:984
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -70505,8 +70534,8 @@ msgstr "| Վիճակ: %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:720
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1121
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
@@ -70769,9 +70798,15 @@ msgstr ""
 #~ msgid "%s Country:"
 #~ msgstr "%s Երկիր:"
 
+#~ msgid "%s Default: "
+#~ msgstr "%s Լռակյաց։ "
+
 #~ msgid "%s Edit news item %s Add news item %s "
 #~ msgstr ""
 #~ "%s Խմբագրի նորությունների նյութը %s Ավելացրու նորությունների նյութ %s "
+
+#~ msgid "%s If not filled in defaults to system preference "
+#~ msgstr "%s Եթե լրացված չէ, լռակյացը համակարգային նախապատվությունում "
 
 #~ msgid "%s In transit from %s, to %s, since %s %s "
 #~ msgstr "%s Տեղափոխվում է %s, դեպի %s, սկսած %s %s "
@@ -71690,6 +71725,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Երկուսն էլ ՛Սկզբնաղբյուր՛ և ՛Տեքստ՛ դաշտերը պետք է ունենան "
 #~ "բովանդակություն, որպեսզի մեջբերումը հիշվի։"
+
+#~ msgid "Branch"
+#~ msgstr "Մասնաճյուղ"
 
 #~ msgid "Branches limitation"
 #~ msgstr "Մասնաճյուղերի սահմանափակում"
@@ -73349,6 +73387,9 @@ msgstr ""
 #~ msgid "Report ID:"
 #~ msgstr "Հաշվետվություն "
 
+#~ msgid "Request number:"
+#~ msgstr "Հարցման համար։"
+
 #, fuzzy
 #~ msgid "Requested by"
 #~ msgstr "Պահանջված"
@@ -73439,6 +73480,9 @@ msgstr ""
 #~ msgid "Type of change"
 #~ msgstr "Փոփոխության տեսակ"
 
+#~ msgid "UPLOAD authorized value category"
+#~ msgstr "UPLOAD լիազորված արժեքի դաս"
+
 #~ msgid "Unit cost search"
 #~ msgstr "Միավորի արժեքի փնտրում"
 
@@ -73470,6 +73514,12 @@ msgstr ""
 
 #~ msgid "View authority record"
 #~ msgstr "Դիտիր հեղինակավոր գրառումը"
+
+#~ msgid "View biblio details"
+#~ msgstr "Դիտիր բիբլիոյի մանրամասները"
+
+#~ msgid "View borrower details"
+#~ msgstr "Դիտիր ստացողի մանրամասները"
 
 #~ msgid "View patron"
 #~ msgstr "Դիտել այցելուին"

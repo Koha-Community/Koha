@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:01-0300\n"
+"POT-Creation-Date: 2023-04-17 08:25-0300\n"
 "PO-Revision-Date: 2021-11-30 22:09+0000\n"
 "Last-Translator: aleisha <aleisha@catalyst.net.nz>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -270,6 +270,24 @@ msgstr "%s E mea ana koe: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Rā mutu: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sRā oti mō te tuemi %sWhakamōhiotanga tōmua %sNgā takahanga haere mai %sKua "
+"kī te puringa %sTaki mai tuemi %sTaki atu tuemi %sTē mōhiotia %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1531,30 +1549,6 @@ msgstr ""
 "%sKa tūmanakohia%s %sKua taea%s %sTōmuri%s %sNgaro%s %sNgaro (kīhai i "
 "whiwhi)%s %sNgaro (pau katoa te hoko)%s %sNgaro (kua tūkinotia)%s %sNgaro "
 "(kua ngaro)%s %sTē wātea%s %sMuku%s %sI kerēmetia%s %sI whakamutua%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sRā oti mō te tuemi %sWhakamōhiotanga tōmua %sNgā takahanga haere mai %sKua "
-"kī te puringa %sTaki mai tuemi %sTaki atu tuemi %sTē mōhiotia %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2939,6 +2933,11 @@ msgstr "Taiohi"
 #, c-format
 msgid "Adult"
 msgstr "Pakeke"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Tāpiri tūtohu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6069,6 +6068,11 @@ msgstr "Rā puringa:"
 msgid "Hold date:"
 msgstr "Rā puringa:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6078,6 +6082,11 @@ msgstr "Kāore te puringa e hiahiatia ā muri i te:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Ngā tuhipoka puringa:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Rā puringa:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6678,6 +6687,11 @@ msgstr "Tau karanga tuemi"
 msgid "Item cannot be checked out."
 msgstr "Tē taea te tuemi te taki atu."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "I takina atu (%s)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6697,6 +6711,11 @@ msgstr "Kua tūkinotia te tuemi"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "He taipitopito anō"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Rā oti"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12116,8 +12135,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Hei pūrongo i tēnei hapa, me whakapā atu ki te Kaiwhakahaere Koha. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "Hei pūrongo i tēnei hapa, ka taea te whakapā atu ki te Kaiwhakahaere Koha."
 

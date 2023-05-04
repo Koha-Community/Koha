@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:19-0300\n"
+"POT-Creation-Date: 2023-04-17 08:53-0300\n"
 "PO-Revision-Date: 2021-10-26 04:49+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,6 +280,25 @@ msgstr "%s %s మీ ఉద్దేశ్యం: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s చివరి తేది: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sఅంశం గడువు %sఅడ్వాన్స్ నోటీసు %sనింపండి %sఅంశం చెక్-ఇన్ %s %s అంశం చెక్అవుట్ మరియు "
+"పునరుద్ధరణ %s అంశం చెక్అవుట్ %s %sఇంటర్ లైబ్రరీ లోన్ సిద్ధంగా ఉంది %sఇంటర్ లైబ్రరీ ఋణం "
+"అందుబాటులో లేదు %sదానంతట అదే పునరుద్ధరణ %sతెలియదు %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1527,31 +1546,6 @@ msgstr ""
 "%sఊహించినది%s %sవచ్చారు%s %sఆలస్యం%s %sతప్పిపోయింది%s %sలేదు (అందుకోలేదు)%s %sలేదు "
 "(అమ్ముడైంది)%s %sలేదు (దెబ్బతింది)%s %sలేదు (కోల్పోయింది)%s %sఅందుబాటులో లేదు%s %sతొలగించు%s "
 "%sమధ్య వివాదం%s %sఆగిపోయింది%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sఅంశం గడువు %sఅడ్వాన్స్ నోటీసు %sనింపండి %sఅంశం చెక్-ఇన్ %s %s అంశం చెక్అవుట్ మరియు "
-"పునరుద్ధరణ %s అంశం చెక్అవుట్ %s %sఇంటర్ లైబ్రరీ లోన్ సిద్ధంగా ఉంది %sఇంటర్ లైబ్రరీ ఋణం "
-"అందుబాటులో లేదు %sదానంతట అదే పునరుద్ధరణ %sతెలియదు %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2940,6 +2934,11 @@ msgstr "కిశోర"
 #, c-format
 msgid "Adult"
 msgstr "అడల్ట్"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "ట్యాగ్‌ను జోడించండి"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6022,6 +6021,11 @@ msgstr "తేదీని పట్టుకోండి"
 msgid "Hold date:"
 msgstr "తేదీ ఉంచండి:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "శీర్షికను పట్టుకోండి"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6031,6 +6035,11 @@ msgstr "తర్వాత అవసరం లేదు:"
 #, c-format
 msgid "Hold notes:"
 msgstr "గమనికలను పట్టుకోండి:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "తేదీని పట్టుకోండి"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6613,6 +6622,11 @@ msgstr "అంశం కాల్ నంబర్"
 msgid "Item cannot be checked out."
 msgstr "అంశం చెక్ అవుట్ చేయబడదు."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "అంశం తనిఖీ చేయబడింది"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6632,6 +6646,11 @@ msgstr "అంశం దెబ్బతింది"
 #, c-format
 msgid "Item details"
 msgstr "అంశం వివరాలు"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "గడువు తేదీ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -11967,8 +11986,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "ఈ లోపాన్ని నివేదించడానికి, దయచేసి కోహా నిర్వాహకుడిని సంప్రదించండి. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "ఈ లోపాన్ని నివేదించడానికి, మీరు కోహా నిర్వాహకుడికి ఇమెయిల్ చేయవచ్చు."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

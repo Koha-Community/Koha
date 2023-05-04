@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:09-0300\n"
-"PO-Revision-Date: 2022-11-17 09:40+0000\n"
-"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
+"POT-Creation-Date: 2023-04-17 08:37-0300\n"
+"PO-Revision-Date: 2023-04-25 15:43+0000\n"
+"Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1668678042.980915\n"
+"X-POOTLE-MTIME: 1682437433.604148\n"
 "X-Pootle-Path: /pl/21.05/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -208,9 +208,9 @@ msgid ""
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
-"%s %s %s Raport o problemie został wysłany do administratora Koha. %s Raport "
-"o problemie został wysłany do biblioteki. %s %s Wystąpił problem podczas "
-"wysyłania raportu. Skontaktuj się z biblioteką. %s "
+"%s %s %s Zgłoszenie problemu zostało wysłane do administratora Koha. %s "
+"Zgłoszenie problemu zostało wysłane do biblioteki. %s %s Wystąpił problem "
+"podczas wysyłania zgłoszenia. Skontaktuj się z biblioteką. %s "
 
 #. %1$s: ~ USE Koha ~
 #. %2$s: ~ USE raw ~
@@ -285,6 +285,25 @@ msgstr "%s %s Czy chodziło o: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Data zakończenia: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Wypożyczenia i prolongaty %s Wypożyczenia %s %sWypożyczenie "
+"międzybiblioteczne zrealizowane %sWypożyczenie międzybiblioteczne "
+"niedostępne %sAutomatyczna prolongata %sInne %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1559,33 +1578,6 @@ msgstr ""
 "%sBrakujący (zagubiony)%s %sNiedostępny%s %sUsunięty%s %sReklamowany%s "
 "%sWstrzymany%s "
 
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sTermin zwrotu %sPrzypomnienie przed upływem terminu %sRezerwacje do "
-"odbioru %sPrzypomnienie o rezerwacjach do odbioru %sZwroty %s %s "
-"Wypożyczenia i prolongaty %s Wypożyczenia %s %sWypożyczenie "
-"międzybiblioteczne zrealizowane %sWypożyczenie międzybiblioteczne "
-"niedostępne %sAutomatyczna prolongata %sInne %s"
-
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
@@ -2609,7 +2601,7 @@ msgstr "(gotowe)"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "(filtered from _MAX_ total entries)"
-msgstr "(filtrowany z _MAX_ wyników)"
+msgstr "(filtrowanych z _MAX_ wyników)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, c-format
@@ -2992,6 +2984,11 @@ msgstr "Wiek licealny"
 #, c-format
 msgid "Adult"
 msgstr "Dorosły"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, c-format
+msgid "Advance notice"
+msgstr "Przypomnienie przed upływem terminu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -4542,7 +4539,7 @@ msgstr "Zawartość &nbsp;"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied %d rows to clipboard"
-msgstr "Skopiowano %d wiersz(y) do schowka"
+msgstr "Skopiowano %d wierszy do schowka"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -5340,13 +5337,13 @@ msgstr "Podaj szukany termin"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
-"Podaj swój identyfikator użytkownika%s i i hasło%s, a następnie kliknij "
-"przycisk 'Wyślij' (lub naciśnij Enter)."
+"Podaj swój identyfikator użytkownika%s i hasło%s, a następnie kliknij "
+"przycisk \"Wyślij\" (lub naciśnij enter)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext | html 
@@ -6087,6 +6084,11 @@ msgstr "Data zamówienia"
 msgid "Hold date:"
 msgstr "Data zamówienia:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, c-format
+msgid "Hold filled"
+msgstr "Rezerwacje do odbioru"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6096,6 +6098,11 @@ msgstr "Zamówienie zbędne po:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Uwagi o zamówieniu:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, c-format
+msgid "Hold reminder"
+msgstr "Przypomnienie o zamówieniu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6407,7 +6414,7 @@ msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
 "log in: "
 msgstr ""
-"Jeśli nie posiadasz konta CAS, tylko konto lokalne, możesz się zalogować w: "
+"Jeśli nie posiadasz konta CAS, tylko konto lokalne, możesz się zalogować: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:166
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:190
@@ -6690,6 +6697,11 @@ msgstr "Sygnatura egzemplarza"
 msgid "Item cannot be checked out."
 msgstr "Egzemplarz nie może zostać wypożyczony."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid "Item check-in"
+msgstr "Egzemplarz zwrócony"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6709,6 +6721,11 @@ msgstr "Egzemplarz zniszczony"
 #, c-format
 msgid "Item details"
 msgstr "Szczegóły egzemplarza"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, c-format
+msgid "Item due"
+msgstr "Termin zwrotu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -9055,7 +9072,7 @@ msgstr "Działa dzięki %s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
 #, c-format
 msgid "Pre-adolescent"
-msgstr "Wiek gimnazjalny"
+msgstr "Wiek 9-13 lat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:68
 #, c-format
@@ -9078,9 +9095,9 @@ msgid ""
 "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your "
 "system clipboard.<br><br>To cancel, click this message or press escape."
 msgstr ""
-"Naciśnij <i>ctrl</i> lub <i>⌘</i> + <i>C</i>, aby skopiować dane "
-"tabeli<br>do schowka systemowego.<br><br>Aby anulować, kliknij ten komunikat "
-"lub naciśnij klawisz Escape."
+"Naciśnij <i>Ctrl</i> lub <i>⌘</i> + <i>C</i>, aby skopiować dane tabeli<br>"
+"do schowka systemowego.<br><br>Aby anulować, kliknij ten komunikat lub "
+"naciśnij klawisz Escape."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10589,7 +10606,7 @@ msgstr "Wyświetl 50 egzemplarzy"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Show _MENU_ entries"
-msgstr "Wyświetl na stronie_MENU_"
+msgstr "Wyświetl na stronie _MENU_"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
@@ -10665,7 +10682,7 @@ msgstr "Wyświetlanie 50 egzemplarzy. "
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Showing _START_ to _END_ of _TOTAL_"
-msgstr "Pokaż_START_ do _END_ z_TOTAL_"
+msgstr "Wyświetlanie od _START_ do _END_ z _TOTAL_"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
@@ -10702,7 +10719,7 @@ msgstr "Simple DC-RDF"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:12
 #, c-format
 msgid "Skip to main content"
-msgstr "Przejdź to głównej treści"
+msgstr "Przejdź do głównej treści"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:183
 #, c-format
@@ -10963,7 +10980,7 @@ msgstr "Status:"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "Step one: Enter your user ID%s and password%s"
 msgstr "Krok pierwszy: Wprowadź swój login%s i hasło%s"
 
@@ -11984,7 +12001,9 @@ msgstr "Nie można zamówić tego tytułu, osiągnięto dzienny limit na zamówi
 msgid ""
 "This title cannot be requested because you reached the maximum number of "
 "holds."
-msgstr "Nie można zamówić tego tytułu, osiągnięto maksymalną liczbę zamówień."
+msgstr ""
+"Nie można zamówić tego tytułu, ponieważ osiągnięto maksymalną liczbę "
+"zamówień."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:219
 #, c-format
@@ -12093,8 +12112,8 @@ msgstr "Jeśli chcesz zgłosić błąd, skontaktuj się z administratorem. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
-msgstr "Jeśli chcesz zgłosić błąd, skontaktuj się z administratorem."
+msgid "To report this error, you can email the Koha Administrator. "
+msgstr "Jeśli chcesz zgłosić błąd, skontaktuj się z administratorem. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
 #, c-format
@@ -12460,7 +12479,7 @@ msgstr "Wolumin"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:95
 #, c-format
 msgid "Volume:"
-msgstr "Wolumin:"
+msgstr "Tom:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:110
 #, c-format
@@ -13033,7 +13052,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:166
 msgid "You must select a digestible transport to select digests"
-msgstr "Musisz wybrać dogodny transport dla wybranego księgozbioru"
+msgstr ""
+"Powiadomienie musi być włączone, aby można było włączyć dla niego zestawienie"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:99
 #, c-format

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 13:20-0300\n"
+"POT-Creation-Date: 2023-04-17 08:54-0300\n"
 "PO-Revision-Date: 2018-06-20 06:47+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -273,6 +273,24 @@ msgstr "%s Ita dehan hanesan ne'e: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Data ikus: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sItem fo fila %sAvisu advansadu %sEventu atu hamosu %sRezerva enxe ona "
+"%sItem fo fila %sItem foempresta%sLa hatene %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1511,30 +1529,6 @@ msgstr ""
 "%sHein hela%s %sMai ona%s %sTarde%s %sFalta%s %sFalta (la simu)%s %sFalta "
 "(hotu ona)%s %sFalta (aat tiona)%s %sFalta (lakon)%s %sLa Disponivel%s "
 "%sApaga%s %sReklama ona%s %sHapara ona%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sItem fo fila %sAvisu advansadu %sEventu atu hamosu %sRezerva enxe ona "
-"%sItem fo fila %sItem foempresta%sLa hatene %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2925,6 +2919,11 @@ msgstr "Joven"
 #, c-format
 msgid "Adult"
 msgstr "Adultu"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Aumenta etiketa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6022,6 +6021,11 @@ msgstr "Data rezerva:"
 msgid "Hold date:"
 msgstr "Data rezerva:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6031,6 +6035,11 @@ msgstr "Rezerva ne'e lalika depois de:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Nota kona ba rezerva sira:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Data rezerva:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6617,6 +6626,11 @@ msgstr "Item kota"
 msgid "Item cannot be checked out."
 msgstr "Item ida ne'e labele fo empresta."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Seidauk checked in %s"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6636,6 +6650,11 @@ msgstr "Item aat hela"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Detalle sira tan"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Data atu fo fila"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12005,8 +12024,8 @@ msgstr ""
 "Atu fo hatena konaba sala ne'e, faz favor halo kontaktu ba staf biblioteka. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "Atu fo hatena konaba sala ne'e, faz favor halo kontaktu ba staf biblioteka."
 

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 12:35-0300\n"
+"POT-Creation-Date: 2023-04-17 07:41-0300\n"
 "PO-Revision-Date: 2011-06-21 08:16+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Koha Translation Team\n"
@@ -266,6 +266,22 @@ msgstr "Bunu demək istəyirdiniz: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:138
 #, c-format
 msgid "%s %s End date: "
+msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
 
 #. %1$s:  SWITCH code 
@@ -1465,28 +1481,6 @@ msgid ""
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
 
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
@@ -2629,6 +2623,11 @@ msgstr "Genç"
 #, c-format
 msgid "Adult"
 msgstr "Yetişkin"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Səbətə əlavə et"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -5749,6 +5748,11 @@ msgstr "Saxlama tarixi"
 msgid "Hold date:"
 msgstr "Saxlama tarixi"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "Adı"
+
 # ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
@@ -5760,6 +5764,12 @@ msgstr "Saxlama tarixi"
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Koleksiya ( %s )"
+
+# ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:153
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Saxlama tarixi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6349,6 +6359,11 @@ msgstr "Materyal yer numarası"
 msgid "Item cannot be checked out."
 msgstr "Materyala ödümə verilə bilmir."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Ödəmə alındı"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6368,6 +6383,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Daha Ətraflı"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "İade tarihi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -11751,7 +11771,7 @@ msgstr "Kitabxanada mövcuddur"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, fuzzy, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Kitabxanada mövcuddur"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

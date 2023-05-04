@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:45-0300\n"
+"POT-Creation-Date: 2023-04-17 07:56-0300\n"
 "PO-Revision-Date: 2017-12-15 09:50-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: eu\n"
@@ -267,6 +267,24 @@ msgstr "%s Esan nahi zenuen: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Azken data: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sItzultzeko epemuga %sAurretiazko oharra %sHurrengo gertaerak %sErreserba "
+"egin da %sElementua itzultzea %sElementua maileguan hartzea %sEzezaguna %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1523,30 +1541,6 @@ msgstr ""
 "%sZain%s %sJasoa%s %sAtzeratua%s %sGaldua%s %sGaldua (ez zen inoiz jaso)%s "
 "%sGaldua (likidatua)%s %sGaldua (ondatua)%s %sGaldua (galdua)%s %sEz zen "
 "atera%s %sEzabatua%s %sErreklamatua%s %sGeldirik%s"
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sItzultzeko epemuga %sAurretiazko oharra %sHurrengo gertaerak %sErreserba "
-"egin da %sElementua itzultzea %sElementua maileguan hartzea %sEzezaguna %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2935,6 +2929,11 @@ msgstr "Nerabea"
 #, c-format
 msgid "Adult"
 msgstr "Heldua"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Gehitu etiketa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6075,6 +6074,11 @@ msgstr "Erreserba-data"
 msgid "Hold date:"
 msgstr "Erreserba-data"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6084,6 +6088,11 @@ msgstr "Geroago beharrezkoa ez den erreserba"
 #, c-format
 msgid "Hold notes:"
 msgstr "Erreserba oharra:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Erreserba-data"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6676,6 +6685,11 @@ msgstr "Signatura topográfica del ítem"
 msgid "Item cannot be checked out."
 msgstr "Ezin da mailegatua izan"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Mailegatua (%s)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6695,6 +6709,11 @@ msgstr "Item kaltetua"
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Xehetasun gehiago"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Itzultze data"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12118,8 +12137,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Akats hau zuzentzeko, jarri Kohako Administrariarekin harremanetan."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "Akats hau zuzentzeko, bidal dezakezu eposta bat Kohado Administrariari."
 

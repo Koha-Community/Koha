@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 13:17-0300\n"
+"POT-Creation-Date: 2023-04-17 08:49-0300\n"
 "PO-Revision-Date: 2022-12-08 09:30+0000\n"
 "Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: \n"
@@ -281,6 +281,26 @@ msgstr "%s %s Menade du: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Slutdatum: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sÅterlämningsdatum %sPåminnelse om kommande återlämningsdatum %sInfångad "
+"reservation %sPåminnelse reservation %sÅterlämnande av exemplar %s %s Utlån "
+"och omlån av exemplar %s Utlåning av exemplar %s %sFjärrlån redo %sFjärrlån "
+"otillgängligt %sAutomatiskt omlån %sOkänt %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1557,32 +1577,6 @@ msgstr ""
 "%sFörväntat%s %sAnländ%s %sFörsenat%s %sSaknat%s %sSaknat (aldrig "
 "mottaget)%s %sSaknat (utsålt)%s %sSaknat (skadat)%s %sSaknat (förlorat)%s "
 "%sEj tillgängligt%s %sTa bort%s %sReklamerat%s %sStoppat%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sÅterlämningsdatum %sPåminnelse om kommande återlämningsdatum %sInfångad "
-"reservation %sPåminnelse reservation %sÅterlämnande av exemplar %s %s Utlån "
-"och omlån av exemplar %s Utlåning av exemplar %s %sFjärrlån redo %sFjärrlån "
-"otillgängligt %sAutomatiskt omlån %sOkänt %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2987,6 +2981,11 @@ msgstr "Ungdom"
 #, c-format
 msgid "Adult"
 msgstr "Vuxen"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Lägg till kommentar"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6096,6 +6095,11 @@ msgstr "Reservationsdatum"
 msgid "Hold date:"
 msgstr "Reservationsdatum:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6105,6 +6109,11 @@ msgstr "Reservation behövs inte efter:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Reservationskommentar:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Reservationsdatum"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6706,6 +6715,11 @@ msgstr "Hyllsignatur för exemplar"
 msgid "Item cannot be checked out."
 msgstr "Exemplaret kan inte lånas ut."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Exemplaret återlämnat"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6725,6 +6739,11 @@ msgstr "Exemplar skadat"
 #, c-format
 msgid "Item details"
 msgstr "Exemplarinformation"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Förfallodatum"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12110,8 +12129,8 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "För att rapportera detta fel, vänligen kontakta Koha-administratören. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "För att rapportera detta fel kan du e-posta Koha-administratören."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:37-0300\n"
-"PO-Revision-Date: 2022-11-19 13:56+0000\n"
+"POT-Creation-Date: 2023-04-17 07:43-0300\n"
+"PO-Revision-Date: 2023-05-01 07:55+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bg\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/21.05/bg-Cyrl-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1668866213.142180\n"
+"X-POOTLE-MTIME: 1682927710.821113\n"
 
 #. %1$s:  USE AdditionalContents 
 #. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
@@ -280,6 +280,25 @@ msgstr "%s %s Имаше предвид: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Крайна дата: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%s %s Заемане и презаписване %s Заемане %s %sМеждубиблиотечно заемане "
+"получено %sМеждубиблиотечно заемане не е получено %sАвтоматично презаписване "
+"%sНеизвестно %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1563,32 +1582,6 @@ msgstr ""
 "%sОчаква се%s %sПолучен%s %sЗадържан%s %sЛипсва%s %sЛипсва (не е получен)%s "
 "%sЛипсва (продаден)%s %sЛипсва(повреден)%s %sЛипсва (загубен)%s %sНе е "
 "достъпен%s %sОтчислен%s %s Заявен%s %sСпрян%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sДължим екземпляр %sПредварително известие %sРезервации запълнени "
-"%sНапомняне за резервация %sВръщане %s %s Заемане и презаписване %s Заемане "
-"%s %sМеждубиблиотечно заемане получено %sМеждубиблиотечно заемане не е "
-"получено %sАвтоматично презаписване %sНеизвестно %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -3002,6 +2995,11 @@ msgstr "Деца на възраст (14-17 години)"
 #, c-format
 msgid "Adult"
 msgstr "Възрастен"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, c-format
+msgid "Advance notice"
+msgstr "Предварително уведомление"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -5365,7 +5363,7 @@ msgstr "Въведете думи за търсене"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
@@ -6116,6 +6114,11 @@ msgstr "Дата на резервация"
 msgid "Hold date:"
 msgstr "Дата на резервация:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, c-format
+msgid "Hold filled"
+msgstr "Резервациите запълнени"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6125,6 +6128,11 @@ msgstr "Резервацията не е необходима след:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Бележка за резервацията:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, c-format
+msgid "Hold reminder"
+msgstr "Напомняне за резервация"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6725,6 +6733,11 @@ msgstr "Сигнатура"
 msgid "Item cannot be checked out."
 msgstr "Библиотечният документ не може да бъде зает."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid "Item check-in"
+msgstr "Екземпляра е върнат"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6744,6 +6757,11 @@ msgstr "Библиотечният документ е повреден"
 #, c-format
 msgid "Item details"
 msgstr "Информация за екземпляра"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, c-format
+msgid "Item due"
+msgstr "Екземпляра се очаква"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -11007,7 +11025,7 @@ msgstr "Статус:"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "Step one: Enter your user ID%s and password%s"
 msgstr "Първа стъпка: Въведете своя потребителски id%s и парола%s"
 
@@ -12144,7 +12162,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "За да подадете сигнал за тази грешка, можете да изпратите имейл до "
 "администратора."

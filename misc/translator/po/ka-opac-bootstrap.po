@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:58-0300\n"
+"POT-Creation-Date: 2023-04-17 08:18-0300\n"
 "PO-Revision-Date: 2018-10-30 14:58+0000\n"
 "Last-Translator: Irakli Garibashhvili <irakli@sciencelib.ge>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,6 +269,22 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:138
 #, c-format
 msgid "%s %s End date: "
+msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
 
 #. %1$s:  SWITCH code 
@@ -1482,28 +1498,6 @@ msgid ""
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
 
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
@@ -2491,8 +2485,8 @@ msgid "Accept"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:65
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:65
 #, c-format
 msgid "Access denied"
 msgstr ""
@@ -2641,6 +2635,11 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
 #, c-format
 msgid "Adult"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, c-format
+msgid "Advance notice"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
@@ -3550,9 +3549,9 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:162
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
@@ -5269,9 +5268,9 @@ msgstr ""
 msgid "Fines:"
 msgstr ""
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "Finish"
 msgstr ""
@@ -5695,6 +5694,11 @@ msgstr ""
 msgid "Hold date:"
 msgstr ""
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, c-format
+msgid "Hold filled"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -5703,6 +5707,11 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:318
 #, c-format
 msgid "Hold notes:"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, c-format
+msgid "Hold reminder"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
@@ -6278,6 +6287,11 @@ msgstr ""
 msgid "Item cannot be checked out."
 msgstr ""
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid "Item check-in"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6296,6 +6310,11 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:384
 #, c-format
 msgid "Item details"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, c-format
+msgid "Item due"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
@@ -6454,9 +6473,9 @@ msgstr ""
 msgid "Koha"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr ""
@@ -10016,8 +10035,8 @@ msgstr ""
 msgid "Series title"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #, c-format
 msgid "Session lost"
 msgstr ""
@@ -11554,7 +11573,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
@@ -13561,10 +13580,10 @@ msgstr ""
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr ""

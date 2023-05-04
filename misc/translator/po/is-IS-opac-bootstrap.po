@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:55-0300\n"
+"POT-Creation-Date: 2023-04-17 08:13-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,6 +268,22 @@ msgstr "Varstu að meina: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:138
 #, c-format
 msgid "%s %s End date: "
+msgstr ""
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
 
 #. %1$s:  SWITCH code 
@@ -1464,28 +1480,6 @@ msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
-msgstr ""
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
@@ -2858,6 +2852,11 @@ msgstr "Unglingur;"
 #, c-format
 msgid "Adult"
 msgstr "Fullorðinn"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Bæta við körfu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -5980,6 +5979,11 @@ msgstr "Dagsetning biðstöðu"
 msgid "Hold date:"
 msgstr "Dagsetning biðstöðu"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
 msgid "Hold not needed after:"
@@ -5989,6 +5993,11 @@ msgstr "Sett í bið, mun ekki þurfa eftir"
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Punktar um frátektir:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Dagsetning biðstöðu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6581,6 +6590,11 @@ msgstr "Beiðnanúmer"
 msgid "Item cannot be checked out."
 msgstr "Það er ekki hægt að fá gagnið lánað."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Í útláni ("
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, fuzzy, c-format
 msgid "Item checked in"
@@ -6600,6 +6614,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Meiri útskýringar"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Skiladagsetning"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12003,7 +12022,7 @@ msgstr "Til að breyta færslunni þinni, vinsamlegast hafðu samband við safni
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
 #, fuzzy, c-format
-msgid "To report this error, you can email the Koha Administrator."
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr "Til að breyta færslunni þinni, vinsamlegast hafðu samband við safnið."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125

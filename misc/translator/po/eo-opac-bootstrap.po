@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2023-02-17 12:44-0300\n"
+"POT-Creation-Date: 2023-04-17 07:55-0300\n"
 "PO-Revision-Date: 2021-06-03 23:05+0000\n"
 "Last-Translator: Victor Grousset/tuxayo <victor.grousset@biblibre.com>\n"
 "Language-Team: \n"
@@ -286,6 +286,26 @@ msgstr "%s %s Ĉu vi volis diri: "
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Findato: "
+
+#. %1$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %2$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  ELSIF ( messaging_preference.Ill_ready ) 
+#. %6$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
+#. %7$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid ""
+"%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+"ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+msgstr ""
+"%sEkzemplero redonenda %sFrua atentigo %sOkazontaj eventoj %sRezervo preta "
+"%sRedono de ekzemplero %s %s Prunto kaj renovigo de ekzemplero %s Prunto de "
+"ekzemplero %s %sInterbiblioteka prunto preta %sInterbiblioteka prunto "
+"nehavebla %sNekonata %s"
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -1551,32 +1571,6 @@ msgstr ""
 "%sAtendata%s %sAlvenis%s %sMalfruas%s %sMankas%s %s Mankas (neniam "
 "ricevita)%s %sMankas (elĉerpita)%s %sMankas (difektita)%s %sMankas "
 "(perdita)%s %sNehavebla%s %sForigu%s %sReklamaciata%s %sHaltigita%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sEkzemplero redonenda %sFrua atentigo %sOkazontaj eventoj %sRezervo preta "
-"%sRedono de ekzemplero %s %s Prunto kaj renovigo de ekzemplero %s Prunto de "
-"ekzemplero %s %sInterbiblioteka prunto preta %sInterbiblioteka prunto "
-"nehavebla %sNekonata %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2985,6 +2979,11 @@ msgstr "Adoleskanto"
 #, c-format
 msgid "Adult"
 msgstr "Plenkreskulo"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Aldonu etikedon"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -6108,6 +6107,11 @@ msgstr "Rezervdato:"
 msgid "Hold date:"
 msgstr "Rezervdato:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "HoldTitle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Hold not needed after:"
@@ -6117,6 +6121,11 @@ msgstr "Rezervo ne bezonata post:"
 #, c-format
 msgid "Hold notes:"
 msgstr "Notoj pri rezervoj:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Rezervdato:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6718,6 +6727,11 @@ msgstr "Signaturo de ekzemplero"
 msgid "Item cannot be checked out."
 msgstr "Ne eblas pruntepreni la ekzempleron."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Redono registrita"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Item checked in"
@@ -6737,6 +6751,11 @@ msgstr "Ekzemplero difektita"
 #, c-format
 msgid "Item details"
 msgstr "Detaloj pri ekzemplero"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Redondato"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
@@ -12151,8 +12170,8 @@ msgstr ""
 "Por raporti pri tiu ĉi eraro, bonvolu kontakti la administranton de Koha. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:228
-#, c-format
-msgid "To report this error, you can email the Koha Administrator."
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator. "
 msgstr ""
 "Por raporti pri tiu ĉi eraro, vi povas sendi retpoŝtan mesaĝon al la "
 "administranto de Koha."
