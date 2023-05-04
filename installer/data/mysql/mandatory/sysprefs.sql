@@ -293,6 +293,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IllLog', 0, '', 'If ON, log information about ILL requests', 'YesNo'),
 ('ILLModule','0','If ON, enables the interlibrary loans module.','','YesNo'),
 ('ILLModuleCopyrightClearance','','70|10','Enter text to enable the copyright clearance stage of request creation. Text will be displayed','Textarea'),
+('ILLModuleDisclaimerByType','','','YAML defining disclaimer settings for each ILL request type','Textarea'),
 ('ILLModuleUnmediated','0','','If enabled, try to immediately progress newly placed ILL requests.','YesNo'),
 ('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),
 ('ILLPartnerCode','IL','','Patrons from this patron category will be used as partners to place ILL requests with','free'),
