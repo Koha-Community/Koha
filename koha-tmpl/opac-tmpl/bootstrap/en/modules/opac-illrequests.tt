@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -275,6 +276,44 @@
                                     [% INCLUDE 'ill-availability-table.inc' service=service %]
                                 [% END %]
                             </div> <!-- /#illrequestupdate-form -->
+                        [% ELSIF method == 'typedisclaimer' %]
+                            <h1>Request type disclaimer</h1>
+                            <div id="results" class="page-section">
+                                <h3>Displaying typedisclaimer results</h3>
+                                [% INCLUDE messages %]
+                                <form method="post" id="typedisclaimer-form">
+                                    <fieldset class="rows">
+                                        [% disclaimer.text | $raw %]
+                                        [% SET disc_av_category_code = AuthorisedValues.GetAuthValueDropbox(disclaimer.av_cat) %]
+                                        [% IF disc_av_category_code.count %]
+                                        <br>
+                                            <select name="type_disclaimer_value">
+                                                [% FOR av_option IN disc_av_category_code %]
+                                                    <option value="[% av_option.lib_opac | html %]">[% av_option.lib_opac | html %]</option>
+                                                [% END %]
+                                            </select>
+                                        [% END %]
+                                    </fieldset>
+                                    <fieldset class="action">
+                                        [% FOREACH key IN whole.keys %]
+                                            [% value = whole.$key %]
+                                            [% IF key != 'custom_key' && key != 'custom_value' %]
+                                            <input type="hidden" name="[% key | html %]" value="[% value | html %]">
+                                            [% END %]
+                                        [% END %]
+                                        [% custom_keys = whole.custom_key.split('\0') %]
+                                        [% custom_values = whole.custom_value.split('\0') %]
+                                        [% i = 0 %]
+                                        [% FOREACH custom_key IN custom_keys %]
+                                            <input type="hidden" name="custom_key" value="[% custom_key | html %]">
+                                            <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
+                                        [% i = i + 1 %]
+                                        [% END %]
+                                        <input type="hidden" name="type_disclaimer_submitted" value="1">
+                                        <input type="submit" value="Next" />
+                                    </fieldset>
+                                </form>
+                            </div>
                         [% END # / IF method == 'create' %]
                     </div> <!-- / #illrequests -->
                 [% END # /IF !backends_available %]
