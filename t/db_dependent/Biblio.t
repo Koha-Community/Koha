@@ -653,7 +653,7 @@ subtest 'deletedbiblio_metadata' => sub {
 
 subtest 'DelBiblio' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
@@ -689,10 +689,21 @@ subtest 'DelBiblio' => sub {
             }
         }
     );
+
+    my $order_basket = $builder->build( { source => 'Aqbasket' } );
+
+    my $orderinfo = {
+        biblionumber => $biblio->biblionumber,
+        basketno     => $order_basket->{basketno},
+    };
+    my $order = $builder->build_object(
+        { class => 'Koha::Acquisition::Orders', value => $orderinfo } );
+
     C4::Biblio::DelBiblio($biblio->biblionumber); # Or $biblio->delete
     is( $subscription->get_from_storage, undef, 'subscription should be deleted on biblio deletion' );
     is( $serial->get_from_storage, undef, 'serial should be deleted on biblio deletion' );
     is( $subscription_history->get_from_storage, undef, 'subscription history should be deleted on biblio deletion' );
+    is( $order->get_from_storage->deleted_biblionumber, $biblio->biblionumber, 'biblionumber of order has been moved to deleted_biblionumber column' );
 };
 
 subtest 'MarcFieldForCreatorAndModifier' => sub {
