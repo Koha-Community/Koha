@@ -659,6 +659,7 @@ DROP TABLE IF EXISTS `aqorders`;
 CREATE TABLE `aqorders` (
   `ordernumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha to each line',
   `biblionumber` int(11) DEFAULT NULL COMMENT 'links the order to the biblio being ordered (biblio.biblionumber)',
+  `deleted_biblionumber` int(11) DEFAULT NULL COMMENT 'links the order to the deleted bibliographic record (deletedbiblio.biblionumber)',
   `entrydate` date DEFAULT NULL COMMENT 'the date the bib was added to the basket',
   `quantity` smallint(6) DEFAULT NULL COMMENT 'the quantity ordered',
   `currency` varchar(10) DEFAULT NULL COMMENT 'the currency used for the purchase',
