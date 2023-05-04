@@ -602,6 +602,7 @@ sub to_api_mapping {
     return {
         basketno                      => 'basket_id',
         biblionumber                  => 'biblio_id',
+        deleted_biblionumber          => 'deleted_biblio_id',
         budget_id                     => 'fund_id',
         budgetdate                    => undef,                    # unused
         cancellationreason            => 'cancellation_reason',
