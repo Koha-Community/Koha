@@ -315,7 +315,7 @@
                                                 [% END %]
 
                                                 [% UNLESS bibitemloo.forced_hold_level && ( bibitemloo.forced_hold_level == 'item' || bibitemloo.forced_hold_level == 'record' ) %]
-                                                    [% IF bibitemloo.object.item_groups %]
+                                                    [% IF Koha.Preference('EnableItemGroupHolds') && bibitemloo.object.item_groups %]
                                                         <li>
                                                             <label for="itemtype">Request specific item group:</label>
                                                             <select name="item_group_id_[% bibitemloo.biblionumber | html %]" id="item_group_id_[% bibitemloo.biblionumber | html %]">
