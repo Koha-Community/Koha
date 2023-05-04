@@ -27,7 +27,8 @@ use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
-use Koha::Illrequest::Availability;
+use Koha::Illrequest::Workflow::Availability;
+use Koha::Illrequest::Workflow::TypeDisclaimer;
 use Koha::Libraries;
 use Koha::Token;
 
@@ -106,55 +107,42 @@ if ( $backends_available ) {
 
 
     } elsif ( $op eq 'create' ) {
-        # We're in the process of creating a request
+        # Load the ILL backend
         my $request = Koha::Illrequest->new->load_backend( $params->{backend} );
-        # Does this backend enable us to insert an availability stage and should
-        # we? If not, proceed as normal.
-        if (
-            # If the user has elected to continue with the request despite
-            # having viewed availability info, this flag will be set
-            C4::Context->preference("ILLCheckAvailability")
-              && !$params->{checked_availability}
-              && $request->_backend_capability( 'should_display_availability', $params )
-        ) {
-            # Establish which of the installed availability providers
-            # can service our metadata
-            my $availability = Koha::Illrequest::Availability->new($params);
-            my $services = $availability->get_services({
-                ui_context => 'staff'
-            });
-            if (scalar @{$services} > 0) {
-                # Modify our method so we use the correct part of the
-                # template
-                $op = 'availability';
-                $params->{method} = 'availability';
-                delete $params->{stage};
-                # Prepare the metadata we're sending them
-                my $metadata = $availability->prep_metadata($params);
-                $template->param(
-                    whole         => $params,
-                    metadata      => $metadata,
-                    services_json => scalar encode_json($services),
-                    services      => $services
-                );
-            } else {
-                # No services can process this metadata, so continue as normal
-                my $backend_result = $request->backend_create($params);
-                $template->param(
-                    whole   => $backend_result,
-                    request => $request
-                );
-                handle_commit_maybe($backend_result, $request);
-            }
+
+        # Before request creation operations - Preparation
+        my $availability =
+          Koha::Illrequest::Workflow::Availability->new( $params, 'staff' );
+        my $type_disclaimer =
+          Koha::Illrequest::Workflow::TypeDisclaimer->new( $params, 'staff' );
+
+        # ILLCheckAvailability operation
+        if ($availability->show_availability($request)) {
+            $op = 'availability';
+            $template->param(
+                $availability->availability_template_params($params)
+            )
+        # ILLModuleDisclaimerByType operation
+        } elsif ( $type_disclaimer->show_type_disclaimer($request)) {
+            $op = 'typedisclaimer';
+            $template->param(
+                $type_disclaimer->type_disclaimer_template_params($params)
+            );
+        # Ready to create ILL request
         } else {
             my $backend_result = $request->backend_create($params);
+
+            # After creation actions
+            if ( $params->{type_disclaimer_submitted} ) {
+                $type_disclaimer->after_request_created($params, $request);
+            }
+
             $template->param(
                 whole   => $backend_result,
                 request => $request
             );
             handle_commit_maybe($backend_result, $request);
         }
-
     } elsif ( $op eq 'migrate' ) {
         # We're in the process of migrating a request
         my $request = Koha::Illrequests->find($params->{illrequest_id});
@@ -313,7 +301,7 @@ if ( $backends_available ) {
             # Prepare availability searching, if required
             # Get the definition for the z39.50 plugin
             if ( C4::Context->preference('ILLCheckAvailability') ) {
-                my $availability = Koha::Illrequest::Availability->new($request->metadata);
+                my $availability = Koha::Illrequest::Workflow::Availability->new($request->metadata);
                 my $services = $availability->get_services({
                     ui_context => 'partners',
                     metadata => {
