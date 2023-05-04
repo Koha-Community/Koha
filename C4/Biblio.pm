@@ -519,6 +519,10 @@ sub DelBiblio {
         $hold->cancel({ skip_holds_queue => 1 });
     }
 
+    # We update any existing orders
+    my $orders = $biblio->orders;
+    $orders->update({ deleted_biblionumber => $biblionumber}, { no_triggers => 1 });
+
     unless ( $params->{skip_record_index} ){
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( $biblionumber, "recordDelete", "biblioserver" );
