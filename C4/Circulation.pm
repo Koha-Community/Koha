@@ -2138,7 +2138,6 @@ sub AddReturn {
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
     my $update_loc_rules = C4::Context->yaml_preference('UpdateItemLocationOnCheckin');
-    map { $update_loc_rules->{$_} = $update_loc_rules->{$_}[0] } keys %$update_loc_rules; #We can only move to one location so we flatten the arrays
     if ($update_loc_rules) {
         if (defined $update_loc_rules->{_ALL_}) {
             if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->permanent_location; }
@@ -2154,8 +2153,8 @@ sub AddReturn {
         else {
             foreach my $key ( keys %$update_loc_rules ) {
                 if ( $update_loc_rules->{$key} eq '_PERM_' ) { $update_loc_rules->{$key} = $item->permanent_location; }
-                if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
-                if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
+                elsif ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
+                if ( (defined $item->location && $item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && ( !defined $item->location || $item->location eq '' ) && $update_loc_rules->{$key} ne '') ) {
                     $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
                     $item->location($update_loc_rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1});
                     last;
