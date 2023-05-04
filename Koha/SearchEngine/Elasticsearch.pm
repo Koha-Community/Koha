@@ -224,9 +224,10 @@ sub get_elasticsearch_mappings {
                 if ($suggestible) {
                     $mappings->{properties}{ $name . '__suggestion' } = _get_elasticsearch_field_config('suggestible', $es_type);
                 }
-                # Sort is a bit special as it can be true, false, undef.
-                # We care about "true" or "undef",
+                # Sort should be defined in mappings as 1 (Yes) or 0 (No)
+                # Previously, we also supported ~ (Undef) in the file
                 # "undef" means to do the default thing, which is make it sortable.
+                # This is preserved in order to not cause breakages for existing installs
                 if (!defined $sort || $sort) {
                     $mappings->{properties}{ $name . '__sort' } = _get_elasticsearch_field_config('sort', $es_type);
                     $sort_fields{$self->index}{$name} = 1;
