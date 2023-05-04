@@ -34,7 +34,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion SetVersion sanitize_zero_date update get_db_entries get_atomic_updates run_atomic_updates );
+    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion NewVersion SetVersion sanitize_zero_date update get_db_entries get_atomic_updates run_atomic_updates has_non_dynamic_row_format );
 };
 
 =head1 NAME
@@ -1037,6 +1037,30 @@ sub sanitize_zero_date {
             WHERE CAST($column_name AS CHAR(19)) = '0000-00-00 00:00:00';
         |);
     }
+}
+
+=head3 has_non_dynamic_row_format
+
+Return the number of tables with row_format that is not Dynamic
+
+=cut
+
+sub has_non_dynamic_row_format {
+    my ($class) = @_;
+    my $database = C4::Context->config('database');
+    my $count = 0;
+    if ($database){
+        my $dbh = C4::Context->dbh;
+        my $sql = q#
+            SELECT count(table_name)
+            FROM information_schema.tables
+            WHERE
+                table_schema = ?
+                AND row_format != "Dynamic"
+        #;
+        ( $count ) = $dbh->selectrow_array($sql, undef, $database);
+    }
+    return $count;
 }
 
 =head1 AUTHOR

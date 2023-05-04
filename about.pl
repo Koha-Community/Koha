@@ -36,6 +36,7 @@ use Encode;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user get_user_subpermissions );
 use C4::Context;
+use C4::Installer;
 use C4::Installer::PerlModules;
 
 use Koha;
@@ -54,7 +55,6 @@ use Koha::Illrequest::Config;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::Logger;
 use Koha::Filter::MARC::ViewPolicy;
-use Koha::Installer;
 
 use C4::Members::Statistics;
 
@@ -627,10 +627,7 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 
 #BZ 28267: Warn administrators if there are database rows with a format other than 'DYNAMIC'
 {
-    my $db_row_format_result = Koha::Installer->check_db_row_format();
-    if ( my $count = $db_row_format_result->{count} ){
-        $template->param( warnDbRowFormat => $count );
-    }
+    $template->param( warnDbRowFormat => C4::Installer->has_non_dynamic_row_format );
 }
 
 my %versions = C4::Context::get_versions();

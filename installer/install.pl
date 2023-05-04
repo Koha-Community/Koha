@@ -32,7 +32,6 @@ use C4::Installer;
 use C4::Installer::PerlModules;
 
 use Koha;
-use Koha::Installer;
 
 my $query = CGI->new;
 my $step  = $query->param('step');
@@ -187,8 +186,7 @@ elsif ( $step && $step == 2 ) {
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
 
-                my $db_row_format_result = Koha::Installer->check_db_row_format();
-                if ( my $count = $db_row_format_result->{count} ){
+                if ( my $count = $installer->has_non_dynamic_row_format ) {
                     $template->param( warnDbRowFormat => $count );
                     $template->param( error => "InnoDB row format" );
                 }
