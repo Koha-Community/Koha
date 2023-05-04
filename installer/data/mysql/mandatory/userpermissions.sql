@@ -10,7 +10,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_accounts', 'Manage Account Debit and Credit Types' ),
    ( 3, 'manage_circ_rules', 'Manage circulation rules'),
    ( 3, 'manage_circ_rules_from_any_libraries', 'Manage circ rules for any libraries'),
-   ( 3, 'manage_sysprefs', 'Manage global system preferences'),
+   ( 3, 'manage_sysprefs', 'Manage system preferences'),
    ( 3, 'manage_libraries', 'Manage libraries and library groups'),
    ( 3, 'manage_itemtypes', 'Manage item types'),
    ( 3, 'manage_auth_values', 'Manage authorized values'),

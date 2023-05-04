@@ -146,7 +146,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_sysprefs' -%]
         <span class="sub_permission manage_sysprefs_subpermission">
-            Manage global system preferences
+            Manage system preferences
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_libraries' -%]
