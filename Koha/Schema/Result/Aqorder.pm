@@ -39,6 +39,13 @@ primary key and unique identifier assigned by Koha to each line
 
 links the order to the biblio being ordered (biblio.biblionumber)
 
+=head2 deleted_biblionumber
+
+  data_type: 'integer'
+  is_nullable: 1
+
+links the order to the deleted bibliographic record (deletedbiblio.biblionumber)
+
 =head2 entrydate
 
   data_type: 'date'
@@ -438,6 +445,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "deleted_biblionumber",
+  { data_type => "integer", is_nullable => 1 },
   "entrydate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "quantity",
@@ -805,8 +814,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-06 16:45:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7vMNLDNO0/Bpng9sBFyyBg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:31:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bt8GMBWcWja5oa7r+8Vbig
 
 __PACKAGE__->belongs_to(
   "basket",
