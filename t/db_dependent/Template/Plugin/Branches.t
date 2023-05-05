@@ -220,27 +220,42 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'branch specific js and css' => sub {
 
-    plan tests => 2;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
-    my $newbranch = $builder->build({
+    my $newbranch_with = $builder->build({
         source => 'Branch',
         value => {
-            branchcode => 'AAA',
-            branchname => 'Specific Branch',
             userjs => 'console.log(\'Hello World\');',
             usercss => 'body { background-color: blue; }'
+        }
+    });
+    my $newbranch_none = $builder->build({
+        source => 'Branch',
+        value => {
+            userjs => '',
+            usercss => ''
         }
     });
 
     my $plugin = Koha::Template::Plugin::Branches->new();
 
-    my $userjs = $plugin->GetBranchSpecificJS($newbranch->{branchcode});
-    is($userjs, $newbranch->{userjs},'received correct JS string from function');
+    my $userjs = $plugin->GetBranchSpecificJS($newbranch_with->{branchcode});
+    is($userjs, $newbranch_with->{userjs},'received correct JS string from function');
 
-    my $usercss = $plugin->GetBranchSpecificCSS($newbranch->{branchcode});
-    is($usercss, $newbranch->{usercss},'received correct CSS string from function');
+    my $usercss = $plugin->GetBranchSpecificCSS($newbranch_with->{branchcode});
+    is($usercss, $newbranch_with->{usercss},'received correct CSS string from function');
+
+    $userjs = $plugin->GetBranchSpecificJS($newbranch_none->{branchcode});
+    $usercss = $plugin->GetBranchSpecificCSS($newbranch_none->{branchcode});
+    is($userjs, q{},'received correct blank string from function when branch has none');
+    is($usercss, q{},'received correct blank string from function when branch has none');
+
+    $userjs = $plugin->GetBranchSpecificJS();
+    $usercss = $plugin->GetBranchSpecificCSS();
+    is($userjs, q{},'received correct blank string from function when no branch set');
+    is($usercss, q{},'received correct blank string from function when no branch set');
 
     $schema->storage->txn_rollback;
 };
