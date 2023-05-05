@@ -328,62 +328,73 @@ $(document).ready(function () {
                     },
                 },
                 {
-                    data: "", // author
+                    data: "", // Request details
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        const author = display_extended_attribute(
-                            row,
-                            "author"
-                        );
-                        if (author) return author;
-                        const articleAuthor = display_extended_attribute(
-                            row,
-                            "article_author"
-                        );
-                        if (articleAuthor) return articleAuthor;
-                        return "";
-                    },
-                },
-                {
-                    data: "", // title
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "title");
-                    },
-                },
-                {
-                    data: "", // article_title
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "article_title");
-                    },
-                },
-                {
-                    data: "", // issue
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "issue");
-                    },
-                },
-                {
-                    data: "", // volume
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "volume");
-                    },
-                },
-                {
-                    data: "", // year
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "year");
-                    },
-                },
-                {
-                    data: "", // pages
-                    orderable: false,
-                    render: function (data, type, row, meta) {
-                        return display_extended_attribute(row, "pages");
+                        let display = "";
+                        if (
+                            display_extended_attribute(row, "article_title") !==
+                            ""
+                        ) {
+                            display +=
+                                '<span style="display:block"> Article: ' +
+                                display_extended_attribute(
+                                    row,
+                                    "article_title"
+                                ) +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "title") !== "") {
+                            display +=
+                                '<span style="display:block"> Title: ' +
+                                display_extended_attribute(row, "title") +
+                                "</span>";
+                        }
+                        if (
+                            display_extended_attribute(
+                                row,
+                                "article_author"
+                            ) !== ""
+                        ) {
+                            display +=
+                                '<span style="display:block"> Article author: ' +
+                                display_extended_attribue(
+                                    row,
+                                    "article_author"
+                                ) +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "author") !== "") {
+                            display +=
+                                '<span style="display:block"> Author: ' +
+                                display_extended_attribute(row, "author") +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "issue") !== "") {
+                            display +=
+                                '<span style="display:block"> Issue: ' +
+                                display_extended_attribute(row, "issue") +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "volume") !== "") {
+                            display +=
+                                '<span style="display:block"> Volume: ' +
+                                display_extended_attribute(row, "volume") +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "year") !== "") {
+                            display +=
+                                '<span style="display:block"> Year: ' +
+                                display_extended_attribute(row, "year") +
+                                "</span>";
+                        }
+                        if (display_extended_attribute(row, "pages") !== "") {
+                            display +=
+                                '<span style="display:block"> Pages: ' +
+                                display_extended_attribute(row, "pages") +
+                                "</span>";
+                        }
+                        return display;
                     },
                 },
                 {

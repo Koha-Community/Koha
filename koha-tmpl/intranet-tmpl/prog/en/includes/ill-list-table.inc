@@ -9,13 +9,7 @@
         <tr id="ill_requests_header">
             <th scope="col">Request ID</th>
             <th scope="col">Batch</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="author" data-related-search-on="value">Author</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="title" data-related-search-on="value">Title</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="article_title" data-related-search-on="value">Article title</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="issue" data-related-search-on="value">Issue</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="volume" data-related-search-on="value">Volume</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="year" data-related-search-on="value">Year</th>
-            <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="pages" data-related-search-on="value">Pages</th>
+            <th scope="col">Request details</th>
             <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="type" data-related-search-on="value">Request type</th>
             <th scope="col">Order ID</th>
             <th scope="col">Patron</th>
