@@ -30,7 +30,6 @@ use C4::Barcodes::ValueBuilder;
 use C4::Context;
 
 use Koha::Items;
-use Koha::Item;
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
