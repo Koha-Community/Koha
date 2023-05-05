@@ -330,6 +330,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 illrequests
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Illrequest>
+
+=cut
+
+__PACKAGE__->has_many(
+  "illrequests",
+  "Koha::Schema::Result::Illrequest",
+  { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 item_groups
 
 Type: has_many
@@ -586,8 +601,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-06 14:23:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:j4elmpNlSt3eMlzF1yXCxg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:10:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xDa15D5QckMdwVzVy4FX2g
 
 __PACKAGE__->has_many(
   "biblioitem",

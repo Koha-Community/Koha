@@ -43,6 +43,7 @@ Patron associated with request
 =head2 biblio_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 Potential bib linked to request
@@ -187,7 +188,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "biblio_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "due_date",
   {
     data_type => "datetime",
@@ -244,6 +245,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("illrequest_id");
 
 =head1 RELATIONS
+
+=head2 biblio
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblio",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblio_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 borrowernumber
 
@@ -331,8 +352,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 18:44:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:on9OCRON/U0uR+m9aPIKPg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:10:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1VhNc8tMnvCpBYaj90YOiQ
 
 __PACKAGE__->has_many(
   "comments",
