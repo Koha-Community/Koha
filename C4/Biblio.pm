@@ -677,8 +677,10 @@ sub LinkBibHeadingsToAuthorities {
             elsif ( C4::Context->preference('AutoCreateAuthorities') ) {
                 if ( _check_valid_auth_link( $current_link, $field ) ) {
                     $results{'linked'}->{ $heading->display_form() }++;
-                }
-                elsif ( !$match_count ) {
+                } elsif ( $match_count > 1 ) {
+                    $results{'unlinked'}->{ $heading->display_form() }++;
+                    push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'MULTIPLE_MATCH', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
+                } elsif ( !$match_count ) {
                     my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
                     my $marcrecordauth = MARC::Record->new();
                     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
@@ -762,6 +764,10 @@ sub LinkBibHeadingsToAuthorities {
                     $results{'unlinked'}->{ $heading->display_form() }++;
                     push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'NONE_FOUND', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
                 }
+            }
+            elsif ( $match_count > 1 ) {
+                $results{'unlinked'}->{ $heading->display_form() }++;
+                push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'MULTIPLE_MATCH', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
             }
             else {
                 $results{'unlinked'}->{ $heading->display_form() }++;
