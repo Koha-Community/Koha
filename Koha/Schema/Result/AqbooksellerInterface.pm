@@ -147,6 +147,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:54:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NOk5VsJp5v7nTw39qxrEbw
 
+sub koha_object_class {
+    'Koha::Acquisition::Bookseller::Interface';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Bookseller::Interfaces';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
