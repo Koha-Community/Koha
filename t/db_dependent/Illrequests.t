@@ -191,63 +191,53 @@ subtest 'store borrowernumber change also updates holds' => sub {
 
 subtest 'Working with related objects' => sub {
 
-    plan tests => 7;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
-
-    my $patron = $builder->build({ source => 'Borrower' });
-    my $illrq = $builder->build({
-        source => 'Illrequest',
-        value => { borrowernumber => $patron->{borrowernumber} }
-    });
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
-
-    isa_ok($illrq_obj->patron, 'Koha::Patron',
-           "OK accessing related patron.");
-
-    $builder->build({
-        source => 'Illrequestattribute',
-        value  => { illrequest_id => $illrq_obj->illrequest_id, type => 'X' }
-    });
-    $builder->build({
-        source => 'Illrequestattribute',
-        value  => { illrequest_id => $illrq_obj->illrequest_id, type => 'Y' }
-    });
-    $builder->build({
-        source => 'Illrequestattribute',
-        value  => { illrequest_id => $illrq_obj->illrequest_id, type => 'Z' }
-    });
-
-    is($illrq_obj->illrequestattributes->count, Koha::Illrequestattributes->search->count,
-       "Fetching expected number of Illrequestattributes for our request.");
-
-    my $illrq1 = $builder->build({ source => 'Illrequest' });
-    $builder->build({
-        source => 'Illrequestattribute',
-        value  => { illrequest_id => $illrq1->{illrequest_id}, type => 'X' }
-    });
-
-    is($illrq_obj->illrequestattributes->count + 1, Koha::Illrequestattributes->search->count,
-       "Fetching expected number of Illrequestattributes for our request.");
-
-    is($illrq_obj->biblio, undef, "->biblio returns undef if no biblio");
-    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
-    my $req_bib = $builder->build_object({
-        class => 'Koha::Illrequests',
-        value => {
-            biblio_id      => $biblio->biblionumber
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $illrq  = $builder->build_object(
+        {   class => 'Koha::Illrequests',
+            value => { borrowernumber => $patron->id, biblio_id => undef }
         }
-    });
-    isa_ok($req_bib->biblio, 'Koha::Biblio', "OK accessing related biblio");
+    );
 
-    $illrq_obj->delete;
-    is(Koha::Illrequestattributes->search->count, 1,
-       "Correct number of illrequestattributes after delete.");
+    isa_ok( $illrq->patron, 'Koha::Patron', "OK accessing related patron." );
 
-    isa_ok(Koha::Patrons->find($patron->{borrowernumber}), 'Koha::Patron',
-           "Borrower was not deleted after illrq delete.");
+    $builder->build(
+        {   source => 'Illrequestattribute',
+            value  => { illrequest_id => $illrq->illrequest_id, type => 'X' }
+        }
+    );
+    $builder->build(
+        {   source => 'Illrequestattribute',
+            value  => { illrequest_id => $illrq->illrequest_id, type => 'Y' }
+        }
+    );
+    $builder->build(
+        {   source => 'Illrequestattribute',
+            value  => { illrequest_id => $illrq->illrequest_id, type => 'Z' }
+        }
+    );
+
+    my $rs = Koha::Illrequestattributes->search( { illrequest_id => $illrq->id } );
+
+    is( $illrq->extended_attributes->count,
+        $rs->count, "Fetching expected number of Illrequestattributes for our request." );
+
+    is( $illrq->biblio, undef, "->biblio returns undef if no biblio" );
+    my $biblio  = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $req_bib = $builder->build_object(
+        {   class => 'Koha::Illrequests',
+            value => { biblio_id => $biblio->biblionumber }
+        }
+    );
+    isa_ok( $req_bib->biblio, 'Koha::Biblio', "OK accessing related biblio" );
+
+    $illrq->delete;
+    is( $rs->count, 0, "Correct number of illrequestattributes after delete." );
+
+    isa_ok( Koha::Patrons->find( $patron->id ), 'Koha::Patron', "Borrower was not deleted after illrq delete." );
 
     $schema->storage->txn_rollback;
 };
