@@ -62,6 +62,67 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       allow-owner: true
+"/public/patrons/{patron_id}/checkouts":
+  post:
+    x-mojo-to: Checkouts#add
+    operationId: addCheckoutPublic
+    tags:
+      - checkouts
+      - patrons
+    summary: Add a new checkout
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing information about the new checkout
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkout"
+      - name: confirmation
+        in: query
+        description: A JWT confirmation token
+        required: false
+        type: string
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Created checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkout"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Cannot create checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "412":
+        description: Precondition failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      allow-owner: true
 "/public/patrons/{patron_id}/guarantors/can_see_charges":
   put:
     x-mojo-to: Patrons#guarantors_can_see_charges

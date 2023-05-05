@@ -315,6 +315,8 @@ paths:
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password~1expiration_date"
   "/public/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1public~1biblios~1{biblio_id}"
+  "/public/checkouts/availability":
+    $ref: ./paths/checkouts.yaml#/~1public~1checkouts~1availability
   "/public/items":
     $ref: "./paths/items.yaml#/~1public~1items"
   "/public/biblios/{biblio_id}/items":
@@ -329,6 +331,8 @@ paths:
     $ref: ./paths/public_oauth.yaml#/~1public~1oauth~1login~1{provider_code}~1{interface}
   "/public/patrons/{patron_id}/article_requests/{article_request_id}":
     $ref: "./paths/article_requests.yaml#/~1public~1patrons~1{patron_id}~1article_requests~1{article_request_id}"
+  "/public/patrons/{patron_id}/checkouts":
+    $ref: "./paths/public_patrons.yaml#/~1public~1patrons~1{patron_id}~1checkouts"
   "/public/patrons/{patron_id}/guarantors/can_see_charges":
     $ref: "./paths/public_patrons.yaml#/~1public~1patrons~1{patron_id}~1guarantors~1can_see_charges"
   "/public/patrons/{patron_id}/guarantors/can_see_checkouts":

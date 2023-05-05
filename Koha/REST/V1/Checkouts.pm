@@ -100,6 +100,50 @@ sub get {
     };
 }
 
+=head3 _check_availability
+
+Internal function to call CanBookBeIssued and return an appropriately filtered
+set return
+
+=cut
+
+sub _check_availability {
+    my ( $c, $patron, $item ) = @_;
+
+    my $inprocess       = 0;                   # What does this do?
+    my $ignore_reserves = 0;                   # Don't ignore reserves
+    my $params          = { item => $item };
+
+    my ( $impossible, $confirmation, $alerts, $messages ) =
+      C4::Circulation::CanBookBeIssued( $patron, undef, undef, $inprocess,
+        $ignore_reserves, $params );
+
+    if ( $c->stash('is_public') ) {
+
+        # Upgrade some confirmations to blockers
+        my @should_block =
+          qw/TOO_MANY ISSUED_TO_ANOTHER RESERVED RESERVED_WAITING TRANSFERRED PROCESSING AGE_RESTRICTION/;
+        for my $block (@should_block) {
+            if ( exists( $confirmation->{$block} ) ) {
+                $impossible->{$block} = $confirmation->{$block};
+                delete $confirmation->{$block};
+            }
+        }
+
+        # Remove any non-public info that's returned by CanBookBeIssued
+        my @restricted_keys =
+          qw/issued_borrowernumber issued_cardnumber issued_firstname issued_surname resborrowernumber resbranchcode rescardnumber reserve_id resfirstname resreservedate ressurname item_notforloan/;
+        for my $key (@restricted_keys) {
+            delete $confirmation->{$key};
+            delete $impossible->{$key};
+            delete $alerts->{$key};
+            delete $messages->{$key};
+        }
+    }
+
+    return ( $impossible, $confirmation, { %{$alerts}, %{$messages} } );
+}
+
 =head3 get_availability
 
 Controller function that handles retrieval of Checkout availability
@@ -111,16 +155,10 @@ sub get_availability {
     my $user = $c->stash('koha.user');
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
-    my $inprocess = 0; # What does this do?
-    my $ignore_reserves = 0; # Don't ignore reserves
     my $item   = Koha::Items->find( $c->param('item_id') );
-    my $params = {
-        item => $item
-    };
 
-    my ( $impossible, $confirmation, $alerts, $messages ) =
-      C4::Circulation::CanBookBeIssued( $patron, undef, undef, $inprocess, $ignore_reserves,
-        $params );
+    my ( $impossible, $confirmation, $warnings ) =
+      $c->_check_availability( $patron, $item );
 
     my $confirm_keys = join( ":", sort keys %{$confirmation} );
     $confirm_keys = $user->id . ":" . $item->id . ":" . $confirm_keys;
@@ -129,7 +167,7 @@ sub get_availability {
     my $response = {
         blockers           => $impossible,
         confirms           => $confirmation,
-        warnings           => { %{$alerts}, %{$messages} },
+        warnings           => $warnings,
         confirmation_token => $token
     };
 
@@ -174,20 +212,8 @@ sub add {
             );
         }
 
-        my $inprocess       = 0;                   # What does this do?
-        my $ignore_reserves = 0;                   # Don't ignore reserves
-        my $params          = { item => $item };
-
-        # Call 'CanBookBeIssued'
-        my ( $impossible, $confirmation, $alerts, $messages ) =
-          C4::Circulation::CanBookBeIssued(
-             $patron,
-             undef,
-             undef,
-             $inprocess,
-             $ignore_reserves,
-             $params
-        );
+        my ( $impossible, $confirmation, $warnings ) =
+          $c->_check_availability( $patron, $item );
 
         # * Fail for blockers - render 403
         if ( keys %{$impossible} ) {
