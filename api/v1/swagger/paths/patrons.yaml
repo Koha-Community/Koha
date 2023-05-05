@@ -405,6 +405,11 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/patron"
+      - name: x-koha-welcome
+        in: header
+        required: false
+        description: If set to 'email' triggers the sending of a welcome email
+        type: string
     consumes:
       - application/json
     produces:

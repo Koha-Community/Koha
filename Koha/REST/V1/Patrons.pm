@@ -22,6 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Database;
 use Koha::Exceptions;
 use Koha::Patrons;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 
 use List::MoreUtils qw(any);
 use Scalar::Util qw( blessed );
@@ -114,6 +115,38 @@ sub add {
                 my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 my $patron = Koha::Patron->new_from_api($body)->store;
+
+                if ( $c->req->headers->header('x-koha-welcome') ) {
+
+                    # if we manage to find a valid email address, send notice
+                    if ( $patron->notice_email_address ) {
+                        my $letter = GetPreparedLetter(
+                            module      => 'members',
+                            letter_code => 'WELCOME',
+                            branchcode  => $patron->branchcode,
+                            ,
+                            lang   => $patron->lang || 'default',
+                            tables => {
+                                'branches'  => $patron->branchcode,
+                                'borrowers' => $patron->borrowernumber,
+                            },
+                            want_librarian => 1,
+                        );
+
+                        if ($letter) {
+                            my $message_id = EnqueueLetter(
+                                {
+                                    letter                 => $letter,
+                                    borrowernumber         => $patron->id,
+                                    to_address             => $patron->notice_email_address,
+                                    message_transport_type => 'email'
+                                }
+                            );
+                            SendQueuedMessages( { message_id => $message_id } );
+                        }
+                    }
+                }
+
                 $patron->extended_attributes(
                     [
                         map { { code => $_->{type}, attribute => $_->{value} } }

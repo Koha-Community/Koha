@@ -35,6 +35,7 @@ use Koha::Exceptions::Patron::Attribute;
 use Koha::Old::Patrons;
 use Koha::Patron::Attributes;
 use Koha::Patron::Debarments qw( AddDebarment );
+use Koha::Notice::Messages;
 
 use JSON qw(encode_json);
 
@@ -302,7 +303,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 24;
+        plan tests => 25;
 
         $schema->storage->txn_begin;
 
@@ -316,28 +317,6 @@ subtest 'add() tests' => sub {
 
         # Mock early, so existing mandatory attributes don't break all the tests
         my $mocked_patron = Test::MockModule->new('Koha::Patron');
-        $mocked_patron->mock(
-            'extended_attributes',
-            sub {
-
-                if ($extended_attrs_exception) {
-                    if ( $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::NonRepeatable'
-                        or $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint'
-                      )
-                    {
-                        $extended_attrs_exception->throw(
-                            attribute => Koha::Patron::Attribute->new(
-                                { code => $code, attribute => $attr }
-                            )
-                        );
-                    }
-                    else {
-                        $extended_attrs_exception->throw( type => $type );
-                    }
-                }
-                return [];
-            }
-        );
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $newpatron = $patron->to_api;
@@ -403,18 +382,21 @@ subtest 'add() tests' => sub {
         # Set a date-time field
         $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
 
-        $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
+        $t->post_ok("//$userid:$password@/api/v1/patrons" => { 'x-koha-welcome' => 'email' } => json => $newpatron)
           ->status_is(201, 'Patron created successfully')
           ->header_like(
             Location => qr|^\/api\/v1\/patrons/\d*|,
             'SWAGGER3.4.1'
           )
           ->json_has('/patron_id', 'got a patron_id')
-          ->json_is( '/cardnumber'    => $newpatron->{ cardnumber })
-          ->json_is( '/surname'       => $newpatron->{ surname })
-          ->json_is( '/firstname'     => $newpatron->{ firstname })
-          ->json_is( '/date_of_birth' => $newpatron->{ date_of_birth }, 'Date field set (Bug 28585)' )
-          ->json_is( '/last_seen'     => $newpatron->{ last_seen }, 'Date-time field set (Bug 28585)' );
+          ->json_is( '/cardnumber'    => $newpatron->{cardnumber})
+          ->json_is( '/surname'       => $newpatron->{surname})
+          ->json_is( '/firstname'     => $newpatron->{firstname})
+          ->json_is( '/date_of_birth' => $newpatron->{date_of_birth}, 'Date field set (Bug 28585)' )
+          ->json_is( '/last_seen'     => $newpatron->{last_seen}, 'Date-time field set (Bug 28585)' );
+
+        my $p = Koha::Patrons->find( { cardnumber => $newpatron->{cardnumber} } );
+        is( Koha::Notice::Messages->search({ borrowernumber => $p->borrowernumber })->count, 1 , "Patron got welcome notice" );
 
         $newpatron->{userid} = undef; # force regeneration
         warning_like {
@@ -427,6 +409,24 @@ subtest 'add() tests' => sub {
         subtest 'extended_attributes handling tests' => sub {
 
             plan tests => 19;
+
+            $mocked_patron->mock(
+                'extended_attributes',
+                sub {
+
+                    if ($extended_attrs_exception) {
+                        if (   $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::NonRepeatable'
+                            or $extended_attrs_exception eq 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint' )
+                        {
+                            $extended_attrs_exception->throw(
+                                attribute => Koha::Patron::Attribute->new( { code => $code, attribute => $attr } ) );
+                        } else {
+                            $extended_attrs_exception->throw( type => $type );
+                        }
+                    }
+                    return [];
+                }
+            );
 
             my $patrons_count = Koha::Patrons->search->count;
 
