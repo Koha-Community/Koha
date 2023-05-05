@@ -270,8 +270,8 @@ subtest "to_api() tests" => sub {
     ok( !exists $api_city->{postal_code}, 'Attribute removed' );
 
     # Pick a class that won't have a mapping for the API
-    my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
-    is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no overloaded to_api_mapping method, return TO_JSON' );
+    my $action_log = $builder->build_object({ class => 'Koha::ActionLogs' });
+    is_deeply( $action_log->to_api, $action_log->TO_JSON, 'If no overloaded to_api_mapping method, return TO_JSON' );
 
     my $biblio = $builder->build_sample_biblio();
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
@@ -545,8 +545,8 @@ subtest "to_api_mapping() tests" => sub {
 
     $schema->storage->txn_begin;
 
-    my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
-    is_deeply( $illrequest->to_api_mapping, {}, 'If no to_api_mapping present, return empty hashref' );
+    my $action_log = $builder->build_object({ class => 'Koha::ActionLogs' });
+    is_deeply( $action_log->to_api_mapping, {}, 'If no to_api_mapping present, return empty hashref' );
 
     $schema->storage->txn_rollback;
 };
