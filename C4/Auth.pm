@@ -1378,8 +1378,6 @@ sub checkauth {
         OpacAuthorities                       => C4::Context->preference("OpacAuthorities"),
         OpacBrowser                           => C4::Context->preference("OpacBrowser"),
         TagsEnabled                           => C4::Context->preference("TagsEnabled"),
-        OPACUserJS                            => C4::Context->preference("OPACUserJS"),
-        OPACUserCSS                           => C4::Context->preference("OPACUserCSS"),
         intranetcolorstylesheet               => C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet                    => C4::Context->preference("intranetstylesheet"),
         IntranetNav                           => C4::Context->preference("IntranetNav"),

@@ -353,6 +353,8 @@ sub to_api_mapping {
         branchip         => 'ip',
         branchnotes      => 'notes',
         marcorgcode      => 'marc_org_code',
+        opacusercss      => undef,
+        opacuserjs       => undef
     };
 }
 

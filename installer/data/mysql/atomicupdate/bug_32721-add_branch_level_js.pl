@@ -7,19 +7,19 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
-        if( !column_exists( 'branches', 'userjs' ) ) {
+        if( !column_exists( 'branches', 'opacuserjs' ) ) {
           $dbh->do(q{
-              ALTER TABLE branches ADD COLUMN `userjs` longtext DEFAULT NULL AFTER `public`
+              ALTER TABLE branches ADD COLUMN `opacuserjs` longtext DEFAULT NULL AFTER `public`
           });
 
-          say $out "Added column 'branches.userjs'";
+          say $out "Added column 'branches.opacuserjs'";
         }
-        if( !column_exists( 'branches', 'usercss' ) ) {
+        if( !column_exists( 'branches', 'opacusercss' ) ) {
           $dbh->do(q{
-              ALTER TABLE branches ADD COLUMN `usercss` longtext DEFAULT NULL AFTER `userjs`
+              ALTER TABLE branches ADD COLUMN `opacusercss` longtext DEFAULT NULL AFTER `opacuserjs`
           });
 
-          say $out "Added column 'branches.usercss'";
+          say $out "Added column 'branches.opacusercss'";
         }
     },
 };
