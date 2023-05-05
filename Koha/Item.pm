@@ -336,7 +336,6 @@ sub move_to_deleted {
     return Koha::Database->new->schema->resultset('Deleteditem')->create($item_infos);
 }
 
-
 =head3 effective_itemtype
 
 Returns the itemtype for the item based on whether item level itemtypes are set or not.

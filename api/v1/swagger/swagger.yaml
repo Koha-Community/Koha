@@ -197,6 +197,8 @@ paths:
     $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}~1renewals"
   "/checkouts/{checkout_id}/renewal":
     $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}~1renewal"
+  "/checkouts/availability":
+    $ref: "./paths/checkouts.yaml#/~1checkouts~1availability"
   /circulation-rules/kinds:
     $ref: ./paths/circulation-rules.yaml#/~1circulation-rules~1kinds
   /cities:
@@ -520,6 +522,11 @@ parameters:
     in: path
     name: item_id
     required: true
+    type: integer
+  item_id_qp:
+    description: Internal item identifier
+    in: query
+    name: item_id
     type: integer
   job_id_pp:
     description: Job internal identifier

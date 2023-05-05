@@ -61,6 +61,68 @@
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
+  post:
+    x-mojo-to: Checkouts#add
+    operationId: addCheckout
+    tags:
+      - checkouts
+      - patrons
+    summary: Add a new checkout
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing information about the new checkout
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkout"
+      - name: confirmation
+        in: query
+        description: A JWT confirmation token
+        required: false
+        type: string
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Created checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/checkout"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Cannot create checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating checkout
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "412":
+        description: Precondition failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
 "/checkouts/{checkout_id}":
   get:
     x-mojo-to: Checkouts#get
@@ -257,6 +319,41 @@
           $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Checkout not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+"/checkouts/availability":
+  get:
+    x-mojo-to: Checkouts#get_availability
+    operationId: availabilityCheckouts
+    tags:
+      - checkouts
+    summary: Get checkout availability
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_qp"
+      - $ref: "../swagger.yaml#/parameters/item_id_qp"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Availability
+        schema:
+          type: "object"
+      "403":
+        description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
