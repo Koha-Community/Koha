@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-12-21 06:31+0000\n"
+"PO-Revision-Date: 2023-04-20 06:39+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.05/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1671604279.597141\n"
+"X-POOTLE-MTIME: 1681972763.558061\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2378,9 +2378,9 @@ msgid ""
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"haseł wzorcowych (ustaw opcję <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> na "
-"wartość 'Zezwalaj')."
+"haseł wzorcowych (ustaw opcję <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities\""
+">BiblioAddsAuthorities</a> na wartość \"Zezwalaj\")."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2677,30 +2677,28 @@ msgstr ""
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
-msgstr ""
+msgstr "Stosuj domyślne wartości ustawione w szablonach"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
-msgstr ""
+msgstr "podczas tworzenia nowych rekordów"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
 "editing the existing record"
-msgstr ""
+msgstr "po zmianie szablonu podczas edycji istniejącego rekordu"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
 "(duplicating)"
-msgstr ""
+msgstr "podczas tworzenia nowego rekordu na podstawie istniejącego (powielania)"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
-msgstr ""
-"wprowadzone pola pomagają w poprawnym zastąpieniu haseł autorów przez Z39.50."
+msgstr "po zaimportowaniu rekordu przez Z39.50"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -2723,8 +2721,8 @@ msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# All values of repeating tags "
 "and subfields will be printed with the given BibTeX tag."
 msgstr ""
-"Wszystkie wartości etykiet i podpól zostaną wydrukowane ze znacznikami "
-"BibTeX."
+"Wszystkie wartości powtarzalnych pól i podpól zostaną wydrukowane z podanymi "
+"znacznikami BibTeX."
 
 # Cataloging > Exporting
 msgid ""
@@ -2738,9 +2736,9 @@ msgid ""
 "subfields as targets for a repeating BibTex tag, use the following format: "
 "BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )."
 msgstr ""
-"Użyj wzoru, aby określić pola/podpola marc jako powtarzające znaczniki "
-"BibTeX: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( np. uwagi: [501$a, "
-"505$g] )."
+"Aby określić wiele pól/podpól MARC jako źródło dla powtarzanych znaczników "
+"BibTeX, użyj wzoru: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] (np. uwagi: "
+"[501$a, 505$g])."
 
 # Cataloging > Exporting
 msgid ""
@@ -2748,7 +2746,7 @@ msgid ""
 "the BT_TAG to replace the bibtex record type with a field value of your "
 "choosing."
 msgstr ""
-"Użyj '@' ( z cudzysłowem) jako BT_TAG, żeby zastąpić typ rekordu bibtex z "
+"Użyj '@' (z cudzysłowem) jako BT_TAG, żeby zastąpić typ rekordu BibTeX z "
 "wybraną wartością pola."
 
 # Cataloging > Exporting
@@ -2756,7 +2754,7 @@ msgid ""
 "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the "
 "format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
 msgstr ""
-"Użyj jedną linię na znacznik według wzoru BT_TAG: TAG$SUBFIELD ( np. lccn: "
+"Użyj jedną linię na znacznik według wzoru BT_TAG: TAG$SUBFIELD (np. lccn: "
 "010$a )."
 
 # Cataloging > Interface
@@ -3182,7 +3180,8 @@ msgid ""
 "cataloguing.pref#RisExportAdditionalFields# All values of repeating tags and "
 "subfields will be printed with the given RIS tag."
 msgstr ""
-"Wszystkie wartości etykiet i podpól zostaną wydrukowane ze znacznikami RIS."
+"Wszystkie wartości powtarzalnych pól i podpól zostaną wydrukowane z podanymi "
+"znacznikami RIS."
 
 # Cataloging > Exporting
 msgid ""
@@ -3196,8 +3195,9 @@ msgid ""
 "subfields as targets for a repeating RIS tag, use the following format: "
 "RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )."
 msgstr ""
-"Użyj wzoru, aby określić pola/podpola MARC jako powtarzające znaczniki "
-"RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( np. NT: [501$a, 505$g] )."
+"Aby określić wiele pól/podpól MARC jako źródło dla powtarzanych znaczników "
+"RIS, użyj wzoru: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] (np. NT: [501$a, "
+"505$g])."
 
 # Cataloging > Exporting
 msgid ""
@@ -3213,8 +3213,8 @@ msgid ""
 "cataloguing.pref#RisExportAdditionalFields# Use one line per tag in the "
 "format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )."
 msgstr ""
-"Użyj jedną linię na znacznik według wzoru RIS_TAG: TAG$SUBFIELD ( np. LC: "
-"010$a )."
+"Użyj jedną linię na znacznik według wzoru RIS_TAG: TAG$SUBFIELD (np. LC: 010$"
+"a )."
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# Don't separate"
@@ -4387,22 +4387,18 @@ msgstr ""
 "wczytany zamiast barkodu egzemplarza."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Do"
-msgstr "Przesyłaj"
+msgstr "Potwierdź przekazanie"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
-msgstr "Nie przesyłaj"
+msgstr "Nie potwierdzaj przekazania"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
 "when the modal is dismissed without clicking 'Yes'."
-msgstr ""
-", gdy egzemplarz zostanie zwrócony do biblioteki macierzystej automatycznie."
+msgstr "automatycznie, gdy okno zostanie zamknięte bez kliknięcia \"Tak\"."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -11887,8 +11883,8 @@ msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
 msgstr ""
-"Jeśli opcja zostanie włączona użytkownik może użyć 'Zapomniałeś hasła' lub "
-"prosi bibliotekarza"
+"Jeśli opcja zostanie wyłączona, użytkownik musi użyć \"Zapomniałeś hasła\" "
+"lub poprosić bibliotekarza"
 
 # Patrons > Security
 msgid "patrons.pref#EnableExpiredPasswordReset# reset their password."
