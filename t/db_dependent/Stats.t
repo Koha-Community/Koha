@@ -19,6 +19,7 @@
 
 use Modern::Perl;
 use Test::More tests => 1;
+use Test::Exception;
 
 use C4::Context;
 use C4::Stats qw( UpdateStats );
@@ -29,14 +30,15 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 subtest 'UpdateStats' => sub {
-    plan tests => 17;
-    is (UpdateStats () ,undef, "UpdateStats returns undef if no params");
+    plan tests => 16;
+
+    throws_ok { UpdateStats() } 'Koha::Exceptions::BadParameter', 'UpdateStats called without params';
 
     my $params = {
                   branch => "BRA",
                   itemnumber => 31,
                   borrowernumber => 5,
-                  amount =>5.1,
+                  amount => 5.1,
                   other => "bla",
                   itemtype => "BK",
                   location => "LOC",
@@ -64,13 +66,14 @@ subtest 'UpdateStats' => sub {
     isnt ($return_error,'',"UpdateStats returns undef and croaks if type is undef");
 
     # returns undef and croaks if mandatory params are missing
-    my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout recall);
-    my @allowed_accounts_types = qw (writeoff payment);
-    my @circulation_mandatory_keys = qw (branch borrowernumber itemnumber ccode itemtype); #don't check type here
-    my @accounts_mandatory_keys = qw (branch borrowernumber amount); #don't check type here
+    my @allowed_circulation_types  = @Koha::Statistic::allowed_circulation_types;
+    my @allowed_accounts_types     = @Koha::Statistic::allowed_accounts_types;
+    my @circulation_mandatory_keys = @Koha::Statistic::mandatory_circulation_keys;
+    my @accounts_mandatory_keys    = @Koha::Statistic::mandatory_accounts_keys;
 
     my @missing_errors = ();
     foreach my $key (@circulation_mandatory_keys) {
+        next if $key eq 'type';
         my $value = $params->{$key};
         delete $params->{$key};
         foreach my $type (@allowed_circulation_types) {
@@ -82,6 +85,7 @@ subtest 'UpdateStats' => sub {
         $params->{$key} = $value;
     }
     foreach my $key (@accounts_mandatory_keys) {
+        next if $key eq 'type';
         my $value = $params->{$key};
         delete $params->{$key};
         foreach my $type (@allowed_accounts_types) {
@@ -94,14 +98,6 @@ subtest 'UpdateStats' => sub {
 
     }
     is (join (", ", @missing_errors),'',"UpdateStats returns undef and croaks if mandatory params are missing");
-
-    # returns undef and croaks if forbidden params are given
-    $params -> {type} = "return";
-    $params -> {newparam} = "true";
-    eval {UpdateStats($params)};
-    $return_error = $@;
-    isnt ($return_error,'',"UpdateStats returns undef and croaks if a forbidden param is given");
-    delete $params->{newparam};
 
     # save the params in the right database fields
     $dbh->do(q|DELETE FROM statistics|);
@@ -124,7 +120,7 @@ subtest 'UpdateStats' => sub {
     is ($params->{branch},         $line->{branch},         "UpdateStats save branch param in branch field of statistics table");
     is ($params->{type},           $line->{type},           "UpdateStats save type param in type field of statistics table");
     is ($params->{borrowernumber}, $line->{borrowernumber}, "UpdateStats save borrowernumber param in borrowernumber field of statistics table");
-    cmp_ok($params->{amount},'==', $line->{value},          "UpdateStats save amount param in value field of statistics table");
+    is ($params->{value},          $line->{value},          "UpdateStats save amount param in value field of statistics table");
     is ($params->{other},          $line->{other},          "UpdateStats save other param in other field of statistics table");
     is ($params->{itemtype},       $line->{itemtype},       "UpdateStats save itemtype param in itemtype field of statistics table");
     is ($params->{location},       $line->{location},       "UpdateStats save location param in location field of statistics table");

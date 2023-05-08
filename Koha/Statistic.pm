@@ -1,5 +1,7 @@
 package Koha::Statistic;
 
+# Copyright 2019, 2023 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -27,7 +29,7 @@ use base qw(Koha::Object);
 
 our @allowed_accounts_types     = qw( writeoff payment );
 our @allowed_circulation_types  = qw( renew issue localuse return onsite_checkout recall item_found item_lost );
-our @mandatory_accounts_keys    = qw( type branch borrowernumber amount );
+our @mandatory_accounts_keys    = qw( type branch borrowernumber value );    # note that amount is mapped to value
 our @mandatory_circulation_keys = qw( type branch borrowernumber itemnumber ccode itemtype );
 
 =head1 NAME
@@ -48,7 +50,8 @@ Koha::Statistic - Koha Statistic Object class
     itemnumber         : itemnumber
     borrowernumber     : borrowernumber
     categorycode       : patron category
-    amount             : transaction amount
+    amount             : transaction amount (legacy parameter name)
+    value              : transaction amount
     other              : sipmode
     itemtype           : itemtype
     ccode              : collection code
@@ -67,67 +70,42 @@ Koha::Statistic - Koha Statistic Object class
 sub new {
     my ( $class, $params ) = @_;
 
-    # make some controls
-    return () if !defined $params;
+    Koha::Exceptions::BadParameter->throw( parameter => $params ) if !$params || ref($params) ne 'HASH';
+    Koha::Exceptions::WrongParameter->throw( name => 'type', value => $params->{type} ) if !$params->{type};
 
-    # change these arrays if new types of transaction or new parameters are allowed
-    my @allowed_keys =
-        qw (type branch amount other itemnumber itemtype borrowernumber ccode location categorycode interface);
-
-    my @mandatory_keys = ();
-    if ( !exists $params->{type} or !defined $params->{type} ) {
-        croak("UpdateStats did not received type param");
+    if ( exists $params->{amount} ) {    # legacy amount parameter still supported
+        $params->{value} //= delete $params->{amount};
     }
-    if ( grep ( $_ eq $params->{type}, @allowed_circulation_types ) ) {
-        @mandatory_keys = @mandatory_circulation_keys;
-    } elsif ( grep ( $_ eq $params->{type}, @allowed_accounts_types ) ) {
-        @mandatory_keys = @mandatory_accounts_keys;
+
+    my $category;
+    if ( grep { $_ eq $params->{type} } @allowed_circulation_types ) {
+        $category = 'circulation';
+    } elsif ( grep { $_ eq $params->{type} } @allowed_accounts_types ) {
+        $category = 'accounts';
     } else {
-        croak( "UpdateStats received forbidden type param: " . $params->{type} );
-    }
-    my @missing_params = ();
-    for my $mykey (@mandatory_keys) {
-        push @missing_params, $mykey if !grep ( /^$mykey/, keys %$params );
-    }
-    if ( scalar @missing_params > 0 ) {
-        croak( "UpdateStats did not received mandatory param(s): " . join( ", ", @missing_params ) );
-    }
-    my @invalid_params = ();
-    for my $myparam ( keys %$params ) {
-        push @invalid_params, $myparam unless grep { $_ eq $myparam } @allowed_keys;
-    }
-    if ( scalar @invalid_params > 0 ) {
-        croak( "UpdateStats received invalid param(s): " . join( ", ", @invalid_params ) );
+        Koha::Exceptions::WrongParameter->throw( name => 'type', value => $params->{type} );
     }
 
-    # get the parameters
-    my $branch         = $params->{branch};
-    my $type           = $params->{type};
-    my $borrowernumber = exists $params->{borrowernumber} ? $params->{borrowernumber} : '';
-    my $itemnumber     = exists $params->{itemnumber}     ? $params->{itemnumber}     : undef;
-    my $amount         = exists $params->{amount}         ? $params->{amount}         : 0;
-    my $other          = exists $params->{other}          ? $params->{other}          : '';
-    my $itemtype       = exists $params->{itemtype}       ? $params->{itemtype}       : '';
-    my $location       = exists $params->{location}       ? $params->{location}       : undef;
-    my $ccode          = exists $params->{ccode}          ? $params->{ccode}          : '';
-    my $categorycode   = exists $params->{categorycode}   ? $params->{categorycode}   : undef;
-    my $interface      = exists $params->{interface}      ? $params->{interface}      : undef;
+    my @mandatory_keys = $category eq 'circulation' ? @mandatory_circulation_keys : @mandatory_accounts_keys;
+    my @missing        = map { exists $params->{$_} ? () : $_ } @mandatory_keys;
+    Koha::Exceptions::MissingParameter->throw( parameter => join( ',', @missing ) ) if @missing;
 
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $datetime = Koha::Database->new->schema->storage->datetime_parser->format_datetime( dt_from_string() );
     return $class->SUPER::new(
         {
-            datetime       => $dtf->format_datetime( dt_from_string() ),
-            branch         => $branch,
-            type           => $type,
-            value          => $amount,
-            other          => $other,
-            itemnumber     => $itemnumber,
-            itemtype       => $itemtype,
-            location       => $location,
-            borrowernumber => $borrowernumber,
-            categorycode   => $categorycode,
-            ccode          => $ccode,
-            interface      => $interface,
+            borrowernumber => $params->{borrowernumber},    # no longer sending empty string (changed 2023)
+            branch         => $params->{branch},
+            categorycode   => $params->{categorycode},
+            ccode          => exists $params->{ccode} ? $params->{ccode} : q{},
+            datetime       => $datetime,
+            interface      => $params->{interface},
+            itemnumber     => $params->{itemnumber},
+            itemtype       => exists $params->{itemtype} ? $params->{itemtype} : q{},
+            location       => $params->{location},
+            other          => exists $params->{other} ? $params->{other} : q{},
+            type           => $params->{type},
+            value          => exists $params->{value} ? $params->{value} : 0,
+
         }
     );
 }
