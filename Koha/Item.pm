@@ -131,6 +131,10 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
+        if( $self->itemlost ) {
+            $self->_add_statistic('item_lost'); # should be quite rare when adding item
+        }
+
     } else { # ModItem
 
         $action = 'modify';
@@ -186,15 +190,12 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        # If item was lost and has now been found,
-        # reverse any list item charges if necessary.
-        if (    exists $updated_columns{itemlost}
-            and $updated_columns{itemlost} <= 0
-            and $pre_mod_item->itemlost > 0 )
-        {
-            $self->_set_found_trigger($pre_mod_item);
+        if( exists $updated_columns{itemlost} && !$updated_columns{itemlost} && $pre_mod_item->itemlost ) { # item found again
+            $self->_set_found_trigger($pre_mod_item); # reverse any list item charges if necessary
+            $self->_add_statistic('item_found');
+        } elsif( exists $updated_columns{itemlost} && $updated_columns{itemlost} && !$pre_mod_item->itemlost ) { # item lost
+            $self->_add_statistic('item_lost');
         }
-
     }
 
     my $result = $self->SUPER::store;
@@ -215,6 +216,20 @@ sub store {
     ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
 
     return $result;
+}
+
+sub _add_statistic {
+    my ( $self, $type ) = @_;
+    C4::Stats::UpdateStats({
+        type           => $type,
+        branch         => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
+        borrowernumber => undef,
+        categorycode   => undef,
+        itemnumber     => $self->itemnumber,
+        ccode          => $self->ccode,
+        itemtype       => $self->effective_itemtype,
+        location       => $self->location,
+    });
 }
 
 =head3 delete
