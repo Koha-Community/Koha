@@ -650,222 +650,8 @@
                         </div> <!-- /div.col-sm-6 -->
                     </div> <!-- /div.row -->
 
-                    <div id="finesholdsissues" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#checkouts" aria-controls="checkouts" role="tab" data-toggle="tab">Checkouts ([% issuecount || 0 | html %])</a>
-                            </li>
-                            [% IF relatives_issues_count %]
-                                <li role="presentation">
-                                    <a href="#relatives-issues" id="relatives-issues-tab" aria-controls="relatives-issues" role="tab" data-toggle="tab">Relatives' checkouts ([% relatives_issues_count | html %])</a>
-                                </li>
-                            [% END %]
-                            [% IF ( fines ) %]
-                                <li role="presentation" id="finestab">
-                                    <a href="#finesandcharges" aria-controls="finesandcharges" role="tab" data-toggle="tab">Charges ([% fines | $Price %])</a>
-                                </li>
-                            [% END %]
-                            [% IF ( guarantees_fines ) %]
-                                <li role="presentation" id="guarantees_finestab">
-                                    <a href="#guarantees_finesandcharges" aria-controls="guarantees_finesandcharges" role="tab" data-toggle="tab">Guarantees' charges ([% guarantees_fines | $Price %])</a>
-                                </li>
-                            [% END %]
-                            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                                <li role="presentation">
-                                        <a href="#reserves" id="holds-tab" aria-controls="reserves" role="tab" data-toggle="tab">Holds ([% holds_count || 0 | html %])</a>
-                                </li>
-                            [% END %]
+                    [% INCLUDE 'patron-detail-tabs.inc' patronpage = "borrower" %]
 
-                            [% IF Koha.Preference('UseRecalls') %]
-                                <li role="presentation">
-                                    <a href="#recalls" id="recalls-tab" aria-controls="recalls" role="tab" data-toggle="tab">Recalls ([% recalls.count || 0 | html %])</a>
-                                </li>
-                            [% END %]
-
-                            [% IF Koha.Preference('ArticleRequests') %]
-                                [% SET article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current') %]
-                                <li role="presentation">
-                                    <a href="#article-requests" id="article-requests-tab" aria-controls="article-requests" role="tab" data-toggle="tab">Article requests ([% article_requests.count || 0 | html %])</a>
-                                </li>
-                            [% END %]
-
-                            [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
-                                <li role="presentation">
-                                    [% IF ( patron.return_claims.count ) %]
-                                        <a href="#return-claims" id="return-claims-tab" aria-controls="return-claims" role="tab" data-toggle="tab">
-                                            Claims
-                                            ([% IF patron.return_claims.resolved.count == 0 %]
-                                                <span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
-                                            [% ELSE %]
-                                                <span title="Resolved claims" class="label label-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
-                                            [% END %]
-                                            [% IF patron.return_claims.unresolved.count == 0 %]
-                                                <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
-                                            [% ELSE %]
-                                                <span title="Unresolved claims" class="label label-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
-                                            [% END %])
-                                        </a>
-                                    [% ELSE %]
-                                        [% no_claims = 0 %]
-                                        <a href="#return-claims" id="return-claims-tab" aria-controls="return-claims" role="tab" data-toggle="tab">
-                                            Claims
-                                            (<span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% no_claims | html %]</span>
-                                            <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% no_claims | html %]</span>)
-                                        </a>
-                                    [% END %]
-                                </li>
-                            [% END %]
-
-                            <li role="presentation">
-                                <a id="debarments-tab-link" href="#reldebarments" aria-controls="reldebarments" role="tab" data-toggle="tab">Restrictions ([% patron.restrictions.count | html %])</a>
-                            </li>
-
-                            [% SET enrollments = patron.get_club_enrollments %]
-                            [% SET enrollable  = patron.get_enrollable_clubs(0) %] <!-- 0 => not OPAC -->
-                            [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
-                                <li role="presentation">
-                                    <a id="clubs-tab-link" href="#clubs-tab" aria-controls="checkouts" role="tab" data-toggle="tab">
-                                        Clubs ([% enrollments.count | html %]/[% enrollable.count | html %])
-                                    </a>
-                                </li>
-                            [% END %]
-                        </ul>
-
-                        <div class="tab-content">
-                            [% INCLUDE "checkouts-table.inc" page="moremember" %]
-
-                            [% INCLUDE "relatives-issues-table.inc" %]
-
-                            [% IF ( fines ) %]
-                                <div id="finesandcharges" role="tabpanel" class="tab-pane">
-                                    [% IF ( fines ) %]
-                                        <p>Total due: [% fines | $Price %]</p>
-                                    [% ELSE %]
-                                        <p>No outstanding charges</p>
-                                    [% END %]
-                                </div>
-                            [% END %]
-
-                        [% IF ( guarantees_fines ) %]
-                            <div id="guarantees_finesandcharges" role="tabpanel" class="tab-pane">
-                                <table id="tguaranteesfines">
-                                    <thead>
-                                        <tr>
-                                            <th>Guarantee</th>
-                                            <th>Amount outstanding</th>
-                                        </tr>
-                                    </thead>
-                                    [% FOREACH guarantee IN guarantees %]
-                                        <tr>
-                                            <td>[% INCLUDE 'patron-title.inc' patron=guarantee hide_patron_infos_if_needed=1 %]</td>
-                                            [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
-                                                <td>[% guarantee.account.balance | $Price %]</td>
-                                            [% ELSE %]
-                                                <td>-</td>
-                                            [% END %]
-                                        </tr>
-                                    [% END %]
-                                    <tfoot>
-                                        <td>Total due</td>
-                                        <td>[% guarantees_fines | $Price %]</td>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        [% END %]
-
-                        [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
-                            <div id="clubs-tab" role="tabpanel" class="tab-pane">
-                                Loading...
-                            </div>
-                        [% END %]
-
-                            [% INCLUDE 'patron-restrictions-tab.inc' %]
-
-                            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                                <div id="reserves" role="tabpanel" class="tab-pane">
-                                    [% IF ( holds_count ) %]
-                                        <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
-                                            <input type="hidden" name="from" value="circ" />
-                                            <table id="holds-table" style="width: 100% !Important;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Hold date</th>
-                                                        <th>Title</th>
-                                                        <th>Call number</th>
-                                                        <th>Item type</th>
-                                                        <th>Barcode</th>
-                                                        <th>Pickup at</th>
-                                                        <th>Expiration</th>
-                                                        <th>Priority</th>
-                                                        <th>Delete?</th>
-                                                        <th>Suspend?</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-
-                                            <fieldset class="action">
-                                                <input type="submit" class="cancel" name="submit" value="Cancel marked holds" />
-
-                                                [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                                                [% IF hold_cancellation.count %]
-                                                    <label for="cancellation-reason">Cancellation reason:</label>
-                                                    <select name="cancellation-reason">
-                                                        <option value="">No reason given</option>
-                                                        [% FOREACH reason IN hold_cancellation %]
-                                                            <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                                        [% END %]
-                                                    </select>
-                                                [% END %]
-                                            </fieldset>
-                                        </form>
-
-                                        [% IF Koha.Preference('SuspendHoldsIntranet') %]
-                                            <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
-                                                <fieldset class="action">
-                                                    <input type="hidden" name="from" value="borrower" />
-                                                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                                    <input type="submit" class="btn btn-primary" value="Suspend all holds" />
-
-                                                    [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
-                                                        <label for="suspend_until">until</label>
-                                                        <input type="text" size="10" id="suspend_until" name="suspend_until" class="flatpickr" data-flatpickr-futuredate="true"/>
-                                                        <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
-                                                    [% END %]
-                                                </fieldset>
-                                            </form>
-
-                                            <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
-                                                <fieldset class="action">
-                                                    <input type="hidden" name="from" value="borrower" />
-                                                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                                    <input type="hidden" name="suspend" value="0" />
-                                                    <input type="submit" class="btn btn-primary" value="Resume all suspended holds" />
-                                                </fieldset>
-                                            </form>
-                                        [% END # IF SuspendHoldsIntranet %]
-
-                                    [% ELSE %]
-                                        <p>Patron has nothing on hold.</p>
-                                    [% END %]
-                                </div> [% # /div#reserves %]
-                            [% END %]
-
-                            [% IF Koha.Preference('UseRecalls') %]
-                                <div id="recalls" role="tabpanel" class="tab-pane">
-                                    [% INCLUDE 'recalls.inc' %]
-                                </div>
-                            [% END %]
-
-                            [% IF Koha.Preference('ClaimReturnedLostValue') %]
-                                [% INCLUDE 'patron-return-claims.inc' %]
-                            [% END %]
-
-                            [% IF Koha.Preference('ArticleRequests') %]
-                                [% INCLUDE 'patron-article-requests.inc' %]
-                            [% END %]
-                        </div> <!-- /.tab-content -->
-                    </div> <!-- /div#finesholdsissues -->
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -927,13 +713,6 @@
         $(document).ready(function() {
             $("#info_digests").tooltip();
 
-            if ( $('#clubs-tab').length ) {
-                $('#clubs-tab-link').on('click', function() {
-                    $('#clubs-tab').text(_("Loading..."));
-                    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% patron.borrowernumber | html %]');
-                });
-            }
-
             $("#finesholdsissues a[data-toggle='tab']").on("shown.bs.tab", function(e){
                 var oTable = $('div.dataTables_wrapper > table', $(e.target.hash) ).dataTable();
                 if ( oTable.length > 0 ) {
@@ -942,11 +721,11 @@
             });
 
             $("#view_restrictions").on("click",function(){
-                $('#debarments-tab-link').click();
+                $('#reldebarments-tab').click();
             });
 
             $("#view_guarantees_finesandcharges").on("click",function(){
-                $('#guarantees_finestab a').click();
+                $('#guarantees_finesandcharges-tab').click();
             });
 
          });

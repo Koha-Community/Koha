@@ -393,7 +393,7 @@
     [% ELSE %]
         <li role="presentation">
     [% END %]
-        <a href="#[% tabname | uri %]_panel" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
+        <a href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
             [% content | $raw %]
         </a>
     </li>
