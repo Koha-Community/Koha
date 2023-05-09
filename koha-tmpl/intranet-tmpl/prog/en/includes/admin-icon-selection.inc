@@ -1,3 +1,5 @@
+[% USE raw %]
+[% PROCESS 'html_helpers.inc' %]
 [% IF ( context == "authval" ) %]
     [% SET image_location = av.imageurl %]
 [% ELSE %]
