@@ -544,8 +544,8 @@ Circulation:
             - "For example:"
             - "<br />ccode: [NEWFIC,NULL,DVD]"
             - "<br />itype: [NEWBK,\"\"]"
-            - "<br /> <strong>NOTE:</strong> The word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
-            - "<br /><strong>LINKS:</strong> <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=CCODE'>Collection codes</a> | <a href='/cgi-bin/koha/admin/itemtypes.pl'>Item types</a>"
+            - "<br /><strong>NOTE:</strong> The word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
+            - "<br /><strong>Configuration:</strong> <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=CCODE'>Collections (CCODE)</a> | <a href='/cgi-bin/koha/admin/itemtypes.pl'>Item types</a>"
         -
             - pref: UpdateNotForLoanStatusOnCheckout
               type: textarea
@@ -562,11 +562,11 @@ Circulation:
                   0: "Don't trap"
             - items that are not for loan but holdable ( notforloan < 0 ) to fill holds.
         -
-            - Never trap items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">'not for loan'</a> values of
+            - Never trap items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">'not for loan'</a> authorized values of
             - pref: SkipHoldTrapOnNotForLoanValue
               class: integer
             - to fill holds.
-            - "(list of <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN'>not for loan</a> values separated with a pipe '|')"
+            - "(list of <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN'>not for loan</a> authorized values separated with a pipe '|')"
         -
             - pref: HoldsAutoFill
               choices:
@@ -616,15 +616,15 @@ Circulation:
               type: textarea
               syntax: text/x-yaml
               class: code
-            - "This is a list of value pairs. The first value is followed immediately by colon space then the second value.<br/><br/>"
-            - <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOC">Location codes</a><br/><br/>
+            - "This is a list of value pairs. The first value is followed immediately by colon space then the second value."
+            - "Valid values are <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOC'>LOC</a> authorised values, _BLANK_, _PERM_, and _ALL_.<br><br>"
             - "Examples:<br/>"
-            - "PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check in.<br/>"
+            - "PROC: FIC - causes an item in the Processing center location to be updated into the Fiction location on check in.<br/>"
             - "FIC: GEN - causes an item in the Fiction location to be updated into the General stacks location on check in.<br/>"
             - "_BLANK_: FIC - causes an item that has no location to be updated into the Fiction location on check in.<br/>"
             - "FIC: _BLANK_ - causes an item in location FIC to be updated to a blank location on check in.<br/>"
             - "_ALL_: FIC - causes all items to be updated into the Fiction location on check in.<br/>"
-            - "PROC: _PERM_ - causes an item that is in the Processing Center to be updated to it's permanent location.<br/><br/>"
+            - "PROC: _PERM_ - causes an item that is in the Processing center to be updated to it's permanent location.<br/><br/>"
             - "General rule: if the location value on the left of the colon (:) matches the item's current location, it will be updated to match the location value on the right of the colon (:).<br/>"
             - "Note: PROC and CART are special values, for these locations the location and permanent_location can differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
             - "The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no location assigned.<br/>"
@@ -651,11 +651,11 @@ Circulation:
               type: textarea
               syntax: text/x-yaml
               class: code
-            - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value
-            - "it will be updated to the right-hand value. For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
-            - "Can be used for showing only the not for loan description. E.g. '-1: ONLYMESSAGE'."
-            - "Each pair of values should be on a separate line.<br/>"
-            - <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">Not for loan values</a>
+            - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value.
+            - "For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
+            - "Can be used for showing only the not for loan description. E.g. '-1: ONLYMESSAGE'.<br>"
+            - "Each pair of values should be on a separate line.<br>"
+            - "Valid values are <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN'>NOT_LOAN</a> authorized values and ONLYMESSAGE."
         -
             - pref: HidePersonalPatronDetailOnCirculation
               choices:
