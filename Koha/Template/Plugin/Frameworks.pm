@@ -23,6 +23,7 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use Koha::BiblioFrameworks;
+use Koha::I18N qw( __ );
 
 =head1 NAME
 
@@ -47,7 +48,7 @@ is not found
 sub GetName {
     my ( $self, $frameworkcode ) = @_;
     return q{} unless defined $frameworkcode;
-    return q{} if $frameworkcode eq q{};
+    return __("Default") if $frameworkcode eq q{};
 
     my $f = Koha::BiblioFrameworks->find($frameworkcode);
 
