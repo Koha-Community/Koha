@@ -1,6 +1,5 @@
 [% USE Context %]
 [% SET current_article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current' ) %]
-<div id="article-requests" role="tabpanel" class="tab-pane">
 [% IF current_article_requests.count > 0 %]
     <table id="article-requests-table" class="table table-bordered table-striped">
         <thead>
@@ -102,4 +101,3 @@
     [% ELSE %]
         <span>Patron has no current article requests.</span>
     [% END %]
-</div>

@@ -74,7 +74,7 @@ $("#table_clubnoenrollmemnts, #table_clubenrollments").dataTable($.extend(true, 
 [% IF CAN_user_clubs_enroll %]
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
-    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-enroll.pl?borrowernumber=[% borrowernumber | html %]&id=' + id, function() {
+    $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-enroll.pl?borrowernumber=[% borrowernumber | html %]&id=' + id, function() {
         $("body").css("cursor", "default");
     });
 
@@ -89,7 +89,7 @@ function cancelEnrollment( id ) {
         data: { id: id },
         success: function( data ) {
             if ( data.success ) {
-                $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]', function() {
+                $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {

@@ -44,7 +44,7 @@ function addEnrollment() {
         data: $( "#patron-enrollment-form" ).serialize(),
         success: function( data ) {
             if ( data.success ) {
-                $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+                $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {
@@ -58,7 +58,7 @@ function addEnrollment() {
 
 function showClubs() {
     $("body").css("cursor", "progress");
-    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+    $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
         $("body").css("cursor", "default");
     });
 }

@@ -1,3 +1,4 @@
+/* global borrowernumber */
 $(document).ready(function() {
     $("#CheckAllExports").on("click",function(){
         $(".export:visible").prop("checked", true);
@@ -8,7 +9,7 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#patronlists a[data-toggle='tab']").on("shown.bs.tab", function(e){
+    $("#finesholdsissues a[data-toggle='tab']").on("shown.bs.tab", function(e){
         $(this).click();
     });
 
@@ -96,6 +97,12 @@ $(document).ready(function() {
         activeTab && activeTab.tab('show');
     }
 
+    if ( $('#clubs_panel').length ) {
+        $('#clubs-tab').on('click', function() {
+            $('#clubs_panel').text(_("Loading..."));
+            $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=' + borrowernumber );
+        });
+    }
 });
 
 function export_checkouts(format) {
