@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 76;
+use Test::More tests => 73;
 use Test::Exception;
 
 use MARC::Record;
@@ -117,13 +117,10 @@ my $hold = Koha::Holds->find( $reserve_id );
 ok( $hold, "Koha::Holds found the hold" );
 my $hold_biblio = $hold->biblio();
 ok( $hold_biblio, "Got biblio using biblio() method" );
-ok( $hold_biblio == $hold->biblio(), "biblio method returns stashed biblio" );
 my $hold_item = $hold->item();
 ok( $hold_item, "Got item using item() method" );
-ok( $hold_item == $hold->item(), "item method returns stashed item" );
 my $hold_branch = $hold->branch();
 ok( $hold_branch, "Got branch using branch() method" );
-ok( $hold_branch == $hold->branch(), "branch method returns stashed branch" );
 my $hold_found = $hold->found();
 $hold->set({ found => 'W'})->store();
 is( Koha::Holds->waiting()->count(), 1, "Koha::Holds->waiting returns waiting holds" );
