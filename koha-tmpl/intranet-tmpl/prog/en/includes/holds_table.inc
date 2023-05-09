@@ -119,7 +119,7 @@
                     [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 %]
                 </td>
                 <td>[% hold.notes | html | html_line_break %]</td>
-                <td>
+                <td data-order="[% hold.date| html %]">
                     [% IF Koha.Preference('AllowHoldDateInFuture') %]
                         <input type="text" class="flatpickr" value="[% hold.date | html %]" required="required" size="10" name="reservedate" />
                     [% ELSE %]
