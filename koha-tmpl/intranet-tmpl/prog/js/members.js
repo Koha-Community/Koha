@@ -190,7 +190,11 @@ $(document).ready(function(){
     });
     var mandatory_fields = $("input[name='BorrowerMandatoryField']").val().split ('|');
     $(mandatory_fields).each(function(){
-        $("[name='"+this+"']").attr('required', 'required');
+        let input = $("[name='"+this+"']")
+        if ( input.hasClass('flatpickr') ) {
+            $(input).siblings('.flatpickr_wrapper').find('input.flatpickr').prop('required', true)
+        }
+        input.prop('required', true);
     });
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
