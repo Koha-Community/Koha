@@ -130,10 +130,7 @@ sub filter_by_lates {
                   && !C4::Context->IsSuperLibrarian
                 ? ( 'borrower.branchcode' => C4::Context->userenv->{branch} )
                 : ()
-            ),
-
-            ( orderstatus => { '-not_in' => ['cancelled', 'complete'] } ),
-
+            )
         },
         {
             '+select' => [
@@ -145,7 +142,7 @@ sub filter_by_lates {
             join => { 'basketno' => 'booksellerid' },
             prefetch => {'basketno' => 'booksellerid'},
         }
-    );
+    )->filter_by_active;
 }
 
 =head3 filter_by_active

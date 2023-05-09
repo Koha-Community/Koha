@@ -50,7 +50,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Letters qw( SendAlerts GetLetters );
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Acquisition::Orders qw( filter_by_lates );
+use Koha::Acquisition::Orders;
 use Koha::CsvProfiles;
 
 my $input = CGI->new;
