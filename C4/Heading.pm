@@ -22,7 +22,7 @@ use Modern::Perl;
 use MARC::Field;
 use C4::Context;
 use Module::Load qw( load );
-
+use List::Util qw( none );
 
 =head1 NAME
 
@@ -239,15 +239,24 @@ sub _search {
     my ( $matched_auths, $total ) = $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
     # Some auth records may not contain the 040$f to specify their source
     # This is legal, so we do a fallback search
-    if( !$total && $thesaurus && !( grep /$thesaurus/,('lcsh','lcac','mesh','nal','notspecified','cash','rvm','sears','aat') ) ){
+    if (
+          !$total
+        && $thesaurus
+        && none { $_ eq $thesaurus } (
+            'lcsh',         'lcac', 'mesh', 'nal',
+            'notspecified', 'cash', 'rvm',  'sears',
+            'aat'
+        )
+      )
+    {
         pop @value;
         push @value, 'notdefined';
-        $search_query = $builder->build_authorities_query_compat(
-            \@marclist, \@and_or, \@excluding, \@operator,
-            \@value,    $self->{'auth_type'},
-            'AuthidAsc'
-        );
-        ( $matched_auths, $total ) = $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
+        $search_query =
+          $builder->build_authorities_query_compat( \@marclist, \@and_or,
+            \@excluding, \@operator, \@value, $self->{'auth_type'},
+            'AuthidAsc' );
+        ( $matched_auths, $total ) =
+          $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
     }
     return ( $matched_auths, $total );
 
