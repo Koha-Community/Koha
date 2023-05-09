@@ -57,6 +57,14 @@ foreign key from the biblioitems table to link to item to additional information
 
 item barcode (MARC21 952$p)
 
+=head2 bookable
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+boolean value defining whether this this item is available for bookings or not
+
 =head2 dateaccessioned
 
   data_type: 'date'
@@ -403,6 +411,8 @@ __PACKAGE__->add_columns(
   },
   "barcode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
+  "bookable",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
@@ -973,8 +983,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-31 11:33:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:w/riz2YWgVUds0eMqZuGTg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-02 10:58:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XTlINIMqB3LroE66IjZP3A
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

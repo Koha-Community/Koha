@@ -55,6 +55,14 @@ foreign key from the biblioitems table to link to item to additional information
 
 item barcode (MARC21 952$p)
 
+=head2 bookable
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+boolean value defining whether this this item is available for bookings or not
+
 =head2 dateaccessioned
 
   data_type: 'date'
@@ -389,6 +397,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "barcode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
+  "bookable",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
@@ -513,8 +523,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 18:18:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6TcVaUWoDdAGfBOr83ZOWQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-02 11:06:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Afgr1jl6aeSy/rS9RJGq2g
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
