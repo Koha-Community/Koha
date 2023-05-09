@@ -98,7 +98,7 @@ subtest 'Test StoreLastBorrower' => sub {
     );
     $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    $item->last_returned_by($patron_object);
+    $item->last_returned_by($patron_object->borrowernumber);
     $item = $item->get_from_storage;
     my $patron_object2 = $item->last_returned_by();
     is( $patron_object->id, $patron_object2->id,
