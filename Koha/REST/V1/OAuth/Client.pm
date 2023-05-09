@@ -43,25 +43,25 @@ Controller method handling login requests
 sub login {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider  = $c->validation->param('provider_code');
-    my $interface = $c->validation->param('interface');
+    my $provider  = $c->param('provider_code');
+    my $interface = $c->param('interface');
 
     my $logger = Koha::Logger->get({ interface => 'api' });
 
     my $provider_config = $c->oauth2->providers->{$provider};
 
     my $uri;
-    my $base_url;
+    my $redirect_url;
 
     if ( $interface eq 'opac' ) {
-        $base_url = C4::Context->preference('OPACBaseURL');
+        $redirect_url = C4::Context->preference('OPACBaseURL') . '/api/v1/public/oauth/login/';
         if ( C4::Context->preference('OpacPublic') ) {
             $uri = '/cgi-bin/koha/opac-user.pl';
         } else {
             $uri = '/cgi-bin/koha/opac-main.pl';
         }
     } else {
-        $base_url = C4::Context->preference('staffClientBaseURL');
+        $redirect_url = C4::Context->preference('staffClientBaseURL') . '/api/v1/oauth/login/';
         $uri = '/cgi-bin/koha/mainpage.pl';
     }
 
@@ -76,7 +76,7 @@ sub login {
         $provider_config->{authorize_url} = $authorize_url->to_string;
     }
 
-    return $c->oauth2->get_token_p( $provider, { redirect_uri => $base_url . '/api/v1/public/oauth/login/' . $provider . "/" . $interface } )->then(
+    return $c->oauth2->get_token_p( $provider, { redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
         sub {
             return unless my $response = shift;
 
