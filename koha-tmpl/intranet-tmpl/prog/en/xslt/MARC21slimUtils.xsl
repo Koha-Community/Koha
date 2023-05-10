@@ -765,7 +765,12 @@
                 <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=Control-number:',$controlnumber),false())"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=ti,phr:',translate(marc:subfield[@code=$title_subfield], '()', '')),false())"/>
+                <xsl:variable name="quoted_title">
+                    <xsl:call-template name="quote_search_term">
+                        <xsl:with-param name="term"><xsl:value-of select="marc:subfield[@code=$title_subfield]"/></xsl:with-param>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="str:encode-uri(concat($scriptname,'?q=ti,phr:',translate($quoted_title, '()', '')),false())"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
