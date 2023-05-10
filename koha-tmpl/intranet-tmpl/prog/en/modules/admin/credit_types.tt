@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+[% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op =='add_form' %]
@@ -94,7 +95,7 @@
                                 <li>
                                     <label for="description" class="required">Description: </label>
                                     [% IF credit_type && credit_type.is_system %]
-                                        <span>[% credit_type.description | html %]</span>
+                                        <span>[%- PROCESS credit_type_description credit_type = credit_type -%]</span>
                                     [% ELSE %]
                                         <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% credit_type.description | html %]" /> <span class="required">Required</span>
                                     [% END %]
@@ -171,7 +172,7 @@
                                         <td>[% credit_type.archived | html %]</td>
                                         <td>[% credit_type.is_system | html %]</td>
                                         <td>[% credit_type.code | html %]</td>
-                                        <td>[% credit_type.description | html %]</td>
+                                        <td>[%- PROCESS credit_type_description credit_type = credit_type -%]</td>
                                         <td>[% IF credit_type.can_be_added_manually %]Manual credit[% END %]</td>
                                         <td>[% IF credit_type.credit_number_enabled %]Yes[% ELSE %]No[% END %]</td>
                                         <td>

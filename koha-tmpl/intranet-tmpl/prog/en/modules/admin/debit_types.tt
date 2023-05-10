@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% SET footerjs = 1 %]
+[% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op =='add_form' %]
@@ -95,7 +96,11 @@
                                 </li>
                                 <li>
                                     <label for="description" class="required">Description: </label>
-                                    <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
+                                    [% IF debit_type && debit_type.is_system %]
+                                        <span>[%- PROCESS debit_type_description debit_type = debit_type -%]</span>
+                                    [% ELSE %]
+                                        <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
+                                    [% END %]
                                 </li>
                                 <li>
                                     <label for="can_be_invoiced">Can be manually invoiced? </label>
@@ -162,7 +167,7 @@
                                         <td>[% debit_type.archived | html %]</td>
                                         <td>[% debit_type.is_system | html %]</td>
                                         <td>[% debit_type.code | html %]</td>
-                                        <td>[% debit_type.description | html %]</td>
+                                        <td>[%- PROCESS debit_type_description debit_type = debit_type -%]</td>
                                         <td>[% debit_type.default_amount | $Price %]</td>
                                         <td>[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]
                                             <i class="fa fa-id-card-o"></i> Invoicing, <i class="fa fa-shopping-cart"></i> Sale
