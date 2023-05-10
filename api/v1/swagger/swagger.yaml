@@ -281,6 +281,8 @@ paths:
     $ref: ./paths/libraries.yaml#/~1libraries
   "/libraries/{library_id}":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}"
+  "/oauth/login/{provider_code}/{interface}":
+    $ref: ./paths/oauth.yaml#/~1oauth~1login~1{provider_code}~1{interface}
   /oauth/token:
     $ref: ./paths/oauth.yaml#/~1oauth~1token
   /patrons:
