@@ -58,10 +58,13 @@ if ( $op eq 'add_form') {
 
     if ($is_a_modif) {
         # Check whether another restriction already has this display text
-        my $dupe = Koha::Patron::Restriction::Types->find({
-            display_text => $display_text
-        });
-        if ($dupe) {
+        my $dupe = Koha::Patron::Restriction::Types->search(
+            {
+                code         => { '!=' => $code },
+                display_text => $display_text,
+            }
+        );
+        if ($dupe->count) {
             push @messages, {
                 type => 'error', code => 'duplicate_display_text'
             };
