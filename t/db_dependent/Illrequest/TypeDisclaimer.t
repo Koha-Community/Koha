@@ -25,7 +25,7 @@ use Test::MockObject;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::Illrequest::Workflow::Availability;
+use Koha::Illrequest::Workflow::TypeDisclaimer;
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-use_ok('Koha::Illrequest::Workflow::Availability');
+use_ok('Koha::Illrequest::Workflow::TypeDisclaimer');
 
 my $metadata = {
     title  => 'This is a title',
@@ -47,13 +47,13 @@ foreach my $key ( keys %{$metadata} ) {
     $sorted->{$key} = $metadata->{$key};
 }
 
-my $availability =
-  Koha::Illrequest::Workflow::Availability->new( $sorted, 'staff' );
+my $type_disclaimer =
+  Koha::Illrequest::Workflow::TypeDisclaimer->new( $sorted, 'staff' );
 
-isa_ok( $availability, 'Koha::Illrequest::Workflow::Availability' );
+isa_ok( $type_disclaimer, 'Koha::Illrequest::Workflow::TypeDisclaimer' );
 
 is(
-    $availability->prep_metadata($sorted),
+    $type_disclaimer->prep_metadata($sorted),
 'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIn0%3D%0A',
     'prep_metadata works'
 );
@@ -81,12 +81,18 @@ $illreqmodule->mock( 'load_backend',
     sub { my $self = shift; $self->{_my_backend} = $backend; return $self } );
 
 # Mock ILLModuleDisclaimerByType with valid YAML
-t::lib::Mocks::mock_preference( 'ILLCheckAvailability', 1 );
-
-# Mock not empty availability services
-my $availability_module =
-  Test::MockModule->new('Koha::Illrequest::Workflow::Availability');
-$availability_module->mock( 'get_services', [ { name => 'service' } ] );
+t::lib::Mocks::mock_preference(
+    'ILLModuleDisclaimerByType', "all:
+ text: |
+  <h2>HTML title</h2>
+  <p>This is an HTML paragraph</p>
+  <p>This is another HTML paragraph</p>
+ av_category_code: YES_NO
+article:
+ text: copyright text for all article type requests
+ av_category_code: YES_NO
+ bypass: 1"
+);
 
 my $req_1 = $builder->build_object(
     {
@@ -97,13 +103,15 @@ my $req_1 = $builder->build_object(
 
 my $request = $req_1->load_backend('Mock');
 
-is( $availability->show_availability($request),
-    1, 'able to show availability search' );
+is( $type_disclaimer->show_type_disclaimer($request),
+    1, 'able to show type disclaimer form' );
 
-# Mock empty availability services
-$availability_module->mock( 'get_services', [] );
+# Mock ILLModuleDisclaimerByType with invalid YAML
+my $type_disclaimer_module =
+  Test::MockModule->new('Koha::Illrequest::Workflow::TypeDisclaimer');
+$type_disclaimer_module->mock( '_get_type_disclaimer_sys_pref', {} );
 
-is( $availability->show_availability($request),
-    0, 'unable to show type disclaimer form' );
+is( $type_disclaimer->show_type_disclaimer($request),
+    0, 'not able to show type disclaimer form' );
 
 $schema->storage->txn_rollback;
