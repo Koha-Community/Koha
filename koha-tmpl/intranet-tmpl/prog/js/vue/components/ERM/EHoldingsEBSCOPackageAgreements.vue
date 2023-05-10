@@ -126,7 +126,7 @@ export default {
     name: "EHoldingsEBSCOPackageAgreements",
 }
 </script>
-<style>
+<style scoped>
 .modal {
     position: fixed;
     z-index: 9998;
@@ -144,17 +144,5 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
-}
-</style>
-
-<style>
-#agreements_list table {
-    display: table;
-}
-.filters label {
-    float: none !important;
-}
-.filters input[type="checkbox"] {
-    margin-left: 0 !important;
 }
 </style>
