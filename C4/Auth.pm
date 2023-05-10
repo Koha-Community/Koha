@@ -450,14 +450,6 @@ sub get_template_and_user {
 
     # these template parameters are set the same regardless of $in->{'type'}
 
-    # Decide if the patron can make suggestions in the OPAC
-    my $can_make_suggestions;
-    if ( C4::Context->preference('Suggestion') && C4::Context->preference('AnonSuggestions') ) {
-        $can_make_suggestions = 1;
-    } elsif ( C4::Context->userenv && C4::Context->userenv->{'number'} ) {
-        $can_make_suggestions = Koha::Patrons->find(C4::Context->userenv->{'number'})->category->can_make_suggestions;
-    }
-
     my $minPasswordLength = C4::Context->preference('minPasswordLength');
     $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
@@ -496,7 +488,6 @@ sub get_template_and_user {
             intranetstylesheet                                                         => C4::Context->preference("intranetstylesheet"),
             IntranetUserCSS                                                            => C4::Context->preference("IntranetUserCSS"),
             IntranetUserJS                                                             => C4::Context->preference("IntranetUserJS"),
-            suggestion                                                                 => $can_make_suggestions,
             virtualshelves                                                             => C4::Context->preference("virtualshelves"),
             StaffSerialIssueDisplayCount                                               => C4::Context->preference("StaffSerialIssueDisplayCount"),
             EasyAnalyticalRecords                                                      => C4::Context->preference('EasyAnalyticalRecords'),
@@ -548,6 +539,14 @@ sub get_template_and_user {
             $opac_name = $in->{'query'}->param('multibranchlimit');
         } elsif ( C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
             $opac_name = C4::Context->userenv->{'branch'};
+        }
+
+        # Decide if the patron can make suggestions in the OPAC
+        my $can_make_suggestions;
+        if ( C4::Context->preference('Suggestion') && C4::Context->preference('AnonSuggestions') ) {
+            $can_make_suggestions = 1;
+        } elsif ( C4::Context->userenv && C4::Context->userenv->{'number'} ) {
+            $can_make_suggestions = Koha::Patrons->find(C4::Context->userenv->{'number'})->category->can_make_suggestions;
         }
 
         my @search_groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' })->as_list;
