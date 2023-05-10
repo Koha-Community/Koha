@@ -16,6 +16,10 @@ function validate_goto_page() {
     }
 }
 
+window.addEventListener('pageshow', function( e ){
+    $('body').css("cursor", "default");
+});
+
 $( document ).ready( function() {
 
     $( "#CheckAll" ).click( function(e) {
@@ -27,7 +31,7 @@ $( document ).ready( function() {
         $( ".checkboxed input:checkbox" ).prop("checked", false);
     });
 
-    $( ".submit" ).on( "click", function() {
+    $( "#submit_z3950_search" ).on( "click", function() {
         $( "body" ).css( "cursor", "wait" );
     });
     $( "[name='changepage_prev']" ).on( "click", function() {
