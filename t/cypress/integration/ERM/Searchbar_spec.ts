@@ -1,10 +1,16 @@
 describe("Searchbar header changes", () => {
+    before(() => {
+        cy.fetch_initial_ERM_sys_pref_value();
+        cy.set_ERM_sys_pref_value(true);
+    });
 
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule", '{"value":"1"}');
-        cy.intercept("GET", "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders", '{"value":"local"}');
+    });
+
+    after(() => {
+        cy.reset_initial_ERM_sys_pref_value();
     });
 
     it("Default option is agreements", () => {
