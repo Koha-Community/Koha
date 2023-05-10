@@ -61,7 +61,7 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
         my $comment = $query->param('comment');
 
         my $patron     = Koha::Patrons->find($borrowernumber);
-        my $user_email = $patron->first_valid_email_address;
+        my $user_email = $patron->notice_email_address;
         my $shelf      = Koha::Virtualshelves->find($shelfid);
         my $contents   = $shelf->get_contents;
         my $iso2709;

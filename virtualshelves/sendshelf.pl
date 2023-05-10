@@ -61,7 +61,7 @@ if ($to_address) {
     my $comment = $query->param('comment');
 
     my $patron     = Koha::Patrons->find($borrowernumber);
-    my $user_email = $patron->first_valid_email_address;
+    my $user_email = $patron->notice_email_address;
     my $contents   = $shelf->get_contents;
     my @biblionumbers;
     my $iso2709;
