@@ -211,6 +211,7 @@
         var MSG_DUPLICATE_DISPLAY_TEXT = _("Restriction type label is already in use");
         var existing = {
         [% FOREACH ex IN existing %]
+            [% NEXT IF ex.code == restriction.code %]
             [% ex.code | $raw %]: '[% ex.display_text | $raw %]',
         [% END %]
         };
