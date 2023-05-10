@@ -51,7 +51,6 @@ Date the recall was requested
 =head2 biblio_id
 
   data_type: 'integer'
-  default_value: 0
   is_foreign_key: 1
   is_nullable: 0
 
@@ -165,12 +164,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "biblio_id",
-  {
-    data_type      => "integer",
-    default_value  => 0,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "pickup_library_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "completed_date",
@@ -312,8 +306,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-29 11:14:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lUgwwMxaStiOS7pHL0UGJA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-10 17:06:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PHc8RtTZ7G02D0ZW4wrPGQ
 
 __PACKAGE__->add_columns(
     '+completed' => { is_boolean => 1 },

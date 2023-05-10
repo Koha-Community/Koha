@@ -34,7 +34,6 @@ id for the items group
 =head2 biblio_id
 
   data_type: 'integer'
-  default_value: 0
   is_foreign_key: 1
   is_nullable: 0
 
@@ -78,12 +77,7 @@ __PACKAGE__->add_columns(
   "item_group_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "biblio_id",
-  {
-    data_type      => "integer",
-    default_value  => 0,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "display_order",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "description",
@@ -178,8 +172,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q2LTnircvx4khvkVm9eIsQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-10 17:06:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OPwObeUEFgzNwMYlEgHkQw
 
 sub koha_objects_class {
     'Koha::Biblio::ItemGroups';
