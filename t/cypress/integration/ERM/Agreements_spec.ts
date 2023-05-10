@@ -376,7 +376,6 @@ describe("Agreement CRUD operations", () => {
             },
         }).as("get-single-agreement-search-result");
         cy.visit("/cgi-bin/koha/erm/agreements");
-        cy.wait("@get-single-agreement-search-result");
 
         // Intercept request after edit click
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
