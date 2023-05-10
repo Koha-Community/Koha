@@ -118,14 +118,10 @@ sub create {
         $args->{to} = $params->{to};
     }
 
-    my @emails = split(',', $args->{to});
-    foreach my $email (@emails) {
-       $email =~ s/ //g;
-       Koha::Exceptions::BadParameter->throw(
-           error     => "Invalid 'to' parameter: ".$email,
-           parameter => 'to'
-       ) unless Koha::Email->is_valid($email);
-    }
+    Koha::Exceptions::BadParameter->throw(
+        error     => "Invalid 'to' parameter: " . $args->{to},
+        parameter => 'to'
+    ) unless Koha::Email->is_valid( $args->{to} );
 
     my $addresses = {};
     $addresses->{reply_to} = $params->{reply_to};
