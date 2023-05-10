@@ -288,7 +288,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
         while ( my $biblio = $biblios->next ) {
             new_item(sprintf "Biblio with biblionumber=%s does not have title defined", $biblio->biblionumber);
         }
-        new_hint("Edit these biblio records to defined a title");
+        new_hint("Edit these bibliographic records to define a title");
     }
 }
 
