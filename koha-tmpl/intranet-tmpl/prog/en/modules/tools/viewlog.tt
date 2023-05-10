@@ -410,14 +410,13 @@
                         </div> <!-- /.page-section -->
                     [% ELSE %]
                         <div class="dialog alert">
-                            No log found
                             [% IF ( CATALOGUING ) %]
-                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object | url %]">Bibliographic record [% object | html %]</a>
+                                No log found for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object | url %]">Bibliographic record [% object | html %]</a>.
+                            [% ELSIF ( MEMBERS ) %]
+                                No log found for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object | url %]">[% INCLUDE 'patron-title.inc' %]</a>.
+                            [% ELSE %]
+                                No log found.
                             [% END %]
-                            [% IF ( MEMBERS ) %]
-                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object | url %]">[% INCLUDE 'patron-title.inc' %]</a>
-                            [% END %]
-                            .
                         </div>
                     [% END %]
                 [% END %]
