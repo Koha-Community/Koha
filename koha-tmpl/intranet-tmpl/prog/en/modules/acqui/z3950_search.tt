@@ -139,7 +139,10 @@ tr.selected td {
 
 <div class="row">
     <div class="col-md-12">
-    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a></fieldset>
+        <fieldset class="action">
+            <input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" />
+            <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Cancel</a>
+        </fieldset>
     </div>
 </div>
 </form>
