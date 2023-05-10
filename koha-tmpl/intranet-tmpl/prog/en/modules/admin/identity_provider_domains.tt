@@ -91,17 +91,12 @@
                         <input type="text" name="domain" id="domain" size="60" />
                         <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-domain" style="display: none">
-                            <div>If this field is empty, or '*' any email domain will match this rule.</div>
-                            <div>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</div>
-                            <div>Exact matches have presedence over wildcard ones, so 'library.com' domain will take presedence over '*library.com' when the email is 'somebody@library.com'</div>
-                            <div>The same way, the longest match will take presedence over the shorter one, so '*teacher.university.com' will take presedence over '*.university.com' if the email is 'user@math.teacher.university.com'</div>
+                            <p>If this field is empty, or '*' any email domain will match this rule.</p>
+                            <p>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</p>
+                            <p>Exact matches have precedence over wildcard ones, so 'library.com' domain will take precedence over '*library.com' when the email is 'somebody@library.com'</p>
+                            <p>The same way, the longest match will take precedence over the shorter one, so '*teacher.university.com' will take precedence over '*.university.com' if the email is 'user@math.teacher.university.com'</p>
                         </div>
                     </li>
-                </ol>
-            </fieldset>
-
-            <fieldset class="rows">
-                <ol>
                     <li>
                         <label for="update_on_auth">Update on login: </label>
                         <select name="update_on_auth" id="update_on_auth">
@@ -178,17 +173,12 @@
                         <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]"/>
                         <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-domain" style="display: none">
-                            <div>If this field is empty, or '*' any email domain will match this rule.</div>
-                            <div>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</div>
-                            <div>Exact matches have presedence over asterix ones, so if the 'library.com' domain will take presedence over '*library.com' when the email is 'somebody@library.com'</div>
-                            <div>The same way, the longest match will take presedence over the shorter one, so '*teacher.university.com' will take presedence over '*.university.com' if the email is 'user@math.teacher.university.com'</div>
+                            <p>If this field is empty, or '*' any email domain will match this rule.</p>
+                            <p>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</p>
+                            <p>Exact matches have precedence over asterix ones, so 'library.com' will take precedence over '*library.com' when the email is 'somebody@library.com'</p>
+                            <p>The same way, the longest match will take precedence over the shorter one, so '*teacher.university.com' will take precedence over '*.university.com' if the email is 'user@math.teacher.university.com'</p>
                         </div>
                     </li>
-                </ol>
-            </fieldset>
-
-            <fieldset class="rows">
-                <ol>
                     <li>
                         <label for="update_on_auth">Update on login: </label>
                         <select name="update_on_auth" id="update_on_auth">
