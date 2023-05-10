@@ -696,7 +696,7 @@ function _dt_default_ajax (params){
 function _dt_buttons(params){
     let included_ids = params.included_ids || [];
     let settings = params.settings || {};
-    let table_settings = params.table_settings || {};
+    let table_settings = params.table_settings;
 
     var exportColumns = ":visible:not(.noExport)";
     if( settings.hasOwnProperty("exportColumns") ){
