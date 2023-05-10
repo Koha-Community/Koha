@@ -376,6 +376,12 @@ if ($op=~/else/) {
     my @allsuggestions;
     foreach my $criteriumvalue ( @criteria_dv ) {
         my $search_params = {%$suggestion_ref};
+
+        next
+          if $search_params->{STATUS}
+          && $displayby eq 'STATUS'
+          && $criteriumvalue ne $search_params->{STATUS};
+
         # By default, display suggestions from current working branch
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
 
