@@ -24,6 +24,7 @@ use Mojo::URL;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 use Koha::Logger;
+use Koha::Token;
 use URI::Escape qw(uri_escape_utf8);
 
 =head1 NAME
@@ -76,7 +77,32 @@ sub login {
         $provider_config->{authorize_url} = $authorize_url->to_string;
     }
 
-    return $c->oauth2->get_token_p( $provider, { redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
+    # Determine if it is a callback request, or the initial
+    my $is_callback = $c->param('error_description') || $c->param('error') || $c->param('code');
+
+    my $state;
+
+    if ($is_callback) {
+        # callback, check CSRF token
+        unless (
+            Koha::Token->new->check_csrf(
+                {
+                    session_id => $c->req->cookie('CGISESSID')->value,
+                    token      => $c->param('state'),
+                }
+            )
+          )
+        {
+            my $error = "wrong_csrf_token";
+            return $c->redirect_to( $uri . "?auth_error=$error" );
+        }
+    }
+    else {
+        # initial request, generate CSRF token
+        $state = Koha::Token->new->generate_csrf( { session_id => $c->req->cookie('CGISESSID')->value } );
+    }
+
+    return $c->oauth2->get_token_p( $provider => { ( !$is_callback ? ( state => $state ) : () ), redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
         sub {
             return unless my $response = shift;
 
