@@ -50,7 +50,7 @@ sub get_providers {
       if $interface eq 'intranet';
 
     my $providers = Koha::Auth::Identity::Providers->search( { "domains.allow_$interface" => 1 }, { prefetch => 'domains' } );
-    my $base_url  = ( $interface ne 'staff' ) ? "/api/v1/public/oauth/login" : "/api/v1/public/oauth/login";
+    my $base_url  = ( $interface eq 'staff' ) ? "/api/v1/oauth/login" : "/api/v1/public/oauth/login";
 
     my @urls;
 
