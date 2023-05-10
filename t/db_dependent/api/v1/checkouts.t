@@ -244,7 +244,7 @@ $schema->storage->txn_rollback;
 
 subtest 'get_availability' => sub {
 
-    plan tests => 28;
+    plan tests => 29;
 
     $schema->storage->txn_begin;
     my $librarian = $builder->build_object(
@@ -346,13 +346,88 @@ subtest 'get_availability' => sub {
         ),
         'Correct token'
     );
+    %needsconfirmation = ();
+
+    subtest 'public availability' => sub {
+        plan tests => 18;
+
+        # Available, Not authentication required
+        $t->get_ok(
+"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)->json_is( '/blockers' => {} )
+          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+          ->json_has('/confirmation_token');
+
+        # Needs confirmation upgrade to blocker
+        %needsconfirmation = ( TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 );
+        $t->get_ok(
+"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)
+          ->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )
+          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+          ->json_has('/confirmation_token');
+        %needsconfirmation = ();
+
+        # Remove personal information from public endpoint
+        %issuingimpossible = (
+            issued_borrowernumber => 'private',
+            issued_cardnumber     => 'private',
+            issued_firstname      => 'private',
+            issued_surname        => 'private',
+            resborrowernumber     => 'private',
+            resbranchcode         => 'private',
+            rescardnumber         => 'private',
+            reserve_id            => 'private',
+            resfirstname          => 'private',
+            resreservedate        => 'private',
+            ressurname            => 'private',
+            item_notforloan       => 'private'
+        );
+        %alerts = (
+            issued_borrowernumber => 'private',
+            issued_cardnumber     => 'private',
+            issued_firstname      => 'private',
+            issued_surname        => 'private',
+            resborrowernumber     => 'private',
+            resbranchcode         => 'private',
+            rescardnumber         => 'private',
+            reserve_id            => 'private',
+            resfirstname          => 'private',
+            resreservedate        => 'private',
+            ressurname            => 'private',
+            item_notforloan       => 'private'
+        );
+
+        %needsconfirmation = (
+            issued_borrowernumber => 'private',
+            issued_cardnumber     => 'private',
+            issued_firstname      => 'private',
+            issued_surname        => 'private',
+            resborrowernumber     => 'private',
+            resbranchcode         => 'private',
+            rescardnumber         => 'private',
+            reserve_id            => 'private',
+            resfirstname          => 'private',
+            resreservedate        => 'private',
+            ressurname            => 'private',
+            item_notforloan       => 'private'
+        );
+        $t->get_ok(
+"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)->json_is( '/blockers' => {} )
+          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+          ->json_has('/confirmation_token');
+        %issuingimpossible = ();
+        %alerts            = ();
+        %needsconfirmation = ();
+    };
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'add checkout' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
     my $librarian = $builder->build_object(
@@ -431,6 +506,59 @@ subtest 'add checkout' => sub {
         }
     )->status_is(201)->or(sub { diag $t->tx->res->body });
     %needsconfirmation = ();
+
+    subtest 'public add' => sub {
+        plan tests => 14;
+
+        my $useridp = $patron->userid;
+        $patron->set_password(
+            { password => $password, skip_validation => 1 } );
+
+        # Feature disabled
+        t::lib::Mocks::mock_preference( 'OpacTrustedCheckout', 0 );
+
+        $t->post_ok( "/api/v1/public/patrons/$patron_id/checkouts" => json =>
+              { item_id => $item1_id, patron_id => $patron_id } )
+          ->status_is(401)->json_is(
+            {
+                error => "Authentication failure."
+            }
+          );
+
+        $t->post_ok(
+            "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts"
+              => json => { item_id => $item1_id, patron_id => $patron_id } )
+          ->status_is(405)
+          ->json_is(
+            { error => "Feature disabled", error_code => "FEATURE_DISABLED" } );
+
+        # Feature enabled
+        t::lib::Mocks::mock_preference( 'OpacTrustedCheckout', 1 );
+
+        $t->post_ok( "/api/v1/public/patrons/$patron_id/checkouts" => json =>
+              { item_id => $item1_id, patron_id => $patron_id } )
+          ->status_is(401)->json_is(
+            {
+                error => "Authentication failure."
+            }
+          );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts"
+              => json => { item_id => $item1_id, patron_id => $patron_id } )
+          ->status_is(403)->json_is(
+            {
+                error =>
+                  "Authorization failure. Missing required permission(s).",
+                required_permissions => undef
+            }
+          );
+
+        $t->post_ok(
+            "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts"
+              => json => { item_id => $item1_id, patron_id => $patron_id } )
+          ->status_is(201);
+    };
 
     $schema->storage->txn_rollback;
 };
