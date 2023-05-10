@@ -67,7 +67,7 @@ return {
             **Describe the concern**
             A clear and concise description of what the concern is.
 
-            **To Reproduce**
+            **To reproduce**
             Steps to reproduce the behavior:
             1. Go to '...'
             2. Click on '....'
