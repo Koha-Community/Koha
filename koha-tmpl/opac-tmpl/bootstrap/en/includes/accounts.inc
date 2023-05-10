@@ -25,22 +25,25 @@
         [%- CASE 'RENT_DAILY_RENEW' -%]<span>Renewal of daily rental item</span>
         [%- CASE 'RESERVE'          -%]<span>Hold fee</span>
         [%- CASE 'RESERVE_EXPIRED'  -%]<span>Hold waiting too long</span>
-        [%- CASE 'Payout'           -%]<span>Payout</span>
+        [%- CASE 'PAYOUT'           -%]<span>Payment from library to patron</span>
+        [%- CASE 'VOID'             -%]<span>Credit has been voided</span>
         [%- CASE                    -%]<span>[% debit_type.description | html %]</span>
     [%- END -%]
 [%- END -%]
 
 [%- BLOCK credit_type_description -%]
     [%- SWITCH credit_type_code -%]
-        [%- CASE 'PAYMENT'      -%]<span>Payment</span>
-        [%- CASE 'WRITEOFF'     -%]<span>Writeoff</span>
-        [%- CASE 'FORGIVEN'     -%]<span>Forgiven</span>
+        [%- CASE 'CANCELLATION' -%]<span>Cancelled charge</span>
         [%- CASE 'CREDIT'       -%]<span>Credit</span>
+        [%- CASE 'DISCOUNT'     -%]<span>Discount</span>
+        [%- CASE 'FORGIVEN'     -%]<span>Forgiven</span>
         [%- CASE 'LOST_FOUND'   -%]<span>Lost item fee refund</span>
         [%- CASE 'OVERPAYMENT'  -%]<span>Overpayment refund</span>
-        [%- CASE 'REFUND'       -%]<span>Refund</span>
-        [%- CASE 'CANCELLATION' -%]<span>Cancelled charge</span>
+        [%- CASE 'PAYMENT'      -%]<span>Payment</span>
         [%- CASE 'PROCESSING_FOUND' -%]<span>Lost item processing fee refund</span>
+        [%- CASE 'PURCHASE'     -%]<span>Purchase</span>
+        [%- CASE 'REFUND'       -%]<span>Refund</span>
+        [%- CASE 'WRITEOFF'     -%]<span>Writeoff</span>
         [%- CASE                -%]<span>[% credit_type.description | html %]</span>
     [%- END -%]
 [%- END -%]
