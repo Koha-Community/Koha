@@ -549,12 +549,17 @@ use C4::Serials qw( NewSubscription GetSerials findSerialsByStatus ModSerialStat
 
 my $notes = 'notes';
 my $internalnotes = 'intnotes';
-$dbh->do(q|UPDATE subscription_numberpatterns SET numberingmethod='No. {X}' WHERE id=1|);
+my $number_pattern = $builder->build_object(
+    {
+        class => 'Koha::Subscription::Numberpatterns',
+        value => { numberingmethod => 'No. {X}' }
+    }
+);
 my $subscriptionid = NewSubscription(
      undef,      "",     undef, undef, undef, $biblionumber,
     '2013-01-01', 1, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          $notes,undef, '2013-01-01', undef, 1,
+    1,          $notes,undef, '2013-01-01', undef, $number_pattern->id,
     undef,       undef,  0,    $internalnotes,  0,
     undef, undef, 0,          undef,         '2013-12-31', 0
 );
@@ -643,12 +648,18 @@ subtest 'SendAlerts - claimissue' => sub {
     }
     my ($biblionumber) = AddBiblio($bib, '');
 
-    $dbh->do(q|UPDATE subscription_numberpatterns SET numberingmethod='No. {X}' WHERE id=1|);
+    my $number_pattern = $builder->build_object(
+        {
+            class => 'Koha::Subscription::Numberpatterns',
+            value => { numberingmethod => 'No. {X}' }
+        }
+    );
+
     my $subscriptionid = NewSubscription(
          undef, "", $booksellerid, undef, undef, $biblionumber,
         '2013-01-01', 1, undef, undef,  undef,
         undef,  undef,  undef, undef, undef, undef,
-        1, 'public',undef, '2013-01-01', undef, 1,
+        1, 'public',undef, '2013-01-01', undef, $number_pattern->id,
         undef, undef,  0, 'internal',  0,
         undef, undef, 0,  undef, '2013-12-31', 0
     );
