@@ -25,15 +25,14 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );    #qw(:standard escapeHTML);
+use CGI qw ( -utf8 );
 use C4::Context;
-use Koha::CoverImages;
 use Koha::Biblios;
-use Koha::Exceptions;
+use Koha::CoverImages;
 
 $| = 1;
 
-my $data  = CGI->new;
+my $input = CGI->new;
 my $imagenumber;
 
 =head1 NAME
@@ -60,15 +59,22 @@ imagenumber, a random image is selected.
 
 my ( $image );
 if ( C4::Context->preference("LocalCoverImages") ) {
-    my $imagenumber = $data->param('imagenumber');
-    my $biblionumber = $data->param('biblionumber');
+    my $imagenumber = $input->param('imagenumber');
+    my $biblionumber = $input->param('biblionumber');
     if ( defined $imagenumber ) {
-        $imagenumber = $data->param('imagenumber');
+        $imagenumber = $input->param('imagenumber');
         $image = Koha::CoverImages->find($imagenumber);
+        unless ($image) {
+            print $input->redirect("/cgi-bin/koha/errors/404.pl");
+            exit;
+        }
     }
     elsif ( defined $biblionumber ) {
         my $biblio = Koha::Biblios->find($biblionumber);
-        Koha::Exceptions::ObjectNotFound->throw( 'No bibliographic record for biblionumber ' . $biblionumber ) unless $biblio;
+        unless ($biblio) {
+            print $input->redirect("/cgi-bin/koha/errors/404.pl");
+            exit;
+        }
         my $cover_images = $biblio->cover_images;
         if ( $cover_images->count ) {
             $image = $cover_images->next;
@@ -79,11 +85,11 @@ if ( C4::Context->preference("LocalCoverImages") ) {
 $image ||= Koha::CoverImages->no_image;
 
 my $image_data =
-    $data->param('thumbnail')
+    $input->param('thumbnail')
   ? $image->thumbnail
   : $image->imagefile;
 
-print $data->header(
+print $input->header(
     -type            => $image->mimetype,
     -expires         => '+30m',
     -Content_Length  => length($image_data)
