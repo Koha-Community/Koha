@@ -48,6 +48,10 @@
 
 <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
 <div class="page-section">
+    [% IF ( query_error ) %]
+        <div class="dialog alert"><p><strong>Error:</strong> [% query_error | html %]</p></div>
+    [% END %]
+
     [% IF ( total ) %]
     <div class="pages">[% pagination_bar | $raw %]</div>
 
