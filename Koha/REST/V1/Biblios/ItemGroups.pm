@@ -105,9 +105,16 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $item_group_data = $c->validation->param('body');
+
+        my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
+        return $c->render(
+            status  => 404,
+            openapi => { error => 'Object not found' }
+        ) unless $biblio;
+
+        my $item_group_data = $c->req->json;
         # biblio_id comes from the path
-        $item_group_data->{biblio_id} = $c->validation->param('biblio_id');
+        $item_group_data->{biblio_id} = $biblio->id;
 
         my $item_group = Koha::Biblio::ItemGroup->new_from_api($item_group_data);
         $item_group->store->discard_changes();
