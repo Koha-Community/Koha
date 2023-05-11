@@ -39,20 +39,24 @@ my %configs;
 
 Mock the configuration I<$config_entry> with the specified I<$value>.
 
+NOTE: We are only mocking config entries here, so no entries from other
+sections of koha-conf.xml. Bug 33718 fixed the section parameter of
+mocked Koha::Config->get calls for other sections (not cached).
+
 =cut
 
 sub mock_config {
+    my ( $config_entry, $value ) = @_;
     my $koha_config = Test::MockModule->new('Koha::Config');
-    my ( $conf, $value ) = @_;
-    $configs{$conf} = $value;
+    $configs{$config_entry} = $value;
     $koha_config->mock('get', sub {
-        my ( $self, $conf ) = @_;
-        if ( exists $configs{$conf} ) {
-            return $configs{$conf}
-        } else {
-            my $method = $koha_config->original('get');
-            return $method->($self, $conf);
+        my ( $self, $key, $section ) = @_;
+        $section ||= 'config';
+        if( $section eq 'config' && exists $configs{$key} ) {
+            return $configs{$key};
         }
+        my $method = $koha_config->original('get');
+        return $method->( $self, $key, $section );
     });
 }
 
