@@ -60,7 +60,7 @@
 
     <div class="col">
         <fieldset class="action">
-            <button class="save btn btn-primary" disabled>Save</button>
+            <button class="save btn btn-primary" disabled>Confirm</button>
             <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
         </fieldset>
         <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
@@ -217,7 +217,7 @@
                                 <ol>
                                     <li>
                                         <label for="datereceived">Date received: </label>
-                                        <input type="text" size="10" id="datereceived" name="datereceived" class="datepicker" />
+                                        <input type="text" size="10" id="datereceived" name="datereceived" class="flatpickr" />
                                     </li>
                                     <li>
                                         <label for="bookfund">Fund: </label>
@@ -358,7 +358,7 @@
     <style>
         @media (min-width: 1200px) {
             #receive-modal, #receive-modal .modal-content {
-                width: 1150px;
+                width: 98%;
             }
         }
         #receive-modal .modal-body {
@@ -461,8 +461,8 @@
         var funds_tree = [];
 
         var QTY_TOTAL = _("Receiving %0$s out of %1$s");
-        var EDIT = _("edit");
-        var MOD_TITLE = _("Edit %s");
+        var EDIT = _("Edit");
+        var MOD_TITLE = _("Edit order #%s (%s)");
         var SUGGESTION = _("suggestion #%s");
         var FUND_KEEP = _("Keep current (%0$s - %1$s)");
         var FUNC_CUR = _("(Current: %0$s - %1$s)");
@@ -572,7 +572,7 @@
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
-                            return '<a data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" class="order_edit_toggle">'+EDIT+'</a>';
+                            return '<a class="btn btn-default btn-xs" data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" class="order_edit_toggle" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
                         }
                     }
                 ]
@@ -1024,7 +1024,7 @@
                     modal.data('row', row);
                 }
                 $('input, select, textarea', '.modal-body').val(null)
-                modal.find(".modal-title").text(MOD_TITLE.format(row.biblio.title));
+                modal.find(".modal-title").text(MOD_TITLE.format(escape_str(row.order_id),escape_str(row.biblio.title)));
                 ["title", "author", "copyright_date", "isbn", "series_title"].forEach(function(key){
                     var o = modal.find(".modal-body #biblio_"+key);
                     if(row.biblio[key] !== null) {
@@ -1068,7 +1068,7 @@
                 }
 
                 var effective_create_items = row.basket.create_items || AcqCreateItem;
-                $("#datereceived").val(row.date_received||$date(new Date().toISOString())).change();
+                $("#datereceived").val(row.date_received||$date(new Date().toISOString()));
                 $("#bookfund option[value='']").html(FUND_KEEP.format(row.fund.budget.budget_period_description, row.fund.name));
                 if(row.fund_id != row.fund.fund_id) {
                     $("#bookfund").val(row.fund_id);
@@ -1083,13 +1083,13 @@
                 var rrp_txt;
                 var ecost_txt;
                 if(invoiceincgst == "1") {
-                    rrp_txt = Number(row.rrp_tax_included).format_price()+'<span class="hint">'+ADJ_TAX_INC.format(active_currency)+"</span>";
-                    ecost_txt = Number(row.ecost_tax_included).format_price()+'<span class="hint">'+TAX_INC+"</span>";
+                    rrp_txt = Number(row.rrp_tax_included).format_price()+'<span class="hint"> '+ADJ_TAX_INC.format(active_currency)+"</span>";
+                    ecost_txt = Number(row.ecost_tax_included).format_price()+'<span class="hint"> '+TAX_INC+"</span>";
                     $("#unitprice").val(row.unit_price_tax_included);
                     $("#unitprice_hint").html(TAX_INC);
                 } else {
-                    rrp_txt = Number(row.rrp_tax_excluded).format_price()+'<span class="hint">'+ADJ_TAX_EXC.format(active_currency)+"</span>";
-                    ecost_txt = Number(row.ecost_tax_excluded).format_price()+'<span class="hint">'+TAX_EXC+"</span>";
+                    rrp_txt = Number(row.rrp_tax_excluded).format_price()+'<span class="hint"> '+ADJ_TAX_EXC.format(active_currency)+"</span>";
+                    ecost_txt = Number(row.ecost_tax_excluded).format_price()+'<span class="hint"> '+TAX_EXC+"</span>";
                     $("#unitprice").val(row.unit_price_tax_excluded);
                     $("#unitprice_hint").html(TAX_EXC);
                 }
