@@ -73,6 +73,7 @@
             [% ELSE %]
               [% PROCESS authresult summary=resul.summary authid=resul.authid %]
             [% END %]
+            [% IF pending_deletion_authid == resul.authid %]<span style="color: red;">Pending deletion</span>[% END %]
           </td>
           <td>[% resul.authtype | html %]</td>
         [% UNLESS ( resul.isEDITORS ) %]
