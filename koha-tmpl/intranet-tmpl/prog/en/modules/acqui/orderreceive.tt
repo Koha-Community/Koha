@@ -645,12 +645,12 @@
                         });
                     });
                 } else if(effective_create_items == 'ordering') {
-                    params['items_to_receive'] = (row.items||[])
+                    params['items_to_receive[]'] = (row.items||[])
                         .filter(function(item) {
                             return item._checked
                         })
                         .map(function(item) {
-                            item.item_id;
+                            return item.item_id;
                         })
                 }
                 return params;

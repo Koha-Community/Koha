@@ -82,7 +82,7 @@ my $basket = $order_obj->basket;
 if ($quantityrec > $origquantityrec ) {
     my @received_items = ();
     if ($basket->effective_create_items eq 'ordering') {
-        @received_items = $input->multi_param('items_to_receive');
+        @received_items = $input->multi_param('items_to_receive[]');
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if ( @affects ) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
