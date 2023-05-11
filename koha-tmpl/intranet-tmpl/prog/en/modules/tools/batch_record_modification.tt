@@ -285,16 +285,21 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
+        function update_tab_display(){
+            let selected_type = $('input[name="recordtype"]:checked').val();
+            if (selected_type == 'authority') {
+                $("a[href='#shelves_tab_panel']").parent().hide();
+                $("a[href='#uploadfile_tab_panel']").tab("show");
+            } else if (selected_type == 'biblio') {
+                $("a[href='#shelves_tab_panel']").parent().show();
+                $("a[href='#uploadfile_tab_panel']").tab("show");
+            }
+        }
         $(document).ready(function() {
 
+            update_tab_display();
             $("input[type='radio']").click(function() {
-                if ($(this).attr('id') == 'authority_type') {
-                    $("a[href='#shelves_tab_panel']").parent().hide();
-                    $("a[href='#uploadfile_tab_panel']").tab("show");
-                } else if ($(this).attr('id') == 'biblio_type') {
-                    $("a[href='#shelves_tab_panel']").parent().show();
-                    $("a[href='#uploadfile_tab_panel']").tab("show");
-                }
+                update_tab_display();
             });
 
             $("#selectall").click(function(e){
