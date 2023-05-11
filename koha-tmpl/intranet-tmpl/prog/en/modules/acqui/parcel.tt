@@ -647,45 +647,45 @@
             };
 
             var selected_rows = {};
-            $('#select_multiple').click(function() {
-              var ids = Object.keys(selected_rows);
-              if(!ids.length) return;
-              location.href = 'orderreceive.pl?multiple_orders='+ids.join(',')+ '&invoiceid=[% invoiceid | uri %]';
+            $('#select_multiple').click(function () {
+                var ids = Object.keys(selected_rows);
+                if (!ids.length) return;
+                location.href = 'orderreceive.pl?multiple_orders=' + ids.join(',') + '&invoiceid=[% invoiceid | uri %]';
             }).html(PENDING_MULTI_SELECTION.format('0'))
             options.select = {
-              style: 'api'
+                style: 'api'
             };
             options.order = [[1, 'asc']];
             options.columns.unshift({
-              "data": function(row, type, val, meta) {
-                  return '<input type="checkbox" class="selOrder" />';
-              },
-              "searchable": false,
-              "orderable": false
+                "data": function (row, type, val, meta) {
+                    return '<input type="checkbox" class="selOrder" />';
+                },
+                "searchable": false,
+                "orderable": false
             });
 
-            var pending_orders_table = $("#pending_orders").kohaTable(options, {}, 1, {"basket.vendor_id": [% booksellerid | html %]});
+            var pending_orders_table = $("#pending_orders").kohaTable(options, {}, 1, { "basket.vendor_id": [% booksellerid | html %] });
 
             var api = pending_orders_table.api();
-            api.on('draw', function() {
-              api.rows().every(function() {
-                var row = this;
-                var data = row.data();
-                $('.selOrder', row.node()).on('click', function(event) {
-                  if($(this).prop('checked')) {
-                    row.select();
-                    selected_rows[data.order_id] = data;
-                  } else {
-                    row.deselect();
-                    delete selected_rows[data.order_id];
-                  }
-                  $('#select_multiple').html(PENDING_MULTI_SELECTION.format(Object.keys(selected_rows).length));
+            api.on('draw', function () {
+                api.rows().every(function () {
+                    var row = this;
+                    var data = row.data();
+                    $('.selOrder', row.node()).on('click', function (event) {
+                        if ($(this).prop('checked')) {
+                            row.select();
+                            selected_rows[data.order_id] = data;
+                        } else {
+                            row.deselect();
+                            delete selected_rows[data.order_id];
+                        }
+                        $('#select_multiple').html(PENDING_MULTI_SELECTION.format(Object.keys(selected_rows).length));
+                    });
+                    if (selected_rows[data.order_id]) {
+                        row.select();
+                        $('.selOrder', row.node()).prop('checked', true);
+                    }
                 });
-                if(selected_rows[data.order_id]) {
-                  row.select();
-                  $('.selOrder', row.node()).prop('checked', true);
-                }
-              });
             });
 
 
