@@ -1112,19 +1112,9 @@
                 if(row.subscription_id) {
                     $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
                     $('#modal-order-main #history-panel').removeClass('hide').addClass('show');
-                    /*$('#modal-order-main').tabs("disable", "#items-panel");
-                    $('#modal-order-main').tabs("enable", "#history-panel");
-                    if($('#modal-order-main').tabs( "option", "active" ) == 3) {
-                        $('#modal-order-main').tabs( "option", "active", 0);
-                    }*/
                 } else {
                     $('#modal-order-main #history-panel').removeClass('show').addClass('hide');
                     $('#modal-order-main #items-panel').removeClass('hide').addClass('show');
-                    /*$('#modal-order-main').tabs("enable", "#items-panel");
-                    $('#modal-order-main').tabs("disable", "#history-panel");
-                    if($('#modal-order-main').tabs( "option", "active" ) == 2) {
-                        $('#modal-order-main').tabs( "option", "active", 0);
-                    }*/
                     if(effective_create_items == 'receiving') {
                         $("#acq-create-receiving").show();
                         $("#acq-create-ordering").hide();
@@ -1161,12 +1151,6 @@
                         }
                     } else {
                         $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
-                        /*
-                        if($('#modal-order-main').tabs( "option", "active" ) == 3) {
-                            $('#modal-order-main').tabs( "option", "active", 0);
-                        }
-                        $('#modal-order-main').tabs("disable", "#items-panel");
-                        */
                     }
                 }
                 $("#select_currency").hide();
@@ -1225,15 +1209,6 @@
                 if(Object.keys(saved_rows).length) $('.save').prop('disabled', false);
                 $("#order_edit").modal('hide');
             })
-
-            /*$('#modal-order-main').tabs({
-                activate: function(event, ui) {
-                    var active = ui.newPanel.attr('id')
-                    if(active == 'history-panel') {
-                        show_subs($("#order_edit").data('row'));
-                    }
-                }
-            });*/
 
             $("#order_edit").on("show.bs.modal", function (event) {
                 var anchor = $(event.relatedTarget);

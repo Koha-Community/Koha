@@ -195,7 +195,6 @@ foreach my $budget (@{$budgets}) {
         b_sort1_authcat => $budget->{'sort1_authcat'},
         b_sort2_authcat => $budget->{'sort2_authcat'},
         b_active => $budget->{budget_period_active},
-        # b_sel => ( $budget->{budget_id} == $order->budget_id ) ? 1 : 0,
         b_level => $budget->{budget_level},
     };
 }
