@@ -31,7 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "store() tests" => sub {
 
-    plan tests => 11;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -109,40 +109,12 @@ subtest "store() tests" => sub {
     is( ref($claim), 'Koha::Checkouts::ReturnClaim', 'Object type is correct' );
     is( Koha::Checkouts::ReturnClaims->search( { issue_id => $checkout->id } )->count, 1, 'Claim stored on the DB');
 
-    {    # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-
-        my $another_checkout = $builder->build_object({ class => 'Koha::Checkouts' });
-        my $checkout_id = $another_checkout->id;
-        $another_checkout->delete;
-
-        my $THE_claim;
-
-        throws_ok {
-            $THE_claim = Koha::Checkouts::ReturnClaim->new(
-                {
-                    issue_id       => $checkout_id,
-                    itemnumber     => $checkout->itemnumber,
-                    borrowernumber => $checkout->borrowernumber,
-                    notes          => 'Some notes',
-                    created_by     => $librarian->borrowernumber
-                }
-            )->store;
-        }
-        'Koha::Exceptions::Object::FKConstraint',
-          'An exception is thrown on invalid issue_id';
-        close STDERR;
-
-        is( $@->broken_fk, 'issue_id', 'Exception field is correct' );
-    }
-
     $schema->storage->txn_rollback;
 };
 
 subtest "resolve() tests" => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -256,6 +228,42 @@ subtest "resolve() tests" => sub {
     # Make sure $item is refreshed
     $item->discard_changes;
     is( $item->itemlost, $new_lost_status, 'Item lost status is updated' );
+
+    # Resolve claim for checkout that has been cleaned from the database
+    $checkout->delete;
+    $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                branchcode     => $patron->branchcode
+            }
+        }
+    );
+
+    $claim = Koha::Checkouts::ReturnClaim->new(
+        {
+            issue_id       => $checkout->id,
+            itemnumber     => $checkout->itemnumber,
+            borrowernumber => $checkout->borrowernumber,
+            notes          => 'Some notes',
+            created_by     => $librarian->borrowernumber
+        }
+    )->store;
+
+    $checkout->delete;
+
+    $claim->resolve(
+        {
+            resolution      => "X",
+            resolved_by     => $librarian->id,
+            resolved_on     => $tomorrow,
+            new_lost_status => $new_lost_status,
+        }
+    )->discard_changes;
+
+    is( $claim->issue_id, undef, "Resolved claim cleaned checkout is updated correctly" );
 
     $schema->storage->txn_rollback;
 };
