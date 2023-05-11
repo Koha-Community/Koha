@@ -46,6 +46,7 @@ my $authid       = $query->param('authid')       || '';
 my ( $template, $loggedinuser, $cookie );
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
+my $pending_deletion_authid;
 
 if ( $op eq "delete" ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -64,6 +65,8 @@ if ( $op eq "delete" ) {
         });
 
     DelAuthority({ authid => $authid });
+    # FIXME No error handling here, DelAuthority needs adjustments
+    $pending_deletion_authid = $authid;
 
     if ( $query->param('operator') ) {
         # query contains search params so perform search
@@ -238,6 +241,7 @@ my $servers = Koha::Z3950Servers->search(
 $template->param(
     servers => $servers,
     authority_types => $authority_types,
+    pending_deletion_authid => $pending_deletion_authid,
     op            => $op,
 );
 
