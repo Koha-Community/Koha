@@ -129,7 +129,7 @@
 
 
                                             <label for="ignore_modify_[% pm.borrowernumber | html %]"><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/> Ignore</label>
-                                            | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
+                                            &nbsp;|&nbsp; <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
                                         </div>
 
                                         [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
