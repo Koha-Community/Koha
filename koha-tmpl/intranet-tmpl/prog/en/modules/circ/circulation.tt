@@ -553,6 +553,7 @@
                                                         <tr>
                                                             <td>
                                                                 <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]">[% item.biblio.title | html %] <i class="fa fa-window-restore"></i></a>
+                                                                [% IF item.onloan %]<span style="float: right; color: red;">Checked out</span>[% END %]
                                                             </td>
                                                             <td>
                                                                 [% item.barcode | html %]
