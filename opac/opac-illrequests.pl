@@ -63,7 +63,7 @@ my ( $illrequest_id, $request );
 if ( $illrequest_id = $params->{illrequest_id} ) {
     $request = Koha::Illrequests->find($illrequest_id);
     # Make sure the request belongs to the logged in user
-    unless ( $request->borrowernumber == $loggedinuser ) {
+    if( !$request || $request->borrowernumber != $loggedinuser ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl");
         exit;
     }
