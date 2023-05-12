@@ -1402,6 +1402,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 illbatches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Illbatch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "illbatches",
+  "Koha::Schema::Result::Illbatch",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 illcomments
 
 Type: has_many
@@ -2103,8 +2118,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-06 15:46:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f6omVb7EtiysdaWTX3IRzg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-28 11:24:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RUWvcq9kgQvACo14H/u9jQ
 
 __PACKAGE__->has_many(
   "restrictions",
