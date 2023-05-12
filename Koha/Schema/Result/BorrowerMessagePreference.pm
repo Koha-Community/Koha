@@ -52,7 +52,6 @@ __PACKAGE__->table("borrower_message_preferences");
 =head2 days_in_advance
 
   data_type: 'integer'
-  default_value: 0
   is_nullable: 1
 
 =head2 wants_digest
@@ -78,7 +77,7 @@ __PACKAGE__->add_columns(
     is_nullable    => 1,
   },
   "days_in_advance",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "wants_digest",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -189,8 +188,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hd5sPnxGi5332WmzqCus8A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 20:33:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KVYT5xqcXSDijZBaEHLV+g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
