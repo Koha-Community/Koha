@@ -916,7 +916,7 @@
 
                         [% IF ( execute ) %]
                             [% UNLESS ( errors ) %]
-                                <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification">
+                                <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification" target="_blank">
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
@@ -925,7 +925,7 @@
                                     </textarea>
                                 </form>
 
-                                <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion">
+                                <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion" target="_blank">
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
@@ -934,7 +934,7 @@
                                     </textarea>
                                 </form>
 
-                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification">
+                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification" target="_blank">
                                     <input type="hidden" name="op" value="show" />
                                     [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
@@ -949,7 +949,7 @@
                                     [% END %]
                                 </form>
 
-                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion">
+                                <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion" target="_blank">
                                     <input type="hidden" name="op" value="show" />
                                     <input type="hidden" name="del" value="1" />
                                     [% FOREACH result IN results %]
@@ -965,7 +965,7 @@
                                     [% END %]
                                 </form>
 
-                                <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list">
+                                <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list" target="_blank">
                                     [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
                                             [% place = loop.index %]
@@ -979,7 +979,7 @@
                                     [% END %]
                                 </form>
 
-                                <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
+                                <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
                                     <input type="hidden" name="op" value="show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
